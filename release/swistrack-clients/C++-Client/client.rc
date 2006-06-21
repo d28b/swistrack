@@ -1,0 +1,2 @@
+conn_icn ICON connect.ico
+#include "wx/msw/wx.rc"

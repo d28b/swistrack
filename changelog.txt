@@ -1,0 +1,65 @@
+/** \file changelog.txt
+* v.3.0.0 (07.04.2006)
+*
+* - core upgrade to Intels OpenCV library 0.97
+* - GUI upgraded to WxWidgets 2.6.1
+* - Application runs in a single thread
+* - Possibility to save BMP files
+* - Socket Server added
+* - Clients for Matlab, Java, C++ added
+* - Coverage image can be refreshed by clicking the right mouse button
+* - Improved error handling / user feedback
+* - Reorganization of projects, clear separation between Windows/Linux
+*
+* v.2.4.1 (05.08.2005)
+*
+* - core upgraded to Intels OpenCV library 0.96
+*
+* v.2.4.0 (15.06.2005)
+*
+* - data association can be overrun manually at any time
+* - single step mode
+* - bugix: GUI reflects tracking state properly after tracking has terminated
+*
+* v.2.3.1 (31.05.2005)
+*
+* - bugfix: number of colorplanes taken into account when using background subtraction
+*
+* v.2.3.0 (09.05.2005)
+*
+* - tracking improved drastically. Merged trajectories are split if there are better candidates.
+*
+* v.2.2.2 (08.05.2005)
+*
+* - color image segmentation improved (segmentation on green plane)
+*
+* v.2.2.1 (02.05.2005)
+*
+* - bugfix: background estimation could not be selected
+* - bugfix: the program crashes on shutdown when working with the IEEE Camera
+*
+* v.2.2.0 (14.04.2005)
+*
+* -Mask mode added. Binary images supplied by the users supply contours and the objects within this contours gets counted
+*
+* v.2.1.1
+*
+* -Visualisation 'Coverage added'
+*
+* v.2.1.0
+*
+* -Support for IEEE1394 (Firewire) Cameras added
+* -Background estimation for segmentation (instead of static background) added
+*
+* v.2.0.1
+*
+* -Possibility to export video data of object trajectories
+* -HTML help added
+*
+*
+* v.2.0 (28.07.2004)
+*
+* -Windows look'n'feel compliant GUI
+* -Integration of Tracking/Calibration/Data Storage under a single platform
+*
+*/

@@ -1,0 +1,33 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: client - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\Nikolaus\LOCALS~1\Temp\RSP48A.tmp" with contents
+[
+/nologo /MDd /W4 /Gm /GR /Zi /Od /I "L:\W2K\wxWidgets-2.6.1\include" /I "L:\W2K\wxWidgets-2.6.1\lib\vc_lib\mswd" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_WINDOWS" /D "NOPCH" /Fo"vc_mswd\client/" /Fd"vc_mswd\client.pdb" /FD /GZ /EHsc /c 
+"H:\work\swistrack\socketclient\client.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\Nikolaus\LOCALS~1\Temp\RSP48A.tmp" 
+Creating temporary file "C:\DOCUME~1\Nikolaus\LOCALS~1\Temp\RSP48B.tmp" with contents
+[
+wxmsw26d_core.lib wxbase26d_net.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib /nologo /subsystem:windows /incremental:yes /pdb:"vc_mswd/client.pdb" /debug /machine:I386 /out:"vc_mswd\client.exe" /libpath:"L:\W2K\wxWidgets-2.6.1\lib\vc_lib" 
+.\vc_mswd\client\client.obj
+]
+Creating command line "link.exe @C:\DOCUME~1\Nikolaus\LOCALS~1\Temp\RSP48B.tmp"
+<h3>Output Window</h3>
+Compiling...
+client.cpp
+Linking...
+LINK : LNK6004: vc_mswd\client.exe not found or not built by the last incremental link; performing full link
+
+
+
+<h3>Results</h3>
+client.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

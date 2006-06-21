@@ -1,0 +1,83 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "calibrationlib"="..\..\calibration\VC++\calibrationlib.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libblob
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "gui"=".\gui.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name calibrationlib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libblob
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name objecttrackerlib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "libblob"="..\..\libblob\VC++\libblob.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "objecttrackerlib"="..\..\core\VC++\objecttrackerlib.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name calibrationlib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libblob
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

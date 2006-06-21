@@ -1,0 +1,37 @@
+SERVER SETTINGS
+
+'c'  : turns calibration off (default). Every point being sent, be it trajectory
+       data or a blob will be sent in image coordinates.
+'C'  : turns calibration on. Every point being sent, be it trajectory data or a 
+       blob will be sent in world coordinates.
+       
+COMMANDS FOR RETRIEVING TRAJECTORY DATA
+
+'t'  : retrieves data points in an asynchronous fashion. You will always
+       get the latest trajectory data. If your application queries data faster
+       than it is produced by SwisTrack, you will get the same data more than 
+       once. If SwisTrack is running at a faster pace, you will eventually loose
+       information.
+
+'T'  : retrieves data points synchronously. Every time, data is requested, SwisTrack
+       will process a single frame. If your application queries frames faster than the
+       framerate supported by the media in use (camera/video), SwisTrack delay packets
+       to be sent out. If your application is running too slow, SwisTrack will skip frames
+       provided by a camera, but not from a video source.
+
+'N'  : requests the number of tracks being tracked. Data is returned in the format ### 
+       (3 characters), with leading zeros if necessary.
+       
+COMMANDS FOR RETRIEVING BLOB DATA
+
+'b'  : same as 't' but the application will be sending blobs instead
+'B'  : same as 'T' but the application will be sending blobs instead
+'n'  : requests the number of blobs being detected. Data is returned in the format ### 
+       (3 characters), with leading zeros if necessary.
+       
+ DATA FORMAT FOR TRAJECTORY DATA/BLOBS
+ 
+ Every point (be it calibrated, or uncalibrated, trajectory, or blob) is sent as fixed precision
+ floating point number in the format "+####.#### +####.#### ", and thus having a length of 22 
+ characters (including the separating spaces). Points are concatunated to a string. There is no
+ terminating character.

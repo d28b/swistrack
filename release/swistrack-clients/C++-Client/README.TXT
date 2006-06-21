@@ -1,0 +1,1 @@
+This folder contains a Visual C++ 6.0 workspace implementing a simple socket client for SwisTrack.
