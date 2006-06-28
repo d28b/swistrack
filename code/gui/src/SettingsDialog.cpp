@@ -124,7 +124,7 @@ void SettingsDialog::CreateDialog(){
             if(IsAttr(*mode,"desc")) availablemodes.Add(GetAttr(*mode,"desc"));
             }
         // display all information of the CURRENT mode given by the CFG
-        for(mode = modeset.begin(); mode != modeset.end(); ++mode){            
+        for(xmlpp::NodeSet::iterator mode = modeset.begin(); mode != modeset.end(); ++mode){            
             if(GetIntAttr(*mode,"mode")==current_mode){
                 
                 // check whether there is already data for this mode in the configuration, and create nodes if necessary
