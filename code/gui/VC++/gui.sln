@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui", "gui.vcproj", "{44405FF3-5736-429E-B8E3-DE423B43038B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D010B136-96BD-4D44-B4F0-30388FB460B7} = {D010B136-96BD-4D44-B4F0-30388FB460B7}
+		{E685E6C0-B8E2-4911-B52F-FE5A0168E5D4} = {E685E6C0-B8E2-4911-B52F-FE5A0168E5D4}
+		{A6BA5C25-467D-4693-A87D-739237D61545} = {A6BA5C25-467D-4693-A87D-739237D61545}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "objecttrackerlib", "..\..\core\VC++\objecttrackerlib.vcproj", "{D010B136-96BD-4D44-B4F0-30388FB460B7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A6BA5C25-467D-4693-A87D-739237D61545} = {A6BA5C25-467D-4693-A87D-739237D61545}
+		{E685E6C0-B8E2-4911-B52F-FE5A0168E5D4} = {E685E6C0-B8E2-4911-B52F-FE5A0168E5D4}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "calibrationlib", "..\..\calibration\VC++\calibrationlib.vcproj", "{A6BA5C25-467D-4693-A87D-739237D61545}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E685E6C0-B8E2-4911-B52F-FE5A0168E5D4} = {E685E6C0-B8E2-4911-B52F-FE5A0168E5D4}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libblob", "..\..\libblob\VC++\libblob.vcproj", "{E685E6C0-B8E2-4911-B52F-FE5A0168E5D4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Debug|Win32.Build.0 = Debug|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release|Win32.ActiveCfg = Release|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release|Win32.Build.0 = Release|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Debug|Win32.Build.0 = Debug|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release|Win32.ActiveCfg = Release|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release|Win32.Build.0 = Release|Win32
+		{A6BA5C25-467D-4693-A87D-739237D61545}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A6BA5C25-467D-4693-A87D-739237D61545}.Debug|Win32.Build.0 = Debug|Win32
+		{A6BA5C25-467D-4693-A87D-739237D61545}.Release|Win32.ActiveCfg = Release|Win32
+		{A6BA5C25-467D-4693-A87D-739237D61545}.Release|Win32.Build.0 = Release|Win32
+		{E685E6C0-B8E2-4911-B52F-FE5A0168E5D4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E685E6C0-B8E2-4911-B52F-FE5A0168E5D4}.Debug|Win32.Build.0 = Debug|Win32
+		{E685E6C0-B8E2-4911-B52F-FE5A0168E5D4}.Release|Win32.ActiveCfg = Release|Win32
+		{E685E6C0-B8E2-4911-B52F-FE5A0168E5D4}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
