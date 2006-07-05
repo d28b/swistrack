@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="gui"
 	ProjectGUID="{44405FF3-5736-429E-B8E3-DE423B43038B}"
+	RootNamespace="gui"
 	>
 	<Platforms>
 		<Platform
@@ -109,7 +110,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="I:\temp\debug"
+			OutputDirectory="..\..\..\release"
 			IntermediateDirectory="I:\temp\debug"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -121,15 +122,18 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				ExecutionBucket="2"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+				ExecutionBucket="3"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
 			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
 				Name="VCMIDLTool"
+				ExecutionBucket="4"
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
@@ -139,8 +143,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				ExecutionBucket="5"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;../../xmlcfg/include;../../libblob/include;../../core/include;../../calibration/include;I:\library\1394camera\include;I:\library\wxWidgets\include;I:\library\wxWidgets\lib\vc_lib\mswd;I:\library\opencv\otherlibs\highgui;I:\library\opencv\cv\include;I:\library\libblob\include;I:\library\opencv\cxcore\include;&quot;I:\library\libxml++&quot;"
+				AdditionalIncludeDirectories="../include;I:\library\glibmm\glib\glibmm;../../xmlcfg/include;../../libblob/include;../../core/include;../../calibration/include;I:\library\1394camera\include;I:\library\wxWidgets\include;I:\library\wxWidgets\lib\vc_lib\mswd;I:\library\opencv\otherlibs\highgui;I:\library\opencv\cv\include;I:\library\libblob\include;I:\library\opencv\cxcore\include;&quot;I:\library\libxml++&quot;"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -157,53 +162,69 @@
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
+				ExecutionBucket="6"
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				ExecutionBucket="7"
 				PreprocessorDefinitions="_DEBUG"
 				Culture="1033"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
+				ExecutionBucket="8"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libxml++.lib libxml2.lib wxbase26d_net.lib wxmsw26d_html.lib wxmsw26d_adv.lib wxmsw26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib objecttrackerd.lib calibrationd.lib libblobd.lib"
+				ExecutionBucket="9"
+				LinkLibraryDependencies="true"
+				UseLibraryDependencyInputs="false"
+				AdditionalDependencies="libxml++d.lib libxml2.lib wxbase26d_net.lib wxmsw26d_html.lib wxmsw26d_adv.lib wxmsw26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib objecttrackerd.lib calibrationd.lib libblobd.lib"
 				OutputFile="../../../release/swistrack.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="../../calibration/lib;../../core/lib;../../libblob/lib;I:\library\wxWidgets\lib\vc_lib;I:\library\1394camera\lib;&quot;I:\library\libxml++\lib&quot;;I:\library\libxml2\lib"
-				IgnoreDefaultLibraryNames="libc.lib,libci.lib,msvcrt.lib"
+				AdditionalLibraryDirectories="../../calibration/lib;../../core/lib;../../libblob/lib;I:\library\wxWidgets\lib\vc_lib;I:\library\1394camera\lib;I:\library\libxml2\lib;&quot;I:\library\libxml++\lib&quot;;I:\library\wxWidgets\contrib\lib"
+				IgnoreAllDefaultLibraries="false"
+				IgnoreDefaultLibraryNames="libci.lib;msvcrt.lib;libc.lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="I:\temp\debug/swistrack.pdb"
+				GenerateMapFile="false"
+				MapExports="false"
 				SubSystem="2"
 				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+				ExecutionBucket="10"
 			/>
 			<Tool
 				Name="VCManifestTool"
+				ExecutionBucket="11"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
+				ExecutionBucket="12"
 			/>
 			<Tool
 				Name="VCBscMakeTool"
+				ExecutionBucket="13"
 				SuppressStartupBanner="true"
 				OutputFile="I:\temp\debug/gui.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
+				ExecutionBucket="14"
 			/>
 			<Tool
 				Name="VCWebDeploymentTool"
+				ExecutionBucket="15"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				ExecutionBucket="16"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 		</Configuration>
 	</Configurations>
