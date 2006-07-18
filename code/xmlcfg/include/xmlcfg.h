@@ -1,6 +1,5 @@
 #ifndef _XMLCFG_H
 #define _XMLCFG_H
-
 #include <libxml++/libxml++.h>
 
 /*/////// Getters for Attributes //////////////////*/

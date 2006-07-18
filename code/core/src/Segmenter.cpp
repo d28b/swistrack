@@ -53,13 +53,12 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg)
             
             if(!IsDefined(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"))
                 throw "[Segmenter::Segmenter] input video not specified (/CFG/INPUT[@mode='0']/AVIFILE)";
-
             Capture = cvCaptureFromFile(GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"));
 
             if (!Capture){
                 //printf("Can not open %s\n",avi_fname);
                 status = CAN_NOT_OPEN_AVI_FILE;
-                FILE* f;
+                FILE* f;				
                 f=fopen(GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"),"r");
                 if(f){
                     fclose(f);
@@ -157,11 +156,17 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg)
                 throw "[Segmenter::Segmenter] background image not specified (/CFG/SEGMENTER[@mode='0']/BGIMAGE)";
 
             
-            IplImage* bg = cvLoadImage(GetValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='0']/BGIMAGE"), -1); 
+            IplImage* bg = cvLoadImage(GetValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='0']/BGIMAGE"), -1); 						
+			if (!bg){
+                status = CAN_NOT_OPEN_BACKGROUND_FILE;
+                throw "Can not open background file";
+                }
+
             background = cvCreateImage(cvSize(input->width,input->height),input->depth,1);
-            
+			int i=bg->nChannels;
             if(bg->nChannels>1)
                 cvCvtPixToPlane(bg,NULL,NULL,background,NULL);
+				/** \todo strange behavior, we remove two channels. Moreover, it is dangerous because if there is only 2 channels, it will crash.*/
             else
                 cvCopy(bg,background);
             
@@ -261,7 +266,7 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg)
                     if (input)  // Get a pointer to the current frame (if query was successful)
                         {
                         nFrame++;                         // Increment the frame counter. 
-                        
+                        /** \todo removing the channels like that is dangerous, if it is a 2 channels file, it will crash.*/
                         cvCvtPixToPlane(input,NULL,NULL,current,NULL);
                         
                         BWSegmentation();                 
@@ -395,7 +400,7 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg)
                     {		
                     //printf("Contour: %d Size(tmp) %d\n",counter++,tmp.size());
                     // Traverse contours until a bigger contour is found
-                    
+                    /** \todo this loop has no interest for my POV. It is doing nothing. We do no action */
                     for(j=tmp.begin(); 
                     (j != tmp.end()) && (fabs(cvContourArea(contour)) < fabs(cvContourArea(*j)));
                     j++);
@@ -405,8 +410,6 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg)
                         tmp.insert(j,contour);
                         n_contours++;
                         }
-                    /* Releases contour scanner and returns pointer to the first outer contour */
-                    contour=cvEndFindContours(&blobs);
                     
                     
                     
@@ -430,10 +433,9 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg)
                         {
                         
                         resultContour rc;
-                        
                         cvMoments(tmp[i],&moments,0);
-                        pt_centre.x=rect.x + (moments.m10/moments.m00+0.5);  // moments using Green theorema
-                        pt_centre.y=rect.y + (moments.m01/moments.m00+0.5);  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
+                        pt_centre.x=(float)(rect.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
+                        pt_centre.y=(float)(rect.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
                         rc.center = pt_centre;
                         rc.area = moments.m00;
                         rc.compactness =  cvContourCompactness( tmp[i]);
@@ -462,7 +464,7 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg)
         
         
         
-        
+        contour=cvEndFindContours(&blobs);
         cvReleaseMemStorage(&storage);
         cvReleaseImage(&src_tmp);
         return n_contours;

@@ -1,6 +1,6 @@
- <?xml version="1.0" ?> 
+<?xml version="1.0" ?> 
   <CFG>
-  Version 1.0.0 
+  <!--Version 1.0.0-->
   <COMPONENTS>
   <!-- This sections define the available components of SwisTrack
        there will be a notebook tab for every one of them, its name is given
