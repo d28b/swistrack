@@ -179,11 +179,11 @@
 				ExecutionBucket="9"
 				LinkLibraryDependencies="true"
 				UseLibraryDependencyInputs="false"
-				AdditionalDependencies="libxml++d.lib libxml2.lib wxbase26d_net.lib wxmsw26d_html.lib wxmsw26d_adv.lib wxmsw26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib objecttrackerd.lib calibrationd.lib libblobd.lib"
+				AdditionalDependencies="libxml++d.lib libxml2.lib wxbase26d_net.lib wxmsw26d_html.lib wxmsw26d_adv.lib wxmsw26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib objecttrackerd.lib calibrationd.lib libblobd.lib 1394camera.lib cv.lib highgui.lib cxcore.lib"
 				OutputFile="../../../release/swistrack.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="../../calibration/lib;../../core/lib;../../libblob/lib;I:\library\wxWidgets\lib\vc_lib;I:\library\1394camera\lib;I:\library\libxml2\lib;&quot;I:\library\libxml++\lib&quot;;I:\library\wxWidgets\contrib\lib"
+				AdditionalLibraryDirectories="..\..\calibration\lib;..\..\core\lib;..\..\libblob\lib;I:\library\wxWidgets\lib\vc_lib;I:\library\1394camera\lib;I:\library\libxml2\lib;&quot;I:\library\libxml++\lib&quot;;I:\library\wxWidgets\contrib\lib;I:\library\opencv\lib"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="libci.lib;msvcrt.lib;libc.lib"
 				GenerateDebugInformation="true"
@@ -619,30 +619,6 @@
 		<Filter
 			Name="libraries"
 			>
-			<File
-				RelativePath="..\..\..\..\..\..\..\library\1394camera\lib\1394camera.lib"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\..\library\opencv\lib\cv.lib"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\..\library\opencv\lib\cvaux.lib"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\..\library\opencv\lib\cxcore.lib"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\..\library\opencv\lib\highgui.lib"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\..\library\libxml++\lib\libxml++.lib"
-				>
-			</File>
 		</Filter>
 		<File
 			RelativePath="changelog.txt"
