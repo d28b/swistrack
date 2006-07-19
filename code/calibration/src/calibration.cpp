@@ -120,7 +120,7 @@ double Transformation::GetArenaRadius(){
 	cvInitFont(&font,CV_FONT_VECTOR0,		
 		0.5,0.5,0.0,1);						
 	char s[250];					
-	sprintf(s,"Mark a point on the arena border, right-click when finished");
+	sprintf_s(s,"Mark a point on the arena border, right-click when finished");
 	cvPutText(tmpimg,s,			
 		cvPoint(20,20),&font,CV_RGB(255,255,255));		
 	cvShowImage("Estimate Arena Width",tmpimg);
@@ -600,10 +600,10 @@ bool Transformation::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 
 	printf("Rotational offset: %f degree\n",alpha/3.14159265*180);
 	
-	transformationMatrix32f->data.fl[0]=cos(alpha);
-	transformationMatrix32f->data.fl[1]=-sin(alpha);
-	transformationMatrix32f->data.fl[2]=sin(alpha);
-	transformationMatrix32f->data.fl[3]=cos(alpha);
+	transformationMatrix32f->data.fl[0]=(float)(cos(alpha));
+	transformationMatrix32f->data.fl[1]=(float)(-sin(alpha));
+	transformationMatrix32f->data.fl[2]=(float)(sin(alpha));
+	transformationMatrix32f->data.fl[3]=(float)(cos(alpha));
 
 	CvPoint2D32f wc,wt;
 	center.x-=bgimg->width/2;  // move center into origin
@@ -826,10 +826,10 @@ try{
 
 	printf("Rotational offset: %f degree\n",alpha/3.14159265*180);
 	
-	transformationMatrix32f->data.fl[0]=cos(alpha);
-	transformationMatrix32f->data.fl[1]=-sin(alpha);
-	transformationMatrix32f->data.fl[2]=sin(alpha);
-	transformationMatrix32f->data.fl[3]=cos(alpha);
+	transformationMatrix32f->data.fl[0]=(float)(cos(alpha));
+	transformationMatrix32f->data.fl[1]=(float)(-sin(alpha));
+	transformationMatrix32f->data.fl[2]=(float)(sin(alpha));
+	transformationMatrix32f->data.fl[3]=(float)(cos(alpha));
 
 	CvPoint2D32f wc,wt;
 	center.x-=bgimg->width/2;  // move center into origin
@@ -1204,7 +1204,8 @@ catch(...){
 
 void Transformation::TestRoundCalibration(char* testpattern,int h, int* nrofpoints, double vd){
     try{
-    FILE* f=fopen("calibrationerror.dat","w");
+    FILE* f;
+	fopen_s(&f,"calibrationerror.dat","w");
 	
 	calibimg = cvLoadImage(testpattern,0);
 	CalibrateTarget();
@@ -1241,8 +1242,8 @@ void Transformation::TestRoundCalibration(char* testpattern,int h, int* nrofpoin
 			{
 			CvPoint2D32f wp = ImageToWorld(imagePoints32f[i+y+1]);
 			CvPoint2D32f op;
-			op.x=objectPoints32f[i+y+1].x*cos(talpha)-sin(talpha)*objectPoints32f[i+y+1].y-dxy.x;
-			op.y=objectPoints32f[i+y+1].x*sin(talpha)+cos(talpha)*objectPoints32f[i+y+1].y-dxy.y;
+			op.x=(float)(objectPoints32f[i+y+1].x*cos(talpha)-sin(talpha)*objectPoints32f[i+y+1].y-dxy.x);
+			op.y=(float)(objectPoints32f[i+y+1].x*sin(talpha)+cos(talpha)*objectPoints32f[i+y+1].y-dxy.y);
 		
 			
 			
@@ -1273,7 +1274,8 @@ void Transformation::TestRoundCalibration(char* testpattern,int h, int* nrofpoin
  
 void Transformation::TestCalibration(char* testpattern,int cw, int ch,double wx, double wy){
     try{
-	FILE* f=fopen("calibrationerror.dat","w");
+	FILE* f;
+	fopen_s(&f,"calibrationerror.dat","w");
 	calibimg = cvLoadImage(testpattern,0);
 	CalibrateTarget();
 	cvNamedWindow("Validation",CV_WINDOW_AUTOSIZE);
@@ -1313,8 +1315,8 @@ void Transformation::TestCalibration(char* testpattern,int cw, int ch,double wx,
 			{
 			CvPoint2D32f wp = ImageToWorld(imagePoints32f[j*cw+i]);
 			CvPoint2D32f op;
-			op.x=objectPoints32f[j*cw+i].x*cos(talpha)-sin(talpha)*objectPoints32f[j*cw+i].y;
-			op.y=objectPoints32f[j*cw+i].x*sin(talpha)+cos(talpha)*objectPoints32f[j*cw+i].y;
+			op.x=(float)(objectPoints32f[j*cw+i].x*cos(talpha)-sin(talpha)*objectPoints32f[j*cw+i].y);
+			op.y=(float)(objectPoints32f[j*cw+i].x*sin(talpha)+cos(talpha)*objectPoints32f[j*cw+i].y);
 			
 			op.x=op.x+tdxy.x;//+dxy.x;
 			op.y=op.y+tdxy.y;//+dxy.y;
@@ -1369,8 +1371,7 @@ void Transformation::SaveError(int n, CvPoint2D32f* u, CvPoint3D32f* x, char *fn
 {
 try{
 	FILE* f;
-
-	f=fopen(fname,"w");
+	fopen_s(&f,fname,"w");
 	if(f){
 	for(int i=0; i<n; i++){
 

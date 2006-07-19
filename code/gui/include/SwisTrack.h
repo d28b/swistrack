@@ -22,7 +22,7 @@
 #include <1394camera.h>
 #endif
 
-#include "constants.h"
+#include "constants."h
 //#include "ExperimentCfg.h"
 #include "AboutDialog.h"
 #include "XMLCfg.h"

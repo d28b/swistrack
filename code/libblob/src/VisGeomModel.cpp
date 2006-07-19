@@ -166,8 +166,8 @@ int VisGeomModel :: CreateModel(double* p_cond_number)
 		seg_cos = vect1.x/sqrt(vect1.x*vect1.x+vect1.y*vect1.y);
 		seg_sin = vect1.y/sqrt(vect1.x*vect1.x+vect1.y*vect1.y);
 
-		cos_ab = seg_cos*cosinus_seq[i]-seg_sin*sinus_seq[i]; 
-		sin_ab = sinus_seq[i]*seg_cos+seg_sin*cosinus_seq[i]; 
+		cos_ab = (float)(seg_cos*cosinus_seq[i]-seg_sin*sinus_seq[i]); 
+		sin_ab = (float)(sinus_seq[i]*seg_cos+seg_sin*cosinus_seq[i]); 
 
 		cvGetRawData(A, (uchar**) &p_mat,&step,&size);
 		p_mat[2*i] = -sin_ab; 
@@ -281,8 +281,8 @@ CvPoint2D32f VisGeomModel :: CalculateTarget(double* p_cond_number, double* p_er
 		seg_cos = vect1.x/sqrt(vect1.x*vect1.x+vect1.y*vect1.y);
 		seg_sin = vect1.y/sqrt(vect1.x*vect1.x+vect1.y*vect1.y);
 
-		cos_ab = seg_cos*cosinus_seq[i]-seg_sin*sinus_seq[i]; 
-		sin_ab = sinus_seq[i]*seg_cos+seg_sin*cosinus_seq[i]; 
+		cos_ab = (float)(seg_cos*cosinus_seq[i]-seg_sin*sinus_seq[i]); 
+		sin_ab = (float)(sinus_seq[i]*seg_cos+seg_sin*cosinus_seq[i]); 
 
 		cvGetRawData(A, (uchar**) &p_mat,&step,&size);
 		p_mat[2*i] = -sin_ab; 

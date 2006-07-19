@@ -477,6 +477,7 @@ void SwisTrack::OnMenuControlContinue(wxCommandEvent& WXUNUSED(event))
 
 	wxToolBarBase *tb = GetToolBar();
     for(int i=Gui_Ctrl_Rewind; i<= Gui_Ctrl_Pause; i++) tb->ToggleTool(i, 0 );
+	status=RUNNING;
 	tb->ToggleTool(Gui_Ctrl_Continue, 1 );
 	
 	}

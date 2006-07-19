@@ -59,13 +59,13 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg)
                 //printf("Can not open %s\n",avi_fname);
                 status = CAN_NOT_OPEN_AVI_FILE;
                 FILE* f;				
-                f=fopen(GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"),"r");
+                fopen_s(&f,GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"),"r");
                 if(f){
                     fclose(f);
                     throw "Segmenter: Can not open AVI file (codec problem)";
                     }
                 else{
-                    f=fopen("swistrack.log","w");
+                    fopen_s(&f,"swistrack.log","w");
                     fprintf(f,"%s not found",GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"));
                     fclose(f);
                     throw "Segmenter: Can not open AVI file (file not found)";

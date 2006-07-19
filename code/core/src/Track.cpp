@@ -113,7 +113,7 @@ using namespace std;
 			}
 		if(style >= TRAJNOCROSS){
 			char smove[3];
-			sprintf(smove, "%d", id);
+			sprintf_s(smove, "%d", id);
 			CvPoint pt = cvPointFrom32f(             //
 				traj->front());
 			

@@ -21,7 +21,7 @@ Mask::Mask(){
 	nrmasks=masks.GetTotalNumBlobs();
 	
     if(strcmp(outputfname,"")!=0){
-        output = fopen(outputfname,"w+");
+        fopen_s(&output,outputfname,"w+");
         }
     else{
         output=0;
@@ -117,7 +117,7 @@ void Mask::DrawMask(TrackingImage *trackingimg)
 	for(int i=0; i<nrmasks; i++){
 		char counter[5];
 	
-		sprintf(counter,"%d",nrobjects.at(i));
+		sprintf_s(counter,"%d",nrobjects.at(i));
 		trackingimg->Text(counter,areas.at(i),CV_RGB(255,0,0));
 		}
 	}
