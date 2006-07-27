@@ -45,6 +45,10 @@
    </FRAMERATE>
   </INPUT>
   <!---
+                                  Imagefilter Tab
+  -->
+  <IMAGEFILTER mode="0" desc="No Filter" long=""></IMAGEFILTER>
+  <!---
                                   Segmenter Tab
   -->
   <SEGMENTER mode="0" desc="Static Background" long="The image is segmented by subtracting a static background image from every frame in the video">

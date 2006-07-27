@@ -1,6 +1,6 @@
-<?xml version="1.0"?> 
+<?xml version="1.0" ?> 
   <CFG>
-  Version 1.0.0 
+  <!--Version 1.0.0-->
   <COMPONENTS>
   <!-- This sections define the available components of SwisTrack
        there will be a notebook tab for every one of them, its name is given
@@ -24,18 +24,14 @@
        the following are available "int", "double", "string", "open", "save", "list". Some types
        require parameters specified in the "param" attribute. For instance, "open" needs
        the filetype, e.g. "*.bmp". The type "list" expects entries separated by <li> tags.
-       The default value is specified within the tags. 
-	
-	 Parameters with the attribute "variable=1" can be changed at runtime of SwisTrack. If this
-       is not desired (for instance for the video feed, the attribute can be omitted).
-
+       The default value is specified within the tags.    
   --> 
   </COMPONENTS>
   <!---
                                   Input Tab
   -->
   <INPUT mode="0" desc="AVI Video" long="The video source is provided by a video file">
-   <AVIFILE desc="AVI File" type="open" param="*.avi">example.avi</AVIFILE>
+   <AVIFILE desc="AVI File" type="open" param="*.avi"/>
   </INPUT>
   <INPUT mode="1" desc="IEEE FireWire" long="The video source is provided by a IEEE FireWire Camera">
    <RESOLUTION desc="Resolution" type="list">
@@ -49,60 +45,54 @@
    </FRAMERATE>
   </INPUT>
   <!---
-					    Image Filter Tab
+                                  Imagefilter Tab
   -->
-  <IMAGEFILTER mode="0" desc="Noise Filter" long="This filter performs a simple erosion and dilusion">
-  </IMAGEFILTER>
+  <IMAGEFILTER mode="0" desc="No Filter" long=""></IMAGEFILTER>
   <!---
                                   Segmenter Tab
   -->
   <SEGMENTER mode="0" desc="Static Background" long="The image is segmented by subtracting a static background image from every frame in the video">
-   <THRESHOLD desc="Threshold" type="integer" min="0" max="255" variable="1">20</THRESHOLD>
-   <BGIMAGE desc="Background Image" type="open" param="*.bmp">example/bg.bmp</BGIMAGE>
+   <THRESHOLD desc="Threshold" type="integer">20</THRESHOLD>
+  <BGIMAGE desc="Background Image" type="open" param="*.bmp"/>
   </SEGMENTER>
   <SEGMENTER mode="1" desc="Running Average" long="The image is segmented by subtracting the running average from every frame in the video">
-   <THRESHOLD desc="Threshold" type="integer" variable="1">20</THRESHOLD>
-   <ALPHA desc="Averaging Speed" type="double" variable="1">0.02</ALPHA>
+   <THRESHOLD desc="Threshold" type="integer">20</THRESHOLD>
+   <ALPHA desc="Averaging Speed" type="double">0.02</ALPHA>
   </SEGMENTER>
   <!---
                   Particle Filter Tab
   -->
   <PARTICLEFILTER mode="0" desc="Min-Max Size Filter" long="Particles are filtered out according to their size">
-   <MINAREA desc="Minimum area of a blob" type="double" variable="1">0</MINAREA>
-   <MAXAREA desc="Maximum area of a blob" type="double" variable="1">1000</MAXAREA>
+   <MINAREA desc="Minimum area of a blob" type="double">0</MINAREA>
+   <MAXAREA desc="Maximum area of a blob" type="double">1000</MAXAREA>
   </PARTICLEFILTER>
-  <PARTICLEFILTER mode="1" desc="Marker-based" long="Markers consist of two blobs, and its COG will be calculated">
-   <MAXDIST desc="Maximum distance between blobs" type="double" variable="1">10</MAXDIST>
-  </PARTICLEFILTER>
-
-
   <!---
                                 Tracker Tab 
   -->
   <TRACKER mode="0" desc="Nearest Neighbor" long="Simple nearest neighbor tracking. Maximal distance between two frames can be specified by a distance gate">
-  <MAXSPEED desc="Maximum allowed speed (pixel/frame)" type="double" variable="1">50</MAXSPEED>
+  <MAXSPEED desc="Maximum allowed speed (pixel/frame)" type="double">50</MAXSPEED>
   <NOBJECTS desc="Number of objects to track" type="integer">1</NOBJECTS>
   </TRACKER>
   <!---
                             Calibration Tab
   -->
-  <CALIBRATION mode="0" desc="2nd Order Polynomial Fit" long="Mapping from image to world space is done using by fitting a 2nd order polynomial">
-   <CALIBBMPFNAME desc="Calibration Background" type="open" param="*.bmp">example/calibration_bg.bmp</CALIBBMPFNAME>
-   <CALIBFNAME desc="Calibration Pattern" type="open" param="*.bmp">example/calibration.bmp</CALIBFNAME>
+  <CALIBRATION mode="0" desc="2nd Order Polynomial Fit" long="">
+   <CALIBBMPFNAME desc="Calibration Background" type="open" param="*.bmp"/>
+   <CALIBFNAME desc="Calibration Pattern" type="open" param="*.bmp"/>
   </CALIBRATION>
   <!---
-                Mask Tab
+			    Mask Tab
   -->
   <MASK mode="0" desc="No Mask" long="">
   </MASK>
   <MASK mode="1" desc="Binary Mask" long="Areas are defined by connected components of white pixels in the mask image">
-   <MASKFNAME desc="Mask Binary Image" type="open" param="*.bmp">example/mask.bmp</MASKFNAME>
+   <MASKFNAME desc="Mask Binary Image" type="open" param="*.bmp"/>
   </MASK>
   <!---
-                Output Tab
+			    Output Tab
   -->
   <OUTPUT mode="0" desc="Output uncalibrated data" long="">
-    <OUTPUTFNAME desc="Output File (text)" type="save" param="*.txt"></OUTPUTFNAME>
+	<OUTPUTFNAME desc="Output File (text)" type="save"/>
   </OUTPUT>
   </CFG>     
                    

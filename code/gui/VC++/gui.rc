@@ -41,7 +41,7 @@ SINGLESTEP              BITMAP  DISCARDABLE     "../bitmaps\\singlestep.bmp"
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-GUI                     ICON    DISCARDABLE     "gui.ico"
+GUI                     ICON    DISCARDABLE     "../ressources/gui.ico"
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
