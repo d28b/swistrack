@@ -963,8 +963,7 @@ int Tracker::init()
 		GetParticlesFromContours(				    // and get particles
 			segmenter->GetContours());
 		numParticles=particles.size();
-        printf("Particles %d\n",numParticles);
- 		if(status != RUNNING) 
+      	if(status != RUNNING) 
 			return(status);
 		else
 			status = SEARCHING;

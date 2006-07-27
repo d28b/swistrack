@@ -93,6 +93,7 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg)
             break;
         case 1 : /////////////// 1394 camera /////////////////////////
 #ifdef _1394
+
             if (theCamera.CheckLink() != CAM_SUCCESS){
                 status = CAN_NOT_OPEN_AVI_FILE;
                 throw "Segmenter: Can not access 1394 Camera";
@@ -128,6 +129,9 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg)
                 trackingimg->Init(input,binary);
                 
                 }
+			else{
+				throw "[Segmenter::Segmenter] Could not read from IEEE1394 camera";
+			}
             
 #endif
             break;
