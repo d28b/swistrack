@@ -119,7 +119,6 @@ void SwisTrack::RecreateToolbar()
 
 	TransferDataFromWindow();
 
-
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
     toolBar->Realize();
