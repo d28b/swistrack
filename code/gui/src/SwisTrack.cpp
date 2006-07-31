@@ -671,7 +671,9 @@ void SwisTrack::ShutDown()
 		delete(datalogger);
 		datalogger=NULL;
 	}
-	ot->Stop();
+	if(ot){
+		ot->Stop();
+	}
 	status=STOPPED;
 
 	menuView->Check (Gui_View_ShowTracker, FALSE);

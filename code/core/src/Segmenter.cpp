@@ -62,7 +62,7 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg)
                 fopen_s(&f,GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"),"r");
                 if(f){
                     fclose(f);
-                    throw "Segmenter: Can not open AVI file (codec problem)";
+                    throw "Segmenter: Can not open AVI file (codec problem, VFW codec required, not DirectShow)";
                     }
                 else{
                     fopen_s(&f,"swistrack.log","w");
