@@ -244,6 +244,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\ParticleFilter.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\polygon.cpp"
 				>
 				<FileConfiguration
@@ -375,6 +379,10 @@
 			</File>
 			<File
 				RelativePath="..\include\ObjectTracker.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ParticleFilter.h"
 				>
 			</File>
 			<File

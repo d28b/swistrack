@@ -45,10 +45,8 @@ Tracker::Tracker(ObjectTracker* parent, xmlpp::Element* cfgRoot, TrackingImage* 
 
     style = TRAJFULL;  /** \todo this should go into trackingimage */
 	
-    
-	
-    segmenter = new Segmenter(cfgRoot,trackingimg);	
-	status = segmenter->GetStatus();
+    particlefilter = new ParticleFilter(cfgRoot,trackingimg);	
+	status = particlefilter->GetStatus();
 	
 	SetParameters(); // this function updates all variable parameters and can also be called from the GUI
 
@@ -63,15 +61,15 @@ Tracker::Tracker(ObjectTracker* parent, xmlpp::Element* cfgRoot, TrackingImage* 
 		}
 	
 	if(status==READY_TO_START){
-		status=segmenter->init(100); // initializes segmenter
+		status=particlefilter->init(100); // initializes segmenter
 		}
 	}
 
 Tracker::~Tracker()
 	{
-   	if(segmenter){
-		delete(segmenter);
-		segmenter=NULL;
+   	if(particlefilter){
+		delete(particlefilter);
+		particlefilter=NULL;
 		}
 	if(targets.size()) targets.clear();
 	if(mask) delete(mask);
@@ -321,7 +319,7 @@ void FindBestAssociation(CvMat* matrix,vector<int>* min_cost_path, vector<int>* 
 
 
 	
-		fp=particles.size();    // Number of particles
+		fp=particles->size();    // Number of particles
 		N=targets.size();		// Number of trajectories
 
 		CvMat* row_index = cvCreateMat(fp,1,CV_64FC1);
@@ -336,11 +334,11 @@ void FindBestAssociation(CvMat* matrix,vector<int>* min_cost_path, vector<int>* 
 
 		double max_speed_square = max_speed * max_speed;
 
-		for(row=0; row<particles.size(); row++){
+		for(row=0; row<particles->size(); row++){
 			for(col=0; col<targets.size(); col++){
 				
 				// Calculate cost for each particle/trajectory pair
-				double cost = GetCost(col,particles.at(row).p);
+				double cost = GetCost(col,particles->at(row).p);
 				if(cost < max_speed_square)
 					{
 						cvmSet(matrix,row,col,sqrt(cost));
@@ -379,7 +377,7 @@ void FindBestAssociation(CvMat* matrix,vector<int>* min_cost_path, vector<int>* 
 						nentries=GetNumberOfCandidateSolutionsInCol(matrix,uniquecol);
 						if(nentries==1)
 							{
-								AddPoint(GetIndex(col_index,uniquecol),particles.at(GetIndex(row_index,row)).p);
+								AddPoint(GetIndex(col_index,uniquecol),particles->at(GetIndex(row_index,row)).p);
 								reducable=ReduceIndexedMatrix(&matrix,&row_index,&col_index,row,uniquecol);
 								break;
 							}
@@ -417,7 +415,7 @@ void FindBestAssociation(CvMat* matrix,vector<int>* min_cost_path, vector<int>* 
 					  }
 //				  else if(nentries==1 && uniquerow!=-1) // 'col' has only a single trajectory to choose from
 //					  {
-//					  AddPoint(GetIndex(col_index,col),particles.at(GetIndex(row_index,uniquerow)).p);
+//					  AddPoint(GetIndex(col_index,col),particles->at(GetIndex(row_index,uniquerow)).p);
 //					  reducable=ReduceIndexedMatrix(&matrix,&row_index,&col_index,-1,col);
 //					  break;
 //					  }
@@ -456,8 +454,8 @@ void FindBestAssociation(CvMat* matrix,vector<int>* min_cost_path, vector<int>* 
 				double min_dist=1000000;
 				vector<particle>::iterator min_dist_id;
 		
-				for(vector<particle>::iterator p=particles.begin(); // find the "closest" particle for object 'id'
-				p != particles.end();
+				for(vector<particle>::iterator p=particles->begin(); // find the "closest" particle for object 'id'
+				p != particles->end();
 				p++){
 					double dist = GetCost(id,p->p);
 					//	printf("%f %f %f\n",p->p.x,p->p.y,dist);
@@ -490,15 +488,15 @@ void FindBestAssociation(CvMat* matrix,vector<int>* min_cost_path, vector<int>* 
 		printf("Association according to minimum cost path\n");
 		for(i=0; i<matrix->cols; i++){
 			
-			if(particles.at(GetIndex(row_index,min_cost_path.at(i))).id==-1){ // if particle is not associated yet
-				particles.at(GetIndex(row_index,min_cost_path.at(i))).id=GetIndex(col_index,i); // associate best particle with object id				
+			if(particles->at(GetIndex(row_index,min_cost_path.at(i))).id==-1){ // if particle is not associated yet
+				particles->at(GetIndex(row_index,min_cost_path.at(i))).id=GetIndex(col_index,i); // associate best particle with object id				
 				}
 			else{  // otherwise just take this point and add id to the list of competitors
 				
-				if(manual_mode)	AddCompetitor(particles.at(GetIndex(row_index,min_cost_path.at(i))).id);
+				if(manual_mode)	AddCompetitor(particles->at(GetIndex(row_index,min_cost_path.at(i))).id);
 				AddCompetitor(GetIndex(col_index,i));
 				}		
-			AddPoint(GetIndex(col_index,i),particles.at(GetIndex(row_index,min_cost_path.at(i))).p);
+			AddPoint(GetIndex(col_index,i),particles->at(GetIndex(row_index,min_cost_path.at(i))).p);
 			}
 		
 			}
@@ -570,8 +568,8 @@ void Tracker::DataAssociation()
 		vector<particle>::iterator min_dist_id;
 		
 		
-		for(vector<particle>::iterator p=particles.begin(); // find the "closest" particle for object 'id'
-		p != particles.end();
+		for(vector<particle>::iterator p=particles->begin(); // find the "closest" particle for object 'id'
+		p != particles->end();
 		p++){
 			double dist = GetCost(id,p->p);
 			//	printf("%f %f %f\n",p->p.x,p->p.y,dist);
@@ -632,13 +630,6 @@ void Tracker::DataAssociation()
 				CleanParticles(); // delete all assigned particles from the particle list			
 				AssociateParticlesToCompetitors(max_speed);
 			//	}
-
-
-	/** \todo
-	* The manual mode got commented out when multi-threading was removed. In order to re-introduce it, some way must be found to ask the GUI for user input *
-	*/
-
-
 			}  // end if !competitors.empty
 		} // end if fp && ap<num_objects
 	else{
@@ -647,8 +638,6 @@ void Tracker::DataAssociation()
 				targets.at(i).DrawTrajectory(style);
 			}
 		}
-
-	
 	avg_speed = max_speed/2;
 
 	///////////////////// Determine number and age of shared trajectories //////////////////
@@ -682,9 +671,9 @@ void Tracker::DataAssociation()
 	///////////////////////////// Create new trajectories for noise  //////////////////////
 	
 	CleanParticles();
-//	printf("We have now %d particles to assign, and have already %d noise trajectories\n",particles.size(),ptargets.size());
+//	printf("We have now %d particles to assign, and have already %d noise trajectories\n",particles->size(),ptargets.size());
     vector<particle>::iterator p;
-	for(p=particles.begin();p != particles.end();p++) // assign particles to existing noise trajectories
+	for(p=particles->begin();p != particles->end();p++) // assign particles to existing noise trajectories
 		{
 		double min_dist=1000000;
 		vector<Track>::iterator min_dist_id=ptargets.begin();
@@ -713,7 +702,7 @@ void Tracker::DataAssociation()
 		} // end for each id 1
 	
 	id=ptargets.size();
-	for(p=particles.begin();p != particles.end();p++){ // create new noise trajectories
+	for(p=particles->begin();p != particles->end();p++){ // create new noise trajectories
 		if(p->id==-1){
 //			printf("Create new noise trajectory (%d)\n",id);
 			ptargets.push_back(*(new Track(id,trackingimg,nr_objects)));
@@ -728,20 +717,12 @@ void Tracker::DataAssociation()
 		found=1;
 		for(vector<Track>::iterator t=ptargets.begin(); t!=ptargets.end(); t++){ // delete noise trajectories that are not assigned
 			found=0;
-			for(p=particles.begin();p != particles.end();p++) if(p->id==t->id) found=1;
+			for(p=particles->begin();p != particles->end();p++) if(p->id==t->id) found=1;
 			if(!found){ ptargets.erase(t); break; }
 		}
 	}
 
 
-	/*if(ptargets.size()>0){
-	printf("MaxAge: %d NrRest: %d ",maxageexceeded,nrresting);
-	for(vector<Track>::iterator t=ptargets.begin(); t!=ptargets.end(); t++){
-		printf("%d:%0.2f  ",t->id,sqrt(GetDist(&t->trajectory.front(),&t->trajectory.back())));
-		}
-	printf("\n");
-		}
-	*/
     ///////////// If a noise trajectory seems to be reasonable, swap with the closest shared trajectory ///////////////////
 
 	found=0;
@@ -774,19 +755,6 @@ void Tracker::DataAssociation()
 			}
 		if(found) break;
 		}
-
-/*	if(maxageexceeded!=-1 && fp){
-		AddCompetitor(maxageexceeded);
-		AssociateParticlesToCompetitors(max_speed*10);
-		}*/
-	//printf("Shared trajectories: %d Free Particles: %d\n",nrshared,fp);
-
-//	for(int i=0; i<nr_objects; i++) printf("%3d ",sharedage.at(i));
-//	printf("### %d\n",fp);
-
-//	for(int i=0; i<nr_objects; i++) printf("%3d ",restingtraj.at(i));
-//	printf("### %d\n",fp);
-	
 	}
 
 
@@ -797,8 +765,8 @@ void Tracker::DataAssociation()
 void Tracker::FindFreeParticles(int* fp, int* ap)
 	{
 	*fp=0; *ap=0;
-	for(vector<particle>::iterator p=particles.begin();
-	p != particles.end();
+	for(vector<particle>::iterator p=particles->begin();
+	p != particles->end();
 	p++) 
 		if(p->id==-1) 
 			(*fp)++;
@@ -810,20 +778,21 @@ void Tracker::FindFreeParticles(int* fp, int* ap)
 void Tracker::CleanParticles()
 	{
 				vector<particle> temp;
-				temp=particles;
-				particles.clear();
+				for(unsigned int i=0; i<particles->size(); i++) temp.push_back(particles->at(i));
+				
+				particles->clear();
 				
 				for(vector<particle>::iterator p=temp.begin();
 				p!= temp.end();
 				p++){									
 					if(p->id==-1)
-						particles.push_back(*p);
+						particles->push_back(*p);
 					}
 	}
 
 void Tracker::AssociateParticlesToCompetitors(int max_speed){
-	for(vector<particle>::iterator p=particles.begin();
-				p!= particles.end();
+	for(vector<particle>::iterator p=particles->begin();
+				p!= particles->end();
 				p++){
 					double min_dist=1000000;
 					vector<int>::iterator min_dist_id=competitors.begin();
@@ -853,14 +822,13 @@ void Tracker::AssociateParticlesToCompetitors(int max_speed){
 
 int Tracker::Step()
 	{
-	status = segmenter->Step();
-	if(status==RUNNING){
-		GetParticlesFromContours(segmenter->GetContours());	
+	particles = particlefilter->Step();
+	if(particles){	
 		DataAssociation();	// associate all points with their nearest neighbor
 		if(trackingimg->GetDisplay() && !manual_mode)
 			DrawTrajectories();
 		if(mask){
-			mask->UpdateCount(&targets,(int)(segmenter->GetProgress(2)));
+			mask->UpdateCount(&targets,(int)(particlefilter->GetProgress(2)));
 			mask->DrawMask(trackingimg);
 			}
 		}
@@ -901,11 +869,11 @@ double Tracker::GetCost(int id,CvPoint2D32f p){
 * \todo A possible improvement could be to generate more than one particle from
 * contours that are too large.
 */
-void Tracker::GetParticlesFromContours(vector<resultContour>* contours){
+/*void Tracker::GetParticlesFromContours(vector<resultContour>* contours){
 	int numContours = contours->size();
 	int numParticles=0;
 	
-	particles.clear();
+	particles->clear();
 	for(int c=0;c<numContours;c++)
 		{                             
 		if(contours->at(c).area<=max_area){ // Only allow blobs that are not bigger than an object
@@ -916,7 +884,7 @@ void Tracker::GetParticlesFromContours(vector<resultContour>* contours){
 			P.area=contours->at(c).area;
 			P.color=contours->at(c).color;
 			P.id=-1; // initially the particle is unassociated
-			particles.push_back(P);
+			particles->push_back(P);
 			numParticles++;
 			if(trackingimg->GetDisplay())
 				trackingimg->DrawCircle(cvPoint((int)(contours->at(c).center.x),(int)(contours->at(c).center.y)),CV_RGB(0,255,0));
@@ -932,14 +900,14 @@ void Tracker::GetParticlesFromContours(vector<resultContour>* contours){
 			P.color=contours->at(c).color;
 
 			P.id=-1; // initially the particle is unassociated
-			particles.push_back(P);
+			particles->push_back(P);
 			numParticles++;
 			if(trackingimg->GetDisplay())
 				trackingimg->DrawCircle(cvPoint((int)(contours->at(c).center.x),(int)(contours->at(c).center.y)),CV_RGB(255,0,0));
 			trackingimg->Cover(cvPoint((int)(contours->at(c).center.x),(int)(contours->at(c).center.y)),CV_RGB(255-P.area,0,0),2);
 			}
 		}
-	}
+	}*/
 
 /** Add a point to the current track (max track) 
 *
@@ -961,22 +929,24 @@ int Tracker::init()
 	{
 	int numParticles=0;
 		
-		status=segmenter->Step();                   // run one segmentation step 
-		GetParticlesFromContours(				    // and get particles
-			segmenter->GetContours());
-		numParticles=particles.size();
-      	if(status != RUNNING) 
-			return(status);
-		else
-			status = SEARCHING;
-		if(numParticles >= nr_objects)				// if there are enough particles
+		particles=particlefilter->Step();
+		
+		if(particles){
+			status=SEARCHING;
+			numParticles=particles->size();
+			if(numParticles >= nr_objects)				// if there are enough particles
 			{
 			status = RUNNING;
 			for (int i=0;i<nr_objects;i++)         
 				{	
-				AddPoint(i,particles.at(i).p);
+				AddPoint(i,particles->at(i).p);
 				}
 			}
+		}
+		else{
+			return(STOPPED);
+		}
+      	
 	return(status);
 	}
 
@@ -1002,17 +972,16 @@ CvPoint2D32f* Tracker::GetPos(int id)
 */
 double Tracker::GetProgress(int kind)
 {
-	return(segmenter->GetProgress(kind));
+	return(particlefilter->GetProgress(kind));
 }
 
 void Tracker::SetParameters()
 	{
      /** \todo Implement cfg look-up */
     mask=0;
-	max_area = 100;
 	max_speed = 25;
 	manual_mode = 0;
-	segmenter->SetParameters();
+	particlefilter->SetParameters();
 	}
 
 /** \brief Changes display options
@@ -1037,11 +1006,11 @@ for(int i=0;i<nr_objects; i++)
 									
 }
 
-/** \brief Wrapper function calling Segmenter::GetFPS
+/** \brief Wrapper function calling	ParticleFilter::GetFPS
 */
 double Tracker::GetFPS()
 {
- return(segmenter->GetFPS());
+ return(particlefilter->GetFPS());
 }
 
 
@@ -1181,7 +1150,7 @@ double Tracker::GetDist(CvPoint2D32f *p1, CvPoint2D32f *p2)
 
 void Tracker::RefreshCoverage()
 {
-	segmenter->RefreshCoverage();
+	particlefilter->RefreshCoverage();
 }
 
 void Tracker::SetPos(int id,CvPoint2D32f *p)
@@ -1193,11 +1162,8 @@ void Tracker::SetPos(int id,CvPoint2D32f *p)
 
 
 int Tracker::GetNumberofParticles()
-{
-	if(segmenter)
-		return(segmenter->GetContours()->size());
-	else
-		return(0);
+{	
+		return(particles->size());
 }
 
 int Tracker::GetNumberofTracks()
@@ -1207,9 +1173,10 @@ int Tracker::GetNumberofTracks()
 
 CvPoint2D32f* Tracker::GetParticlePos(int id)
 {
-	if(segmenter)
-		return(&(segmenter->GetContours()->at(id).center));
-	else return(0);
+	if((unsigned int) id <= particles->size())
+		return(&(particles->at(id).p));
+	else
+		return(0);
 }
 
 CvPoint2D32f* Tracker::GetTargetPos(int id)

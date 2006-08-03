@@ -10,7 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #include "mask.h"
-#include "Segmenter.h"
+#include "ParticleFilter.h"
 #include "TrackingImage.h"
 #include "Track.h"
 #include "ObjectTracker.h"
@@ -18,26 +18,6 @@
 
 
 class ObjectTracker;
-
-/** \struct particle
-* \brief stores parameters and track id of a particle
-* A particle allows for storing its center (sub-pixel accuracy), its size, compactness, orientation, color, and the id 
-* of its associated track.
-*/
-struct particle{
-	/** Particle center */
-	CvPoint2D32f p;  
-	/** Particle color */
-	double color;	  
-	/** Particle area */
-	double area;
-	/** The contour's compactness (area/circumference ratio) */
-	double compactness;
-	/** The contour's orientation */
-	double orientation;
-	int id;          // associated track
-};
-
 
 class Tracker : public Component
 	{
@@ -96,8 +76,8 @@ class Tracker : public Component
 		void AddLostItem(int c);
 		
 		ObjectTracker* parent;
-		/** Segmenter class */
-		Segmenter* segmenter;
+		/** Particlefilter class */
+		ParticleFilter* particlefilter;
 		/** Mask class */
 		Mask* mask;
 		/** Info about objects being tracked */
@@ -107,9 +87,8 @@ class Tracker : public Component
 		/** status */
 		int status;
 		/** particles from segmenter*/
-		vector<particle> particles;	 
-		/** Maximum area of blob  [pix^2] */
-		int max_area;				
+		vector<particle>* particles;	 
+		
 		/** Maximum speed of objects to track */
 		int max_speed;	
 		/** 'Average' speed of objects to track */

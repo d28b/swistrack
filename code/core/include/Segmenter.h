@@ -125,11 +125,6 @@ class Segmenter : public Component
 		/** Vector of resulting contours from segmentation */
 		vector<resultContour> contours;
 		double GetSqrDist(CvPoint2D32f p1, CvPoint2D32f p2);
-
-		//int input_mode;
-        int particlefilter_mode;
-
-
 	};
 
 #endif // !defined(AFX_SEGMENTER_H__12A4A8C0_A7DD_4FD4_A1FF_10200028C06A__INCLUDED_)

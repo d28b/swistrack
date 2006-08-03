@@ -29,8 +29,6 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 	trackingimg->Init(input->GetInputIpl(),binary);
 
 
-	if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/PARTICLEFILTER","mode"))
-		throw "[Segmenter::Segmenter] Particlefilter mode undefined (/CFG/COMPONENTS/INPUT)";
 	if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/SEGMENTER","mode"))
 		throw "[Segmenter::Segmenter] Segmenter mode undefined (/CFG/COMPONENTS/INPUT)";
 
@@ -40,7 +38,7 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 	* segmenter mode
 	*/
 
-	particlefilter_mode=GetIntAttrByXPath(cfgRoot,"/CFG/COMPONENTS/PARTICLEFILTER","mode");
+	
 	status = READY_TO_START;
 
 
