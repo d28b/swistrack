@@ -10,20 +10,19 @@
 #endif // _MSC_VER > 1000
 
 
-#define _1394
 
 
 #include "polygon.h"
 #include "TrackingImage.h"
+#include "Input.h"
 #include <vector>
 #include <math.h>
 #include "cv.h"
 #include "highgui.h"
 #include "Component.h"
 
-#ifdef _1394
-#include <1394camera.h>
-#endif
+
+
 
 /*****************************************************************************/
 /******************************** defines ************************************/
@@ -103,49 +102,54 @@ class Segmenter : public Component
 		int FindContours(IplImage* src, vector<resultContour>* contour_obj, double min_area);
 		void GetContourColor(IplImage* input, vector<resultContour>* contour_obj);
 		void BWSegmentation();
+
+		Input* input;
+
 		/** Background image. From a file */
 		IplImage* background;	
 		/** Input image, from an AVI sequence */
-		IplImage* input;			
+		//IplImage* input;			
 		/** B&W version of input image */
 		IplImage* current;		
 		/** Binary image (segmented) */
 		IplImage* binary;	
 		/** Pointer to AVI sequence */
-		CvCapture* Capture;	
+		//CvCapture* Capture;	
+		
 		/** Stops processing */
 		//bool stop_proc;			
+		
 		/** Status code */
 		status_code status;		
 		/** Number of objects to segment */
 //		int nr_objects;			
+		
 		/** Binarization threshold (0-255) */
 		int bin_threshold;		
 		/** Minimum area of blob  [pix^2] */
 		int min_area;	
-		/** Exponential average constant for motion estimater */
+		/** Exponential average constant for background estimae */
 		double alpha;
+
 		/** Frame number */
-		int nFrame;
+		//int nFrame;
 		/** Vector of resulting contours from segmentation */
 		vector<resultContour> contours;
 		double GetSqrDist(CvPoint2D32f p1, CvPoint2D32f p2);
 		/** Raw data for storing 1394 camera images */
-		unsigned char *m_pBitmap;
+	//	unsigned char *m_pBitmap;
 
 
 #ifdef _1394
 		/** 1394 Camera handle */
-		C1394Camera theCamera;  //!< Camera handle (CMU 1394 Camera Driver)
+		//C1394Camera theCamera;  //!< Camera handle (CMU 1394 Camera Driver)
 #endif
 
-		/** input mode 0 = AVI, 1 = CAM */
-		int input_mode;
+		//int input_mode;
         int particlefilter_mode;
 
 
-		/** Color input flag */
-		int isinputincolor;
+
 	};
 
 #endif // !defined(AFX_SEGMENTER_H__12A4A8C0_A7DD_4FD4_A1FF_10200028C06A__INCLUDED_)

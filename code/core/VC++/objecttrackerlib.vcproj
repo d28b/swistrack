@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="objecttrackerlib"
 	ProjectGUID="{D010B136-96BD-4D44-B4F0-30388FB460B7}"
+	RootNamespace="objecttrackerlib"
 	>
 	<Platforms>
 		<Platform
@@ -22,6 +23,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			DeleteExtensionsOnClean="*.obj;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;$(TargetPath);*.ncb"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -194,6 +196,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\input.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\mask.cpp"
 				>
 				<FileConfiguration
@@ -360,6 +366,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\input.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\mask.h"
 				>
 			</File>
@@ -396,6 +406,10 @@
 			Name="Resource Files"
 			>
 		</Filter>
+		<File
+			RelativePath=".\input.cpp"
+			>
+		</File>
 		<File
 			RelativePath="..\core\readme.txt"
 			>

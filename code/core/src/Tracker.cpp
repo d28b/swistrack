@@ -45,11 +45,13 @@ Tracker::Tracker(ObjectTracker* parent, xmlpp::Element* cfgRoot, TrackingImage* 
 
     style = TRAJFULL;  /** \todo this should go into trackingimage */
 	
-    SetParameters(); // this function updates all variable parameters and can also be called from the GUI
+    
 	
     segmenter = new Segmenter(cfgRoot,trackingimg);	
 	status = segmenter->GetStatus();
 	
+	SetParameters(); // this function updates all variable parameters and can also be called from the GUI
+
 	for (int i=0;i<nr_objects;i++)          // initiate nr_objects Track classes
 		{
 		sharedage.push_back(0);

@@ -41,6 +41,8 @@ class SettingsDialog : public wxPropertySheetDialog
 
         void FileOpen(wxCommandEvent& event);
         void FileSave(wxCommandEvent& event);
+		void ChangeParam(wxCommandEvent& event);
+		void ChangeIntParam(wxCommandEvent& event);
         void ChangeMode(wxCommandEvent& event);
 
     public:

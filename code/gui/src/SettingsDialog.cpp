@@ -4,13 +4,25 @@ BEGIN_EVENT_TABLE(SettingsDialog, wxPropertySheetDialog)
 END_EVENT_TABLE()
 
 
-/*
-\todo:
-- save configuration
-- load configuration
-- integration of xmlcfg into swistrack core
-- therefore: abstract class "Components"
-*/
+void SettingsDialog::ChangeParam(wxCommandEvent& event)
+	{
+		int id=event.GetId()-1-wxID_HIGHEST;
+		//((wxTextCtrl*) controls[id])->SetValue("OK");
+		SetParamByXPath(parent->cfgRoot,idxpath[id].c_str(),((wxTextCtrl*) controls[id])->GetValue().c_str());
+	}
+
+void SettingsDialog::ChangeIntParam(wxCommandEvent& event)
+	{
+		int id=event.GetId()-1-wxID_HIGHEST;
+		wxString dummy;
+		dummy.Printf("%d",(int)((dynamic_cast<wxSpinCtrl*>(controls[id]))->GetValue()));
+		
+		wxMessageDialog* dlg =
+    new wxMessageDialog(this,"Transporting Integer values does not yet work, change the configuration manually",dummy,wxOK);
+    dlg->ShowModal();
+
+		SetParamByXPath(parent->cfgRoot,idxpath[id].c_str(),dummy.c_str());
+	}
 
 void SettingsDialog::FileOpen(wxCommandEvent& event )
     {
@@ -25,8 +37,8 @@ void SettingsDialog::FileOpen(wxCommandEvent& event )
     dialog.CentreOnParent();
     
     if (dialog.ShowModal() == wxID_OK)
-        {
-        //parent->cfg->SetParam(idxpath[id].c_str(),dialog.GetPath().c_str());
+        {	
+		SetParamByXPath(parent->cfgRoot,idxpath[id].c_str(),dialog.GetPath().c_str());
         ((wxTextCtrl*) controls[id])->SetValue(dialog.GetPath().c_str());
         }
     }
@@ -45,7 +57,7 @@ void SettingsDialog::FileSave(wxCommandEvent& event )
     
     if (dialog.ShowModal() == wxID_OK)
         {
-        //parent->cfg->SetParam(idxpath[id].c_str(),dialog.GetPath().c_str());
+        SetParamByXPath(parent->cfgRoot,idxpath[id].c_str(),dialog.GetPath().c_str());
         ((wxTextCtrl*) controls[id])->SetValue(dialog.GetPath().c_str());
         }
     }
@@ -65,7 +77,10 @@ void SettingsDialog::ChangeMode(wxCommandEvent& event){
     
     int currentab= notebook->GetSelection();
     // Clean up the notebook and reassign all callbacks to the controls
-    notebook->DeleteAllPages();
+/*	for(int i=wxID_HIGHEST+1; i<actid; i++){
+		Disconnect(i, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(SettingsDialog::ChangeIntParam));
+	}*/
+	notebook->DeleteAllPages();
     actid=wxID_HIGHEST+1;
     controls.clear();
     idxpath.clear();
@@ -90,6 +105,7 @@ SettingsDialog::SettingsDialog(SwisTrack *parent) : actid(wxID_HIGHEST+1), paren
     Create(parent, wxID_ANY, _("Preferences"), wxDefaultPosition, wxDefaultSize,
         wxDEFAULT_DIALOG_STYLE |wxRESIZE_BORDER);
     
+
     notebook =GetBookCtrl();
     try{
         parser.parse_file("swistrack.exp");
@@ -110,7 +126,7 @@ void SettingsDialog::CreateDialog(){
     // Creates one notebook panel for every entry in the components list
     vector<wxPanel*> panels;
     xmlpp::NodeSet set = nodeRoot->find("/CFG/COMPONENTS/*");
-    for(xmlpp::NodeSet::iterator i = set.begin(); i != set.end(); ++i)
+    for(xmlpp::NodeSet::iterator i = set.begin(); i != set.end(); ++i) // loops through all components
         {
         //  std::cout << " " << (*i)->get_path() << std::endl;
         
@@ -120,11 +136,11 @@ void SettingsDialog::CreateDialog(){
         char xpath[255];
         sprintf(xpath,"/CFG/%s",(*i)->get_name().c_str());
         xmlpp::NodeSet modeset = nodeRoot->find(xpath);
-        for(xmlpp::NodeSet::iterator mode = modeset.begin(); mode != modeset.end(); ++mode){
+        for(xmlpp::NodeSet::iterator mode = modeset.begin(); mode != modeset.end(); ++mode){ // loops through all available modes
             if(IsAttr(*mode,"desc")) availablemodes.Add(GetAttr(*mode,"desc"));
             }
         // display all information of the CURRENT mode given by the CFG
-        for(xmlpp::NodeSet::iterator mode = modeset.begin(); mode != modeset.end(); ++mode){            
+        for(xmlpp::NodeSet::iterator mode = modeset.begin(); mode != modeset.end(); ++mode){ // processes all available modes           
             if(GetIntAttr(*mode,"mode")==current_mode){
                 
                 // check whether there is already data for this mode in the configuration, and create nodes if necessary
@@ -202,6 +218,7 @@ void SettingsDialog::CreateDialog(){
                         idxpath.push_back(wxString((*parameter)->get_path().c_str()));
                         controls.push_back(m_spinctrl);
                         parameter_sizer->Add(m_spinctrl,0, wxALL|wxALIGN_LEFT,0);
+						this->Connect(actid-1,wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(SettingsDialog::ChangeIntParam));
                         }
                     //////////////// Treats type DOUBLE //////////////////////
                     else if(!param_type.compare("double")){
@@ -216,6 +233,7 @@ void SettingsDialog::CreateDialog(){
                         idxpath.push_back(wxString((*parameter)->get_path().c_str()));
                         controls.push_back(m_textctrl);
                         parameter_sizer->Add(m_textctrl,0,wxALL|wxALIGN_LEFT,0);
+                        this->Connect(actid-1,wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(SettingsDialog::ChangeParam));
                         }
                     //////////////// Treats type OPEN ///////////////////////
                     else if(!param_type.compare("open")){

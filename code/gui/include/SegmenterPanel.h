@@ -9,6 +9,7 @@
 
 #include "wx/minifram.h"  // Imports the mini frame class (tracker and segmenter panel)
 #include "wx/valgen.h"	  // Generic validators, used in almost every dialgo
+#include "wx/slider.h"
 
 #include "constants.h"
 #include "SwisTrack.h"
@@ -34,6 +35,12 @@ class SegmenterPanel : public wxMiniFrame
 	protected:
 		DECLARE_EVENT_TABLE()
 	private:
+		void ChangeParam(wxCommandEvent& event);
+		void ChangeIntParam(wxScrollEvent& event);
+
+		int actid; // used to keep track of control id's
+        vector<wxString> idxpath; // keeps track of the x-path of each control
+        vector<wxControl*> controls; // keeps track of all controls
 		int minarea;
 		int threshold;
 		SwisTrack* parent;

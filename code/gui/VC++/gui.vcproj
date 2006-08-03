@@ -204,6 +204,7 @@
 			<Tool
 				Name="VCXDCMakeTool"
 				ExecutionBucket="12"
+				ValidateIntelliSense="true"
 			/>
 			<Tool
 				Name="VCBscMakeTool"
