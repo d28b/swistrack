@@ -99,7 +99,7 @@ class Segmenter : public Component
 	
 		void QueryFrame1394(IplImage* input);
 		int GetContour(IplImage* src, vector<resultContour>* contour_obj);
-		int FindContours(IplImage* src, vector<resultContour>* contour_obj, double min_area);
+		int FindContours(IplImage* src, vector<resultContour>* contour_obj);
 		void GetContourColor(IplImage* input, vector<resultContour>* contour_obj);
 		void BWSegmentation();
 
@@ -107,47 +107,27 @@ class Segmenter : public Component
 
 		/** Background image. From a file */
 		IplImage* background;	
-		/** Input image, from an AVI sequence */
-		//IplImage* input;			
 		/** B&W version of input image */
 		IplImage* current;		
 		/** Binary image (segmented) */
 		IplImage* binary;	
-		/** Pointer to AVI sequence */
-		//CvCapture* Capture;	
-		
-		/** Stops processing */
-		//bool stop_proc;			
-		
 		/** Status code */
 		status_code status;		
-		/** Number of objects to segment */
-//		int nr_objects;			
 		
 		/** Binarization threshold (0-255) */
 		int bin_threshold;		
-		/** Minimum area of blob  [pix^2] */
-		int min_area;	
 		/** Exponential average constant for background estimae */
 		double alpha;
+		
+		/** Maximum number of contours to keep (only the 'max_number' largest contours are kept) */
+		int max_number;
 
-		/** Frame number */
-		//int nFrame;
 		/** Vector of resulting contours from segmentation */
 		vector<resultContour> contours;
 		double GetSqrDist(CvPoint2D32f p1, CvPoint2D32f p2);
-		/** Raw data for storing 1394 camera images */
-	//	unsigned char *m_pBitmap;
-
-
-#ifdef _1394
-		/** 1394 Camera handle */
-		//C1394Camera theCamera;  //!< Camera handle (CMU 1394 Camera Driver)
-#endif
 
 		//int input_mode;
         int particlefilter_mode;
-
 
 
 	};

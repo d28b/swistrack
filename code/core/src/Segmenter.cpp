@@ -45,7 +45,6 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 
 
 	mode=GetIntAttrByXPath(cfgRoot,"/CFG/COMPONENTS/SEGMENTER","mode");
-	SetParameters(); // should query all VARIABLE parameters from CFG 
 
 	switch(mode){
 		case 0 :{ ///////// Background Subtraction ///////////////
@@ -55,6 +54,8 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 				throw "[Segmenter::Segmenter] background image not specified (/CFG/SEGMENTER[@mode='0']/BGIMAGE)";
 			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='0']/THRESHOLD"))
 				throw "[Segmenter::Segmenter] threshold not specified (/CFG/SEGMENTER[@mode='0']/THRESHOLD)";
+			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='0']/MAXNUMBER"))
+				throw "[Segmenter::Segmenter] maximal number of contours not specified (/CFG/SEGMENTER[@mode='0']/MAXNUMBER)";
 
 
 			IplImage* bg = cvLoadImage(GetValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='0']/BGIMAGE"), -1); 						
@@ -88,12 +89,16 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 				throw "[Segmenter::Segmenter] threshold not specified (/CFG/SEGMENTER[@mode='1']/THRESHOLD)";
 			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='1']/ALPHA"))
 				throw "[Segmenter::Segmenter] alpha not specified (/CFG/SEGMENTER[@mode='1']/ALPHA)";
+			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='1']/MAXNUMBER"))
+				throw "[Segmenter::Segmenter] maximal number of contours not specified (/CFG/SEGMENTER[@mode='1']/MAXNUMBER)";
 
 			background = cvCreateImage(input->GetInputDim(),input->GetInputDepth(),1);
 			break;	
 		default :
 			throw "[Segmenter::Segmenter] Segmenter mode not implemented";
 	}
+
+	SetParameters(); // should query all VARIABLE parameters from CFG 
 }
 
 /** Destructor
@@ -144,7 +149,7 @@ int Segmenter::Step()
 	current=input->GetFrame();
 	if(current){
 		BWSegmentation();
-		trackingimg->Refresh(input->GetInputIpl(),binary);
+		trackingimg->Refresh(input->GetInputIpl(),binary);				
 		int numContours = GetContour(binary,&contours);    
 		status = RUNNING;
 	}
@@ -208,96 +213,57 @@ void Segmenter::BWSegmentation()
 * \param contour_obj: Vector to store resulting contours
 * \param min_area: Minimum area for the contours not to be rejected
 */
-int Segmenter::FindContours(IplImage* src, vector<resultContour>* contour_obj, double min_area)
+int Segmenter::FindContours(IplImage* src, vector<resultContour>* contour_obj)
 {
 	CvMemStorage* storage = cvCreateMemStorage(0);		// memory space that will be used for contour storage			
 	CvSeq* contour = 0;
-	//CvSeq* contour_max = 0;
 	std::vector<CvSeq*> tmp;
 	std::vector<CvSeq*>::iterator j;
-	int i;
+//	int i;
 	int n_contours = 0; /* Number of contours found */
 
 	//    CvPoint2D32f center = cvPoint2D32f(src->width/2,src->height/2);
 
 	// Make a copy of source, because contents are destroyed by cvStartFindContours
 	IplImage* src_tmp = cvCloneImage(src);
-	//cvErode(src_tmp,src_tmp,NULL,2);
 	CvContourScanner blobs = cvStartFindContours(src_tmp,storage,sizeof(CvContour),CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
 
-	// Traverse the sequence of contours and keep those that 
-	// are within geometric bounds
-
-
-	int counter=0;
-	switch(particlefilter_mode){
-			case 0 : { //////////////////// MIN-MAX FILTER ///////////////////////////////
-				while((contour=cvFindNextContour(blobs))!=NULL)
-				{		
-					//printf("Contour: %d Size(tmp) %d\n",counter++,tmp.size());
-					// Traverse contours until a bigger contour is found
-					/** \todo this loop has no interest for my POV. It is doing nothing. We do no action */
-					for(j=tmp.begin(); 
-						(j != tmp.end()) && (fabs(cvContourArea(contour)) < fabs(cvContourArea(*j)));
-						j++);
-					// check size of the contour
-					if((fabs(cvContourArea(contour)) > min_area))
-					{
-						tmp.insert(j,contour);
-						n_contours++;
-					}
-
-
-
-					CvPoint2D32f pt_centre;
-					CvRect rect;
-
-					// This is used to correct the position in case of ROI
-					if(src->roi != NULL)
-						rect = cvGetImageROI(src);
-					else
-					{
-						rect.x = 0;
-						rect.y = 0;
-					}
-
-
-					CvMoments moments;
-
-					// Compute and store the moments and other data of each contour
-					for(i=0;i<n_contours;i++)
-					{
-
-						resultContour rc;
-						cvMoments(tmp[i],&moments,0);
-						pt_centre.x=(float)(rect.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
-						pt_centre.y=(float)(rect.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
-						rc.center = pt_centre;
-						rc.area = moments.m00;
-						rc.compactness =  cvContourCompactness( tmp[i]);
-						rc.boundingrect = cvContourBoundingRect(tmp[i], 0);
-
-						contour_obj->push_back(rc);
-
-						/*for(j=0; // sort by distance from center
-						(j < contour_obj->size()) && (GetSqrDist(center,rc.center) < GetSqrDist(center,contour_obj->at(j).center));
-						j++);		
-						contour_obj->insert(&(contour_obj->at(j)),rc);
-						*/
-					}
-
-
-				}
-					 }
-					 break;
-			case 1 : { //////////////////// MARKER BASED ///////////////////////////////
-				/** \todo Implement something that copies the contours according to the markers */
-				/** \todo Of course, the whole thing has to go into PARTICLEFILTER class */
-					 }
-					 break;
-			default : throw "[Segmenter::FindContounrs] Unknown particlefilter mode";
+	//
+	while((contour=cvFindNextContour(blobs))!=NULL)
+	{	// inserts contours into temporary vector, sorted by size, biggest in front
+		for(j=tmp.begin(); (j != tmp.end()) && (fabs(cvContourArea(contour)) < fabs(cvContourArea(*j))); j++); 
+		tmp.insert(j,contour);
+		n_contours++;		
 	}
+		CvPoint2D32f pt_centre;
+		CvRect rect;
 
+		// This is used to correct the position in case of ROI
+		if(src->roi != NULL)
+			rect = cvGetImageROI(src);
+		else
+		{
+			rect.x = 0;
+			rect.y = 0;
+		}
+
+		CvMoments moments;
+
+		// Compute and store the moments and other data of each contour, but take only the 'max_number' first contours
+		for(int i=0;i<n_contours && i<max_number;i++)
+		{
+			resultContour rc;
+			cvMoments(tmp[i],&moments,0);
+			pt_centre.x=(float)(rect.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
+			pt_centre.y=(float)(rect.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
+			rc.center = pt_centre;
+			rc.area = moments.m00;
+			rc.compactness =  cvContourCompactness( tmp[i]);
+			rc.boundingrect = cvContourBoundingRect(tmp[i], 0);
+
+			contour_obj->push_back(rc);
+
+		}
 
 
 	contour=cvEndFindContours(&blobs);
@@ -324,7 +290,7 @@ int Segmenter::GetContour(IplImage* src, vector<resultContour>* contour_obj)
 	//printf("GetContour\n");
 	// Erase all contours in resultContour vector
 	contour_obj->clear();	
-	n_contours=FindContours(src,contour_obj,min_area);
+	n_contours=FindContours(src,contour_obj);
 	GetContourColor(input->GetInputIpl(),contour_obj);
 	return n_contours;
 }
@@ -389,11 +355,13 @@ void Segmenter::SetParameters()
 	switch(mode){
 			case 0 : { /////////// BACKGROUND SUBTRACTION ////////////////
 				bin_threshold = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='0']/THRESHOLD");
+				max_number = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='0']/MAXNUMBER");
 					 }
 					 break;
 			case 1 : { /////////// ESTIMATE SUBTRACTION //////////////////
 				bin_threshold = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='1']/THRESHOLD");
 				alpha = GetDoubleValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='1']/ALPHA");
+				max_number = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='1']/MAXNUMBER");
 					 }
 					 break;
 			default : {
@@ -401,11 +369,6 @@ void Segmenter::SetParameters()
 					  }
 					  break;
 	}
-
-
-
-	/** \todo min_area should go into particle filter */
-	min_area = 10; // particle filter
 }
 
 double Segmenter::GetFPS()

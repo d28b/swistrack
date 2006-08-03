@@ -17,9 +17,9 @@ void SettingsDialog::ChangeIntParam(wxCommandEvent& event)
 		wxString dummy;
 		dummy.Printf("%d",(int)((dynamic_cast<wxSpinCtrl*>(controls[id]))->GetValue()));
 		
-		wxMessageDialog* dlg =
+		/*wxMessageDialog* dlg =
     new wxMessageDialog(this,"Transporting Integer values does not yet work, change the configuration manually",dummy,wxOK);
-    dlg->ShowModal();
+    dlg->ShowModal();*/
 
 		SetParamByXPath(parent->cfgRoot,idxpath[id].c_str(),dummy.c_str());
 	}
@@ -66,20 +66,21 @@ void SettingsDialog::FileSave(wxCommandEvent& event )
 void SettingsDialog::ChangeMode(wxCommandEvent& event){
     int id=event.GetId()-1-wxID_HIGHEST;
     wxString dummy;
-    /*    dummy.Printf("%d",event.GetSelection());
+        dummy.Printf("%d",event.GetSelection());
     wxMessageDialog* dlg =
-    new wxMessageDialog(this,idxpath[id].c_str(),dummy,wxOK);
+		new wxMessageDialog(this,"[SettingsDialog::ChangeMode] This feature is still under development. Problem: As soon as we connect wxTextCtrl to an event, it is not possible to change modes anymore.","Developer Message",wxOK);
     dlg->ShowModal();
-    */
-    dummy.Printf("%d",event.GetSelection());
     
+    
+	
+	/*dummy.Printf("%d",event.GetSelection());
+    
+	
     SetAttrByXPath(parent->cfgRoot,idxpath[id].c_str(),"mode",dummy.c_str());
     
     int currentab= notebook->GetSelection();
     // Clean up the notebook and reassign all callbacks to the controls
-/*	for(int i=wxID_HIGHEST+1; i<actid; i++){
-		Disconnect(i, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(SettingsDialog::ChangeIntParam));
-	}*/
+
 	notebook->DeleteAllPages();
     actid=wxID_HIGHEST+1;
     controls.clear();
@@ -87,7 +88,7 @@ void SettingsDialog::ChangeMode(wxCommandEvent& event){
     LayoutDialog();
     
     CreateDialog();
-    notebook->SetSelection(currentab);
+    notebook->SetSelection(currentab);*/
     }
 
 SettingsDialog::~SettingsDialog(){
