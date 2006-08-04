@@ -4,7 +4,6 @@
 #include "AviWriter.h"
 #include "SocketServer.h"
 #include "SettingsDialog.h"
-//#include "TrackingPanel.h"
 #include "SwisTrackPanel.h"
 #include "InterceptionPanel.h"
 #include "GUIApp.h"
@@ -576,14 +575,6 @@ void SwisTrack::OnMenuHelpAbout(wxCommandEvent& WXUNUSED(event))
 	dlg->SetText("(c) 2004, 2005 Swarm-Intelligent Systems Group\nSwiss Federal Institute of Technology\nLausanne, Switzerland\n");
 	dlg->ShowModal();
 }
-
-
-
-
-
-
-
-
 
 
 
