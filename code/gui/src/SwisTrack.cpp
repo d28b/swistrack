@@ -4,7 +4,7 @@
 #include "AviWriter.h"
 #include "SocketServer.h"
 #include "SettingsDialog.h"
-#include "TrackingPanel.h"
+//#include "TrackingPanel.h"
 #include "SwisTrackPanel.h"
 #include "InterceptionPanel.h"
 #include "GUIApp.h"
@@ -937,10 +937,10 @@ void SwisTrack::StartTracker()
 	try {
 
 		if(trackingpanel) trackingpanel->Destroy(); // delete old copy that might exist from a previous run
-		trackingpanel = new TrackingPanel(this); // ...and load new trackingpanel
+		trackingpanel = new SwisTrackPanel(this,"Tracking panel","/CFG/TRACKER","/CFG/COMPONENTS/TRACKER",0); // ...and load new trackingpanel
 
 		if(segmenterpanel) segmenterpanel->Destroy();
-		segmenterpanel = new SwisTrackPanel(this,"Segmenter parameters","/CFG/SEGMENTER","/CFG/COMPONENTS/SEGMENTER");
+		segmenterpanel = new SwisTrackPanel(this,"Segmenter panel","/CFG/SEGMENTER","/CFG/COMPONENTS/SEGMENTER");
 
 		if(interceptionpanel) interceptionpanel->Destroy();
 		interceptionpanel = new InterceptionPanel(this);

@@ -1,6 +1,6 @@
 #include "SwisTrackPanel.h"
 
-SwisTrackPanel::SwisTrackPanel(SwisTrack* parent, char* title, char* component, char* path) 
+SwisTrackPanel::SwisTrackPanel(SwisTrack* parent, char* title, char* component, char* path, int display) 
 															  : wxMiniFrame(parent, -1,
 																title,
 																wxDefaultPosition,
@@ -97,9 +97,12 @@ SwisTrackPanel::SwisTrackPanel(SwisTrack* parent, char* title, char* component, 
 			
 	}
 	wxFlexGridSizer* panelsizer = new wxFlexGridSizer(2,1,10,10);
+	
+	if(display){
+		canvas = new SwisTrackPanelCanvas(parent,panel,wxDefaultPosition, wxSize(parent->width/3,parent->height/3));
+		panelsizer->Add(canvas, 0, wxALIGN_CENTER,10);	
+	}
 
-	canvas = new SwisTrackPanelCanvas(parent,panel,wxDefaultPosition, wxSize(parent->width/3,parent->height/3));
-	panelsizer->Add(canvas, 0, wxALIGN_CENTER,10);	
 	panelsizer->Add(parameter_sizer, 0, wxALIGN_CENTER,10);
 	
 	panel->SetSizer(panelsizer);

@@ -12,7 +12,7 @@
 class SwisTrackPanel : public wxMiniFrame
 {
 public:
-	SwisTrackPanel(SwisTrack* parent, char* title, char* mode, char* path);
+	SwisTrackPanel(SwisTrack* parent, char* title, char* mode, char* path, int display=1);
 	void ChangeIntParam(wxScrollEvent& event);
 	void ChangeParam(wxCommandEvent& event);
 	void Refresh();

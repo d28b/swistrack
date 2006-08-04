@@ -28,7 +28,7 @@
 #include "XMLCfg.h"
 
 class Canvas;
-class TrackingPanel;
+//class TrackingPanel;
 class SwisTrackPanel;
 class InterceptionPanel;
 class DataLogger;
@@ -104,7 +104,7 @@ public:
 	void SetStatus(int status){ this->status=status;}
 
     //control panels
-	TrackingPanel* trackingpanel;
+	SwisTrackPanel* trackingpanel;
 	SwisTrackPanel* segmenterpanel;
 	InterceptionPanel* interceptionpanel;
 
