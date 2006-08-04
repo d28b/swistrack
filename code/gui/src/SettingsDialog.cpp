@@ -62,25 +62,28 @@ void SettingsDialog::FileSave(wxCommandEvent& event )
         }
     }
 
-
+/*************************************************************
+/* \brief Callback function for changing a mode
+/*
+/* This function is called when the user tries changing a mode.
+/* The current notebook tab is stored, the whole notebook
+/* is rebuild from scratch (using SettingsDialog::CreateDialog()).
+/*
+/* \param wxCommandEvent& event : The event created when changing
+/*                                the mode
+/* \output none
+****************************************************************/
 void SettingsDialog::ChangeMode(wxCommandEvent& event){
     int id=event.GetId()-1-wxID_HIGHEST;
     wxString dummy;
         dummy.Printf("%d",event.GetSelection());
-    /*wxMessageDialog* dlg =
-		new wxMessageDialog(this,"[SettingsDialog::ChangeMode] This feature is still under development. Problem: As soon as we connect wxTextCtrl to an event, it is not possible to change modes anymore.","Developer Message",wxOK);
-    dlg->ShowModal();*/
-    
-    
-	
+   	
 	dummy.Printf("%d",event.GetSelection());
     	
     SetAttrByXPath(parent->cfgRoot,idxpath[id].c_str(),"mode",dummy.c_str());
     
     int currentab= notebook->GetSelection();
     // Clean up the notebook and reassign all callbacks to the controls
-
-
 	for(int i=wxID_HIGHEST+1; i<=actid;i++)
 		Disconnect(i);
 
