@@ -23,7 +23,6 @@ ObjectTracker::ObjectTracker(xmlpp::Element* cfgRoot) : cfgRoot(cfgRoot)
 	pause=0;
 	tracker=NULL;
 	trackingimg=NULL;
-	semaphor=false;
     if(!cfgRoot){
         throw "[ObjectTracker::ObjectTracker] No configuration specified";
         }
@@ -48,29 +47,11 @@ ObjectTracker::~ObjectTracker()
 */
 void ObjectTracker::Stop(){
 	
-	//int i=0;
-
 	stop=1;
-    /*
-	while(semaphor && i<50){
-	//	printf("Waiting for segmenter to shut down...\n");
-		Sleep(200);
-		i++;
-		}
-	while(semaphor && i<50){
-	//	printf("Waiting for segmenter to shut down...\n");
-		Sleep(200);
-		i++;
-		}
-	//if(i>=200) throw "Tracking Thread did not terminate correctly (after 20s)";
-    */
-
 	if(tracker) delete(tracker);
 	tracker=NULL;
 	if(trackingimg) delete(trackingimg);
 	trackingimg=NULL;
-	//int status=InitVideo(avi_fname,bmp_fname);
-
 }
 
 /*! Given the trajectory, GetPos yields (asynchronously) the latest object position. For getting synchronous data,
@@ -98,13 +79,8 @@ CvPoint2D32f* ObjectTracker::GetPos(int id)
 int ObjectTracker::Step()
 {
 	int status;
-	semaphor=true;
 	if(tracker)
-		status=tracker->Step();
-	semaphor=false;
-/*	if(status==RUNNING && !stop)
-		otProcessData();
-*/
+		status=tracker->Step();	
 	return(status);
 }
 
@@ -315,10 +291,6 @@ void ObjectTracker::SetDisplay(int display_vid)
 		trackingimg->SetDisplay(display_vid);
 }
 
-void ObjectTracker::SetSemaphor(bool semaphor)
-{
-	this->semaphor=semaphor;
-}
 
 /** \brief Initializes tracker and the trajectories
 *

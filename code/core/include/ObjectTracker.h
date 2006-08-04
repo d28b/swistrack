@@ -28,8 +28,7 @@ public:
 	void ToggleMaskDisplay();
 
 	IplImage* GetCoveragePointer();
-
-	void SetSemaphor(bool semaphor);
+	
 	void SetDisplay(int display_vid);
 	double GetFPS();
 	void SetVisualisation(int style);
@@ -63,17 +62,12 @@ private:
     int InitMask();
 	void InitTracker();
 
-	/** Number of objects to keep track of*/
-	int nr_objects; 
 	/** Tracker class */
 	Tracker* tracker;
 
 	/** Color image */
 	TrackingImage* trackingimg;
 	int pause;
-	char* avi_fname; // local copies
-	char* bmp_fname; // local copies
-	bool semaphor;
     xmlpp::Element* cfgRoot;
 };
 

@@ -145,7 +145,6 @@ help(wxHF_DEFAULT_STYLE | wxHF_OPEN_FILES)
 	display_speed=5; //initial display speed 5Hz
 	fps=30; // initial guess for the FPS of our video
 	width=640; height=480; // initial guess for video resolution
-	//manual_mode = 0;
 
 	transform = NULL;
 	trackingpanel = NULL;
@@ -301,7 +300,6 @@ void SwisTrack::ProcessData(){
 	double time;
 
 	//	if(!stop){
-	ot->SetSemaphor(TRUE);
 	pos=ot->GetProgress(2);		
 	time=ot->GetProgress(1)/1000.0;
 
@@ -339,22 +337,8 @@ void SwisTrack::ProcessData(){
 		//SetStatusText(_T("Finish process data"),1);
 	}
 	//		}
-	ot->SetSemaphor(FALSE);
 }
 
-
-/** \brief Wrapper for transporting tracking and segmenter parameters to the segmenter and tracking class respectively.
-*
-*/
-void SwisTrack::SetTrackingSegmenterParameters(){
-	/*	ot->SetParameters(cfg->GetIntParam("/CFG/PARTICLEFILTER/@0/MAXAREA"), 
-	cfg->GetIntParam("/CFG/TRACKER/@0/MAXSPEED"),
-	cfg->GetIntParam("/CFG/TRACKER/@0/THRESHOLD"),
-	cfg->GetIntParam("/CFG/PARTICLEFILTER/@0/MINAREA"));
-	*/
-	/** \todo One needs to implement here a function that sends a message to all components to re-read their
-	parameters from config*/
-}
 
 SwisTrack::~SwisTrack(){
 	ShutDown();
@@ -728,13 +712,9 @@ RefreshAllDisplays();
 *
 * This method is called during otProcessData() and during otSearching() to refresh the
 * main canvas and the segmenter panel (if activated).
-* Note the use of otSetSemaphor(TRUE) and otSetSemaphor(FALSE) at the beginning and end of
-* the method. In case of stopping the tracking thread, the destructor will wait until 
-* the flag is false before deleting the memory taken by the progress images.
 */
 void SwisTrack::RefreshAllDisplays()
 {
-	ot->SetSemaphor(TRUE);
 	if(ot->GetImagePointer()){
 		IplImage* tmp;			
 		if(!show_coverage){
@@ -772,7 +752,6 @@ void SwisTrack::RefreshAllDisplays()
 		delete binaryimg;
 		cvReleaseImage(&tmp);
 	}
-	ot->SetSemaphor(FALSE);
 }
 
 /** \brief Eventhandler when tracking has finished

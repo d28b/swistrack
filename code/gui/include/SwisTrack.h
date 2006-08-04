@@ -55,7 +55,6 @@ public:
 	void OnEnableAVI(wxCommandEvent& event);
 	CvPoint GetUserEstimateFor(int id);
 	void Finished();
-//	void otSearching();
 	void ShutDown();
    // ctor(s)
 	SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size,
@@ -113,9 +112,7 @@ public:
 
 	void ProcessData();
 
-	// wrappers
-	void SetTrackingSegmenterParameters();
-
+	
 	CvPoint2D32f* GetPos(int id);
 	int clicked; // keep track of mouse
 	int mx,my;
@@ -152,7 +149,6 @@ private:
 	void RefreshAllDisplays();
 	int display_speed; //!< Display speed that can be changed in the toolbar
 	double fps;       //!< FPS, read from the avi file
-	int manual_mode;  //!< manual mode yes or no
 	wxString avioutfname; //!< File for video output
 	wxHtmlHelpController help; //!< Help controller
 	int show_coverage;
