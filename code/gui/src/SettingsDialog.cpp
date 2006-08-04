@@ -60,7 +60,7 @@ void SettingsDialog::FileSave(wxCommandEvent& event )
         SetParamByXPath(parent->cfgRoot,idxpath[id].c_str(),dialog.GetPath().c_str());
         ((wxTextCtrl*) controls[id])->SetValue(dialog.GetPath().c_str());
         }
-    }
+}
 
 /*************************************************************
 /* \brief Callback function for changing a mode

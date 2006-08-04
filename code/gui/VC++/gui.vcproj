@@ -439,6 +439,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\SwisTrackPanel.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\TrackingPanel.cpp"
 				>
 				<FileConfiguration
@@ -511,6 +515,10 @@
 			</File>
 			<File
 				RelativePath="..\include\SwisTrack.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\SwistrackPanel.h"
 				>
 			</File>
 			<File

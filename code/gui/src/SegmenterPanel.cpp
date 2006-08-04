@@ -1,10 +1,5 @@
 #include "SegmenterPanel.h"
 
-BEGIN_EVENT_TABLE(SegmenterPanel, wxMiniFrame)
-	EVT_COMMAND_SCROLL(wxID_SPMINAREA, SegmenterPanel::OnChangeMinArea)
-	EVT_COMMAND_SCROLL(wxID_SPTHRESHOLD, SegmenterPanel::OnChangeThreshold)
-END_EVENT_TABLE()
-
 void SegmenterPanel::ChangeIntParam(wxScrollEvent& event)
 	{
 		int id=event.GetId()-1-wxID_HIGHEST;
@@ -32,15 +27,10 @@ void SegmenterPanel::ChangeParam(wxCommandEvent& event)
 * \brief parent : Owner of the panel (usually SwisTrack)
 */
 
-SegmenterPanel::SegmenterPanel(SwisTrack *parent) : wxMiniFrame(parent, -1,
-																_("Segmenter parameters"),
-																wxDefaultPosition,
-																wxDefaultSize,
-
-																wxCAPTION | wxSIMPLE_BORDER),
-																actid(wxID_HIGHEST+1), parent(parent)
+SegmenterPanel::SegmenterPanel(SwisTrack *parent) : SwisTrackPanel(parent,("Segmenter parameters"))
 {
-
+	actid=wxID_HIGHEST+1;
+	//this->parent=parent;
 
 
 	binarybmp=new wxBitmap(parent->width/4,parent->height/3,3);
@@ -173,35 +163,3 @@ SegmenterPanel::SegmenterPanel(SwisTrack *parent) : wxMiniFrame(parent, -1,
 	
     // done
   }
-
-/** \brief Eventhandler for the 'min area' slider bar
-*
-* This event handler calls the TransferDataFromWindow() method of the
-* panel holding the controls. By this, data from the controls are transported
-* to variables private to the SegmenterPanel class. From there, they are copied
-* to the global parameters (ExperimentCfg class) and send to the ObjectTracker class
-* using the SetTrackingSegmenterParameters() method.
-*/
-void SegmenterPanel::OnChangeMinArea(wxScrollEvent& WXUNUSED(event)){
-/*	panel->TransferDataFromWindow();
-	parent->cfg->SetParam("/CFG/SEGMENTER/@0/MINAREA",minarea);
-	parent->SetTrackingSegmenterParameters();*/
-	}
-
-
-/** \brief Eventhandler for the 'threshold' slider bar
-*
-* This event handler calls the TransferDataFromWindow() method of the
-* panel holding the controls. By this, data from the controls are transported
-* to variables private to the SegmenterPanel class. From there, they are copied
-* to the global parameters (ExperimentCfg class) and send to the ObjectTracker class
-* using the SetTrackingSegmenterParameters() method.
-*/
-void SegmenterPanel::OnChangeThreshold(wxScrollEvent& WXUNUSED(event)){
-/*	panel->TransferDataFromWindow();
-	parent->cfg->SetParam("/CFG/SEGMENTER/@0/THRESHOLD",threshold);
-	parent->SetTrackingSegmenterParameters();*/
-	}
-
-
-
