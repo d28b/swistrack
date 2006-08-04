@@ -650,7 +650,7 @@ void SwisTrack::OnDrawingMode(wxCommandEvent& event)
 void SwisTrack::OnMenuViewShowTracker(wxCommandEvent& WXUNUSED(event))
 {
 	bool checked = GetMenuBar()->GetMenu(2)->IsChecked(Gui_View_ShowTracker);
-	trackingpanel->Show(checked);
+	if(trackingpanel) trackingpanel->Show(checked);
 }
 
 
@@ -661,7 +661,7 @@ void SwisTrack::OnMenuViewShowTracker(wxCommandEvent& WXUNUSED(event))
 void SwisTrack::OnMenuViewShowSegmenter(wxCommandEvent& WXUNUSED(event))
 {
 	bool checked = GetMenuBar()->GetMenu(2)->IsChecked(Gui_View_ShowSegmenter);
-	segmenterpanel->Show(checked);
+	if(segmenterpanel) segmenterpanel->Show(checked);
 
 }
 
