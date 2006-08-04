@@ -402,28 +402,6 @@
 				RelativePath="..\src\SwisTrackPanelCanvas.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\src\TrackingPanel.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -475,10 +453,6 @@
 			</File>
 			<File
 				RelativePath="..\include\SwisTrackPanelCanvas.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\TrackingPanel.h"
 				>
 			</File>
 			<File
