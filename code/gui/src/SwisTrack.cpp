@@ -5,7 +5,7 @@
 #include "SocketServer.h"
 #include "SettingsDialog.h"
 #include "TrackingPanel.h"
-#include "SegmenterPanel.h"
+#include "SwisTrackPanel.h"
 #include "InterceptionPanel.h"
 #include "GUIApp.h"
 #include <string.h>
@@ -766,12 +766,9 @@ void SwisTrack::RefreshAllDisplays()
 		cvFlip(tmp);
 
 		wxImage* binaryimg = new wxImage(width,height,(unsigned char*) (tmp->imageData),TRUE);
-		if(segmenterpanel->bmp){
-			delete segmenterpanel->bmp;
-			segmenterpanel->bmp=NULL;
-		}
-		segmenterpanel->bmp=new wxBitmap((&(binaryimg->Rescale(width/3,height/3))),3); //
-		segmenterpanel->canvas->Refresh();
+		segmenterpanel->Clear();
+		segmenterpanel->CreateBitmapfromImage((&(binaryimg->Rescale(width/3,height/3))),3); //
+		segmenterpanel->Refresh();
 		delete binaryimg;
 		cvReleaseImage(&tmp);
 	}
@@ -943,7 +940,7 @@ void SwisTrack::StartTracker()
 		trackingpanel = new TrackingPanel(this); // ...and load new trackingpanel
 
 		if(segmenterpanel) segmenterpanel->Destroy();
-		segmenterpanel = new SegmenterPanel(this);
+		segmenterpanel = new SwisTrackPanel(this,"Segmenter parameters","/CFG/SEGMENTER","/CFG/COMPONENTS/SEGMENTER");
 
 		if(interceptionpanel) interceptionpanel->Destroy();
 		interceptionpanel = new InterceptionPanel(this);

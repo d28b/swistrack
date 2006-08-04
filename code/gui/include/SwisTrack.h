@@ -29,7 +29,7 @@
 
 class Canvas;
 class TrackingPanel;
-class SegmenterPanel;
+class SwisTrackPanel;
 class InterceptionPanel;
 class DataLogger;
 class AviWriter;
@@ -105,7 +105,7 @@ public:
 
     //control panels
 	TrackingPanel* trackingpanel;
-	SegmenterPanel* segmenterpanel;
+	SwisTrackPanel* segmenterpanel;
 	InterceptionPanel* interceptionpanel;
 
 	//toolbar

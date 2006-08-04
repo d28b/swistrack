@@ -347,50 +347,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\SegmenterPanel.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\src\SegmenterPanelCanvas.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\src\SettingsDialog.cpp"
 				>
 				<FileConfiguration
@@ -440,6 +396,10 @@
 			</File>
 			<File
 				RelativePath="..\src\SwisTrackPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\SwisTrackPanelCanvas.cpp"
 				>
 			</File>
 			<File
@@ -498,14 +458,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\SegmenterPanel.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\SegmenterPanelCanvas.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\SettingsDialog.h"
 				>
 			</File>
@@ -519,6 +471,10 @@
 			</File>
 			<File
 				RelativePath="..\include\SwistrackPanel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\SwisTrackPanelCanvas.h"
 				>
 			</File>
 			<File
