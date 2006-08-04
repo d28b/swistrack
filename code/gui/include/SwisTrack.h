@@ -139,6 +139,9 @@ public:
      xmlpp::Document* document;
      xmlpp::Element* cfgRoot;
     
+	 xmlpp::DomParser* expparser;
+     xmlpp::Document* expdocument;
+     xmlpp::Element* expRoot;
  
 
 protected:

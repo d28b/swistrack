@@ -74,20 +74,23 @@ void SettingsDialog::ChangeMode(wxCommandEvent& event){
     
 	
 	dummy.Printf("%d",event.GetSelection());
-    
-	
+    	
     SetAttrByXPath(parent->cfgRoot,idxpath[id].c_str(),"mode",dummy.c_str());
     
     int currentab= notebook->GetSelection();
     // Clean up the notebook and reassign all callbacks to the controls
 
+
+	for(int i=wxID_HIGHEST+1; i<=actid;i++)
+		Disconnect(i);
+
 	notebook->DeleteAllPages();
     actid=wxID_HIGHEST+1;
     controls.clear();
     idxpath.clear();
-    LayoutDialog();
-    
+      
     CreateDialog();
+	LayoutDialog();
     notebook->SetSelection(currentab);
     }
 

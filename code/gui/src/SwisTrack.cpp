@@ -282,6 +282,15 @@ help(wxHF_DEFAULT_STYLE | wxHF_OPEN_FILES)
 	catch (...){
 		throw "Problems encountered when opening default.cfg. Invalid syntax?";
 	}
+	try{
+		expparser = new xmlpp::DomParser();
+		expparser->parse_file("swistrack.exp");
+		expdocument = expparser->get_document();
+		expRoot = expparser->get_document()->get_root_node();
+	}
+	catch (...){
+		throw "Problems encountered when opening swistrack.exp. Invalid syntax?";
+	}
 }
 
 /** \brief Image displaying routing ProcessData(), called for every processed frame
@@ -354,6 +363,7 @@ SwisTrack::~SwisTrack(){
 	if(canvas) delete canvas;
 	if(colorbmp) delete colorbmp;
 	if(parser) delete parser;
+	if(expparser) delete expparser;
 
 	wxThread::Sleep(100);
 	Close(TRUE);
