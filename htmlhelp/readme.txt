@@ -1,1 +1,0 @@
-Generate HTML help using Microsoft HTML help workshop
