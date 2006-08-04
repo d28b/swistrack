@@ -18,7 +18,7 @@ gui or ui for the executable.
 VISUAL STUDIO 2005 SETTINGS
 ---------------------------
 
-- Make sure you set the working directories for release and debug compilation to 'gui/ressources', otherwise SwisTrack won't find
+- Make sure you set the working directories for release and debug compilation to 'release', otherwise SwisTrack won't find
   its configuration files (Alt-F7, Configuration Properties, Debugging, Working directory)
 
 
