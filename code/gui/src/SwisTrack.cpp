@@ -364,8 +364,6 @@ SwisTrack::~SwisTrack(){
 	if(colorbmp) delete colorbmp;
 	if(parser) delete parser;
 	if(expparser) delete expparser;
-
-	wxThread::Sleep(100);
 	Close(TRUE);
 }
 
@@ -673,10 +671,7 @@ void SwisTrack::OnMenuViewShowSegmenter(wxCommandEvent& WXUNUSED(event))
 */
 void SwisTrack::ShutDown()
 {
-
 	wxBusyInfo info(_T("Shutting down, please wait..."), this);
-
-
 	if(datalogger){
 		delete(datalogger);
 		datalogger=NULL;
@@ -771,11 +766,11 @@ void SwisTrack::RefreshAllDisplays()
 		cvFlip(tmp);
 
 		wxImage* binaryimg = new wxImage(width,height,(unsigned char*) (tmp->imageData),TRUE);
-		if(segmenterpanel->binarybmp){
-			delete segmenterpanel->binarybmp;
-			segmenterpanel->binarybmp=NULL;
+		if(segmenterpanel->bmp){
+			delete segmenterpanel->bmp;
+			segmenterpanel->bmp=NULL;
 		}
-		segmenterpanel->binarybmp=new wxBitmap((&(binaryimg->Rescale(width/3,height/3))),3); //
+		segmenterpanel->bmp=new wxBitmap((&(binaryimg->Rescale(width/3,height/3))),3); //
 		segmenterpanel->canvas->Refresh();
 		delete binaryimg;
 		cvReleaseImage(&tmp);

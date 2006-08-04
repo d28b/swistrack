@@ -1,24 +1,5 @@
 #include "SegmenterPanel.h"
 
-void SegmenterPanel::ChangeIntParam(wxScrollEvent& event)
-	{
-		int id=event.GetId()-1-wxID_HIGHEST;
-		
-		wxString dummy;
-		dummy.Printf("%d",((wxSlider*) controls[id])->GetValue());
-		SetParamByXPath(parent->cfgRoot,idxpath[id].c_str(),dummy.c_str());
-		parent->ot->SetParameters(); 
-	}
-
-void SegmenterPanel::ChangeParam(wxCommandEvent& event)
-	{
-		int id=event.GetId()-1-wxID_HIGHEST;
-		//((wxTextCtrl*) controls[id])->SetValue("OK");
-		SetParamByXPath(parent->cfgRoot,idxpath[id].c_str(),((wxTextCtrl*) controls[id])->GetValue().c_str());
-		parent->ot->SetParameters();
-	}
-
-
 /** \brief Constructor
 *
 * Creates a floating panel where the user can change segmenter parameters and watch
@@ -27,13 +8,13 @@ void SegmenterPanel::ChangeParam(wxCommandEvent& event)
 * \brief parent : Owner of the panel (usually SwisTrack)
 */
 
-SegmenterPanel::SegmenterPanel(SwisTrack *parent) : SwisTrackPanel(parent,("Segmenter parameters"))
+SegmenterPanel::SegmenterPanel(SwisTrack *parent) : SwisTrackPanel(parent,"Segmenter parameters","/CFG/SEGMENTER","/CFG/COMPONENTS/SEGMENTER")
 {
 	actid=wxID_HIGHEST+1;
 	//this->parent=parent;
 
 
-	binarybmp=new wxBitmap(parent->width/4,parent->height/3,3);
+	bmp=new wxBitmap(parent->width/4,parent->height/3,3);
 	panel = new wxPanel(this,-1);
 
 	controls.clear();
@@ -41,9 +22,9 @@ SegmenterPanel::SegmenterPanel(SwisTrack *parent) : SwisTrackPanel(parent,("Segm
 	wxGridSizer* parameter_sizer = new wxGridSizer(0,2,3,10);
 
 	// Get current mode from actual cfg
-	int current_mode=GetIntAttrByXPath(parent->cfgRoot,"/CFG/COMPONENTS/SEGMENTER","mode");
+	int current_mode=GetIntAttrByXPath(parent->cfgRoot,path,"mode");
 	char xpath[255];
-	sprintf(xpath,"/CFG/SEGMENTER");
+	sprintf(xpath,component);
 	xmlpp::NodeSet modeset = parent->cfgRoot->find(xpath);
 	for(xmlpp::NodeSet::iterator mode = modeset.begin(); mode != modeset.end(); ++mode){ // processes all available modes           
 		if(GetIntAttr(*mode,"mode")==current_mode){ // work only on the current mode
@@ -90,7 +71,7 @@ SegmenterPanel::SegmenterPanel(SwisTrack *parent) : SwisTrackPanel(parent,("Segm
 								idxpath.push_back(wxString((*parameter)->get_path().c_str()));
 								controls.push_back(m_slider);
 								parameter_sizer->Add(m_slider,0, wxALL|wxALIGN_LEFT,0);
-								this->Connect(actid-1,wxEVT_SCROLL_CHANGED, wxScrollEventHandler(SegmenterPanel::ChangeIntParam));
+								this->Connect(actid-1,wxEVT_SCROLL_CHANGED, wxScrollEventHandler(SwisTrackPanel::ChangeIntParam));
 							}
 							//////////////// Treats type DOUBLE //////////////////////
 							else if(!param_type.compare("double")){
@@ -105,7 +86,7 @@ SegmenterPanel::SegmenterPanel(SwisTrack *parent) : SwisTrackPanel(parent,("Segm
 								idxpath.push_back(wxString((*parameter)->get_path().c_str()));
 								controls.push_back(m_textctrl);
 								parameter_sizer->Add(m_textctrl,0,wxALL|wxALIGN_LEFT,0);
-								this->Connect(actid-1,wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(SegmenterPanel::ChangeParam));
+								this->Connect(actid-1,wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(SwisTrackPanel::ChangeParam));
 							}
 							else {
 								throw "/CFG/SEGMENTER: only INTEGER and DOUBLE can be declared VARIABLE";
@@ -117,27 +98,6 @@ SegmenterPanel::SegmenterPanel(SwisTrack *parent) : SwisTrackPanel(parent,("Segm
 			
 			
 	}
-	
-                        
-
-	//minarea = parent->cfg->GetIntParam("/CFG/PARTICLEFILTER/@0/MINAREA");
-	//threshold = parent->cfg->GetIntParam("/CFG/SEGMENTER/@0/THRESHOLD");
-
-	
-
-	
-	
-/*	dialogSizer->Add(new wxStaticText(panel, -1, "Minimum area", wxDefaultPosition,
-		wxDefaultSize, wxALIGN_CENTER), 0, wxALIGN_CENTER,10);
-	dialogSizer->Add(new wxSlider(panel,wxID_SPMINAREA, 0, 0,100,  wxDefaultPosition, wxSize(155,-1),
-		wxSL_LABELS, wxGenericValidator(&minarea)), 0, wxALIGN_CENTER,10);
-	
-	dialogSizer->Add(new wxStaticText(panel, -1, "Threshold", wxDefaultPosition,
-		wxDefaultSize, wxALIGN_CENTER), 0, wxALIGN_CENTER,10);
-	dialogSizer->Add(new wxSlider( panel,wxID_SPTHRESHOLD, 0, 0,50,  wxDefaultPosition, wxSize(155,-1),
-		wxSL_LABELS, wxGenericValidator(&threshold)), 0, wxALIGN_CENTER,10);
-*/	
-
 	wxFlexGridSizer* panelsizer = new wxFlexGridSizer(2,1,10,10);
 
 	canvas = new SegmenterPanelCanvas(this,panel,wxDefaultPosition, wxSize(parent->width/3,parent->height/3));

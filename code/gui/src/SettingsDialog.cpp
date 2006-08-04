@@ -16,11 +16,6 @@ void SettingsDialog::ChangeIntParam(wxCommandEvent& event)
 		int id=event.GetId()-1-wxID_HIGHEST;
 		wxString dummy;
 		dummy.Printf("%d",(int)((dynamic_cast<wxSpinCtrl*>(controls[id]))->GetValue()));
-		
-		/*wxMessageDialog* dlg =
-    new wxMessageDialog(this,"Transporting Integer values does not yet work, change the configuration manually",dummy,wxOK);
-    dlg->ShowModal();*/
-
 		SetParamByXPath(parent->cfgRoot,idxpath[id].c_str(),dummy.c_str());
 	}
 

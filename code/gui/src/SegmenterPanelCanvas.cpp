@@ -27,9 +27,9 @@ void SegmenterPanelCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
   wxBufferedPaintDC dc(this);
    
 	  //wxASSERT((parent->colorbmp));
-  if(parent->binarybmp){
+  if(parent->bmp){
 		  dc.BeginDrawing();
-		  dc.DrawBitmap(*(parent->binarybmp),0,0,FALSE);
+		  dc.DrawBitmap(*(parent->bmp),0,0,FALSE);
 		  dc.EndDrawing();
 	 }
 

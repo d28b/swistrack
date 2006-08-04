@@ -17,11 +17,9 @@ class SegmenterPanelCanvas;
 class SegmenterPanel : public SwisTrackPanel
 	{
 	public:
-		void OnPaint(wxPaintEvent& WXUNUSED(event));
-
 		SegmenterPanel(SwisTrack *parent);
 
-		wxBitmap* binarybmp;
+		wxBitmap* bmp;
 		SegmenterPanelCanvas* canvas;
 
 	private:

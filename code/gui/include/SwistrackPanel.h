@@ -11,7 +11,9 @@
 class SwisTrackPanel : public wxMiniFrame
 {
 public:
-	SwisTrackPanel(SwisTrack* parent, wxString title);
+	SwisTrackPanel(SwisTrack* parent, char* title, char* mode, char* path);
+	void ChangeIntParam(wxScrollEvent& event);
+	void ChangeParam(wxCommandEvent& event);
 
 protected:
 	int actid;
@@ -19,6 +21,8 @@ protected:
 	vector<wxString> idxpath; // keeps track of the x-path of each control
     vector<wxControl*> controls; // keeps track of all controls
 	wxPanel* panel;
+	char* component;
+	char* path;
 
 };
 
