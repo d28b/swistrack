@@ -67,13 +67,13 @@ void SettingsDialog::ChangeMode(wxCommandEvent& event){
     int id=event.GetId()-1-wxID_HIGHEST;
     wxString dummy;
         dummy.Printf("%d",event.GetSelection());
-    wxMessageDialog* dlg =
+    /*wxMessageDialog* dlg =
 		new wxMessageDialog(this,"[SettingsDialog::ChangeMode] This feature is still under development. Problem: As soon as we connect wxTextCtrl to an event, it is not possible to change modes anymore.","Developer Message",wxOK);
-    dlg->ShowModal();
+    dlg->ShowModal();*/
     
     
 	
-	/*dummy.Printf("%d",event.GetSelection());
+	dummy.Printf("%d",event.GetSelection());
     
 	
     SetAttrByXPath(parent->cfgRoot,idxpath[id].c_str(),"mode",dummy.c_str());
@@ -88,7 +88,7 @@ void SettingsDialog::ChangeMode(wxCommandEvent& event){
     LayoutDialog();
     
     CreateDialog();
-    notebook->SetSelection(currentab);*/
+    notebook->SetSelection(currentab);
     }
 
 SettingsDialog::~SettingsDialog(){
