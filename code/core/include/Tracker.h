@@ -34,7 +34,6 @@ class Tracker : public Component
 		void SetCritPoint(int id);
 		void ToggleMaskDisplay();
 		int InitMask();
-		void SetManualMode(int mode);
 		double GetFPS();
 		void SetVisualisation(int style);
 		double GetProgress(int kind);
@@ -101,9 +100,7 @@ class Tracker : public Component
 		/** Vector containing the id number of lost items */
 		vector<int> lostitems;
 		/** Drawing style */
-		int style;
-		int manual_mode;
-		
+		int style;				
 	};
 
 #endif // !defined(AFX_TRACKER_H__AB256777_016A_4984_A1F1_8AC6C1D31D05__INCLUDED_)

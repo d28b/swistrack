@@ -344,11 +344,6 @@ void ObjectTracker::InitTracker()
 	return(cvPoint(0,0));
 }*/
 
-void ObjectTracker::SetManualMode(int mode)
-{
-	if(tracker)
-		tracker->SetManualMode(mode);
-}
 
 IplImage* ObjectTracker::GetCoveragePointer()
 {

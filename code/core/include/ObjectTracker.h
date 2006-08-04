@@ -28,7 +28,6 @@ public:
 	void ToggleMaskDisplay();
 
 	IplImage* GetCoveragePointer();
-	void SetManualMode(int mode);
 
 	void SetSemaphor(bool semaphor);
 	void SetDisplay(int display_vid);

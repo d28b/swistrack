@@ -25,6 +25,7 @@ Tracker::Tracker(ObjectTracker* parent, xmlpp::Element* cfgRoot, TrackingImage* 
     this->parent=parent;
     this->trackingimg=trackingimg;
 	
+	mask=0;
 
     if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/TRACKER","mode"))
         throw "[Tracker::Tracker] Tracker mode undefined (/CFG/COMPONENTS/TRACKER)";
@@ -35,14 +36,15 @@ Tracker::Tracker(ObjectTracker* parent, xmlpp::Element* cfgRoot, TrackingImage* 
         case 0 : /////////////// Nearest neighbor //////////////////////////
             if(!IsDefined(cfgRoot,"/CFG/TRACKER[@mode='0']"))
                 throw "[Tracker::Tracker] no parameters for tracker mode 0 (nearest neighbor) found";
-            CreateExceptionIfEmpty(cfgRoot,"/CFG/TRACKER[@mode='0']/NOBJECTS");
-            nr_objects=GetIntValByXPath(cfgRoot,"/CFG/TRACKER[@mode='0']/NOBJECTS");
+			if(!IsDefined(cfgRoot,"/CFG/TRACKER[@mode='0']/MAXSPEED"))
+				throw "[Tracker::Tracker] maxspeed for tracker mode 0 undefined (/CFG/COMPONENTS/[@mode='0']/MAXSPEED)";
+			if(!IsDefined(cfgRoot,"/CFG/TRACKER[@mode='0']/NOBJECTS"))
+				throw "[Tracker::Tracker] number of objects for tracker mode 0 undefined (/CFG/COMPONENTS/[@mode='0']/MAXSPEED)";
            break;
         default : throw "[Tracker::Tracker] tracker mode not implemented";
         };
 
-   
-
+	
     style = TRAJFULL;  /** \todo this should go into trackingimage */
 	
     particlefilter = new ParticleFilter(cfgRoot,trackingimg);	
@@ -592,7 +594,6 @@ void Tracker::DataAssociation()
 			else{  // otherwise just take this point and add id to the list of competitors
 				
 				AddPoint(id,min_dist_id->p);
-				if(manual_mode)	AddCompetitor(min_dist_id->id);
 				AddCompetitor(id);
 				}
 			}
@@ -632,12 +633,6 @@ void Tracker::DataAssociation()
 			//	}
 			}  // end if !competitors.empty
 		} // end if fp && ap<num_objects
-	else{
-		if(manual_mode){ // if we are in manual mode, we take care of the drawing here
-			for(int i=0;i<nr_objects; i++)
-				targets.at(i).DrawTrajectory(style);
-			}
-		}
 	avg_speed = max_speed/2;
 
 	///////////////////// Determine number and age of shared trajectories //////////////////
@@ -825,7 +820,7 @@ int Tracker::Step()
 	particles = particlefilter->Step();
 	if(particles){	
 		DataAssociation();	// associate all points with their nearest neighbor
-		if(trackingimg->GetDisplay() && !manual_mode)
+		if(trackingimg->GetDisplay())
 			DrawTrajectories();
 		if(mask){
 			mask->UpdateCount(&targets,(int)(particlefilter->GetProgress(2)));
@@ -977,10 +972,9 @@ double Tracker::GetProgress(int kind)
 
 void Tracker::SetParameters()
 	{
-     /** \todo Implement cfg look-up */
-    mask=0;
-	max_speed = 25;
-	manual_mode = 0;
+					
+	nr_objects=GetIntValByXPath(cfgRoot,"/CFG/TRACKER[@mode='0']/NOBJECTS");
+	max_speed=GetIntValByXPath(cfgRoot,"/CFG/TRACKER[@mode='0']/MAXSPEED");
 	particlefilter->SetParameters();
 	}
 
@@ -1013,15 +1007,6 @@ double Tracker::GetFPS()
  return(particlefilter->GetFPS());
 }
 
-
-/** \brief Sets manual mode
-*
-* \param mode : Set to zero to turn manual mode off, set to one to turn it on
-*/
-void Tracker::SetManualMode(int mode)
-{
- manual_mode = mode;
-}
 
 /** \brief Calculates the "fitness" of a combination of two particles to belong to the same track
 *
