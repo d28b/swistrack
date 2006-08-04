@@ -181,9 +181,10 @@ void Segmenter::BWSegmentation()
 					 break;
 			case 1 : { /////////// ESTIMATE SUBTRACTION //////////////////
 				try{
-					cvConvertScale(current,current,alpha);
+					IplImage* tmpImage = cvCreateImage(input->GetInputDim(),input->GetInputDepth(),1);
+					cvConvertScale(current,tmpImage,alpha);
 					cvConvertScale(background,background,1.0-alpha);
-					cvAdd(current,background,background);
+					cvAdd(tmpImage,background,background);
 					cvAbsDiff(current, background, binary);
 					cvThreshold(binary,binary, bin_threshold, 255,  CV_THRESH_BINARY);
 				}
