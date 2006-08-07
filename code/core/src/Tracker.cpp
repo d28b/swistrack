@@ -818,7 +818,8 @@ void Tracker::AssociateParticlesToCompetitors(int max_speed){
 int Tracker::Step()
 	{
 	particles = particlefilter->Step();
-	if(particles){	
+	if(particles){
+		status=RUNNING;
 		DataAssociation();	// associate all points with their nearest neighbor
 		if(trackingimg->GetDisplay())
 			DrawTrajectories();
@@ -827,6 +828,8 @@ int Tracker::Step()
 			mask->DrawMask(trackingimg);
 			}
 		}
+	else
+		status=FINISHED;
 	return(status);
 	}
 

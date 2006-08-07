@@ -100,29 +100,32 @@ SettingsDialog::~SettingsDialog(){
 IMPLEMENT_CLASS(SettingsDialog, wxPropertySheetDialog)
 
 SettingsDialog::SettingsDialog(SwisTrack *parent) : actid(wxID_HIGHEST+1), parent(parent)
+{
 
-   	{
-    SetExtraStyle(wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY);
-    
-    Create(parent, wxID_ANY, _("Preferences"), wxDefaultPosition, wxDefaultSize,
-        wxDEFAULT_DIALOG_STYLE |wxRESIZE_BORDER);
-    
+	try{
+		SetExtraStyle(wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY);
 
-    notebook =GetBookCtrl();
-    try{
-        parser.parse_file("swistrack.exp");
-        document = parser.get_document();
-        }
-    catch (...){
-        throw "Problems encountered when opening swistrack.exp. Invalid syntax?";
-        }
-    
-    nodeRoot = parser.get_document()->get_root_node();
-    current=nodeRoot;
-    
-    CreateDialog();
-    
-    }
+		Create(parent, wxID_ANY, _("Tracking Parameters"), wxDefaultPosition, wxDefaultSize,
+			wxDEFAULT_DIALOG_STYLE |wxRESIZE_BORDER);
+
+		notebook =GetBookCtrl();
+		try{
+			parser.parse_file("swistrack.exp");
+			document = parser.get_document();
+		}
+		catch (...){
+			throw "Problems encountered when opening swistrack.exp. Invalid syntax?";
+		}
+
+		nodeRoot = parser.get_document()->get_root_node();
+		current=nodeRoot;
+		CreateDialog();
+	}
+	catch (char* str) {
+		wxString msg(str);
+		parent->DisplayModal(msg,"Error");
+	}
+}
 
 void SettingsDialog::CreateDialog(){
     // Creates one notebook panel for every entry in the components list
@@ -130,8 +133,6 @@ void SettingsDialog::CreateDialog(){
     xmlpp::NodeSet set = nodeRoot->find("/CFG/COMPONENTS/*");
     for(xmlpp::NodeSet::iterator i = set.begin(); i != set.end(); ++i) // loops through all components
         {
-        //  std::cout << " " << (*i)->get_path() << std::endl;
-        
         // read a list of all possible modes
         int current_mode=GetIntAttrByXPath(parent->cfgRoot,(*i)->get_path(),"mode"); 
         wxArrayString availablemodes;
@@ -149,9 +150,7 @@ void SettingsDialog::CreateDialog(){
                 if(!IsDefined(parent->cfgRoot,(*mode)->get_path().c_str())){ 
                     //// import the node into CFG
                     parent->cfgRoot->import_node(*mode);
-                    //xmlpp::Element* node = parent->cfgRoot->add_child((*i)->get_name().c_str());
-                    //node->set_attribute("mode",GetAttr(*mode,"mode"));
-                    }
+                     }
                 
                 ///// Create Dialog ////
                 panels.push_back(new wxPanel(notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -261,12 +260,6 @@ void SettingsDialog::CreateDialog(){
                     //////////////// Treats type SAVE ///////////////////////
                     else if(!param_type.compare("save")){
                         wxString value("");
-                       /* if(IsDefined(parent->cfgRoot,(*parameter)->get_path().c_str())){ // if in cfg
-                            value=wxString(GetValByXPath(parent->cfgRoot,(*parameter)->get_path().c_str()));
-                            }
-                        else if(IsContent(nodeRoot,(*parameter)->get_path().c_str())){ // else get from template
-                            value=GetVal(*parameter);
-                            }*/
                         wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
                         wxTextCtrl* m_textctrl = new wxTextCtrl(panels.back(),actid++,value,wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator);  
                         idxpath.push_back(wxString((*parameter)->get_path().c_str()));
@@ -307,11 +300,8 @@ void SettingsDialog::CreateDialog(){
                 sizer_main->Fit(panels.back());
                 
                 } // if current mode
-                
             } // for each mode
-            
             notebook->AddPage(panels.back(),GetAttr(*i,"desc"), false);
-            
-        }
+         }
         LayoutDialog();
     }

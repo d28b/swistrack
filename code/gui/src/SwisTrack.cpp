@@ -298,44 +298,30 @@ void SwisTrack::ProcessData(){
 	double pos;
 	double time;
 
-	//	if(!stop){
-	pos=ot->GetProgress(2);		
-	time=ot->GetProgress(1)/1000.0;
+	if(status==RUNNING){
+		pos=ot->GetProgress(2);		
+		time=ot->GetProgress(1)/1000.0;
 
-	if(datalogger)
-		datalogger->WriteRow((int) pos,time);
+		if(datalogger)
+			datalogger->WriteRow((int) pos,time);
 
-	if(fmod(pos,10)){
-		char progress[200];
+		if(fmod(pos,10)){
+			char progress[200];
 
-		double prog=ot->GetProgress(3);
+			double prog=ot->GetProgress(3);
 
-		if(prog>1) prog=1;
-		sprintf(progress,"Time: %10.1fs Frame: %10.0f Progress: %2.2f%%",
-			time,
-			pos,
-			100.0*prog);
-		SetStatusText(progress,1);
-	}
-	if(display_speed && fmod(pos,(int) (fps/display_speed))==0){
-		// image routines
-		if(1)//if(!stop)
-		{	
-
-
-
-
+			if(prog>1) prog=1;
+			sprintf(progress,"Time: %10.1fs Frame: %10.0f Progress: %2.2f%%",
+				time,
+				pos,
+				100.0*prog);
+			SetStatusText(progress,1);
+		}
+		if(display_speed && fmod(pos,(int) (fps/display_speed))==0){
 			RefreshAllDisplays();
 			if(aviwriter) aviwriter->WriteFrame();
-
-
 		}
-		else{
-			//SetStatusText(_T("Mutual Exclusion prevented!"),1);
-		}
-		//SetStatusText(_T("Finish process data"),1);
 	}
-	//		}
 }
 
 
@@ -940,6 +926,7 @@ void SwisTrack::StartTracker()
 
 		SetStatusText(_T("Searching for the specified number of objects in the first 1000 frames"),0);
 		status=ot->Start();                    
+		SetStatusText(_T(""),0);
 		status=ot->Step();
 
 
