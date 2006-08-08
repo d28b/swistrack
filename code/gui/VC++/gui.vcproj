@@ -179,7 +179,7 @@
 				ExecutionBucket="9"
 				LinkLibraryDependencies="true"
 				UseLibraryDependencyInputs="false"
-				AdditionalDependencies="libxml++d.lib  libxml2.lib wxbase26d_net.lib wxmsw26d_html.lib wxmsw26d_adv.lib wxmsw26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib objecttrackerd.lib calibrationd.lib libblobd.lib 1394camera.lib cv.lib highgui.lib cxcore.lib"
+				AdditionalDependencies="libxml++d.lib libxml2.lib wxbase26d_net.lib wxmsw26d_adv.lib wxmsw26d_core.lib wxbase26d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib objecttrackerd.lib calibrationd.lib libblobd.lib 1394camera.lib cv.lib highgui.lib cxcore.lib"
 				OutputFile="../../../release/swistrack.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"

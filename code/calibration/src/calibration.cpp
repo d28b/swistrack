@@ -462,7 +462,12 @@ bool Transformation::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 		new CvPoint3D32f[ps];				//
 
 	if (FindRoundPoints(imagePoints32f,objectPoints32f,spots,h,nrofpoints,vd)!=ps)
-		return false;
+		{
+			delete [] imagePoints32f;
+			delete [] objectPoints32f;
+			return false;
+		}
+		
 
 	
  //NONLINEAR FIT
@@ -676,7 +681,11 @@ try{
 		new CvPoint3D32f[cw*ch];				//
 
 	if (FindPoints(imagePoints32f,objectPoints32f,spots,cw,ch,wx,wy)!=cw*ch)
-		return false;
+		{
+			delete [] imagePoints32f;
+			delete [] objectPoints32f;
+			return false;
+		}
 
  //NONLINEAR FIT
 
@@ -864,6 +873,8 @@ try{
 	cvReleaseMat(&objectmatrix32f);			//
 	cvReleaseMat(&cameratransform32f);		//
 	cvReleaseImage(&calibmask);				//
+	delete [] imagePoints32f;
+	delete [] objectPoints32f;
 	return true;							// ??? WHO USES THE RETURN VALUE ???
 }
 catch(...){

@@ -136,8 +136,8 @@ void SwisTrack::RecreateToolbar()
 * \param style	  : Style (Icon, Always on top, etc.)
 */
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-: wxFrame(NULL, -1, title, pos, size, style),
-help(wxHF_DEFAULT_STYLE | wxHF_OPEN_FILES)
+: wxFrame(NULL, -1, title, pos, size, style)
+//help(wxHF_DEFAULT_STYLE | wxHF_OPEN_FILES)
 {
 
 	show_coverage=0; // don't show coverage image
@@ -870,7 +870,7 @@ int SwisTrack::GetDisplaySpeed()
 
 void SwisTrack::OnHelp(wxCommandEvent& WXUNUSED(event))
 {
-	help.Display(wxT("Test HELPFILE"));
+	//help.Display(wxT("Test HELPFILE"));
 }
 
 

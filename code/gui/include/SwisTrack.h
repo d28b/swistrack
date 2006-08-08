@@ -7,7 +7,7 @@
   #include "wx/wx.h"
 #endif
 #include "wx/minifram.h"  // Imports the mini frame class (tracker and segmenter panel)
-#include <wx/html/helpctrl.h>
+//#include <wx/html/helpctrl.h>
 #include "wx/spinbutt.h"  // Spinbuttons 
 #include "wx/valgen.h"	  // Generic validators, used in almost every dialgo
 #include "wx/image.h"     // Necessary for image operations
@@ -150,7 +150,7 @@ private:
 	int display_speed; //!< Display speed that can be changed in the toolbar
 	double fps;       //!< FPS, read from the avi file
 	wxString avioutfname; //!< File for video output
-	wxHtmlHelpController help; //!< Help controller
+	//wxHtmlHelpController help; //!< Help controller
 	int show_coverage;
 	int status;
 };
