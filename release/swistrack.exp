@@ -56,7 +56,7 @@
   <!---
                                   Segmenter Tab
   -->
-  <SEGMENTER mode="0" desc="Static Background" long="The image is segmented by subtracting a static background image from every frame in the video. The 'Threshold' determines the minimal difference for the gray value of an object to be recognized, and 'Max. Number' is the maximal number of contours processed (sorted by size).">
+  <SEGMENTER mode="0" desc="Static Background, fixed threshold" long="The image is segmented by subtracting a static background image from every frame in the video. The 'Threshold' determines the minimal difference for the gray value of an object to be recognized, and 'Max. Number' is the maximal number of contours processed (sorted by size).">
     <THRESHOLD desc="Threshold" type="integer" min="1" max="150" variable="1">20</THRESHOLD>
     <MAXNUMBER desc="Maximal Number of Contours" type="integer" min="0" max="255" variable="1">50</MAXNUMBER>
     <BGIMAGE desc="Background Image" type="open" param="*.bmp">example/bg.bmp</BGIMAGE>
@@ -65,6 +65,11 @@
     <THRESHOLD desc="Threshold" type="integer" min="1" max="150" variable="1">20</THRESHOLD>
     <MAXNUMBER desc="Maximal Number of Contours" type="integer" min="0" max="255" variable="1">50</MAXNUMBER>
     <ALPHA desc="Averaging Speed" type="double" min="0" max="1" variable="1">0.02</ALPHA>
+  </SEGMENTER>
+  <SEGMENTER mode="2" desc="Static Background, color ration" long="The image is segmented by subtracting a static background image from every frame in the video. The 'Threshold' determine the maximal color ratio variation for the background, and 'Max. Number' is the maximal number of contours processed (sorted by size).">
+    <THRESHOLD desc="Threshold" type="integer" min="1" max="150" variable="1">20</THRESHOLD>
+    <MAXNUMBER desc="Maximal Number of Contours" type="integer" min="0" max="255" variable="1">50</MAXNUMBER>
+    <BGIMAGE desc="Background Image" type="open" param="*.bmp">example/bg.bmp</BGIMAGE>
   </SEGMENTER>
   <!---
                   Particle Filter Tab
