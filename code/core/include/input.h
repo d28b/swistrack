@@ -23,15 +23,14 @@ public:
 	double GetProgress(int kind);
 	CvSize GetInputDim();
 	int GetInputDepth();
+	int GetInputNbChannels();
 	int GetInputOrigin();
 	IplImage* GetInputIpl();
 	double GetFPS();
 
 private:
 		/** Input image, from an AVI sequence */
-		IplImage* input;			
-		/** B&W version of input image */
-		IplImage* current;
+		IplImage* input;
 		/** Pointer to AVI sequence */
 		CvCapture* Capture;	
 		/** Color input flag */

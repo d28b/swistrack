@@ -101,14 +101,14 @@ class Segmenter : public Component
 		int GetContour(IplImage* src, vector<resultContour>* contour_obj);
 		int FindContours(IplImage* src, vector<resultContour>* contour_obj);
 		void GetContourColor(IplImage* input, vector<resultContour>* contour_obj);
-		void BWSegmentation();
+		void Segmentation();
 
 		Input* input;
 
 		/** Background image. From a file */
 		IplImage* background;	
-		/** B&W version of input image */
-		IplImage* current;		
+		/** Input image */
+		IplImage* inputImg;		
 		/** Binary image (segmented) */
 		IplImage* binary;	
 		/** Status code */
