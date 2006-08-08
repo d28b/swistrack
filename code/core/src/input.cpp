@@ -3,7 +3,7 @@
 
 
 Input::Input(xmlpp::Element* cfgRoot)  
-	  : Capture(0), current(0), isinputincolor(0), nFrame(0), m_pBitmap(0) 
+	  : Capture(0), isinputincolor(0), nFrame(0), m_pBitmap(0) 
 {
 	    if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/INPUT","mode"))
         throw "[Input::Input] Input mode undefined (/CFG/COMPONENTS/INPUT)";
@@ -38,11 +38,7 @@ Input::Input(xmlpp::Element* cfgRoot)
                 if(strcmp(input->colorModel,"GRAY")==0)
                     isinputincolor=0;
                 else
-                    isinputincolor=1;
-                
-                
-                current = cvCreateImage(cvSize(input->width,input->height),input->depth,1);
-                cvCvtPixToPlane(input,NULL,NULL,current,NULL);              
+                    isinputincolor=1;          
                 }
             cvSetCaptureProperty( Capture , CV_CAP_PROP_POS_FRAMES,0); // Reset to first frame
             
@@ -76,14 +72,7 @@ Input::Input(xmlpp::Element* cfgRoot)
                     isinputincolor=0;
                 else
                     isinputincolor=1;
-                
-                
-                current = cvCreateImage(cvSize(input->width,input->height),input->depth,1);
-                cvCvtPixToPlane(input,NULL,NULL,current,NULL);
-                
-                //binary = cvCreateImage(cvSize(current->width,current->height),current->depth,1);
-                //binary->origin = current->origin;               
-                }
+			}
 			else{
 				throw "[Segmenter::Segmenter] Could not read from IEEE1394 camera";
 			}
@@ -136,10 +125,8 @@ IplImage* Input::GetFrame()
                     input =  cvQueryFrame( Capture );
                     if (input)  // Get a pointer to the current frame (if query was successful)
                         {
-                        nFrame++;                         // Increment the frame counter. 
-                        /** \todo removing the channels like that is dangerous, if it is a 2 channels file, it will crash.*/
-                        cvCvtPixToPlane(input,NULL,NULL,current,NULL);
-						return(current);
+                        nFrame++;                         // Increment the frame counter.
+						return(input);
                         } // end if input
                     }
                 else
@@ -154,8 +141,7 @@ IplImage* Input::GetFrame()
                     {
                     nFrame++;                         // Increment the frame counter. 
                     
-                    cvCvtPixToPlane(input,NULL,NULL,current,NULL);
-      				return(current);
+      				return(input);
 					} // end if input
                 else
                     {
@@ -184,15 +170,18 @@ void Input::QueryFrame1394(IplImage* input)
 			}
 
 CvSize Input::GetInputDim(){
-	 return(cvSize(current->width,current->height));
+	 return(cvSize(input->width,input->height));
 }
 
 int Input::GetInputDepth(){
-	return current->depth;
+	return input->depth;
+}
+int Input::GetInputNbChannels(){
+	return input->nChannels;
 }
 
 int Input::GetInputOrigin(){
-	return current->origin;
+	return input->origin;
 }
 
 IplImage* Input::GetInputIpl(){
@@ -202,7 +191,7 @@ IplImage* Input::GetInputIpl(){
 Input::~Input()
 {
 		if (Capture) cvReleaseCapture( &Capture );
-		if (current) cvReleaseImage( &current);
+		if (input) cvReleaseImage( &input);
 		if (m_pBitmap) delete(m_pBitmap);
 }
 
