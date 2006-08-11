@@ -406,108 +406,147 @@ void Segmenter::Segmentation()
 
 }
 
-/**  \brief Find Contours in the image (called by GetContour)
-*
-* \param src: Segmented image
-* \param contour_obj: Vector to store resulting contours
-* \param min_area: Minimum area for the contours not to be rejected
+
+
+
+
+/**	\brief Return the binary image resulting of the segmentation
+*	
+*	Return a pointer to the binary image resulting of the segmentation.
+*	
+*	\return IplImage pointer to the binary image
 */
-int Segmenter::FindContours(IplImage* src, vector<resultContour>* contour_obj)
+IplImage* Segmenter::GetBinaryImage()
 {
-	CvMemStorage* storage = cvCreateMemStorage(0);		// memory space that will be used for contour storage			
-	CvSeq* contour = 0;
-	std::vector<CvSeq*> tmp;
-	std::vector<CvSeq*>::iterator j;
-	//	int i;
-	int n_contours = 0; /* Number of contours found */
-
-	//    CvPoint2D32f center = cvPoint2D32f(src->width/2,src->height/2);
-
-	// Make a copy of source, because contents are destroyed by cvStartFindContours
-	IplImage* src_tmp = cvCloneImage(src);
-	CvContourScanner blobs = cvStartFindContours(src_tmp,storage,sizeof(CvContour),CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
-
-	//
-	while((contour=cvFindNextContour(blobs))!=NULL)
-	{	// inserts contours into temporary vector, sorted by size, biggest in front
-		for(j=tmp.begin(); (j != tmp.end()) && (fabs(cvContourArea(contour)) < fabs(cvContourArea(*j))); j++); 
-		tmp.insert(j,contour);
-		n_contours++;		
-	}
-	CvPoint2D32f pt_centre;
-	CvRect rect;
-
-	// This is used to correct the position in case of ROI
-	if(src->roi != NULL)
-		rect = cvGetImageROI(src);
-	else
-	{
-		rect.x = 0;
-		rect.y = 0;
-	}
-
-	CvMoments moments;
-
-	// Compute and store the moments and other data of each contour, but take only the 'max_number' first contours
-	for(int i=0;i<n_contours && i<max_number;i++)
-	{
-		resultContour rc;
-		cvMoments(tmp[i],&moments,0);
-		pt_centre.x=(float)(rect.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
-		pt_centre.y=(float)(rect.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
-		rc.center = pt_centre;
-		rc.area = moments.m00;
-		rc.compactness =  cvContourCompactness( tmp[i]);
-		rc.boundingrect = cvContourBoundingRect(tmp[i], 0);
-
-		contour_obj->push_back(rc);
-
-	}
-
-
-	contour=cvEndFindContours(&blobs);
-	cvReleaseMemStorage(&storage);
-	cvReleaseImage(&src_tmp);
-	return n_contours;
-
+	return binary;
 }
 
-/**  \brief Select contours in a picture
-*
-* This function computes all exterior contours in the picture and find the center of 
-* gravity of the ones whose areas are within the defined bounds and whose compactness is
-* higher than target one. It writes the retained contours and their features in a 
-* user-defined array 'contour_obj'.
-*
-* \param src: pointer on the binary source picture
-* \param contour_obj: pointer to a vector of resultContour where results are returned
-* \result Returns the number of detected contours.
+/**	\brief Return the background image used for the segmentation
+*	
+*	Return a pointer to the background image.
+*	
+*	\return IplImage pointer to the background image
 */
-int Segmenter::GetContour(IplImage* src, vector<resultContour>* contour_obj)
+IplImage* Segmenter::GetBackgroundImage()
 {
-	int n_contours;
-	//printf("GetContour\n");
-	// Erase all contours in resultContour vector
-	contour_obj->clear();	
-	n_contours=FindContours(src,contour_obj);
-	GetContourColor(input->GetInputIpl(),contour_obj);
-	return n_contours;
+	return background;
 }
 
-/** \brief Determines contours average color 
-*
-* This function computes the average color value over all pixels in a contour. 
-* This might be a useful parameter in determining the fitness of the data
-* association algorithm.
-*
-* \param input: The color input image
-* \param contour_obj: pointer to a vector of resultContour 
-*
-* \todo Implementation
+/**	\brief Return the input image used for the segemenation
+*	
+*	Return a pointer to the input image used for the segmetation.
+*	
+*	\return IplImage point to the input image used for the segementation
 */
-void Segmenter::GetContourColor(IplImage* input, vector<resultContour>* contour_obj)
+IplImage* Segmenter::GetInputImage()
 {
+	return inputImg;
 }
+
+
+
+///**  \brief Find Contours in the image (called by GetContour)
+//*
+//* \param src: Segmented image
+//* \param contour_obj: Vector to store resulting contours
+//* \param min_area: Minimum area for the contours not to be rejected
+//*/
+//int Segmenter::FindContours(IplImage* src, vector<resultContour>* contour_obj)
+//{
+//	CvMemStorage* storage = cvCreateMemStorage(0);		// memory space that will be used for contour storage			
+//	CvSeq* contour = 0;
+//	std::vector<CvSeq*> tmp;
+//	std::vector<CvSeq*>::iterator j;
+//	//	int i;
+//	int n_contours = 0; /* Number of contours found */
+//
+//	//    CvPoint2D32f center = cvPoint2D32f(src->width/2,src->height/2);
+//
+//	// Make a copy of source, because contents are destroyed by cvStartFindContours
+//	IplImage* src_tmp = cvCloneImage(src);
+//	CvContourScanner blobs = cvStartFindContours(src_tmp,storage,sizeof(CvContour),CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
+//
+//	//
+//	while((contour=cvFindNextContour(blobs))!=NULL)
+//	{	// inserts contours into temporary vector, sorted by size, biggest in front
+//		for(j=tmp.begin(); (j != tmp.end()) && (fabs(cvContourArea(contour)) < fabs(cvContourArea(*j))); j++); 
+//		tmp.insert(j,contour);
+//		n_contours++;		
+//	}
+//	CvPoint2D32f pt_centre;
+//	CvRect rect;
+//
+//	// This is used to correct the position in case of ROI
+//	if(src->roi != NULL)
+//		rect = cvGetImageROI(src);
+//	else
+//	{
+//		rect.x = 0;
+//		rect.y = 0;
+//	}
+//
+//	CvMoments moments;
+//
+//	// Compute and store the moments and other data of each contour, but take only the 'max_number' first contours
+//	for(int i=0;i<n_contours && i<max_number;i++)
+//	{
+//		resultContour rc;
+//		cvMoments(tmp[i],&moments,0);
+//		pt_centre.x=(float)(rect.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
+//		pt_centre.y=(float)(rect.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
+//		rc.center = pt_centre;
+//		rc.area = moments.m00;
+//		rc.compactness =  cvContourCompactness( tmp[i]);
+//		rc.boundingrect = cvContourBoundingRect(tmp[i], 0);
+//
+//		contour_obj->push_back(rc);
+//
+//	}
+//
+//
+//	contour=cvEndFindContours(&blobs);
+//	cvReleaseMemStorage(&storage);
+//	cvReleaseImage(&src_tmp);
+//	return n_contours;
+//
+//}
+//
+///**  \brief Select contours in a picture
+//*
+//* This function computes all exterior contours in the picture and find the center of 
+//* gravity of the ones whose areas are within the defined bounds and whose compactness is
+//* higher than target one. It writes the retained contours and their features in a 
+//* user-defined array 'contour_obj'.
+//*
+//* \param src: pointer on the binary source picture
+//* \param contour_obj: pointer to a vector of resultContour where results are returned
+//* \result Returns the number of detected contours.
+//*/
+//int Segmenter::GetContour(IplImage* src, vector<resultContour>* contour_obj)
+//{
+//	int n_contours;
+//	//printf("GetContour\n");
+//	// Erase all contours in resultContour vector
+//	contour_obj->clear();	
+//	n_contours=FindContours(src,contour_obj);
+//	GetContourColor(input->GetInputIpl(),contour_obj);
+//	return n_contours;
+//}
+//
+///** \brief Determines contours average color 
+//*
+//* This function computes the average color value over all pixels in a contour. 
+//* This might be a useful parameter in determining the fitness of the data
+//* association algorithm.
+//*
+//* \param input: The color input image
+//* \param contour_obj: pointer to a vector of resultContour 
+//*
+//* \todo Implementation
+//*/
+//void Segmenter::GetContourColor(IplImage* input, vector<resultContour>* contour_obj)
+//{
+//}
 
 /**  \brief Initializes segmenter, by discarding the first few frames.
 *
