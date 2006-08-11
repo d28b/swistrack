@@ -57,6 +57,17 @@ void SettingsDialog::FileSave(wxCommandEvent& event )
         }
 }
 
+void SettingsDialog::ChangeBooleanParam(wxCommandEvent& event)
+	{
+		int id=event.GetId()-1-wxID_HIGHEST;
+		
+		wxString dummy;
+		dummy.Printf("%d",((wxCheckBox*) controls[id])->GetValue());
+		SetParamByXPath(parent->cfgRoot,idxpath[id].c_str(),dummy.c_str());
+		parent->ot->SetParameters(); 
+	}
+
+
 /*************************************************************
 /* \brief Callback function for changing a mode
 /*
@@ -236,6 +247,24 @@ void SettingsDialog::CreateDialog(){
                         parameter_sizer->Add(m_textctrl,0,wxALL|wxALIGN_LEFT,0);
                         this->Connect(actid-1,wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(SettingsDialog::ChangeParam));
                         }
+					//////////////// Treats type BOOLEAN /////////////////////
+					else if(!param_type.compare("boolean")){
+								int v=0;
+								//wxString value("0");
+								if(IsDefined(parent->cfgRoot,(*parameter)->get_path().c_str()) && IsContent(parent->cfgRoot,(*parameter)->get_path().c_str())){                            
+									//value=wxString(GetValByXPath(parent->cfgRoot,(*parameter)->get_path().c_str()));
+									v=GetIntValByXPath(parent->cfgRoot,(*parameter)->get_path().c_str());
+								}
+								else if(IsContent(nodeRoot,(*parameter)->get_path().c_str())){                            
+									v=GetIntVal(*parameter);
+								}
+								
+								wxCheckBox* m_checkbox = new wxCheckBox(panels.back(),actid++,_(""));
+								idxpath.push_back(wxString((*parameter)->get_path().c_str()));
+								controls.push_back(m_checkbox);
+								parameter_sizer->Add(m_checkbox,0, wxALL|wxALIGN_LEFT,0);
+								this->Connect(actid-1,wxEVT_SCROLL_CHANGED, wxCommandEventHandler(SettingsDialog::ChangeBooleanParam));
+							}
                     //////////////// Treats type OPEN ///////////////////////
                     else if(!param_type.compare("open")){
                         wxString value("");
