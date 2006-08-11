@@ -37,8 +37,8 @@ SwisTrackPanel::SwisTrackPanel(SwisTrack* parent, char* title, char* component, 
 				parameter != parameterset.end(); ++parameter){
 					if(IsAttr(*parameter,"variable")){  
 						if(GetIntAttr(*parameter,"variable")==1){
-							if(!IsAttr(*parameter,"desc")) throw "The parameter description (attribute desc) is missing for some parameters of the current SEGMENTER mode";
-							if(!IsAttr(*parameter,"type")) throw "The parameter type (parameter type) is missing for some parameters of the current SEGMENTER mode";
+							if(!IsAttr(*parameter,"desc")) throw "[SwisTrackPanel::SwisTrackPanel] The parameter description (attribute desc) is missing for some parameters of the current SEGMENTER mode";
+							if(!IsAttr(*parameter,"type")) throw "[SwisTrackPanel::SwisTrackPanel] The parameter type (parameter type) is missing for some parameters of the current SEGMENTER mode";
 							parameter_sizer->Add(new wxStaticText(panel,wxID_ANY,GetAttr(*parameter,"desc")),0, wxALL|wxALIGN_LEFT,0);
 							std::string param_type(GetAttr(*parameter,"type"));
 
@@ -59,7 +59,7 @@ SwisTrackPanel::SwisTrackPanel(SwisTrack* parent, char* title, char* component, 
 									v=GetIntValByXPath(parent->cfgRoot,(*parameter)->get_path().c_str());
 								}
 								else{
-									throw "An INTEGER parameter has an empty content field in this component and mode";
+									throw "[SwisTrackPanel::SwisTrackPanel] An INTEGER parameter has an empty content field in this component and mode";
 								}
 								wxSlider* m_slider = new wxSlider( panel,actid++, v, min,max,  wxDefaultPosition, wxSize(155,-1),
 									wxSL_LABELS | wxSL_SELRANGE);
@@ -80,7 +80,7 @@ SwisTrackPanel::SwisTrackPanel(SwisTrack* parent, char* title, char* component, 
 									v=GetIntValByXPath(parent->cfgRoot,(*parameter)->get_path().c_str());
 								}
 								else{
-									throw "An BOOLEAN parameter has an empty content field in this component and mode";
+									throw "[SwisTrackPanel::SwisTrackPanel] An BOOLEAN parameter has an empty content field in this component and mode";
 								}
 								
 								wxCheckBox* m_checkbox = new wxCheckBox(panel,actid++,_(""));
@@ -96,7 +96,7 @@ SwisTrackPanel::SwisTrackPanel(SwisTrack* parent, char* title, char* component, 
 									value=wxString(GetValByXPath(parent->cfgRoot,(*parameter)->get_path().c_str()));
 								}
 								else{
-									throw "A DOUBLE parameter has an empty content field in this component and mode";
+									throw "[SwisTrackPanel::SwisTrackPanel] A DOUBLE parameter has an empty content field in this component and mode";
 								}
 								wxTextCtrl* m_textctrl = new wxTextCtrl(panel,actid++,value,wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator);
 								idxpath.push_back(wxString((*parameter)->get_path().c_str()));
@@ -105,7 +105,7 @@ SwisTrackPanel::SwisTrackPanel(SwisTrack* parent, char* title, char* component, 
 								this->Connect(actid-1,wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(SwisTrackPanel::ChangeParam));
 							}
 							else {
-								throw "Only INTEGER and DOUBLE can be declared VARIABLE";
+								throw "[SwisTrackPanel::SwisTrackPanel] Only INTEGER, DOUBLE, BOOLEAN can be declared VARIABLE";
 							}
 						}
 					}
