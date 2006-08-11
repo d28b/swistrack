@@ -115,7 +115,9 @@ class Segmenter : public Component
 		status_code status;		
 		
 		/** Binarization threshold (0-255) */
-		int bin_threshold;		
+		int bin_threshold;
+		/** Average value of the background, for threshold based on image average (0-255)*/
+		int backgroundAverage;
 		/** Exponential average constant for background estimae */
 		double alpha;
 		

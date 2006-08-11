@@ -57,7 +57,8 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 				throw "[Segmenter::Segmenter] threshold not specified (/CFG/SEGMENTER[@mode='0']/THRESHOLD)";
 			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='0']/MAXNUMBER"))
 				throw "[Segmenter::Segmenter] maximal number of contours not specified (/CFG/SEGMENTER[@mode='0']/MAXNUMBER)";
-
+			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='0']/FIXED"))
+				throw "[Segmenter::Segmenter] Using fixed or moving threshold not specified (/CFG/SEGMENTER[@mode='0']/FIXED)";
 
 			IplImage* bg = cvLoadImage(GetValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='0']/BGIMAGE"), -1); 						
 			if (!bg){
@@ -85,10 +86,15 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 
 			// Flip image because AVI provides bottom left images and BMP top left.
 			cvFlip(background,background,0);
+			
 			if (!background)
 			{
 				status = CAN_NOT_OPEN_BACKGROUND_FILE;
 				throw "Can not open background file";
+			}
+			if (GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='0']/FIXED")==0)
+			{
+				backgroundAverage=(int)cvMean(background);
 			}
 			break;
 			cvReleaseImage(&bg);
@@ -277,7 +283,13 @@ void Segmenter::Segmentation()
 				}
 
 				cvAbsDiff(tmpImage, background, binary);
-				cvThreshold(binary,binary, bin_threshold, 255,  CV_THRESH_BINARY);
+				if (GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='0']/FIXED")==0)
+				{
+					int currentImageAverage=(int)cvMean(inputImg);
+					cvThreshold(binary,binary, (bin_threshold+currentImageAverage-backgroundAverage), 255,  CV_THRESH_BINARY);
+				}
+				else
+					cvThreshold(binary,binary, bin_threshold, 255,  CV_THRESH_BINARY);
 			}
 			catch(...)
 			{
