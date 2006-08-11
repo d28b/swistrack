@@ -98,9 +98,12 @@ class Segmenter : public Component
 	private:
 	
 		void QueryFrame1394(IplImage* input);
-		int GetContour(IplImage* src, vector<resultContour>* contour_obj);
-		int FindContours(IplImage* src, vector<resultContour>* contour_obj);
-		void GetContourColor(IplImage* input, vector<resultContour>* contour_obj);
+		IplImage* GetInputImage();
+		IplImage* GetBinaryImage();
+		IplImage* GetBackgroundImage();	
+		//int GetContour(IplImage* src, vector<resultContour>* contour_obj);
+		//int FindContours(IplImage* src, vector<resultContour>* contour_obj);
+		//void GetContourColor(IplImage* input, vector<resultContour>* contour_obj);
 		void Segmentation();
 
 		Input* input;
