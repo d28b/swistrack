@@ -558,7 +558,7 @@ void SwisTrack::OnChangeDisplaySpeed(wxScrollEvent& WXUNUSED(event))
 void SwisTrack::OnMenuHelpAbout(wxCommandEvent& WXUNUSED(event))
 {
 	AboutDialog *dlg = new AboutDialog(this);
-	dlg->SetText("(c) 2004, 2005 Swarm-Intelligent Systems Group\nSwiss Federal Institute of Technology\nLausanne, Switzerland\n");
+	dlg->SetText("(c) 2004-2006 Swarm-Intelligent Systems Group\nSwiss Federal Institute of Technology\nLausanne, Switzerland\n\nhttp://swistrack.sourceforge.net");
 	dlg->ShowModal();
 }
 
