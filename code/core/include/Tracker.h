@@ -60,7 +60,7 @@ class Tracker : public Component
 		double Fitness(particle* pa, particle* pb);
 		void DrawTrajectories();
 		/** Convert list of contours into particles */
-		void GetParticlesFromContours(vector<resultContour>* contours);
+		//void GetParticlesFromContours(vector<resultContour>* contours);
 		/** Add a point to a track */
 		void AddPoint(int i, CvPoint2D32f p);
 		/** Calculates cost between two points */

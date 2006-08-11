@@ -13,13 +13,11 @@
 struct particle{
 	/** Particle center */
 	CvPoint2D32f p;  
-	/** Particle color */
-	double color;	  
 	/** Particle area */
 	double area;
 	/** The contour's compactness (area/circumference ratio) */
 	double compactness;
-	/** The contour's orientation */
+	/** The contour's orientation (not calculated at this time */
 	double orientation;
 	int id;          // associated track
 };
@@ -50,9 +48,9 @@ private:
 	/** Maximum area of blob  [pix^2] */
 	int max_area;				
 	/** Minimum area of blob  [pix^2] */
-	int min_area;				
-	
-	
+	int min_area;
+	/** Maximum number of contours to keep (only the 'max_number' largest contours are kept) */
+	int max_number;	
 };
 
 #endif 

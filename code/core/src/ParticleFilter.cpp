@@ -19,14 +19,16 @@ ParticleFilter::ParticleFilter(xmlpp::Element* cfgRoot,TrackingImage* trackingim
 	mode=GetIntAttrByXPath(cfgRoot,"/CFG/COMPONENTS/PARTICLEFILTER","mode");
 	
 	switch(mode){
-		case 0 : {
-			if(!IsDefined(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MINAREA"))
-				throw "[ParticleFilter::ParticleFilter] no parameters for particle filter mode 0 (minimum area) found";
-
-			if(!IsDefined(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MAXAREA"))
-				throw "[ParticleFilter::ParticleFilter] no parameters for particle filter mode 0 (maximal area) found";
-				 }
-				 break;
+		case 0 : 
+			{
+				if(!IsDefined(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MINAREA"))
+					throw "[ParticleFilter::ParticleFilter] no parameters for particle filter mode 0 (minimum area) found";
+				if(!IsDefined(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MAXAREA"))
+					throw "[ParticleFilter::ParticleFilter] no parameters for particle filter mode 0 (maximal area) found";
+				if(!IsDefined(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MAXNUMBER"))
+					throw "[ParticleFilter::ParticleFilter] maximal number of contours not specified (/CFG/PARTICLEFILTER[@mode='0']/MAXNUMBER)";
+			}
+			break;
 		default : throw "[ParticleFilter::ParticleFilter] Invalid mode.";
 	}
 	
@@ -38,11 +40,13 @@ ParticleFilter::ParticleFilter(xmlpp::Element* cfgRoot,TrackingImage* trackingim
 void ParticleFilter::SetParameters()
 {
 	switch(mode){
-		case 0 : {
+		case 0 : 
+			{
 				min_area = GetIntValByXPath(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MINAREA");
 				max_area = GetIntValByXPath(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MAXAREA");
-				 }
-				 break;
+				max_number = GetIntValByXPath(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MAXNUMBER");
+			}
+			break;
 		default : throw "[ParticleFilter::ParticleFilter] Invalid mode.";
 	}
 
@@ -105,32 +109,97 @@ void ParticleFilter::RefreshCoverage()
 * \todo A possible improvement could be to generate more than one particle from
 * contours that are too large.
 */
-void ParticleFilter::GetParticlesFromContours(){
-	
-	vector<resultContour>* contours = segmenter->GetContours();
-	int numContours = contours->size();
-
-	int numParticles=0;
-	particles.clear();
-	
-	for(int c=0;c<numContours;c++)
-		{                             
-		if(contours->at(c).area>=min_area && contours->at(c).area<=max_area){ // Only allow blobs that are within the size constraints
-			particle P;
-			P.p=contours->at(c).center;
-			P.compactness=contours->at(c).compactness;
-			P.orientation=contours->at(c).orientation;
-			P.area=contours->at(c).area;
-			P.color=contours->at(c).color;
-			P.id=-1; // initially the particle is unassociated
-			particles.push_back(P);
-			numParticles++;
-			if(trackingimg->GetDisplay())
-				trackingimg->DrawCircle(cvPoint((int)(contours->at(c).center.x),(int)(contours->at(c).center.y)),CV_RGB(0,255,0));
-			//trackingimg->DrawRectangle(&contours->at(c).boundingrect,CV_RGB(0,0,255));
-				trackingimg->Cover(cvPoint((int)(contours->at(c).center.x),(int)(contours->at(c).center.y)),CV_RGB(255-P.area,0,0),2);
+void ParticleFilter::GetParticlesFromContours()
+{
+	switch(mode)
+	{
+	case 0:
+		{
+			//Control if max_number is not to slow
+			if (max_number<=0)
+				throw "[ParticleFilter::GetParticlesFromContours] Max Number of blob must be greater or equal to 1";
+			//We get the binary image from the segmenter, we make a copy because the image is modified during blobs extraction
+			IplImage* src_tmp = cvCloneImage(segmenter->GetBinaryImage());
+			//We clear the ouput vector
+			particles.clear();
+			particle tmpParticle; //Used to put the calculated value in memory
+			CvMoments moments; //Used to calculate the moments
+			std::vector<particle>::iterator j;//Iterator used to stock the particles by size
+			//We allocate memory to extract the contours from the binary image
+			CvMemStorage* storage = cvCreateMemStorage(0);
+			CvSeq* contour = 0;
+			//Init blob extraxtion						
+			CvContourScanner blobs = cvStartFindContours(src_tmp,storage,sizeof(CvContour),CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
+			
+			// This is used to correct the position in case of ROI
+			CvRect rectROI;
+			if(src_tmp->roi != NULL)
+				rectROI = cvGetImageROI(src_tmp);
+			else
+			{
+				rectROI.x = 0;
+				rectROI.y = 0;
 			}
+
+			while((contour=cvFindNextContour(blobs))!=NULL)
+			{
+				//calculating the moments
+				cvMoments(contour,&moments);
+				//Calculating Particle Area
+				tmpParticle.area=moments.m00;				
+
+				//Selection based on area
+				if ((tmpParticle.area<=max_area)&&(tmpParticle.area>=min_area))
+				{
+					//Check if we have already enough particles
+					if (particles.size()==max_number)
+					{
+						//If the particle is bigger than le smaller particle stored, stored it, else do nothing
+						if (tmpParticle.area>(particles.back()).area)
+						{
+							//Find the place were it must be inserted, sorted by size
+							for(j=particles.begin();(j!=particles.end())&&(tmpParticle.area <(*j).area);j++);
+							
+							//Caculate the important values						
+							(tmpParticle.p).x=(float)(rectROI.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
+							(tmpParticle.p).y=(float)(rectROI.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
+							tmpParticle.compactness=cvContourCompactness(contour);
+							tmpParticle.id=-1;
+							tmpParticle.orientation=0;
+
+							//Insert the particle
+							particles.insert(j,tmpParticle);
+							//remove the smallest one
+							particles.pop_back();
+						}
+					}
+					else //The particle is added at the correct place
+					{
+						//Find the place were it must be inserted, sorted by size
+						for(j=particles.begin();(j!=particles.end())&&(tmpParticle.area <(*j).area);j++);
+						
+						//Caculate the important values						
+						(tmpParticle.p).x=(float)(rectROI.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
+						(tmpParticle.p).y=(float)(rectROI.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
+						tmpParticle.compactness=cvContourCompactness(contour);
+						tmpParticle.id=-1;
+						tmpParticle.orientation=0;
+
+						//Insert the particle
+						particles.insert(j,tmpParticle);
+					}
+				}
+			}
+			//If we need to display the particles
+			if(trackingimg->GetDisplay())
+				for(j=particles.begin();j!=particles.end();j++)
+				{
+					trackingimg->DrawCircle(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(0,255,0));
+					//trackingimg->Cover(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255-((j*).area),0,0),2);
+					trackingimg->Cover(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255,0,0),2);
+				}
 		}
+		break;
+	default: throw "[ParticleFilter::GetParticlesFromContours()] Mode not implemented.";
 	}
-
-
+}

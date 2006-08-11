@@ -43,15 +43,12 @@ FINISHED, // 11
 STOPPED, // 12
 SEGMENTER_MODE_INVALID, //13
 PAUSED }; // 14
+using namespace std;
 /** \file Segmenter.h
     \brief Interface for the Segmenter class and the resultContour structure
 
     The Segmenter class implements basic image segmentation routines, found
 	contours are returned in a vector of resultContour.
-*/
-
-/** \struct resultContour
-    \brief Entity to save a contour from image segmentation
 */
 
 /** \class Segmenter
@@ -61,29 +58,14 @@ PAUSED }; // 14
 	in it. Found contours are sorted by their area, a threshold can be provided that rejects
 	contours that are to small.
 */
-struct resultContour{
-	/** The center with subpixel accuracy */
-	CvPoint2D32f center;
-	/** The area of the contour (in pixels) */
-	double area;
-	/** The contour's compactness (area/circumference ratio) */
-	double compactness;
-	/** The contour's orientation */
-	double orientation;
-	/** Smallest surrounding rectangle */
-	CvRect boundingrect;
-	/** Mean color of the contour */
-	double color;
-	};
-
-using namespace std;
-
 class Segmenter : public Component
 	{
 	public:
+		IplImage* GetInputImage();
+		IplImage* GetBinaryImage();
+		IplImage* GetBackgroundImage();	
 		void RefreshCoverage();
 		double GetFPS();
-		vector<resultContour>* GetContours();
 		Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg);
 		virtual ~Segmenter();
 		int GetStatus();
@@ -98,14 +80,7 @@ class Segmenter : public Component
 	private:
 	
 		void QueryFrame1394(IplImage* input);
-		IplImage* GetInputImage();
-		IplImage* GetBinaryImage();
-		IplImage* GetBackgroundImage();	
-		//int GetContour(IplImage* src, vector<resultContour>* contour_obj);
-		//int FindContours(IplImage* src, vector<resultContour>* contour_obj);
-		//void GetContourColor(IplImage* input, vector<resultContour>* contour_obj);
 		void Segmentation();
-
 		Input* input;
 
 		/** Background image. From a file */
@@ -115,8 +90,10 @@ class Segmenter : public Component
 		/** Binary image (segmented) */
 		IplImage* binary;	
 		/** Status code */
-		status_code status;		
+		status_code status;
 		
+		/** Fixed Threshold (0 false, 1 true)*/
+		int fixedThresholdBoolean;
 		/** Binarization threshold (0-255) */
 		int bin_threshold;
 		/** Average value of the background, for threshold based on image average (0-255)*/
@@ -124,11 +101,6 @@ class Segmenter : public Component
 		/** Exponential average constant for background estimae */
 		double alpha;
 		
-		/** Maximum number of contours to keep (only the 'max_number' largest contours are kept) */
-		int max_number;
-
-		/** Vector of resulting contours from segmentation */
-		vector<resultContour> contours;
 		double GetSqrDist(CvPoint2D32f p1, CvPoint2D32f p2);
 	};
 
