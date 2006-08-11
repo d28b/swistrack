@@ -12,7 +12,6 @@
 
 
 
-#include "polygon.h"
 #include "TrackingImage.h"
 #include "Input.h"
 #include <vector>

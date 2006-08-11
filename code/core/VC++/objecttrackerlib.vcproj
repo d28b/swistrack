@@ -248,28 +248,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\polygon.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\src\Segmenter.cpp"
 				>
 				<FileConfiguration
@@ -383,10 +361,6 @@
 			</File>
 			<File
 				RelativePath="..\include\ParticleFilter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\polygon.h"
 				>
 			</File>
 			<File

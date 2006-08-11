@@ -40,7 +40,7 @@ public:
 	void RefreshCoverage();
 
 private:
-
+	double GetContourCompactness( const void*);
 	Segmenter* segmenter;
 	vector<particle> particles;
 	TrackingImage* trackingimg;

@@ -1,6 +1,22 @@
 #include "ParticleFilter.h"
 
 
+
+/** \brief Returns the compacteness of a contour
+ *
+ * Compactness is a contour feature defined as 4*pi*Area/Perimeter^2
+ * It is maximum (1) for a circle, 0.78 for a square and \f[\frac{\pi\alpha}{(1+\alpha)^2}\f]
+ * for a rectangle where on side is \f[(\alpha \leq 1) \f] smaller than the other.
+ *
+ * \param contour: a CvSeq* containing the contour
+ * \result Returns the compactness 
+ */
+double  ParticleFilter::GetContourCompactness( const void* contour)
+{
+ double l = cvArcLength(contour,CV_WHOLE_SEQ,1);
+ return fabs(12.56*cvContourArea(contour)/(l*l));	
+}  
+
 ParticleFilter::ParticleFilter(xmlpp::Element* cfgRoot,TrackingImage* trackingimg)
 	: trackingimg(trackingimg)
 {
@@ -163,7 +179,7 @@ void ParticleFilter::GetParticlesFromContours()
 							//Caculate the important values						
 							(tmpParticle.p).x=(float)(rectROI.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
 							(tmpParticle.p).y=(float)(rectROI.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
-							tmpParticle.compactness=cvContourCompactness(contour);
+							tmpParticle.compactness=GetContourCompactness(contour);
 							tmpParticle.id=-1;
 							tmpParticle.orientation=0;
 
@@ -181,7 +197,7 @@ void ParticleFilter::GetParticlesFromContours()
 						//Caculate the important values						
 						(tmpParticle.p).x=(float)(rectROI.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
 						(tmpParticle.p).y=(float)(rectROI.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
-						tmpParticle.compactness=cvContourCompactness(contour);
+						tmpParticle.compactness=GetContourCompactness(contour);
 						tmpParticle.id=-1;
 						tmpParticle.orientation=0;
 
