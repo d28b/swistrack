@@ -28,8 +28,8 @@
 * Menu calls for the functions provided by the ObjectTracker class are provided, also event handler that capture
 * mouse clicks and display coordinates in image and world space (after calibration).
 *
-* \section visualstudio Project Settings for Visual Studio 6.0
-* This application was written using Microsoft Visual Studio 6.0. In order to successfully link,
+* \section visualstudio Project Settings for Visual Studio 2005
+* This application was written using Microsoft Visual Studio 2005. In order to successfully link,
 * the following project settings are necessary:
 *
 * \subsection codegen C++/Code Generation Tab
@@ -42,8 +42,6 @@
 * gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib
 * rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib 
 *
-* The librares objecttracker.lib and calibration.lib have to be compiled using their own work-
-* spaces.
 */
 
 
