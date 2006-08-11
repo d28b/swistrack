@@ -260,7 +260,8 @@ void SettingsDialog::CreateDialog(){
                     //////////////// Treats type SAVE ///////////////////////
                     else if(!param_type.compare("save")){
                         wxString value("");
-                        wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
+
+	                    wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
                         wxTextCtrl* m_textctrl = new wxTextCtrl(panels.back(),actid++,value,wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator);  
                         idxpath.push_back(wxString((*parameter)->get_path().c_str()));
                         controls.push_back(m_textctrl);
