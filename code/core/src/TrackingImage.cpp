@@ -162,7 +162,7 @@ IplImage* TrackingImage::GetCoveragePointer()
 
 void TrackingImage::DrawContours(VisBlobSet *blobs)
 {
-	blobs->DrawContours(colorimg,255,255);	// outline the located blobs
+	blobs->DrawContours(colorimg,cvScalarAll(255),cvScalarAll(255));	// outline the located blobs
 }
 
 /** \brief Returns a pointer to the current image

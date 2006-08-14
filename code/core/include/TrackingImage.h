@@ -9,7 +9,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "VisBlobSet.hpp"
+#include "libgeom.h"
 #include "cv.h"
 #include "highgui.h" // only for debugging
 #include "Component.h"

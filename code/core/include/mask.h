@@ -26,7 +26,7 @@
 /*****************************************************************************/
 
 
-#include "VisBlobSet.hpp"
+#include "libgeom.h"
 #include "Track.h"
 #include "TrackingImage.h"
 #include "Component.h"

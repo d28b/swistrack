@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="I:\library\OpenCV\cv\include;I:\library\OpenCV\cxcore\include;I:\library\OpenCV\otherlibs\highgui"
+				AdditionalIncludeDirectories="I:\library\OpenCV\cv\include;I:\library\OpenCV\cxcore\include;I:\library\OpenCV\otherlibs\highgui;..\..\..\LPM_VISLIB\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -200,10 +200,6 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
-		<File
-			RelativePath="Readme.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

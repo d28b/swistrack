@@ -252,9 +252,9 @@ try{
 	//printf("CENTER: (%f/%f) %f\n",center.x,center.y,spots.GetEllipseSim(0));
 
 	spots.DrawContours(						// outline the arena blob.
-		centerbg,255,0);	// ??? WHY RGB IN GRAY IMG ???
+		centerbg,cvScalarAll(255),cvScalarAll(0));	// ??? WHY RGB IN GRAY IMG ???
 
-	spots.DisplayCross(centerbg,0,1,10,0);	// show the origin as a cross on 
+	spots.DisplayCross(centerbg,cvScalarAll(0),1,10,0);	// show the origin as a cross on 
 											// the image.
 											//   (img,color,thickness,
 											//    armlength,blobnumber)
@@ -353,7 +353,7 @@ void calibthreshold (int id)				// ---------------------------------
 		printf("Number of blobs: %d\n",squares.GetTotalNumBlobs());
 	
 	if(squares.GetTotalNumBlobs()>1) squares.SortByArea();					// biggest one first.
-	squares.DrawContours(calibmask,255,255);// outline the located blobs
+	squares.DrawContours(calibmask,cvScalarAll(255),cvScalarAll(255));// outline the located blobs
 
 	CvFont font;							// write the number of spots found
 	cvInitFont(&font,CV_FONT_VECTOR0,		// into the image, so that the 
@@ -415,7 +415,7 @@ try{
 	printf("Number of blobs: %d\n",spots.GetTotalNumBlobs());
 	
 	if(spots.GetTotalNumBlobs()>1)	spots.SortByArea();						// biggest one first.
-	spots.DrawContours(calibmask,255,255);	// outline the located blobs
+	spots.DrawContours(calibmask,cvScalarAll(255),cvScalarAll(255));	// outline the located blobs
 
 	cvDestroyWindow("Find the Calibration Target");	// clean up all the memory we used. 
 	cvReleaseImage(&calibbg);				//
@@ -454,7 +454,7 @@ bool Transformation::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 	spots.EmptyDetectedBlobsList();			// clear the blob list,
 	spots.FindBlobs(calibmask);				// and get the new ones,
 	spots.SortByArea();						// biggest one first.
-	spots.DrawContours(calibmask,255,255);	// outline the located blobs
+	spots.DrawContours(calibmask,cvScalarAll(255),cvScalarAll(255));	// outline the located blobs
 
 	CvPoint2D32f* imagePoints32f =			// declare and allocate arrays of
 		new CvPoint2D32f[ps];				// points for calculating the 
@@ -673,7 +673,7 @@ try{
 	spots.EmptyDetectedBlobsList();			// clear the blob list,
 	spots.FindBlobs(calibmask);				// and get the new ones,
 	spots.SortByArea();						// biggest one first.
-	spots.DrawContours(calibmask,255,255);	// outline the located blobs
+	spots.DrawContours(calibmask,cvScalarAll(255),cvScalarAll(255));	// outline the located blobs
 
 	CvPoint2D32f* imagePoints32f =			// declare and allocate arrays of
 		new CvPoint2D32f[cw*ch];				// points for calculating the 
@@ -1063,7 +1063,7 @@ try{
 		if(img)
 		{
 			cvNamedWindow("debug", CV_WINDOW_AUTOSIZE);
-			blobs.DrawContours(img,255,0);
+			blobs.DrawContours(img,cvScalarAll(255),cvScalarAll(0));
 		}
 		
 		for (int x=0;x<cw;x++)
@@ -1226,7 +1226,7 @@ void Transformation::TestRoundCalibration(char* testpattern,int h, int* nrofpoin
 	spots.EmptyDetectedBlobsList();			// clear the blob list,
 	spots.FindBlobs(calibmask);				// and get the new ones,
 	spots.SortByArea();						// biggest one first.
-	spots.DrawContours(calibmask,255,255);	// outline the located blobs
+	spots.DrawContours(calibmask,cvScalarAll(255),cvScalarAll(255));	// outline the located blobs
 	
 	CvPoint2D32f* imagePoints32f =			// declare and allocate arrays of
 		new CvPoint2D32f[patternsize];				// points for calculating the 
@@ -1295,7 +1295,7 @@ void Transformation::TestCalibration(char* testpattern,int cw, int ch,double wx,
 	spots.EmptyDetectedBlobsList();			// clear the blob list,
 	spots.FindBlobs(calibmask);				// and get the new ones,
 	spots.SortByArea();						// biggest one first.
-	spots.DrawContours(calibmask,255,255);	// outline the located blobs
+	spots.DrawContours(calibmask,cvScalarAll(255),cvScalarAll(255));	// outline the located blobs
 	
 	CvPoint2D32f* imagePoints32f =			// declare and allocate arrays of
 		new CvPoint2D32f[cw*ch];				// points for calculating the 

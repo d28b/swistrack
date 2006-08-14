@@ -26,10 +26,9 @@
 /*****************************************************************************/
 
 
-//#include "ipl.h"
 //#include "cxcore.h"
 #include "highgui.h"
-#include "VisBlobSet.hpp"
+#include "libgeom.h"
 
 
 

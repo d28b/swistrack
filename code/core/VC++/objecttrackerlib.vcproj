@@ -43,7 +43,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="I:\library\1394camera\include;I:\library\OpenCV\otherlibs\highgui;I:\library\OpenCV\cxcore\include;I:\library\OpenCV\cv\include;../../xmlcfg/include;../../libblob/include;../include;../../calibration/include;&quot;I:\library\libxml++&quot;"
+				AdditionalIncludeDirectories="I:\library\1394camera\include;I:\library\OpenCV\otherlibs\highgui;I:\library\OpenCV\cxcore\include;I:\library\OpenCV\cv\include;../../xmlcfg/include;../../libblob/include;../include;../../calibration/include;&quot;I:\library\libxml++&quot;;..\..\..\LPM_VISLIB\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
