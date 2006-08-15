@@ -2,6 +2,8 @@
 #define _datalogger_H
 
 #include "Component.h"
+#include "cv.h"
+#include "ObjectTracker.h"
 
 /** \class DataLogger
 *
@@ -10,15 +12,15 @@
 class DataLogger : Component
 	{
 	public:
-        DataLogger(char * fname, xmlpp::Element* cfgRoot);
-	void WriteRow(int frame, double time);
+        DataLogger(ObjectTracker* parent, xmlpp::Element* cfgRoot);
+	void WriteRow();
 	    ~DataLogger();
 	
 
 	private:
-	FILE* rawcalib;
-	FILE* rawuncalib;
+	FILE* output;	
     int ncols;
+	ObjectTracker* parent;
 	};
 
 #endif

@@ -34,12 +34,9 @@ Tracker::Tracker(ObjectTracker* parent, xmlpp::Element* cfgRoot, TrackingImage* 
     
     switch(mode){
         case 0 : /////////////// Nearest neighbor //////////////////////////
-            if(!IsDefined(cfgRoot,"/CFG/TRACKER[@mode='0']"))
-                throw "[Tracker::Tracker] no parameters for tracker mode 0 (nearest neighbor) found";
-			if(!IsDefined(cfgRoot,"/CFG/TRACKER[@mode='0']/MAXSPEED"))
-				throw "[Tracker::Tracker] maxspeed for tracker mode 0 undefined (/CFG/COMPONENTS/[@mode='0']/MAXSPEED)";
-			if(!IsDefined(cfgRoot,"/CFG/TRACKER[@mode='0']/NOBJECTS"))
-				throw "[Tracker::Tracker] number of objects for tracker mode 0 undefined (/CFG/COMPONENTS/[@mode='0']/MAXSPEED)";
+            CreateExceptionIfEmpty(cfgRoot,"/CFG/TRACKER[@mode='0']");
+            CreateExceptionIfEmpty(cfgRoot,"/CFG/TRACKER[@mode='0']/MAXSPEED");				
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/TRACKER[@mode='0']/NOBJECTS");				
            break;
         default : throw "[Tracker::Tracker] tracker mode not implemented";
         };

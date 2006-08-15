@@ -12,6 +12,7 @@
 */
 
 #include "ObjectTracker.h"
+#include "DataLogger.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -23,20 +24,23 @@ ObjectTracker::ObjectTracker(xmlpp::Element* cfgRoot) : cfgRoot(cfgRoot)
 	pause=0;
 	tracker=NULL;
 	trackingimg=NULL;
+	datalogger=NULL;
+
     if(!cfgRoot){
         throw "[ObjectTracker::ObjectTracker] No configuration specified";
         }
 
     trackingimg = new TrackingImage();
     tracker=new Tracker(this,cfgRoot,trackingimg);
-    
-
+	datalogger=new DataLogger(this,cfgRoot);
+   
 }
 
 ObjectTracker::~ObjectTracker()
 {
 	if(tracker) delete(tracker);
 	if(trackingimg) delete(trackingimg);
+	if(datalogger) delete(datalogger);
 }
 
 
@@ -79,8 +83,8 @@ CvPoint2D32f* ObjectTracker::GetPos(int id)
 int ObjectTracker::Step()
 {
 	int status;
-	if(tracker)
-		status=tracker->Step();	
+	status=tracker->Step();	
+	datalogger->WriteRow();
 	return(status);
 }
 
@@ -102,28 +106,6 @@ double ObjectTracker::GetProgress(int kind)
 		return 0;
 }
 
-/** \brief Tracking thread
-* This function is called by Start() and performs tracking steps
-* as long as tracking is not stopped or paused. In case of pause (Pause(), Continue()),
-* the thread sleeps for 250ms. Thus the minimum pause time is 250ms and all pause times
-* are a multiple of 250ms.
-*/
-/*void ObjectTracker::TrackingThread()
-{
-int status = 1;
-
-while(!stop && status){
-	
-	status=otStep();
-	if( status == RUNNING || status == SEARCHING)
-		status =1;
-	else
-		status =0;
-	while(pause)
-			Sleep(250);
-	};
-}*/
-
 
 /** \brief Starts tracking
 *
@@ -141,46 +123,6 @@ int ObjectTracker::Start()
 //	TrackingThread();
 }
 
-/** \brief Processes data
-*
-* This function is called after every succesfull tracking step. Override this function with your own code
-* in order to postprocess the data.
-*
-* Example:
-*
-* class MyApp : public ObjectTracker // extend the ObjectTracker class<br>
-* {<br>
-* public: <br>
-* &nbsp;	MyApp() : ObjectTracker() <br>
-* &nbsp;&nbsp;			{<br>
-* &nbsp;&nbsp;&nbsp;				// your constructor goes here<br>
-* &nbsp;&nbsp;			}<br>
-*<br>
-*&nbsp;		void ProcessData(){ // your own data processing (displays frame number, and position of object 0)<br>
-*&nbsp;&nbsp;			int i=0;<br>
-*<br>			
-*&nbsp;&nbsp;			CvPoint2D32f* p=GetPos(i);<br>
-*&nbsp;&nbsp;			printf("Frame %d Object %d (%f/%f)\n",(int) GetProgress(2),i,p->x,p->y);<br>
-*&nbsp;			}<br>
-* }<br>
-*	<br>	
-*/
-/*void ObjectTracker::otProcessData()
-	{
-	  // process data here (use GetPos())
-	}
-*/
-
-
-/** \brief Displays Search Progress
-*
-* This method is called during the initial search process (Tracker::init()). Override this method in your
-* application, for instance to display the segmenter window during search.
-*/
-/*void ObjectTracker::otSearching()
-	{
-	}
-*/
 
 /** \brief Sets tracking parameters
 * Allows for changing parameters used by the segmenter (bin_threshold, min_area) and the
@@ -190,7 +132,6 @@ int ObjectTracker::Start()
 
 void ObjectTracker::SetParameters()
 {
-    // To be implemented: refresh all parameters from CFG
 	if(tracker)
 		tracker->SetParameters();
 }
@@ -221,23 +162,6 @@ IplImage* ObjectTracker::GetBinaryPointer()
 		return(NULL);
 }
 
-/** \brief Pauses tracking
-*
-* Pauses tracking for at least 250ms. 
-*/
-/*void ObjectTracker::otPause()
-{
-	pause=1;
-}*/
-
-/** \brief Continues tracking after Pause()
-* 
-* Continues tracking with a maximum overhead of 250ms.
-*/
-/*void ObjectTracker::otContinue()
-{
-	pause=0;
-}*/
 
 /** \brief Returns segmenter status
 *
@@ -309,12 +233,6 @@ void ObjectTracker::InitTracker()
       throw "Could not distinguish the specified number of objects before the video stream ended";
       }
 }
-
-
-/*CvPoint ObjectTracker::GetUserEstimateFor(int id)
-{
-	return(cvPoint(0,0));
-}*/
 
 
 IplImage* ObjectTracker::GetCoveragePointer()

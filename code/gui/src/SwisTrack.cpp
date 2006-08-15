@@ -1,6 +1,6 @@
 #include "SwisTrack.h"
 #include "Canvas.h"
-#include "DataLogger.h"
+//#include "DataLogger.h"
 #include "AviWriter.h"
 #include "SocketServer.h"
 #include "SettingsDialog.h"
@@ -149,7 +149,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	trackingpanel = NULL;
 	segmenterpanel = NULL;
 	interceptionpanel = NULL;
-	datalogger = NULL;
+//	datalogger = NULL;
 	aviwriter = NULL;
 	socketserver = NULL;
 	parser = NULL;
@@ -302,8 +302,8 @@ void SwisTrack::ProcessData(){
 		pos=ot->GetProgress(2);		
 		time=ot->GetProgress(1)/1000.0;
 
-		if(datalogger)
-			datalogger->WriteRow((int) pos,time);
+		/*if(datalogger)
+			datalogger->WriteRow((int) pos,time);*/
 
 		if(fmod(pos,10)){
 			char progress[200];
@@ -633,10 +633,10 @@ void SwisTrack::OnMenuViewShowSegmenter(wxCommandEvent& WXUNUSED(event))
 void SwisTrack::ShutDown()
 {
 	wxBusyInfo info(_T("Shutting down, please wait..."), this);
-	if(datalogger){
+	/*if(datalogger){
 		delete(datalogger);
 		datalogger=NULL;
-	}
+	}*/
 	if(ot){
 		ot->Stop();
 	}
@@ -743,10 +743,10 @@ void SwisTrack::Finished()
 	menuControl->Enable(Gui_Ctrl_Continue,FALSE);
 	menuControl->Enable(Gui_Ctrl_Stop,FALSE);
 
-	if(datalogger){
+	/*if(datalogger){
 		delete(datalogger);
 		datalogger=NULL;
-	}
+	}*/
 
 	if(interceptionpanel) interceptionpanel->Destroy();
 	interceptionpanel=NULL;

@@ -37,12 +37,9 @@ ParticleFilter::ParticleFilter(xmlpp::Element* cfgRoot,TrackingImage* trackingim
 	switch(mode){
 		case 0 : 
 			{
-				if(!IsDefined(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MINAREA"))
-					throw "[ParticleFilter::ParticleFilter] no parameters for particle filter mode 0 (minimum area) found";
-				if(!IsDefined(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MAXAREA"))
-					throw "[ParticleFilter::ParticleFilter] no parameters for particle filter mode 0 (maximal area) found";
-				if(!IsDefined(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MAXNUMBER"))
-					throw "[ParticleFilter::ParticleFilter] maximal number of contours not specified (/CFG/PARTICLEFILTER[@mode='0']/MAXNUMBER)";
+				CreateExceptionIfEmpty(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MINAREA");					
+				CreateExceptionIfEmpty(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MAXAREA");
+				CreateExceptionIfEmpty(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MAXNUMBER");
 			}
 			break;
 		default : throw "[ParticleFilter::ParticleFilter] Invalid mode.";

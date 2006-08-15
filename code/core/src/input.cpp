@@ -12,11 +12,9 @@ Input::Input(xmlpp::Element* cfgRoot)
 
 		switch(mode){
         case 0 : /////////////// video file //////////////////////////
-            if(!IsDefined(cfgRoot,"/CFG/INPUT[@mode='0']"))
-                throw "[Segmenter::Segmenter] no parameters for input mode 0 found";
-            
-            if(!IsDefined(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"))
-                throw "[Segmenter::Segmenter] input video not specified (/CFG/INPUT[@mode='0']/AVIFILE)";
+            CreateExceptionIfEmpty(cfgRoot,"/CFG/INPUT[@mode='0']");
+            CreateExceptionIfEmpty(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE");
+                
             Capture = cvCaptureFromFile(GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"));
             if (!Capture){
                 FILE* f;				

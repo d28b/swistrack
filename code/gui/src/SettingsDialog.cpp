@@ -52,6 +52,7 @@ void SettingsDialog::FileSave(wxCommandEvent& event )
     
     if (dialog.ShowModal() == wxID_OK)
         {
+		CreateExceptionIfEmpty(parent->cfgRoot,idxpath[id].c_str());
         SetParamByXPath(parent->cfgRoot,idxpath[id].c_str(),dialog.GetPath().c_str());
         ((wxTextCtrl*) controls[id])->SetValue(dialog.GetPath().c_str());
         }
@@ -290,6 +291,12 @@ void SettingsDialog::CreateDialog(){
                     else if(!param_type.compare("save")){
                         wxString value("");
 
+                        if(IsDefined(parent->cfgRoot,(*parameter)->get_path().c_str()) && IsContent(parent->cfgRoot,(*parameter)->get_path().c_str())){ // if in cfg
+                            value=wxString(GetValByXPath(parent->cfgRoot,(*parameter)->get_path().c_str()));
+                            }
+                        else if(IsContent(nodeRoot,(*parameter)->get_path().c_str())){ // else get from template
+                            value=GetVal(*parameter);
+                            }
 	                    wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
                         wxTextCtrl* m_textctrl = new wxTextCtrl(panels.back(),actid++,value,wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator);  
                         idxpath.push_back(wxString((*parameter)->get_path().c_str()));

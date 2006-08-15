@@ -31,7 +31,7 @@ class Canvas;
 //class TrackingPanel;
 class SwisTrackPanel;
 class InterceptionPanel;
-class DataLogger;
+//class DataLogger;
 class AviWriter;
 class SocketServer;
 class NewExperimentDialog;
@@ -124,7 +124,7 @@ public:
 
 	// Tool classes
 	Transformation* transform;
-	DataLogger* datalogger;
+//	DataLogger* datalogger;
 	AviWriter* aviwriter;
 	SocketServer* socketserver;
 

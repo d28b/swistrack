@@ -66,15 +66,10 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 	case 0 :
 		{
 			///////// Background Subtraction, working in grayscale, with fixed threshold ///////////////
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='0']"))
-				throw "[Segmenter::Segmenter] no parameters for segmenter mode 0 (background subtraction) found";
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='0']/BGIMAGE"))
-				throw "[Segmenter::Segmenter] background image not specified (/CFG/SEGMENTER[@mode='0']/BGIMAGE)";
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='0']/THRESHOLD"))
-				throw "[Segmenter::Segmenter] threshold not specified (/CFG/SEGMENTER[@mode='0']/THRESHOLD)";
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='0']/FIXED"))
-				throw "[Segmenter::Segmenter] Using fixed or moving threshold not specified (/CFG/SEGMENTER[@mode='0']/FIXED)";
-
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='0']");
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='0']/BGIMAGE");
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='0']/THRESHOLD");
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='0']/FIXED");
 
 			IplImage* bg = cvLoadImage(GetValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='0']/BGIMAGE"), -1); 						
 			if (!bg){
@@ -116,13 +111,10 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 		/////////// Estimate Subtraction //////////////////
 	case 1 :
 		{
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='1']"))
-				throw "[Segmenter::Segmenter] no parameters for segmenter mode 1 (estimate subtraction) found";
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='1']/THRESHOLD"))
-				throw "[Segmenter::Segmenter] threshold not specified (/CFG/SEGMENTER[@mode='1']/THRESHOLD)";
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='1']/ALPHA"))
-				throw "[Segmenter::Segmenter] alpha not specified (/CFG/SEGMENTER[@mode='1']/ALPHA)";
-
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='1']");
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='1']/THRESHOLD");
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='1']/ALPHA");
+			
 			background = cvCreateImage(input->GetInputDim(),input->GetInputDepth(),1);
 			int i=input->GetInputNbChannels();
 			switch(i)
@@ -145,13 +137,9 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 		// Bacground Soustration working by color ratio
 	case 2:
 		{
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='2']"))
-				throw "[Segmenter::Segmenter] no parameters for segmenter mode 2(background subtraction with color ratio) found";
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='2']/BGIMAGE"))
-				throw "[Segmenter::Segmenter] background image not specified (/CFG/SEGMENTER[@mode='2']/BGIMAGE)";
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='2']/THRESHOLD"))
-				throw "[Segmenter::Segmenter] threshold not specified (/CFG/SEGMENTER[@mode='2']/THRESHOLD)";
-
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='2']");				
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='2']/BGIMAGE");		
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='2']/THRESHOLD");
 
 			IplImage* bg = cvLoadImage(GetValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='2']/BGIMAGE"), -1); 						
 			if (!bg){
@@ -196,28 +184,20 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 	//Searching for a specific color, no need of a background
 	case 3:
 		{
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']"))
-				throw "[Segmenter::Segmenter] no parameters for segmenter mode 3 (Specific color tracking) found";
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']/THRESHOLD"))
-				throw "[Segmenter::Segmenter] threshold not specified (/CFG/SEGMENTER[@mode='3']/THRESHOLD)";
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']/RED"))
-				throw "[Segmenter::Segmenter] Red color not specified (/CFG/SEGMENTER[@mode='3']/RED)";
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']/BLUE"))
-				throw "[Segmenter::Segmenter] Blue color not specified (/CFG/SEGMENTER[@mode='3']/BLUE)";
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']/GREEN"))
-				throw "[Segmenter::Segmenter] Green color not specified (/CFG/SEGMENTER[@mode='3']/GREEN)";
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']/SELECTCOLORATSTART"))
-				throw "[Segmenter::Segmenter] Select Color at Start Mode not specified (/CFG/SEGMENTER[@mode='3']/SELECTCOLORATSTART)";
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']/COLORDESCRIBEFOREGROUND"))
-				throw "[Segmenter::Segmenter] Background/Forground mode not specified (/CFG/SEGMENTER[@mode='3']/COLORDESCRIBEFOREGROUND)";
-			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']/WORKINGWITHCOLORRATIO"))
-				throw "[Segmenter::Segmenter] Working with color ratio mode not specified (/CFG/SEGMENTER[@mode='3']/WORKINGWITHCOLORRATIO)";
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='3']");
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='3']/THRESHOLD");
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='3']/RED");
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='3']/BLUE");
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='3']/GREEN");
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='3']/SELECTCOLORATSTART");
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='3']/COLORDESCRIBEFOREGROUND");
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='3']/WORKINGWITHCOLORRATIO");
 			
 			//If we use an GUI to select color
 			if(GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/SELECTCOLORATSTART"))
 			{
 				if (input->GetInputNbChannels()!=3)
-					throw "[Segmenter::Segmenter] The input image needs 3 channels (RGB)";
+					throw "[Segmenter::Segmenter] The input image needs 3 channels (RGB) for the chosen mode";
 				cvNamedWindow("Click on the desired color in the image",CV_WINDOW_AUTOSIZE);
 				cvShowImage("Click on the desired color in the image",input->GetInputIpl());
 				cmx=-1;

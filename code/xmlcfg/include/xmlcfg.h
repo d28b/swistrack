@@ -2,7 +2,6 @@
 #define _XMLCFG_H
 #include <libxml++/libxml++.h>
 
-
 /*/////// Getters for Attributes //////////////////*/
 #define GetAttr(node,desc)\
  ((dynamic_cast<const xmlpp::Element*> (node))->get_attribute(desc)->get_value().c_str())
@@ -87,11 +86,17 @@
 
 
 #define CreateExceptionIfEmpty(root,path)\
-       if(!IsDefined(root,path)) \
-            throw "path: node not specified"; \
-       else \
-        if(!IsContent(root,path)) \
-         throw "path: node without value"
-
+	if(!IsDefined(root,path)){ \
+			char _str_[2000];\
+			strcpy(_str_,"Path not found:\n");\
+			strcat(_str_,path);\
+            throw _str_; \
+	}else \
+	if(!IsContent(root,path)){ \
+			char _str_[2000];\
+			strcpy(_str_,"Empty field:\n");\
+			strcat(_str_,path);\
+            throw _str_; \
+	}
 
 #endif

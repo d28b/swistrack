@@ -10,9 +10,11 @@
 #endif // _MSC_VER > 1000
 
 #include "Tracker.h"
+
 #include <libxml++/libxml++.h>
 
 class Tracker;
+class DataLogger;
 
 class ObjectTracker  
 {
@@ -47,8 +49,6 @@ public:
 	/** Destructor */
 	 ~ObjectTracker();
 
-
-
 	CvPoint2D32f* GetPos(int id);
 	void Stop();
 	/** Runs a single step */
@@ -64,6 +64,9 @@ private:
 
 	/** Tracker class */
 	Tracker* tracker;
+
+	/** Datalogger class */
+	DataLogger* datalogger;
 
 	/** Color image */
 	TrackingImage* trackingimg;

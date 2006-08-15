@@ -119,6 +119,6 @@
                 Output Tab
   -->
   <OUTPUT mode="0" desc="Output uncalibrated data" long="">
-    <OUTPUTFNAME desc="Output File (text)" type="save" param="*.txt"></OUTPUTFNAME>
+    <OUTPUTFNAME desc="Output File (text)" type="save" param="*.txt">output.txt</OUTPUTFNAME>
   </OUTPUT>
 </CFG>

@@ -1,44 +1,48 @@
 #include "DataLogger.h"
 
-DataLogger::DataLogger(char* fname, xmlpp::Element* cfgRoot){
-/*	wxString ucfname;
+DataLogger::DataLogger(ObjectTracker* parent, xmlpp::Element* cfgRoot){
 
-	ucfname.Printf("%s",fname);
-	ucfname.Replace(".txt","_uncalib.txt");
+	if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/OUTPUT","mode"))
+        throw "[Datalogger::Datalogger] Datalogger mode undefined (/CFG/COMPONENTS/OUTPUT)";
+
+    mode=GetIntAttrByXPath(cfgRoot,"/CFG/COMPONENTS/OUTPUT","mode");
+    
+    switch(mode){
+        case 0 : /////////////// Raw Data //////////////////////////
+            CreateExceptionIfEmpty(cfgRoot,"/CFG/OUTPUT[@mode='0']");
+            CreateExceptionIfEmpty(cfgRoot,"/CFG/OUTPUT[@mode='0']/OUTPUTFNAME");					
+			break;
+        default : throw "[Datalogger::Datalogger] mode invalid";
+        };
+
 	
-	if(parent->transform) rawcalib = fopen(fname,  "w");
-	rawuncalib = fopen(ucfname.GetData(),"w");
+	switch(mode){
+		case 0:
+			output = fopen(GetValByXPath(cfgRoot,"/CFG/OUTPUT[@mode='0']/OUTPUTFNAME"),"w");
+			break;
+		default : throw "[Datalogger::Datalogger] mode invalid";
+	};
+
 	this->parent=parent;
-    if(parent->cfg->IsDefined("/CFG/TRACKER/NOBJECTS"))
-        ncols = parent->cfg->GetIntParam("/CFG/TRACKER/NOBJECTS");
-    else
-        throw "Number of objects for Tracker not specified (NOBJECTS)";
-*/
+	ncols = parent->GetNumberofTracks();
 	}
 
-void DataLogger::WriteRow(int frame, double time){
-/*	if(parent->transform) fprintf(rawcalib,"%d %f ",frame,time);
-	fprintf(rawuncalib,"%d %f ",frame,time);
+void DataLogger::WriteRow(){
 	
-	int nins = ncols;
-	for(int i=0; i<nins; i++){
+	double frame   =  parent->GetProgress(2);
+	double time = parent->GetProgress(1);
+
+	fprintf(output,"%2.0f %f ",frame,time);
+		
+	for(int i=0; i<ncols; i++){
 		CvPoint2D32f* pi=parent->GetPos(i);
 		CvPoint2D32f p=*pi;
 
-		if(parent->transform){
-			p.x-=parent->width/2;
-			p.y-=parent->height/2;
-			CvPoint2D32f c=parent->transform->ImageToWorld(p);
-			fprintf(rawcalib,"%f %f ",c.x,c.y);
-			}
-		fprintf(rawuncalib,"%f %f ",pi->x,pi->y);
+		fprintf(output,"%f %f ",pi->x,pi->y);
 		}
-	if(parent->transform) fprintf(rawcalib,"\n");
-	fprintf(rawuncalib,"\n");
-	*/
+	fprintf(output,"\n");
       }
 
-DataLogger::~DataLogger(){
-	/*if(parent->transform) fclose(rawcalib);
-	fclose(rawuncalib);*/
+DataLogger::~DataLogger(){	
+	fclose(output);
 	}
