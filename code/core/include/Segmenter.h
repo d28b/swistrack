@@ -57,6 +57,7 @@ using namespace std;
 	in it. Found contours are sorted by their area, a threshold can be provided that rejects
 	contours that are to small.
 */
+
 class Segmenter : public Component
 	{
 	public:
@@ -93,12 +94,22 @@ class Segmenter : public Component
 		
 		/** Fixed Threshold (0 false, 1 true)*/
 		int fixedThresholdBoolean;
+
+
 		/** Binarization threshold (0-255) */
 		int bin_threshold;
 		/** Average value of the background, for threshold based on image average (0-255)*/
 		int backgroundAverage;
 		/** Exponential average constant for background estimae */
 		double alpha;
+		//Mode 3 parameters
+		/** Specified color (Mode 3) */
+		CvScalar specifiedColor;
+		/** Color Describe Foreground boolean (Mode 3) (0 false, 1 true)*/
+		int colorDescribeForegroundBoolean;
+		/** Working with color ratio boolean (Mode 3) (0 false, 1 true)*/
+		int workingWithColorRatioBoolean;
+
 		
 		double GetSqrDist(CvPoint2D32f p1, CvPoint2D32f p2);
 	};

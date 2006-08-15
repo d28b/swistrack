@@ -52,7 +52,7 @@
 	((root)->remove_child((dynamic_cast<xmlpp::Element*> (node))->get_child_text()))
 
 #define ClearParamByXPath(root,path)\
-	root->remove_child((dynamic_cast<xmlpp::Element*> (*(parent->cfgRoot->find(path).begin())))->get_child_text())
+	root->remove_child((dynamic_cast<xmlpp::Element*> (*(root->find(path).begin())))->get_child_text())
 
 #define ExtendParam(node,value)\
 	((dynamic_cast<xmlpp::Element*> (node))->add_child_text(value))

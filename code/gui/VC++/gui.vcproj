@@ -542,15 +542,7 @@
 			>
 		</Filter>
 		<File
-			RelativePath="changelog.txt"
-			>
-		</File>
-		<File
 			RelativePath="documentation.oxy"
-			>
-		</File>
-		<File
-			RelativePath="ReadMe.txt"
 			>
 		</File>
 	</Files>

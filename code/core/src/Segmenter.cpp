@@ -4,6 +4,23 @@
 
 #include "Segmenter.h"
 
+
+
+//////////////////////////////////////////////////////////////////////
+// Private function called in the segementer
+//////////////////////////////////////////////////////////////////////
+
+/** To be removed when mode 3 will no more work with highgui*/
+extern int cmx;
+/** To be removed when mode 3 will no more work with highgui*/
+extern int cmy;
+
+/** Private function to be removed and transfered to the gui functions
+*
+*	Get the color value in a image using highgui, when you left click on the image and put it in specifiedColor
+*
+*/
+extern void UpdateMouse(int event, int x, int y, int flags, void* param);
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -129,7 +146,7 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 	case 2:
 		{
 			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='2']"))
-				throw "[Segmenter::Segmenter] no parameters for segmenter mode 2(background subtraction) found";
+				throw "[Segmenter::Segmenter] no parameters for segmenter mode 2(background subtraction with color ratio) found";
 			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='2']/BGIMAGE"))
 				throw "[Segmenter::Segmenter] background image not specified (/CFG/SEGMENTER[@mode='2']/BGIMAGE)";
 			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='2']/THRESHOLD"))
@@ -176,6 +193,52 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 			}
 			break;
 		}
+	//Searching for a specific color, no need of a background
+	case 3:
+		{
+			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']"))
+				throw "[Segmenter::Segmenter] no parameters for segmenter mode 3 (Specific color tracking) found";
+			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']/THRESHOLD"))
+				throw "[Segmenter::Segmenter] threshold not specified (/CFG/SEGMENTER[@mode='3']/THRESHOLD)";
+			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']/RED"))
+				throw "[Segmenter::Segmenter] Red color not specified (/CFG/SEGMENTER[@mode='3']/RED)";
+			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']/BLUE"))
+				throw "[Segmenter::Segmenter] Blue color not specified (/CFG/SEGMENTER[@mode='3']/BLUE)";
+			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']/GREEN"))
+				throw "[Segmenter::Segmenter] Green color not specified (/CFG/SEGMENTER[@mode='3']/GREEN)";
+			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']/SELECTCOLORATSTART"))
+				throw "[Segmenter::Segmenter] Select Color at Start Mode not specified (/CFG/SEGMENTER[@mode='3']/SELECTCOLORATSTART)";
+			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']/COLORDESCRIBEFOREGROUND"))
+				throw "[Segmenter::Segmenter] Background/Forground mode not specified (/CFG/SEGMENTER[@mode='3']/COLORDESCRIBEFOREGROUND)";
+			if(!IsDefined(cfgRoot,"/CFG/SEGMENTER[@mode='3']/WORKINGWITHCOLORRATIO"))
+				throw "[Segmenter::Segmenter] Working with color ratio mode not specified (/CFG/SEGMENTER[@mode='3']/WORKINGWITHCOLORRATIO)";
+			
+			//If we use an GUI to select color
+			if(GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/SELECTCOLORATSTART"))
+			{
+				if (input->GetInputNbChannels()!=3)
+					throw "[Segmenter::Segmenter] The input image needs 3 channels (RGB)";
+				cvNamedWindow("Click on the desired color in the image",CV_WINDOW_AUTOSIZE);
+				cvShowImage("Click on the desired color in the image",input->GetInputIpl());
+				cmx=-1;
+				cvSetMouseCallback("Click on the desired color in the image", UpdateMouse);
+				while(cmx<0)
+					cvWaitKey();
+				cvDestroyWindow("Click on the desired color in the image");
+				specifiedColor=cvGet2D(input->GetInputIpl(),cmx,cmy);
+
+				char redChar[20];
+				sprintf_s(redChar,"%f",(specifiedColor.val)[0]);
+				SetParamByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/RED",redChar);
+				char blueChar[20];
+				sprintf_s(blueChar,"%f",(specifiedColor.val)[1]);
+				SetParamByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/BLUE",blueChar);
+				char greenChar[20];
+				sprintf_s(greenChar,"%f",(specifiedColor.val)[2]);
+				SetParamByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/GREEN",greenChar);
+			}
+		}
+		break;
 	default :
 		throw "[Segmenter::Segmenter] Segmenter mode not implemented";
 	}
@@ -380,19 +443,109 @@ void Segmenter::Segmentation()
 			}
 			catch(...)
 			{
-				throw "[Segmenter::Segmentation] with fixed background failed";
+				throw "[Segmenter::Segmentation] with fixed background failed and color ratio";
 			}
 			cvReleaseImage(&tmpImage);
 			break;
 		}
-	default : {
-		throw "Invalid segmentation mode";
-			  }
-			  break;
+	case 3://Tracking a specified color
+		{	
+			try
+			{
+				IplImage* tmpImage;
+				// no special treatment needed in this case
+				switch(inputImg->nChannels)
+				{
+					//RGB, perfect
+				case 3:
+					{	
+						if (workingWithColorRatioBoolean)
+						{
+							//Create an image with the R/G and R/B factor
+							tmpImage = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,3);
+							IplImage* Red = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
+							IplImage* Green = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
+							IplImage* Blue = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
+							cvConvert(inputImg,tmpImage);
+							cvSplit(tmpImage,Red,Green,Blue,NULL);
+							//We put R/G in Green
+							cvDiv(Red,Green,Green);
+							//We put R/B in Blue
+							cvDiv(Red,Blue,Blue);
+							//Calculate Rb/Gb
+							CvScalar rbRatio;
+							if ((specifiedColor.val)[1])
+								rbRatio=cvScalar((specifiedColor.val)[0]/(specifiedColor.val)[1]);
+							else 
+								if ((specifiedColor.val)[0])
+									rbRatio=cvScalar(0);
+								else
+									rbRatio=cvScalar(255);
+							//We put R/G-Rb/Gb in Green
+							cvSubS(Green,rbRatio,Green);
+							cvAbs(Green,Green);
+							double rgWeight=(rbRatio.val)[0];
+							
+							//Calculate Rb/Bb
+							if ((specifiedColor.val)[2])
+								rbRatio=cvScalar((specifiedColor.val)[0]/(specifiedColor.val)[2]);
+							else 
+								if ((specifiedColor.val)[0])
+									rbRatio=cvScalar(0);
+								else
+									rbRatio=cvScalar(255);
+							//We put R/B-Rb/Bb in Blue
+							cvSubS(Blue,rbRatio,Blue);
+							cvAbs(Blue,Blue);
+							double rbWeight=(rbRatio.val)[0];
+
+							//We combined the two in Red
+							cvAddWeighted(Green,rgWeight,Blue,rbWeight,0,Red);
+   							cvThreshold(Red,binary, bin_threshold, 255,  CV_THRESH_BINARY);
+							cvReleaseImage(&Red);
+							cvReleaseImage(&Green);
+							cvReleaseImage(&Blue);
+						}
+						else
+						{
+							tmpImage = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,3);
+							cvSubS(inputImg,specifiedColor,tmpImage);
+							IplImage* Red = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,1);
+							IplImage* Green = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,1);
+							IplImage* Blue = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,1);
+							cvSplit(tmpImage,Red,Green,Blue,NULL);
+							cvThreshold(Red,Red,bin_threshold,255,CV_THRESH_BINARY);
+							cvThreshold(Blue,Blue,bin_threshold,255,CV_THRESH_BINARY);
+							cvThreshold(Green,Green,bin_threshold,255,CV_THRESH_BINARY);
+							cvZero(binary);
+							cvAnd(Red,Blue,binary,Green);
+						}
+						break;
+					}
+					//We will not be able to work
+				default:
+					throw "[Segmenter::Segmentation] The input image doesn't have 3 channels";
+					break;
+				}
+				cvReleaseImage(&tmpImage);
+			}
+			catch(...)
+			{
+				throw "[Segmenter::Segmentation] with specified color tracking failed";
+			}
+			break;
+		}
+	default : 
+		{
+			throw "Invalid segmentation mode";
+		}
+		break;
 	}
-
 	// Perform a morphological opening to reduce noise. 
-
+	cvNamedWindow("DEBUG",CV_WINDOW_AUTOSIZE);
+	cvShowImage("DEBUG",binary);
+	cvWaitKey();
+	cvDestroyWindow("DEBUG");
 	cvErode(binary, binary, NULL, 2);
 	cvDilate(binary, binary, NULL, 2);
 
@@ -493,6 +646,14 @@ void Segmenter::SetParameters()
 	case 2 : 
 		{ /////////// BACKGROUND SUBTRACTION ////////////////
 			bin_threshold = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='2']/THRESHOLD");
+		}
+		break;
+	case 3:
+		{//////////// SPECIFIC COLOR TRACKING //////////////
+			specifiedColor=cvScalar(GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/RED"),GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/BLUE"),GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/GREEN"));
+			bin_threshold = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/THRESHOLD");
+			colorDescribeForegroundBoolean = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/COLORDESCRIBEFOREGROUND");
+			workingWithColorRatioBoolean = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/WORKINGWITHCOLORRATIO");
 		}
 		break;
 	default : 
