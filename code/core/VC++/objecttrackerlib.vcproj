@@ -201,6 +201,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\input.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\mask.cpp"
 				>
 				<FileConfiguration
@@ -389,10 +393,6 @@
 			Name="Resource Files"
 			>
 		</Filter>
-		<File
-			RelativePath=".\input.cpp"
-			>
-		</File>
 		<File
 			RelativePath="..\core\readme.txt"
 			>

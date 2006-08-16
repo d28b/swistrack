@@ -73,7 +73,7 @@ SwisTrackPanel::SwisTrackPanel(SwisTrack* parent, char* title, char* component, 
 							}
 							//////////////// Treats type BOOLEAN /////////////////////
 							else if(!param_type.compare("boolean")){
-								int v=0;
+								bool v=0;
 								//wxString value("0");
 								if(IsDefined(parent->cfgRoot,(*parameter)->get_path().c_str()) && IsContent(parent->cfgRoot,(*parameter)->get_path().c_str())){                            
 									//value=wxString(GetValByXPath(parent->cfgRoot,(*parameter)->get_path().c_str()));
@@ -84,10 +84,11 @@ SwisTrackPanel::SwisTrackPanel(SwisTrack* parent, char* title, char* component, 
 								}
 								
 								wxCheckBox* m_checkbox = new wxCheckBox(panel,actid++,_(""));
+								m_checkbox->SetValue(v);
 								idxpath.push_back(wxString((*parameter)->get_path().c_str()));
 								controls.push_back(m_checkbox);
 								parameter_sizer->Add(m_checkbox,0, wxALL|wxALIGN_LEFT,0);
-								this->Connect(actid-1,wxEVT_SCROLL_CHANGED, wxCommandEventHandler(SwisTrackPanel::ChangeBooleanParam));
+								this->Connect(actid-1,wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler(SwisTrackPanel::ChangeBooleanParam));
 							}
 							//////////////// Treats type DOUBLE //////////////////////
 							else if(!param_type.compare("double")){
