@@ -205,8 +205,7 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 				while(cmx<0)
 					cvWaitKey();
 				cvDestroyWindow("Click on the desired color in the image");
-				specifiedColor=cvGet2D(input->GetInputIpl(),cmx,cmy);
-
+				specifiedColor=cvGet2D(input->GetInputIpl(),cmy,cmx);//matrix reading, we define first the row (height/y) and then the column (width/x)
 				char redChar[20];
 				sprintf_s(redChar,"%f",(specifiedColor.val)[0]);
 				SetParamByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/RED",redChar);
@@ -494,10 +493,20 @@ void Segmenter::Segmentation()
 							IplImage* Green = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,1);
 							IplImage* Blue = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,1);
 							cvSplit(tmpImage,Red,Green,Blue,NULL);
+							cvSubS(Red,(desiredValue.val)[0],Red);
+							cvSubS(Blue,(desiredValue.val)[1],Blue);
+							cvSubS(Green,(desiredValue.val)[2],Green);
 							cvThreshold(Red,Red,bin_threshold,255,CV_THRESH_BINARY);
 							cvThreshold(Blue,Blue,bin_threshold,255,CV_THRESH_BINARY);
 							cvThreshold(Green,Green,bin_threshold,255,CV_THRESH_BINARY);
 							cvZero(binary);
+							cvNamedWindow("toto",CV_WINDOW_AUTOSIZE);
+							cvShowImage("toto",Red);
+							cvWaitKey();
+							cvShowImage("toto",Blue);
+							cvWaitKey();
+							cvShowImage("toto",Green);
+							cvWaitKey();
 							cvAnd(Red,Blue,binary,Green);
 						}
 						break;
@@ -522,10 +531,12 @@ void Segmenter::Segmentation()
 		break;
 	}
 	// Perform a morphological opening to reduce noise. 
+	
 	cvNamedWindow("DEBUG",CV_WINDOW_AUTOSIZE);
 	cvShowImage("DEBUG",binary);
 	cvWaitKey();
 	cvDestroyWindow("DEBUG");
+	
 	cvErode(binary, binary, NULL, 2);
 	cvDilate(binary, binary, NULL, 2);
 
