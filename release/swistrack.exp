@@ -72,8 +72,8 @@
   <SEGMENTER mode="3" desc="Tracking a fixed color" long="We are searching for objects or background of a given color. The segmentation will be done on a simple threshold or color ratio based.">
     <THRESHOLD desc="Threshold" type="integer" min="1" max="150" variable="1">20</THRESHOLD>
     <RED desc="Red value of the color to track" type="integer" min="0" max="255" variable="1">150</RED>
-    <BLUE desc="Red value of the color to track" type="integer" min="0" max="255" variable="1">150</BLUE>
-    <GREEN desc="Red value of the color to track" type="integer" min="0" max="255" variable="1">150</GREEN>
+    <BLUE desc="Blue value of the color to track" type="integer" min="0" max="255" variable="1">150</BLUE>
+    <GREEN desc="Green value of the color to track" type="integer" min="0" max="255" variable="1">150</GREEN>
     <SELECTCOLORATSTART desc="Select the color with a gui at the run start" type="boolean">1</SELECTCOLORATSTART>
     <COLORDESCRIBEFOREGROUND desc="The color designed the foreground" type="boolean" variable="1">1</COLORDESCRIBEFOREGROUND>
     <WORKINGWITHCOLORRATIO desc="Working with color ratio" type="boolean" variable="1">1</WORKINGWITHCOLORRATIO>
