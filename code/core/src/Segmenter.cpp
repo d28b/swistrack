@@ -159,7 +159,7 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 				IplImage* Green = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
 				IplImage* Blue = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
 				cvConvert(bg,tmpImage);
-				cvSplit(tmpImage,Red,Green,Blue,NULL);				
+				cvSplit(tmpImage,Blue,Green,Red,NULL);				
 				cvDiv(Red,Green,Green);				
 				cvSetImageCOI(background,1);
 				cvCopy(Green,background);
@@ -205,6 +205,8 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 				while(cmx<0)
 					cvWaitKey();
 				cvDestroyWindow("Click on the desired color in the image");
+				if ((input->GetInputIpl())->origin==1)//Image is bottom left
+					cmy=(input->GetInputIpl())->height-cmy-1;
 				specifiedColor=cvGet2D(input->GetInputIpl(),cmy,cmx);//matrix reading, we define first the row (height/y) and then the column (width/x)
 				char redChar[20];
 				sprintf_s(redChar,"%f",(specifiedColor.val)[0]);
@@ -381,7 +383,7 @@ void Segmenter::Segmentation()
 						IplImage* Green = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
 						IplImage* Blue = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
 						cvConvert(inputImg,tmpImage);
-						cvSplit(tmpImage,Red,Green,Blue,NULL);
+						cvSplit(tmpImage,Blue,Green,Red,NULL);
 						//We put R/G in Green
 						cvDiv(Red,Green,Green);
 						//We put R/B in Blue
@@ -446,7 +448,7 @@ void Segmenter::Segmentation()
 							IplImage* Green = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
 							IplImage* Blue = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
 							cvConvert(inputImg,tmpImage);
-							cvSplit(tmpImage,Red,Green,Blue,NULL);
+							cvSplit(tmpImage,Blue,Green,Red,NULL);
 							//We put R/G in Green
 							cvDiv(Red,Green,Green);
 							//We put R/B in Blue
@@ -487,20 +489,41 @@ void Segmenter::Segmentation()
 						}
 						else
 						{
-							tmpImage = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,3);
-							cvSubS(inputImg,specifiedColor,tmpImage);
+ 							cvNamedWindow("toto",CV_WINDOW_AUTOSIZE);
+ 							tmpImage = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,3);
+							cvShowImage("toto",inputImg);
+							cvWaitKey();
+							cvCopy(inputImg,tmpImage);
+							//cvAbsDiffS(inputImg,tmpImage,specifiedColor);
 							IplImage* Red = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,1);
 							IplImage* Green = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,1);
 							IplImage* Blue = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,1);
-							cvSplit(tmpImage,Red,Green,Blue,NULL);
-							cvSubS(Red,(desiredValue.val)[0],Red);
-							cvSubS(Blue,(desiredValue.val)[1],Blue);
-							cvSubS(Green,(desiredValue.val)[2],Green);
+							cvShowImage("toto",tmpImage);
+							cvWaitKey();
+ 							cvSplit(tmpImage,Blue,Green,Red,NULL);
+							cvShowImage("toto",Red);
+							cvWaitKey();
+							cvShowImage("toto",Blue);
+							cvWaitKey();							
+							cvShowImage("toto",Green);
+							cvWaitKey();
+							cvShowImage("toto",tmpImage);
+							cvWaitKey();
+							cvSplit(tmpImage,Blue,Green,Red,NULL);
+							cvAbsDiffS(Red,Red,cvScalarAll(150));
+							cvShowImage("toto",Red);
+							cvWaitKey();
+							cvAbsDiffS(Blue,Blue,cvScalarAll(50));
+							cvShowImage("toto",Blue);
+							cvWaitKey();
+							cvAbsDiffS(Green,Green,cvScalarAll(50));
+							cvShowImage("toto",Green);
+							cvWaitKey();
 							cvThreshold(Red,Red,bin_threshold,255,CV_THRESH_BINARY);
 							cvThreshold(Blue,Blue,bin_threshold,255,CV_THRESH_BINARY);
 							cvThreshold(Green,Green,bin_threshold,255,CV_THRESH_BINARY);
 							cvZero(binary);
-							cvNamedWindow("toto",CV_WINDOW_AUTOSIZE);
+							
 							cvShowImage("toto",Red);
 							cvWaitKey();
 							cvShowImage("toto",Blue);
