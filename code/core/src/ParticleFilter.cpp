@@ -205,12 +205,16 @@ void ParticleFilter::GetParticlesFromContours()
 			}
 			//If we need to display the particles
 			if(trackingimg->GetDisplay())
+			{
 				for(j=particles.begin();j!=particles.end();j++)
 				{
 					trackingimg->DrawCircle(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(0,255,0));
 					//trackingimg->Cover(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255-((j*).area),0,0),2);
 					trackingimg->Cover(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255,0,0),2);
 				}
+			}
+			cvReleaseImage(&src_tmp);
+			cvReleaseMemStorage(&storage);
 		}
 		break;
 	default: throw "[ParticleFilter::GetParticlesFromContours()] Mode not implemented.";

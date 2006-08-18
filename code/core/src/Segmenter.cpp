@@ -490,6 +490,9 @@ void Segmenter::Segmentation()
 							cvAnd(Red,Blue,binary,Green);
 							if (!colorDescribeForegroundBoolean)
 								cvNot(binary,binary);
+							cvReleaseImage(&Red);
+							cvReleaseImage(&Green);
+							cvReleaseImage(&Blue);
 						}
 						break;
 					}
