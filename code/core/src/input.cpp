@@ -3,7 +3,7 @@
 
 
 Input::Input(xmlpp::Element* cfgRoot)  
-	  : Capture(0), isinputincolor(0), nFrame(0), m_pBitmap(0) 
+	  : Capture(0), isinputincolor(0), nFrame(0) 
 {
 	    if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/INPUT","mode"))
         throw "[Input::Input] Input mode undefined (/CFG/COMPONENTS/INPUT)";
@@ -56,11 +56,18 @@ Input::Input(xmlpp::Element* cfgRoot)
             /**
             * \todo Fetch parameters from CFG instead setting default values 
             */
-            theCamera.SetVideoFrameRate(4); // 15fps
-            theCamera.SetVideoFormat(0);    // 640x480, yuv411
-            theCamera.SetVideoMode(2);
-            
-            m_pBitmap = new unsigned char [theCamera.m_width * theCamera.m_height * 3];
+            theCamera.SetVideoFrameRate(3); // 15fps
+            theCamera.SetVideoFormat(0);    // 640x480, 
+            theCamera.SetVideoMode(4);		//rgb   yuv411	
+			theCamera.m_controlGain.SetAutoMode(false); //Set gain control to manual
+			theCamera.m_controlAutoExposure.TurnOn(false); //Set auto exposure to manual
+			theCamera.m_controlWhiteBalance.SetAutoMode(false); //Set White balance to manual
+			theCamera.SetBrightness(240);
+			theCamera.SetAutoExposure(267);
+			theCamera.SetSharpness(73);
+			theCamera.SetWhiteBalance(172,69);
+			theCamera.SetSaturation(103);
+			
             
             theCamera.StartImageAcquisition();
             input=cvCreateImage(cvSize(theCamera.m_width,theCamera.m_height),8,3);
@@ -137,8 +144,7 @@ IplImage* Input::GetFrame()
                 QueryFrame1394(input);
                 if (input)  // Get a pointer to the current frame (if query was successful)
                     {
-                    nFrame++;                         // Increment the frame counter. 
-                    
+                    nFrame++;                         // Increment the frame counter.                     
       				return(input);
 					} // end if input
                 else
@@ -156,10 +162,11 @@ IplImage* Input::GetFrame()
 void Input::QueryFrame1394(IplImage* input)
 			{
 #ifdef _1394
-			theCamera.AcquireImage();
-			theCamera.getRGB(m_pBitmap);
-			
-			input->imageData=(char*) m_pBitmap;
+				int toto;
+			while (theCamera.AcquireImage() != CAM_SUCCESS)
+				throw "[Input::QueryFrame1394] Camera acquisition error";
+			input->imageData=(char*) theCamera.m_pData;
+			cvCvtColor(input,input,CV_RGB2BGR);
 			/** \todo get dimensions from camera */
 			input->width=640;
 			input->height=480;
@@ -190,7 +197,6 @@ Input::~Input()
 {
 		if (Capture) cvReleaseCapture( &Capture );
 		if (input) cvReleaseImage( &input);
-		if (m_pBitmap) delete(m_pBitmap);
 }
 
 double Input::GetFPS(){

@@ -38,15 +38,6 @@
     <AVIFILE desc="AVI File" type="open" param="*.avi">example.avi</AVIFILE>
   </INPUT>
   <INPUT mode="1" desc="CMU 1394 Digital Camera Driver" long="The video source is provided by a IEEE FireWire Camera. See http://www.cs.cmu.edu/~iwan for details and compatible cameras.">
-    <RESOLUTION desc="Resolution" type="list">
-      <li>640x480</li>
-      <li>320x240</li>
-      <li>160x120</li>
-    </RESOLUTION>
-    <FRAMERATE desc="Video Framerate" type="list">
-      <li>30.0</li>
-      <li>15.0</li>
-    </FRAMERATE>
   </INPUT>
   <!---
 					    Image Filter Tab

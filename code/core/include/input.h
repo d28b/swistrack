@@ -40,10 +40,7 @@ private:
 #ifdef _1394
 		/** 1394 Camera handle */
 		C1394Camera theCamera;  //!< Camera handle (CMU 1394 Camera Driver)
-#endif
-		/** Raw data for storing 1394 camera images */
-		unsigned char *m_pBitmap;
-
+#endif		
 		void QueryFrame1394(IplImage* input);
 
 		
