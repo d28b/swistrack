@@ -103,7 +103,7 @@ class Segmenter : public Component
 		/** Exponential average constant for background estimae */
 		double alpha;
 		//Mode 3 parameters
-		/** Specified color (Mode 3) */
+		/** Specified color (Mode 3) Coded as BGR */
 		CvScalar specifiedColor;
 		/** Color Describe Foreground boolean (Mode 3) (0 false, 1 true)*/
 		int colorDescribeForegroundBoolean;

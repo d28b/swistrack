@@ -158,7 +158,8 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 				IplImage* Red = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
 				IplImage* Green = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
 				IplImage* Blue = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
-				cvConvert(bg,tmpImage);
+				//Add 1 to remove the problem with 0/0 (number will be from 1 to 256)
+				cvConvertScale(bg,tmpImage,1,1);
 				cvSplit(tmpImage,Blue,Green,Red,NULL);				
 				cvDiv(Red,Green,Green);				
 				cvSetImageCOI(background,1);
@@ -209,13 +210,13 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 					cmy=(input->GetInputIpl())->height-cmy-1;
 				specifiedColor=cvGet2D(input->GetInputIpl(),cmy,cmx);//matrix reading, we define first the row (height/y) and then the column (width/x)
 				char redChar[20];
-				sprintf_s(redChar,"%f",(specifiedColor.val)[0]);
+				sprintf_s(redChar,"%f",(specifiedColor.val)[2]);
 				SetParamByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/RED",redChar);
 				char blueChar[20];
 				sprintf_s(blueChar,"%f",(specifiedColor.val)[1]);
 				SetParamByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/BLUE",blueChar);
 				char greenChar[20];
-				sprintf_s(greenChar,"%f",(specifiedColor.val)[2]);
+				sprintf_s(greenChar,"%f",(specifiedColor.val)[0]);
 				SetParamByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/GREEN",greenChar);
 			}
 		}
@@ -382,7 +383,8 @@ void Segmenter::Segmentation()
 						IplImage* Red = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
 						IplImage* Green = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
 						IplImage* Blue = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
-						cvConvert(inputImg,tmpImage);
+						//add 1 to remove 0/0 problems, number from 1 to 256
+						cvConvertScale(inputImg,tmpImage,1,1);						
 						cvSplit(tmpImage,Blue,Green,Red,NULL);
 						//We put R/G in Green
 						cvDiv(Red,Green,Green);
@@ -392,20 +394,18 @@ void Segmenter::Segmentation()
 						//We get the Rb/Gb from the background and put it in Red
 						cvSetImageCOI(background,1);
 						cvCopy(background,Red);
-						//We put R/G-Rb/Gb in Green
-						cvSub(Green,Red,Green);
+						//We put abs(R/G-Rb/Gb) in Green
+						cvAbsDiff(Green,Red,Green);
 						//We divide by Rb/Gb
 						cvDiv(Green,Red,Green);
-						cvAbs(Green,Green);
 
 						//We get the Rb/Bb from the background and put it in Red
 						cvSetImageCOI(background,2);
 						cvCopy(background,Red);
-						//We put R/G-Bb/Bb in Blue
-						cvSub(Blue,Red,Blue);
+						//We put abs(R/G-Bb/Bb) in Blue
+						cvAbsDiff(Blue,Red,Blue);
 						//We divide by Rb/Bb
 						cvDiv(Blue,Red,Blue);
-						cvAbs(Blue,Blue);
 
 						//We combined the two in Red
 						cvAddWeighted(Green,50,Blue,50,0,Red);
@@ -447,90 +447,49 @@ void Segmenter::Segmentation()
 							IplImage* Red = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
 							IplImage* Green = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
 							IplImage* Blue = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
-							cvConvert(inputImg,tmpImage);
+							//Add 1 to the image to remove div by 0 problemes, numbers from 1 to 256
+							cvConvertScale(inputImg,tmpImage,1,1);
 							cvSplit(tmpImage,Blue,Green,Red,NULL);
 							//We put R/G in Green
 							cvDiv(Red,Green,Green);
 							//We put R/B in Blue
 							cvDiv(Red,Blue,Blue);
 							//Calculate Rb/Gb
-							CvScalar rbRatio;
-							if ((specifiedColor.val)[1])
-								rbRatio=cvScalar((specifiedColor.val)[0]/(specifiedColor.val)[1]);
-							else 
-								if ((specifiedColor.val)[0])
-									rbRatio=cvScalar(0);
-								else
-									rbRatio=cvScalar(255);
-							//We put R/G-Rb/Gb in Green
-							cvSubS(Green,rbRatio,Green);
-							cvAbs(Green,Green);
-							double rgWeight=(rbRatio.val)[0];
+							double rgWeight=((specifiedColor.val)[2]+1)/((specifiedColor.val)[1]+1);							
+							//We put abs(R/G-Rb/Gb) in Green
+							cvAbsDiffS(Green,Green,cvScalar(rgWeight));
 							
 							//Calculate Rb/Bb
-							if ((specifiedColor.val)[2])
-								rbRatio=cvScalar((specifiedColor.val)[0]/(specifiedColor.val)[2]);
-							else 
-								if ((specifiedColor.val)[0])
-									rbRatio=cvScalar(0);
-								else
-									rbRatio=cvScalar(255);
-							//We put R/B-Rb/Bb in Blue
-							cvSubS(Blue,rbRatio,Blue);
-							cvAbs(Blue,Blue);
-							double rbWeight=(rbRatio.val)[0];
+							double rbWeight=((specifiedColor.val)[2]+1)/((specifiedColor.val)[0]+1);													
+							//We put abs(R/B-Rb/Bb) in Blue
+							cvAbsDiffS(Blue,Blue,cvScalar(rbWeight));
 
 							//We combined the two in Red
-							cvAddWeighted(Green,rgWeight,Blue,rbWeight,0,Red);
-   							cvThreshold(Red,binary, bin_threshold, 255,  CV_THRESH_BINARY);
+							cvAddWeighted(Green,10*rgWeight,Blue,10*rbWeight,0,Red);
+							//Test if the color describe the foreground or the background
+							if (colorDescribeForegroundBoolean)
+								cvThreshold(Red,binary, bin_threshold, 255,  CV_THRESH_BINARY_INV);
+							else
+								cvThreshold(Red,binary, bin_threshold, 255,  CV_THRESH_BINARY);
 							cvReleaseImage(&Red);
 							cvReleaseImage(&Green);
 							cvReleaseImage(&Blue);
 						}
 						else
 						{
- 							cvNamedWindow("toto",CV_WINDOW_AUTOSIZE);
  							tmpImage = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,3);
-							cvShowImage("toto",inputImg);
-							cvWaitKey();
-							cvCopy(inputImg,tmpImage);
-							//cvAbsDiffS(inputImg,tmpImage,specifiedColor);
+							cvAbsDiffS(inputImg,tmpImage,specifiedColor);
 							IplImage* Red = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,1);
 							IplImage* Green = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,1);
 							IplImage* Blue = cvCreateImage(input->GetInputDim(),IPL_DEPTH_8U,1);
-							cvShowImage("toto",tmpImage);
-							cvWaitKey();
- 							cvSplit(tmpImage,Blue,Green,Red,NULL);
-							cvShowImage("toto",Red);
-							cvWaitKey();
-							cvShowImage("toto",Blue);
-							cvWaitKey();							
-							cvShowImage("toto",Green);
-							cvWaitKey();
-							cvShowImage("toto",tmpImage);
-							cvWaitKey();
-							cvSplit(tmpImage,Blue,Green,Red,NULL);
-							cvAbsDiffS(Red,Red,cvScalarAll(150));
-							cvShowImage("toto",Red);
-							cvWaitKey();
-							cvAbsDiffS(Blue,Blue,cvScalarAll(50));
-							cvShowImage("toto",Blue);
-							cvWaitKey();
-							cvAbsDiffS(Green,Green,cvScalarAll(50));
-							cvShowImage("toto",Green);
-							cvWaitKey();
-							cvThreshold(Red,Red,bin_threshold,255,CV_THRESH_BINARY);
-							cvThreshold(Blue,Blue,bin_threshold,255,CV_THRESH_BINARY);
-							cvThreshold(Green,Green,bin_threshold,255,CV_THRESH_BINARY);
-							cvZero(binary);
-							
-							cvShowImage("toto",Red);
-							cvWaitKey();
-							cvShowImage("toto",Blue);
-							cvWaitKey();
-							cvShowImage("toto",Green);
-							cvWaitKey();
+							cvSplit(tmpImage,Blue,Green,Red,NULL);							
+							cvThreshold(Red,Red,bin_threshold,255,CV_THRESH_BINARY_INV);
+							cvThreshold(Blue,Blue,bin_threshold,255,CV_THRESH_BINARY_INV);
+							cvThreshold(Green,Green,bin_threshold,255,CV_THRESH_BINARY_INV);
+							cvZero(binary);						
 							cvAnd(Red,Blue,binary,Green);
+							if (!colorDescribeForegroundBoolean)
+								cvNot(binary,binary);
 						}
 						break;
 					}
@@ -554,11 +513,6 @@ void Segmenter::Segmentation()
 		break;
 	}
 	// Perform a morphological opening to reduce noise. 
-	
-	cvNamedWindow("DEBUG",CV_WINDOW_AUTOSIZE);
-	cvShowImage("DEBUG",binary);
-	cvWaitKey();
-	cvDestroyWindow("DEBUG");
 	
 	cvErode(binary, binary, NULL, 2);
 	cvDilate(binary, binary, NULL, 2);
@@ -664,7 +618,7 @@ void Segmenter::SetParameters()
 		break;
 	case 3:
 		{//////////// SPECIFIC COLOR TRACKING //////////////
-			specifiedColor=cvScalar(GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/RED"),GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/BLUE"),GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/GREEN"));
+			specifiedColor=cvScalar(GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/BLUE"),GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/GREEN"),GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/RED"));
 			bin_threshold = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/THRESHOLD");
 			colorDescribeForegroundBoolean = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/COLORDESCRIBEFOREGROUND");
 			workingWithColorRatioBoolean = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/WORKINGWITHCOLORRATIO");

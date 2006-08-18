@@ -694,11 +694,19 @@ void SwisTrack::RefreshAllDisplays()
 {
 	if(ot->GetImagePointer()){
 		IplImage* tmp;			
-		if(!show_coverage){
-			tmp = cvCloneImage(ot->GetImagePointer());
+		if(!show_coverage)
+		{
+			tmp=cvCreateImage(cvSize((ot->GetImagePointer())->width,(ot->GetImagePointer())->height),IPL_DEPTH_8U,3);
+			//Converting BGR data into RGB
+			cvCvtColor(ot->GetImagePointer(),tmp,CV_BGR2RGB);
+			//tmp = cvCloneImage(ot->GetImagePointer());
 		}
-		else{
-			tmp = cvCloneImage(ot->GetCoveragePointer());
+		else
+		{
+			tmp=cvCreateImage(cvSize((ot->GetCoveragePointer())->width,(ot->GetCoveragePointer())->height),IPL_DEPTH_8U,3);
+			//Converting BGR data into RGB
+			cvCvtColor(ot->GetCoveragePointer(),tmp,CV_BGR2RGB);
+			//tmp = cvCloneImage(ot->GetCoveragePointer());
 		}
 		cvFlip(tmp);
 		wxImage* colorimg = new wxImage(width,height,(unsigned char*) tmp->imageData,TRUE);

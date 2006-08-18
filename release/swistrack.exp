@@ -77,7 +77,6 @@
     <SELECTCOLORATSTART desc="Select the color with a gui at the run start" type="boolean">1</SELECTCOLORATSTART>
     <COLORDESCRIBEFOREGROUND desc="The color designed the foreground" type="boolean" variable="1">1</COLORDESCRIBEFOREGROUND>
     <WORKINGWITHCOLORRATIO desc="Working with color ratio" type="boolean" variable="1">1</WORKINGWITHCOLORRATIO>
-    <BGIMAGE desc="Background Image" type="open" param="*.bmp">example/bg.bmp</BGIMAGE>    
   </SEGMENTER>
   <!---
                   Particle Filter Tab
