@@ -45,16 +45,8 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 	binary->origin = input->GetInputOrigin();
 	trackingimg->Init(input->GetInputIpl(),binary);
 
-
 	if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/SEGMENTER","mode"))
-		throw "[Segmenter::Segmenter] Segmenter mode undefined (/CFG/COMPONENTS/INPUT)";
-
-	/**
-	* \todo We ignore particlefilter, imagefilter modes, all this should be 
-	* transported in their own classes. "mode" will instead solely been used for the 
-	* segmenter mode
-	*/
-
+	 throw "[Segmenter::Segmenter] Segmenter mode undefined (/CFG/COMPONENTS/SEGMENTER)";
 
 	status = READY_TO_START;
 

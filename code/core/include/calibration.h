@@ -51,27 +51,25 @@ private:
 	IplImage* calibimg; 
 
 	bool CalibrateTarget();
-
-public:
-	void SaveError(int n,CvPoint2D32f* u,CvPoint3D32f* x,char* fname);
-	Calibration(char* _bgfname, char* _calfname);
-	~Calibration();
-	bool CalibratePattern(int cw, int ch,double wx, double wy);
-	bool CalibrateRoundPattern(int h, int* nrofpoints, double vd); // h=number of circles, nrofpoints=array(h) with the number of points on each circle, vd=distance between rings
-	bool CalibrateCenter();	
-	double GetArenaRadius();
-
 	void TestCalibration(char* testpattern,int cw, int ch,double wx, double wy);
 	void TestRoundCalibration(char* testpattern,int h, int* nrofpoints, double vd);
 
 	CvPoint2D32f ImageToWorld(CvPoint2D32f p, int transform=1);
 	CvPoint2D32f WorldToImage(CvPoint2D32f p);
 
+public:
+	void SaveError(int n,CvPoint2D32f* u,CvPoint3D32f* x,char* fname);
+	Calibration(xmlpp::Element* cfgRoot);
+	~Calibration();
+	bool CalibratePattern(int cw, int ch,double wx, double wy);
+	bool CalibrateRoundPattern(int h, int* nrofpoints, double vd); // h=number of circles, nrofpoints=array(h) with the number of points on each circle, vd=distance between rings
+	bool CalibrateCenter();	
+	double GetArenaRadius();
+
+
 	IplImage* mask;
 	CvPoint2D32f  center;
 	CvPoint2D32f* arenaboundary;
-	char* bgfname;
-	char* calfname;
 };
 
 #endif

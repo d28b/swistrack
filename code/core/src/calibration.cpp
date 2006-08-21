@@ -16,96 +16,118 @@ void UpdateMouse(int event, int x, int y, int flags,void* param)
 
 
 
-Calibration::Calibration(char* _bgfname, char* _calfname)
+Calibration::Calibration(xmlpp::Element* cfgRoot)
 {
-    try{    
-    cameraMatrix32f = cvCreateMat(2,6,CV_32F);
-	transformationMatrix32f = cvCreateMat(2,2,CV_32F);
-	cvSetIdentity(transformationMatrix32f,cvRealScalar(1));
+	if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/CALIBRATION","mode"))
+		throw "[Calibration::Calibration] Calibration mode undefined (/CFG/COMPONENTS/CALIBRATION)";
 
-	bgfname=_bgfname;
-	calfname=_calfname;
-	bgimg = cvLoadImage(bgfname,0);
-	calibimg = cvLoadImage(calfname,0);
-//	arenaboundary = new CvPoint2D32f[8];
-	
-	meani.x=0;	meani.y=0;
-	meano.x=0;	meano.y=0;
+	mode=GetIntAttrByXPath(cfgRoot,"/CFG/COMPONENTS/CALIBRATION","mode");
 
-	stdi.x=0; stdi.y=0;
-	stdo.x=0; stdo.y=0;
+	switch (mode){
+		case 0 : 
+			break;
+		case 1:
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/CALIBRATION[@mode='1']");
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/CALIBRATION[@mode='1']/CALIBBMPFNAME");
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/CALIBRATION[@mode='1']/CALIBFNAME");
 
-	dxy.x=0; dxy.y=0;
-        }
-    catch (...){
-        throw "[Core] Calibration::Calibration";
-        }
+			cameraMatrix32f = cvCreateMat(2,6,CV_32F);
+			transformationMatrix32f = cvCreateMat(2,2,CV_32F);
+			cvSetIdentity(transformationMatrix32f,cvRealScalar(1));
 
-	/*printf("Mean i: %f/%f\n",meani.x,meani.y);
-	printf("Mean o: %f/%f\n",meano.x,meano.y);
-	printf("Std i: %f/%f\n",stdi.x,stdi.y);
-	printf("Std o: %f/%f\n",stdo.x,stdo.y);*/
+			bgimg = cvLoadImage(GetValByXPath(cfgRoot,"/CFG/CALIBRATION[@mode='1']/CALIBBMPFNAME"),0);
+			if (!bgimg){
+				throw "[Calibration::Calibration] Can not open calibration background image";
+			}
+			calibimg = cvLoadImage(GetValByXPath(cfgRoot,"/CFG/CALIBRATION[@mode='1']/CALIBFNAME"),0);
+			if (!calibimg){
+				throw "[Calibration::Calibration] Can not open calibration pattern";
+			}
 
+			meani.x=0;	meani.y=0;
+			meano.x=0;	meano.y=0;
+
+			stdi.x=0; stdi.y=0;
+			stdo.x=0; stdo.y=0;
+
+			dxy.x=0; dxy.y=0;
+			break;
+		default :
+			throw "[Calibration::Calibration] illegal mode";
+			break;
+	};
 }
 
 
 Calibration::~Calibration()
 {
-try{
-	cvReleaseImage(&bgimg);
-	cvReleaseImage(&calibimg);
-        }
-    catch(...){
-        throw "[Core] Calibration::~Calibration";
-        }
-    }
+	switch (mode){
+		case 0 : 
+			break;
+		case 1:
+			try{
+				cvReleaseImage(&bgimg);
+				cvReleaseImage(&calibimg);
+			}
+			catch(...){
+				throw "[Core] Calibration::~Calibration";
+			}
+	};
+}
 
 
 double Calibration::GetArenaRadius(){
-    try{	
-	cvNamedWindow(						
-		"Estimate Arena Width",				
-		CV_WINDOW_AUTOSIZE					
-		);									
-	
-	IplImage* tmpimg=cvCloneImage(bgimg);
-	CvPoint2D32f r;
+	switch (mode){
+		case 0 : 
+			throw "[Calibration::GetArenaRadius] Only uncalibrated data available";
+			return 0;
+			break;
+		case 1:
+			try{	
+				cvNamedWindow(						
+					"Estimate Arena Width",				
+					CV_WINDOW_AUTOSIZE					
+					);									
 
-	CvFont font;							
-	cvInitFont(&font,CV_FONT_VECTOR0,		
-		0.5,0.5,0.0,1);						
-	char s[250];					
-	sprintf_s(s,"Mark a point on the arena border, right-click when finished");
-	cvPutText(tmpimg,s,			
-		cvPoint(20,20),&font,CV_RGB(255,255,255));		
-	cvShowImage("Estimate Arena Width",tmpimg);
-	cvWaitKey(1);		
-	
-	cvSetMouseCallback("Estimate Arena Width", UpdateMouse);
-	cmevent=0;
-	int clicked=0;
-	while(!clicked){
-		if(cmevent==CV_EVENT_LBUTTONDOWN){
-			r=ImageToWorld(cvPoint2D32f(cmx-bgimg->width/2,cmy-bgimg->height/2));
-			cvCircle(tmpimg,cvPoint(cmx,cmy),1,CV_RGB(255,255,255),1);
-			printf("Coordinates of this point(%f/%f)\n",r.x,r.y);
-			printf("Distance from center %f m\n",sqrt(r.x*r.x+r.y*r.y));
-			cvShowImage("Estimate Arena Width",tmpimg);
-			cmevent=0;
+				IplImage* tmpimg=cvCloneImage(bgimg);
+				CvPoint2D32f r;
+
+				CvFont font;							
+				cvInitFont(&font,CV_FONT_VECTOR0,		
+					0.5,0.5,0.0,1);						
+				char s[250];					
+				sprintf_s(s,"Mark a point on the arena border, right-click when finished");
+				cvPutText(tmpimg,s,			
+					cvPoint(20,20),&font,CV_RGB(255,255,255));		
+				cvShowImage("Estimate Arena Width",tmpimg);
+				cvWaitKey(1);		
+
+				cvSetMouseCallback("Estimate Arena Width", UpdateMouse);
+				cmevent=0;
+				int clicked=0;
+				while(!clicked){
+					if(cmevent==CV_EVENT_LBUTTONDOWN){
+						r=ImageToWorld(cvPoint2D32f(cmx-bgimg->width/2,cmy-bgimg->height/2));
+						cvCircle(tmpimg,cvPoint(cmx,cmy),1,CV_RGB(255,255,255),1);
+						printf("Coordinates of this point(%f/%f)\n",r.x,r.y);
+						printf("Distance from center %f m\n",sqrt(r.x*r.x+r.y*r.y));
+						cvShowImage("Estimate Arena Width",tmpimg);
+						cmevent=0;
+					}
+					if(cmevent==CV_EVENT_RBUTTONDOWN){
+						clicked=1;
+					}
+					cvWaitKey(250);
+				}
+
+				cvReleaseImage(&tmpimg);
+				return(0);
 			}
-		if(cmevent==CV_EVENT_RBUTTONDOWN){
-			clicked=1;
+			catch(...){
+				throw "[Core] Calibration::GetArenaRadius";
 			}
-		cvWaitKey(250);
-		}
-	
-	cvReleaseImage(&tmpimg);
-	return(0);
-        }
-    catch(...){
-        throw "[Core] Calibration::GetArenaRadius";
-        }
-	}
+	};
+}
 
 
 
@@ -170,66 +192,73 @@ void centerthreshold (int id)				// ---------------------------------
 
 bool Calibration::CalibrateCenter()		// ---------------------------------
 {
-try{
-	cvNamedWindow(							// build a window to show the 
-		"Find the Arena",					// feedback, so we can properly
-		CV_WINDOW_AUTOSIZE					// adjust the thresholding
-		);									//
+	switch (mode){
+		case 0 :
+			throw "[Calibration::CalibrateCenter] Only uncalibrated data available";
+			return 0;
+			break;
+		case 1:
+			try{
+				cvNamedWindow(							// build a window to show the 
+					"Find the Arena",					// feedback, so we can properly
+					CV_WINDOW_AUTOSIZE					// adjust the thresholding
+					);									//
 
-	cvCreateTrackbar(						// add an adjustable slider to
-		"Arena",							// our window that will allow
-		"Find the Arena",					// us to properly segment out 
-		&centerthresholdvalue,				// the arena
-		255,								//
-		centerthreshold						//
-		);									//
+				cvCreateTrackbar(						// add an adjustable slider to
+					"Arena",							// our window that will allow
+					"Find the Arena",					// us to properly segment out 
+					&centerthresholdvalue,				// the arena
+					255,								//
+					centerthreshold						//
+					);									//
 
-	centerbg    = cvCloneImage(bgimg);		// allocate and initialize the
-	centermask  = cvCloneImage(bgimg);		// result images.
+				centerbg    = cvCloneImage(bgimg);		// allocate and initialize the
+				centermask  = cvCloneImage(bgimg);		// result images.
 
-	centerthreshold(0);						// jump start the slider bar.
+				centerthreshold(0);						// jump start the slider bar.
 
-	cvWaitKey(0);							// let the user play with the 
-											// slider for a while, and then
-											// press a key when done.
+				cvWaitKey(0);							// let the user play with the 
+				// slider for a while, and then
+				// press a key when done.
 
-											// ---------------------------------
+				// ---------------------------------
 
-	spots.EmptyDetectedBlobsList();			// clear the blob list,
-	spots.FindBlobs(centermask);			// and get the new ones,
-	printf("Number of blobs: %d\n",spots.GetTotalNumBlobs());
-	
-	if(spots.GetTotalNumBlobs()>1) spots.SortByArea();						// biggest one first.
-	center = spots.GetCenterReal(0);		// the first/biggest blob should
-											// be the arena, so its center
-											// will be our origin.
+				spots.EmptyDetectedBlobsList();			// clear the blob list,
+				spots.FindBlobs(centermask);			// and get the new ones,
+				printf("Number of blobs: %d\n",spots.GetTotalNumBlobs());
 
-	//printf("CENTER: (%f/%f) %f\n",center.x,center.y,spots.GetEllipseSim(0));
+				if(spots.GetTotalNumBlobs()>1) spots.SortByArea();						// biggest one first.
+				center = spots.GetCenterReal(0);		// the first/biggest blob should
+				// be the arena, so its center
+				// will be our origin.
 
-	spots.DrawContours(						// outline the arena blob.
-		centerbg,cvScalarAll(255),cvScalarAll(0));	// ??? WHY RGB IN GRAY IMG ???
+				//printf("CENTER: (%f/%f) %f\n",center.x,center.y,spots.GetEllipseSim(0));
 
-	spots.DisplayCross(centerbg,cvScalarAll(0),1,10,0);	// show the origin as a cross on 
-											// the image.
-											//   (img,color,thickness,
-											//    armlength,blobnumber)
-	
-	cvShowImage("Find the Arena",centerbg);	// display the image with origin
-		cvWaitKey(0);						// so the user can check it.
+				spots.DrawContours(						// outline the arena blob.
+					centerbg,cvScalarAll(255),cvScalarAll(0));	// ??? WHY RGB IN GRAY IMG ???
 
-											// ---------------------------------
+				spots.DisplayCross(centerbg,cvScalarAll(0),1,10,0);	// show the origin as a cross on 
+				// the image.
+				//   (img,color,thickness,
+				//    armlength,blobnumber)
 
-	mask=cvCloneImage(centermask);			// store the final arena mask.
-	//mask=cvCloneImage(tmask);			// store the final arena mask.
+				cvShowImage("Find the Arena",centerbg);	// display the image with origin
+				cvWaitKey(0);						// so the user can check it.
 
-	cvDestroyWindow("Find the Arena");		// clean up all the memory we used. 
-	cvReleaseImage(&centermask);			//
-	cvReleaseImage(&centerbg);				//
-	return true;							// ??? WHO USES THE RETURN VALUE ???
-    }
-catch (...){
-    throw "[Core] Calibration::CalibrateCenter";
-    }
+				// ---------------------------------
+
+				mask=cvCloneImage(centermask);			// store the final arena mask.
+				//mask=cvCloneImage(tmask);			// store the final arena mask.
+
+				cvDestroyWindow("Find the Arena");		// clean up all the memory we used. 
+				cvReleaseImage(&centermask);			//
+				cvReleaseImage(&centerbg);				//
+				return true;							// ??? WHO USES THE RETURN VALUE ???
+			}
+			catch (...){
+				throw "[Core] Calibration::CalibrateCenter";
+			}
+	};
 }
 
 // -----------------------------------------------------------------------------
