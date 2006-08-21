@@ -926,12 +926,6 @@ void SwisTrack::StartTracker()
 		menuControl->Enable(Gui_Ctrl_Stop,TRUE);
 		menuBar->EnableTop(2,TRUE);
 
-		/*        if(!cfg->IsEmpty("/CFG/OUTPUT/@0/OUTPUTFNAME"))
-		datalogger = new DataLogger((char*) cfg->GetParam("/CFG/OUTPUT/@0/OUTPUTFNAME"),this);
-		else{
-		DisplayModal("You did not select an output filename, no data will be written!","Message");
-		}*/
-
 		SetStatusText(_T("Searching for the specified number of objects in the first 1000 frames"),0);
 		status=ot->Start();                    
 		SetStatusText(_T(""),0);
