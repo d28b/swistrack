@@ -145,11 +145,10 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	fps=30; // initial guess for the FPS of our video
 	width=640; height=480; // initial guess for video resolution
 
-	transform = NULL;
+//	transform = NULL;
 	trackingpanel = NULL;
 	segmenterpanel = NULL;
 	interceptionpanel = NULL;
-//	datalogger = NULL;
 	aviwriter = NULL;
 	socketserver = NULL;
 	parser = NULL;
@@ -657,10 +656,10 @@ void SwisTrack::ShutDown()
 		interceptionpanel->Destroy();
 		interceptionpanel=NULL;
 	}
-	if(transform){
+/*	if(transform){
 		delete(transform);
 		transform=NULL;
-	}
+	}*/
 	if(aviwriter){
 		delete(aviwriter);
 		aviwriter=NULL;

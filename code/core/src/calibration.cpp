@@ -61,7 +61,7 @@ double sign(double v){
 * \param h: Height
 * \param init: Initial level. Default is 0.
 */
-Transformation::Transformation(char* _bgfname, char* _calfname)
+Calibration::Calibration(char* _bgfname, char* _calfname)
 {
     try{    
     cameraMatrix32f = cvCreateMat(2,6,CV_32F);
@@ -83,7 +83,7 @@ Transformation::Transformation(char* _bgfname, char* _calfname)
 	dxy.x=0; dxy.y=0;
         }
     catch (...){
-        throw "[Core] Transformation::Transformation";
+        throw "[Core] Calibration::Calibration";
         }
 
 	/*printf("Mean i: %f/%f\n",meani.x,meani.y);
@@ -94,19 +94,19 @@ Transformation::Transformation(char* _bgfname, char* _calfname)
 }
 
 
-Transformation::~Transformation()
+Calibration::~Calibration()
 {
 try{
 	cvReleaseImage(&bgimg);
 	cvReleaseImage(&calibimg);
         }
     catch(...){
-        throw "[Core] Transformation::~Transformation";
+        throw "[Core] Calibration::~Calibration";
         }
     }
 
 
-double Transformation::GetArenaRadius(){
+double Calibration::GetArenaRadius(){
     try{	
 	cvNamedWindow(						
 		"Estimate Arena Width",				
@@ -148,7 +148,7 @@ double Transformation::GetArenaRadius(){
 	return(0);
         }
     catch(...){
-        throw "[Core] Transformation::GetArenaRadius";
+        throw "[Core] Calibration::GetArenaRadius";
         }
 	}
 
@@ -213,7 +213,7 @@ void centerthreshold (int id)				// ---------------------------------
 		cvWaitKey(1);						//  (wait for display refresh)
 }
 
-bool Transformation::CalibrateCenter()		// ---------------------------------
+bool Calibration::CalibrateCenter()		// ---------------------------------
 {
 try{
 	cvNamedWindow(							// build a window to show the 
@@ -273,7 +273,7 @@ try{
 	return true;							// ??? WHO USES THE RETURN VALUE ???
     }
 catch (...){
-    throw "[Core] Transformation::CalibrateCenter";
+    throw "[Core] Calibration::CalibrateCenter";
     }
 }
 
@@ -374,7 +374,7 @@ void calibthreshold (int id)				// ---------------------------------
 	cvReleaseImage(&tmp);					//
 }
 
-bool Transformation::CalibrateTarget()		// ---------------------------------
+bool Calibration::CalibrateTarget()		// ---------------------------------
 {
 try{
 	cvNamedWindow(							// build a window to show the 
@@ -423,7 +423,7 @@ try{
 	return true;							// ??? WHO USES THE RETURN VALUE ???
     }
 catch(...){
-    throw "[Core] Transformation::CalibrateTarget";
+    throw "[Core] Calibration::CalibrateTarget";
     }
 }
 
@@ -432,7 +432,7 @@ catch(...){
 // -----------------------------------------------------------------------------
 
 
-bool Transformation::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
+bool Calibration::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 
     try{
 	int i=0;
@@ -653,11 +653,11 @@ bool Transformation::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 	return true;							// ??? WHO USES THE RETURN VALUE ???
     }
     catch (...){
-        throw "[Core] Transformation::CalibrateRoundPattern";
+        throw "[Core] Calibration::CalibrateRoundPattern";
         }
 }
 
-bool Transformation::CalibratePattern(int cw, int ch,double wx, double wy)
+bool Calibration::CalibratePattern(int cw, int ch,double wx, double wy)
 {
 try{
     int i=0;
@@ -878,7 +878,7 @@ try{
 	return true;							// ??? WHO USES THE RETURN VALUE ???
 }
 catch(...){
-    throw "[Core] Transformation::CalibratePattern";
+    throw "[Core] Calibration::CalibratePattern";
     }
 }
 
@@ -917,7 +917,7 @@ catch(...){
    * \sa Empty()
    */
 
-CvPoint2D32f Transformation::ImageToWorld(CvPoint2D32f p, int transform)
+CvPoint2D32f Calibration::ImageToWorld(CvPoint2D32f p, int transform)
 {
 try{
 	CvPoint2D32f w;
@@ -964,11 +964,11 @@ try{
 	return(w);
             }
     catch(...){
-        throw "[Core] Transformation::GetArenaRadius";
+        throw "[Core] Calibration::GetArenaRadius";
         }
 }
 
-CvPoint2D32f Transformation::WorldToImage(CvPoint2D32f p)
+CvPoint2D32f Calibration::WorldToImage(CvPoint2D32f p)
 {
 try{
 	CvMat* invcam = cvCreateMat(3,3,CV_32F);
@@ -987,7 +987,7 @@ try{
 	return(r);
             }
     catch(...){
-        throw "[Core] Transformation::WorldToImage";
+        throw "[Core] Calibration::WorldToImage";
         }
 }
 
@@ -999,7 +999,7 @@ try{
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-int Transformation::FindPoints(
+int Calibration::FindPoints(
 	CvPoint2D32f* imagePoints32f, 
 	CvPoint3D32f* objectPoints32f,
 	VisBlobSet& blobs, 
@@ -1098,12 +1098,12 @@ try{
 	}
     }
 catch(...){
-    throw "[Core] Transformation::FindPoints";
+    throw "[Core] Calibration::FindPoints";
     }
 }
 
 
-int Transformation::FindRoundPoints(
+int Calibration::FindRoundPoints(
 	CvPoint2D32f* imagePoints32f, 
 	CvPoint3D32f* objectPoints32f,
 	VisBlobSet& blobs, 
@@ -1208,12 +1208,12 @@ try{
 		}
     }    
 catch(...){
-    throw "[Core] Transformation::FindRoundPoints";
+    throw "[Core] Calibration::FindRoundPoints";
     }
 }
 
 
-void Transformation::TestRoundCalibration(char* testpattern,int h, int* nrofpoints, double vd){
+void Calibration::TestRoundCalibration(char* testpattern,int h, int* nrofpoints, double vd){
     try{
     FILE* f;
 	fopen_s(&f,"calibrationerror.dat","w");
@@ -1279,11 +1279,11 @@ void Transformation::TestRoundCalibration(char* testpattern,int h, int* nrofpoin
 		fclose(f);
 		        }
     catch(...){
-        throw "[Core] Transformation::TestRoundCalibration";
+        throw "[Core] Calibration::TestRoundCalibration";
         }
         }
  
-void Transformation::TestCalibration(char* testpattern,int cw, int ch,double wx, double wy){
+void Calibration::TestCalibration(char* testpattern,int cw, int ch,double wx, double wy){
     try{
 	FILE* f;
 	fopen_s(&f,"calibrationerror.dat","w");
@@ -1366,7 +1366,7 @@ void Transformation::TestCalibration(char* testpattern,int cw, int ch,double wx,
 		fclose(f2);*/
 		        }
     catch(...){
-        throw "[Core] Transformation::TestCalibration";
+        throw "[Core] Calibration::TestCalibration";
         }
 	}
 
@@ -1378,7 +1378,7 @@ void Transformation::TestCalibration(char* testpattern,int cw, int ch,double wx,
 /********************************************* end of File ********************/
 
 
-void Transformation::SaveError(int n, CvPoint2D32f* u, CvPoint3D32f* x, char *fname)
+void Calibration::SaveError(int n, CvPoint2D32f* u, CvPoint3D32f* x, char *fname)
 {
 try{
 	FILE* f;
@@ -1399,6 +1399,6 @@ try{
 	}
             }
     catch(...){
-        throw "[Core] Transformation::SaveError";
+        throw "[Core] Calibration::SaveError";
         }
 }

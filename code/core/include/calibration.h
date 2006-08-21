@@ -1,55 +1,14 @@
 #ifndef calibration_h        
 #define calibration_h
-//****************************************************************************/
-// Filename :   $RCSfile: calibration.h,v $
-// Version  :   $Revision: 1.1.1.1 $
-//
-// Author   :   $Author: correll $
-//              Your name
-//              Ecole Polytechnique Federale de Lausanne
-//              IPR-LPM-VISION
-//              CH-1015 Lausanne
-//              Switzerland
-//
-//
-// Date     :   $Date: 2004/12/16 12:54:17 $
 
-
-/** \file calibration.h
-* \brief Calibration procedures for instrack/robotrack
-*/
-
-
-// See end of this header file for usage notes
-/*****************************************************************************/
-/******************************** inclusions *********************************/
-/*****************************************************************************/
-
-
-//#include "cxcore.h"
 #include "highgui.h"
 #include "libgeom.h"
-
-
 
 
 using namespace std;
 
 
-/*****************************************************************************/
-/******************************** defines ************************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/******************************** types **************************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/******************************** prototypes *********************************/
-/*****************************************************************************/
-
-
-/** \class Transformation
+/** \class Calibration
 * \brief This class provides a transformation for camera calibration
 *
 * The non-linear transformation from image pixels to world coordinates is approximated by a 
@@ -68,7 +27,7 @@ using namespace std;
 * is higher in the neighborhood of the training points. By that, we are able to bias the region within 
 * the camera frame where we want to minimize the prediction area. 
 */
-class Transformation
+class Calibration
 {
 
 private:
@@ -79,7 +38,7 @@ private:
   CvMat* distortion32f;
   /** \brief Camera matrix*/
   CvMat* cameraMatrix32f;
-  /** \brief Transformation matrix */
+  /** \brief Calibration matrix */
   CvMat* transformationMatrix32f;
 
   CvPoint2D32f target,xaxis, yaxis; // coordinates of target
@@ -100,9 +59,9 @@ private:
 public:
 	void SaveError(int n,CvPoint2D32f* u,CvPoint3D32f* x,char* fname);
 
-	Transformation(char* _bgfname, char* _calfname);
+	Calibration(char* _bgfname, char* _calfname);
 
-	~Transformation();
+	~Calibration();
 
   bool CalibratePattern(int cw, int ch,double wx, double wy);
   bool CalibrateRoundPattern(int h, int* nrofpoints, double vd); // h=number of circles, nrofpoints=array(h) with the number of points on each circle, vd=distance between rings

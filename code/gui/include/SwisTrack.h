@@ -16,22 +16,19 @@
 #include "wx/app.h"	      // Provides app functions (setvendorname...)
 
 
-#include "calibration.h"
+//#include "calibration.h"
 #include "ObjectTracker.h"
 #ifdef _1394
 #include <1394camera.h>
 #endif
 
 #include "constants.h"
-//#include "ExperimentCfg.h"
 #include "AboutDialog.h"
 #include "XMLCfg.h"
 
 class Canvas;
-//class TrackingPanel;
 class SwisTrackPanel;
 class InterceptionPanel;
-//class DataLogger;
 class AviWriter;
 class SocketServer;
 class NewExperimentDialog;
@@ -123,7 +120,7 @@ public:
 	ObjectTracker* ot;		//!< The tracking core (ObjectTracker)
 
 	// Tool classes
-	Transformation* transform;
+//	Calibration* transform;
 //	DataLogger* datalogger;
 	AviWriter* aviwriter;
 	SocketServer* socketserver;

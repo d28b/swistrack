@@ -174,11 +174,9 @@ void SocketServer::SendBlobs(wxSocketBase *sock)
   len=n*width+4;
   for(unsigned int i=0; i<n; i++){
 	CvPoint2D32f* p;		
-	CvPoint2D32f pc;
 
-	if(calibration && parent->transform){
-	 pc=parent->transform->ImageToWorld(*(parent->ot->GetParticlePos(i)));	
-	 p=&pc;
+	if(calibration){
+	 p=parent->ot->GetPos(i);	
 	 }
 	else
 	 p=parent->ot->GetParticlePos(i);
@@ -201,12 +199,7 @@ void SocketServer::SendTracks(wxSocketBase *sock)
 	CvPoint2D32f* p;		
 	CvPoint2D32f pc;
 
-	if(calibration && parent->transform){
-	 pc=parent->transform->ImageToWorld(*(parent->ot->GetTargetPos(i)));	
-	 p=&pc;
-	 }
-	else
-	 p=parent->ot->GetTargetPos(i);
+	p=parent->ot->GetTargetPos(i);
 		
 	buf.Printf("%s %+#010.4f %+#010.4f",buf.c_str(),p->x,p->y);
  }

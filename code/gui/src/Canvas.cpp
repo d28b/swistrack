@@ -61,14 +61,14 @@ void Canvas::OnMouseClick(wxMouseEvent &event)
     if(event.GetButton()==wxMOUSE_BTN_LEFT){
 		// set statusbar text
 		wxString msg;
-		if(parent->transform)
+		/*if(parent->transform)
 		{
 			CvPoint2D32f p1=cvPoint2D32f(u-parent->width/2,v-parent->height/2);
 			CvPoint2D32f p2;
 			p2=parent->transform->ImageToWorld(p1);
 			msg.Printf("(%dpx, %dpx) -> (%0.3fm, %0.3fm)",u,v,p2.x,p2.y);
 		}
-		else
+		else*/
 			msg.Printf(_("(%d, %d)"), u, v);
 		
 		(parent)->SetStatusText(msg, 0);
