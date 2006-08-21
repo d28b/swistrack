@@ -1,5 +1,6 @@
 #include <sstream>
-#include "calibration.h" 
+#include "tracker.h" 
+#include "calibration.h"
 
 /*************************************************************************************************/
 /************ private types, variables, classes and function prototypes **************************/
@@ -16,12 +17,16 @@ void UpdateMouse(int event, int x, int y, int flags,void* param)
 
 
 
-Calibration::Calibration(xmlpp::Element* cfgRoot)
+Calibration::Calibration(ObjectTracker* parent, xmlpp::Element* cfgRoot)
 {
 	if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/CALIBRATION","mode"))
 		throw "[Calibration::Calibration] Calibration mode undefined (/CFG/COMPONENTS/CALIBRATION)";
 
 	mode=GetIntAttrByXPath(cfgRoot,"/CFG/COMPONENTS/CALIBRATION","mode");
+	this->parent=parent;
+
+	trackingimg = new TrackingImage();
+	tracker=new Tracker(this,cfgRoot,trackingimg);
 
 	switch (mode){
 		case 0 : 
@@ -37,11 +42,11 @@ Calibration::Calibration(xmlpp::Element* cfgRoot)
 
 			bgimg = cvLoadImage(GetValByXPath(cfgRoot,"/CFG/CALIBRATION[@mode='1']/CALIBBMPFNAME"),0);
 			if (!bgimg){
-				throw "[Calibration::Calibration] Can not open calibration background image";
+				throw "[Calibration::Calibration] Can not open tracker background image";
 			}
 			calibimg = cvLoadImage(GetValByXPath(cfgRoot,"/CFG/CALIBRATION[@mode='1']/CALIBFNAME"),0);
 			if (!calibimg){
-				throw "[Calibration::Calibration] Can not open calibration pattern";
+				throw "[Calibration::Calibration] Can not open tracker pattern";
 			}
 
 			meani.x=0;	meani.y=0;
@@ -61,6 +66,9 @@ Calibration::Calibration(xmlpp::Element* cfgRoot)
 
 Calibration::~Calibration()
 {
+	if(trackingimg) delete(trackingimg);
+	if(tracker) delete(tracker);
+	
 	switch (mode){
 		case 0 : 
 			break;
@@ -127,7 +135,7 @@ double Calibration::GetArenaRadius(){
 				throw "[Core] Calibration::GetArenaRadius";
 			}
 	};
-	return -1;
+	return(0);
 }
 
 
@@ -178,12 +186,12 @@ void centerthreshold (int id)				// ---------------------------------
 		cvPoint(							//
 			centermask->width/2,			// this creates a binary "mask"
 			centermask->height/2			// which will later be multiplied
-			),								// into the calibration image,
+			),								// into the tracker image,
 		CV_RGB(1,1,1));									// clearing everything but the arena
 
 //	tmask=cvCloneImage(centermask);
 
-	cvMul(centermask,centerbg,				// mask the calibration image
+	cvMul(centermask,centerbg,				// mask the tracker image
 		centermask);						//
 
 	cvShowImage("Find the Arena",			// and display it
@@ -260,7 +268,7 @@ bool Calibration::CalibrateCenter()		// ---------------------------------
 				throw "[Core] Calibration::CalibrateCenter";
 			}
 	};
-	return false;
+	return(0);
 }
 
 // -----------------------------------------------------------------------------
@@ -309,11 +317,11 @@ void outlinethreshold (int id)				// ---------------------------------
 		cvPoint(							//
 			calibmask->width/2,				// this creates a binary "mask"
 			calibmask->height/2				// which will later be multiplied
-			),								// into the calibration image,
+			),								// into the tracker image,
 		CV_RGB(1,1,1));									// clearing everything but the arena
 		
 
-	cvMul(calibmask,calibtarget,			// mask the calibration image
+	cvMul(calibmask,calibtarget,			// mask the tracker image
 		calibmask);							//
 
 	cvShowImage("Find the Calibration Target",		// and display it
@@ -330,7 +338,7 @@ void calibthreshold (int id)				// ---------------------------------
 	//int i=0;
 
 	cvThreshold(							// try to segment out all the
-		calibmask, calibmask,				// squares of the calibration 
+		calibmask, calibmask,				// squares of the tracker 
 		calibthresholdvalue, 128,			// target.
 		CV_THRESH_BINARY);					//
 
@@ -346,7 +354,7 @@ void calibthreshold (int id)				// ---------------------------------
 		0.5,0.5,0.0,1);						// user will know when they have 
 	ostringstream s;						// successfully adjusted the 
 	s	<< "found "							// sliders to allow detection of
-		<< squares.GetTotalNumBlobs()-1		// the calibration target.
+		<< squares.GetTotalNumBlobs()-1		// the tracker target.
 		<< "/"
 		<< patternsize
 		<< " spots, press any key when the pattern is properly visible";						//
@@ -378,7 +386,7 @@ try{
 	
 	cvCreateTrackbar(						// add another slider for 
 		"Squares",							// segmenting the squares of 
-		"Find the Calibration Target",				// the calibration chessboard.
+		"Find the Calibration Target",				// the tracker chessboard.
 		&calibthresholdvalue,				//
 		255,								//
 		calibthreshold						//
@@ -606,7 +614,7 @@ bool Calibration::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 	printf("Center offset: (%f/%f)\n",dxy.x,dxy.y);
 
 
-	/*FILE* f4=fopen("calibrationpattern.dat","w");
+	/*FILE* f4=fopen("trackerpattern.dat","w");
 	for(j=0; j<ps; j++){
 		CvPoint2D32f calibpoint;
 		calibpoint=ImageToWorld(imagePoints32f[j]);
@@ -624,7 +632,7 @@ bool Calibration::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 	fclose(f4);
 */
 
-	SaveError(ps,imagePoints32f,objectPoints32f,"calibration_error.txt");
+	SaveError(ps,imagePoints32f,objectPoints32f,"tracker_error.txt");
 
 
 	cvDestroyWindow("Calibration");			// clean up all the memory we used. 
@@ -836,7 +844,7 @@ try{
 	printf("Center offset: (%f/%f)\n",dxy.x,dxy.y);
 
 
-	/*FILE* f4=fopen("calibrationpattern.dat","w");
+	/*FILE* f4=fopen("trackerpattern.dat","w");
 	for(j=0; j<cw*ch; j++){
 		CvPoint2D32f calibpoint;
 		calibpoint=ImageToWorld(imagePoints32f[j]);
@@ -1096,7 +1104,7 @@ int Calibration::FindRoundPoints(
 	int h, int* nrofpoints, double vd)
 {
 
-	//IplImage* img = cvLoadImage("C:/Documents and Settings/Nikolaus/My Documents/work/Leurre/robotrack/calibrationtest/roundpattern.bmp",0);
+	//IplImage* img = cvLoadImage("C:/Documents and Settings/Nikolaus/My Documents/work/Leurre/robotrack/trackertest/roundpattern.bmp",0);
 try{
 	if (blobs.GetTotalNumBlobs() != (patternsize+1))
 	{
@@ -1202,7 +1210,7 @@ catch(...){
 void Calibration::TestRoundCalibration(char* testpattern,int h, int* nrofpoints, double vd){
     try{
     FILE* f;
-	fopen_s(&f,"calibrationerror.dat","w");
+	fopen_s(&f,"trackererror.dat","w");
 	
 	calibimg = cvLoadImage(testpattern,0);
 	CalibrateTarget();
@@ -1272,7 +1280,7 @@ void Calibration::TestRoundCalibration(char* testpattern,int h, int* nrofpoints,
 void Calibration::TestCalibration(char* testpattern,int cw, int ch,double wx, double wy){
     try{
 	FILE* f;
-	fopen_s(&f,"calibrationerror.dat","w");
+	fopen_s(&f,"trackererror.dat","w");
 	calibimg = cvLoadImage(testpattern,0);
 	CalibrateTarget();
 	cvNamedWindow("Validation",CV_WINDOW_AUTOSIZE);
@@ -1292,7 +1300,7 @@ void Calibration::TestCalibration(char* testpattern,int cw, int ch,double wx, do
 	
 
 	CvPoint2D32f tdxy=cvPoint2D32f(0.35,0.25);  // data for test pattern
-	tdxy=cvPoint2D32f(-dxy.x,-dxy.y); // disable this line when working with small calibration pattern
+	tdxy=cvPoint2D32f(-dxy.x,-dxy.y); // disable this line when working with small tracker pattern
 	
 	double talpha=-178.175863/180*3.14159265;
 	
@@ -1357,13 +1365,6 @@ void Calibration::TestCalibration(char* testpattern,int cw, int ch,double wx, do
 	}
 
 
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-
-			
-/********************************************* end of File ********************/
-
-
 void Calibration::SaveError(int n, CvPoint2D32f* u, CvPoint3D32f* x, char *fname)
 {
 try{
@@ -1388,3 +1389,207 @@ try{
         throw "[Core] Calibration::SaveError";
         }
 }
+
+
+CvPoint2D32f* Calibration::GetTargetPos(int id){
+ if(tracker)
+	 return(tracker->GetTargetPos(id));
+	else 
+	 return(0);
+}
+
+CvPoint2D32f* Calibration::GetParticlePos(int id){
+		if(tracker) 
+			return(tracker->GetParticlePos(id));
+		else 
+			return(0);
+}
+
+CvPoint2D32f* Calibration::GetPos(int id){
+	if(tracker)
+		return(tracker->GetPos(id));
+	else
+		return(NULL);
+}
+
+
+IplImage* Calibration::GetCoveragePointer()
+{
+	if(trackingimg)
+		return(trackingimg->GetCoveragePointer());
+	else
+		return(NULL);
+}
+
+/** \brief Returns a pointer to the current image
+*
+* Calls TrackingImage::GetImagePointer()
+* \return A pointer to the current image
+*/
+IplImage* Calibration::GetImagePointer()
+{
+	if(trackingimg)
+		return(trackingimg->GetImagePointer());
+	else
+		return(NULL);
+}
+
+
+/** \brief Returns a pointer to the current binary image
+*
+* Calls TrackingImage::GetBinaryPointer()
+* \return A pointer to the current binary image
+*/
+IplImage* Calibration::GetBinaryPointer()
+{
+	if(trackingimg)
+		return(trackingimg->GetBinaryPointer());
+	else
+		return(NULL);
+}
+
+/** \brief Returns a pointer to the current frame without overlaid information
+*
+* Calls TrackingImage::GetRawImagePointer()
+* \return A pointer to the current raw image
+*/
+IplImage* Calibration::GetRawImagePointer()
+{
+		return(trackingimg->GetRawImagePointer());
+}
+
+int Calibration::GetNumberofTracks(){
+		if(tracker)
+			return(tracker->GetNumberofTracks());
+		else 
+			return(0);
+}
+
+int Calibration::GetNumberofParticles(){
+		if(tracker)
+			return(tracker->GetNumberofParticles());
+		else 
+			return(0);
+}
+
+/** \brief Returns segmenter status
+*
+* \return
+* enum status_code
+*/
+int Calibration::GetStatus()
+{
+		return(tracker->GetStatus());
+}
+
+int Calibration::Step()
+{
+	if(tracker)
+	return(tracker->Step());
+	else
+		return(0);
+}
+
+int Calibration::InitTracker()
+{
+	if(tracker)
+		return(tracker->init());
+	else
+		return 0;
+}
+
+int Calibration::InitMask()
+{
+	if(tracker)
+		return(tracker->InitMask());
+	else
+		return 0;
+}
+
+/** \brief Returns FPS (frames per second) of the current video
+*
+* \return FPS
+*/
+double Calibration::GetFPS()
+{
+	if(tracker)
+		return(tracker->GetFPS());
+	else
+		return(0);
+}
+
+/** \brief Gives AVI progress
+* 
+* \param kind : format of the progress
+*               - 1 = progress in milliseconds
+*               - 2 = progress in frames
+*               - 3 = progress in percent
+* \result Returns progress in the format specified by 'kind'
+*
+*/ 
+double Calibration::GetProgress(int kind)
+{
+	if(tracker)
+		return(tracker->GetProgress(kind));
+	else
+		return 0;
+}
+
+void Calibration::ClearCoverageImage()
+{   
+	if(trackingimg) trackingimg->ClearCoverageImage();
+}
+
+void Calibration::SetPos(int id,CvPoint2D32f *p){
+	tracker->SetPos(id,p);
+}
+void Calibration::RefreshCoverage(){
+	tracker->RefreshCoverage();
+}
+void Calibration::ToggleMaskDisplay()
+{
+	if(tracker) tracker->ToggleMaskDisplay();
+}
+
+/** \brief Allows to turn display on and off
+*
+* Turning the display off saves some computation, as trajectories and so on are not
+* drawn anymore.
+*
+* \param display_vid : set to '1' for display and '0' otherwise
+*/
+void Calibration::SetDisplay(int display_vid)
+{
+	if(trackingimg)
+		trackingimg->SetDisplay(display_vid);
+}
+
+/** \brief Changes display options
+*
+* \param style
+* - TRAJCROSS		: Draws a cross and id for every object
+* - TRAJNONUMBER	: Draws a cross without id
+* - TRAJFULL		: Draws a full trajectory with cross and id	
+* - TRAJNOCROSS		: Draws only the trajectory
+*/
+void Calibration::SetVisualisation(int style)
+{
+if(tracker)
+	tracker->SetVisualisation(style);
+}
+
+/** \brief Sets tracking parameters
+* Allows for changing parameters used by the segmenter (bin_threshold, min_area) and the
+* data association algorithm (max_area, max_speed).
+* Call this function whenever you want during tracking.
+*/
+void Calibration::SetParameters()
+{
+	if(tracker)
+		tracker->SetParameters();
+}
+
+
+
+
+
