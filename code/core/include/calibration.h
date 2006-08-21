@@ -3,6 +3,7 @@
 
 #include "highgui.h"
 #include "libgeom.h"
+#include "Component.h"
 
 
 using namespace std;
@@ -27,81 +28,50 @@ using namespace std;
 * is higher in the neighborhood of the training points. By that, we are able to bias the region within 
 * the camera frame where we want to minimize the prediction area. 
 */
-class Calibration
+class Calibration : public Component
 {
 
 private:
+	/** \brief Blobs */
+	VisBlobSet spots;
+	/** \brief Distortion matrix*/
+	CvMat* distortion32f;
+	/** \brief Camera matrix*/
+	CvMat* cameraMatrix32f;
+	/** \brief Calibration matrix */
+	CvMat* transformationMatrix32f;
+	CvPoint2D32f target,xaxis, yaxis; // coordinates of target
+	CvPoint2D32f dxy; // displacement of target from center
+	CvPoint2D32f meani,meano,stdi,stdo; // mean and standard deviation of training data
+	double alpha; // rotation of target vs. camera frame
 
-  /** \brief Blobs */
-  VisBlobSet spots;
-  /** \brief Distortion matrix*/
-  CvMat* distortion32f;
-  /** \brief Camera matrix*/
-  CvMat* cameraMatrix32f;
-  /** \brief Calibration matrix */
-  CvMat* transformationMatrix32f;
+	int FindPoints(CvPoint2D32f* imagePoints32f, CvPoint3D32f* objectPoints32f,VisBlobSet& blobs, int cw, int ch,double wx,double wy,IplImage* img=0);
+	int FindRoundPoints(CvPoint2D32f* imagePoints32f, CvPoint3D32f* objectPoints32f,VisBlobSet& blobs, int h, int* nrofpoints, double vd);
+	IplImage* bgimg;
+	IplImage* calibimg; 
 
-  CvPoint2D32f target,xaxis, yaxis; // coordinates of target
-  CvPoint2D32f dxy; // displacement of target from center
-  CvPoint2D32f meani,meano,stdi,stdo; // mean and standard deviation of training data
-
-  double alpha; // rotation of target vs. camera frame
-
- 
-  
-  int FindPoints(CvPoint2D32f* imagePoints32f, CvPoint3D32f* objectPoints32f,VisBlobSet& blobs, int cw, int ch,double wx,double wy,IplImage* img=0);
-  int FindRoundPoints(CvPoint2D32f* imagePoints32f, CvPoint3D32f* objectPoints32f,VisBlobSet& blobs, int h, int* nrofpoints, double vd);
-  IplImage* bgimg;
-  IplImage* calibimg; 
-
-  bool CalibrateTarget();
+	bool CalibrateTarget();
 
 public:
 	void SaveError(int n,CvPoint2D32f* u,CvPoint3D32f* x,char* fname);
-
 	Calibration(char* _bgfname, char* _calfname);
-
 	~Calibration();
+	bool CalibratePattern(int cw, int ch,double wx, double wy);
+	bool CalibrateRoundPattern(int h, int* nrofpoints, double vd); // h=number of circles, nrofpoints=array(h) with the number of points on each circle, vd=distance between rings
+	bool CalibrateCenter();	
+	double GetArenaRadius();
 
-  bool CalibratePattern(int cw, int ch,double wx, double wy);
-  bool CalibrateRoundPattern(int h, int* nrofpoints, double vd); // h=number of circles, nrofpoints=array(h) with the number of points on each circle, vd=distance between rings
+	void TestCalibration(char* testpattern,int cw, int ch,double wx, double wy);
+	void TestRoundCalibration(char* testpattern,int h, int* nrofpoints, double vd);
 
-  bool CalibrateCenter();	
+	CvPoint2D32f ImageToWorld(CvPoint2D32f p, int transform=1);
+	CvPoint2D32f WorldToImage(CvPoint2D32f p);
 
-  double GetArenaRadius();
-
-
-
-  void TestCalibration(char* testpattern,int cw, int ch,double wx, double wy);
-  void TestRoundCalibration(char* testpattern,int h, int* nrofpoints, double vd);
- 
-  CvPoint2D32f ImageToWorld(CvPoint2D32f p, int transform=1);
-
-  CvPoint2D32f WorldToImage(CvPoint2D32f p);
-
-  IplImage* mask;
-
-  CvPoint2D32f  center;
-  CvPoint2D32f* arenaboundary;
-  char* bgfname;
-  char* calfname;
-
-	
+	IplImage* mask;
+	CvPoint2D32f  center;
+	CvPoint2D32f* arenaboundary;
+	char* bgfname;
+	char* calfname;
 };
 
-
-
-
-
-
-/*****************************************************************************/
-/******************************** usage notes ********************************/
-/*****************************************************************************/
-/**
-
- \todo An Empty() function.
- 
- \test See test0() in bidon.cpp
-
-*/
 #endif

@@ -93,7 +93,9 @@
   <!---
                             Calibration Tab
   -->
-  <CALIBRATION mode="0" desc="2nd Order Polynomial Fit" long="Mapping from image to world space is done using by fitting a 2nd order polynomial">
+  <CALIBRATION mode="0" desc="No Calibration" long="Data">
+  </CALIBRATION>
+  <CALIBRATION mode="1" desc="2nd Order Polynomial Fit" long="Mapping from image to world space is done using by fitting a 2nd order polynomial">
     <CALIBBMPFNAME desc="Calibration Background" type="open" param="*.bmp">example/calibration_bg.bmp</CALIBBMPFNAME>
     <CALIBFNAME desc="Calibration Pattern" type="open" param="*.bmp">example/calibration.bmp</CALIBFNAME>
   </CALIBRATION>

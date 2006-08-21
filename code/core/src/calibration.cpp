@@ -1,27 +1,3 @@
-//******************************* DEFINITION MODULE **********************************************/
-//
-// Author   :   Your name, your e-mail
-//              $Author: correll $
-//              Ecole Polytechnique Federale de Lausanne
-//              IPR-LPM-VISION
-//              CH-1015 Lausanne
-//              Switzerland
-// Filename :   $RCSfile: calibration.cpp,v $
-// Version:     $Revision: 1.2 $
-/*************************************************************************************************/
-
-/** \file calibration.cpp
-    
-    Implementation of VisClass
-*/
-
-
-// CVS/SCCS Tag
-static char *id="@(#) $Id: calibration.cpp,v 1.2 2005/08/26 16:54:23 correll Exp $";
-
-/******************************** inclusions *****************************************************/
-/*************************************************************************************************/
-//#include <conio.h>
 #include <sstream>
 #include "calibration.h" 
 
@@ -39,28 +15,7 @@ void UpdateMouse(int event, int x, int y, int flags,void* param)
 	}  
 
 
-/*************************************************************************************************/
-/************* public class methods and functions implementations ********************************/
-/*************************************************************************************************/
 
-/*
-double sign(double v){
-	if(v>=0) 
-		return(1.0);
-	else
-		return(0);
-	}
-*/
-
-/** Constructor
-*
-* Detailed description (on several lines)
-* of the constructor function
-*
-* \param r: Radius
-* \param h: Height
-* \param init: Initial level. Default is 0.
-*/
 Calibration::Calibration(char* _bgfname, char* _calfname)
 {
     try{    
