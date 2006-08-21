@@ -12,7 +12,7 @@
 */
 
 #include "ObjectTracker.h"
-#include "DataLogger.h"
+#include "Output.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -32,7 +32,7 @@ ObjectTracker::ObjectTracker(xmlpp::Element* cfgRoot) : cfgRoot(cfgRoot)
 
     trackingimg = new TrackingImage();
     tracker=new Tracker(this,cfgRoot,trackingimg);
-	datalogger=new DataLogger(this,cfgRoot);
+	datalogger=new Output(this,cfgRoot);
    
 }
 

@@ -161,8 +161,7 @@ IplImage* Input::GetFrame()
 
 void Input::QueryFrame1394(IplImage* input)
 			{
-#ifdef _1394
-				int toto;
+#ifdef _1394			
 			while (theCamera.AcquireImage() != CAM_SUCCESS)
 				throw "[Input::QueryFrame1394] Camera acquisition error";
 			input->imageData=(char*) theCamera.m_pData;

@@ -1,6 +1,6 @@
-#include "DataLogger.h"
+#include "Output.h"
 
-DataLogger::DataLogger(ObjectTracker* parent, xmlpp::Element* cfgRoot){
+Output::Output(ObjectTracker* parent, xmlpp::Element* cfgRoot){
 
 	if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/OUTPUT","mode"))
         throw "[Datalogger::Datalogger] Datalogger mode undefined (/CFG/COMPONENTS/OUTPUT)";
@@ -27,7 +27,7 @@ DataLogger::DataLogger(ObjectTracker* parent, xmlpp::Element* cfgRoot){
 	ncols = parent->GetNumberofTracks();
 	}
 
-void DataLogger::WriteRow(){
+void Output::WriteRow(){
 	
 	double frame   =  parent->GetProgress(2);
 	double time = parent->GetProgress(1);
@@ -43,6 +43,6 @@ void DataLogger::WriteRow(){
 	fprintf(output,"\n");
       }
 
-DataLogger::~DataLogger(){	
+Output::~Output(){	
 	fclose(output);
 	}

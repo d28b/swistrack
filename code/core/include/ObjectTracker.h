@@ -14,7 +14,7 @@
 #include <libxml++/libxml++.h>
 
 class Tracker;
-class DataLogger;
+class Output;
 
 class ObjectTracker  
 {
@@ -66,7 +66,7 @@ private:
 	Tracker* tracker;
 
 	/** Datalogger class */
-	DataLogger* datalogger;
+	Output* datalogger;
 
 	/** Color image */
 	TrackingImage* trackingimg;

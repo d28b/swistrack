@@ -1,20 +1,20 @@
-#ifndef _datalogger_H
-#define _datalogger_H
+#ifndef _Output_H
+#define _Output_H
 
 #include "Component.h"
 #include "cv.h"
 #include "ObjectTracker.h"
 
-/** \class DataLogger
+/** \class Output
 *
 * \brief Provides data logging functions
 */
-class DataLogger : Component
+class Output : Component
 	{
 	public:
-        DataLogger(ObjectTracker* parent, xmlpp::Element* cfgRoot);
+        Output(ObjectTracker* parent, xmlpp::Element* cfgRoot);
 	void WriteRow();
-	    ~DataLogger();
+	    ~Output();
 	
 
 	private:

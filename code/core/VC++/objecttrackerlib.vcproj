@@ -175,33 +175,7 @@
 			Name="Source Files"
 			>
 			<File
-				RelativePath="..\src\DataLogger.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\src\input.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\input.cpp"
 				>
 			</File>
 			<File
@@ -247,6 +221,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\Output.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\src\ParticleFilter.cpp"
@@ -349,10 +327,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\DataLogger.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\input.h"
 				>
 			</File>
@@ -362,6 +336,10 @@
 			</File>
 			<File
 				RelativePath="..\include\ObjectTracker.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\Output.h"
 				>
 			</File>
 			<File
