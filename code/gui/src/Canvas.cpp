@@ -69,6 +69,7 @@ void Canvas::OnMouseClick(wxMouseEvent &event)
 			msg.Printf("(%dpx, %dpx) -> (%0.3fm, %0.3fm)",u,v,p2.x,p2.y);
 		}
 		else*/
+		/** \todo Insert calibration into ot interface and allow for conversion of points */
 			msg.Printf(_("(%d, %d)"), u, v);
 		
 		(parent)->SetStatusText(msg, 0);

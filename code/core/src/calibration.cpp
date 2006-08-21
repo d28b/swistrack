@@ -31,7 +31,7 @@ Calibration::Calibration(ObjectTracker* parent, xmlpp::Element* cfgRoot)
 	switch (mode){
 		case 0 : 
 			break;
-		case 1:
+		case 1:{
 			CreateExceptionIfEmpty(cfgRoot,"/CFG/CALIBRATION[@mode='1']");
 			CreateExceptionIfEmpty(cfgRoot,"/CFG/CALIBRATION[@mode='1']/CALIBBMPFNAME");
 			CreateExceptionIfEmpty(cfgRoot,"/CFG/CALIBRATION[@mode='1']/CALIBFNAME");
@@ -42,11 +42,11 @@ Calibration::Calibration(ObjectTracker* parent, xmlpp::Element* cfgRoot)
 
 			bgimg = cvLoadImage(GetValByXPath(cfgRoot,"/CFG/CALIBRATION[@mode='1']/CALIBBMPFNAME"),0);
 			if (!bgimg){
-				throw "[Calibration::Calibration] Can not open tracker background image";
+				throw "[Calibration::Calibration] Can not open calibration background image";
 			}
 			calibimg = cvLoadImage(GetValByXPath(cfgRoot,"/CFG/CALIBRATION[@mode='1']/CALIBFNAME"),0);
 			if (!calibimg){
-				throw "[Calibration::Calibration] Can not open tracker pattern";
+				throw "[Calibration::Calibration] Can not open calibration pattern";
 			}
 
 			meani.x=0;	meani.y=0;
@@ -56,6 +56,11 @@ Calibration::Calibration(ObjectTracker* parent, xmlpp::Element* cfgRoot)
 			stdo.x=0; stdo.y=0;
 
 			dxy.x=0; dxy.y=0;
+
+			int nrofpoints[4]={8,16,16,28};
+			CalibrateCenter();
+			CalibrateRoundPattern(4,nrofpoints,0.115);
+			   }
 			break;
 		default :
 			throw "[Calibration::Calibration] illegal mode";
@@ -901,15 +906,8 @@ catch(...){
 
 
 
-  /** 1-line description of the method
-   * 
-   * Detailed description of the method
-   * and bla, bla, bla.
-   *
-   * \param vol: Volume a ajouter
-   * \result Returns current level or the overflow as a negative value.
-   * \sa Empty()
-   */
+
+
 
 CvPoint2D32f Calibration::ImageToWorld(CvPoint2D32f p, int transform)
 {
@@ -961,6 +959,11 @@ try{
         throw "[Core] Calibration::GetArenaRadius";
         }
 }
+
+CvPoint2D32f* Calibration::ImageToWorld(CvPoint2D32f* p, int transform){
+	return(&ImageToWorld(*p,transform));	
+}
+
 
 CvPoint2D32f Calibration::WorldToImage(CvPoint2D32f p)
 {
@@ -1392,22 +1395,49 @@ try{
 
 
 CvPoint2D32f* Calibration::GetTargetPos(int id){
- if(tracker)
-	 return(tracker->GetTargetPos(id));
-	else 
+	if(tracker){
+	 switch(mode){
+		 case 0 : return(tracker->GetTargetPos(id));
+			 break;
+		 case 1 : return(ImageToWorld(tracker->GetTargetPos(id)));
+			 break;
+		 default:
+			  return(0);
+ };
+	}
+ else
 	 return(0);
 }
 
 CvPoint2D32f* Calibration::GetParticlePos(int id){
-		if(tracker) 
+	if(tracker){
+			switch(mode){
+				case 0 : 
 			return(tracker->GetParticlePos(id));
+			break;
+				case 1 :
+					return(ImageToWorld(tracker->GetParticlePos(id)));
+					break;
+				default:
+					return(0);
+		};
+	}
 		else 
 			return(0);
 }
 
 CvPoint2D32f* Calibration::GetPos(int id){
-	if(tracker)
+	if(tracker){
+		switch(mode){
+			case 0:
 		return(tracker->GetPos(id));
+		break;
+			case 1 : return(ImageToWorld(tracker->GetPos(id)));
+				break;
+			default:
+				return(0);
+	};
+}
 	else
 		return(NULL);
 }

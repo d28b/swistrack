@@ -199,11 +199,6 @@ void SocketServer::SendTracks(wxSocketBase *sock)
   len=n*width;
   for(unsigned int i=0; i<n; i++){
 	CvPoint2D32f* p;		
-<<<<<<< .mine
-=======
-//	CvPoint2D32f pc;
->>>>>>> .r99
-
 	p=parent->ot->GetTargetPos(i);
 		
 	buf.Printf("%s %+#010.4f %+#010.4f",buf.c_str(),p->x,p->y);

@@ -5,7 +5,7 @@
 int main()
 {
 try{
-	Transformation* transform = new Transformation(
+	Calibration* transform = new Calibration(
 			"../../../../release/example/bg_acalibration.bmp",//background.bmp",
 			"../../../../release/example/calibration.bmp");
 			int nrofpoints[4]={8,16,16,28};

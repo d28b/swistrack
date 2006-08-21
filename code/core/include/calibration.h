@@ -98,6 +98,7 @@ private:
 	void TestRoundCalibration(char* testpattern,int h, int* nrofpoints, double vd);
 
 	CvPoint2D32f ImageToWorld(CvPoint2D32f p, int transform=1);
+	CvPoint2D32f* ImageToWorld(CvPoint2D32f* p, int transform=1);
 	CvPoint2D32f WorldToImage(CvPoint2D32f p);
 	IplImage* mask;
 	CvPoint2D32f  center;

@@ -31,7 +31,6 @@ ObjectTracker::ObjectTracker(xmlpp::Element* cfgRoot) : cfgRoot(cfgRoot)
         throw "[ObjectTracker::ObjectTracker] No configuration specified";
         }
 
-    //trackingimg = new TrackingImage();
     calibration=new Calibration(this,cfgRoot);
 	datalogger=new Output(this,cfgRoot);
    
