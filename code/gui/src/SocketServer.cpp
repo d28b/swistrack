@@ -1,3 +1,4 @@
+
 #include "SocketServer.h"
 #include "SwisTrack.h"
 
@@ -89,6 +90,7 @@ void SocketServer::OnServerEvent(wxSocketEvent& event)
 
   m_numClients++;
  }
+
 
 void SocketServer::OnSocketEvent(wxSocketEvent& event)
 {
@@ -197,7 +199,10 @@ void SocketServer::SendTracks(wxSocketBase *sock)
   len=n*width;
   for(unsigned int i=0; i<n; i++){
 	CvPoint2D32f* p;		
+<<<<<<< .mine
+=======
 //	CvPoint2D32f pc;
+>>>>>>> .r99
 
 	p=parent->ot->GetTargetPos(i);
 		
