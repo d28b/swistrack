@@ -76,8 +76,10 @@ SwisTrackPanel::SwisTrackPanel(SwisTrack* parent, char* title, char* component, 
 								bool v=0;
 								//wxString value("0");
 								if(IsDefined(parent->cfgRoot,(*parameter)->get_path().c_str()) && IsContent(parent->cfgRoot,(*parameter)->get_path().c_str())){                            
-									//value=wxString(GetValByXPath(parent->cfgRoot,(*parameter)->get_path().c_str()));
-									v=GetIntValByXPath(parent->cfgRoot,(*parameter)->get_path().c_str());
+									if (GetIntValByXPath(parent->cfgRoot,(*parameter)->get_path().c_str())==0)
+										v=false;
+									else
+										v=true;
 								}
 								else{
 									throw "[SwisTrackPanel::SwisTrackPanel] An BOOLEAN parameter has an empty content field in this component and mode";

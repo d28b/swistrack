@@ -251,11 +251,16 @@ void SettingsDialog::CreateDialog(){
 								bool v=0;
 								//wxString value("0");
 								if(IsDefined(parent->cfgRoot,(*parameter)->get_path().c_str()) && IsContent(parent->cfgRoot,(*parameter)->get_path().c_str())){                            
-									//value=wxString(GetValByXPath(parent->cfgRoot,(*parameter)->get_path().c_str()));
-									v=GetIntValByXPath(parent->cfgRoot,(*parameter)->get_path().c_str());									
+									if (GetIntValByXPath(parent->cfgRoot,(*parameter)->get_path().c_str())==0)
+										v=false;
+									else
+										v=true;
 								}
 								else if(IsContent(nodeRoot,(*parameter)->get_path().c_str())){                            
-									v=GetIntVal(*parameter);
+									if (GetIntVal(*parameter)==0)
+										v=false;
+									else
+										v=true;
 								}
 								
 								wxCheckBox* m_checkbox = new wxCheckBox(panels.back(),actid++,_(""));

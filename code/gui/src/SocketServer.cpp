@@ -197,7 +197,7 @@ void SocketServer::SendTracks(wxSocketBase *sock)
   len=n*width;
   for(unsigned int i=0; i<n; i++){
 	CvPoint2D32f* p;		
-	CvPoint2D32f pc;
+//	CvPoint2D32f pc;
 
 	p=parent->ot->GetTargetPos(i);
 		

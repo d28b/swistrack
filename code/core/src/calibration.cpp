@@ -127,6 +127,7 @@ double Calibration::GetArenaRadius(){
 				throw "[Core] Calibration::GetArenaRadius";
 			}
 	};
+	return -1;
 }
 
 
@@ -259,6 +260,7 @@ bool Calibration::CalibrateCenter()		// ---------------------------------
 				throw "[Core] Calibration::CalibrateCenter";
 			}
 	};
+	return false;
 }
 
 // -----------------------------------------------------------------------------

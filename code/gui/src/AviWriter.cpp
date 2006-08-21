@@ -14,13 +14,13 @@ AviWriter::AviWriter(wxString* fname, SwisTrack* parent, int type=RAWIMAGE)
 
 void AviWriter::WriteFrame()
 {
-    /*switch (aviwriter_type){
+    switch (aviwriter_type)
+	{
     case OVERLAY : 
         cvWriteToAVI(AVIWriter,parent->ot->GetImagePointer()); break;
     case RAWIMAGE: 
         cvWriteToAVI(AVIWriter,parent->ot->GetRawImagePointer()); break;
-    }*/
-    cvWriteToAVI(AVIWriter,parent->ot->GetImagePointer());
+	}
 }
 
 AviWriter::~AviWriter()
