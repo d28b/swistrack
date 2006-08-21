@@ -9,6 +9,8 @@
 #include "SwisTrack.h"
 #include "SwisTrackPanelCanvas.h"
 
+using namespace std;
+
 class SwisTrackPanel : public wxMiniFrame
 {
 public:
