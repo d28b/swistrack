@@ -47,7 +47,7 @@ Input::Input(xmlpp::Element* cfgRoot)
 #ifdef _1394
 
             if (theCamera.CheckLink() != CAM_SUCCESS){
-                throw "Segmenter: Can not access 1394 Camera";
+				throw "[Input::Input] Can not access 1394 Camera";
                 return;
                 }
             
@@ -79,13 +79,13 @@ Input::Input(xmlpp::Element* cfgRoot)
                     isinputincolor=1;
 			}
 			else{
-				throw "[Segmenter::Segmenter] Could not read from IEEE1394 camera";
+				throw "[Input::Input] Could not read from IEEE1394 camera";
 			}
             
 #endif
             break;
         default:
-            throw "[Segmenter::Segmenter] segmenter mode not implemented";
+            throw "[Input::Input] input mode not implemented";
         }
   
 }
@@ -117,7 +117,7 @@ double Input::GetProgress(int kind){
 				else
 					return(cvGetCaptureProperty(Capture, CV_CAP_PROP_POS_FRAMES));
             default:
-                throw "INTERNAL ERROR: Segmenter::GetProgress invalid type";
+                throw "[Input::GetProgress] invalid type";
 			}
 		return 0;
 }

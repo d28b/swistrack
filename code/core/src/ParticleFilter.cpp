@@ -30,7 +30,7 @@ ParticleFilter::ParticleFilter(xmlpp::Element* cfgRoot,TrackingImage* trackingim
 	// 2. Check whether all necessary parameters for this class are available in the configuration
 
 	if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/PARTICLEFILTER","mode"))
-		throw "[Segmenter::Segmenter] Particlefilter mode undefined (/CFG/COMPONENTS/INPUT)";
+		throw "[ParticleFilter::ParticleFilter] Particlefilter mode undefined (/CFG/COMPONENTS/INPUT)";
 	
 	mode=GetIntAttrByXPath(cfgRoot,"/CFG/COMPONENTS/PARTICLEFILTER","mode");
 	

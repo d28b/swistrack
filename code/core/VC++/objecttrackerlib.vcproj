@@ -175,6 +175,10 @@
 			Name="Source Files"
 			>
 			<File
+				RelativePath="..\src\calibration.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\input.cpp"
 				>
 			</File>
@@ -322,6 +326,10 @@
 		<Filter
 			Name="Header Files"
 			>
+			<File
+				RelativePath="..\include\calibration.h"
+				>
+			</File>
 			<File
 				RelativePath="..\include\Component.h"
 				>
