@@ -17,6 +17,7 @@
 #include <vector>
 #include "XMLCfg.h"
 
+using namespace std;
 
 
 /** \class NewExperimentDialog
