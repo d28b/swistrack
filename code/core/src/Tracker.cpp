@@ -19,7 +19,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-Tracker::Tracker(ObjectTracker* parent, xmlpp::Element* cfgRoot, TrackingImage* trackingimg) 
+Tracker::Tracker(Calibration* parent, xmlpp::Element* cfgRoot, TrackingImage* trackingimg) 
 	{
 	this->cfgRoot=cfgRoot;
     this->parent=parent;

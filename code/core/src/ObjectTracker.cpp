@@ -12,6 +12,7 @@
 */
 
 #include "ObjectTracker.h"
+#include "Calibration.h"
 #include "Output.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -22,24 +23,23 @@ ObjectTracker::ObjectTracker(xmlpp::Element* cfgRoot) : cfgRoot(cfgRoot)
 {
 	stop=1;
 	pause=0;
-	tracker=NULL;
-	trackingimg=NULL;
+	calibration=NULL;
+//	trackingimg=NULL;
 	datalogger=NULL;
 
     if(!cfgRoot){
         throw "[ObjectTracker::ObjectTracker] No configuration specified";
         }
 
-    trackingimg = new TrackingImage();
-    tracker=new Tracker(this,cfgRoot,trackingimg);
+    //trackingimg = new TrackingImage();
+    calibration=new Calibration(this,cfgRoot);
 	datalogger=new Output(this,cfgRoot);
    
 }
 
 ObjectTracker::~ObjectTracker()
 {
-	if(tracker) delete(tracker);
-	if(trackingimg) delete(trackingimg);
+	if(calibration) delete(calibration);
 	if(datalogger) delete(datalogger);
 }
 
@@ -52,10 +52,10 @@ ObjectTracker::~ObjectTracker()
 void ObjectTracker::Stop(){
 	
 	stop=1;
-	if(tracker) delete(tracker);
-	tracker=NULL;
-	if(trackingimg) delete(trackingimg);
-	trackingimg=NULL;
+	if(calibration) delete(calibration);
+	calibration=NULL;
+//	if(trackingimg) delete(trackingimg);
+//	trackingimg=NULL;
 }
 
 /*! Given the trajectory, GetPos yields (asynchronously) the latest object position. For getting synchronous data,
@@ -66,8 +66,8 @@ void ObjectTracker::Stop(){
 */
 CvPoint2D32f* ObjectTracker::GetPos(int id)
 {
-	if(tracker)
-		return(tracker->GetPos(id));
+	if(calibration)
+		return(calibration->GetPos(id));
 	else
 		return(NULL);
 }
@@ -83,7 +83,7 @@ CvPoint2D32f* ObjectTracker::GetPos(int id)
 int ObjectTracker::Step()
 {
 	int status;
-	status=tracker->Step();	
+	status=calibration->Step();	
 	datalogger->WriteRow();
 	return(status);
 }
@@ -100,8 +100,8 @@ int ObjectTracker::Step()
 */ 
 double ObjectTracker::GetProgress(int kind)
 {
-	if(tracker)
-		return(tracker->GetProgress(kind));
+	if(calibration)
+		return(calibration->GetProgress(kind));
 	else
 		return 0;
 }
@@ -113,14 +113,13 @@ double ObjectTracker::GetProgress(int kind)
 */
 int ObjectTracker::Start()
 {
-	if(!tracker || !trackingimg){
-        throw "InitVideo has not been executed properly";
-		return(GENERIC_ERROR);
-		}
+	if(calibration){
 	stop=0;
 	InitTracker();
 	return(OK);
-//	TrackingThread();
+	}
+	else
+		return(0);
 }
 
 
@@ -132,8 +131,8 @@ int ObjectTracker::Start()
 
 void ObjectTracker::SetParameters()
 {
-	if(tracker)
-		tracker->SetParameters();
+	if(calibration)
+		calibration->SetParameters();
 }
 
 /** \brief Returns a pointer to the current image
@@ -143,10 +142,7 @@ void ObjectTracker::SetParameters()
 */
 IplImage* ObjectTracker::GetImagePointer()
 {
-	if(trackingimg)
-		return(trackingimg->GetImagePointer());
-	else
-		return(NULL);
+		return(calibration->GetImagePointer());
 }
 
 /** \brief Returns a pointer to the current binary image
@@ -156,10 +152,7 @@ IplImage* ObjectTracker::GetImagePointer()
 */
 IplImage* ObjectTracker::GetBinaryPointer()
 {
-	if(trackingimg)
-		return(trackingimg->GetBinaryPointer());
-	else
-		return(NULL);
+		return(calibration->GetBinaryPointer());
 }
 
 
@@ -171,7 +164,7 @@ IplImage* ObjectTracker::GetBinaryPointer()
 int ObjectTracker::GetStatus()
 {
 	if(!stop)
-		return(tracker->GetStatus());
+		return(calibration->GetStatus());
 	else
 		return(STOPPED);
 }
@@ -186,8 +179,8 @@ int ObjectTracker::GetStatus()
 */
 void ObjectTracker::SetVisualisation(int style)
 {
-if(tracker)
-	tracker->SetVisualisation(style);
+if(calibration)
+	calibration->SetVisualisation(style);
 }
 
 /** \brief Returns FPS (frames per second) of the current video
@@ -196,8 +189,8 @@ if(tracker)
 */
 double ObjectTracker::GetFPS()
 {
-	if(tracker)
-		return(tracker->GetFPS());
+	if(calibration)
+		return(calibration->GetFPS());
 	else
 		return(0);
 }
@@ -211,22 +204,22 @@ double ObjectTracker::GetFPS()
 */
 void ObjectTracker::SetDisplay(int display_vid)
 {
-	if(trackingimg)
-		trackingimg->SetDisplay(display_vid);
+	if(calibration)
+		calibration->SetDisplay(display_vid);
 }
 
 
-/** \brief Initializes tracker and the trajectories
+/** \brief Initializes calibration and the trajectories
 *
 * This method is used internally and calls otSearching for every frame until all objects have been found.
 */
 void ObjectTracker::InitTracker()
 {
-  int status = tracker->init();
+  int status = calibration->InitTracker();
   int trials=0;
   while(!stop && status==SEARCHING){
 	  trials++;
-      status=tracker->init();
+      status=calibration->InitTracker();
       if(trials>1000) throw "Could not distinguish the specified number of objects within the first 1000 frames";
 	  }
   if(status==FINISHED){
@@ -237,16 +230,13 @@ void ObjectTracker::InitTracker()
 
 IplImage* ObjectTracker::GetCoveragePointer()
 {
-	if(trackingimg)
-		return(trackingimg->GetCoveragePointer());
-	else
-		return(NULL);
+	return(calibration->GetCoveragePointer());
 }
 
 int ObjectTracker::InitMask()
 {
-if(tracker)
-return(tracker->InitMask());
+if(calibration)
+return(calibration->InitMask());
 	else
 return(0);
 	
@@ -254,36 +244,36 @@ return(0);
 
 void ObjectTracker::ToggleMaskDisplay()
 {
-	if(tracker) tracker->ToggleMaskDisplay();
+	if(calibration) calibration->ToggleMaskDisplay();
 }
 
 void ObjectTracker::RefreshCoverage()
 {
-	tracker->RefreshCoverage();
+	calibration->RefreshCoverage();
 }
 
 void ObjectTracker::SetPos(int id, CvPoint2D32f *p)
 {
-	tracker->SetPos(id,p);
+	calibration->SetPos(id,p);
 }
 
 CvPoint2D32f* ObjectTracker::GetTargetPos(int id){
-	if(tracker) return(tracker->GetTargetPos(id));
+	if(calibration) return(calibration->GetTargetPos(id));
 	else return(0);
 }
 
 CvPoint2D32f* ObjectTracker::GetParticlePos(int id){
-	if(tracker) return(tracker->GetParticlePos(id));
+	if(calibration) return(calibration->GetParticlePos(id));
 		else return(0);
 }
 
 int ObjectTracker::GetNumberofTracks(){
-	if(tracker) return(tracker->GetNumberofTracks());
+	if(calibration) return(calibration->GetNumberofTracks());
 		else return(0);
 }
 
 int ObjectTracker::GetNumberofParticles(){
-	if(tracker) return(tracker->GetNumberofParticles());
+	if(calibration) return(calibration->GetNumberofParticles());
 		else return(0);
 }
 
@@ -295,13 +285,10 @@ int ObjectTracker::GetNumberofParticles(){
 */
 IplImage* ObjectTracker::GetRawImagePointer()
 {
-	if(trackingimg)
-		return(trackingimg->GetRawImagePointer());
-	else
-		return(NULL);
+		return(calibration->GetRawImagePointer());
 }
 
 void ObjectTracker::ClearCoverageImage()
 {   
-	if(trackingimg) trackingimg->ClearCoverageImage();
+	if(calibration) calibration->ClearCoverageImage();
 }
