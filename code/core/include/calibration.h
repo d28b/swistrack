@@ -4,7 +4,9 @@
 #include "highgui.h"
 #include "libgeom.h"
 #include "Component.h"
-
+#include "ObjectTracker.h"
+#include "Tracker.h"
+#include "TrackingImage.h"
 
 using namespace std;
 
@@ -28,10 +30,51 @@ using namespace std;
 * is higher in the neighborhood of the training points. By that, we are able to bias the region within 
 * the camera frame where we want to minimize the prediction area. 
 */
+
 class Calibration : public Component
 {
+public:
+	Calibration(ObjectTracker* parent, xmlpp::Element* cfgRoot);
+	~Calibration();
+
+
+	CvPoint2D32f* GetTargetPos(int id);
+	CvPoint2D32f* GetParticlePos(int id);
+	CvPoint2D32f* GetPos(int id);
+
+	IplImage* GetRawImagePointer();
+	IplImage* GetCoveragePointer();
+	IplImage* GetBinaryPointer();
+	IplImage* GetImagePointer();
+	
+	int GetNumberofTracks();
+	int GetNumberofParticles();
+	int GetStatus();
+	int Step();
+	int InitTracker();
+	int InitMask();
+
+	double GetFPS();
+	double GetProgress(int kind);
+
+	void ClearCoverageImage();	
+	void SetPos(int id,CvPoint2D32f *p);
+	void RefreshCoverage();
+	void ToggleMaskDisplay();
+	void SetDisplay(int display_vid);
+	void SetVisualisation(int style);
+	void SetParameters();
+	void SaveError(int n,CvPoint2D32f* u,CvPoint3D32f* x,char* fname);
+	bool CalibratePattern(int cw, int ch,double wx, double wy);
+	bool CalibrateRoundPattern(int h, int* nrofpoints, double vd); // h=number of circles, nrofpoints=array(h) with the number of points on each circle, vd=distance between rings
+	bool CalibrateCenter();	
+	double GetArenaRadius();
 
 private:
+
+	Tracker* tracker;
+	TrackingImage* trackingimg;
+
 	/** \brief Blobs */
 	VisBlobSet spots;
 	/** \brief Distortion matrix*/
@@ -56,20 +99,11 @@ private:
 
 	CvPoint2D32f ImageToWorld(CvPoint2D32f p, int transform=1);
 	CvPoint2D32f WorldToImage(CvPoint2D32f p);
-
-public:
-	void SaveError(int n,CvPoint2D32f* u,CvPoint3D32f* x,char* fname);
-	Calibration(xmlpp::Element* cfgRoot);
-	~Calibration();
-	bool CalibratePattern(int cw, int ch,double wx, double wy);
-	bool CalibrateRoundPattern(int h, int* nrofpoints, double vd); // h=number of circles, nrofpoints=array(h) with the number of points on each circle, vd=distance between rings
-	bool CalibrateCenter();	
-	double GetArenaRadius();
-
-
 	IplImage* mask;
 	CvPoint2D32f  center;
 	CvPoint2D32f* arenaboundary;
+	ObjectTracker* parent;
+
 };
 
 #endif

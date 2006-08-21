@@ -44,7 +44,7 @@ class Tracker : public Component
 		/** returns status */
 		int GetStatus();
 		/** Constructor */
-        Tracker(ObjectTracker* parent, xmlpp::Element* cfgRoot, TrackingImage* trackingimg);
+        Tracker(Calibration* parent, xmlpp::Element* cfgRoot, TrackingImage* trackingimg);
 		/** Destructor */
 		virtual ~Tracker();
 		/** Tracking image */
@@ -74,7 +74,7 @@ class Tracker : public Component
 		void AddCompetitor(int c);
 		void AddLostItem(int c);
 		
-		ObjectTracker* parent;
+		Calibration* parent;
 		/** Particlefilter class */
 		ParticleFilter* particlefilter;
 		/** Mask class */
