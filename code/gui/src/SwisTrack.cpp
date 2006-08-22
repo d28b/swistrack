@@ -713,7 +713,7 @@ void SwisTrack::RefreshAllDisplays()
 			delete(colorbmp);
 			colorbmp=NULL;
 		}
-		//colorbmp= new wxBitmap(colorimg,3);
+		colorbmp= new wxBitmap(colorimg,3);
 		canvas->Refresh();
 		delete(colorimg);
 		cvReleaseImage(&tmp);
