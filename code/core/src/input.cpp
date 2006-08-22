@@ -84,6 +84,21 @@ Input::Input(xmlpp::Element* cfgRoot)
             
 #endif
             break;
+		case 2:{ /////////////// USB Cam /////////////////
+				Capture =0;
+				Capture = cvCaptureFromCAM(-1);
+				if(!Capture)
+					throw "[Input::Input] Cannot find USB Webcam";
+				input =  cvQueryFrame( Capture );	
+            if(input){
+                if(strcmp(input->colorModel,"GRAY")==0)
+                    isinputincolor=0;
+                else
+                    isinputincolor=1;          
+                }
+			else throw "[Input::Input] Cannot read from USB Webcam";
+			   }
+			break;
         default:
             throw "[Input::Input] input mode not implemented";
         }
@@ -112,7 +127,7 @@ double Input::GetProgress(int kind){
 				else
 					return(cvGetCaptureProperty(Capture, CV_CAP_PROP_POS_MSEC));
 			case 2:
-				if(mode)
+				if(mode==1)
 					return(nFrame);
 				else
 					return(cvGetCaptureProperty(Capture, CV_CAP_PROP_POS_FRAMES));
@@ -153,6 +168,23 @@ IplImage* Input::GetFrame()
                     }
                 }
                 break;
+			case 2:{ ////////////////// USB Camera ////////////////
+				   if(Capture){
+                    input =  cvQueryFrame( Capture );
+					cvNamedWindow("Input",0);
+					cvShowImage("Input",input);
+                    if (input)  // Get a pointer to the current frame (if query was successful)
+                        {
+                        nFrame++;                         // Increment the frame counter.
+						return(input);
+                        } // end if input
+                    }
+                else
+                    {
+                    throw "[Input::GetFrame] Video feed broken (USB Camera)";
+                     }
+				   }
+				   break;
             default : throw "[Input::GetFrame] Illegal input mode";
             }
 			return 0;

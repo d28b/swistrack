@@ -39,6 +39,8 @@
   </INPUT>
   <INPUT mode="1" desc="CMU 1394 Digital Camera Driver" long="The video source is provided by a IEEE FireWire Camera. See http://www.cs.cmu.edu/~iwan for details and compatible cameras.">
   </INPUT>
+  <INPUT mode="2" desc="Native video driver" long="Windows: Video for Windows (VFW) and Matrox Imaging Library (MIL).\nLinux: V4L and FireWire (IEEE1394).">
+  </INPUT>
   <!---
 					    Image Filter Tab
   -->
@@ -88,7 +90,7 @@
   -->
   <TRACKER mode="0" desc="Nearest Neighbor" long="Simple nearest neighbor tracking. Maximal distance between two frames can be specified by a distance gate">
     <MAXSPEED desc="Maximum allowed speed (pixel/frame)" type="integer" variable="1" min="1" max="255">50</MAXSPEED>
-    <NOBJECTS desc="Number of objects to track" type="integer">1</NOBJECTS>
+    <NOBJECTS desc="Number of objects to track" type="integer">0</NOBJECTS>
   </TRACKER>
   <!---
                             Calibration Tab
