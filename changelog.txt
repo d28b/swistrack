@@ -1,5 +1,5 @@
 /** \file changelog.txt
-* v.3.0.0 Rev. 85
+* v.3.0.0 Rev. 110
 *
 * - core upgrade to Intels OpenCV library 0.97
 * - GUI upgraded to WxWidgets 2.6.3
@@ -12,6 +12,7 @@
 * - XML description for most of the GUI's features
 * - XML data structure for passing parameters within SwisTrack
 * - Segmentation routines improved
+* - VfW camera (USB) support added
 *
 * v.2.4.1 (05.08.2005)
 *
