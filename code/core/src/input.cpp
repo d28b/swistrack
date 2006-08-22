@@ -85,6 +85,7 @@ Input::Input(xmlpp::Element* cfgRoot)
 #endif
             break;
 		case 2:{ /////////////// USB Cam /////////////////
+				
 				Capture =0;
 				Capture = cvCaptureFromCAM(-1);
 				if(!Capture)

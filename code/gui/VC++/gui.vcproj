@@ -146,7 +146,7 @@
 				ExecutionBucket="5"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;I:\library\glibmm\glib\glibmm;../../xmlcfg/include;../../libblob/include;../../core/include;../../calibration/include;I:\library\1394camera\include;I:\library\wxWidgets\include;I:\library\wxWidgets\lib\vc_lib\mswd;I:\library\opencv\otherlibs\highgui;I:\library\opencv\cv\include;I:\library\libblob\include;I:\library\opencv\cxcore\include;&quot;I:\library\libxml++&quot;;..\..\..\LPM_VISLIB\include"
+				AdditionalIncludeDirectories="../include;I:\library\glibmm\glib\glibmm;../../xmlcfg/include;../../libblob/include;../../core/include;../../calibration/include;I:\library\1394camera\include;I:\library\wxWidgets\include;I:\library\wxWidgets\lib\vc_lib\mswd;I:\library\opencv\otherlibs\highgui;I:\library\opencv\cv\include;I:\library\libblob\include;I:\library\opencv\cxcore\include;&quot;I:\library\libxml++&quot;;..\..\..\LPM_VISLIB\include;I:\library\opencv\otherlibs\cvcam\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

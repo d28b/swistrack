@@ -207,11 +207,13 @@ void SettingsDialog::CreateDialog(){
                     if(!param_type.compare("integer")){
                         int min, max;
                         
+						min=-10000;
+                        max=10000;
+
                         if(IsAttr(*parameter,"min")) min=GetIntAttr(*parameter,"min");
                         if(IsAttr(*parameter,"max")) max=GetIntAttr(*parameter,"max");
                         
-                        if(min==-1) min=-10000;
-                        if(max==-1) max=10000;
+
                         
                         wxString value("0");
                         int v=0;
