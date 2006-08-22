@@ -15,7 +15,8 @@ SwisTrackPanelCanvas::SwisTrackPanelCanvas(SwisTrack *parent, wxPanel *loc, cons
 	wxPanel(loc, -1, pos, size)
 {
  this->parent=parent;
- bmp=new wxBitmap(parent->width/4,parent->height/3,3);
+ bmp=new wxBitmap(640/4,480/3,3);
+ /** \todo get the right values for width and height here */
 }
 
 /** \brief Event handler for the canvas' OnPaint event

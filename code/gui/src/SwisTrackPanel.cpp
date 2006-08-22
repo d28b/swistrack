@@ -118,9 +118,10 @@ SwisTrackPanel::SwisTrackPanel(SwisTrack* parent, char* title, char* component, 
 			
 	}
 	wxFlexGridSizer* panelsizer = new wxFlexGridSizer(2,1,10,10);
-	
+
+	/** \todo Get the real values for the image width and height here */
 	if(display){
-		canvas = new SwisTrackPanelCanvas(parent,panel,wxDefaultPosition, wxSize(parent->width/3,parent->height/3));
+		canvas = new SwisTrackPanelCanvas(parent,panel,wxDefaultPosition, wxSize(640/3,480/3));
 		panelsizer->Add(canvas, 0, wxALIGN_CENTER,10);	
 	}
 

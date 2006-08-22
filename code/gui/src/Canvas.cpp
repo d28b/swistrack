@@ -52,7 +52,7 @@ void Canvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 void Canvas::OnMouseClick(wxMouseEvent &event)
 {
 	int u = event.GetX();
-	int v = parent->height-event.GetY();
+	int v = event.GetY();
 	
    	parent->mx=u;
 	parent->my=v;

@@ -70,7 +70,7 @@ public:
   
 	// bitmap
 	wxBitmap* colorbmp;
-	int width, height;
+	//int width, height;
 
     // event handlers (these functions should _not_ be virtual)
 	void OnHelp(wxCommandEvent& WXUNUSED(event));

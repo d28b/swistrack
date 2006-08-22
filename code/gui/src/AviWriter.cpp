@@ -7,7 +7,7 @@ AviWriter::AviWriter(wxString* fname, SwisTrack* parent, int type=RAWIMAGE)
                         fname->GetData(),
                         -1,
                         parent->GetDisplaySpeed(),
-                        cvSize(parent->width,parent->height)
+                        cvSize(parent->ot->GetImagePointer()->width,parent->ot->GetImagePointer()->height)
                       );
     this->parent    = parent;
 }

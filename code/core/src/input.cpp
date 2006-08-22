@@ -171,8 +171,6 @@ IplImage* Input::GetFrame()
 			case 2:{ ////////////////// USB Camera ////////////////
 				   if(Capture){
                     input =  cvQueryFrame( Capture );
-					cvNamedWindow("Input",0);
-					cvShowImage("Input",input);
                     if (input)  // Get a pointer to the current frame (if query was successful)
                         {
                         nFrame++;                         // Increment the frame counter.

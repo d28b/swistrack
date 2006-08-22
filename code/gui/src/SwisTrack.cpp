@@ -143,7 +143,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	show_coverage=0; // don't show coverage image
 	display_speed=5; //initial display speed 5Hz
 	fps=30; // initial guess for the FPS of our video
-	width=640; height=480; // initial guess for video resolution
+//	width=640; height=480; // initial guess for video resolution
 
 //	transform = NULL;
 	trackingpanel = NULL;
@@ -708,7 +708,7 @@ void SwisTrack::RefreshAllDisplays()
 			//tmp = cvCloneImage(ot->GetCoveragePointer());
 		}
 		cvFlip(tmp);
-		wxImage* colorimg = new wxImage(width,height,(unsigned char*) tmp->imageData,TRUE);
+		wxImage* colorimg = new wxImage(tmp->width,tmp->height,(unsigned char*) tmp->imageData,TRUE);
 		if(colorbmp){
 			delete(colorbmp);
 			colorbmp=NULL;
@@ -729,9 +729,9 @@ void SwisTrack::RefreshAllDisplays()
 
 		cvFlip(tmp);
 
-		wxImage* binaryimg = new wxImage(width,height,(unsigned char*) (tmp->imageData),TRUE);
+		wxImage* binaryimg = new wxImage(tmp->width,tmp->height,(unsigned char*) (tmp->imageData),TRUE);
 		segmenterpanel->Clear();
-		segmenterpanel->CreateBitmapfromImage((&(binaryimg->Rescale(width/3,height/3))),3); //
+		segmenterpanel->CreateBitmapfromImage((&(binaryimg->Rescale(tmp->width/3,tmp->height/3))),3); //
 		segmenterpanel->Refresh();
 		delete binaryimg;
 		cvReleaseImage(&tmp);
@@ -797,7 +797,7 @@ CvPoint SwisTrack::GetUserEstimateFor(int id)
 
 	else{
 
-		return(cvPoint(width/2,height/2));
+		return(cvPoint(0,0));
 	}
 }
 
@@ -851,7 +851,7 @@ void SwisTrack::OnSetAviOutput(wxCommandEvent& WXUNUSED(event))
 
 void SwisTrack::OnEnableAVI(wxCommandEvent &event)
 {
-
+/** \todo You should not be able to enable the aviwriter before the input dimensions are known */
 	if(!aviwriter){
 		int type;
 		int result = UserInputModal("Do you want to overlay the AVI output with trajectory information?","AVI Output");
