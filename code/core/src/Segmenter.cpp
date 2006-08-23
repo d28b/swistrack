@@ -66,16 +66,15 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 			IplImage* bg = cvLoadImage(GetValByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='0']/BGIMAGE"), -1); 						
 			if (!bg){
 				status = CAN_NOT_OPEN_BACKGROUND_FILE;
-				throw "Can not open background file";
+				throw "[Segementer::Segmenter] Can not open background file";
 			}
 
 			background = cvCreateImage(input->GetInputDim(),input->GetInputDepth(),1);
-			int i=bg->nChannels;
-			switch(i)
+			switch(bg->nChannels)
 			{
-				//RGB case, we convert in Gray
+				//BGR case, we convert in Gray
 			case 3:
-				cvCvtColor(bg,background,CV_RGB2GRAY);
+				cvCvtColor(bg,background,CV_BGR2GRAY);
 				break;
 				//Already in Gray
 			case 1:
@@ -93,7 +92,7 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 			if (!background)
 			{
 				status = CAN_NOT_OPEN_BACKGROUND_FILE;
-				throw "Can not open background file";
+				throw "[Segmenter::Segmenter] Can not create background file";
 			}
 			//We always calculate the background average, so we can select if we use the moving threshold during the segmentation
 			backgroundAverage=(int)cvMean(background);
@@ -108,12 +107,11 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 			CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTER[@mode='1']/ALPHA");
 			
 			background = cvCreateImage(input->GetInputDim(),input->GetInputDepth(),1);
-			int i=input->GetInputNbChannels();
-			switch(i)
+			switch(input->GetInputNbChannels())
 			{
-				//RGB case, we convert in Gray
+				//BGR case, we convert in Gray
 			case 3:
-				cvCvtColor(input->GetInputIpl(),background,CV_RGB2GRAY);
+				cvCvtColor(input->GetInputIpl(),background,CV_BGR2GRAY);
 				break;
 				//Already in Gray
 			case 1:
@@ -123,6 +121,11 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 			default:
 				cvCvtPixToPlane(input->GetInputIpl(),background,NULL,NULL,NULL);
 				break;
+			}
+			if (!background)
+			{
+				status = CAN_NOT_OPEN_BACKGROUND_FILE;
+				throw "[Segmenter::Segmenter] Can not create background file";
 			}
 			break;
 		}
@@ -164,6 +167,7 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 				cvReleaseImage(&Green);
 				cvReleaseImage(&Blue);
 				cvReleaseImage(&tmpImage);
+				// Flip image because AVI provides bottom left images and BMP top left.
 				cvFlip(background,background,0);
 				break;
 				}
@@ -224,7 +228,6 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 */
 Segmenter::~Segmenter()
 {
-
 	if (binary) cvReleaseImage( &binary );
 	if (background) cvReleaseImage( &background );
 }
@@ -250,7 +253,8 @@ int Segmenter::GetStatus()
 * \result Returns progress in the format specified by 'kind'
 * \todo Get the framerate from the camera in order to calculate the right time
 */
-double Segmenter::GetProgress(int kind){
+double Segmenter::GetProgress(int kind)
+{
 	return(input->GetProgress(kind));
 }
 
@@ -297,9 +301,9 @@ void Segmenter::Segmentation()
 				//We convert the input image in black and white
 				switch(inputImg->nChannels)
 				{
-					//RGB case, we convert in Gray
+					//BGR case, we convert in Gray
 				case 3:
-					cvCvtColor(inputImg,tmpImage,CV_RGB2GRAY);
+					cvCvtColor(inputImg,tmpImage,CV_BGR2GRAY);
 					break;
 					//Already in Gray
 				case 1:
@@ -310,15 +314,12 @@ void Segmenter::Segmentation()
 					cvCvtPixToPlane(inputImg,tmpImage,NULL,NULL,NULL);
 					break;
 				}
-
-				cvAbsDiff(tmpImage, background, binary);
+				//Correct the tmpImage with the difference in image mean
 				if (fixedThresholdBoolean==0)
-				{
-					int currentImageAverage=(int)cvMean(inputImg);
-					cvThreshold(binary,binary, (bin_threshold+currentImageAverage-backgroundAverage), 255,  CV_THRESH_BINARY);
-				}
-				else
-					cvThreshold(binary,binary, bin_threshold, 255,  CV_THRESH_BINARY);
+					cvAddS(tmpImage,cvScalar(backgroundAverage-cvMean(tmpImage)),tmpImage);
+				//Background Substraction
+				cvAbsDiff(tmpImage, background, binary);
+				cvThreshold(binary,binary, bin_threshold, 255,  CV_THRESH_BINARY);
 			}
 			catch(...)
 			{
@@ -336,9 +337,9 @@ void Segmenter::Segmentation()
 				//We convert the input image in black and white
 				switch(inputImg->nChannels)
 				{
-					//RGB case, we convert in Gray
+					//BGR case, we convert in Gray
 				case 3:
-					cvCvtColor(inputImg,tmpImage,CV_RGB2GRAY);
+					cvCvtColor(inputImg,tmpImage,CV_BGR2GRAY);
 					break;
 					//Already in Gray
 				case 1:
@@ -348,9 +349,12 @@ void Segmenter::Segmentation()
 				default:
 					cvCvtPixToPlane(inputImg,tmpImage,NULL,NULL,NULL);
 					break;
-				}				
+				}
+				//Update background
                 cvAddWeighted(tmpImage,alpha,background,1.0-alpha,0,background);				
+				//Background substraction
 				cvAbsDiff(tmpImage, background, binary);
+				//Threshold
 				cvThreshold(binary,binary, bin_threshold, 255,  CV_THRESH_BINARY);
 			}
 			catch(...)
@@ -361,8 +365,7 @@ void Segmenter::Segmentation()
 		}
 		break;
 	case 2:
-		{ /////////// BACKGROUND SUBTRACTION, color ration, color image ////////////////
-			IplImage* tmpImage = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,3);
+		{ /////////// BACKGROUND SUBTRACTION, color ration, color image ////////////////			
 			try
 			{
 				// no special treatment needed in this case
@@ -371,6 +374,7 @@ void Segmenter::Segmentation()
 					//RGB, perfect
 				case 3:
 					{
+						IplImage* tmpImage = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,3);
 						//Create an image with the R/G and R/B factor
 						IplImage* Red = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
 						IplImage* Green = cvCreateImage(input->GetInputDim(),IPL_DEPTH_32F,1);
@@ -399,13 +403,14 @@ void Segmenter::Segmentation()
 						//We divide by Rb/Bb
 						cvDiv(Blue,Red,Blue);
 
-						//We combined the two in Red
+						//We combined the two in Red (factor 50 is to make the values more easy to variate with the threshold slider
 						cvAddWeighted(Green,50,Blue,50,0,Red);
    						cvThreshold(Red,binary, bin_threshold, 255,  CV_THRESH_BINARY);
-						cvSetImageCOI(background,0);
+						cvSetImageCOI(background,0);						
 						cvReleaseImage(&Red);
 						cvReleaseImage(&Green);
 						cvReleaseImage(&Blue);
+						cvReleaseImage(&tmpImage);
 						break;
 					}
 					//We will not be able to work
@@ -418,20 +423,19 @@ void Segmenter::Segmentation()
 			{
 				throw "[Segmenter::Segmentation] with fixed background failed and color ratio";
 			}
-			cvReleaseImage(&tmpImage);
 			break;
 		}
 	case 3://Tracking a specified color
 		{	
 			try
 			{
-				IplImage* tmpImage;
 				// no special treatment needed in this case
 				switch(inputImg->nChannels)
 				{
 					//RGB, perfect
 				case 3:
-					{	
+					{
+						IplImage* tmpImage;
 						if (workingWithColorRatioBoolean)
 						{
 							//Create an image with the R/G and R/B factor
@@ -486,6 +490,7 @@ void Segmenter::Segmentation()
 							cvReleaseImage(&Green);
 							cvReleaseImage(&Blue);
 						}
+						cvReleaseImage(&tmpImage);
 						break;
 					}
 					//We will not be able to work
@@ -493,7 +498,6 @@ void Segmenter::Segmentation()
 					throw "[Segmenter::Segmentation] The input image doesn't have 3 channels";
 					break;
 				}
-				cvReleaseImage(&tmpImage);
 			}
 			catch(...)
 			{

@@ -128,7 +128,7 @@ void ParticleFilter::GetParticlesFromContours()
 	{
 	case 0:
 		{
-			//Control if max_number is not to slow
+			//Control if max_number is not to small
 			if (max_number<=0)
 				throw "[ParticleFilter::GetParticlesFromContours] Max Number of blob must be greater or equal to 1";
 			//We get the binary image from the segmenter, we make a copy because the image is modified during blobs extraction
@@ -215,6 +215,7 @@ void ParticleFilter::GetParticlesFromContours()
 			}
 			cvReleaseImage(&src_tmp);
 			cvReleaseMemStorage(&storage);
+			cvRelease((void**)&contour);
 		}
 		break;
 	default: throw "[ParticleFilter::GetParticlesFromContours()] Mode not implemented.";

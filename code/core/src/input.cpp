@@ -71,14 +71,11 @@ Input::Input(xmlpp::Element* cfgRoot)
             
             theCamera.StartImageAcquisition();
             input=cvCreateImage(cvSize(theCamera.m_width,theCamera.m_height),8,3);
+			//Always color
+			isinputincolor=1;
             QueryFrame1394(input);
-            if(input){
-                if(strcmp(input->colorModel,"GRAY")==0)
-                    isinputincolor=0;
-                else
-                    isinputincolor=1;
-			}
-			else{
+            if(!input)
+			{
 				throw "[Input::Input] Could not read from IEEE1394 camera";
 			}
             
@@ -186,21 +183,20 @@ IplImage* Input::GetFrame()
 				   break;
             default : throw "[Input::GetFrame] Illegal input mode";
             }
-			return 0;
+			return NULL;
 }
 
 
 void Input::QueryFrame1394(IplImage* input)
 			{
-#ifdef _1394			
-			while (theCamera.AcquireImage() != CAM_SUCCESS)
+#ifdef _1394
+			//Get a new frame from the camera and throw an error if we grab nothing.
+			if (theCamera.AcquireImage() != CAM_SUCCESS)
 				throw "[Input::QueryFrame1394] Camera acquisition error";
+			//point the input IPLImage to the camera buffer
 			input->imageData=(char*) theCamera.m_pData;
+			//Convert the input in the right format (RGB to BGR)
 			cvCvtColor(input,input,CV_RGB2BGR);
-			/** \todo get dimensions from camera */
-			input->width=640;
-			input->height=480;
-			input->nChannels=3;
 #endif
 			}
 
