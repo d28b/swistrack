@@ -558,7 +558,7 @@ bool Calibration::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 	cvMatMul(pseudoinverse32f, objectmatrix32f, cameratransform32f);
 
 
-/*	FILE* f1=fopen("imagematrix.dat","w");
+	FILE* f1=fopen("imagematrix.dat","w");
 	FILE* f2=fopen("pseudoinverse.dat","w");
 	FILE* f3=fopen("objectmatrix.dat","w");
 	
@@ -570,7 +570,7 @@ bool Calibration::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 		fprintf(f3,"%f\n",objectmatrix32f->data.fl[j]);
 		}
 
-	for(j=0; j<12; j++){
+	for(int j=0; j<12; j++){
 		for(i=0; i<2*ps; i++){
 			fprintf(f2,"%f ",pseudoinverse32f->data.fl[j*2*ps+i]);
 			}
@@ -582,7 +582,7 @@ bool Calibration::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 	fclose(f1);
 	fclose(f2);
 	fclose(f3);
-*/	
+	
 
 	// copy cameratransformation to appropriate format
 	for(i=0;i<12;i++)
