@@ -460,8 +460,10 @@ void Segmenter::Segmentation()
 							//We put abs(R/B-Rb/Bb) in Blue
 							cvAbsDiffS(Blue,Blue,cvScalar(rbWeight));
 
-							//We combined the two in Red
-							cvAddWeighted(Green,10*rgWeight,Blue,10*rbWeight,0,Red);
+							//We combined the two in Red							
+							cvAddWeighted(Green,rgWeight*50,Blue,rbWeight*50,0,Red);
+											
+
 							//Test if the color describe the foreground or the background
 							if (colorDescribeForegroundBoolean)
 								cvThreshold(Red,binary, bin_threshold, 255,  CV_THRESH_BINARY_INV);
@@ -512,8 +514,8 @@ void Segmenter::Segmentation()
 		break;
 	}
 	// Perform a morphological opening to reduce noise. 
-	
-	cvErode(binary, binary, NULL, 2);
+	cvDilate(binary,binary,NULL,1);
+	cvErode(binary, binary, NULL, 3);
 	cvDilate(binary, binary, NULL, 2);
 
 }
