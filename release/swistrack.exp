@@ -51,7 +51,7 @@
   -->
   <SEGMENTER mode="0" desc="Static Background, fixed threshold" long="The image is segmented by subtracting a static background image from every frame in the video. The 'Threshold' determines the minimal difference for the gray value of an object to be recognized, and 'Max. Number' is the maximal number of contours processed (sorted by size).">
     <THRESHOLD desc="Threshold" type="integer" min="1" max="150" variable="1">20</THRESHOLD>
-    <FIXED desc="Fixed or based on image average" type="boolean" variable="1">0</FIXED>
+    <FIXED desc="Fixed" type="boolean" variable="1">0</FIXED>
     <BGIMAGE desc="Background Image" type="open" param="*.bmp">example/bg.bmp</BGIMAGE>    
   </SEGMENTER>
   <SEGMENTER mode="1" desc="Running Average" long="The image is segmented by subtracting a static background image from every frame in the video. The 'Threshold' determines the minimal difference for the gray value of an object to be recognized, and 'Max. Number' is the maximal number of contours processed (sorted by size). 'Alpha' is the speed of the exponential averager.">
