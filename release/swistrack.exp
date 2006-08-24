@@ -43,11 +43,6 @@
   <INPUT mode="2" desc="Native video driver" long="Windows: Video for Windows (VFW) and Matrox Imaging Library (MIL).\nLinux: V4L and FireWire (IEEE1394).">
   </INPUT>
   <!---
-					    Image Filter Tab
-  -->
-  <IMAGEFILTER mode="0" desc="Noise Filter" long="This filter performs a simple erosion and dilusion">
-  </IMAGEFILTER>
-  <!---
                                   Segmenter Tab
   -->
   <SEGMENTER mode="0" desc="Static Background, fixed threshold" long="The image is segmented by subtracting a static background image from every frame in the video. The 'Threshold' determines the minimal difference for the gray value of an object to be recognized, and 'Max. Number' is the maximal number of contours processed (sorted by size).">
