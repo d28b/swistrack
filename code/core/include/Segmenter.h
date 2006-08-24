@@ -110,6 +110,19 @@ class Segmenter : public Component
 		/** Working with color ratio boolean (Mode 3) (0 false, 1 true)*/
 		int workingWithColorRatioBoolean;
 
+
+		//Post-Processing variables
+		/** Using a mask during the Post-processing (0 false, 1 true)*/
+		int usingMaskBoolean;
+		/** Mask Image */
+		IplImage* mask;
+		/** Number of dilates at the first step*/
+		int firstDilate;
+		/** Number of erodes at the second step*/
+		int firstErode;
+		/** Number of dilates at the third step*/
+		int secondDilate;
+
 		
 		double GetSqrDist(CvPoint2D32f p1, CvPoint2D32f p2);
 	};

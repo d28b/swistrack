@@ -33,7 +33,7 @@ extern void UpdateMouse(int event, int x, int y, int flags, void* param);
 * READY_TO_START.
 *
 */
-Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : binary(0),background(0),inputImg(0)
+Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : binary(0),background(0),inputImg(0),mask(0)
 {    
 
 	this->cfgRoot=cfgRoot;
@@ -221,6 +221,29 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 		throw "[Segmenter::Segmenter] Segmenter mode not implemented";
 	}
 
+	//Test Post Processing Variables
+	if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/SEGMENTERPP","mode"))
+	 throw "[Segmenter::Segmenter] Segmenter Post Processing mode undefined (/CFG/COMPONENTS/SEGMENTERPP)";
+	CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']");
+	CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/FIRSTDILATE");
+	CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/FIRSTERODE");
+	CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/SECONDDILATE");
+	CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/USINGMASK");
+	CreateExceptionIfEmpty(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/MASKIMAGE");
+	if(GetIntValByXPath(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/USINGMASK"))
+	{
+		mask = cvLoadImage(GetValByXPath(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/MASKIMAGE"), -1); 						
+		if (!mask)
+		{
+			throw "[Segementer::Segmenter] Can not open mask file";
+		}
+		if (mask->nChannels!=1)
+			throw "[Segmenter::Segmenter] The mask must be a black and white image";
+		// Flip image because AVI provides bottom left images and BMP top left.
+		cvFlip(mask);
+	}
+
+
 	SetParameters(); // should query all VARIABLE parameters from CFG 
 }
 
@@ -230,6 +253,8 @@ Segmenter::~Segmenter()
 {
 	if (binary) cvReleaseImage( &binary );
 	if (background) cvReleaseImage( &background );
+	if (mask) cvReleaseImage(&mask);
+	if (inputImg) cvReleaseImage(&inputImg);
 }
 
 /** Returns Status
@@ -513,10 +538,16 @@ void Segmenter::Segmentation()
 		}
 		break;
 	}
-	// Perform a morphological opening to reduce noise. 
-	cvDilate(binary,binary,NULL,1);
-	cvErode(binary, binary, NULL, 3);
-	cvDilate(binary, binary, NULL, 2);
+	//If we want to use a mask, perform an AND function between the binary image and the mask
+	if (usingMaskBoolean)
+		cvAnd(binary,mask,binary);
+	// Perform a morphological opening to reduce noise.
+	if (firstDilate)
+		cvDilate(binary,binary,NULL,firstDilate);
+	if (firstErode)
+		cvErode(binary, binary, NULL, firstErode);
+	if (secondDilate)
+		cvDilate(binary, binary, NULL, secondDilate);
 
 }
 
@@ -631,6 +662,11 @@ void Segmenter::SetParameters()
 		}
 		break;
 	}
+	//Saving Post-Processing Values
+	firstDilate = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/FIRSTDILATE");
+	firstErode = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/FIRSTERODE");
+	secondDilate = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/SECONDDILATE");
+	usingMaskBoolean = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/USINGMASK");
 }
 
 double Segmenter::GetFPS()
