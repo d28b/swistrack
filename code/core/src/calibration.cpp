@@ -558,7 +558,7 @@ bool Calibration::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 	cvMatMul(pseudoinverse32f, objectmatrix32f, cameratransform32f);
 
 
-	FILE* f1=fopen("imagematrix.dat","w");
+/*	FILE* f1=fopen("imagematrix.dat","w");
 	FILE* f2=fopen("pseudoinverse.dat","w");
 	FILE* f3=fopen("objectmatrix.dat","w");
 	
@@ -581,7 +581,7 @@ bool Calibration::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 	
 	fclose(f1);
 	fclose(f2);
-	fclose(f3);
+	fclose(f3);****/
 	
 
 	// copy cameratransformation to appropriate format
@@ -618,7 +618,27 @@ bool Calibration::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 	dxy.y=wc.y+wt.y;
 	printf("Center offset: (%f/%f)\n",dxy.x,dxy.y);
 
-
+	//Write to a file what is needed to make a manual transformation
+	FILE* f4=fopen("transformation.dat","w");
+	fprintf(f4,"Meani \n");
+	fprintf(f4,"%f %f\n",meani.x,meani.y);
+	fprintf(f4,"Meano \n");
+	fprintf(f4,"%f %f\n",meano.x,meano.y);
+	fprintf(f4,"Stdi \n");
+	fprintf(f4,"%f %f\n",stdi.x,stdi.y);
+	fprintf(f4,"Stdo \n");
+	fprintf(f4,"%f %f\n",stdo.x,stdo.y);
+	fprintf(f4,"CameraMatrix \n");
+	for(i=0;i<12;i++)
+	{
+		fprintf(f4,"%f \n",cameraMatrix32f->data.fl[i]);		
+	}
+	fprintf(f4,"Transformation Matrix \n");
+	for(i=0;i<4;i++)
+	{
+		fprintf(f4,"%f \n",transformationMatrix32f->data.fl[i]);		
+	}
+	fclose(f4);
 	/*FILE* f4=fopen("trackerpattern.dat","w");
 	for(j=0; j<ps; j++){
 		CvPoint2D32f calibpoint;
@@ -857,15 +877,29 @@ try{
 		}
 	fclose(f4);
 
-
-	FILE* f5=fopen("cameramatrix.dat","w");
-	for(i=0;i<12;i++){
-		
+*/
+	//Write what is needed to do a manual transformation
+	FILE* f4=fopen("transformation.dat","w");
+	fprintf(f4,"%Meani \n");
+	fprintf(f4,"%d \n",meani.x);
+	fprintf(f4,"%d \n",meani.y);
+	fprintf(f4,"%Meano \n");
+	fprintf(f4,"%d \n",meano.x);
+	fprintf(f4,"%d \n",meano.y);
+	fprintf(f4,"%Stdi \n");
+	fprintf(f4,"%d \n",stdi.x);
+	fprintf(f4,"%d \n",stdi.y);
+	fprintf(f4,"%Stdo \n");
+	fprintf(f4,"%d \n",stdo.x);
+	fprintf(f4,"%d \n",stdo.y);
+	fprintf(f4,"%CameraMatrix \n");
+	for(i=0;i<12;i++)
+	{
 		fprintf(f4,"%d \n",cameraMatrix32f->data.fl[i]);
 		printf("CameraMatrix[%d]: %f\n",i,cameraMatrix32f->data.fl[i]);
-		}
+	}
 	fclose(f4);
-*/
+
 	cvDestroyWindow("Calibration");			// clean up all the memory we used. 
 	cvReleaseMat(&pseudoinverse32f);		// 
 	cvReleaseMat(&imagematrix32f);			//
