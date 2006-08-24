@@ -628,6 +628,8 @@ bool Calibration::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 	fprintf(f4,"%f %f\n",stdi.x,stdi.y);
 	fprintf(f4,"Stdo \n");
 	fprintf(f4,"%f %f\n",stdo.x,stdo.y);
+	fprintf(f4,"dxy \n");
+	fprintf(f4,"%f %f\n",dxy.x,dxy.y);
 	fprintf(f4,"CameraMatrix \n");
 	for(i=0;i<12;i++)
 	{
