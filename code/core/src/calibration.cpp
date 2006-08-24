@@ -631,14 +631,18 @@ bool Calibration::CalibrateRoundPattern(int h, int* nrofpoints, double vd){
 	fprintf(f4,"dxy \n");
 	fprintf(f4,"%f %f\n",dxy.x,dxy.y);
 	fprintf(f4,"CameraMatrix \n");
-	for(i=0;i<12;i++)
+	for (int i=0;i<cameraMatrix32f->rows;i++)
 	{
-		fprintf(f4,"%f \n",cameraMatrix32f->data.fl[i]);		
+		for (int j=0;j<cameraMatrix32f->cols;j++)
+			fprintf(f4,"%f\t",cvmGet(cameraMatrix32f,i,j));
+		fprintf(f4,"\n");
 	}
 	fprintf(f4,"Transformation Matrix \n");
-	for(i=0;i<4;i++)
+	for (int i=0;i<transformationMatrix32f->rows;i++)
 	{
-		fprintf(f4,"%f \n",transformationMatrix32f->data.fl[i]);		
+		for (int j=0;j<transformationMatrix32f->cols;j++)
+			fprintf(f4,"%f\t",cvmGet(transformationMatrix32f,i,j));
+		fprintf(f4,"\n");
 	}
 	fclose(f4);
 	/*FILE* f4=fopen("trackerpattern.dat","w");
