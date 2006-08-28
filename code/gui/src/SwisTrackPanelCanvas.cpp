@@ -49,3 +49,8 @@ void SwisTrackPanelCanvas::Clear()
 void SwisTrackPanelCanvas::CreateBitmapfromImage(const wxImage& img, int depth){
 	bmp=new wxBitmap(img,depth);
 }
+
+SwisTrackPanelCanvas::~SwisTrackPanelCanvas()
+{
+	if(bmp) delete bmp;
+}

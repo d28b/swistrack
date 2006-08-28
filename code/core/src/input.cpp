@@ -222,7 +222,7 @@ IplImage* Input::GetInputIpl(){
 Input::~Input()
 {
 		if (Capture) cvReleaseCapture( &Capture );
-		if (input) cvReleaseImage( &input);
+		//if (input) cvReleaseImage( &input);
 }
 
 double Input::GetFPS(){

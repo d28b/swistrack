@@ -54,9 +54,8 @@ Tracker::Tracker(Calibration* parent, xmlpp::Element* cfgRoot, TrackingImage* tr
 		sharedage.push_back(0);
 		oldshared.push_back(0);
 		restingtraj.push_back(0);
-		targets.push_back(
-			*(new Track(i,					// id number
-			trackingimg,nr_objects)));
+		targets.push_back(Track(i,					// id number
+			trackingimg,nr_objects));
 		}
 	
 	if(status==READY_TO_START){
@@ -697,7 +696,9 @@ void Tracker::DataAssociation()
 	for(p=particles->begin();p != particles->end();p++){ // create new noise trajectories
 		if(p->id==-1){
 //			printf("Create new noise trajectory (%d)\n",id);
-			ptargets.push_back(*(new Track(id,trackingimg,nr_objects)));
+			//Track* tmpTrack = new Track(id,trackingimg,nr_objects);
+			ptargets.push_back(Track(id,trackingimg,nr_objects));
+			//delete tmpTrack;
 			ptargets.back().AddPoint(p->p);
 			p->id=id;
 			id++;
@@ -713,7 +714,6 @@ void Tracker::DataAssociation()
 			if(!found){ ptargets.erase(t); break; }
 		}
 	}
-
 
     ///////////// If a noise trajectory seems to be reasonable, swap with the closest shared trajectory ///////////////////
 

@@ -19,6 +19,7 @@ class SwisTrackPanelCanvas: public wxPanel // wxScrolledWindow
 {
   public:
   SwisTrackPanelCanvas(SwisTrack* parent, wxPanel *loc,const wxPoint& pos, const wxSize& size);
+  ~SwisTrackPanelCanvas();
   void Clear();
   void CreateBitmapfromImage(const wxImage& img, int depth = -1);    
   void OnPaint(wxPaintEvent& WXUNUSED(event));

@@ -75,17 +75,12 @@ class Track : public Component
 	public:
 		void SetCritPoint(CvPoint2D32f* p);
 //		int touch;
-		
 		int id;					/*< Holds ID number of track */
-		
 		vector<CvPoint2D32f> trajectory; /*< Info about objects being tracked */
-
 		/** Critical point */
-		CvPoint2D32f critpoint;
-		
+		CvPoint2D32f critpoint;		
 		/** Constructor - id number id*/
-		Track(int idnumber,TrackingImage* trackingimg,int n_objects);
-		
+		Track(int idnumber,TrackingImage* trackingimg,int n_objects);	
 		/** Add a point to the current track (max track) */
 		void AddPoint(CvPoint2D32f p);
 		
@@ -98,8 +93,7 @@ class Track : public Component
 		
 		void DrawTrajectory(int style,int length=0);
 		void DrawCross(CvPoint center, int width , CvScalar color);
-		
-		
+				
 		/** Destructor */
 		~Track(void);
 		

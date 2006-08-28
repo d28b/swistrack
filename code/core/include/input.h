@@ -19,6 +19,7 @@ class Input : public Component
 public:
 	void SetParameters();
 	Input(xmlpp::Element* cfgRoot);
+	virtual ~Input();
 	IplImage* GetFrame();
 	double GetProgress(int kind);
 	CvSize GetInputDim();
@@ -42,11 +43,6 @@ private:
 		C1394Camera theCamera;  //!< Camera handle (CMU 1394 Camera Driver)
 #endif		
 		void QueryFrame1394(IplImage* input);
-
-		
-
-protected:
-	~Input();
 };
 
 #endif

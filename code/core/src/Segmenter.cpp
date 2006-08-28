@@ -254,7 +254,9 @@ Segmenter::~Segmenter()
 	if (binary) cvReleaseImage( &binary );
 	if (background) cvReleaseImage( &background );
 	if (mask) cvReleaseImage(&mask);
-	if (inputImg) cvReleaseImage(&inputImg);
+	//if (inputImg) cvReleaseImage(&inputImg);
+	if (input) delete input;
+
 }
 
 /** Returns Status
