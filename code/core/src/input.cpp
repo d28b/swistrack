@@ -62,8 +62,8 @@ Input::Input(xmlpp::Element* cfgRoot)
 			theCamera.m_controlGain.SetAutoMode(false); //Set gain control to manual
 			theCamera.m_controlAutoExposure.TurnOn(false); //Set auto exposure to manual
 			theCamera.m_controlWhiteBalance.SetAutoMode(false); //Set White balance to manual
-			theCamera.SetBrightness(240);
-			theCamera.SetAutoExposure(267);
+			theCamera.SetBrightness(271);
+			theCamera.SetAutoExposure(511);
 			theCamera.SetSharpness(73);
 			theCamera.SetWhiteBalance(172,69);
 			theCamera.SetSaturation(103);
