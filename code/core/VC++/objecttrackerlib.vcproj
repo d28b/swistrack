@@ -121,7 +121,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="I:\library\libxml++,../../xmlcfg/include,../../libblob/include,../include,../../calibration/include"
+				AdditionalIncludeDirectories="&quot;I:\library\libxml++&quot;;../../xmlcfg/include;../../libblob/include;../include;../../calibration/include;I:\swistrack\LPM_VISLIB\include;I:\library\opencv\cv\include;I:\library\opencv\cxcore\include;I:\library\opencv\otherlibs\highgui;I:\library\1394camera\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="2"

@@ -48,7 +48,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../include;I:\library\glibmm\glib\glibmm;../../xmlcfg/include;../../libblob/include;../../core/include;../../calibration/include;I:\library\1394camera\include;I:\library\wxWidgets\include;I:\library\wxWidgets\lib\vc_lib\mswd;I:\library\opencv\otherlibs\highgui;I:\library\opencv\cv\include;I:\library\libblob\include;I:\library\opencv\cxcore\include;&quot;I:\library\libxml++&quot;;..\..\..\LPM_VISLIB\include;I:\library\opencv\otherlibs\cvcam\include"
+				AdditionalIncludeDirectories="../include;I:\library\glibmm\glib\glibmm;../../xmlcfg/include;../../libblob/include;../../core/include;../../calibration/include;I:\library\1394camera\include;I:\library\wxWidgets\include;I:\library\wxWidgets\lib\vc_lib\mswd;I:\library\opencv\otherlibs\highgui;&quot;C:\Documents and Settings\admin\Desktop\test\library\opencv\cv\include&quot;;I:\library\opencv\cv\include;I:\library\libblob\include;I:\library\opencv\cxcore\include;&quot;I:\library\libxml++&quot;;..\..\..\LPM_VISLIB\include;I:\library\opencv\otherlibs\cvcam\include;I:\swistrack\LPM_VISLIB\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WINDOWS__;__WXMSW__;__WIN95__;__WIN32__"
 				StringPooling="true"
 				RuntimeLibrary="2"

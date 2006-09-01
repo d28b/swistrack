@@ -50,7 +50,7 @@ ObjectTracker::~ObjectTracker()
 */
 void ObjectTracker::Stop(){
 	
-	stop=1;
+ 	stop=1;
 	if(calibration) delete(calibration);
 	calibration=NULL;
 //	if(trackingimg) delete(trackingimg);
