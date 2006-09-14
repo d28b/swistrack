@@ -1166,5 +1166,5 @@ CvPoint2D32f* Tracker::GetParticlePos(int id)
 
 CvPoint2D32f* Tracker::GetTargetPos(int id)
 {
-	return(&(*(targets.at(id).trajectory.end())));
+	return(&(targets.at(id).trajectory.back()));
 }

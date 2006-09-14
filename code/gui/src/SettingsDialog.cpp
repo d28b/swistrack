@@ -135,6 +135,9 @@ SettingsDialog::SettingsDialog(SwisTrack *parent) : actid(wxID_HIGHEST+1), paren
 		wxString msg(str);
 		parent->DisplayModal(msg,"Error");
 	}
+	catch (xmlpp::exception & e) {
+		parent->DisplayModal(e.what(), "Xml Parsing Error");
+	}
 }
 
 void SettingsDialog::CreateDialog(){

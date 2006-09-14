@@ -50,15 +50,25 @@ Input::Input(xmlpp::Element* cfgRoot)
 				throw "[Input::Input] Can not access 1394 Camera";
                 return;
                 }
-            
-            theCamera.InitCamera();
+            if (theCamera.InitCamera() != CAM_SUCCESS){
+				throw "[Input::Input] Can not Init 1394 Camera";
+                return;
+                }
+
+			theCamera.StatusControlRegisters();
+
+			
             
             /**
             * \todo Fetch parameters from CFG instead setting default values 
             */
-            theCamera.SetVideoFrameRate(3); // 15fps
-            theCamera.SetVideoFormat(0);    // 640x480, 
-            theCamera.SetVideoMode(4);		//rgb   yuv411	
+             
+             theCamera.SetVideoFormat(0);    // 640x480, 
+             theCamera.SetVideoMode(4);		//rgb  
+			 theCamera.SetVideoFrameRate(1); // 15fps
+		
+
+			
 			theCamera.m_controlGain.SetAutoMode(false); //Set gain control to manual
 			theCamera.m_controlAutoExposure.TurnOn(false); //Set auto exposure to manual
 			theCamera.m_controlWhiteBalance.SetAutoMode(false); //Set White balance to manual
@@ -69,7 +79,9 @@ Input::Input(xmlpp::Element* cfgRoot)
 			theCamera.SetSaturation(103);
 			
             
-            theCamera.StartImageAcquisition();
+			if (theCamera.StartImageAcquisition() != 0) {
+				throw "[Input::Input] Could not start image acquisition";
+			}
             input=cvCreateImage(cvSize(theCamera.m_width,theCamera.m_height),8,3);
 			//Always color
 			isinputincolor=1;
@@ -191,8 +203,20 @@ void Input::QueryFrame1394(IplImage* input)
 			{
 #ifdef _1394
 			//Get a new frame from the camera and throw an error if we grab nothing.
-			if (theCamera.AcquireImage() != CAM_SUCCESS)
-				throw "[Input::QueryFrame1394] Camera acquisition error";
+			switch(theCamera.AcquireImage())
+			{
+			case CAM_SUCCESS:
+				{
+					break;
+				}
+			case CAM_ERROR_NOT_INITIALIZED:
+				{
+					throw "[Input::QueryFrame1394] Camera not initialized";
+					break;
+				}
+			default : throw "[Input::QueryFrame1394] Camera acquisition error";
+			}
+
 			//point the input IPLImage to the camera buffer
 			input->imageData=(char*) theCamera.m_pData;
 			//Convert the input in the right format (RGB to BGR)
