@@ -22,7 +22,7 @@
  
        Attributes for the parameter itself are as follows:
        The attribute "type" specifies, what kind the information is. Currently,
-       the following are available "int", "double", "string", "open", "save", "list". Some types
+       the following are available "int", "double", "string", "open", "save", "list", "boolean". Some types
        require parameters specified in the "param" attribute. For instance, "open" needs
        the filetype, e.g. "*.bmp". The type "list" expects entries separated by <li> tags.
        The default value is specified within the tags. 
@@ -31,15 +31,46 @@
        is not desired (for instance for the video feed, the attribute can be omitted).
 
   -->
-  </COMPONENTS>
-  <!---
+     </COMPONENTS>
+     <!---
                                   Input Tab
   -->
-  <INPUT mode="0" desc="AVI Video" long="The video source is provided by a video file">
-    <AVIFILE desc="AVI File" type="open" param="*.avi">example.avi</AVIFILE>
-  </INPUT>
-  <INPUT mode="1" desc="CMU 1394 Digital Camera Driver" long="The video source is provided by a IEEE FireWire Camera. See http://www.cs.cmu.edu/~iwan for details and compatible cameras.">
-  </INPUT>
+     <INPUT mode="0" desc="AVI Video" long="The video source is provided by a video file">
+       <AVIFILE desc="AVI File" type="open" param="*.avi">example.avi</AVIFILE>
+     </INPUT>
+     <INPUT mode="1" desc="CMU 1394 Digital Camera Driver" long="The video source is provided by a IEEE FireWire Camera. See http://www.cs.cmu.edu/~iwan for details and compatible cameras.">
+       <MODE desc="Resolution and Colour Model" type="list">
+         <li>160x120 YUV444</li>
+         <li>320x240 YUV422</li>
+         <li>640x480 YUV411</li>
+         <li>640x480 YUV422</li>
+         <li>640x480 RGB</li>
+         <li>640x480 MONO</li>
+         <li>800x600 YUV422</li>
+         <li>800x600 RGB</li>
+         <li>800x600 MONO</li>
+         <li>1024x768 YUV422</li>
+         <li>1024x768 RGB</li>
+         <li>1024x768 MONO</li>
+         <li>1280x960 YUV422</li>
+         <li>1280x960 RGB</li>
+         <li>1280x960 MONO</li>
+         <li>1600x1200 YUV422</li>
+         <li>1600x1200 RGB</li>
+         <li>1600x1200 MONO</li>
+       </MODE>
+       <FRAMERATE desc="Framerate" type="list">
+         <li>2 Hz</li>
+         <li>4 Hz</li>
+         <li>7 Hz</li>
+         <li>15 Hz</li>
+         <li>30 Hz</li>
+         <li>60 Hz</li>
+       </FRAMERATE>
+       <GAINCONTROL desc="Automatic Gain Control" type="boolean" variable="1">0</GAINCONTROL>
+       <EXPOSURE desc="Automatic Exposure Control" type="boolean" variable="1">0</EXPOSURE>
+       <WHITEBALANCE desc="Automatic White Balance" type="boolean" variable="1">0</WHITEBALANCE>  
+     </INPUT>
   <INPUT mode="2" desc="Native video driver" long="Windows: Video for Windows (VFW) and Matrox Imaging Library (MIL).\nLinux: V4L and FireWire (IEEE1394).">
   </INPUT>
   <!---

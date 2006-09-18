@@ -60,6 +60,7 @@
 	(ExtendParam(*((root)->find(path).begin()),value))
 
 #define SetParamByXPath(root,path,value)\
+		CreateExceptionIfEmpty(root,path);\
 		ClearParamByXPath(root,path);\
 		ExtendParamByXPath(root,path,value);
 
