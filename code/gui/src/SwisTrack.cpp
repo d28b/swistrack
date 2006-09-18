@@ -50,6 +50,7 @@ EVT_MENU(Gui_Mode_Intercept, SwisTrack::OnMenuIntercept)
 EVT_MENU(Gui_Ctrl_Stop, SwisTrack::OnMenuControlStop)
 EVT_MENU(Gui_View_ShowTracker, SwisTrack::OnMenuViewShowTracker)
 EVT_MENU(Gui_View_ShowSegmenter, SwisTrack::OnMenuViewShowSegmenter)
+EVT_MENU(Gui_View_ShowInput, SwisTrack::OnMenuViewShowInput)
 EVT_MENU_RANGE(Gui_View_TrajCross, Gui_View_ShowMask,SwisTrack::OnDrawingMode)
 EVT_MENU(Gui_Tools_SetAviOutput, SwisTrack::OnSetAviOutput)
 EVT_MENU(Gui_Tools_ShowCamera,SwisTrack::OnMenuToolsShow1394Camera)
@@ -148,6 +149,8 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 //	transform = NULL;
 	trackingpanel = NULL;
 	segmenterpanel = NULL;
+	inputpanel = NULL;
+
 	interceptionpanel = NULL;
 	aviwriter = NULL;
 	socketserver = NULL;
@@ -184,10 +187,12 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	menuControl->Enable(Gui_Ctrl_Continue,FALSE);
 	menuControl->Enable(Gui_Ctrl_Stop,FALSE);
 
-	menuView->Append(Gui_View_ShowTracker,_T("Show Tracker Control"),_T("Toggles window where tracking parameters can be changed"),TRUE);
+	menuView->Append(Gui_View_ShowTracker,_T("Show Tracker Panel"),_T("Toggles window where tracking parameters can be changed"),TRUE);
 	menuView->Check (Gui_View_ShowTracker, FALSE);
-	menuView->Append(Gui_View_ShowSegmenter,_T("Show Segmenter Control"),_T("Toggles window where segmenter parameters can be changed"),TRUE);
+	menuView->Append(Gui_View_ShowSegmenter,_T("Show Segmenter Panel"),_T("Toggles window where segmenter parameters can be changed"),TRUE);
 	menuView->Check(Gui_View_ShowSegmenter,FALSE);
+	menuView->Append(Gui_View_ShowInput,_T("Show Input Panel"),_T("Toggles window where input parameters can be changed"),TRUE);
+	menuView->Check(Gui_View_ShowInput,FALSE);
 	menuView->AppendSeparator();
 	menuView->AppendRadioItem(Gui_View_TrajCross, _T("cross only"));
 	menuView->AppendRadioItem(Gui_View_TrajNoID, _T("trace and cross"));
@@ -300,9 +305,6 @@ void SwisTrack::ProcessData(){
 	if(status==RUNNING){
 		pos=ot->GetProgress(2);		
 		time=ot->GetProgress(1)/1000.0;
-
-		/*if(datalogger)
-			datalogger->WriteRow((int) pos,time);*/
 
 		if(fmod(pos,10)){
 			char progress[200];
@@ -625,6 +627,17 @@ void SwisTrack::OnMenuViewShowSegmenter(wxCommandEvent& WXUNUSED(event))
 
 }
 
+/** \brief Event handler for the 'view->Show Input' checker
+*
+* If the item is checked, the input panel becomes visible.
+*/
+void SwisTrack::OnMenuViewShowInput(wxCommandEvent& WXUNUSED(event))
+{
+	bool checked = GetMenuBar()->GetMenu(2)->IsChecked(Gui_View_ShowInput);
+	if(inputpanel) inputpanel->Show(checked);
+
+}
+
 /** \brief Shuts down tracking, closes output files
 *
 * \todo Close output files here
@@ -651,6 +664,10 @@ void SwisTrack::ShutDown()
 	if(segmenterpanel){
 		segmenterpanel->Destroy();
 		segmenterpanel=NULL;
+	}
+	if(inputpanel){
+		inputpanel->Destroy();
+		inputpanel=NULL;
 	}
 	if(interceptionpanel){
 		interceptionpanel->Destroy();
@@ -734,6 +751,18 @@ void SwisTrack::RefreshAllDisplays()
 		segmenterpanel->CreateBitmapfromImage((&(binaryimg->Rescale(tmp->width/3,tmp->height/3))),3); //
 		segmenterpanel->Refresh();
 		delete binaryimg;
+		cvReleaseImage(&tmp);
+	}
+
+	if(ot->GetBinaryPointer() && GetMenuBar()->GetMenu(2)->IsChecked(Gui_View_ShowInput)){
+
+		IplImage* tmp = cvCloneImage(ot->GetRawImagePointer());
+
+		wxImage* rawimg = new wxImage(tmp->width,tmp->height,(unsigned char*) (tmp->imageData),TRUE);
+		inputpanel->Clear();
+		inputpanel->CreateBitmapfromImage((&(rawimg->Rescale(tmp->width/3,tmp->height/3))),3); //
+		inputpanel->Refresh();
+		delete rawimg;
 		cvReleaseImage(&tmp);
 	}
 }
@@ -903,13 +932,18 @@ void SwisTrack::StartTracker()
 		trackingpanel = new SwisTrackPanel(this,"Tracking panel","/CFG/TRACKER","/CFG/COMPONENTS/TRACKER",0); // ...and load new trackingpanel
 
 		if(segmenterpanel) segmenterpanel->Destroy();
-		segmenterpanel = new SwisTrackPanel(this,"Segmenter panel","/CFG/SEGMENTER","/CFG/COMPONENTS/SEGMENTER");
+		segmenterpanel = new SwisTrackPanel(this,"Segmenter panel","/CFG/SEGMENTER","/CFG/COMPONENTS/SEGMENTER",1);
+
+		if(inputpanel) inputpanel->Destroy();
+		inputpanel = new SwisTrackPanel(this,"Input panel","/CFG/INPUT","/CFG/COMPONENTS/INPUT",1);
 
 		if(interceptionpanel) interceptionpanel->Destroy();
 		interceptionpanel = new InterceptionPanel(this);
 
 		trackingpanel->Show(FALSE);
 		segmenterpanel->Show(FALSE);
+		inputpanel->Show(FALSE);
+
 		interceptionpanel->Show(FALSE);
 
 		wxToolBarBase *tb = GetToolBar();

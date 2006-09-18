@@ -91,8 +91,11 @@ public:
 	void OnMenuToolsShow1394Camera(wxCommandEvent& WXUNUSED(event));
     void OnMenuHelpAbout(wxCommandEvent& WXUNUSED(event));
 	void OnChangeDisplaySpeed(wxScrollEvent& WXUNUSED(event));
-	void OnMenuViewShowSegmenter(wxCommandEvent& WXUNUSED(event));
+	
 	void OnMenuViewShowTracker(wxCommandEvent& WXUNUSED(event));
+	void OnMenuViewShowSegmenter(wxCommandEvent& WXUNUSED(event));
+	void OnMenuViewShowInput(wxCommandEvent& WXUNUSED(event));
+
 	void OnDrawingMode(wxCommandEvent& event);
  	void OnMenuIntercept(wxCommandEvent& WXUNUSED(event));
 	
@@ -102,6 +105,7 @@ public:
     //control panels
 	SwisTrackPanel* trackingpanel;
 	SwisTrackPanel* segmenterpanel;
+	SwisTrackPanel* inputpanel;
 	InterceptionPanel* interceptionpanel;
 
 	//toolbar

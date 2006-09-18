@@ -22,6 +22,7 @@ enum
 	Gui_Ctrl_Pause,
 	Gui_View_ShowTracker,
 	Gui_View_ShowSegmenter,
+	Gui_View_ShowInput,
 	Gui_View_TrajCross,
     Gui_View_TrajNoID,
     Gui_View_TrajFull,
