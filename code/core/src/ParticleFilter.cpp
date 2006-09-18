@@ -71,10 +71,10 @@ int ParticleFilter::GetStatus()
 	return segmenter->GetStatus();
 }
 
-int ParticleFilter::init(int overhead)
+/*int ParticleFilter::init(int overhead)
 {
 	return segmenter->init(overhead);
-}
+}*/
 
 ParticleFilter::~ParticleFilter()
 {

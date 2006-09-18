@@ -34,7 +34,7 @@ public:
 
 	// Interface to 'Segmenter' class //
 	int GetStatus();
-	int init(int overhead=2);
+	//int init(int overhead=2);
 	double GetProgress(int kind);
 	double GetFPS();
 	void RefreshCoverage();

@@ -600,22 +600,10 @@ IplImage* Segmenter::GetInputImage()
 * \todo The segmenter has to be divided into input and segmenter part
 *     
 */
-int Segmenter::init(int overhead)
+/*int Segmenter::init(int overhead)
 {
-	/*
-	status = READY_TO_START;						// change status
-	for(int i=1; i<=overhead; i++){
-		if(mode == 1){ // ESTIMATE
-			inputImg=input->GetFrame();
-			cvConvertScale(inputImg,inputImg,0.3);
-			cvConvertScale(background,background,0.7);
-			cvAdd(inputImg,background,background);
-		}
-	}
-	trackingimg->RefreshCoverage(background);
-	*/
 	return(OK);
-}
+}*/
 
 
 double Segmenter::GetSqrDist(CvPoint2D32f p1, CvPoint2D32f p2)

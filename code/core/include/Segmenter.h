@@ -70,7 +70,7 @@ class Segmenter : public Component
 		virtual ~Segmenter();
 		int GetStatus();
 		double GetProgress(int kind);
-		int init(int overhead=2);
+		//int init(int overhead=2);
 		int Step();
 		/** Color image to display tracking progress */
 		TrackingImage* trackingimg;

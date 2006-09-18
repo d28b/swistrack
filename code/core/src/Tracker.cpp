@@ -58,9 +58,9 @@ Tracker::Tracker(Calibration* parent, xmlpp::Element* cfgRoot, TrackingImage* tr
 			trackingimg,nr_objects));
 		}
 	
-	if(status==READY_TO_START){
+/*	if(status==READY_TO_START){
 		status=particlefilter->init(100); // initializes segmenter
-		}
+		}*/
 	}
 
 Tracker::~Tracker()
