@@ -67,10 +67,16 @@
          <li>30 Hz</li>
          <li>60 Hz</li>
        </FRAMERATE>
-       <GAINCONTROL desc="Automatic Gain Control" type="boolean" variable="1">0</GAINCONTROL>
-       <EXPOSURE desc="Automatic Exposure Control" type="boolean" variable="1">0</EXPOSURE>
-       <WHITEBALANCE desc="Automatic White Balance" type="boolean" variable="1">0</WHITEBALANCE>  
-     </INPUT>
+       <AUTOGAINCONTROL desc="Automatic Gain Control" type="boolean" variable="1">0</AUTOGAINCONTROL>
+       <AUTOEXPOSURE desc="Automatic Exposure Control" type="boolean" variable="1">0</AUTOEXPOSURE>
+       <AUTOWHITEBALANCE desc="Automatic White Balance" type="boolean" variable="1">0</AUTOWHITEBALANCE>
+       <BRIGHTNESS desc="Brightness" type="integer" min="0" max="1024" variable="1">271</BRIGHTNESS>
+       <EXPOSURE desc="Exposure" type="integer" min="0" max="1024" variable="1">511</EXPOSURE>
+       <SHARPNESS desc="Sharpness" type="integer" min="0" max="1024" variable="1">73</SHARPNESS>
+       <WHITEBALANCE1 desc="White Balance" type="integer" min="0" max="1024" variable="1">172</WHITEBALANCE1>          
+       <WHITEBALANCE2 desc="White Balance" type="integer" min="0" max="1024" variable="1">172</WHITEBALANCE2>
+       <SATURATION desc="Saturation" type="integer" variable="1">103</SATURATION>         
+       </INPUT>
   <INPUT mode="2" desc="Native video driver" long="Windows: Video for Windows (VFW) and Matrox Imaging Library (MIL).\nLinux: V4L and FireWire (IEEE1394).">
   </INPUT>
   <!---

@@ -669,6 +669,7 @@ void Segmenter::SetParameters()
 	firstErode = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/FIRSTERODE");
 	secondDilate = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/SECONDDILATE");
 	usingMaskBoolean = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/USINGMASK");
+	input->SetParameters();
 }
 
 double Segmenter::GetFPS()
