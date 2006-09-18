@@ -259,36 +259,55 @@ void Input::QueryFrame1394(IplImage* input)
 }
 
 CvSize Input::GetInputDim(){
-	return(cvSize(input->width,input->height));
+	switch(mode){
+		case 0 : return(cvSize(input->width,input->height)); break;
+		case 1 : return(cvSize(theCamera.m_width,theCamera.m_height)); break;
+		case 2 : return(cvSize(input->width,input->height)); break;
+		default: throw "[Input::GetInputDim] Illegal mode";
+	}
 }
 
 int Input::GetInputDepth(){
-	return input->depth;
+	if(input) 
+		return input->depth;
+	else throw "[Input::GetInputDepth] not implemented for this input mode";
+	/** \todo Implement for different modes */
+		
 }
 int Input::GetInputNbChannels(){
-	return input->nChannels;
+	if(input) return input->nChannels;
+	else throw "[Input::GetInputNbChannels] not implemented for this input mode";
+	/** \todo Implement for different modes */
 }
 
 int Input::GetInputOrigin(){
-	return input->origin;
+	if(input) return input->origin;
+	else throw "[Input::GetInputOrigin] not implemented for this input mode";
+	/** \todo Implement for different modes */
 }
 
 IplImage* Input::GetInputIpl(){
-	return input;
+	if(input) return input;
+	else throw "[Input::GetInputIpl] not implemented for this input mode";
+	/** \todo Implement for different modes */
 }
 
 Input::~Input()
 {
-	if (Capture) cvReleaseCapture( &Capture );
-	//if (input) cvReleaseImage( &input);
+	if (Capture) cvReleaseCapture( &Capture );	
 }
 
 double Input::GetFPS(){
 	if(mode){
-		return(15);
-		/**
-		* \todo Extract the real frame rate from the camera 
-		*/
+		switch(GetIntValByXPath(cfgRoot,"/CFG/INPUT[@mode='1']/FRAMERATE")){
+			case 0 : return(2); break;
+			case 1 : return(5); break;
+			case 2 : return(7); break;
+			case 3 : return(15); break;
+			case 4 : return(30); break;
+			case 5 : return(60); break;
+			default : throw "[Input::GetFPS] Unknown Framerate";
+		}
 	}
 	else
 		if(Capture)
