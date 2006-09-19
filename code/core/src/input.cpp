@@ -15,6 +15,7 @@ void Input::SetParameters(){
 			theCamera.SetSharpness(GetIntValByXPath(cfgRoot,"/CFG/INPUT[@mode='1']/SHARPNESS"));
 			theCamera.SetWhiteBalance(GetIntValByXPath(cfgRoot,"/CFG/INPUT[@mode='1']/WHITEBALANCE1"),GetIntValByXPath(cfgRoot,"/CFG/INPUT[@mode='1']/WHITEBALANCE2"));
 			theCamera.SetSaturation(GetIntValByXPath(cfgRoot,"/CFG/INPUT[@mode='1']/SATURATION"));
+			break;
 			   }
 		default : throw "[Input::SetParameters] Illegal input mode";
 	}
@@ -23,6 +24,8 @@ void Input::SetParameters(){
 Input::Input(xmlpp::Element* cfgRoot)  
 : Capture(0), isinputincolor(0), nFrame(0) 
 {
+	this->cfgRoot=cfgRoot;
+
 	if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/INPUT","mode"))
 		throw "[Input::Input] Input mode undefined (/CFG/COMPONENTS/INPUT)";
 
@@ -69,8 +72,6 @@ Input::Input(xmlpp::Element* cfgRoot)
 			CreateExceptionIfEmpty(cfgRoot,"/CFG/INPUT[@mode='1']/AUTOWHITEBALANCE");
 			CreateExceptionIfEmpty(cfgRoot,"/CFG/INPUT[@mode='1']/AUTOGAIN");
 			CreateExceptionIfEmpty(cfgRoot,"/CFG/INPUT[@mode='1']/AUTOEXPOSURE");
-			CreateExceptionIfEmpty(cfgRoot,"/CFG/INPUT[@mode='1']/WHITEBALANCE");
-			CreateExceptionIfEmpty(cfgRoot,"/CFG/INPUT[@mode='1']/GAIN");
 			CreateExceptionIfEmpty(cfgRoot,"/CFG/INPUT[@mode='1']/EXPOSURE");
 			CreateExceptionIfEmpty(cfgRoot,"/CFG/INPUT[@mode='1']/BRIGHTNESS");
 			CreateExceptionIfEmpty(cfgRoot,"/CFG/INPUT[@mode='1']/SHARPNESS");
