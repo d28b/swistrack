@@ -110,17 +110,7 @@ void ParticleFilter::RefreshCoverage()
 	segmenter->RefreshCoverage();
 }
 
-/** Convert list of contours into particles 
-* Allows to filter particles according to tracking/segmentation parameters. Currently,
-* the function distinguishes normal and large contours (collisions) but does not use this feature.
-* While contours store additional parameters (e.g. area, compactness, ...), particles are given
-* only by their position, and the object they are currently associated with.
-*
-* \param contours : list of contours from segmentation
-* \param img : trackingimg to store information relevant to the user (optional)
-*
-* \todo A possible improvement could be to generate more than one particle from
-* contours that are too large.
+/** \brief Convert list of contours into particles 
 */
 void ParticleFilter::GetParticlesFromContours()
 {
@@ -202,6 +192,7 @@ void ParticleFilter::GetParticlesFromContours()
 						particles.insert(j,tmpParticle);
 					}
 				}
+				cvRelease((void**)&contour);
 			}
 			//If we need to display the particles
 			if(trackingimg->GetDisplay())
@@ -214,8 +205,8 @@ void ParticleFilter::GetParticlesFromContours()
 				}
 			}
 			cvReleaseImage(&src_tmp);
-			cvReleaseMemStorage(&storage);
 			cvRelease((void**)&contour);
+			cvReleaseMemStorage(&storage);
 		}
 		break;
 	default: throw "[ParticleFilter::GetParticlesFromContours()] Mode not implemented.";
