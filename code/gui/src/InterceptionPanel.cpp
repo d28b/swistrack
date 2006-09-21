@@ -110,7 +110,8 @@ void InterceptionPanel::OnInterceptPick( wxCommandEvent &event )
 	CvPoint ue = parent->GetUserEstimateFor(id);
 
 	if(ue.x != -1 && ue.y != -1){
-		CvPoint2D32f uef = cvPoint2D32f(ue.x,ue.y);
+		int height = parent->ot->GetImagePointer()->height;
+		CvPoint2D32f uef = cvPoint2D32f(ue.x,height - ue.y);
 		parent->ot->SetPos(id,&uef);
 	}
 	Show(TRUE);
