@@ -3,7 +3,7 @@
 #define libgeom_h
 //****************************************************************************/
 // Filename :   $RCSfile: libgeom.h,v $
-// Version  :   $Revision: 1.8 $
+// Version  :   $Revision: 1.1 $
 //
 // Author   :   $Author: produit $
 //              Yuri Lopez de Meneses
@@ -13,7 +13,7 @@
 //              Switzerland
 //
 //
-// Date     :   $Date: 2006/04/07 14:12:38 $
+// Date     :   $Date: 2006/08/14 16:08:13 $
 
 
 /** \file libgeom.h
@@ -97,8 +97,8 @@ inline VISAPI CvPoint2D32f ProjectXZ(CvPoint3D32f pt){
 	\image html geometricModel.png "Exemple of a model with 8 reference points and a target point
 
 	 \author $Author: produit $
-     \version $Revision: 1.8 $
-     \date $Date: 2006/04/07 14:12:38 $
+     \version $Revision: 1.1 $
+     \date $Date: 2006/08/14 16:08:13 $
 
 
 */
@@ -246,9 +246,9 @@ public:
  *	  and calculate their features.
  *
  *	
- *	 \author $Author: mbellino $
- *   \version $Revision: 1.4 $
- *   \date $Date: 2006/03/07 13:55:17 $
+ *	 \author $Author: produit $
+ *   \version $Revision: 1.1 $
+ *   \date $Date: 2006/08/14 16:08:13 $
  *
  */
 
@@ -589,8 +589,8 @@ class VISAPI VisGeomModel
  		If a ROI is defined, blobs are only searched in the ROI.
 
 	 \author $Author: produit $
-     \version $Revision: 1.7 $
-     \date $Date: 2006/04/07 14:12:38 $
+     \version $Revision: 1.1 $
+     \date $Date: 2006/08/14 16:08:13 $
 
 
 */
@@ -842,9 +842,9 @@ typedef int (VisBlobSet ::* p_blobset_meth_3) ( double, double);
  *	the best value for the chosen blob feature. 
  *
  *	
- *	 \author $Author: mbellino $
- *   \version $Revision: 1.3 $
- *   \date $Date: 2006/03/07 13:55:17 $
+ *	 \author $Author: produit $
+ *   \version $Revision: 1.1 $
+ *   \date $Date: 2006/08/14 16:08:13 $
  *
  */
 
