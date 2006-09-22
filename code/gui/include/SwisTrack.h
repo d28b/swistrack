@@ -48,6 +48,7 @@ public:
 	void MakeScreenShot(wxCommandEvent& WXUNUSED(event));
 	void StopTracker();
 	void StartTracker();
+	void SetStatus(int status){ this->status=status;}
 	int GetDisplaySpeed();
 	void OnEnableAVI(wxCommandEvent& event);
 	CvPoint GetUserEstimateFor(int id);
@@ -99,9 +100,6 @@ public:
 	void OnDrawingMode(wxCommandEvent& event);
  	void OnMenuIntercept(wxCommandEvent& WXUNUSED(event));
 	
-	int GetStatus(){ return(status);}
-	void SetStatus(int status){ this->status=status;}
-
     //control panels
 	SwisTrackPanel* trackingpanel;
 	SwisTrackPanel* segmenterpanel;
@@ -111,7 +109,7 @@ public:
 	//toolbar
 	void RecreateToolbar();
 
-	void ProcessData();
+	void Update();
 
 	
 	CvPoint2D32f* GetPos(int id);

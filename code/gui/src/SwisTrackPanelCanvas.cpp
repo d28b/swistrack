@@ -23,7 +23,7 @@ SwisTrackPanelCanvas::SwisTrackPanelCanvas(SwisTrack *parent, wxPanel *loc, cons
 *
 * This function is called whenever the canvas needs to be redrawn (for 
 * instance if the window is moved. Also, when the Canvas::Refresh() method
-* is called (as from SwisTrack::otProcessData().
+* is called (as from SwisTrack::otUpdate().
 */
 void SwisTrackPanelCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {

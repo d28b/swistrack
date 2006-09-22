@@ -29,7 +29,7 @@ void Canvas::EraseBackground(wxEraseEvent& event){
 *
 * This function is called whenever the canvas needs to be redrawn (for 
 * instance if the window is moved. Also, when the Canvas::Refresh() method
-* is called (as from SwisTrack::otProcessData().
+* is called (as from SwisTrack::otUpdate().
 */
 void Canvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {

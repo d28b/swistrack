@@ -1,18 +1,42 @@
 /*! \mainpage My Personal Index Page
-*
-* \section intro_sec Introduction
-*
-* This is the introduction.
-*
-* \section install_sec Installation
-*
-* \subsection step1 Step 1: Opening the box
-*
-* etc...
+\section intro_sec Introduction
+
+\section prog_sec Getting started
+You will need to install the following libraries 
+
+- libxml2
+- libxml++ (http://sourceforge.net/projects/libxmlplusplus)
+- OpenCV (http://sourceforge.net/projects/opencvlibrary)
+- WxWidgets (http://www.wxwidgets.org)
+
+Windows only:
+
+- CMU 1394 Firewire Driver
+
+SwisTrack is divided in three projects Objecttracker, GUI, and UI. Objecttracker 
+contains all methods for acquiring and processing images, whereas GUI and UI are a graphical and
+a command line interface, respectively.
+
+Hence, you will first need to build objecttracker.lib and then link it into either the GUI or
+the UI project.
+
+\subsection visual_studio Visual Studio 2005 Settings
+
+Make sure you set the working directories for release and debug compilation to 'release', otherwise SwisTrack won't find
+its configuration files 'swistrack.exp' and 'default.cfg' (Alt-F7, Configuration Properties, Debugging, Working directory).
+
+
+\subsection samples Running the examples
+
+When running the samples, make sure you have a recent version of DivX installed. If you have problems, try to open 
+the video files with Virtualdub first. SwisTrack (and VirtualDub) use so called VfW drivers and not DirectMedia drivers,
+usually installing a codec pack like the KazaaLite codec pack solves all of this problems.
+
+If you are working with Firewire cameras make sure you replace the custom driver that comes with the camera with the CMU1394
+driver.
 */
 #include "SwisTrack.h"
 #include "Canvas.h"
-//#include "DataLogger.h"
 #include "AviWriter.h"
 #include "SocketServer.h"
 #include "SettingsDialog.h"
@@ -80,23 +104,12 @@ END_EVENT_TABLE()
 */
 void SwisTrack::RecreateToolbar()
 {
-	// delete and recreate the toolbar
 	wxToolBarBase *toolBar = GetToolBar();
 	long style = wxTB_FLAT | wxTB_DOCKABLE | wxTB_TEXT;
-	//style &= ~(wxTB_NOICONS | wxTB_TEXT);
-
 	delete toolBar;
-
 	SetToolBar(NULL);
-
-	//  style &= ~(wxTB_HORIZONTAL | wxTB_VERTICAL);
-	//  style |= m_horzToolbar ? wxTB_HORIZONTAL : wxTB_VERTICAL;
-
 	toolBar = CreateToolBar(style, wxID_TOOLBAR);
-
-	// Set up toolbar
 	wxBitmap toolBarBitmaps[9];
-
 	toolBarBitmaps[0] = wxBITMAP(new);
 	toolBarBitmaps[1] = wxBITMAP(open);
 	toolBarBitmaps[2] = wxBITMAP(save);
@@ -106,8 +119,6 @@ void SwisTrack::RecreateToolbar()
 	//toolBarBitmaps[6] = wxBITMAP(rewind);
 	//toolBarBitmaps[7] = wxBITMAP(singlestepback);
 	toolBarBitmaps[8] = wxBITMAP(singlestep);
-
-
 	toolBar->AddTool(Gui_New, _T("New"), toolBarBitmaps[0], _T("New configuration"), wxITEM_CHECK);
 	toolBar->AddTool(Gui_Open, _T("Open"), toolBarBitmaps[1], _T("Open configuration"), wxITEM_CHECK);
 	toolBar->AddTool(Gui_Save, _T("Save"), toolBarBitmaps[2], _T("Save configuration"), wxITEM_CHECK);
@@ -130,18 +141,13 @@ void SwisTrack::RecreateToolbar()
 
 
 	TransferDataFromWindow();
-
-	// after adding the buttons to the toolbar, must call Realize() to reflect
-	// the changes
 	toolBar->Realize();
-
 	toolBar->SetRows(1 ? 1 : 10 / 1);
 }
 
-// frame constructor
-/** \brief constructor
+/** \brief Constructor
 *
-* Creates menu bar and status bar 
+* Creates menu bar and status bar.
 *
 * \param title    : Application name in the title bar
 * \param pos	  : Position on screen
@@ -150,29 +156,24 @@ void SwisTrack::RecreateToolbar()
 */
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
 : wxFrame(NULL, -1, title, pos, size, style)
-//help(wxHF_DEFAULT_STYLE | wxHF_OPEN_FILES)
 {
 
 	show_coverage=0; // don't show coverage image
 	display_speed=5; //initial display speed 5Hz
 	fps=30; // initial guess for the FPS of our video
-//	width=640; height=480; // initial guess for video resolution
 
-//	transform = NULL;
-	trackingpanel = NULL;
+	trackingpanel = NULL; 
 	segmenterpanel = NULL;
 	inputpanel = NULL;
-
 	interceptionpanel = NULL;
+	
 	aviwriter = NULL;
 	socketserver = NULL;
 	parser = NULL;
 	ot = NULL;
 
-	// set the frame icon
-	SetIcon(wxICON(gui));
+	SetIcon(wxICON(gui)); // set the frame icon
 
-#if wxUSE_MENUS
 	// create a menu bar
 	menuBar = new wxMenuBar();
 	// create menus
@@ -232,7 +233,6 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 		menuTools->Enable(Gui_Tools_ShowCamera,TRUE);
 #endif
 
-
 	menuHelp->Append(Gui_Help,_T("&Manual"),_T("Opens the manual"));
 	menuHelp->Enable(Gui_Help,FALSE);
 
@@ -246,12 +246,8 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	menuBar->Append(menuHelp, _T("&Help"));
 	// ... and attach this menu bar to the frame
 	SetMenuBar(menuBar);
-	//menuBar->EnableTop(1,FALSE);
-	//menuBar->EnableTop(2,FALSE);
 	menuBar->Check(Gui_View_TrajFull, TRUE);
 	menuBar->Check(Gui_View_ShowMask,FALSE);
-
-#endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
 	CreateStatusBar(2);
@@ -276,6 +272,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	wxMessageBox(wxT("Failed adding book doc/html/index.hhp"));
 	*/
 
+	/** \todo The SocketServer should go into ObjectTracker and the socket should be a parameter */
 	socketserver = new SocketServer(this,3000);
 
 	if(!wxFile::Exists("swistrack.exp")){
@@ -286,7 +283,6 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 		DisplayModal("File default.cfg could not be found. Quitting.","Error");
 		Close(TRUE);
 	}
-
 	try{
 		parser = new xmlpp::DomParser();
 		parser->parse_file("default.cfg");
@@ -307,10 +303,13 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	}
 }
 
-/** \brief Image displaying routing ProcessData(), called for every processed frame
-*
+/** \brief Updates all graphical output, the status bar, and AVI output
+Update() is called after each processed frame. Update() only updates the graphical
+output and the AVI file if the current frame number is a multiple of the frame rate
+divided by the display speed set in the toolbar. For example, for a frame rate of
+15Hz and a display speed of 5Hz, Update() would ignore two frames out of three.
 */
-void SwisTrack::ProcessData(){
+void SwisTrack::Update(){
 	double pos;
 	double time;
 
@@ -338,6 +337,10 @@ void SwisTrack::ProcessData(){
 }
 
 
+/*! \brief Destructor
+
+Deallocates all memory and closes the application.
+*/
 SwisTrack::~SwisTrack(){
 	ShutDown();
 	if(ot) delete ot;
@@ -350,10 +353,10 @@ SwisTrack::~SwisTrack(){
 }
 
 
-// event handlers
 /** \brief Event handler for the 'File->New' command
 *
-* Opens a dialog asking the user for video, background, and number of objects.
+Opens the SettingsDialog, which allows specifying parameters as defined in the
+file swistrack.exp.
 */ 
 void SwisTrack::OnMenuFileNew(wxCommandEvent& WXUNUSED(event))
 {
@@ -363,7 +366,10 @@ void SwisTrack::OnMenuFileNew(wxCommandEvent& WXUNUSED(event))
 
 /** \brief Event handler for the 'File->Open' command
 *
-* Opens an open file dialog where the user can choose a configuration.
+Opens an open file dialog where the user can choose a configuration and
+parses the file using xmlpp::DomParser().
+
+\see xmlpp
 */
 void SwisTrack::OnMenuFileOpen(wxCommandEvent& WXUNUSED(event))
 {
@@ -395,14 +401,17 @@ void SwisTrack::OnMenuFileOpen(wxCommandEvent& WXUNUSED(event))
 			return;
 		}
 	}
-
-
 	dlg->Destroy();
 }
 
 /** \brief Event handler for the 'File->Save' command
 *
-* Opens an save file dialog where the user can save the current configuration
+Opens an save file dialog where the user can save the current configuration,
+and stores the configuration as formatted XML.
+
+\todo This function should create a copy of the XML tree and prune all information
+for modes that are not used. There should be a second function that instead
+saves all modes into the default.cfg (Save as default).
 */
 void SwisTrack::OnMenuFileSave(wxCommandEvent& WXUNUSED(event))
 {
@@ -414,25 +423,24 @@ void SwisTrack::OnMenuFileSave(wxCommandEvent& WXUNUSED(event))
 		SetStatusText("Save " + dlg->GetPath(),1);
 		document->write_to_file_formatted((char*) dlg->GetPath().GetData());
 	}
-
-
 	dlg->Destroy();
 }
 
-/** \brief Event hanlder for the 'File->Exit' command and any attempt to close the window
-* 
-* Stops the tracking thread (blocking) and closes the main window after its termination.
+/** \brief Event hanlder for the 'File->Exit' command
+
+Closes the application
+\see ~Swistrack
 */
 void SwisTrack::OnMenuFileQuit(wxCommandEvent& WXUNUSED(event))
 {
-	ShutDown();
-	// TRUE is to force the frame to close
 	Close(TRUE);
 }
 
 /** \brief Event handler for the 'File->Control->Start' command
 *
-* Inits and starts tracking.
+* Inits and starts tracking by calling StartTracker()
+
+\see StartTracker()
 */
 void SwisTrack::OnMenuControlStart(wxCommandEvent& WXUNUSED(event))
 {
@@ -441,7 +449,7 @@ void SwisTrack::OnMenuControlStart(wxCommandEvent& WXUNUSED(event))
 
 /** \brief Event handler for the 'File->Control->Pause' command
 *
-* Pauses tracking
+* Pauses tracking and toggles the `Pause' button in the GUI.
 */
 void SwisTrack::OnMenuControlPause(wxCommandEvent& WXUNUSED(event))
 {
@@ -457,7 +465,8 @@ void SwisTrack::OnMenuControlPause(wxCommandEvent& WXUNUSED(event))
 
 /** \brief Event handler for the 'File->Control->Continue' command
 *
-* Continues tracking (after pause)
+Continues tracking (after pause) and toggles the `Pause' button in
+the GUI.
 */
 void SwisTrack::OnMenuControlContinue(wxCommandEvent& WXUNUSED(event))
 {
@@ -471,7 +480,12 @@ void SwisTrack::OnMenuControlContinue(wxCommandEvent& WXUNUSED(event))
 
 }
 
+/*! Event handler for the rewind button in the toolbar
 
+\todo This function does not actually do anything as the rewind button is
+currently disabled. Rewind should issue a command to ObjectTracker which sets
+the AVI pointer 1s back.
+*/
 void SwisTrack::OnMenuControlRewind(wxCommandEvent& WXUNUSED(event))
 {
 	wxToolBarBase *tb = GetToolBar();
@@ -479,6 +493,12 @@ void SwisTrack::OnMenuControlRewind(wxCommandEvent& WXUNUSED(event))
 	tb->ToggleTool(Gui_Ctrl_Rewind, 1 );
 }
 
+/*! Event handler for the single step back button in the toolbar
+
+\todo This function does not actually do anything as the single step back button
+is currently disabled. This function should issue a command to ObjectTracker which sets
+the AVI pointer 1 frame back.
+*/
 void SwisTrack::OnMenuControlSinglestepback(wxCommandEvent& WXUNUSED(event))
 {
 	wxToolBarBase *tb = GetToolBar();
@@ -486,6 +506,12 @@ void SwisTrack::OnMenuControlSinglestepback(wxCommandEvent& WXUNUSED(event))
 	tb->ToggleTool(Gui_Ctrl_Pause, 1 );
 }
 
+/*! 
+
+Performing a single step is equivalent to entering the PAUSE state (i.e. OnIdleEvent
+does not process the video source), but a single step is executed by calling
+ObjectTracker::Step() and SwisTrack::Update().
+*/
 void SwisTrack::Singlestep(){
 	wxToolBarBase *tb = GetToolBar();
 	for(int i=Gui_Ctrl_Rewind; i<= Gui_Ctrl_Pause; i++) tb->ToggleTool(i, 0 );
@@ -493,10 +519,14 @@ void SwisTrack::Singlestep(){
 	((wxSlider*) tb->FindControl(wxID_DSPSPDSLIDER))->SetValue((int) ot->GetFPS());
 	display_speed=(int) ot->GetFPS();
 	ot->Step();
-	ProcessData();
+	Update();
 	status=PAUSED;
 }
 
+/*! \brief Event handler for the single step button in the toolbar 
+
+Calls SwisTrack::Singlestep().
+*/
 void SwisTrack::OnMenuControlSinglestep(wxCommandEvent& WXUNUSED(event))
 {
 	Singlestep();
@@ -504,24 +534,26 @@ void SwisTrack::OnMenuControlSinglestep(wxCommandEvent& WXUNUSED(event))
 
 /** \brief Event handler for the 'File->Control->Stop' command
 *
-* Stops the tracking thread.
+* Calls SwisTrack::StopTracker().
 */
 void SwisTrack::OnMenuControlStop(wxCommandEvent& WXUNUSED(event))
 {
 	StopTracker();
 }
 
-/** \brief Menu Handler Template
-*
-* \todo Comment this function
+/** \brief Event handler for the 'File->Tools->Show 1394 Camera' command
+
+Acquires an image from the camera and displays it right away.
+* \todo This function works only for 640x480 yuv411 at 15 Hz, and shows only one static image.
+Instead, a user dialog should offer the choices from SettingsDialog for the input, create a new of
+ObjectTracker with this configuration, and a SwisTrackPanel without graphical output.
+Also OnIdleEvent should be modified to either launch a step of tracking or displaying the input
+stream.
 */
 void SwisTrack::OnMenuToolsShow1394Camera(wxCommandEvent& WXUNUSED(event))
 {
 #ifdef _1394
 	unsigned char *m_pBitmap;
-
-
-
 	theCamera.InitCamera();
 
 	theCamera.SetVideoFrameRate(4); // 15fps
@@ -650,24 +682,22 @@ void SwisTrack::OnMenuViewShowInput(wxCommandEvent& WXUNUSED(event))
 
 }
 
-/** \brief Shuts down tracking, closes output files
-*
-* \todo Close output files here
+/** \brief Stops tracking
+
+ShutDown() calls ObjectTracker::Stop() and stops all tracking related panels
+and closes a possibly open AVI File.
 */
 void SwisTrack::ShutDown()
 {
 	wxBusyInfo info(_T("Shutting down, please wait..."), this);
-	/*if(datalogger){
-		delete(datalogger);
-		datalogger=NULL;
-	}*/
 	if(ot){
 		ot->Stop();
 	}
 	status=STOPPED;
 
-	menuView->Check (Gui_View_ShowTracker, FALSE);
+	menuView->Check(Gui_View_ShowTracker, FALSE);
 	menuView->Check(Gui_View_ShowSegmenter,FALSE);
+	menuView->Check(Gui_View_ShowInput,FALSE);
 
 	if(trackingpanel){
 		trackingpanel->Destroy();
@@ -685,10 +715,6 @@ void SwisTrack::ShutDown()
 		interceptionpanel->Destroy();
 		interceptionpanel=NULL;
 	}
-/*	if(transform){
-		delete(transform);
-		transform=NULL;
-	}*/
 	if(aviwriter){
 		delete(aviwriter);
 		aviwriter=NULL;
@@ -697,26 +723,13 @@ void SwisTrack::ShutDown()
 
 }
 
-
-
-/** \brief This function overrides otSearching() that is called within the ObjectTracker class during initial search
-*
-* During initialization, the Tracker class is looking for ExperimentCfg::nins objects to track. For every frame
-* that is searched, otSearching() is called.
-* In this implementation, we display segmenter progress here.
-*/
-/*void SwisTrack::otSearching()
-{ 
-wxString msg;
-msg.Printf("Waiting for %s objects to be found",cfg->nins);
-SetStatusText(msg,1);
-RefreshAllDisplays();
-}*/
-
 /** \brief Refreshes all displays
 *
-* This method is called during otProcessData() and during otSearching() to refresh the
-* main canvas and the segmenter panel (if activated).
+This method is called during otUpdate() to refresh the
+main canvas and those panels (segmenter, tracker, input) that
+are activated. 
+As the frames coming from Input are in BGR, they will be converted
+into RGB.
 */
 void SwisTrack::RefreshAllDisplays()
 {
@@ -727,7 +740,6 @@ void SwisTrack::RefreshAllDisplays()
 			tmp=cvCreateImage(cvSize((ot->GetImagePointer())->width,(ot->GetImagePointer())->height),IPL_DEPTH_8U,3);
 			//Converting BGR data into RGB
 			cvCvtColor(ot->GetImagePointer(),tmp,CV_BGR2RGB);
-			//tmp = cvCloneImage(ot->GetImagePointer());
 		}
 		else
 		{
@@ -738,10 +750,7 @@ void SwisTrack::RefreshAllDisplays()
 		}
 		cvFlip(tmp);
 		wxImage* colorimg = new wxImage(tmp->width,tmp->height,(unsigned char*) tmp->imageData,TRUE);
-		if(colorbmp){
-			delete(colorbmp);
-			colorbmp=NULL;
-		}
+		if(colorbmp) delete(colorbmp);
 		colorbmp= new wxBitmap(colorimg,3);
 		canvas->Refresh();
 		delete(colorimg);
@@ -749,7 +758,6 @@ void SwisTrack::RefreshAllDisplays()
 	}	
 
 	if(ot->GetBinaryPointer() && GetMenuBar()->GetMenu(2)->IsChecked(Gui_View_ShowSegmenter)){
-
 		IplImage* tmp = cvCreateImage(cvSize(ot->GetBinaryPointer()->width,ot->GetBinaryPointer()->height),
 			ot->GetBinaryPointer()->depth,3);
 
@@ -766,10 +774,9 @@ void SwisTrack::RefreshAllDisplays()
 		cvReleaseImage(&tmp);
 	}
 
-	if(ot->GetBinaryPointer() && GetMenuBar()->GetMenu(2)->IsChecked(Gui_View_ShowInput)){
-
-		IplImage* tmp = cvCloneImage(ot->GetRawImagePointer());
-
+	if(ot->GetRawImagePointer() && GetMenuBar()->GetMenu(2)->IsChecked(Gui_View_ShowInput)){
+		IplImage* tmp=cvCreateImage(cvSize((ot->GetRawImagePointer())->width,(ot->GetRawImagePointer())->height),IPL_DEPTH_8U,3);
+		cvCvtColor(ot->GetRawImagePointer(),tmp,CV_BGR2RGB);
 		wxImage* rawimg = new wxImage(tmp->width,tmp->height,(unsigned char*) (tmp->imageData),TRUE);
 		inputpanel->Clear();
 		inputpanel->CreateBitmapfromImage((&(rawimg->Rescale(tmp->width/3,tmp->height/3))),3); //
@@ -781,7 +788,7 @@ void SwisTrack::RefreshAllDisplays()
 
 /** \brief Eventhandler when tracking has finished
 *
-* Gets called after tracking has terminated (from otProcessData()), closes output files
+* Gets called after tracking has terminated (from otUpdate()), closes output files
 */
 void SwisTrack::Finished()
 {
@@ -791,16 +798,11 @@ void SwisTrack::Finished()
 	menuControl->Enable(Gui_Ctrl_Continue,FALSE);
 	menuControl->Enable(Gui_Ctrl_Stop,FALSE);
 
-	/*if(datalogger){
-		delete(datalogger);
-		datalogger=NULL;
-	}*/
-
+	
 	if(interceptionpanel) interceptionpanel->Destroy();
 	interceptionpanel=NULL;
 
 	DisplayModal("Tracking has successfully terminated!");
-
 }
 
 
@@ -926,7 +928,7 @@ void SwisTrack::OnIdle(wxIdleEvent& WXUNUSED(event)){
 	if(status==RUNNING){
 		try{
 			ot->Step();
-			ProcessData();
+			Update();
 			status=ot->GetStatus();
 			wxWakeUpIdle();
 		}

@@ -95,8 +95,6 @@ void InterceptionPanel::OnInterceptDone( wxCommandEvent &event )
 	parent->menuControl->Enable(Gui_Ctrl_Continue,FALSE);	
 
 	parent->SetStatus(parent->ot->GetStatus());
-//	parent->ot.Continue();
-
 }
 
 void InterceptionPanel::OnInterceptPick( wxCommandEvent &event )
