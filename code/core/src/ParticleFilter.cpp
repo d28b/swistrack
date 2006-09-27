@@ -194,6 +194,7 @@ void ParticleFilter::GetParticlesFromContours()
 				}
 				cvRelease((void**)&contour);
 			}
+			contour = cvEndFindContours(&blobs);
 			//If we need to display the particles
 			if(trackingimg->GetDisplay())
 			{
