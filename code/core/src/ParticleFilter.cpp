@@ -30,7 +30,7 @@ ParticleFilter::ParticleFilter(xmlpp::Element* cfgRoot,TrackingImage* trackingim
 	// 2. Check whether all necessary parameters for this class are available in the configuration
 
 	if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/PARTICLEFILTER","mode"))
-		throw "[ParticleFilter::ParticleFilter] Particlefilter mode undefined (/CFG/COMPONENTS/INPUT)";
+		throw "[ParticleFilter::ParticleFilter] Particlefilter mode undefined (/CFG/COMPONENTS/PARTICLEFILTER)";
 
 	mode=GetIntAttrByXPath(cfgRoot,"/CFG/COMPONENTS/PARTICLEFILTER","mode");
 
@@ -40,6 +40,11 @@ ParticleFilter::ParticleFilter(xmlpp::Element* cfgRoot,TrackingImage* trackingim
 				CreateExceptionIfEmpty(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MINAREA");					
 				CreateExceptionIfEmpty(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MAXAREA");
 				CreateExceptionIfEmpty(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MAXNUMBER");
+			}
+			break;
+		case 1 :
+			{
+				CreateExceptionIfEmpty(cfgRoot,"/CFG/PARTICLEFILTER[@mode='1']/RADIUS");
 			}
 			break;
 		default : throw "[ParticleFilter::ParticleFilter] Invalid mode.";
@@ -58,6 +63,11 @@ void ParticleFilter::SetParameters()
 				min_area = GetIntValByXPath(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MINAREA");
 				max_area = GetIntValByXPath(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MAXAREA");
 				max_number = GetIntValByXPath(cfgRoot,"/CFG/PARTICLEFILTER[@mode='0']/MAXNUMBER");
+			}
+			break;
+		case 1 : 
+			{
+				radius = GetDoubleValByXPath(cfgRoot,"/CFG/PARTICLEFILTER[@mode='1']/RADIUS");
 			}
 			break;
 		default : throw "[ParticleFilter::ParticleFilter] Invalid mode.";

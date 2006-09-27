@@ -51,6 +51,8 @@ private:
 	int min_area;
 	/** Maximum number of contours to keep (only the 'max_number' largest contours are kept) */
 	int max_number;	
+	/** Radius of a ciruclar shape for particlefilter mode 1*/
+	double radius;
 };
 
 #endif 
