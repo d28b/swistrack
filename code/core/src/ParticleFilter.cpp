@@ -3,22 +3,22 @@
 
 
 /** \brief Returns the compacteness of a contour
- *
- * Compactness is a contour feature defined as 4*pi*Area/Perimeter^2
- * It is maximum (1) for a circle, 0.78 for a square and \f[\frac{\pi\alpha}{(1+\alpha)^2}\f]
- * for a rectangle where on side is \f[(\alpha \leq 1) \f] smaller than the other.
- *
- * \param contour: a CvSeq* containing the contour
- * \result Returns the compactness 
- */
+*
+* Compactness is a contour feature defined as 4*pi*Area/Perimeter^2
+* It is maximum (1) for a circle, 0.78 for a square and \f[\frac{\pi\alpha}{(1+\alpha)^2}\f]
+* for a rectangle where on side is \f[(\alpha \leq 1) \f] smaller than the other.
+*
+* \param contour: a CvSeq* containing the contour
+* \result Returns the compactness 
+*/
 double  ParticleFilter::GetContourCompactness( const void* contour)
 {
- double l = cvArcLength(contour,CV_WHOLE_SEQ,1);
- return fabs(12.56*cvContourArea(contour)/(l*l));	
+	double l = cvArcLength(contour,CV_WHOLE_SEQ,1);
+	return fabs(12.56*cvContourArea(contour)/(l*l));	
 }  
 
 ParticleFilter::ParticleFilter(xmlpp::Element* cfgRoot,TrackingImage* trackingimg)
-	: trackingimg(trackingimg)
+: trackingimg(trackingimg)
 {
 	// 0. Copy configuration root to a local variable
 	this->cfgRoot = cfgRoot;
@@ -26,14 +26,14 @@ ParticleFilter::ParticleFilter(xmlpp::Element* cfgRoot,TrackingImage* trackingim
 	// 1. Instantiate class one level below
 	segmenter = new Segmenter(cfgRoot,trackingimg);	
 	segmenter->GetStatus();
-	
+
 	// 2. Check whether all necessary parameters for this class are available in the configuration
 
 	if(!IsAttrByXPath(cfgRoot,"/CFG/COMPONENTS/PARTICLEFILTER","mode"))
 		throw "[ParticleFilter::ParticleFilter] Particlefilter mode undefined (/CFG/COMPONENTS/INPUT)";
-	
+
 	mode=GetIntAttrByXPath(cfgRoot,"/CFG/COMPONENTS/PARTICLEFILTER","mode");
-	
+
 	switch(mode){
 		case 0 : 
 			{
@@ -44,7 +44,7 @@ ParticleFilter::ParticleFilter(xmlpp::Element* cfgRoot,TrackingImage* trackingim
 			break;
 		default : throw "[ParticleFilter::ParticleFilter] Invalid mode.";
 	}
-	
+
 	// 4. Fetch parameters from the configuration
 	SetParameters();
 }	
@@ -73,7 +73,7 @@ int ParticleFilter::GetStatus()
 
 /*int ParticleFilter::init(int overhead)
 {
-	return segmenter->init(overhead);
+return segmenter->init(overhead);
 }*/
 
 ParticleFilter::~ParticleFilter()
@@ -81,7 +81,7 @@ ParticleFilter::~ParticleFilter()
 	if(segmenter){
 		delete(segmenter);
 		segmenter=NULL;
-		}
+	}
 }
 
 vector<particle>* ParticleFilter::Step()
@@ -133,7 +133,7 @@ void ParticleFilter::GetParticlesFromContours()
 			CvSeq* contour = 0;
 			//Init blob extraxtion						
 			CvContourScanner blobs = cvStartFindContours(src_tmp,storage,sizeof(CvContour),CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
-			
+
 			// This is used to correct the position in case of ROI
 			CvRect rectROI;
 			if(src_tmp->roi != NULL)
@@ -162,7 +162,7 @@ void ParticleFilter::GetParticlesFromContours()
 						{
 							//Find the place were it must be inserted, sorted by size
 							for(j=particles.begin();(j!=particles.end())&&(tmpParticle.area <(*j).area);j++);
-							
+
 							//Caculate the important values						
 							(tmpParticle.p).x=(float)(rectROI.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
 							(tmpParticle.p).y=(float)(rectROI.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
@@ -180,7 +180,7 @@ void ParticleFilter::GetParticlesFromContours()
 					{
 						//Find the place were it must be inserted, sorted by size
 						for(j=particles.begin();(j!=particles.end())&&(tmpParticle.area <(*j).area);j++);
-						
+
 						//Caculate the important values						
 						(tmpParticle.p).x=(float)(rectROI.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
 						(tmpParticle.p).y=(float)(rectROI.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem

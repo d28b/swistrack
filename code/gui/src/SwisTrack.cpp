@@ -119,7 +119,7 @@ void SwisTrack::RecreateToolbar()
 	//toolBarBitmaps[6] = wxBITMAP(rewind);
 	//toolBarBitmaps[7] = wxBITMAP(singlestepback);
 	toolBarBitmaps[8] = wxBITMAP(singlestep);
-	toolBar->AddTool(Gui_New, _T("New"), toolBarBitmaps[0], _T("New configuration"), wxITEM_CHECK);
+	toolBar->AddTool(Gui_New, _T("Config"), toolBarBitmaps[0], _T("Edit configuration"), wxITEM_CHECK);
 	toolBar->AddTool(Gui_Open, _T("Open"), toolBarBitmaps[1], _T("Open configuration"), wxITEM_CHECK);
 	toolBar->AddTool(Gui_Save, _T("Save"), toolBarBitmaps[2], _T("Save configuration"), wxITEM_CHECK);
 	toolBar->AddSeparator();
@@ -183,7 +183,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	menuView    = new wxMenu;
 	menuTools   = new wxMenu;
 
-	menuFile->Append(Gui_New, _T("&New\tCtrl-N"), _T("Create a new tracking profile"));
+	menuFile->Append(Gui_New, _T("&Config\tCtrl-C"), _T("Edits profile"));
 	menuFile->Append(Gui_Open, _T("&Open\tCtrl-O"), _T("Opens a tracking profile"));
 	menuFile->Append(Gui_Save, _T("&Save\tCtrl-s"), _T("Saves the current tracking profile"));
 	menuFile->AppendSeparator();

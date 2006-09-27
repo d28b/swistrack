@@ -36,7 +36,7 @@ void Canvas::OnPaint(wxPaintEvent& WXUNUSED(event))
   wxBufferedPaintDC dc(this);
    
 	  //wxASSERT((parent->colorbmp));
-  if(parent->colorbmp){
+  if(parent->colorbmp && parent->colorbmp->Ok()){
 		  dc.BeginDrawing();
 		  dc.DrawBitmap(*(parent->colorbmp),0,0,FALSE);
 		  dc.EndDrawing();
