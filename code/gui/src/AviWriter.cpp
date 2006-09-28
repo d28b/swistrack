@@ -2,7 +2,8 @@
 
 AviWriter::AviWriter(wxString* fname, SwisTrack* parent, int type=RAWIMAGE)
 {
-    aviwriter_type  = type;
+	if(!parent->ot) throw "[AviWriter::AviWriter] ObjectTracker not initialized";   
+	aviwriter_type  = type;
     AVIWriter       = cvCreateAVIWriter(
                         fname->GetData(),
                         -1,

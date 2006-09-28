@@ -894,7 +894,7 @@ void SwisTrack::OnSetAviOutput(wxCommandEvent& WXUNUSED(event))
 
 void SwisTrack::OnEnableAVI(wxCommandEvent &event)
 {
-/** \todo You should not be able to enable the aviwriter before the input dimensions are known */
+	if(!ot) StartTracker();
 	if(!aviwriter){
 		int type;
 		int result = UserInputModal("Do you want to overlay the AVI output with trajectory information?","AVI Output");
