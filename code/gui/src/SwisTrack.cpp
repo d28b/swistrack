@@ -973,7 +973,7 @@ void SwisTrack::StartTracker()
 		menuControl->Enable(Gui_Ctrl_Stop,TRUE);
 		menuBar->EnableTop(2,TRUE);
 
-		SetStatusText(_T("Searching for the specified number of objects in the first 1000 frames"),0);
+		SetStatusText(_T("Searching for objects in the first 30 frames"),0);
 		status=ot->Start();                    
 		SetStatusText(_T(""),0);
 		status=ot->Step();

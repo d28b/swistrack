@@ -219,7 +219,7 @@ void ObjectTracker::InitTracker()
   while(!stop && status==SEARCHING){
 	  trials++;
       status=calibration->InitTracker();
-      if(trials>1000) throw "Could not distinguish the specified number of objects within the first 1000 frames";
+      if(trials>30) throw "Could not distinguish the specified number of objects within the first 30 frames, try different settings or reduce the number of tracks";
 	  }
   if(status==FINISHED){
       throw "Could not distinguish the specified number of objects before the video stream ended";
