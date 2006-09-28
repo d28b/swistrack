@@ -128,6 +128,7 @@ void ParticleFilter::GetParticlesFromContours()
 	{
 	case 0:
 		{
+			vector<particle> rejectedparticles;
 			//Control if max_number is not to small
 			if (max_number<=0)
 				throw "[ParticleFilter::GetParticlesFromContours] Max Number of blob must be greater or equal to 1";
@@ -167,7 +168,7 @@ void ParticleFilter::GetParticlesFromContours()
 					//Check if we have already enough particles
 					if (particles.size()==max_number)
 					{
-						//If the particle is bigger than le smaller particle stored, stored it, else do nothing
+						//If the particle is bigger than the smallest stored particle, store it, else do nothing
 						if (tmpParticle.area>(particles.back()).area)
 						{
 							//Find the place were it must be inserted, sorted by size
@@ -202,6 +203,9 @@ void ParticleFilter::GetParticlesFromContours()
 						particles.insert(j,tmpParticle);
 					}
 				}
+				else{
+					rejectedparticles.push_back(tmpParticle);
+				}
 				cvRelease((void**)&contour);
 			}
 			contour = cvEndFindContours(&blobs);
@@ -211,8 +215,11 @@ void ParticleFilter::GetParticlesFromContours()
 				for(j=particles.begin();j!=particles.end();j++)
 				{
 					trackingimg->DrawCircle(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(0,255,0));
-					//trackingimg->Cover(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255-((j*).area),0,0),2);
 					trackingimg->Cover(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255,0,0),2);
+				}
+				for(j=rejectedparticles.begin();j!=rejectedparticles.end();j++)
+				{
+					trackingimg->DrawCircle(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255,0,0));					
 				}
 			}
 			cvReleaseImage(&src_tmp);

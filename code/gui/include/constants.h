@@ -21,6 +21,7 @@ enum
 	Gui_Ctrl_Singlestep,
 	Gui_Ctrl_Pause,
 	Gui_View_ShowTracker,
+	Gui_View_ShowParticleFilter,
 	Gui_View_ShowSegmenter,
 	Gui_View_ShowInput,
 	Gui_View_TrajCross,

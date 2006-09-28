@@ -85,6 +85,7 @@ EVT_MENU(Gui_Ctrl_Singlestep, SwisTrack::OnMenuControlSinglestep)
 EVT_MENU(Gui_Mode_Intercept, SwisTrack::OnMenuIntercept)
 EVT_MENU(Gui_Ctrl_Stop, SwisTrack::OnMenuControlStop)
 EVT_MENU(Gui_View_ShowTracker, SwisTrack::OnMenuViewShowTracker)
+EVT_MENU(Gui_View_ShowParticleFilter, SwisTrack::OnMenuViewShowParticleFilter)
 EVT_MENU(Gui_View_ShowSegmenter, SwisTrack::OnMenuViewShowSegmenter)
 EVT_MENU(Gui_View_ShowInput, SwisTrack::OnMenuViewShowInput)
 EVT_MENU_RANGE(Gui_View_TrajCross, Gui_View_ShowMask,SwisTrack::OnDrawingMode)
@@ -165,6 +166,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	trackingpanel = NULL; 
 	segmenterpanel = NULL;
 	inputpanel = NULL;
+	particlefilterpanel = NULL;
 	interceptionpanel = NULL;
 	
 	aviwriter = NULL;
@@ -202,6 +204,8 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 
 	menuView->Append(Gui_View_ShowTracker,_T("Show Tracker Panel"),_T("Toggles window where tracking parameters can be changed"),TRUE);
 	menuView->Check (Gui_View_ShowTracker, FALSE);
+	menuView->Append(Gui_View_ShowParticleFilter,_T("Show Particle Filter Panel"),_T("Toggles window where particle filters parameters can be changed"),TRUE);
+	menuView->Check (Gui_View_ShowParticleFilter, FALSE);
 	menuView->Append(Gui_View_ShowSegmenter,_T("Show Segmenter Panel"),_T("Toggles window where segmenter parameters can be changed"),TRUE);
 	menuView->Check(Gui_View_ShowSegmenter,FALSE);
 	menuView->Append(Gui_View_ShowInput,_T("Show Input Panel"),_T("Toggles window where input parameters can be changed"),TRUE);
@@ -682,6 +686,17 @@ void SwisTrack::OnMenuViewShowInput(wxCommandEvent& WXUNUSED(event))
 
 }
 
+/** \brief Event handler for the 'view->Show Particle Filter' checker
+*
+* If the item is checked, the particlefilter panel becomes visible.
+*/
+void SwisTrack::OnMenuViewShowParticleFilter(wxCommandEvent& WXUNUSED(event))
+{
+	bool checked = GetMenuBar()->GetMenu(2)->IsChecked(Gui_View_ShowParticleFilter);
+	if(particlefilterpanel) particlefilterpanel->Show(checked);
+
+}
+
 /** \brief Stops tracking
 
 ShutDown() calls ObjectTracker::Stop() and stops all tracking related panels
@@ -696,12 +711,17 @@ void SwisTrack::ShutDown()
 	status=STOPPED;
 
 	menuView->Check(Gui_View_ShowTracker, FALSE);
+	menuView->Check(Gui_View_ShowParticleFilter, FALSE);
 	menuView->Check(Gui_View_ShowSegmenter,FALSE);
 	menuView->Check(Gui_View_ShowInput,FALSE);
 
 	if(trackingpanel){
 		trackingpanel->Destroy();
 		trackingpanel=NULL;
+	}
+	if(particlefilterpanel){
+		particlefilterpanel->Destroy();
+		particlefilterpanel=NULL;
 	}
 	if(segmenterpanel){
 		segmenterpanel->Destroy();
@@ -944,6 +964,9 @@ void SwisTrack::StartTracker()
 
 		if(trackingpanel) trackingpanel->Destroy(); // delete old copy that might exist from a previous run
 		trackingpanel = new SwisTrackPanel(this,"Tracking panel","/CFG/TRACKER","/CFG/COMPONENTS/TRACKER",0); // ...and load new trackingpanel
+	
+		if(particlefilterpanel) particlefilterpanel->Destroy();
+		particlefilterpanel = new SwisTrackPanel(this,"Particle Filter panel","/CFG/PARTICLEFILTER","/CFG/COMPONENTS/PARTICLEFILTER",0);
 
 		if(segmenterpanel) segmenterpanel->Destroy();
 		segmenterpanel = new SwisTrackPanel(this,"Segmenter panel","/CFG/SEGMENTER","/CFG/COMPONENTS/SEGMENTER",1);
@@ -955,6 +978,7 @@ void SwisTrack::StartTracker()
 		interceptionpanel = new InterceptionPanel(this);
 
 		trackingpanel->Show(FALSE);
+		particlefilterpanel->Show(FALSE);
 		segmenterpanel->Show(FALSE);
 		inputpanel->Show(FALSE);
 

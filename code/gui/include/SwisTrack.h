@@ -96,6 +96,7 @@ public:
 	void OnMenuViewShowTracker(wxCommandEvent& WXUNUSED(event));
 	void OnMenuViewShowSegmenter(wxCommandEvent& WXUNUSED(event));
 	void OnMenuViewShowInput(wxCommandEvent& WXUNUSED(event));
+	void OnMenuViewShowParticleFilter(wxCommandEvent& WXUNUSED(event));
 
 	void OnDrawingMode(wxCommandEvent& event);
  	void OnMenuIntercept(wxCommandEvent& WXUNUSED(event));
@@ -104,6 +105,7 @@ public:
 	SwisTrackPanel* trackingpanel;
 	SwisTrackPanel* segmenterpanel;
 	SwisTrackPanel* inputpanel;
+	SwisTrackPanel* particlefilterpanel;
 	InterceptionPanel* interceptionpanel;
 
 	//toolbar
@@ -122,8 +124,6 @@ public:
 	ObjectTracker* ot;		//!< The tracking core (ObjectTracker)
 
 	// Tool classes
-//	Calibration* transform;
-//	DataLogger* datalogger;
 	AviWriter* aviwriter;
 	SocketServer* socketserver;
 
