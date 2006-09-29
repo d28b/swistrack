@@ -160,7 +160,10 @@ void ParticleFilter::GetParticlesFromContours()
 				//calculating the moments
 				cvMoments(contour,&moments);
 				//Calculating Particle Area
-				tmpParticle.area=moments.m00;				
+				tmpParticle.area=moments.m00;	
+				(tmpParticle.p).x=(float)(rectROI.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
+			    (tmpParticle.p).y=(float)(rectROI.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
+			
 
 				//Selection based on area
 				if ((tmpParticle.area<=max_area)&&(tmpParticle.area>=min_area))
@@ -193,8 +196,6 @@ void ParticleFilter::GetParticlesFromContours()
 						for(j=particles.begin();(j!=particles.end())&&(tmpParticle.area <(*j).area);j++);
 
 						//Caculate the important values						
-						(tmpParticle.p).x=(float)(rectROI.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
-						(tmpParticle.p).y=(float)(rectROI.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
 						tmpParticle.compactness=GetContourCompactness(contour);
 						tmpParticle.id=-1;
 						tmpParticle.orientation=0;
@@ -212,15 +213,23 @@ void ParticleFilter::GetParticlesFromContours()
 			//If we need to display the particles
 			if(trackingimg->GetDisplay())
 			{
+				char smove[20];
+				sprintf(smove,"%d",rejectedparticles.size());
+				trackingimg->Text(smove,cvPoint(10,10),CV_RGB(255,0,0));
+		
+				sprintf(smove,"%d",particles.size());
+				trackingimg->Text(smove,cvPoint(100,10),CV_RGB(0,255,0));
+
+				for(j=rejectedparticles.begin();j!=rejectedparticles.end();j++)
+				{
+					trackingimg->DrawCircle(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255,0,0));					
+				}
 				for(j=particles.begin();j!=particles.end();j++)
 				{
 					trackingimg->DrawCircle(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(0,255,0));
 					trackingimg->Cover(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255,0,0),2);
 				}
-				for(j=rejectedparticles.begin();j!=rejectedparticles.end();j++)
-				{
-					trackingimg->DrawCircle(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255,0,0));					
-				}
+
 			}
 			cvReleaseImage(&src_tmp);
 			cvRelease((void**)&contour);
