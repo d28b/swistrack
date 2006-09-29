@@ -1,9 +1,8 @@
 /** \file changelog.txt
-* v.3.0.0 Rev. 110
+* v.3.0.0 Rev. 159
 *
-* - core upgrade to Intels OpenCV library 0.97
+* - core upgrade to Intels OpenCV library 0.99
 * - GUI upgraded to WxWidgets 2.6.3
-* - Application runs in a single thread
 * - Possibility to save BMP files
 * - Socket Server added
 * - Clients for Matlab, Java, C++ added
@@ -13,6 +12,7 @@
 * - XML data structure for passing parameters within SwisTrack
 * - Segmentation routines improved
 * - VfW camera (USB) support added
+* - Panels added for most classes
 *
 * v.2.4.1 (05.08.2005)
 *
