@@ -178,7 +178,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	ot = NULL;
 
 #ifdef MULTITHREAD
-	criticalSection = NULL;
+	criticalSection = new wxCriticalSection();
 	objectTrackerThread = NULL;
 #endif
 
@@ -752,7 +752,7 @@ void SwisTrack::ShutDown()
 {
 
 	wxBusyInfo info(_T("Shutting down, please wait..."), this);
-	
+
 #ifdef MULTITHREAD
 	if (objectTrackerThread) {
 		if (objectTrackerThread->IsAlive()) {
@@ -1083,6 +1083,7 @@ void SwisTrack::StartTracker()
 
 		trackingpanel->Show(FALSE);
 		particlefilterpanel->Show(FALSE);
+		segmenterpppanel->Show(FALSE);
 		segmenterpanel->Show(FALSE);
 		inputpanel->Show(FALSE);
 
@@ -1092,9 +1093,6 @@ void SwisTrack::StartTracker()
 
 		ot=new ObjectTracker(cfgRoot);
 
-#ifdef MULTITHREAD
-		criticalSection = new wxCriticalSection();
-#endif
 
 		fps=ot->GetFPS(); // read the real fps
 		RecreateToolbar(); // ...and update the toolbar accordingly
