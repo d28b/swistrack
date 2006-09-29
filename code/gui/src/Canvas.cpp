@@ -75,6 +75,9 @@ void Canvas::OnMouseClick(wxMouseEvent &event)
 		(parent)->SetStatusText(msg, 0);
 	}
 	else if(event.GetButton()==wxMOUSE_BTN_RIGHT){
+#ifdef MULTITHREAD
+		wxCriticalSectionLocker locker(*(parent->criticalSection));
+#endif
 		parent->ot->ClearCoverageImage();
 	}		
 }

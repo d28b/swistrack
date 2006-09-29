@@ -97,9 +97,9 @@ void SocketServer::OnSocketEvent(wxSocketEvent& event)
   wxString s = _("OnSocketEvent: ");
   wxSocketBase *sock = event.GetSocket();
   wxCommandEvent dummy;
-  
-  
-	
+#ifdef MULTITHREAD
+  wxCriticalSectionLocker locker(*(parent->criticalSection));
+#endif
 
   // Now we process the event
   switch(event.GetSocketEvent())
@@ -167,6 +167,7 @@ void SocketServer::OnSocketEvent(wxSocketEvent& event)
 
 void SocketServer::SendBlobs(wxSocketBase *sock)
 {
+  
   unsigned int len,n,width;
   wxString buf;
   sock->SetFlags(wxSOCKET_WAITALL);
@@ -191,6 +192,7 @@ void SocketServer::SendBlobs(wxSocketBase *sock)
 
 void SocketServer::SendTracks(wxSocketBase *sock)
 {
+  
   unsigned int len,n,width;
   wxString buf;
   sock->SetFlags(wxSOCKET_WAITALL);
@@ -209,6 +211,7 @@ void SocketServer::SendTracks(wxSocketBase *sock)
 
 void SocketServer::SendNumberofBlobs(wxSocketBase *sock)
 {
+	
 	wxString buf;
 	int n=parent->ot->GetNumberofParticles();
 	buf.Printf("%04d",n);
@@ -218,6 +221,7 @@ void SocketServer::SendNumberofBlobs(wxSocketBase *sock)
 
 void SocketServer::SendNumberofTracks(wxSocketBase *sock)
 {
+	
 	wxString buf;
 	int n=parent->ot->GetNumberofTracks();
 	buf.Printf("%04d",n);
@@ -227,6 +231,7 @@ void SocketServer::SendNumberofTracks(wxSocketBase *sock)
 
 void SocketServer::SendSmallFloat(wxSocketBase *sock, double value)
 {
+
 	wxString buf;
 	buf.Printf("%05.2f",value);
 	sock->Write(buf.GetData(),5);

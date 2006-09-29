@@ -1,6 +1,8 @@
 #ifndef _SwisTrack_H
 #define _SwisTrack_H
 
+#define MULTITHREAD
+
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
@@ -18,6 +20,11 @@
 
 //#include "calibration.h"
 #include "ObjectTracker.h"
+// For the auxiliary thread
+#ifdef MULTITHREAD
+#include "ObjectTrackerThread.h"
+#endif
+
 #ifdef _1394
 #include <1394camera.h>
 #endif
@@ -138,7 +145,11 @@ public:
 	 xmlpp::DomParser* expparser;
      xmlpp::Document* expdocument;
      xmlpp::Element* expRoot;
- 
+
+#ifdef MULTITHREAD
+	 // Critical section used to synchronize the main and auxiliary threads
+	 wxCriticalSection* criticalSection; 
+#endif
 
 protected:
     // any class wishing to process wxWindows events must use this macro
@@ -152,6 +163,11 @@ private:
 	//wxHtmlHelpController help; //!< Help controller
 	int show_coverage;
 	int status;
+
+#ifdef MULTITHREAD
+	ObjectTrackerThread* objectTrackerThread; // Object tracker auxiliary thread
+#endif
+	
 };
 
 #endif

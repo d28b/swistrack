@@ -350,6 +350,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\ObjectTrackerThread.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\SettingsDialog.cpp"
 				>
 				<FileConfiguration
@@ -432,6 +436,10 @@
 			</File>
 			<File
 				RelativePath="..\include\InterceptionPanel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ObjectTrackerThread.h"
 				>
 			</File>
 			<File

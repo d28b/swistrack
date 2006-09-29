@@ -147,28 +147,42 @@ SwisTrackPanel::SwisTrackPanel(SwisTrack* parent, char* title, char* component, 
 
 void SwisTrackPanel::ChangeIntParam(wxScrollEvent& event)
 	{
+		
 		int id=event.GetId()-1-wxID_HIGHEST;
 		
 		wxString dummy;
 		dummy.Printf("%d",((wxSlider*) controls[id])->GetValue());
 		SetParamByXPath(parent->cfgRoot,idxpath[id].c_str(),dummy.c_str());
+
+#ifdef MULTITHREAD
+		wxCriticalSectionLocker locker(*(parent->criticalSection));
+#endif
 		parent->ot->SetParameters(); 
 	}
 
 void SwisTrackPanel::ChangeBooleanParam(wxCommandEvent& event)
 	{
+		
 		int id=event.GetId()-1-wxID_HIGHEST;
 		
 		wxString dummy;
 		dummy.Printf("%d",((wxCheckBox*) controls[id])->GetValue());
 		SetParamByXPath(parent->cfgRoot,idxpath[id].c_str(),dummy.c_str());
+#ifdef MULTITHREAD
+		wxCriticalSectionLocker locker(*(parent->criticalSection));
+#endif
 		parent->ot->SetParameters(); 
+
 	}
 
 void SwisTrackPanel::ChangeParam(wxCommandEvent& event)
 	{
+		
 		int id=event.GetId()-1-wxID_HIGHEST;
 		SetParamByXPath(parent->cfgRoot,idxpath[id].c_str(),((wxTextCtrl*) controls[id])->GetValue().c_str());
+#ifdef MULTITHREAD
+		wxCriticalSectionLocker locker(*(parent->criticalSection));
+#endif
 		parent->ot->SetParameters();
 	}
 

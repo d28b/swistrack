@@ -159,6 +159,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 : wxFrame(NULL, -1, title, pos, size, style)
 {
 
+
 	show_coverage=0; // don't show coverage image
 	display_speed=5; //initial display speed 5Hz
 	fps=30; // initial guess for the FPS of our video
@@ -173,6 +174,11 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	socketserver = NULL;
 	parser = NULL;
 	ot = NULL;
+
+#ifdef MULTITHREAD
+	criticalSection = NULL;
+	objectTrackerThread = NULL;
+#endif
 
 	SetIcon(wxICON(gui)); // set the frame icon
 
@@ -314,6 +320,9 @@ divided by the display speed set in the toolbar. For example, for a frame rate o
 15Hz and a display speed of 5Hz, Update() would ignore two frames out of three.
 */
 void SwisTrack::Update(){
+#ifdef MULTITHREAD
+	wxCriticalSectionLocker locker(*criticalSection);
+#endif
 	double pos;
 	double time;
 
@@ -347,12 +356,16 @@ Deallocates all memory and closes the application.
 */
 SwisTrack::~SwisTrack(){
 	ShutDown();
+
 	if(ot) delete ot;
 	if(socketserver) delete socketserver;
 	if(canvas) delete canvas;
 	if(colorbmp) delete colorbmp;
 	if(parser) delete parser;
 	if(expparser) delete expparser;
+#ifdef MULTITHREAD
+	if (criticalSection) delete criticalSection;
+#endif
 	Close(TRUE);
 }
 
@@ -517,14 +530,22 @@ does not process the video source), but a single step is executed by calling
 ObjectTracker::Step() and SwisTrack::Update().
 */
 void SwisTrack::Singlestep(){
+	
 	wxToolBarBase *tb = GetToolBar();
 	for(int i=Gui_Ctrl_Rewind; i<= Gui_Ctrl_Pause; i++) tb->ToggleTool(i, 0 );
 	tb->ToggleTool(Gui_Ctrl_Pause, 1 );
+#ifdef MULTITHREAD
+	criticalSection->Enter();
+#endif
 	((wxSlider*) tb->FindControl(wxID_DSPSPDSLIDER))->SetValue((int) ot->GetFPS());
 	display_speed=(int) ot->GetFPS();
 	ot->Step();
+#ifdef MULTITHREAD
+	criticalSection->Leave();
+#endif
 	Update();
 	status=PAUSED;
+	
 }
 
 /*! \brief Event handler for the single step button in the toolbar 
@@ -593,11 +614,18 @@ void SwisTrack::OnMenuToolsShow1394Camera(wxCommandEvent& WXUNUSED(event))
 */
 void SwisTrack::OnChangeDisplaySpeed(wxScrollEvent& WXUNUSED(event))
 {
+	
 	GetToolBar()->TransferDataFromWindow();
+#ifdef MULTITHREAD
+	criticalSection->Enter();
+#endif
 	if(!display_speed)
 		ot->SetDisplay(0);
 	else
 		ot->SetDisplay(1);
+#ifdef MULTITHREAD
+	criticalSection->Leave();
+#endif
 }
 
 /** \brief Event handler for the 'Help->About' command
@@ -620,7 +648,9 @@ void SwisTrack::OnMenuHelpAbout(wxCommandEvent& WXUNUSED(event))
 */
 void SwisTrack::OnDrawingMode(wxCommandEvent& event)
 {
-
+#ifdef MULTITHREAD
+	wxCriticalSectionLocker lock(*criticalSection);
+#endif
 	switch ( event.GetId() )
 	{
 	case Gui_View_TrajCross:{
@@ -704,10 +734,30 @@ and closes a possibly open AVI File.
 */
 void SwisTrack::ShutDown()
 {
+
 	wxBusyInfo info(_T("Shutting down, please wait..."), this);
+	
+#ifdef MULTITHREAD
+	if (objectTrackerThread) {
+		if (objectTrackerThread->IsAlive()) {
+			objectTrackerThread->Delete();
+		}
+		objectTrackerThread = NULL;
+	} 
+#endif
+
+#ifdef MULTITHREAD
+	criticalSection->Enter();
+#endif
+
 	if(ot){
 		ot->Stop();
 	}
+
+#ifdef MULTITHREAD
+	criticalSection->Leave();
+#endif
+	
 	status=STOPPED;
 
 	menuView->Check(Gui_View_ShowTracker, FALSE);
@@ -740,7 +790,6 @@ void SwisTrack::ShutDown()
 		aviwriter=NULL;
 		menuTools->Check(Gui_Tools_AviOutput,FALSE);
 	}
-
 }
 
 /** \brief Refreshes all displays
@@ -753,6 +802,9 @@ into RGB.
 */
 void SwisTrack::RefreshAllDisplays()
 {
+#ifdef MULTITHREAD
+	wxCriticalSectionLocker locker(*criticalSection);
+#endif
 	if(ot->GetImagePointer()){
 		IplImage* tmp;			
 		if(!show_coverage)
@@ -829,15 +881,18 @@ void SwisTrack::Finished()
 
 CvPoint2D32f* SwisTrack::GetPos(int id)
 {
+#ifdef MULTITHREAD
+	wxCriticalSectionLocker locker(*criticalSection);
+#endif
 	//	if(!stop)
-	return(ot->GetPos(id));
+	return ot->GetPos(id);
 	//	else
 	//		return(NULL);
 }
 
 CvPoint SwisTrack::GetUserEstimateFor(int id)
 {
-
+	
 	GUIApp* app=&(wxGetApp());
 
 	wxString msg;
@@ -849,7 +904,14 @@ CvPoint SwisTrack::GetUserEstimateFor(int id)
 		wxThread::Sleep(100);
 		app->Yield();
 	}
-	if(!(ot->GetStatus()==STOPPED))
+#ifdef MULTITHREAD
+	criticalSection->Enter();
+#endif
+	int otStatus = ot->GetStatus();
+#ifdef MULTITHREAD
+	criticalSection->Leave();
+#endif
+	if(!(otStatus==STOPPED))
 		if(clicked==1){
 			return(cvPoint(mx,my));
 		}
@@ -914,7 +976,18 @@ void SwisTrack::OnSetAviOutput(wxCommandEvent& WXUNUSED(event))
 
 void SwisTrack::OnEnableAVI(wxCommandEvent &event)
 {
-	if(!ot) StartTracker();
+#ifdef MULTITHREAD
+	criticalSection->Enter();
+#endif
+	if(!ot) {
+		#ifdef MULTITHREAD
+			criticalSection->Leave();
+		#endif
+		StartTracker();
+	}
+#ifdef MULTITHREAD
+	criticalSection->Leave();
+#endif
 	if(!aviwriter){
 		int type;
 		int result = UserInputModal("Do you want to overlay the AVI output with trajectory information?","AVI Output");
@@ -947,9 +1020,17 @@ void SwisTrack::OnHelp(wxCommandEvent& WXUNUSED(event))
 void SwisTrack::OnIdle(wxIdleEvent& WXUNUSED(event)){
 	if(status==RUNNING){
 		try{
+#ifndef MULTITHREAD
 			ot->Step();
+#endif
 			Update();
+#ifdef MULTITHREAD
+			criticalSection->Enter();
+#endif
 			status=ot->GetStatus();
+#ifdef MULTITHREAD
+			criticalSection->Leave();
+#endif
 			wxWakeUpIdle();
 		}
 		catch ( char * str ) {DisplayModal(str,"Error");}
@@ -988,6 +1069,10 @@ void SwisTrack::StartTracker()
 
 		ot=new ObjectTracker(cfgRoot);
 
+#ifdef MULTITHREAD
+		criticalSection = new wxCriticalSection();
+#endif
+
 		fps=ot->GetFPS(); // read the real fps
 		RecreateToolbar(); // ...and update the toolbar accordingly
 
@@ -1002,6 +1087,14 @@ void SwisTrack::StartTracker()
 		SetStatusText(_T(""),0);
 		status=ot->Step();
 
+#ifdef MULTITHREAD
+		// If thread does not exist
+		if (objectTrackerThread == NULL) {
+			objectTrackerThread = new ObjectTrackerThread(ot, criticalSection);
+			objectTrackerThread->Create();
+			objectTrackerThread->Run();
+		}		
+#endif 
 
 	}             
 	catch (char* str) {

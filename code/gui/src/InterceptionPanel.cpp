@@ -93,8 +93,11 @@ void InterceptionPanel::OnInterceptDone( wxCommandEvent &event )
 	this->Show(FALSE);
 	parent->menuControl->Enable(Gui_Ctrl_Pause,TRUE);
 	parent->menuControl->Enable(Gui_Ctrl_Continue,FALSE);	
-
+#ifdef MULTITHREAD
+	wxCriticalSectionLocker locker(*(parent->criticalSection));
+#endif
 	parent->SetStatus(parent->ot->GetStatus());
+
 }
 
 void InterceptionPanel::OnInterceptPick( wxCommandEvent &event )
@@ -108,6 +111,9 @@ void InterceptionPanel::OnInterceptPick( wxCommandEvent &event )
 	CvPoint ue = parent->GetUserEstimateFor(id);
 
 	if(ue.x != -1 && ue.y != -1){
+#ifdef MULTITHREAD
+		wxCriticalSectionLocker locker(*(parent->criticalSection));
+#endif
 		int height = parent->ot->GetImagePointer()->height;
 		CvPoint2D32f uef = cvPoint2D32f(ue.x,height - ue.y);
 		parent->ot->SetPos(id,&uef);
