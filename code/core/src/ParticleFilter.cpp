@@ -213,13 +213,6 @@ void ParticleFilter::GetParticlesFromContours()
 			//If we need to display the particles
 			if(trackingimg->GetDisplay())
 			{
-				char smove[20];
-				sprintf(smove,"%d",rejectedparticles.size());
-				trackingimg->Text(smove,cvPoint(10,10),CV_RGB(255,0,0));
-		
-				sprintf(smove,"%d",particles.size());
-				trackingimg->Text(smove,cvPoint(100,10),CV_RGB(0,255,0));
-
 				for(j=rejectedparticles.begin();j!=rejectedparticles.end();j++)
 				{
 					trackingimg->DrawCircle(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255,0,0));					

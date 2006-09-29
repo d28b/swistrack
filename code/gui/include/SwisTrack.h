@@ -104,6 +104,7 @@ public:
 	void OnMenuViewShowSegmenter(wxCommandEvent& WXUNUSED(event));
 	void OnMenuViewShowInput(wxCommandEvent& WXUNUSED(event));
 	void OnMenuViewShowParticleFilter(wxCommandEvent& WXUNUSED(event));
+	void OnMenuViewShowSegmenterPP(wxCommandEvent& WXUNUSED(event));
 
 	void OnDrawingMode(wxCommandEvent& event);
  	void OnMenuIntercept(wxCommandEvent& WXUNUSED(event));
@@ -111,6 +112,7 @@ public:
     //control panels
 	SwisTrackPanel* trackingpanel;
 	SwisTrackPanel* segmenterpanel;
+	SwisTrackPanel* segmenterpppanel;
 	SwisTrackPanel* inputpanel;
 	SwisTrackPanel* particlefilterpanel;
 	InterceptionPanel* interceptionpanel;
