@@ -31,7 +31,6 @@
 #include <vector>
 #include "vispolygon.h"
 
-using namespace std; //So that we can use standard library names
 
 /*****************************************************************************/
 /******************************** defines ************************************/
