@@ -148,6 +148,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				LinkLibraryDependencies="true"
 				OutputFile="../lib/objecttracker.lib"
 				SuppressStartupBanner="true"
 			/>

@@ -80,6 +80,8 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\core\lib;..\..\libblob\lib;L:\wxWidgets\lib\vc_lib;L:\1394camera\lib;L:\libxml2\lib;&quot;L:\libxml++\lib&quot;;L:\wxWidgets\contrib\lib;L:\opencv\lib;..\..\..\LPM_VISLIB\lib"
+				IgnoreDefaultLibraryNames=""
+				DelayLoadDLLs="MSVCR80D.DLL;MSVCP80D.DLL"
 				SubSystem="2"
 				TargetMachine="1"
 			/>
