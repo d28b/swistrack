@@ -1,5 +1,10 @@
 /** \file changelog.txt
-* v.3.0.0 Rev. 159
+* v.3.0.0 Rev. 172
+*
+* - image flip now optional, performance of real-time tracking improved
+* - it is now possible to specify whether trajectories can merge (marker-less) or not (marker-based)
+*
+* v.3.0.0b Rev. 170
 *
 * - core upgrade to Intels OpenCV library 0.99
 * - GUI upgraded to WxWidgets 2.6.3
