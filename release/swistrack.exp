@@ -133,6 +133,7 @@
   <TRACKER mode="0" desc="Nearest Neighbor" long="Simple nearest neighbor tracking. Maximal distance between two frames can be specified by a distance gate">
     <MAXSPEED desc="Maximum allowed speed (pixel/frame)" type="integer" variable="1" min="1" max="255">50</MAXSPEED>
     <NOBJECTS desc="Number of objects to track" type="integer">0</NOBJECTS>
+    <SHAREDTRAJECTORIES desc="Can trajectories share a particle?" type="boolean">1</SHAREDTRAJECTORIES>
   </TRACKER>
   <!---
                             Calibration Tab

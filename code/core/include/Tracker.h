@@ -100,7 +100,9 @@ class Tracker : public Component
 		/** Vector containing the id number of lost items */
 		vector<int> lostitems;
 		/** Drawing style */
-		int style;				
+		int style;	
+		/** If set to one, trajectories can share a particle, otherwise not (suitable for marker based tracking) */
+		int sharedtrajectories;
 	};
 
 #endif // !defined(AFX_TRACKER_H__AB256777_016A_4984_A1F1_8AC6C1D31D05__INCLUDED_)

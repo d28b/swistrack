@@ -36,7 +36,8 @@ Tracker::Tracker(Calibration* parent, xmlpp::Element* cfgRoot, TrackingImage* tr
         case 0 : /////////////// Nearest neighbor //////////////////////////
             CreateExceptionIfEmpty(cfgRoot,"/CFG/TRACKER[@mode='0']");
             CreateExceptionIfEmpty(cfgRoot,"/CFG/TRACKER[@mode='0']/MAXSPEED");				
-			CreateExceptionIfEmpty(cfgRoot,"/CFG/TRACKER[@mode='0']/NOBJECTS");				
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/TRACKER[@mode='0']/NOBJECTS");	
+			CreateExceptionIfEmpty(cfgRoot,"/CFG/TRACKER[@mode='0']/SHAREDTRAJECTORIES");
            break;
         default : throw "[Tracker::Tracker] tracker mode not implemented";
         };
@@ -587,10 +588,11 @@ void Tracker::DataAssociation()
 				
 				AddPoint(id,min_dist_id->p);
 				}
-			else{  // otherwise just take this point and add id to the list of competitors
-				
-				AddPoint(id,min_dist_id->p);
-				AddCompetitor(id);
+			else{  // otherwise just take this point and add id to the list of competitors, but only if this behavior is desired
+				if(sharedtrajectories){
+					AddPoint(id,min_dist_id->p);
+					AddCompetitor(id);
+				}
 				}
 			}
 		} // end for each id 1
@@ -986,6 +988,7 @@ void Tracker::SetParameters()
 					
 	nr_objects=GetIntValByXPath(cfgRoot,"/CFG/TRACKER[@mode='0']/NOBJECTS");
 	max_speed=GetIntValByXPath(cfgRoot,"/CFG/TRACKER[@mode='0']/MAXSPEED");
+	sharedtrajectories=GetIntValByXPath(cfgRoot,"/CFG/TRACKER[@mode='0']/SHAREDTRAJECTORIES");
 	particlefilter->SetParameters();
 	}
 
