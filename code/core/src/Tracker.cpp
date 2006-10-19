@@ -786,15 +786,17 @@ void Tracker::AssociateParticlesToCompetitors(int max_speed){
 	for(vector<particle>::iterator p=particles->begin();
 				p!= particles->end();
 				p++){
-					double min_dist=1000000;
+					const double INFTY = 1000000000;
+					double min_dist= (double) INFTY;
+					bool good_competitor_found = false; // True iff a reasonable competitor has been found
 					vector<int>::iterator min_dist_id=competitors.begin();
 					
 					for(vector<int>::iterator it=competitors.begin(); it != competitors.end(); it++){
 						double dist = GetCost(*it,p->p);
 						if(dist < min_dist) 
 							{
-							min_dist = dist;
-							min_dist_id = it; // save pointer to competitor
+								min_dist = dist;
+								min_dist_id = it; // save pointer to competitor
 							}
 						
 						}
@@ -802,12 +804,21 @@ void Tracker::AssociateParticlesToCompetitors(int max_speed){
 					
 					if(sqrt(min_dist) < max_speed)
 						{ // take a particle that is not to far away
-						targets.at(*min_dist_id).trajectory.pop_back();
-						AddPoint(*min_dist_id,p->p);
+							targets.at(*min_dist_id).trajectory.pop_back(); // Remove the oldest trajectory point of the trajectory history
+							AddPoint(*min_dist_id,p->p); // Add the current point to the trajectory history
+							good_competitor_found = true; // In this case say we have found the good competitor
 						}
 					
-					if(min_dist_id!=competitors.begin()) competitors.erase(min_dist_id); // ...and delete it
-					
+
+					// [2006-10-19-14-08, Clement Hongler:] commented this line because allows potential trajectories overlap
+					// if(min_dist_id!=competitors.begin()) competitors.erase(min_dist_id); // ...and delete it
+					// Replaced with this one that should do what we expect
+
+					// Iff we have found a good competitor (it has already been added to the particle history
+					if (good_competitor_found == true) { 
+						competitors.erase(min_dist_id); // We can remove it from the list of the competitors
+					}
+
 					} // end for every particle
 				}
 
