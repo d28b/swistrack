@@ -95,6 +95,7 @@ EVT_MENU(Gui_Tools_ShowCamera,SwisTrack::OnMenuToolsShow1394Camera)
 EVT_MENU(Gui_Tools_AviOutput,SwisTrack::OnEnableAVI)
 EVT_MENU(Gui_Tools_Screenshot,SwisTrack::MakeScreenShot)
 EVT_MENU(Gui_Tools_FlipScreen,SwisTrack::FlipScreen)
+EVT_MENU(Gui_Tools_FitCanvas,SwisTrack::FitCanvas)
 EVT_COMMAND_SCROLL(wxID_DSPSPDSLIDER, SwisTrack::OnChangeDisplaySpeed)
 EVT_MENU(Gui_Help,SwisTrack::OnHelp)
 EVT_IDLE(SwisTrack::OnIdle)
@@ -242,8 +243,10 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	menuTools->AppendSeparator();
 	menuTools->Append(Gui_Tools_Screenshot,_T("Save Bitmap"),_T("Saves the current view to a file"));
 	menuTools->AppendSeparator();
-	menuTools->Append(Gui_Tools_FlipScreen,_("Flip Output"),_T("Flips the output (when tracking from video)"),TRUE);
-	menuView->Check (Gui_Tools_FlipScreen,flip);
+	menuTools->Append(Gui_Tools_FlipScreen,_T("Flip Output"),_T("Flips the output (when tracking from video)"),TRUE);
+	menuTools->Check(Gui_Tools_FlipScreen,flip);
+	menuTools->Append(Gui_Tools_FitCanvas,_T("Fit window to video"),_T("Increases performance"));
+
 #ifdef _1394
 	if(theCamera.CheckLink() != CAM_SUCCESS)    
 		menuTools->Enable(Gui_Tools_ShowCamera,FALSE);
@@ -831,7 +834,10 @@ void SwisTrack::RefreshAllDisplays()
 	wxCriticalSectionLocker locker(*criticalSection);
 #endif
 	if(ot->GetImagePointer()){
-		IplImage* tmp;			
+		IplImage* tmp;	
+		int cwidth, cheight;
+
+		canvas->GetSize(&cwidth,&cheight);
 		if(!show_coverage)
 		{
 			tmp=cvCreateImage(cvSize((ot->GetImagePointer())->width,(ot->GetImagePointer())->height),IPL_DEPTH_8U,3);
@@ -847,6 +853,12 @@ void SwisTrack::RefreshAllDisplays()
 		}
 		if(flip) cvFlip(tmp);
 		wxImage* colorimg = new wxImage(tmp->width,tmp->height,(unsigned char*) tmp->imageData,TRUE);
+		if(cwidth != tmp->width || cheight != tmp->height)
+		 colorimg = &colorimg->Rescale(cwidth,cheight);
+		
+		canvas->default_width=tmp->width;
+		canvas->default_height=tmp->height;
+
 		if(colorbmp) delete(colorbmp);
 		colorbmp= new wxBitmap(colorimg,3);
 		canvas->Refresh();
@@ -1164,6 +1176,11 @@ void SwisTrack::FlipScreen(wxCommandEvent& WXUNUSED(event))
 	menuBar->Check(Gui_Tools_FlipScreen,TRUE);
 }
 
+void SwisTrack::FitCanvas(wxCommandEvent& WXUNUSED(event))
+{
+ canvas->SetSize(canvas->default_width,canvas->default_height);		
+ wxGetApp().frame->SetSize(-1, -1,canvas->default_width+8,canvas->default_height+115);
+}
 
 void SwisTrack::DisplayModal(wxString msg, wxString title)
 {

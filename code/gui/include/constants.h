@@ -39,6 +39,7 @@ enum
 	Gui_Tools_ShowCamera,
 	Gui_Tools_Screenshot,
 	Gui_Tools_FlipScreen,
+	Gui_Tools_FitCanvas,
 	Gui_Intercept_Done,
 	Gui_Intercept_Pick,
 	wxID_OPENAVI,

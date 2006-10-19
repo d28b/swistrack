@@ -652,6 +652,7 @@ void Segmenter::SetParameters()
 		}
 		break;
 	}
+	/** \todo segmenter post processing needs its own class segmenterpp */
 	//Saving Post-Processing Values
 	firstDilate = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/FIRSTDILATE");
 	firstErode = GetIntValByXPath(cfgRoot,"/CFG/SEGMENTERPP[@mode='0']/FIRSTERODE");

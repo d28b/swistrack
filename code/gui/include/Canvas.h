@@ -25,10 +25,13 @@ class Canvas: public  wxPanel // wxScrolledWindow
 	void EraseBackground(wxEraseEvent& event);
   	
     void OnPaint(wxPaintEvent& WXUNUSED(event));
+	 int default_width;
+	 int default_height;
 
   private:
 	 SwisTrack* parent;
 	 int status;
+
 
 	
   protected:

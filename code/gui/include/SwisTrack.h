@@ -54,6 +54,7 @@ public:
 	void DisplayModal(wxString msg, wxString title=_T("Message"));
 	void MakeScreenShot(wxCommandEvent& WXUNUSED(event));
 	void FlipScreen(wxCommandEvent& WXUNUSED(event));
+	void FitCanvas(wxCommandEvent& WXUNUSED(event));
 	void StopTracker();
 	void StartTracker();
 	void SetStatus(int status){ this->status=status;}

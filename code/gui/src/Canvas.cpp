@@ -15,6 +15,8 @@ Canvas::Canvas(SwisTrack *parent, const wxPoint& pos, const wxSize& size):
 wxPanel(parent, -1, pos, size)
 {
  this->parent=parent;
+ default_width=size.GetWidth();
+ default_height=size.GetHeight();
 }
 
 /** \brief Interception of the EVT_ERASE_BACKGROUND
