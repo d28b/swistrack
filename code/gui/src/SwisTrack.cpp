@@ -840,7 +840,7 @@ void SwisTrack::RefreshAllDisplays()
 			cvCvtColor(ot->GetCoveragePointer(),tmp,CV_BGR2RGB);
 			//tmp = cvCloneImage(ot->GetCoveragePointer());
 		}
-		cvFlip(tmp);
+		//cvFlip(tmp);
 		wxImage* colorimg = new wxImage(tmp->width,tmp->height,(unsigned char*) tmp->imageData,TRUE);
 		if(colorbmp) delete(colorbmp);
 		colorbmp= new wxBitmap(colorimg,3);
@@ -856,7 +856,7 @@ void SwisTrack::RefreshAllDisplays()
 		cvCvtPlaneToPix(ot->GetBinaryPointer(), ot->GetBinaryPointer(),
 			ot->GetBinaryPointer(), NULL, tmp );
 
-		cvFlip(tmp);
+		//cvFlip(tmp);
 
 		wxImage* binaryimg = new wxImage(tmp->width,tmp->height,(unsigned char*) (tmp->imageData),TRUE);
 		segmenterpanel->Clear();
