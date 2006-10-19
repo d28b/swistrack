@@ -46,6 +46,7 @@ Section "SwisTrack"
 	File "..\release\swistrack.exp"
 	File "..\release\vispolygon_dll.dll"
 	File "..\release\zlib1.dll"
+	File "..\release\vcredist_x86.exe"
 	CreateShortCut "$DESKTOP\SwisTrack.lnk" "$INSTDIR\swistrack.exe"
 	CreateDirectory "$SMPROGRAMS\SwisTrack"
 	CreateShortCut "$SMPROGRAMS\SwisTrack\SwisTrack.lnk" "$INSTDIR\swistrack.exe"
@@ -93,7 +94,7 @@ Section "Example"
 	SetOverwrite on
 
 	; Set Section Files and Shortcuts
-	SetOutPath "$INSTDIR\"
+	SetOutPath "$INSTDIR\example\"
 	File "..\release\example\example.cfg"
   File "..\release\example\bg.bmp"
 	File "..\release\example\bg_calibration.bmp"
@@ -112,9 +113,9 @@ Section -FinishSection
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "UninstallString" "$INSTDIR\uninstall.exe"
 	WriteUninstaller "$INSTDIR\uninstall.exe"
 
-	MessageBox MB_YESNO "Would you like to run ${APPNAMEANDVERSION}?" IDNO NoRun
-		Exec "$INSTDIR\swistrack.exe"
-	NoRun:
+	Exec "$INSTDIR\vcredist_x86.exe"
+	Delete "$INSTDIR\vcredist_x86.exe"
+	
 
 SectionEnd
 
