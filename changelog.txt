@@ -1,8 +1,9 @@
 /** \file changelog.txt
-* v.3.0.0 Rev. 172
+* v.3.0.0 Rev. 175
 *
 * - image flip now optional, performance of real-time tracking improved
 * - it is now possible to specify whether trajectories can merge (marker-less) or not (marker-based)
+* - swistrack can now resize the video
 *
 * v.3.0.0b Rev. 170
 *
