@@ -13,7 +13,7 @@ Mask::Mask(){
      
    
 	maskimg=cvLoadImage(maskfname,0);
-	cvFlip(maskimg,maskimg);
+	//cvFlip(maskimg,maskimg);
 	masks.EmptyDetectedBlobsList();			// clear the blob list,
 	masks.FindBlobs(maskimg);				// and get the new ones,
 	masks.CalculateFeatures();              // calculate all blob features

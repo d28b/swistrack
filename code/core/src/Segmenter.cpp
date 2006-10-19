@@ -87,7 +87,7 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 			}			
 
 			// Flip image because AVI provides bottom left images and BMP top left.
-			cvFlip(background,background,0);
+			//cvFlip(background,background,0);
 			
 			if (!background)
 			{
@@ -168,7 +168,7 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 				cvReleaseImage(&Blue);
 				cvReleaseImage(&tmpImage);
 				// Flip image because AVI provides bottom left images and BMP top left.
-				cvFlip(background,background,0);
+				//cvFlip(background,background,0);
 				break;
 				}
 				//We will not be able to work
@@ -240,7 +240,7 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 		if (mask->nChannels!=1)
 			throw "[Segmenter::Segmenter] The mask must be a black and white image";
 		// Flip image because AVI provides bottom left images and BMP top left.
-		cvFlip(mask);
+		//cvFlip(mask);
 	}
 
 

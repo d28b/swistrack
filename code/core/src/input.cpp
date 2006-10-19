@@ -191,6 +191,7 @@ IplImage* Input::GetFrame()
 					if (input)  // Get a pointer to the current frame (if query was successful)
 					{
 						nFrame++;                         // Increment the frame counter.
+						cvFlip(input,0);              // AVI files are flipped
 						return(input);
 					} // end if input
 				}
