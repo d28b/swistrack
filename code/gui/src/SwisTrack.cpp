@@ -94,6 +94,7 @@ EVT_MENU(Gui_Tools_SetAviOutput, SwisTrack::OnSetAviOutput)
 EVT_MENU(Gui_Tools_ShowCamera,SwisTrack::OnMenuToolsShow1394Camera)
 EVT_MENU(Gui_Tools_AviOutput,SwisTrack::OnEnableAVI)
 EVT_MENU(Gui_Tools_Screenshot,SwisTrack::MakeScreenShot)
+EVT_MENU(Gui_Tools_FlipScreen,SwisTrack::FlipScreen)
 EVT_COMMAND_SCROLL(wxID_DSPSPDSLIDER, SwisTrack::OnChangeDisplaySpeed)
 EVT_MENU(Gui_Help,SwisTrack::OnHelp)
 EVT_IDLE(SwisTrack::OnIdle)
@@ -164,6 +165,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	show_coverage=0; // don't show coverage image
 	display_speed=5; //initial display speed 5Hz
 	fps=30; // initial guess for the FPS of our video
+    flip=0; // don't flip the image
 
 	trackingpanel = NULL; 
 	segmenterpanel = NULL;
@@ -239,7 +241,9 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	menuTools->Append(Gui_Tools_ShowCamera,_T("Display camera"),_T("Displays data from a IEEE1394 firewire camera"));
 	menuTools->AppendSeparator();
 	menuTools->Append(Gui_Tools_Screenshot,_T("Save Bitmap"),_T("Saves the current view to a file"));
-
+	menuTools->AppendSeparator();
+	menuTools->Append(Gui_Tools_FlipScreen,_("Flip Output"),_T("Flips the output (when tracking from video)"),TRUE);
+	menuView->Check (Gui_Tools_FlipScreen,flip);
 #ifdef _1394
 	if(theCamera.CheckLink() != CAM_SUCCESS)    
 		menuTools->Enable(Gui_Tools_ShowCamera,FALSE);
@@ -779,6 +783,7 @@ void SwisTrack::ShutDown()
 	menuView->Check(Gui_View_ShowTracker, FALSE);
 	menuView->Check(Gui_View_ShowParticleFilter, FALSE);
 	menuView->Check(Gui_View_ShowSegmenter,FALSE);
+	menuView->Check(Gui_View_ShowSegmenterPP,FALSE);
 	menuView->Check(Gui_View_ShowInput,FALSE);
 
 	if(trackingpanel){
@@ -840,7 +845,7 @@ void SwisTrack::RefreshAllDisplays()
 			cvCvtColor(ot->GetCoveragePointer(),tmp,CV_BGR2RGB);
 			//tmp = cvCloneImage(ot->GetCoveragePointer());
 		}
-		//cvFlip(tmp);
+		if(flip) cvFlip(tmp);
 		wxImage* colorimg = new wxImage(tmp->width,tmp->height,(unsigned char*) tmp->imageData,TRUE);
 		if(colorbmp) delete(colorbmp);
 		colorbmp= new wxBitmap(colorimg,3);
@@ -856,7 +861,7 @@ void SwisTrack::RefreshAllDisplays()
 		cvCvtPlaneToPix(ot->GetBinaryPointer(), ot->GetBinaryPointer(),
 			ot->GetBinaryPointer(), NULL, tmp );
 
-		//cvFlip(tmp);
+		if(flip) cvFlip(tmp);
 
 		wxImage* binaryimg = new wxImage(tmp->width,tmp->height,(unsigned char*) (tmp->imageData),TRUE);
 		segmenterpanel->Clear();
@@ -1153,6 +1158,11 @@ void SwisTrack::MakeScreenShot(wxCommandEvent& WXUNUSED(event))
 	dlg->Destroy();
 }
 
+void SwisTrack::FlipScreen(wxCommandEvent& WXUNUSED(event))
+{
+	if(flip) flip=0; else flip=1;
+	menuBar->Check(Gui_Tools_FlipScreen,TRUE);
+}
 
 
 void SwisTrack::DisplayModal(wxString msg, wxString title)

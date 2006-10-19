@@ -53,6 +53,7 @@ public:
 	int UserInputModal(wxString msg,wxString title);
 	void DisplayModal(wxString msg, wxString title=_T("Message"));
 	void MakeScreenShot(wxCommandEvent& WXUNUSED(event));
+	void FlipScreen(wxCommandEvent& WXUNUSED(event));
 	void StopTracker();
 	void StartTracker();
 	void SetStatus(int status){ this->status=status;}
@@ -165,6 +166,7 @@ private:
 	//wxHtmlHelpController help; //!< Help controller
 	int show_coverage;
 	int status;
+	int flip; //!< Flag whether to flip the image
 
 #ifdef MULTITHREAD
 	ObjectTrackerThread* objectTrackerThread; // Object tracker auxiliary thread
