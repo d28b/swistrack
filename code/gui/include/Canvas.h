@@ -33,7 +33,9 @@ public:
     void OnPaint(wxPaintEvent& WXUNUSED(event));
 	wxSize GetDefaultSize(){return(wxSize(default_width,default_height));}
 	void SetDefaultSize(wxSize size){default_width=size.GetWidth(); default_height=size.GetHeight();}
-	void SetSizeToDefault(){SetSize(default_width,default_height);};		
+	void SetSizeToDefault(){SetSize(default_width,default_height);};
+	CvPoint GetPixel(int x,int y){return(cvPoint((double) x/GetSize().GetWidth()*default_width,(double) y/GetSize().GetHeight()*default_height));};
+	//CvPoint GetPixel(int x,int y){return(cvPoint(GetSize().GetWidth(),GetSize().GetHeight()));};
 
   
 

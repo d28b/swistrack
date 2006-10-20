@@ -56,6 +56,9 @@ void Canvas::OnMouseClick(wxMouseEvent &event)
 	int u = event.GetX();
 	int v = event.GetY();
 	
+	CvPoint p = GetPixel(u,v);
+	u=p.x;
+	v=p.y;
    	parent->mx=u;
 	parent->my=v;
 	parent->clicked=event.GetButton();
