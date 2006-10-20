@@ -24,9 +24,11 @@ private:
 	 int default_height;
 	 SwisTrack* parent;
 	 int status;
+	 int dragging; 
   
 public:
-	  void OnMouseClick(wxMouseEvent &event);
+	void OnMouseClick(wxMouseEvent &event);
+	void OnMouseMove(wxMouseEvent &event);
     Canvas(SwisTrack *parent, const wxPoint& pos, const wxSize& size);
 	void EraseBackground(wxEraseEvent& event);
   	

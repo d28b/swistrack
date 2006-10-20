@@ -1172,7 +1172,7 @@ void SwisTrack::MakeScreenShot(wxCommandEvent& WXUNUSED(event))
 void SwisTrack::FlipScreen(wxCommandEvent& WXUNUSED(event))
 {
 	if(flip) flip=0; else flip=1;
-	menuBar->Check(Gui_Tools_FlipScreen,TRUE);
+	menuBar->Check(Gui_Tools_FlipScreen,flip);
 }
 
 void SwisTrack::FitCanvas(wxCommandEvent& WXUNUSED(event))

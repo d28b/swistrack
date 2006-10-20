@@ -5,6 +5,7 @@ BEGIN_EVENT_TABLE(Canvas, wxPanel)
 	EVT_ERASE_BACKGROUND(Canvas::EraseBackground)
     EVT_LEFT_DOWN(Canvas::OnMouseClick)
 	EVT_RIGHT_DOWN(Canvas::OnMouseClick)
+	EVT_MOTION(Canvas::OnMouseMove)
 END_EVENT_TABLE()
 
 /** \brief Constructor
@@ -53,30 +54,26 @@ void Canvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 */
 void Canvas::OnMouseClick(wxMouseEvent &event)
 {
-	int u = event.GetX();
-	int v = event.GetY();
+
 	
-	CvPoint p = GetPixel(u,v);
-	u=p.x;
-	v=p.y;
-   	parent->mx=u;
-	parent->my=v;
+	CvPoint p = GetPixel(event.GetX(),event.GetY());
+	if(parent->GetMenuBar()->GetMenu(3)->IsChecked(Gui_Tools_FlipScreen)) p.y=default_height-p.y;
+   	parent->mx=p.x;
+	parent->my=p.y;
 	parent->clicked=event.GetButton();
 	
     if(event.GetButton()==wxMOUSE_BTN_LEFT){
 		// set statusbar text
 		wxString msg;
-		/*if(parent->transform)
-		{
-			CvPoint2D32f p1=cvPoint2D32f(u-parent->width/2,v-parent->height/2);
-			CvPoint2D32f p2;
-			p2=parent->transform->ImageToWorld(p1);
-			msg.Printf("(%dpx, %dpx) -> (%0.3fm, %0.3fm)",u,v,p2.x,p2.y);
-		}
-		else*/
 		/** \todo Insert calibration into ot interface and allow for conversion of points */
-			msg.Printf(_("(%d, %d)"), u, v);
+			msg.Printf(_("(%d, %d)"), p.x, p.y);
+
 		(parent)->SetStatusText(msg, 0);
+
+		if(parent->ot)
+			dragging=parent->ot->GetIdByPos(&cvPoint2D32f(p.x,p.y)); // set 'dragging' to the id of the trajectory the user is clicking on (-1) if none
+		else 
+			dragging=-1;
 	}
 	else if(event.GetButton()==wxMOUSE_BTN_RIGHT){
 #ifdef MULTITHREAD
@@ -84,4 +81,20 @@ void Canvas::OnMouseClick(wxMouseEvent &event)
 #endif
 		parent->ot->ClearCoverageImage();
 	}		
+}
+
+/** \brief Event handler for mouse movements over the main canvas 
+* 
+*/
+void Canvas::OnMouseMove(wxMouseEvent &event)
+{
+	wxString msg;
+	
+	if(event.LeftIsDown() && dragging>-1){
+    	CvPoint p = GetPixel(event.GetX(),event.GetY());
+		if(parent->GetMenuBar()->GetMenu(3)->IsChecked(Gui_Tools_FlipScreen)) p.y=default_height-p.y;
+        parent->ot->SetPos(dragging,&cvPoint2D32f(p.x,p.y));  
+	}
+	else
+		dragging=-1;
 }
