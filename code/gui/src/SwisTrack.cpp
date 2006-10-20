@@ -1027,14 +1027,19 @@ void SwisTrack::OnEnableAVI(wxCommandEvent &event)
 	if(!aviwriter){
 		int type;
 		int result = UserInputModal("Do you want to overlay the AVI output with trajectory information?","AVI Output");
-		if(result==1)
+		if(result==5103){
 			type=OVERLAY;
-		else
+			SetStatusText("Create AVI Writer (with trajectories)");
+		}
+		else{
 			type=RAWIMAGE;
-
-		// type=RAWIMAGE;
+			wxString std;
+			SetStatusText("Create AVI Writer (raw-image)");
+			SetStatusText(std);
+		}
 		aviwriter=new AviWriter(&avioutfname,this,type);
-		SetStatusText("Create AVI Writer");}
+	}
+		
 	else{
 		delete(aviwriter);
 		aviwriter=NULL;
