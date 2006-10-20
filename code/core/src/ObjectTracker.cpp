@@ -291,3 +291,9 @@ void ObjectTracker::ClearCoverageImage()
 {   
 	if(calibration) calibration->ClearCoverageImage();
 }
+
+
+int  ObjectTracker::GetIdByPos(CvPoint2D32f *p)
+{
+	return calibration->GetIdByPos(p);
+}

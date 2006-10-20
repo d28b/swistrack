@@ -1660,6 +1660,9 @@ void Calibration::SetParameters()
 }
 
 
-
+int Calibration::GetIdByPos(CvPoint2D32f *p)
+{
+	return(tracker->GetIdByPos(p));
+}
 
 

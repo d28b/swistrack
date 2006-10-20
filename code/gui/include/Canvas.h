@@ -19,19 +19,23 @@
 */
 class Canvas: public  wxPanel // wxScrolledWindow
 {
-  public:
+private:
+	 int default_width;
+	 int default_height;
+	 SwisTrack* parent;
+	 int status;
+  
+public:
 	  void OnMouseClick(wxMouseEvent &event);
     Canvas(SwisTrack *parent, const wxPoint& pos, const wxSize& size);
 	void EraseBackground(wxEraseEvent& event);
   	
     void OnPaint(wxPaintEvent& WXUNUSED(event));
-	 int default_width;
-	 int default_height;
+	wxSize GetDefaultSize(){return(wxSize(default_width,default_height));}
+	void SetDefaultSize(wxSize size){default_width=size.GetWidth(); default_height=size.GetHeight();}
+	void SetSizeToDefault(){SetSize(default_width,default_height);};		
 
-  private:
-	 SwisTrack* parent;
-	 int status;
-
+  
 
 	
   protected:

@@ -1159,6 +1159,9 @@ void Tracker::SetPos(int id,CvPoint2D32f *p)
 					
 }
 
+int Tracker::GetIdByPos(CvPoint2D32f *p){
+	return(0);
+}
 
 int Tracker::GetNumberofParticles()
 {	

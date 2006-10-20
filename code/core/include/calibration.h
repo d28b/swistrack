@@ -59,6 +59,7 @@ public:
 
 	void ClearCoverageImage();	
 	void SetPos(int id,CvPoint2D32f *p);
+	int GetIdByPos(CvPoint2D32f *p);
 	void RefreshCoverage();
 	void ToggleMaskDisplay();
 	void SetDisplay(int display_vid);

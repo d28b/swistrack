@@ -856,8 +856,7 @@ void SwisTrack::RefreshAllDisplays()
 		if(cwidth != tmp->width || cheight != tmp->height)
 		 colorimg = &colorimg->Rescale(cwidth,cheight);
 		
-		canvas->default_width=tmp->width;
-		canvas->default_height=tmp->height;
+		canvas->SetDefaultSize(wxSize(tmp->width,tmp->height));
 
 		if(colorbmp) delete(colorbmp);
 		colorbmp= new wxBitmap(colorimg,3);
@@ -1178,8 +1177,8 @@ void SwisTrack::FlipScreen(wxCommandEvent& WXUNUSED(event))
 
 void SwisTrack::FitCanvas(wxCommandEvent& WXUNUSED(event))
 {
- canvas->SetSize(canvas->default_width,canvas->default_height);		
- wxGetApp().frame->SetSize(-1, -1,canvas->default_width+8,canvas->default_height+115);
+ canvas->SetSizeToDefault();		
+ wxGetApp().frame->SetSize(-1, -1,canvas->GetDefaultSize().GetWidth()+8,canvas->GetDefaultSize().GetHeight()+115);
 }
 
 void SwisTrack::DisplayModal(wxString msg, wxString title)

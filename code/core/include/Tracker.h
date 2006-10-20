@@ -27,6 +27,7 @@ class Tracker : public Component
 		int GetNumberofTracks();
 		int GetNumberofParticles();
 		void SetPos(int id,CvPoint2D32f *p);
+		int GetIdByPos(CvPoint2D32f *p);
 		void RefreshCoverage();
 		double GetDist(CvPoint2D32f* p1, CvPoint2D32f* p2);
 		CvPoint2D32f* GetCritPoint(int id);
