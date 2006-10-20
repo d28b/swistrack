@@ -94,6 +94,9 @@ void Canvas::OnMouseMove(wxMouseEvent &event)
     	CvPoint p = GetPixel(event.GetX(),event.GetY());
 		if(parent->GetMenuBar()->GetMenu(3)->IsChecked(Gui_Tools_FlipScreen)) p.y=default_height-p.y;
         parent->ot->SetPos(dragging,&cvPoint2D32f(p.x,p.y));  
+		wxString msg;
+		msg.Printf("Dragging Object %d",dragging);
+		(parent)->SetStatusText(msg, 0);
 	}
 	else
 		dragging=-1;

@@ -1160,7 +1160,16 @@ void Tracker::SetPos(int id,CvPoint2D32f *p)
 }
 
 int Tracker::GetIdByPos(CvPoint2D32f *p){
-	return(3);
+	
+	for(unsigned int i=0; i<targets.size(); i++){
+		
+		for(unsigned int j=0; j<targets.at(i).trajectory.size(); j++){
+			if((targets.at(i).trajectory.at(j).x-p->x)*(targets.at(i).trajectory.at(j).x-p->x)+(targets.at(i).trajectory.at(j).y-p->y)*(targets.at(i).trajectory.at(j).y-p->y)<2.0)
+				return(i);
+		}
+	}
+
+	return(-1);
 }
 
 int Tracker::GetNumberofParticles()
