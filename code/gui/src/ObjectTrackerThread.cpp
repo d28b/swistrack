@@ -25,16 +25,16 @@ ObjectTrackerThread::~ObjectTrackerThread() {
 void* ObjectTrackerThread::Entry() {
 	int status = 0;
 	while (true) {
-		cs->Enter();
-		int status = ot->GetStatus();
-		cs->Leave();
+		{
+			wxCriticalSectionLocker(*cs);	
+			status = ot->GetStatus();
+		}
 		if (TestDestroy() == true) {
 			return NULL;
 		}
 		if (status == RUNNING) {
-			cs->Enter();
+			wxCriticalSectionLocker(*cs);	
 			ot->Step();
-			cs->Leave();
 		}
 		Sleep(10);
 		

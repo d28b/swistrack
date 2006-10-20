@@ -17,6 +17,8 @@ void Input::SetParameters(){
 			theCamera.SetSaturation(GetIntValByXPath(cfgRoot,"/CFG/INPUT[@mode='1']/SATURATION"));
 			break;
 			   }
+		case 2:
+			break;
 		default : throw "[Input::SetParameters] Illegal input mode";
 	}
 }

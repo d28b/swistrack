@@ -54,7 +54,9 @@ void Canvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 */
 void Canvas::OnMouseClick(wxMouseEvent &event)
 {
-
+#ifdef MULTITHREAD
+		wxCriticalSectionLocker locker(*(parent->criticalSection));
+#endif
 	
 	CvPoint p = GetPixel(event.GetX(),event.GetY());
 	if(parent->GetMenuBar()->GetMenu(3)->IsChecked(Gui_Tools_FlipScreen)) p.y=default_height-p.y;
@@ -76,9 +78,6 @@ void Canvas::OnMouseClick(wxMouseEvent &event)
 			dragging=-1;
 	}
 	else if(event.GetButton()==wxMOUSE_BTN_RIGHT){
-#ifdef MULTITHREAD
-		wxCriticalSectionLocker locker(*(parent->criticalSection));
-#endif
 		parent->ot->ClearCoverageImage();
 	}		
 }
@@ -88,6 +87,9 @@ void Canvas::OnMouseClick(wxMouseEvent &event)
 */
 void Canvas::OnMouseMove(wxMouseEvent &event)
 {
+#ifdef MULTITHREAD
+	wxCriticalSectionLocker locker(*(parent->criticalSection));
+#endif
 	wxString msg;
 	
 	if(event.LeftIsDown() && dragging>-1){
