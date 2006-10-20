@@ -76,7 +76,6 @@ void Canvas::OnMouseClick(wxMouseEvent &event)
 		else*/
 		/** \todo Insert calibration into ot interface and allow for conversion of points */
 			msg.Printf(_("(%d, %d)"), u, v);
-		
 		(parent)->SetStatusText(msg, 0);
 	}
 	else if(event.GetButton()==wxMOUSE_BTN_RIGHT){
