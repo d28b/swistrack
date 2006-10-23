@@ -1059,10 +1059,7 @@ int SwisTrack::GetStatus() const {
 
 void SwisTrack::OnHelp(wxCommandEvent& WXUNUSED(event))
 {
-	//help.Display(wxT("Test HELPFILE"));
-	//wxHtmlWindow* helpwindow =new wxHtmlWindow(this, -1, wxDefaultPosition, wxDefaultSize, wxHW_DEFAULT_STYLE, "htmlWindow");
-	//helpwindow->LoadFile(wxFileName("http://en.wikibooks.org/wiki/Swistrack"));
-	wxExecute("iexplore http://en.wikibooks.org/wiki/Swistrack");
+	wxLaunchDefaultBrowser("http://en.wikibooks.org/wiki/Swistrack");
 }
 
 
