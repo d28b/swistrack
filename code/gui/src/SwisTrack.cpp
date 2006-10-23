@@ -255,7 +255,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 #endif
 
 	menuHelp->Append(Gui_Help,_T("&Manual"),_T("Opens the manual"));
-	menuHelp->Enable(Gui_Help,FALSE);
+	//menuHelp->Enable(Gui_Help,FALSE);
 
 	menuHelp->Append(Gui_About, _T("&About...\tF1"), _T("Show about dialog"));
 
@@ -1060,6 +1060,9 @@ int SwisTrack::GetStatus() const {
 void SwisTrack::OnHelp(wxCommandEvent& WXUNUSED(event))
 {
 	//help.Display(wxT("Test HELPFILE"));
+	//wxHtmlWindow* helpwindow =new wxHtmlWindow(this, -1, wxDefaultPosition, wxDefaultSize, wxHW_DEFAULT_STYLE, "htmlWindow");
+	//helpwindow->LoadFile(wxFileName("http://en.wikibooks.org/wiki/Swistrack"));
+	wxExecute("iexplore http://en.wikibooks.org/wiki/Swistrack");
 }
 
 

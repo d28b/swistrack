@@ -11,7 +11,7 @@
     <SEGMENTER desc="Segmenter"/>
     <SEGMENTERPP desc="Segmenter Post-Processing"/>
     <PARTICLEFILTER desc="Particle Filter"/>
-    <MASK desc="Mask" />
+<!--    <MASK desc="Mask" /> -->
     <TRACKER desc="Tracker" />
     <CALIBRATION desc="Calibration" />
     <OUTPUT desc="Output" />
@@ -122,10 +122,10 @@
     <MAXAREA desc="Maximum area of a blob" type="integer" min="0" max="1000"  variable="1">100000</MAXAREA>
     <MAXNUMBER desc="Maximal Number of Contours" type="integer" min="0" max="255" variable="1">50</MAXNUMBER>
   </PARTICLEFILTER>
-  <PARTICLEFILTER mode="1" desc="Circular Shapes" long="All objects have the same, circular shape. Upon collision, contours are dissected in individual shapes.">
+<!--  <PARTICLEFILTER mode="1" desc="Circular Shapes" long="All objects have the same, circular shape. Upon collision, contours are dissected in individual shapes.">
     <RADIUS desc="Object radius (pixels)" type="double" variable="1">10</RADIUS>
    </PARTICLEFILTER>
-
+-->
 
   <!---
                                 Tracker Tab 

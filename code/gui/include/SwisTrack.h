@@ -16,7 +16,7 @@
 #include "wx/file.h"	  // File operations (here: FileExists)
 #include "wx/busyinfo.h"  // Imports the wxBusyInfo class (used on shutdown)
 #include "wx/app.h"	      // Provides app functions (setvendorname...)
-
+#include "wx/html/htmlwin.h"
 
 //#include "calibration.h"
 #include "ObjectTracker.h"
