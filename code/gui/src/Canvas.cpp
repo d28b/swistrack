@@ -72,7 +72,7 @@ void Canvas::OnMouseClick(wxMouseEvent &event)
 
 		(parent)->SetStatusText(msg, 0);
 
-		if(parent->ot)
+		if(parent->ot && parent->GetStatus()==RUNNING)
 			dragging=parent->ot->GetIdByPos(&cvPoint2D32f(p.x,p.y)); // set 'dragging' to the id of the trajectory the user is clicking on (-1) if none
 		else 
 			dragging=-1;

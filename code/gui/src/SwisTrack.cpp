@@ -337,7 +337,7 @@ void SwisTrack::Update(){
 	double pos;
 	double time;
 
-	if(status==RUNNING){
+	if(status==RUNNING || status==PAUSED){
 		pos=ot->GetProgress(2);		
 		time=ot->GetProgress(1)/1000.0;
 
@@ -532,6 +532,7 @@ void SwisTrack::OnMenuControlSinglestepback(wxCommandEvent& WXUNUSED(event))
 	wxToolBarBase *tb = GetToolBar();
 	for(int i=Gui_Ctrl_Rewind; i<= Gui_Ctrl_Pause; i++) tb->ToggleTool(i, 0 );
 	tb->ToggleTool(Gui_Ctrl_Pause, 1 );
+
 }
 
 /*! 
@@ -822,7 +823,7 @@ void SwisTrack::ShutDown()
 
 /** \brief Refreshes all displays
 *
-This method is called during otUpdate() to refresh the
+This method is called during Update() to refresh the
 main canvas and those panels (segmenter, tracker, input) that
 are activated. 
 As the frames coming from Input are in BGR, they will be converted
