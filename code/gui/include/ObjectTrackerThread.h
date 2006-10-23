@@ -34,7 +34,7 @@ class GuiApp;
 
 class ObjectTrackerThread: public wxThread {
 public:
-	ObjectTrackerThread(ObjectTracker* _ot, wxCriticalSection* _cs);
+	ObjectTrackerThread(ObjectTracker* _ot, wxCriticalSection* _cs, SwisTrack* _st);
 	virtual ~ObjectTrackerThread();
 	virtual void* Entry();
 protected:
@@ -43,6 +43,7 @@ protected:
 	ObjectTracker* ot;
 	// Critical section pointer
 	wxCriticalSection* cs;
+	SwisTrack* st;
 
 private:
 	// Forbids copy

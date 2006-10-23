@@ -1052,6 +1052,10 @@ int SwisTrack::GetDisplaySpeed()
 	return(display_speed);
 }
 
+int SwisTrack::GetStatus() const {
+	return status;
+}
+
 void SwisTrack::OnHelp(wxCommandEvent& WXUNUSED(event))
 {
 	//help.Display(wxT("Test HELPFILE"));
@@ -1132,7 +1136,7 @@ void SwisTrack::StartTracker()
 #ifdef MULTITHREAD
 		// If thread does not exist
 		if (objectTrackerThread == NULL) {
-			objectTrackerThread = new ObjectTrackerThread(ot, criticalSection);
+			objectTrackerThread = new ObjectTrackerThread(ot, criticalSection, this);
 			objectTrackerThread->Create();
 			objectTrackerThread->Run();
 		}		

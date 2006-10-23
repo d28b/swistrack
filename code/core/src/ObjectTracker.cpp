@@ -223,7 +223,7 @@ void ObjectTracker::InitTracker()
 	  }
   if(status==FINISHED){
       throw "Could not distinguish the specified number of objects before the video stream ended";
-      }
+    }
 }
 
 

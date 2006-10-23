@@ -1554,6 +1554,7 @@ int Calibration::GetStatus()
 
 int Calibration::Step()
 {
+	
 	if(tracker)
 	return(tracker->Step());
 	else

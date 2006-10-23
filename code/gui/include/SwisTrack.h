@@ -59,6 +59,7 @@ public:
 	void StartTracker();
 	void SetStatus(int status){ this->status=status;}
 	int GetDisplaySpeed();
+	int GetStatus() const;
 	void OnEnableAVI(wxCommandEvent& event);
 	CvPoint GetUserEstimateFor(int id);
 	void Finished();

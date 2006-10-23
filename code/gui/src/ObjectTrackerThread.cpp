@@ -9,8 +9,8 @@
 #include "GUIApp.h"
 #include <string.h>
 
-ObjectTrackerThread::ObjectTrackerThread(ObjectTracker* _ot, wxCriticalSection* _cs)
-: wxThread(), ot(_ot), cs(_cs) {
+ObjectTrackerThread::ObjectTrackerThread(ObjectTracker* _ot, wxCriticalSection* _cs, SwisTrack* _st)
+: wxThread(), ot(_ot), cs(_cs), st(_st) {
 
 }
 
@@ -23,18 +23,20 @@ ObjectTrackerThread::~ObjectTrackerThread() {
 
 
 void* ObjectTrackerThread::Entry() {
-	int status = 0;
 	while (true) {
-		{
-			wxCriticalSectionLocker(*cs);	
-			status = ot->GetStatus();
-		}
+	
 		if (TestDestroy() == true) {
 			return NULL;
 		}
-		if (status == RUNNING) {
-			wxCriticalSectionLocker(*cs);	
-			ot->Step();
+		else {
+			{
+				wxCriticalSectionLocker locker(*cs);	
+				int otStatus = ot->GetStatus();
+				int stStatus = st->GetStatus();
+				if (stStatus == RUNNING && otStatus == RUNNING) {
+					ot->Step();
+				}
+			}
 		}
 		Sleep(10);
 		
