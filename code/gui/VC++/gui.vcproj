@@ -49,7 +49,9 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../include;L:\glibmm\glib\glibmm;../../xmlcfg/include;../../libblob/include;../../core/include;../../calibration/include;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\libblob\include;L:\opencv\cxcore\include;&quot;L:\libxml++&quot;;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include"
+				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
+				AdditionalIncludeDirectories="../include;../../xmlcfg/include;../../libblob/include;../../core/include;../../calibration/include;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\msw;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\libblob\include;L:\opencv\cxcore\include;&quot;L:\libxml++&quot;;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WINDOWS__;__WXMSW__;__WIN95__;__WIN32__"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -83,6 +85,10 @@
 				IgnoreDefaultLibraryNames=""
 				DelayLoadDLLs=""
 				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				OptimizeForWindows98="1"
+				LinkTimeCodeGeneration="1"
 				TargetMachine="1"
 			/>
 			<Tool
