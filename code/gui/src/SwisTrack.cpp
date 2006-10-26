@@ -498,13 +498,17 @@ the GUI.
 */
 void SwisTrack::OnMenuControlContinue(wxCommandEvent& WXUNUSED(event))
 {
-	menuControl->Enable(Gui_Ctrl_Pause,TRUE);
-	menuControl->Enable(Gui_Ctrl_Continue,FALSE);
+	if(status==PAUSED){
+		menuControl->Enable(Gui_Ctrl_Pause,TRUE);
+		menuControl->Enable(Gui_Ctrl_Continue,FALSE);
 
-	wxToolBarBase *tb = GetToolBar();
-	for(int i=Gui_Ctrl_Rewind; i<= Gui_Ctrl_Pause; i++) tb->ToggleTool(i, 0 );
-	status=RUNNING;
-	tb->ToggleTool(Gui_Ctrl_Continue, 1 );
+		wxToolBarBase *tb = GetToolBar();
+		for(int i=Gui_Ctrl_Rewind; i<= Gui_Ctrl_Pause; i++) tb->ToggleTool(i, 0 );
+		status=RUNNING;
+		tb->ToggleTool(Gui_Ctrl_Continue, 1 );
+	}
+	else
+		StartTracker();
 
 }
 
