@@ -3,7 +3,7 @@
 #define libgeom_h
 //****************************************************************************/
 // Filename :   $RCSfile: libgeom.h,v $
-// Version  :   $Revision: 1.1 $
+// Version  :   $Revision: 1.2 $
 //
 // Author   :   $Author: produit $
 //              Yuri Lopez de Meneses
@@ -13,7 +13,7 @@
 //              Switzerland
 //
 //
-// Date     :   $Date: 2006/08/14 16:08:13 $
+// Date     :   $Date: 2006/10/13 12:32:55 $
 
 
 /** \file libgeom.h
@@ -96,8 +96,8 @@ inline VISAPI CvPoint2D32f ProjectXZ(CvPoint3D32f pt){
 	\image html geometricModel.png "Exemple of a model with 8 reference points and a target point
 
 	 \author $Author: produit $
-     \version $Revision: 1.1 $
-     \date $Date: 2006/08/14 16:08:13 $
+     \version $Revision: 1.2 $
+     \date $Date: 2006/10/13 12:32:55 $
 
 
 */
@@ -246,8 +246,8 @@ public:
  *
  *	
  *	 \author $Author: produit $
- *   \version $Revision: 1.1 $
- *   \date $Date: 2006/08/14 16:08:13 $
+ *   \version $Revision: 1.2 $
+ *   \date $Date: 2006/10/13 12:32:55 $
  *
  */
 
@@ -588,8 +588,8 @@ class VISAPI VisGeomModel
  		If a ROI is defined, blobs are only searched in the ROI.
 
 	 \author $Author: produit $
-     \version $Revision: 1.1 $
-     \date $Date: 2006/08/14 16:08:13 $
+     \version $Revision: 1.2 $
+     \date $Date: 2006/10/13 12:32:55 $
 
 
 */
@@ -842,8 +842,8 @@ typedef int (VisBlobSet ::* p_blobset_meth_3) ( double, double);
  *
  *	
  *	 \author $Author: produit $
- *   \version $Revision: 1.1 $
- *   \date $Date: 2006/08/14 16:08:13 $
+ *   \version $Revision: 1.2 $
+ *   \date $Date: 2006/10/13 12:32:55 $
  *
  */
 
