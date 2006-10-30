@@ -40,14 +40,22 @@ Input::Input(xmlpp::Element* cfgRoot)
 
 			Capture = cvCaptureFromFile(GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"));
 			if (!Capture){
-				FILE* f;				
+				FILE* f;
+#ifdef VS2003
+				f=fopen(GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"),"r");
+#else
 				fopen_s(&f,GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"),"r");
+#endif
 				if(f){
 					fclose(f);
 					throw "Input: Can not open AVI file (codec problem, VFW codec required, not DirectShow)";
 				}
 				else{
+#ifdef VS2003
+					f = fopen("swistrack.log","w");
+#else
 					fopen_s(&f,"swistrack.log","w");
+#endif
 					fprintf(f,"%s not found",GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"));
 					fclose(f);
 					throw "Input: Can not open AVI file (file not found)";

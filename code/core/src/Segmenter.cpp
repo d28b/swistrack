@@ -206,13 +206,25 @@ Segmenter::Segmenter(xmlpp::Element* cfgRoot, TrackingImage* trackingimg) : bina
 					cmy=(input->GetInputIpl())->height-cmy-1;
 				specifiedColor=cvGet2D(input->GetInputIpl(),cmy,cmx);//matrix reading, we define first the row (height/y) and then the column (width/x)
 				char redChar[20];
+#ifdef VS2003
+				sprintf(redChar,"%f",(specifiedColor.val)[2]);
+#else
 				sprintf_s(redChar,"%f",(specifiedColor.val)[2]);
+#endif
 				SetParamByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/RED",redChar);
 				char blueChar[20];
+#ifdef VS2003
+				sprintf(blueChar,"%f",(specifiedColor.val)[1]);
+#else
 				sprintf_s(blueChar,"%f",(specifiedColor.val)[1]);
+#endif
 				SetParamByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/BLUE",blueChar);
 				char greenChar[20];
+#ifdef VS2003
+				sprintf(greenChar,"%f",(specifiedColor.val)[0]);
+#else
 				sprintf_s(greenChar,"%f",(specifiedColor.val)[0]);
+#endif
 				SetParamByXPath(cfgRoot,"/CFG/SEGMENTER[@mode='3']/GREEN",greenChar);
 			}
 		}

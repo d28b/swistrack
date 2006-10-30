@@ -113,7 +113,11 @@ using namespace std;
 			}
 		if(style >= TRAJNOCROSS){
 			char smove[3];
+#ifdef VS2003
+			sprintf(smove, "%d", id);
+#else
 			sprintf_s(smove, "%d", id);
+#endif
 			CvPoint pt = cvPointFrom32f(             //
 				traj->front());
 			

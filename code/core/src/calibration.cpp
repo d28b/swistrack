@@ -108,8 +108,12 @@ double Calibration::GetArenaRadius(){
 				CvFont font;							
 				cvInitFont(&font,CV_FONT_VECTOR0,		
 					0.5,0.5,0.0,1);						
-				char s[250];					
+				char s[250];
+#ifdef VS2003
+				sprintf(s, "Mark a point on the arena border, right-click when finished");
+#else
 				sprintf_s(s,"Mark a point on the arena border, right-click when finished");
+#endif
 				cvPutText(tmpimg,s,			
 					cvPoint(20,20),&font,CV_RGB(255,255,255));		
 				cvShowImage("Estimate Arena Width",tmpimg);
@@ -1253,7 +1257,11 @@ catch(...){
 void Calibration::TestRoundCalibration(char* testpattern,int h, int* nrofpoints, double vd){
     try{
     FILE* f;
+#ifdef VS2003
+	f = fopen("trackererror.dat", "w");
+#else
 	fopen_s(&f,"trackererror.dat","w");
+#endif
 	
 	calibimg = cvLoadImage(testpattern,0);
 	CalibrateTarget();
@@ -1323,7 +1331,11 @@ void Calibration::TestRoundCalibration(char* testpattern,int h, int* nrofpoints,
 void Calibration::TestCalibration(char* testpattern,int cw, int ch,double wx, double wy){
     try{
 	FILE* f;
+#ifdef VS2003
+	f= fopen("trackererror.dat","w");
+#else
 	fopen_s(&f,"trackererror.dat","w");
+#endif
 	calibimg = cvLoadImage(testpattern,0);
 	CalibrateTarget();
 	cvNamedWindow("Validation",CV_WINDOW_AUTOSIZE);
@@ -1412,7 +1424,11 @@ void Calibration::SaveError(int n, CvPoint2D32f* u, CvPoint3D32f* x, char *fname
 {
 try{
 	FILE* f;
+#ifdef VS2003
+	f= fopen(fname, "w");
+#else
 	fopen_s(&f,fname,"w");
+#endif
 	if(f){
 	for(int i=0; i<n; i++){
 
