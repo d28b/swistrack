@@ -45,7 +45,8 @@ SwisTrackPanel::SwisTrackPanel(SwisTrack* parent, char* title, char* component, 
 							//////////////// Treats type INTEGER /////////////////////
 							if(!param_type.compare("integer")){
 								int min, max;
-
+								min=-1;			// forces initialisation
+								max = -1;
 								if(IsAttr(*parameter,"min")) min=GetIntAttr(*parameter,"min");
 								if(IsAttr(*parameter,"max")) max=GetIntAttr(*parameter,"max");
 

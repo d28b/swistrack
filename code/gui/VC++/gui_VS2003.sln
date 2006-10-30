@@ -2,7 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui", "gui_VS2003.vcproj", "{44405FF3-5736-429E-B8E3-DE423B43038B}"
 	ProjectSection(ProjectDependencies) = postProject
-		{D010B136-96BD-4D44-B4F0-30388FB460B7} = {D010B136-96BD-4D44-B4F0-30388FB460B7}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "objecttrackerlib", "..\..\core\VC++\objecttrackerlib_VS2003.vcproj", "{D010B136-96BD-4D44-B4F0-30388FB460B7}"

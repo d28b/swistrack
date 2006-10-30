@@ -84,7 +84,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\..\release"
+			OutputDirectory="C:\data\swistrack\release"
 			IntermediateDirectory="c:\temp"
 			ConfigurationType="1"
 			UseOfMFC="0"
