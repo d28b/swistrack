@@ -1,5 +1,5 @@
-#ifndef _INPUT_H
-#define _INPUT_H
+#ifndef HEADER_DataStructureImage
+#define HEADER_DataStructureImage
 
 #include "DataStructure.h"
 #include <string>

@@ -4,39 +4,40 @@
 THISCLASS::ComponentInputFileAVI(xmlpp::Element* cfgRoot):
 		Component(cfgRoot), mCapture(0) {
 
-	mode=GetIntAttrByXPath(cfgRoot,"/CFG/COMPONENTS/INPUT/FileAVI","mode");
+	// Check if configuration is there
+	CreateExceptionIfEmpty(mCfgRoot, "/Configuration/Input/FileAVI");
 
-	CreateExceptionIfEmpty(cfgRoot,"/CFG/INPUT[@mode='0']");
-	CreateExceptionIfEmpty(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE");
-
-	Capture = cvCaptureFromFile(GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"));
-	if (!Capture){
+	// Open file
+	std::string filename=GetValByXPath(cfgRoot, "/Configuration/Input/FileAVI/File");
+	Capture = cvCaptureFromFile(filename);
+	if (! Capture) {
 		FILE* f;
 #ifdef VS2003
-		f=fopen(GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"),"r");
+		f=fopen(filename, "r");
 #else
-		fopen_s(&f,GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"),"r");
+		fopen_s(&f, filename, "r");
 #endif
-		if(f){
+		if (f) {
 			fclose(f);
 			throw "Input: Can not open AVI file (codec problem, VFW codec required, not DirectShow)";
-		}
-		else{
+		} else {
 #ifdef VS2003
-			f = fopen("swistrack.log","w");
+			f = fopen("swistrack.log", "w");
 #else
-			fopen_s(&f,"swistrack.log","w");
+			fopen_s(&f,"swistrack.log", "w");
 #endif
-			fprintf(f,"%s not found",GetValByXPath(cfgRoot,"/CFG/INPUT[@mode='0']/AVIFILE"));
+			fprintf(f, "%s not found", filename);
 			fclose(f);
 			throw "Input: Can not open AVI file (file not found)";
 		}
 		return;
 	}
-	input =  cvQueryFrame( Capture );	
-	if(input){
-		if(strcmp(input->colorModel,"GRAY")==0)
-			isinputincolor=0;
+
+	// Check if we have colors or not
+	input=cvQueryFrame(Capture);	
+	if (input) {
+		if (strcmp(input->colorModel, "GRAY")==0)
+			mDataStructureImage->=0;
 		else
 			isinputincolor=1;          
 	}

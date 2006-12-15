@@ -1,5 +1,5 @@
-#ifndef _COMPONENTINPUTFILEAVI_H
-#define _COMPONENTINPUTFILEAVI_H
+#ifndef HEADER_ComponentInputFileAVI
+#define HEADER_ComponentInputFileAVI
 
 #include "TrackingImage.h"
 #include <vector>
