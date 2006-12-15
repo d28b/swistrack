@@ -294,7 +294,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	*/
 
 	/** \todo The SocketServer should go into ObjectTracker and the socket should be a parameter */
-	socketserver = new SocketServer(this,3000);
+	socketserver = new SocketServer(this, 3000);
 
 	if(!wxFile::Exists("swistrack.exp")){
 		DisplayModal("File swistrack.exp could not be found. Quitting.","Error");
