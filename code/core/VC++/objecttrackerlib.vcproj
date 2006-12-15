@@ -382,10 +382,6 @@
 			Name="Resource Files"
 			>
 		</Filter>
-		<File
-			RelativePath="..\core\readme.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

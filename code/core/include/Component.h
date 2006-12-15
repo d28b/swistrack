@@ -10,6 +10,9 @@ class Component
     protected:
         xmlpp::Element* cfgRoot;
         int mode;
+
+	public:
+		//virtual void SetParameters() = 0;
     };
 
 #endif
