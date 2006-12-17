@@ -1,53 +1,58 @@
 #include "ComponentInputCameraUSB.h"
 #define THISCLASS ComponentInputCameraUSB
 
-THISCLASS::ComponentInputCameraUSB(xmlpp::Element* cfgRoot):
-		mCapture(0) {
+THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
+		Component(stc, "CameraUSB"), mCapture(0), mLastImage(0) {
 
-	mCapture = cvCaptureFromCAM(-1);
-	if (! mCapture) {return;}
-
-	mLastImage = cvQueryFrame(mCapture);
-	if (! mLastImage) {return;}
-
-	mCore->mDataStructureImage.mIsInColor=(strcmp(mLastImage->colorModel, "GRAY")!=0);
 }
 
 THISCLASS::~ComponentInputCameraUSB() {
 	if (! mCapture) {return;}
-	cvReleaseCapture(&Capture);	
+	cvReleaseCapture(mCapture);
 }
 
-void THISCLASS::SetParameters() {
+bool THISCLASS::Start() {
+	mCapture = cvCaptureFromCAM(-1);
+	if (! mCapture) {
+		AddError("Could not open USB camera.");
+		return false;
+	}
+
+	mLastImage = cvQueryFrame(mCapture);
+	if (! mLastImage) {
+		AddError("Could not retrieve image from USB camera.");
+		return false;
+	}
+
+	mCore->mDataStructureImage.mIsInColor=(strcmp(mLastImage->colorModel, "GRAY")!=0);
 }
 
 bool THISCLASS::Step() {
-	if (! mCapture) {return 0;}	
+	if (! mCapture) {return false;}	
 
+	// Read from camera
 	IplImage* inputimage = cvQueryFrame(Capture);
-	if (! inputimage) {return false;}
+	if (! inputimage) {
+		AddError("Could not retrieve image from USB camera.");
+		return false;
+	}
 
+	// Set DataStructureImage
 	mCore->mDataStructureImage.mImage=inputimage;	
 	mCore->mDataStructureImage.mFrameNumber++;
+
+	// Show status
+	std::ostringstream oss;
+	oss << "Frame " << mCore->mDataStructureImage.mFrameNumber;
+	AddInfo(oss.str);
 	return true;
 }
 
-void THISCLASS::UpdateStatus() {
-	ClearStatus();
+bool THISCLASS::Stop() {
+	if (! mCapture) {return false;}	
 
-	if (! mCapture) {
-		AddError("Could not open USB camera.");
-		return;
-	}
-
-	if (! mLastAcquiredImage) {
-		AddError("Could not retrieve image from USB camera.");
-		return;
-	}
-
-	std::ostringstream oss;
-	oss << "Sampling at " << cvGetCaptureProperty(mCapture, CV_CAP_PROP_FPS) << " frames per second.";
-	AddInfo(oss.str);
+	cvReleaseCapture(mCapture);
+	return true;
 }
 
 double THISCLASS::GetFPS() {

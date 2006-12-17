@@ -8,13 +8,14 @@
 class SwisTrackCore {
 
 public:
+	typedef std::list<Component*> tComponentList;
 	DataStructureImage mDataStructureImage;
-	list<Component*> mComponents;
+	tComponentList mComponents;
 
 	SwisTrackCore(): mConfigurationRoot(0) {}
 	SwisTrackCore(xmlpp::Element* cfgroot): mConfigurationRoot(cfgroot) {}
 	virtual ~SwisTrackCore() {}
-	
+
 	virtual void SetParameters() = 0;
 	virtual void Step() = 0;
 

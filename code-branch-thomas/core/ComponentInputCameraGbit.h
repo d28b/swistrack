@@ -6,12 +6,13 @@
 class ComponentInputCameraGBit: public Component {
 
 public:
-	ComponentInputCameraGBit(xmlpp::Element* cfgRoot);
+	ComponentInputCameraGBit(SwisTrackCore *stc);
 	~ComponentInputCameraGBit();
 
 	// Overwritten Component methods
-	void SetParameters();
-	void Step();
+	bool Start();
+	bool Step();
+	bool Stop();
 
 private:
 

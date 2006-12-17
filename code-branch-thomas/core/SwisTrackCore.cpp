@@ -7,3 +7,4 @@ void THISCLASS::AddComponent() {
 void THISCLASS::RemoveComponent() {
 }
 
+

@@ -11,28 +11,24 @@
 class ComponentFileAVI: public Component {
 
 public:
-	ComponentInputFileAVI(xmlpp::Element* cfgRoot);
+	ComponentInputFileAVI(SwisTrackCore *stc);
 	~ComponentInputFileAVI();
 
 	// Overwritten Component methods
-	void SetParameters();
-	void Step();
+	bool Start();
+	bool Step();
+	bool Stop();
 
-	void SetParameters();
-	Input(xmlpp::Element* cfgRoot);
-	virtual ~Input();
-	IplImage* GetFrame();
-	double GetProgress(int kind);
-	CvSize GetInputDim();
-	int GetInputDepth();
-	int GetInputNbChannels();
-	int GetInputOrigin();
-	IplImage* GetInputIpl();
+	double GetProgressPercent();
+	double GetProgressMSec();
+	int GetProgressFrameNumber();
 	double GetFPS();
 
 private:
-	/** Pointer to AVI sequence */
+	//! Pointer to AVI sequence.
 	CvCapture* mCapture;
+	//! The last acquired image.
+	IplImage* mLastImage;
 };
 
 #endif

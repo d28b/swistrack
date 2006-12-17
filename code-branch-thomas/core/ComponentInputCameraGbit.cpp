@@ -1,22 +1,18 @@
 #include "ComponentInputCameraGBit.h"
 #define THISCLASS ComponentInputCameraGBit
 
-THISCLASS::ComponentInputCameraGBit(xmlpp::Element* cfgroot):
-		Component(cfgroot) {
+THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
+		Component(stc, "CameraGBit") {
 
 }
 
-void THISCLASS::SetParameters() {
+bool THISCLASS::Start() {
 	//theCamera.SetVideoFrameRate(GetIntValByXPath(cfgRoot, "/Configuration/InputCameraGBit/FrameRate")); 
 }
 
-void THISCLASS::Step() {
+bool THISCLASS::Step() {
 }
 
-bool THISCLASS::HasError() {
+bool THISCLASS::stop() {
 	return false;
 }
-
-std::string THISCLASS::GetError() {
-}
-

@@ -1,14 +1,14 @@
-#ifndef HEADER_ComponentInputCameraUSB
-#define HEADER_ComponentInputCameraUSB
+#ifndef HEADER_ComponentBackgroundSubtraction
+#define HEADER_ComponentBackgroundSubtraction
 
 #include "cv.h"
 #include "Component.h"
 
-class ComponentInputCameraUSB: public Component {
+class ComponentBackgroundSubtraction: public Component {
 
 public:
-	ComponentInputCameraUSB(SwisTrackCore *stc);
-	~ComponentInputCameraUSB();
+	ComponentBackgroundSubtraction(SwisTrackCore *stc);
+	~ComponentBackgroundSubtraction();
 
 	// Overwritten Component methods
 	bool Start();
