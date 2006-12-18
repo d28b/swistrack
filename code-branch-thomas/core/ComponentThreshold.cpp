@@ -1,18 +1,22 @@
-#include "ComponentBackgroundSubtraction.h"
-#define THISCLASS ComponentBackgroundSubtraction
+#include "ComponentThreshold.h"
+#define THISCLASS ComponentThreshold
 
-THISCLASS::ComponentBackgroundSubtraction(SwisTrackCore *stc):
+THISCLASS::ComponentThreshold(SwisTrackCore *stc):
 		Component(stc, "SegmenterBackgroundSubtraction"), mCapture(0), mLastImage(0) {
 
 	mDisplayName="Background subtraction";
 }
 
-THISCLASS::~ComponentBackgroundSubtraction() {
+THISCLASS::~ComponentThreshold() {
 	if (! mCapture) {return;}
 	cvReleaseCapture(mCapture);
 }
 
 bool THISCLASS::Start() {
+	binary = cvCreateImage(input->GetInputDim(),input->GetInputDepth(),1);
+	binary->origin = input->GetInputOrigin();
+	trackingimg->Init(input->GetInputIpl(),binary);
+
 	IplImage* bg = cvLoadImage(GetConfigurationString("BackgroundImage", ""), -1);
 	if (! bg) {
 		AddError("Cannot open background file.");
@@ -47,15 +51,14 @@ bool THISCLASS::Start() {
 bool THISCLASS::Step() {
 	IplImage *inputimage=mCore->mDataStructureImageGray.mImage;
 	if (! inputimage) {return true;}
-	if (! mBackgroundImage) {return true;}
+
+
+	IplImage *inputimage=mCore->mDataStructureImage.mImage;
+	if (! inputimage) {return true;}
+	
 
 	try {
-		// Correct the tmpImage with the difference in image mean
-		if (fixedThresholdBoolean==0)
-			cvAddS(inputimage, cvScalar(mBackgroundImageMean-cvMean(inputimage)), inputimage);
-
-		// Background Substraction
-		cvAbsDiff(inputimage, mBackgroundImage, inputimage);
+		// Threshold the image
 		cvThreshold(binary, binary, bin_threshold, 255, CV_THRESH_BINARY);
 	} catch(...) {
 		AddError("Background subtraction failed.");

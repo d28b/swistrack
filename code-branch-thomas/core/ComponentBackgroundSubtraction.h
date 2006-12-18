@@ -16,10 +16,8 @@ public:
 	bool Stop();
 
 private:
-	//! Pointer to the capture object.
-	CvCapture* mCapture;
-	//! The last acquired image.
-	IplImage* mLastImage;
+	IplImage *mBackgroundImage;
+	double mBackgroundImageMean;
 };
 
 #endif

@@ -19,13 +19,11 @@ bool THISCLASS::Step() {
 	if (! inputimage) {return true;}
 	
 	try {
-		IplImage* outputimage;
-		
 		// We convert the input image in black and white
 		switch (inputImg->nChannels) {
 		case 3:	// BGR case, we convert to gray
-			outputimage = cvCreateImage(cvSize(inputimage->width, inputimage->height), inputimage->depth, 1);
-			cvCvtColor(inputimage, outputimage, CV_BGR2GRAY);
+			PrepareImage(inputimage);
+			cvCvtColor(inputimage, mImage, CV_BGR2GRAY);
 			break;
 		case 1:	// Already in Gray
 			outputimage = inputimage;
@@ -38,7 +36,7 @@ bool THISCLASS::Step() {
 		
 		mCore->mDataStructureImageGray.mImage=outputimage;
 	} catch(...) {
-		AddError("Converstion to gray failed.");
+		AddError("Convertion to gray failed.");
 		return false;
 	}
 
