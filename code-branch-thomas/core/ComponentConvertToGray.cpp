@@ -20,21 +20,21 @@ bool THISCLASS::Step() {
 	
 	try {
 		// We convert the input image in black and white
-		switch (inputImg->nChannels) {
+		switch (inputimage->nChannels) {
 		case 3:	// BGR case, we convert to gray
-			PrepareImage(inputimage);
-			cvCvtColor(inputimage, mImage, CV_BGR2GRAY);
+			PrepareOutputImage(inputimage);
+			cvCvtColor(inputimage, mOutputImage, CV_BGR2GRAY);
+			mCore->mDataStructureImageGray.mImage=mOutputImage;
 			break;
 		case 1:	// Already in Gray
-			outputimage = inputimage;
+			mCore->mDataStructureImageGray.mImage=inputimage;
 			break;
 		default:	// Other cases, we take the first channel
-			outputimage = cvCreateImage(cvSize(inputimage->width, inputimage->height), inputimage->depth, 1);
-			cvCvtPixToPlane(inputimage, outputimage, NULL, NULL, NULL);
+			PrepareOutputImage(inputimage);
+			cvCvtPixToPlane(inputimage, mOutputImage, NULL, NULL, NULL);
+			mCore->mDataStructureImageGray.mImage=mOutputImage;
 			break;
 		}
-		
-		mCore->mDataStructureImageGray.mImage=outputimage;
 	} catch(...) {
 		AddError("Convertion to gray failed.");
 		return false;

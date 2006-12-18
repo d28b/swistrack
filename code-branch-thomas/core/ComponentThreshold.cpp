@@ -2,9 +2,9 @@
 #define THISCLASS ComponentThreshold
 
 THISCLASS::ComponentThreshold(SwisTrackCore *stc):
-		Component(stc, "SegmenterBackgroundSubtraction"), mCapture(0), mLastImage(0) {
+		Component(stc, "Threshold"), mCapture(0), mLastImage(0) {
 
-	mDisplayName="Background subtraction";
+	mDisplayName="Thresholding";
 }
 
 THISCLASS::~ComponentThreshold() {

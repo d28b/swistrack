@@ -16,14 +16,14 @@ public:
 	bool Stop();
 
 private:
-	IplImage *mImage;
+	IplImage *mOutputImage;
 
-	inline void PrepareImage(IplImage *inputimage) {
-		if (mImage) {
-			if ((mImage->width==inputimage->width) && (mImage->height==inputimage->height) && (mImage->depth==inputimage->depth)) {return;}
-			cvReleaseImage(mImage);
+	inline void PrepareOutputImage(IplImage *inputimage) {
+		if (mOutputImage) {
+			if ((mOutputImage->width==inputimage->width) && (mOutputImage->height==inputimage->height) && (mOutputImage->depth==inputimage->depth)) {return;}
+			cvReleaseImage(mOutputImage);
 		}
-		mImage = cvCreateImage(cvSize(inputimage->width, inputimage->height), inputimage->depth, 1);
+		mOutputImage = cvCreateImage(cvSize(inputimage->width, inputimage->height), inputimage->depth, 1);
 	}
 };
 
