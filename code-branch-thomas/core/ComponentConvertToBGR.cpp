@@ -1,16 +1,16 @@
-#include "ComponentConvertToGray.h"
-#define THISCLASS ComponentConvertToGray
+#include "ComponentConvertToBGR.h"
+#define THISCLASS ComponentConvertToBGR
 
-THISCLASS::ComponentConvertToGray(SwisTrackCore *stc):
-		Component(stc, "ConvertToGray") {
+THISCLASS::ComponentConvertToBGR(SwisTrackCore *stc):
+		Component(stc, "ConvertToBGR") {
 
 	// User-friendly information about this component
-	mDisplayName="Convert to gray";
+	mDisplayName="Convert to colors (BGR)";
 	AddDataStructureRead(mCore->mDataStructureInput);
-	AddDataStructureWrite(mCore->mDataStructureImageGray);
+	AddDataStructureWrite(mCore->mDataStructureImageBGR);
 }
 
-THISCLASS::~ComponentConvertToGray() {
+THISCLASS::~ComponentConvertToBGR() {
 }
 
 bool THISCLASS::Start() {
@@ -24,18 +24,18 @@ bool THISCLASS::Step() {
 	try {
 		// We convert the input image in black and white
 		switch (inputimage->nChannels) {
-		case 3:	// BGR case, we convert to gray
-			PrepareOutputImage(inputimage);
-			cvCvtColor(inputimage, mOutputImage, CV_BGR2GRAY);
-			mCore->mDataStructureImageGray.mImage=mOutputImage;
+		case 3:	// Already in BGR
+			mCore->mDataStructureImageBGR.mImage=inputimage;
 			break;
-		case 1:	// Already in Gray
-			mCore->mDataStructureImageGray.mImage=inputimage;
+		case 1:	// Gray, convert to BGR
+			PrepareOutputImage(inputimage);
+			cvCvtColor(inputimage, mOutputImage, CV_GRAY2BGR);
+			mCore->mDataStructureImageBGR.mImage=mOutputImage;
 			break;
 		default:	// Other cases, we take the first channel
 			PrepareOutputImage(inputimage);
 			cvCvtPixToPlane(inputimage, mOutputImage, NULL, NULL, NULL);
-			mCore->mDataStructureImageGray.mImage=mOutputImage;
+			mCore->mDataStructureImageBGR.mImage=mOutputImage;
 			break;
 		}
 	} catch(...) {
@@ -47,7 +47,7 @@ bool THISCLASS::Step() {
 }
 
 bool THISCLASS::StepCleanup() {
-	mCore->mDataStructureImageGray.mImage=0;
+	mCore->mDataStructureImageBGR.mImage=0;
 	return true;
 }
 

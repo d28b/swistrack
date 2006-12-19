@@ -12,11 +12,10 @@ public:
 	IplImage* mImage;
 
 	//! Constructor.
-	DataStructureImage(): DataStructure("Image"), mImage(0) {}
+	DataStructureImage(const std::string &name, const std::string &displayname): DataStructure(name), mImage(0) {mDisplayName=displayname;}
 	~DataStructureImage() {}
-	
-	CvSize GetInputDim();
+
+	CvSize GetSize();
 };
 
 #endif
-

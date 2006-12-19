@@ -4,6 +4,10 @@
 THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
 		Component(stc, "CameraUSB"), mCapture(0), mLastImage(0) {
 
+	// User-friendly information about this component
+	mDisplayName="USB camera";
+	AddDataStructureWrite(mCore->mDataStructureImage);
+	AddDataStructureWrite(mCore->mDataStructureInput);
 }
 
 THISCLASS::~ComponentInputCameraUSB() {
@@ -39,12 +43,18 @@ bool THISCLASS::Step() {
 
 	// Set DataStructureImage
 	mCore->mDataStructureImage.mImage=inputimage;	
-	mCore->mDataStructureImage.mFrameNumber++;
+	mCore->mDataStructureInput.mFrameNumber++;
 
 	// Show status
 	std::ostringstream oss;
 	oss << "Frame " << mCore->mDataStructureImage.mFrameNumber;
 	AddInfo(oss.str);
+	return true;
+}
+
+bool THISCLASS::StepCleanup() {
+	mCore->mDataStructureImage.mImage=0;
+	if (mLastImage) {cvReleaseImage(mLastImage);}
 	return true;
 }
 

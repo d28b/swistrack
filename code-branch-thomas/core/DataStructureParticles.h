@@ -1,21 +1,21 @@
-#ifndef HEADER_DataStructureInput
-#define HEADER_DataStructureInput
+#ifndef HEADER_DataStructureParticles
+#define HEADER_DataStructureParticles
 
 #include "DataStructure.h"
-#include <string>
+#include <vector>
 #include "cv.h"
 
-class DataStructureInput: public DataStructure {
+class DataStructureParticles: public DataStructure {
 
 public:
+	typedef std::vector<Particle> ParticleVector;
+
 	//! Frame number
-	int mFrameNumber;
-	//! Frames per second
-	double mFramesPerSecond;
+	ParticleVector mParticles;
 
 	//! Constructor.
-	DataStructureInput(): DataStructure("Input"), mFrameNumber(0), mFramesPerSecond(-1) {}
-	~DataStructureInput() {}
+	DataStructureParticles(): DataStructure("Particles"), mFrameNumber(0), mFramesPerSecond(-1) {}
+	~DataStructureParticles() {}
 };
 
 #endif

@@ -1,11 +1,9 @@
 #ifndef HEADER_DataStructureInput
 #define HEADER_DataStructureInput
 
-#include "DataStructure.h"
-#include <string>
-#include "cv.h"
+#include "DataStructureImage.h"
 
-class DataStructureInput: public DataStructure {
+class DataStructureInput: public DataStructureImage {
 
 public:
 	//! Frame number
@@ -14,7 +12,7 @@ public:
 	double mFramesPerSecond;
 
 	//! Constructor.
-	DataStructureInput(): DataStructure("Input"), mFrameNumber(0), mFramesPerSecond(-1) {}
+	DataStructureInput(): DataStructureImage("Input"), mFrameNumber(0), mFramesPerSecond(-1) {mDisplayName="Input";}
 	~DataStructureInput() {}
 };
 

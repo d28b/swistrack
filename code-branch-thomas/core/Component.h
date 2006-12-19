@@ -19,6 +19,7 @@ public:
 	
 	virtual bool Start() = 0;
 	virtual bool Step() = 0;
+	virtual bool StepCleanup() = 0;
 	virtual bool Stop() = 0;
 
 	int GetConfigurationInt(const std::string &path, int defvalue);

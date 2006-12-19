@@ -1,6 +1,6 @@
 #include "DataStructureImage.h"
 #define THISCLASS DataStructureImage
 
-CvSize THISCLASS::GetInputDim() {
+CvSize THISCLASS::GetSize() {
 	return cvSize(mImage->width, mImage->height);
 }

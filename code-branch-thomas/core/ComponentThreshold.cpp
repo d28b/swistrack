@@ -4,7 +4,10 @@
 THISCLASS::ComponentThreshold(SwisTrackCore *stc):
 		Component(stc, "Threshold"), mCapture(0), mLastImage(0) {
 
+	// User-friendly information about this component
 	mDisplayName="Thresholding";
+	AddDataStructureWrite(mCore->mDataStructureImage);
+	AddDataStructureWrite(mCore->mDataStructureImageBinary);
 }
 
 THISCLASS::~ComponentThreshold() {

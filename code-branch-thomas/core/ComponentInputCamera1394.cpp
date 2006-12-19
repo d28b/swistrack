@@ -4,9 +4,12 @@
 #ifdef _1394
 
 THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):
-		Component(stc, "Camera1394"), mCamera(0), mLastImage(0) {
+		Component(stc, "Camera1394"), mCamera(), mLastImage(0) {
 
+	// User-friendly information about this component
 	mDisplayName="1394 camera";
+	AddDataStructureWrite(mCore->mDataStructureImage);
+	AddDataStructureWrite(mCore->mDataStructureInput);
 }
 
 bool THISCLASS::Start() {
@@ -73,7 +76,12 @@ bool THISCLASS::Step() {
 	
 	// Set this image in the DataStructureImage
 	mCore->mDataStructureImage.mImage=mLastImage;
-	mCore->mDataStructureImage.mFrameNumber++;
+	mCore->mDataStructureInput.mFrameNumber++;
+	return true;
+}
+
+bool THISCLASS::StepCleanup() {
+	mCore->mDataStructureImage.mImage=0;
 	return true;
 }
 

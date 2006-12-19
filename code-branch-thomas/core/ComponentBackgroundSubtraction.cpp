@@ -2,9 +2,12 @@
 #define THISCLASS ComponentBackgroundSubtraction
 
 THISCLASS::ComponentBackgroundSubtraction(SwisTrackCore *stc):
-		Component(stc, "SegmenterBackgroundSubtraction"), mCapture(0), mLastImage(0) {
+		Component(stc, "BackgroundSubtraction"), mCapture(0), mLastImage(0) {
 
+	// User-friendly information about this component
 	mDisplayName="Background subtraction";
+	AddDataStructureRead(mCore->mDataStructureImageGray);
+	AddDataStructureWrite(mCore->mDataStructureImageGray);
 }
 
 THISCLASS::~ComponentBackgroundSubtraction() {
@@ -42,6 +45,7 @@ bool THISCLASS::Start() {
 	
 	// Release the temporary image
 	cvReleaseImage(&bg);
+	return true;
 }
 
 bool THISCLASS::Step() {
@@ -62,6 +66,10 @@ bool THISCLASS::Step() {
 	}
 	
 	cvReleaseImage(&tmpImage);
+	return true;
+}
+
+bool THISCLASS::StepCleanup() {
 	return true;
 }
 

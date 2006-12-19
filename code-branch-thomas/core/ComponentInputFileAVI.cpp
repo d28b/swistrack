@@ -4,6 +4,10 @@
 THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
 		Component(stc, "FileAVI"), mCapture(0), mLastImage(0) {
 
+	// User-friendly information about this component
+	mDisplayName="AVI file";
+	AddDataStructureWrite(mCore->mDataStructureImage);
+	AddDataStructureWrite(mCore->mDataStructureInput);
 }
 
 THISCLASS::~ComponentInputFileAVI() {
@@ -41,19 +45,9 @@ bool THISCLASS::Start() {
 		}
 	}
 
-	// Check if we have colors or not
-	mLastImage=cvQueryFrame(mCapture);	
-	if (! mLastImage) {
-		AddError("Could not read frame from AVI file.");
-		return false;
-	}
-	if (strcmp(input->colorModel, "GRAY")==0)
-		mCore->mDataStructureImage.mIsInColor=0;
-	else
-		mCore->mDataStructureImage.mIsInColor=1;
-
 	// Reset to first frame
 	cvSetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES, 0);
+	return true;
 }
 
 bool THISCLASS::Step() {
@@ -69,8 +63,8 @@ bool THISCLASS::Step() {
 	cvFlip(mLastImage, 0);
 
 	// Set DataStructureImage
-	mCore->mDataStructureImage.mImage=inputimage;	
-	mCore->mDataStructureImage.mFrameNumber++;
+	mCore->mDataStructureImage.mImage=inputimage;
+	mCore->mDataStructureInput.mFrameNumber++;
 
 	// Show status
 	std::ostringstream oss;
@@ -80,13 +74,14 @@ bool THISCLASS::Step() {
 
 }
 
-bool THISCLASS::Stop() {
+bool THISCLASS::StepCleanup() {
+	mCore->mDataStructureImage.mImage=0;
+	if (mLastImage) {cvReleaseImage(mLastImage);}
+	return true;
 }
 
 bool THISCLASS::Stop() {
-	if (! mCapture) {return false;}	
-
-	cvReleaseCapture(mCapture);
+	if (mCapture) {cvReleaseCapture(mCapture);}
 	return true;
 }
 

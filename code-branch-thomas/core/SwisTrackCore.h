@@ -9,11 +9,18 @@ class SwisTrackCore {
 
 public:
 	typedef std::list<Component*> tComponentList;
-	DataStructureImage mDataStructureImage;
 	tComponentList mComponents;
+	
+	DataStructureInput mDataStructureInput;
+	DataStructureImage mDataStructureImageBGR;
+	DataStructureImage mDataStructureBackgroundBGR;
+	DataStructureImage mDataStructureImageGray;
+	DataStructureImage mDataStructureBackgroundGray;
+	DataStructureImage mDataStructureImageBinary;
+	DataStructureImage mDataStructureMaskBinary;
+	DataStructureParticles mDataStructureParticles;
 
-	SwisTrackCore(): mConfigurationRoot(0) {}
-	SwisTrackCore(xmlpp::Element* cfgroot): mConfigurationRoot(cfgroot) {}
+	SwisTrackCore(xmlpp::Element* cfgroot=0): mConfigurationRoot(cfgroot), mDataStructureInput(), mDataStructureImageBGR("ImageBGR", "Color image (BGR)") {}
 	virtual ~SwisTrackCore() {}
 
 	virtual void SetParameters() = 0;

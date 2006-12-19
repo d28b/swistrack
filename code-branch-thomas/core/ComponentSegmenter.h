@@ -1,14 +1,14 @@
-#ifndef HEADER_ComponentBackgroundSubtraction
-#define HEADER_ComponentBackgroundSubtraction
+#ifndef HEADER_ComponentParticleFilter
+#define HEADER_ComponentParticleFilter
 
 #include "cv.h"
 #include "Component.h"
 
-class ComponentBackgroundSubtraction: public Component {
+class ComponentParticleFilter: public Component {
 
 public:
-	ComponentBackgroundSubtraction(SwisTrackCore *stc);
-	~ComponentBackgroundSubtraction();
+	ComponentParticleFilter(SwisTrackCore *stc);
+	~ComponentParticleFilter();
 
 	// Overwritten Component methods
 	bool Start();

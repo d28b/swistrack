@@ -13,6 +13,7 @@ public:
 	// Overwritten Component methods
 	bool Start();
 	bool Step();
+	bool StepCleanup();
 	bool Stop();
 
 private:

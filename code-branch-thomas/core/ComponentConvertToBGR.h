@@ -1,14 +1,14 @@
-#ifndef HEADER_ComponentConvertToGray
-#define HEADER_ComponentConvertToGray
+#ifndef HEADER_ComponentConvertToBGR
+#define HEADER_ComponentConvertToBGR
 
 #include "cv.h"
 #include "Component.h"
 
-class ComponentConvertToGray: public Component {
+class ComponentConvertToBGR: public Component {
 
 public:
-	ComponentConvertToGray(SwisTrackCore *stc);
-	~ComponentConvertToGray();
+	ComponentConvertToBGR(SwisTrackCore *stc);
+	~ComponentConvertToBGR();
 
 	// Overwritten Component methods
 	bool Start();
