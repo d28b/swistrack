@@ -7,7 +7,7 @@
 class ComponentBackgroundSubtractionGray: public Component {
 
 public:
-	ComponentBackgroundSubtractionGray(SwisTrackCore *stc);
+	ComponentBackgroundSubtractionGray(SwisTrackCore *stc, const std::string &displayname);
 	~ComponentBackgroundSubtractionGray();
 
 	// Overwritten Component methods

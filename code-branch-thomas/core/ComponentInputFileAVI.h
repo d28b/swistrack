@@ -11,7 +11,7 @@
 class ComponentFileAVI: public Component {
 
 public:
-	ComponentInputFileAVI(SwisTrackCore *stc);
+	ComponentInputFileAVI(SwisTrackCore *stc, const std::string &displayname);
 	~ComponentInputFileAVI();
 
 	// Overwritten Component methods

@@ -14,7 +14,7 @@ public:
 	std::string mDisplayName;
 	tStatusItemList mStatus;
 
-	Component(SwisTrackCore *stc, const std::string &nam);
+	Component(SwisTrackCore *stc, const std::string &name, const std::string &displayname);
 	virtual ~Component() {}
 	
 	virtual bool Start() = 0;

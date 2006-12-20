@@ -1,11 +1,10 @@
 #include "ComponentConvertToBGR.h"
 #define THISCLASS ComponentConvertToBGR
 
-THISCLASS::ComponentConvertToBGR(SwisTrackCore *stc):
-		Component(stc, "ConvertToBGR") {
+THISCLASS::ComponentConvertToBGR(SwisTrackCore *stc, const std::string &displayname):
+		Component(stc, "ConvertToBGR", displayname) {
 
-	// User-friendly information about this component
-	mDisplayName="Convert to colors (BGR)";
+	// Data structure relations
 	AddDataStructureRead(mCore->mDataStructureInput);
 	AddDataStructureWrite(mCore->mDataStructureImageBGR);
 }

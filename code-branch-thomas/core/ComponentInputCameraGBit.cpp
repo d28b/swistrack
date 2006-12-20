@@ -1,11 +1,10 @@
 #include "ComponentInputCameraGBit.h"
 #define THISCLASS ComponentInputCameraGBit
 
-THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
-		Component(stc, "CameraGBit") {
+THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc, const std::string &displayname):
+		Component(stc, "CameraGBit", displayname) {
 
-	// User-friendly information about this component
-	mDisplayName="GBit camera";
+	// Data structure relations
 	AddDataStructureWrite(mCore->mDataStructureImage);
 	AddDataStructureWrite(mCore->mDataStructureInput);
 }

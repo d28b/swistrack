@@ -1,11 +1,11 @@
 #include "ComponentInputFileAVI.h"
 #define THISCLASS ComponentInputFileAVI
 
-THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
-		Component(stc, "FileAVI"), mCapture(0), mLastImage(0) {
+THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc, const std::string &displayname):
+		Component(stc, "FileAVI", displayname),
+		mCapture(0), mLastImage(0) {
 
-	// User-friendly information about this component
-	mDisplayName="AVI file";
+	// Data structure relations
 	AddDataStructureWrite(mCore->mDataStructureImage);
 	AddDataStructureWrite(mCore->mDataStructureInput);
 }

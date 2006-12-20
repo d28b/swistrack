@@ -12,7 +12,7 @@
 class ComponentInputCamera1394: public Component {
 
 public:
-	ComponentInputCamera1394(SwisTrackCore *stc);
+	ComponentInputCamera1394(SwisTrackCore *stc, const std::string &displayname);
 	~ComponentInputCamera1394();
 
 	// Overwritten Component methods

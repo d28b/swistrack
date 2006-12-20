@@ -1,11 +1,11 @@
 #include "ComponentParticleFilter.h"
 #define THISCLASS ComponentParticleFilter
 
-THISCLASS::ComponentParticleFilter(SwisTrackCore *stc):
-		Component(stc, "ParticleFilter"), mCapture(0), mLastImage(0) {
+THISCLASS::ComponentParticleFilter(SwisTrackCore *stc, const std::string &displayname):
+		Component(stc, "ParticleFilter", displayname),
+		mCapture(0), mLastImage(0) {
 
-	// User-friendly information about this component
-	mDisplayName="Particle filter";
+	// Data structure relations
 	AddDataStructureWrite(mCore->mDataStructureParticles);
 	AddDataStructureWrite(mCore->mDataStructureParticles);
 }

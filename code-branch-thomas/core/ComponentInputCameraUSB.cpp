@@ -1,11 +1,11 @@
 #include "ComponentInputCameraUSB.h"
 #define THISCLASS ComponentInputCameraUSB
 
-THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
-		Component(stc, "CameraUSB"), mCapture(0), mLastImage(0) {
+THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc, const std::string &displayname):
+		Component(stc, "CameraUSB", displayname),
+		mCapture(0), mLastImage(0) {
 
-	// User-friendly information about this component
-	mDisplayName="USB camera";
+	// Data structure relations
 	AddDataStructureWrite(mCore->mDataStructureImage);
 	AddDataStructureWrite(mCore->mDataStructureInput);
 }

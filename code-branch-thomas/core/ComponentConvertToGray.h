@@ -7,7 +7,7 @@
 class ComponentConvertToGray: public Component {
 
 public:
-	ComponentConvertToGray(SwisTrackCore *stc);
+	ComponentConvertToGray(SwisTrackCore *stc, const std::string &displayname);
 	~ComponentConvertToGray();
 
 	// Overwritten Component methods

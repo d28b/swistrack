@@ -1,11 +1,10 @@
 #include "ComponentConvertToGray.h"
 #define THISCLASS ComponentConvertToGray
 
-THISCLASS::ComponentConvertToGray(SwisTrackCore *stc):
-		Component(stc, "ConvertToGray") {
+THISCLASS::ComponentConvertToGray(SwisTrackCore *stc, const std::string &displayname):
+		Component(stc, "ConvertToGray", displayname) {
 
-	// User-friendly information about this component
-	mDisplayName="Convert to gray";
+	// Data structure relations
 	AddDataStructureRead(mCore->mDataStructureInput);
 	AddDataStructureWrite(mCore->mDataStructureImageGray);
 }

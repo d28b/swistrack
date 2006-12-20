@@ -3,11 +3,11 @@
 
 #ifdef _1394
 
-THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):
-		Component(stc, "Camera1394"), mCamera(), mLastImage(0) {
+THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc, const std::string &displayname):
+		Component(stc, "Camera1394", displayname),
+		mCamera(), mLastImage(0) {
 
-	// User-friendly information about this component
-	mDisplayName="1394 camera";
+	// Data structure relations
 	AddDataStructureWrite(mCore->mDataStructureImage);
 	AddDataStructureWrite(mCore->mDataStructureInput);
 }

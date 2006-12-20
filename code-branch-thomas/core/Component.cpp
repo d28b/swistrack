@@ -1,8 +1,8 @@
 #include "Component.h"
 #define THISCLASS Component
 
-THISCLASS::Component(SwisTrackCore *stc, const std::string &nam):
-		mSwisTrackCore(stc), mName(nam), mDisplayName(nam) {
+THISCLASS::Component(SwisTrackCore *stc, const std::string &name, const std::string &displayname):
+		mSwisTrackCore(stc), mName(name), mDisplayName(displayname) {
 
 	mConfigurationRoot=dynamic_cast<const xmlpp::Element*>(mSwisTrackCore->mConfigurationRoot->find(mName)).begin());
 }

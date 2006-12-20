@@ -1,11 +1,11 @@
 #include "ComponentBackgroundSubtractionGray.h"
 #define THISCLASS ComponentBackgroundSubtractionGray
 
-THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore *stc):
-		Component(stc, "BackgroundSubtraction"), mCapture(0), mLastImage(0) {
+THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore *stc, const std::string &displayname):
+		Component(stc, "BackgroundSubtraction", displayname),
+		mCapture(0), mLastImage(0) {
 
-	// User-friendly information about this component
-	mDisplayName="Background subtraction";
+	// Data structure relations
 	AddDataStructureRead(mCore->mDataStructureImageGray);
 	AddDataStructureWrite(mCore->mDataStructureImageGray);
 }
@@ -60,7 +60,6 @@ bool THISCLASS::Step() {
 
 		// Background Substraction
 		cvAbsDiff(inputimage, mBackgroundImage, inputimage);
-		cvThreshold(binary, binary, bin_threshold, 255, CV_THRESH_BINARY);
 	} catch(...) {
 		AddError("Background subtraction failed.");
 	}
@@ -74,13 +73,6 @@ bool THISCLASS::StepCleanup() {
 }
 
 bool THISCLASS::Stop() {
-	if (! mBackgroundImage) {return false;}	
-
-	cvReleaseCapture(mBackgroundImage);
+	if (mBackgroundImage) {cvReleaseCapture(mBackgroundImage);}
 	return true;
-}
-
-double THISCLASS::GetFPS() {
-	if (! mCapture) {return 0;}	
-	return cvGetCaptureProperty(mCapture, CV_CAP_PROP_FPS);
 }

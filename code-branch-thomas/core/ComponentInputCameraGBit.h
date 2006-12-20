@@ -6,7 +6,7 @@
 class ComponentInputCameraGBit: public Component {
 
 public:
-	ComponentInputCameraGBit(SwisTrackCore *stc);
+	ComponentInputCameraGBit(SwisTrackCore *stc, const std::string &displayname);
 	~ComponentInputCameraGBit();
 
 	// Overwritten Component methods

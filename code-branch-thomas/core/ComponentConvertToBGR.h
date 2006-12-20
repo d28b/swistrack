@@ -7,7 +7,7 @@
 class ComponentConvertToBGR: public Component {
 
 public:
-	ComponentConvertToBGR(SwisTrackCore *stc);
+	ComponentConvertToBGR(SwisTrackCore *stc, const std::string &displayname);
 	~ComponentConvertToBGR();
 
 	// Overwritten Component methods

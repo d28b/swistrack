@@ -7,7 +7,7 @@
 class ComponentParticleFilter: public Component {
 
 public:
-	ComponentParticleFilter(SwisTrackCore *stc);
+	ComponentParticleFilter(SwisTrackCore *stc, const std::string &displayname);
 	~ComponentParticleFilter();
 
 	// Overwritten Component methods
