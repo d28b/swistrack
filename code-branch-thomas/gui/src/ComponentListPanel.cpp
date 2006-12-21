@@ -50,6 +50,8 @@ THISCLASS::ComponentListCtrl(wxWindow* parent, SwisTrackCore *stc):
 }
 
 void THISCLASS::OnUpdate() {
+	mList->ClearAll();
+
 	SwisTrackCore::tComponentList::iterator it=SwisTrackCore.mComponentList.begin();
 	while (it!=SwisTrackCore.mComponentList.end()) {
 		int col=0;
@@ -100,14 +102,35 @@ void THISCLASS::OnUpdate() {
 		}
 
 		// Status messages
-		TODO
+		wxListItem li;
+		li.SetColumn(col++);
+		if ((*it)->mStatusHasError) {
+			li.SetTextColour(*wxRED);
+		} else if ((*it)->mStatusHasWarning) {
+			li.SetTextColour(*wxBLUE);
+		}
+		if (((*it)->mStatusHasError) || ((*it)->mStatusHasWarning)) {
+			wxString str;
+			Component::tStatusItemList::iterator itsl=(*its)->mStatus.begin();
+			while (itsl!=(*its)->mStatus.end()) {
+				if ((*itsl)->mType==StatusItem::sTypeError) {
+					str+=(*itsl)->mMessage+" ";
+				} else if ((*itsl)->mType==StatusItem::sTypeWarning) {
+					str+=(*itsl)->mMessage+" ";
+				}
+			}
+			li.SetText(str);
+			mList->InsertItem(li);
+		}
+
+		// Get next item
 		it++;
 	}
-
 }
 
 void THISCLASS::OnButtonAdd(wxCommandEvent& event) {
 	//mSwisTrackCore->mComponentList.push_back();
+	
 }
 
 void THISCLASS::OnButtonRemove(wxCommandEvent& event) {
