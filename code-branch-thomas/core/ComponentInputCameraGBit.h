@@ -14,6 +14,7 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
+	Component *Create() {return new ComponentInputCameraGBit(mCore);}
 
 private:
 

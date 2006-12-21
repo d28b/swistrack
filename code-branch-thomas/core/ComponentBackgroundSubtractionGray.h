@@ -15,6 +15,7 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
+	Component *Create() {return new ComponentBackgroundSubtractionGray(mCore);}
 
 private:
 	IplImage *mBackgroundImage;

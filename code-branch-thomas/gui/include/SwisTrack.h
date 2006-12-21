@@ -77,6 +77,7 @@ public:
 	wxMenu *menuHelp;
 	wxMenu *menuMode;
 	wxMenu *menuTools;
+	wxMenu *menuComponents;
 
 	Canvas* canvas;
 	wxListCtrl* mListCtrlComponents;

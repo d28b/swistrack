@@ -21,6 +21,7 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
+	Component *Create() {return new ComponentInputCamera1394(mCore);}
 
 private:
 	//! 1394 Camera handle (CMU 1394 Camera Driver)

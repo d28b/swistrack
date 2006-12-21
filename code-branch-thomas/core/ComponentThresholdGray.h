@@ -15,6 +15,7 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
+	Component *Create() {return new ComponentThresholdGray(mCore);}
 
 private:
 	IplImage *mOutputImage;

@@ -194,6 +194,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	menuHelp    = new wxMenu;
 	menuView    = new wxMenu;
 	menuTools   = new wxMenu;
+	menuComponents = new wxMenu;
 
 	menuFile->Append(Gui_New, _T("&Config\tCtrl-C"), _T("Edits profile"));
 	menuFile->Append(Gui_Open, _T("&Open\tCtrl-O"), _T("Opens a tracking profile"));

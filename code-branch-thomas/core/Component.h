@@ -19,6 +19,8 @@ public:
 	tStatusItemList mStatus;
 	//! Whether there is an error in the status item list.
 	bool mStatusHasError;
+	//! Whether there is a warning in the status item list.
+	bool mStatusHasWarning;
 	//! Tells whether the component is started. This flag is set and reset by the SwisTrackCore class and should not be used by the components.
 	bool mStarted;
 	//! The internal name of the component (used to save configuration).
@@ -43,6 +45,8 @@ public:
 	virtual void OnStepCleanup() = 0;
 	//! This event is called to stop the component. No further OnStep() will be called before OnStart().
 	virtual void OnStop() = 0;
+	//! This function must return an new object of its own class.
+	virtual Component *Create() = 0;
 
 	//! Returns a boolean from the configuration.
 	bool GetConfigurationBool(const std::string &path, bool defvalue);
@@ -64,6 +68,11 @@ public:
 
 	//! Clears the status list
 	void ClearStatus();
+
+	//! Returns true if the component reads that data structure.
+	bool HasDataStructureRead(DataStructure *ds);
+	//! Returns true if the component writes that data structure.
+	bool HasDataStructureWrite(DataStructure *ds);
 
 protected:
 	//! The associated SwisTrackCore object.

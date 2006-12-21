@@ -3,7 +3,7 @@
 #define THISCLASS Component
 
 THISCLASS::Component(SwisTrackCore *stc, const std::string &name):
-		mCore(stc), mName(name), mDisplayName(name), mStatus(), mStatusHasError(false), mStarted(false) {
+		mCore(stc), mName(name), mDisplayName(name), mStatus(), mStatusHasError(false), mStatusHasWarning(false), mStarted(false) {
 
 	//mConfigurationRoot=dynamic_cast<const xmlpp::Element*>(mCore->mConfigurationRoot->find(mName)).begin());
 }
@@ -11,6 +11,7 @@ THISCLASS::Component(SwisTrackCore *stc, const std::string &name):
 void THISCLASS::ClearStatus() {
 	mStatus.clear();
 	mStatusHasError=false;
+	mStatusHasWarning=false;
 }
 
 void THISCLASS::AddError(const std::string &msg) {
@@ -20,6 +21,7 @@ void THISCLASS::AddError(const std::string &msg) {
 
 void THISCLASS::AddWarning(const std::string &msg) {
 	mStatus.push_back(StatusItem(StatusItem::sTypeWarning, msg));
+	mStatusHasWarning=true;
 }
 
 void THISCLASS::AddInfo(const std::string &msg) {
@@ -30,6 +32,12 @@ void THISCLASS::AddDataStructureRead(DataStructure *ds) {
 }
 
 void THISCLASS::AddDataStructureWrite(DataStructure *ds) {
+}
+
+bool THISCLASS::HasDataStructureRead(DataStructure *ds) {
+}
+
+bool THISCLASS::HasDataStructureWrite(DataStructure *ds) {
 }
 
 bool THISCLASS::GetConfigurationBool(const std::string &path, bool defvalue) {
