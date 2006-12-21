@@ -12,9 +12,13 @@ class SwisTrackCore;
 class SwisTrackCore {
 
 public:
-	//! The list of all available component factories.
+	//! The list of all available components.
 	typedef std::list<Component*> tComponents;
 	tComponents mComponents;
+
+	//! The list of all available data structures.
+	typedef std::list<DataStructure*> tDataStructures;
+	tDataStructures mDataStructures;
 
 	//! The list of the deployed components.
 	typedef std::list<Component*> tComponentList;

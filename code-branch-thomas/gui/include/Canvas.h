@@ -17,7 +17,7 @@
 * This class implements an OnPaint method and an event handler
 * for mouse clicks on the canvas.
 */
-class Canvas: public  wxPanel // wxScrolledWindow
+class Canvas: public wxPanel // wxScrolledWindow
 {
 private:
 	 int default_width;
@@ -38,9 +38,6 @@ public:
 	void SetSizeToDefault(){SetSize(default_width,default_height);};
 	CvPoint GetPixel(int x,int y){return(cvPoint((double) x/GetSize().GetWidth()*default_width,(double) y/GetSize().GetHeight()*default_height));};
 	//CvPoint GetPixel(int x,int y){return(cvPoint(GetSize().GetWidth(),GetSize().GetHeight()));};
-
-  
-
 	
   protected:
 DECLARE_EVENT_TABLE()

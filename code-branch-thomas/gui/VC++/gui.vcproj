@@ -314,6 +314,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\ComponentListCtrl.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\gui.cpp"
 				>
 				<FileConfiguration
@@ -432,6 +436,10 @@
 			</File>
 			<File
 				RelativePath="..\include\Canvas.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ComponentListCtrl.h"
 				>
 			</File>
 			<File

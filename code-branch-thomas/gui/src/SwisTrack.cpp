@@ -91,13 +91,14 @@ EVT_MENU(Gui_View_ShowSegmenter, SwisTrack::OnMenuViewShowSegmenter)
 EVT_MENU(Gui_View_ShowInput, SwisTrack::OnMenuViewShowInput)
 EVT_MENU_RANGE(Gui_View_TrajCross, Gui_View_ShowMask,SwisTrack::OnDrawingMode)
 EVT_MENU(Gui_Tools_SetAviOutput, SwisTrack::OnSetAviOutput)
-EVT_MENU(Gui_Tools_ShowCamera,SwisTrack::OnMenuToolsShow1394Camera)
-EVT_MENU(Gui_Tools_AviOutput,SwisTrack::OnEnableAVI)
-EVT_MENU(Gui_Tools_Screenshot,SwisTrack::MakeScreenShot)
-EVT_MENU(Gui_Tools_FlipScreen,SwisTrack::FlipScreen)
-EVT_MENU(Gui_Tools_FitCanvas,SwisTrack::FitCanvas)
+EVT_MENU(Gui_Tools_ShowCamera, SwisTrack::OnMenuToolsShow1394Camera)
+EVT_MENU(Gui_Tools_AviOutput, SwisTrack::OnEnableAVI)
+EVT_MENU(Gui_Tools_Screenshot, SwisTrack::MakeScreenShot)
+EVT_MENU(Gui_Tools_FlipScreen, SwisTrack::FlipScreen)
+EVT_MENU(Gui_Tools_FitCanvas, SwisTrack::FitCanvas)
 EVT_COMMAND_SCROLL(wxID_DSPSPDSLIDER, SwisTrack::OnChangeDisplaySpeed)
-EVT_MENU(Gui_Help,SwisTrack::OnHelp)
+EVT_MENU(Gui_Help, SwisTrack::OnHelp)
+EVT_MENU(Gui_Test, SwisTrack::OnTest)
 EVT_IDLE(SwisTrack::OnIdle)
 END_EVENT_TABLE()
 
@@ -158,10 +159,8 @@ void SwisTrack::RecreateToolbar()
 * \param size	  : Initial size
 * \param style	  : Style (Icon, Always on top, etc.)
 */
-SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-: wxFrame(NULL, -1, title, pos, size, style)
-{
-
+SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
+		wxFrame(NULL, -1, title, pos, size, style) {
 
 	show_coverage=0; // don't show coverage image
 	display_speed=5; //initial display speed 5Hz
@@ -203,60 +202,59 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	menuFile->Append(Gui_Quit, _T("E&xit\tAlt-F4"), _T("Quit this program"));
 	menuFile->Enable(Gui_Save,FALSE);
 
-	menuControl->Append(Gui_Ctrl_Start,_T("&Go\tCtrl-G"),_T("Starts tracking"));
+	menuControl->Append(Gui_Ctrl_Start, _T("&Go\tCtrl-G"), _T("Starts tracking"));
 	menuControl->AppendSeparator();
-	menuControl->Append(Gui_Ctrl_Pause,_T("&Pause\tCtrl-P"),_T("Pauses tracking"));
-	menuControl->Append(Gui_Ctrl_Continue,_T("&Resume\tCtrl-R"),_T("Resumes tracking"));
+	menuControl->Append(Gui_Ctrl_Pause, _T("&Pause\tCtrl-P"), _T("Pauses tracking"));
+	menuControl->Append(Gui_Ctrl_Continue,_T("&Resume\tCtrl-R"), _T("Resumes tracking"));
 	menuControl->AppendSeparator();
-	menuControl->Append(Gui_Ctrl_Stop,_T("&Stop\tESC"),_T("Stops tracking"));
-	menuControl->Enable(Gui_Ctrl_Pause,FALSE);
-	menuControl->Enable(Gui_Ctrl_Continue,FALSE);
-	menuControl->Enable(Gui_Ctrl_Stop,FALSE);
+	menuControl->Append(Gui_Ctrl_Stop, _T("&Stop\tESC"), _T("Stops tracking"));
+	menuControl->Enable(Gui_Ctrl_Pause, FALSE);
+	menuControl->Enable(Gui_Ctrl_Continue, FALSE);
+	menuControl->Enable(Gui_Ctrl_Stop, FALSE);
 
-	menuView->Append(Gui_View_ShowTracker,_T("Show Tracker Panel"),_T("Toggles window where tracking parameters can be changed"),TRUE);
+	menuView->Append(Gui_View_ShowTracker, _T("Show Tracker Panel"), _T("Toggles window where tracking parameters can be changed"),TRUE);
 	menuView->Check (Gui_View_ShowTracker, FALSE);
-	menuView->Append(Gui_View_ShowParticleFilter,_T("Show Particle Filter Panel"),_T("Toggles window where particle filters parameters can be changed"),TRUE);
+	menuView->Append(Gui_View_ShowParticleFilter, _T("Show Particle Filter Panel"), _T("Toggles window where particle filters parameters can be changed"),TRUE);
 	menuView->Check (Gui_View_ShowParticleFilter, FALSE);
-	menuView->Append(Gui_View_ShowSegmenterPP,_T("Show Segmenter Post-Processing Panel"),_T("Toggles window where parameters for segmentation post-processing can be changed"),TRUE);
+	menuView->Append(Gui_View_ShowSegmenterPP, _T("Show Segmenter Post-Processing Panel"), _T("Toggles window where parameters for segmentation post-processing can be changed"),TRUE);
 	menuView->Check (Gui_View_ShowSegmenterPP, FALSE);
-	menuView->Append(Gui_View_ShowSegmenter,_T("Show Segmenter Panel"),_T("Toggles window where segmenter parameters can be changed"),TRUE);
-	menuView->Check(Gui_View_ShowSegmenter,FALSE);
-	menuView->Append(Gui_View_ShowInput,_T("Show Input Panel"),_T("Toggles window where input parameters can be changed"),TRUE);
-	menuView->Check(Gui_View_ShowInput,FALSE);
+	menuView->Append(Gui_View_ShowSegmenter, _T("Show Segmenter Panel"), _T("Toggles window where segmenter parameters can be changed"),TRUE);
+	menuView->Check(Gui_View_ShowSegmenter ,FALSE);
+	menuView->Append(Gui_View_ShowInput, _T("Show Input Panel"), _T("Toggles window where input parameters can be changed"),TRUE);
+	menuView->Check(Gui_View_ShowInput, FALSE);
 	menuView->AppendSeparator();
 	menuView->AppendRadioItem(Gui_View_TrajCross, _T("cross only"));
 	menuView->AppendRadioItem(Gui_View_TrajNoID, _T("trace and cross"));
 	menuView->AppendRadioItem(Gui_View_TrajNoCross, _T("trace and ID"));
 	menuView->AppendRadioItem(Gui_View_TrajFull, _T("trace, cross, and ID"));
-	menuView->AppendRadioItem(Gui_View_Coverage,_T("coverage"));
+	menuView->AppendRadioItem(Gui_View_Coverage, _T("coverage"));
 	menuView->AppendSeparator();
-	menuView->Append(Gui_View_ShowMask,_T("Show Mask"),_T("Displays the contours given by the mask image"),TRUE);
-	menuView->Enable(Gui_View_ShowMask,FALSE);
-	menuView->Check(Gui_View_ShowMask,FALSE);
+	menuView->Append(Gui_View_ShowMask, _T("Show Mask"), _T("Displays the contours given by the mask image"),TRUE);
+	menuView->Enable(Gui_View_ShowMask, FALSE);
+	menuView->Check(Gui_View_ShowMask, FALSE);
 
-	menuTools->Append(Gui_Tools_SetAviOutput,_T("Set AVI Output"),_T("Select video file for output"));
-	menuTools->Append(Gui_Tools_AviOutput,_T("Enable AVI Output"),_T("Enables/Disables Video output"),TRUE);
+	menuTools->Append(Gui_Tools_SetAviOutput, _T("Set AVI Output"), _T("Select video file for output"));
+	menuTools->Append(Gui_Tools_AviOutput, _T("Enable AVI Output"), _T("Enables/Disables Video output"),TRUE);
 	menuTools->Check(Gui_Tools_AviOutput, FALSE);
-	menuTools->Enable(Gui_Tools_AviOutput,FALSE);
+	menuTools->Enable(Gui_Tools_AviOutput, FALSE);
 	menuTools->AppendSeparator();
-	menuTools->Append(Gui_Tools_ShowCamera,_T("Display camera"),_T("Displays data from a IEEE1394 firewire camera"));
+	menuTools->Append(Gui_Tools_ShowCamera, _T("Display camera"), _T("Displays data from a IEEE1394 firewire camera"));
 	menuTools->AppendSeparator();
-	menuTools->Append(Gui_Tools_Screenshot,_T("Save Bitmap"),_T("Saves the current view to a file"));
+	menuTools->Append(Gui_Tools_Screenshot, _T("Save Bitmap"), _T("Saves the current view to a file"));
 	menuTools->AppendSeparator();
-	menuTools->Append(Gui_Tools_FlipScreen,_T("Flip Output"),_T("Flips the output (when tracking from video)"),TRUE);
-	menuTools->Check(Gui_Tools_FlipScreen,flip);
-	menuTools->Append(Gui_Tools_FitCanvas,_T("Fit window to video"),_T("Increases performance"));
+	menuTools->Append(Gui_Tools_FlipScreen, _T("Flip Output") ,_T("Flips the output (when tracking from video)"),TRUE);
+	menuTools->Check(Gui_Tools_FlipScreen, flip!=0);
+	menuTools->Append(Gui_Tools_FitCanvas, _T("Fit window to video"), _T("Increases performance"));
 
 #ifdef _1394
 	if(theCamera.CheckLink() != CAM_SUCCESS)    
-		menuTools->Enable(Gui_Tools_ShowCamera,FALSE);
+		menuTools->Enable(Gui_Tools_ShowCamera, FALSE);
 	else
-		menuTools->Enable(Gui_Tools_ShowCamera,TRUE);
+		menuTools->Enable(Gui_Tools_ShowCamera, TRUE);
 #endif
 
-	menuHelp->Append(Gui_Help,_T("&Manual"),_T("Opens the manual"));
-	//menuHelp->Enable(Gui_Help,FALSE);
-
+	menuHelp->Append(Gui_Help, _T("&Manual"), _T("Opens the manual"));
+	menuHelp->Append(Gui_Test, _T("&Test"), _T("Test"));
 	menuHelp->Append(Gui_About, _T("&About...\tF1"), _T("Show about dialog"));
 
 	// now append the freshly created menu to the menu bar...
@@ -268,18 +266,52 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	// ... and attach this menu bar to the frame
 	SetMenuBar(menuBar);
 	menuBar->Check(Gui_View_TrajFull, TRUE);
-	menuBar->Check(Gui_View_ShowMask,FALSE);
+	menuBar->Check(Gui_View_ShowMask, FALSE);
 
 #if wxUSE_STATUSBAR
 	CreateStatusBar(2);
 	SetStatusText(_T("Welcome to SwisTrack!"));
 #endif // wxUSE_STATUSBAR
 
-	colorbmp = 0;
-	canvas=0;
-	colorbmp = new wxBitmap(640,480);
-	canvas = new Canvas(this, wxPoint(0, 0), wxSize(-1,-1));
+	colorbmp = new wxBitmap(640, 480);
+	canvas=new Canvas(this, wxPoint(0, 0), wxSize(40, 30));
 	RecreateToolbar();
+
+	// List
+	mListCtrlComponents=new wxListCtrl(this, -1);
+	mListCtrlComponents->SetWindowStyle(wxLC_REPORT);
+	mListCtrlComponents->InsertColumn(1, "Component", wxLIST_FORMAT_LEFT, 200);
+	mListCtrlComponents->InsertColumn(1, "I", wxLIST_FORMAT_CENTER, 100);
+	mListCtrlComponents->InsertColumn(1, "BGR", wxLIST_FORMAT_CENTER, 100);
+	mListCtrlComponents->InsertColumn(1, "BGBGR", wxLIST_FORMAT_CENTER, 100);
+	mListCtrlComponents->InsertColumn(1, "Gray", wxLIST_FORMAT_CENTER, 100);
+	mListCtrlComponents->InsertColumn(1, "BGGray", wxLIST_FORMAT_CENTER, 100);
+	mListCtrlComponents->InsertColumn(1, "Binary", wxLIST_FORMAT_CENTER, 100);
+	mListCtrlComponents->InsertColumn(1, "Mask", wxLIST_FORMAT_CENTER, 100);
+	mListCtrlComponents->InsertColumn(1, "P", wxLIST_FORMAT_CENTER, 100);
+	wxListItem li;
+	li.SetText("Camera");
+	li.SetTextColour(*wxBLACK);
+	li.SetColumn(0);
+	mListCtrlComponents->InsertItem(li);
+
+	// Panel
+	mPanelInformation=new wxPanel(this, -1, wxDefaultPosition, wxSize(200, 20));
+	mPanelInformation->SetBackgroundColour(*wxBLUE);
+	mPanelInformation1=new wxPanel(this, -1, wxDefaultPosition, wxSize(200, 20));
+	mPanelInformation1->SetBackgroundColour(*wxRED);
+	mPanelInformation1->Hide();
+
+	// Setup frame contents
+	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
+	hs->Add(canvas, 1, wxALL|wxSHAPED|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 10);
+	hs->Add(mPanelInformation, 0, wxEXPAND, 0);
+	hs->Add(mPanelInformation1, 0, wxEXPAND, 0);
+
+	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
+	SetSizer(vs);
+	vs->Add(hs, 3, wxEXPAND, 0);
+	vs->Add(mListCtrlComponents, 1, wxEXPAND, 0);
 
 	wxInitAllImageHandlers();
 
@@ -368,12 +400,15 @@ Deallocates all memory and closes the application.
 SwisTrack::~SwisTrack(){
 	ShutDown();
 
-	if(ot) delete ot;
-	if(socketserver) delete socketserver;
-	if(canvas) delete canvas;
-	if(colorbmp) delete colorbmp;
-	if(parser) delete parser;
-	if(expparser) delete expparser;
+	if (ot) delete ot;
+	if (socketserver) delete socketserver;
+	if (canvas) delete canvas;
+	if (colorbmp) delete colorbmp;
+	if (parser) delete parser;
+	if (expparser) delete expparser;
+
+	if (mPanelInformation) delete mPanelInformation;
+	if (mListCtrlComponents) delete mListCtrlComponents;
 #ifdef MULTITHREAD
 	if (criticalSection) delete criticalSection;
 #endif
@@ -1061,11 +1096,15 @@ int SwisTrack::GetStatus() const {
 	return status;
 }
 
-void SwisTrack::OnHelp(wxCommandEvent& WXUNUSED(event))
-{
+void SwisTrack::OnHelp(wxCommandEvent& WXUNUSED(event)) {
 	wxLaunchDefaultBrowser("http://en.wikibooks.org/wiki/Swistrack");
 }
 
+void SwisTrack::OnTest(wxCommandEvent& WXUNUSED(event)) {
+	mPanelInformation->Hide();
+	mPanelInformation1->Show();
+	GetSizer()->Layout();
+}
 
 void SwisTrack::OnIdle(wxIdleEvent& WXUNUSED(event)){
 	if(status==RUNNING){
@@ -1186,7 +1225,7 @@ void SwisTrack::MakeScreenShot(wxCommandEvent& WXUNUSED(event))
 void SwisTrack::FlipScreen(wxCommandEvent& WXUNUSED(event))
 {
 	if(flip) flip=0; else flip=1;
-	menuBar->Check(Gui_Tools_FlipScreen,flip);
+	menuBar->Check(Gui_Tools_FlipScreen, flip!=0);
 }
 
 void SwisTrack::FitCanvas(wxCommandEvent& WXUNUSED(event))

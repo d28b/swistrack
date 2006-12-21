@@ -16,6 +16,7 @@
 #include "wx/file.h"	  // File operations (here: FileExists)
 #include "wx/busyinfo.h"  // Imports the wxBusyInfo class (used on shutdown)
 #include "wx/app.h"	      // Provides app functions (setvendorname...)
+#include "wx/listctrl.h"  // ListCtrl
 #include "wx/html/htmlwin.h"
 
 //#include "calibration.h"
@@ -78,13 +79,17 @@ public:
 	wxMenu *menuTools;
 
 	Canvas* canvas;
-  
+	wxListCtrl* mListCtrlComponents;
+	wxPanel* mPanelInformation;
+	wxPanel* mPanelInformation1;
+
 	// bitmap
 	wxBitmap* colorbmp;
 	//int width, height;
 
     // event handlers (these functions should _not_ be virtual)
 	void OnHelp(wxCommandEvent& WXUNUSED(event));
+	void OnTest(wxCommandEvent& WXUNUSED(event));
     void OnSetAviOutput(wxCommandEvent& WXUNUSED(event));
 	void OnMenuFileNew(wxCommandEvent& WXUNUSED(event));
 	void OnMenuFileOpen(wxCommandEvent& WXUNUSED(event));

@@ -23,7 +23,7 @@ THISCLASS::SwisTrackCore(xmlpp::Element* cfgroot):
 		mDataStructureParticles()
 		{
 
-	// Initialize the list of component factories
+	// Initialize the list of available components
 	mComponents.push_back(new ComponentInputCamera1394(this));
 	mComponents.push_back(new ComponentInputCameraUSB(this));
 	mComponents.push_back(new ComponentInputCameraGBit(this));
@@ -33,6 +33,15 @@ THISCLASS::SwisTrackCore(xmlpp::Element* cfgroot):
 	mComponents.push_back(new ComponentBackgroundSubtractionGray(this));
 	mComponents.push_back(new ComponentThresholdGray(this));
 	mComponents.push_back(new ComponentParticleFilter(this));
+
+	// Initialize the list of available data structures
+	mDataStructures.push_back(&mDataStructureInput);
+	mDataStructures.push_back(&mDataStructureImageBGR);
+	mDataStructures.push_back(&mDataStructureBackgroundBGR);
+	mDataStructures.push_back(&mDataStructureBackgroundGray);
+	mDataStructures.push_back(&mDataStructureImageBinary);
+	mDataStructures.push_back(&mDataStructureMaskBinary);
+	mDataStructures.push_back(&mDataStructureParticles);
 }
 
 bool THISCLASS::Start() {
