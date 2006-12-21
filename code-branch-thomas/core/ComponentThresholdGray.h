@@ -11,18 +11,19 @@ public:
 	~ComponentThresholdGray();
 
 	// Overwritten Component methods
-	bool Start();
-	bool Step();
-	bool StepCleanup();
-	bool Stop();
+	void OnStart();
+	void OnStep();
+	void OnStepCleanup();
+	void OnStop();
 
 private:
 	IplImage *mOutputImage;
+	int mThreshold;
 
 	inline void PrepareOutputImage(IplImage *inputimage) {
 		if (mOutputImage) {
 			if ((mOutputImage->width==inputimage->width) && (mOutputImage->height==inputimage->height)) {return;}
-			cvReleaseImage(mOutputImage);
+			cvReleaseImage(&mOutputImage);
 		}
 		mOutputImage = cvCreateImage(cvSize(inputimage->width, inputimage->height), 8, 1);
 	}

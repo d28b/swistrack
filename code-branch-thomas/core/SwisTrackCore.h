@@ -1,6 +1,8 @@
 #ifndef HEADER_SwisTrackCore
 #define HEADER_SwisTrackCore
 
+class SwisTrackCore;
+
 #include <list>
 #include "Component.h"
 #include "DataStructureInput.h"
@@ -11,7 +13,7 @@ class SwisTrackCore {
 
 public:
 	//! The list of all available component factories.
-	typedef std::list<ComponentFactory*> tComponents;
+	typedef std::list<Component*> tComponents;
 	tComponents mComponents;
 
 	//! The list of the deployed components.
@@ -31,6 +33,9 @@ public:
 	SwisTrackCore(xmlpp::Element* cfgroot=0);
 	~SwisTrackCore() {}
 
+	bool Start();
+	bool Step();
+	bool Stop();
 protected:
 	xmlpp::Element* mConfigurationRoot;
 

@@ -1,31 +1,33 @@
 #include "ComponentBackgroundSubtractionGray.h"
 #define THISCLASS ComponentBackgroundSubtractionGray
 
-THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore *stc, const std::string &displayname):
-		Component(stc, "BackgroundSubtraction", displayname),
-		mCapture(0), mLastImage(0) {
+#include <highgui.h>
+
+THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore *stc):
+		Component(stc, "BackgroundSubtraction"),
+		mBackgroundImageMean(0), mBackgroundImage(0), mCorrectMean(true) {
 
 	// Data structure relations
-	AddDataStructureRead(mCore->mDataStructureImageGray);
-	AddDataStructureWrite(mCore->mDataStructureImageGray);
+	mDisplayName="Background Subtraction (grayscale)";
+	mCategory="Preprocessing (grayscale)";
+	AddDataStructureRead(&(mCore->mDataStructureImageGray));
+	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 }
 
 THISCLASS::~ComponentBackgroundSubtractionGray() {
-	if (! mCapture) {return;}
-	cvReleaseCapture(mCapture);
 }
 
-bool THISCLASS::Start() {
-	IplImage* bg = cvLoadImage(GetConfigurationString("BackgroundImage", ""), -1);
+void THISCLASS::OnStart() {
+	IplImage* bg = cvLoadImage(GetConfigurationString("BackgroundImage", "").c_str(), -1);
 	if (! bg) {
 		AddError("Cannot open background file.");
-		return false;
+		return;
 	}
 
-	mBackgroundImage=cvCreateImage(bg->GetInputDim(), bg->GetInputDepth(), 1);
+	mBackgroundImage=cvCreateImage(cvSize(bg->width, bg->height), bg->depth, 1);
 	if (! mBackgroundImage) {
 		AddError("Cannot create background image.");
-		return false;
+		return;
 	}
 
 	switch (bg->nChannels) {
@@ -40,22 +42,28 @@ bool THISCLASS::Start() {
 		break;
 	}
 
+	// Whether to correct the mean or not
+	mCorrectMean=GetConfigurationBool("CorrectMean", true);
+
 	// We always calculate the background average, so we can select if we use the moving threshold during the segmentation
-	mBackgroundImageMean=(int)cvMean(mBackgroundImage);
+	if (mCorrectMean) {
+		mBackgroundImageMean=cvMean(mBackgroundImage);
+	} else {
+		mBackgroundImageMean=0;
+	}
 	
 	// Release the temporary image
 	cvReleaseImage(&bg);
-	return true;
 }
 
-bool THISCLASS::Step() {
+void THISCLASS::OnStep() {
 	IplImage *inputimage=mCore->mDataStructureImageGray.mImage;
-	if (! inputimage) {return true;}
-	if (! mBackgroundImage) {return true;}
+	if (! inputimage) {return;}
+	if (! mBackgroundImage) {return;}
 
 	try {
 		// Correct the tmpImage with the difference in image mean
-		if (fixedThresholdBoolean==0)
+		if (mCorrectMean)
 			cvAddS(inputimage, cvScalar(mBackgroundImageMean-cvMean(inputimage)), inputimage);
 
 		// Background Substraction
@@ -63,16 +71,11 @@ bool THISCLASS::Step() {
 	} catch(...) {
 		AddError("Background subtraction failed.");
 	}
-	
-	cvReleaseImage(&tmpImage);
-	return true;
 }
 
-bool THISCLASS::StepCleanup() {
-	return true;
+void THISCLASS::OnStepCleanup() {
 }
 
-bool THISCLASS::Stop() {
-	if (mBackgroundImage) {cvReleaseCapture(mBackgroundImage);}
-	return true;
+void THISCLASS::OnStop() {
+	if (mBackgroundImage) {cvReleaseImage(&mBackgroundImage);}
 }

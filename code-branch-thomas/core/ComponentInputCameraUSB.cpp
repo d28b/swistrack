@@ -1,68 +1,59 @@
 #include "ComponentInputCameraUSB.h"
 #define THISCLASS ComponentInputCameraUSB
 
-THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc, const std::string &displayname):
-		Component(stc, "CameraUSB", displayname),
+THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
+		Component(stc, "CameraUSB"),
 		mCapture(0), mLastImage(0) {
 
 	// Data structure relations
-	AddDataStructureWrite(mCore->mDataStructureImage);
-	AddDataStructureWrite(mCore->mDataStructureInput);
+	mDisplayName="USB Camera";
+	mCategory="Input";
+	AddDataStructureWrite(&(mCore->mDataStructureInput));
 }
 
 THISCLASS::~ComponentInputCameraUSB() {
 	if (! mCapture) {return;}
-	cvReleaseCapture(mCapture);
+	cvReleaseCapture(&mCapture);
 }
 
-bool THISCLASS::Start() {
+void THISCLASS::OnStart() {
 	mCapture = cvCaptureFromCAM(-1);
 	if (! mCapture) {
 		AddError("Could not open USB camera.");
-		return false;
+		return;
 	}
 
 	mLastImage = cvQueryFrame(mCapture);
 	if (! mLastImage) {
 		AddError("Could not retrieve image from USB camera.");
-		return false;
+		return;
 	}
-
-	mCore->mDataStructureImage.mIsInColor=(strcmp(mLastImage->colorModel, "GRAY")!=0);
 }
 
-bool THISCLASS::Step() {
-	if (! mCapture) {return false;}	
+void THISCLASS::OnStep() {
+	if (! mCapture) {return;}	
 
 	// Read from camera
-	IplImage* inputimage = cvQueryFrame(Capture);
-	if (! inputimage) {
+	mLastImage = cvQueryFrame(mCapture);
+	if (! mLastImage) {
 		AddError("Could not retrieve image from USB camera.");
-		return false;
+		return;
 	}
 
 	// Set DataStructureImage
-	mCore->mDataStructureImage.mImage=inputimage;	
+	mCore->mDataStructureInput.mImage=mLastImage;	
 	mCore->mDataStructureInput.mFrameNumber++;
-
-	// Show status
-	std::ostringstream oss;
-	oss << "Frame " << mCore->mDataStructureImage.mFrameNumber;
-	AddInfo(oss.str);
-	return true;
 }
 
-bool THISCLASS::StepCleanup() {
-	mCore->mDataStructureImage.mImage=0;
-	if (mLastImage) {cvReleaseImage(mLastImage);}
-	return true;
+void THISCLASS::OnStepCleanup() {
+	mCore->mDataStructureInput.mImage=0;
+	if (mLastImage) {cvReleaseImage(&mLastImage);}
 }
 
-bool THISCLASS::Stop() {
-	if (! mCapture) {return false;}	
+void THISCLASS::OnStop() {
+	if (! mCapture) {return;}
 
-	cvReleaseCapture(mCapture);
-	return true;
+	cvReleaseCapture(&mCapture);
 }
 
 double THISCLASS::GetFPS() {

@@ -3,40 +3,39 @@
 
 THISCLASS::ComponentThresholdGray(SwisTrackCore *stc):
 		Component(stc, "ThresholdGray"),
-		mCapture(0), mLastImage(0) {
+		mOutputImage(0), mThreshold(128) {
 
 	// Data structure relations
 	mDisplayName="Thresholding (grayscale)";
 	mCategory="Preprocessing (grayscale)";
-	AddDataStructureWrite(mCore->mDataStructureImage);
-	AddDataStructureWrite(mCore->mDataStructureImageBinary);
+	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
+	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 }
 
 THISCLASS::~ComponentThresholdGray() {
-	if (! mCapture) {return;}
-	cvReleaseCapture(mCapture);
 }
 
-bool THISCLASS::Start() {
-	return true;
+void THISCLASS::OnStart() {
+	mThreshold=GetConfigurationInt("Threshold", 128);
 }
 
-bool THISCLASS::Step() {
+void THISCLASS::OnStep() {
 	IplImage *inputimage=mCore->mDataStructureImageGray.mImage;
-	if (! inputimage) {return true;}
+	if (! inputimage) {return;}
 
 	try {
 		PrepareOutputImage(inputimage);
-		cvThreshold(inputimage, binary, mThreshold, 255, CV_THRESH_BINARY);
+		cvThreshold(inputimage, mOutputImage, mThreshold, 255, CV_THRESH_BINARY);
+		mCore->mDataStructureImageBinary.mImage=mOutputImage;
 	} catch (...) {
 		AddError("Thresholding failed.");
 	}
-	
-	cvReleaseImage(&tmpImage);
-	return true;
 }
 
-bool THISCLASS::Stop() {
-	if (mOutputImage) {cvReleaseCapture(mOutputImage);}
-	return true;
+void THISCLASS::OnStepCleanup() {
+	mCore->mDataStructureImageBinary.mImage=0;
+}
+
+void THISCLASS::OnStop() {
+	if (mOutputImage) {cvReleaseImage(&mOutputImage);}
 }

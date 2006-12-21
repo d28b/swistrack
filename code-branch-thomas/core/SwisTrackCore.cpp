@@ -1,6 +1,16 @@
 #include "SwisTrackCore.h"
 #define THISCLASS SwisTrackCore
 
+#include "ComponentInputCamera1394.h"
+#include "ComponentInputCameraUSB.h"
+#include "ComponentInputCameraGBit.h"
+#include "ComponentInputFileAVI.h"
+#include "ComponentConvertToGray.h"
+#include "ComponentConvertToBGR.h"
+#include "ComponentBackgroundSubtractionGray.h"
+#include "ComponentThresholdGray.h"
+#include "ComponentParticleFilter.h"
+
 THISCLASS::SwisTrackCore(xmlpp::Element* cfgroot):
 		mConfigurationRoot(cfgroot),
 		mDataStructureInput(),
@@ -14,51 +24,73 @@ THISCLASS::SwisTrackCore(xmlpp::Element* cfgroot):
 		{
 
 	// Initialize the list of component factories
-	mComponents->push_back(new ComponentFactory<ComponentInputCamera1394>, "1394 Camera", "Input");
-	mComponents->push_back(new ComponentFactory<ComponentInputCameraUSB>, "USB Camera", "Input");
-	mComponents->push_back(new ComponentFactory<ComponentInputCameraGBit>, "GBit Camera", "Input");
-	mComponents->push_back(new ComponentFactory<ComponentInputFileAVI>, "AVI File", "Input");
-	mComponents->push_back(new ComponentFactory<ComponentInputConvertToGray>, "Conversion to Grayscale", "Input Conversion");
-	mComponents->push_back(new ComponentFactory<ComponentInputConvertToBGR>, "Conversion to Color", "Input Conversion");
-	mComponents->push_back(new ComponentFactory<ComponentInputBackgroundSubtractionGray>, "Background Subtraction (grayscale)", "Preprocessing (grayscale)");
-	mComponents->push_back(new ComponentInputThresholdGray());
-	mComponents->push_back(new ComponentFactory<ComponentInputParticleFilter>, "Particle Filter", "Blob Detection");
-}
-
-void THISCLASS::AddComponent(ComponentFactory *cf) {
-	mComponentList->push_back(cf->Create());
-}
-
-void THISCLASS::RemoveComponent() {
+	mComponents.push_back(new ComponentInputCamera1394(this));
+	mComponents.push_back(new ComponentInputCameraUSB(this));
+	mComponents.push_back(new ComponentInputCameraGBit(this));
+	mComponents.push_back(new ComponentInputFileAVI(this));
+	mComponents.push_back(new ComponentConvertToGray(this));
+	mComponents.push_back(new ComponentConvertToBGR(this));
+	mComponents.push_back(new ComponentBackgroundSubtractionGray(this));
+	mComponents.push_back(new ComponentThresholdGray(this));
+	mComponents.push_back(new ComponentParticleFilter(this));
 }
 
 bool THISCLASS::Start() {
+	bool allok=true;
+
+	// Start all components (until first error)
 	tComponentList::iterator it=mComponentList.begin();
 	while (it!=mComponentList.end()) {
-		it->mOK=it->Start();
+		(*it)->ClearStatus();
+		(*it)->OnStart();
+		if ((*it)->mStatusHasError) {
+			allok=false;
+			break;
+		}
+		(*it)->mStarted=true;
 		it++;
 	}
+
+	return allok;
 }
 
-void THISCLASS::Stop() {
+bool THISCLASS::Stop() {
+	bool allok=true;
+
+	// Stop all components
 	tComponentList::iterator it=mComponentList.end();
 	while (it!=mComponentList.begin()) {
 		it--;
-		if (! it->Stop()) {it->mOK=false;}
+		if ((*it)->mStarted) {
+			(*it)->ClearStatus();
+			(*it)->OnStop();
+			(*it)->mStarted=false;
+			if (! (*it)->mStatusHasError) {allok=false;}
+		}
 	}
+
+	return allok;
 }
 
-void THISCLASS::Step() {
+bool THISCLASS::Step() {
+	bool allok=true;
+
+	// Run until first error, or until the end (all started components)
 	tComponentList::iterator it=mComponentList.begin();
 	while (it!=mComponentList.end()) {
-		if (! it->mOK) {break;}
-		it->mOK=it->Step();
-		if (! it->mOK) {break;}
+		if (! (*it)->mStarted) {break;}
+		(*it)->ClearStatus();
+		(*it)->OnStep();
+		if (! (*it)->mStatusHasError) {allok=false; break;}
 		it++;
 	}
 
+	// and then cleanup what we run
 	while (it!=mComponentList.begin()) {
 		it--;
-		if (! it->StepCleanup()) {it->mOK=false;}
+		(*it)->OnStepCleanup();
+		if (! (*it)->mStatusHasError) {allok=false;}
 	}
+
+	return allok;
 }

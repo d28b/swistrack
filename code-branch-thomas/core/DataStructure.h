@@ -8,10 +8,11 @@ class DataStructure {
 public:
 	//! Name of this data structure.
 	std::string mName;
+	std::string mDisplayName;
 
 	//! Constructor.
 	DataStructure(): mName("") {}
-	DataStructure(std::string &nam): mName(nam) {}
+	DataStructure(const std::string &name): mName(name) {}
 
 	//! Destructor.
 	virtual ~DataStructure() {}

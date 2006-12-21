@@ -7,18 +7,19 @@
 class ComponentBackgroundSubtractionGray: public Component {
 
 public:
-	ComponentBackgroundSubtractionGray(SwisTrackCore *stc, const std::string &displayname);
+	ComponentBackgroundSubtractionGray(SwisTrackCore *stc);
 	~ComponentBackgroundSubtractionGray();
 
 	// Overwritten Component methods
-	bool Start();
-	bool Step();
-	bool StepCleanup();
-	bool Stop();
+	void OnStart();
+	void OnStep();
+	void OnStepCleanup();
+	void OnStop();
 
 private:
 	IplImage *mBackgroundImage;
 	double mBackgroundImageMean;
+	bool mCorrectMean;
 };
 
 #endif

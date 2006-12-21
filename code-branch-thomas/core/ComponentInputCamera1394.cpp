@@ -3,34 +3,35 @@
 
 #ifdef _1394
 
-THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc, const std::string &displayname):
-		Component(stc, "Camera1394", displayname),
+THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):
+		Component(stc, "Camera1394"),
 		mCamera(), mLastImage(0) {
 
 	// Data structure relations
-	AddDataStructureWrite(mCore->mDataStructureImage);
-	AddDataStructureWrite(mCore->mDataStructureInput);
+	mDisplayName="1394 Camera";
+	mCategory="Input";
+	AddDataStructureWrite(&(mCore->mDataStructureInput));
 }
 
-bool THISCLASS::Start() {
+void THISCLASS::OnStart() {
 	if (mCamera.CheckLink() != CAM_SUCCESS) {
 		AddError("Cannot access 1394 Camera (Make sure CMU driver is installed).");
 		return;
 	}
 
 	if (mCamera.InitCamera() != CAM_SUCCESS) {
-		AddError("Cannot initialize 1394 Camera.";
+		AddError("Cannot initialize 1394 Camera.");
 		return;
 	}
 
 	mCamera.StatusControlRegisters();
 
 	int videoformat=GetConfigurationInt("VideoFormat", 0);
-	if ((videoformat<0) || (videoformat>2)) {AddError("VideoMode must be 0, 1 or 2."); return false;}
+	if ((videoformat<0) || (videoformat>2)) {AddError("VideoMode must be 0, 1 or 2."); return;}
 	mCamera.SetVideoFormat(videoformat);
 
 	int videomode=GetConfigurationInt("VideoMode", 0);
-	if ((videomode<0) || (videomode>5)) {AddError("VideoMode must be in [0, 5]."); return false;}
+	if ((videomode<0) || (videomode>5)) {AddError("VideoMode must be in [0, 5]."); return;}
 	mCamera.SetVideoMode(videomode);
 	
 	mCamera.SetVideoFrameRate(GetConfigurationInt("FrameRate", 10)); 
@@ -44,17 +45,15 @@ bool THISCLASS::Start() {
 	mCamera.SetSaturation(GetConfigurationInt("Saturation", 0));
 	
 	if (mCamera.StartImageAcquisition() != 0) {
-		AddError("Could not start image acquisition.";
-		return false;
+		AddError("Could not start image acquisition.");
+		return;
 	}
 
 	mLastImage=cvCreateImage(cvSize(mCamera.m_width, mCamera.m_height), 8, 3);
-	mCore->mDataStructureImage.mImage=mLastImage;
-	mCore->mDataStructureImage.mIsInColor=true;
-	return true;
+	mCore->mDataStructureInput.mImage=mLastImage;
 }
 
-bool THISCLASS::Step() {
+void THISCLASS::OnStep() {
 	// Get image from camera
 	int status=mCamera.AcquireImage();	
 	switch (status) {
@@ -62,10 +61,10 @@ bool THISCLASS::Step() {
 		break;
 	case CAM_ERROR_NOT_INITIALIZED:
 		AddError("Camera not initialized.");
-		return false;
+		return;
 	default:
 		AddError("Camera acquisition error.");
-		return false;
+		return;
 	}
 
 	// Point the input IplImage to the camera buffer
@@ -75,18 +74,15 @@ bool THISCLASS::Step() {
 	cvCvtColor(mLastImage, mLastImage, CV_RGB2BGR);
 	
 	// Set this image in the DataStructureImage
-	mCore->mDataStructureImage.mImage=mLastImage;
+	mCore->mDataStructureInput.mImage=mLastImage;
 	mCore->mDataStructureInput.mFrameNumber++;
-	return true;
 }
 
-bool THISCLASS::StepCleanup() {
-	mCore->mDataStructureImage.mImage=0;
-	return true;
+void THISCLASS::OnStepCleanup() {
+	mCore->mDataStructureInput.mImage=0;
 }
 
-bool THISCLASS::Stop() {
-	return true;
+void THISCLASS::OnStop() {
 }
 
 #endif

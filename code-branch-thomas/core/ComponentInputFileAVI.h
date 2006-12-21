@@ -1,24 +1,22 @@
 #ifndef HEADER_ComponentInputFileAVI
 #define HEADER_ComponentInputFileAVI
 
-#include "TrackingImage.h"
 #include <vector>
-#include <math.h>
 #include "cv.h"
 #include "highgui.h"
 #include "Component.h"
 
-class ComponentFileAVI: public Component {
+class ComponentInputFileAVI: public Component {
 
 public:
-	ComponentInputFileAVI(SwisTrackCore *stc, const std::string &displayname);
+	ComponentInputFileAVI(SwisTrackCore *stc);
 	~ComponentInputFileAVI();
 
 	// Overwritten Component methods
-	bool Start();
-	bool Step();
-	bool StepCleanup();
-	bool Stop();
+	void OnStart();
+	void OnStep();
+	void OnStepCleanup();
+	void OnStop();
 
 	double GetProgressPercent();
 	double GetProgressMSec();

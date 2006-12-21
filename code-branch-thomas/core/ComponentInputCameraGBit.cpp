@@ -1,27 +1,24 @@
 #include "ComponentInputCameraGBit.h"
 #define THISCLASS ComponentInputCameraGBit
 
-THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc, const std::string &displayname):
-		Component(stc, "CameraGBit", displayname) {
+THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
+		Component(stc, "CameraGBit") {
 
 	// Data structure relations
-	AddDataStructureWrite(mCore->mDataStructureImage);
-	AddDataStructureWrite(mCore->mDataStructureInput);
+	mDisplayName="GBit Camera";
+	mCategory="Input";
+	AddDataStructureWrite(&(mCore->mDataStructureInput));
 }
 
-bool THISCLASS::Start() {
+void THISCLASS::OnStart() {
 	//theCamera.SetVideoFrameRate(GetIntValByXPath(cfgRoot, "/Configuration/InputCameraGBit/FrameRate")); 
-	return true;
 }
 
-bool THISCLASS::Step() {
-	return true;
+void THISCLASS::OnStep() {
 }
 
-bool THISCLASS::StepCleanup() {
-	return true;
+void THISCLASS::OnStepCleanup() {
 }
 
-bool THISCLASS::stop() {
-	return false;
+void THISCLASS::OnStop() {
 }

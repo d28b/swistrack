@@ -12,7 +12,7 @@ public:
 	double mFramesPerSecond;
 
 	//! Constructor.
-	DataStructureInput(): DataStructureImage("Input"), mFrameNumber(0), mFramesPerSecond(-1) {mDisplayName="Input";}
+	DataStructureInput(): DataStructureImage("Input", "Input"), mFrameNumber(0), mFramesPerSecond(-1) {mDisplayName="Input";}
 	~DataStructureInput() {}
 };
 

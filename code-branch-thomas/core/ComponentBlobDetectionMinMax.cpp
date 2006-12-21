@@ -1,53 +1,64 @@
-#include "ComponentParticleFilter.h"
-#define THISCLASS ComponentParticleFilter
+#include "ComponentBlobDetectionMinMax.h"
+#define THISCLASS ComponentBlobDetectionMinMax
 
-THISCLASS::ComponentParticleFilter(SwisTrackCore *stc, const std::string &displayname):
-		Component(stc, "ParticleFilter", displayname),
-		mCapture(0), mLastImage(0) {
+THISCLASS::ComponentBlobDetectionMinMax(SwisTrackCore *stc):
+		Component(stc, "ParticleFilter"),
+		mMinArea(0), mMaxArea(1000000), mMaxNumber(10), mFirstDilate(1), mFirstErode(1), mSecondDilate(1) {
 
 	// Data structure relations
-	AddDataStructureWrite(mCore->mDataStructureImageBinary);
-	AddDataStructureWrite(mCore->mDataStructureParticles);
+	mDisplayName="Blob detection with min/max particle size";
+	mCategory="Blob detection";
+	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
+	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 }
 
-THISCLASS::~ComponentParticleFilter() {
+THISCLASS::~ComponentBlobDetectionMinMax() {
 }
 
-bool THISCLASS::Start() {
-	mMinArea=GetConfigurationDouble("MinArea");
-	mMaxArea=GetConfigurationDouble("MaxArea");
-	mMaxNumber=GetConfigurationInt("MaxNumber");
+void THISCLASS::OnStart() {
+	mMinArea=GetConfigurationDouble("MinArea", 0);
+	mMaxArea=GetConfigurationDouble("MaxArea", 1000000);
+	mMaxNumber=GetConfigurationInt("MaxNumber", 10);
+	mFirstDilate=GetConfigurationInt("FirstDilate", 1);
+	mFirstErode=GetConfigurationInt("FirstErode", 1);
+	mSecondDilate=GetConfigurationInt("SecondDilate", 1);
 	
-	//Control if max_number is not to small
+	// Check for stupid configurations
 	if (mMaxNumber<1) {
 		AddError("Max number of particles must be greater or equal to 1");
-		return false;
 	}
 
-	return true;
+	if (mMinArea>mMaxArea) {
+		AddError("The min area must be smaller than the max area.");
+	}
+
+	return;
 }
 
-bool THISCLASS::Step() {
-	std::vector<particle> rejectedparticles;
+void THISCLASS::OnStep() {
+	std::vector<Particle> rejectedparticles;
 
 	// We get the binary image from the segmenter, we make a copy because the image is modified during blobs extraction
 	IplImage* src_tmp = cvCloneImage(mCore->mDataStructureImageBinary.mImage);
 	
 	// Perform a morphological opening to reduce noise.
-	if (mFirstDilate) {
+	if (mFirstDilate>0) {
 		cvDilate(src_tmp, src_tmp, NULL, mFirstDilate);
 	}
-	if (mFirstErode) {
+	if (mFirstErode>0) {
 		cvErode(src_tmp, src_tmp, NULL, mFirstErode);
 	}
-	if (mSecondDilate) {
+	if (mSecondDilate>0) {
 		cvDilate(src_tmp, src_tmp, NULL, mSecondDilate);
 	}
 
 	// We clear the ouput vector
+	mParticles.clear();
+
+	// Initialization
 	Particle tmpParticle; // Used to put the calculated value in memory
 	CvMoments moments; // Used to calculate the moments
-	std::vector<particle>::iterator j; // Iterator used to stock the particles by size
+	std::vector<Particle>::iterator j; // Iterator used to stock the particles by size
 
 	// We allocate memory to extract the contours from the binary image
 	CvMemStorage* storage = cvCreateMemStorage(0);
@@ -71,33 +82,33 @@ bool THISCLASS::Step() {
 
 		// Calculating particle area
 		tmpParticle.mArea=moments.m00;
-		tmpParticle.mPosition.x=(float)(rectROI.x + (moments.m10/moments.m00+0.5));  // moments using Green theorem
-		tmpParticle.mPosition.y=(float)(rectROI.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
+		tmpParticle.mCenter.x=(float)(rectROI.x + (moments.m10/moments.m00+0.5));  // moments using Green theorem
+		tmpParticle.mCenter.y=(float)(rectROI.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
 
 		// Selection based on area
 		if ((tmpParticle.mArea<=mMaxArea) && (tmpParticle.mArea>=mMinArea)) {
 			// Check if we have already enough particles
-			if (particles.size()==mMaxNumber) {
+			if (mParticles.size()==mMaxNumber) {
 				// If the particle is bigger than the smallest stored particle, store it, else do nothing
-				if (tmpParticle.mArea>mCore->mDataStructureParticles.mParticles.back().mArea) {
+				if (tmpParticle.mArea>mParticles.back().mArea) {
 					// Find the place were it must be inserted, sorted by size
-					for (j=mCore->mDataStructureParticles.mParticles.begin(); (j!=mCore->mDataStructureParticles.mParticles.end()) && (tmpParticle.mArea<(*j).mArea); j++);
+					for (j=mParticles.begin(); (j!=mParticles.end()) && (tmpParticle.mArea<(*j).mArea); j++);
 
 					// Calculate the important values
-					//tmpParticle.mPosition.x=(float)(rectROI.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
-					//tmpParticle.mPosition.y=(float)(rectROI.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
+					//tmpParticle.mCenter.x=(float)(rectROI.x + (moments.m10/moments.m00+0.5));  // moments using Green theorema
+					//tmpParticle.mCenter.y=(float)(rectROI.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
 					tmpParticle.mCompactness=GetContourCompactness(contour);
 					tmpParticle.mID=-1;
 					tmpParticle.mOrientation=0;
 
 					// Insert the particle
-					mCore->mDataStructureParticles.mParticles.insert(j, tmpParticle);
+					mParticles.insert(j, tmpParticle);
 					// Remove the smallest one
-					mCore->mDataStructureParticles.mParticles.pop_back();
+					mParticles.pop_back();
 				}
 			} else { // The particle is added at the correct place
 				// Find the place were it must be inserted, sorted by size
-				for (j=mCore->mDataStructureParticles.mParticles.begin(); (j!=mCore->mDataStructureParticles.mParticles.end()) && (tmpParticle.mArea<(*j).mArea); j++);
+				for (j=mParticles.begin(); (j!=mParticles.end()) && (tmpParticle.mArea<(*j).mArea); j++);
 
 				// Caculate the important values
 				tmpParticle.mCompactness=GetContourCompactness(contour);
@@ -105,7 +116,7 @@ bool THISCLASS::Step() {
 				tmpParticle.mOrientation=0;
 
 				// Insert the particle
-				mCore->mDataStructureParticles.mParticles.insert(j, tmpParticle);
+				mParticles.insert(j, tmpParticle);
 			}
 		} else {
 			rejectedparticles.push_back(tmpParticle);
@@ -131,16 +142,16 @@ bool THISCLASS::Step() {
 	cvReleaseImage(&src_tmp);
 	cvRelease((void**)&contour);
 	cvReleaseMemStorage(&storage);
-	return true;
+
+	// Set these particles
+	mCore->mDataStructureParticles.mParticles=&mParticles;
 }
 
-bool THISCLASS::StepCleanup() {
-	mCore->mDataStructureParticles.mParticles.clear();
-	return true;
+void THISCLASS::OnStepCleanup() {
+	mCore->mDataStructureParticles.mParticles=0;
 }
 
-bool THISCLASS::Stop() {
-	return true;
+void THISCLASS::OnStop() {
 }
 
 double THISCLASS::GetContourCompactness(const void* contour) {

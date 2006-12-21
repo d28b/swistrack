@@ -23,7 +23,7 @@ public:
 	double mOrientation;
 
 	//! Constructor.
-	Particle(): mCenter(0, 0), mArea(0), mCompactness(0), mOrientation(0), mID(-1) {}
+	Particle(): mCenter(), mArea(0), mCompactness(0), mOrientation(0), mID(-1) {}
 	~Particle() {}
 };
 

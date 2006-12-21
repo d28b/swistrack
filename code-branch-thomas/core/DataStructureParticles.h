@@ -1,20 +1,22 @@
 #ifndef HEADER_DataStructureParticles
 #define HEADER_DataStructureParticles
 
-#include "DataStructure.h"
 #include <vector>
 #include "cv.h"
+#include "DataStructure.h"
+#include "Particle.h"
 
 class DataStructureParticles: public DataStructure {
 
 public:
-	typedef std::vector<Particle> ParticleVector;
+	//! Particle vector type.
+	typedef std::vector<Particle> tParticleVector;
 
-	//! Frame number
-	ParticleVector mParticles;
+	//! Vector of particles.
+	tParticleVector *mParticles;
 
 	//! Constructor.
-	DataStructureParticles(): DataStructure("Particles"), mFrameNumber(0), mFramesPerSecond(-1) {}
+	DataStructureParticles(): DataStructure("Particles"), mParticles(0) {}
 	~DataStructureParticles() {}
 };
 

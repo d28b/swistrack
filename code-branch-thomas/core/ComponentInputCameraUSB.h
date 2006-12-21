@@ -2,6 +2,7 @@
 #define HEADER_ComponentInputCameraUSB
 
 #include "cv.h"
+#include "highgui.h"
 #include "Component.h"
 
 class ComponentInputCameraUSB: public Component {
@@ -11,10 +12,12 @@ public:
 	~ComponentInputCameraUSB();
 
 	// Overwritten Component methods
-	bool Start();
-	bool Step();
-	bool StepCleanup();
-	bool Stop();
+	void OnStart();
+	void OnStep();
+	void OnStepCleanup();
+	void OnStop();
+
+	double GetFPS();
 
 private:
 	//! Pointer to the capture object.

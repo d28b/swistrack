@@ -1,24 +1,25 @@
 #include "ComponentConvertToGray.h"
 #define THISCLASS ComponentConvertToGray
 
-THISCLASS::ComponentConvertToGray(SwisTrackCore *stc, const std::string &displayname):
-		Component(stc, "ConvertToGray", displayname) {
+THISCLASS::ComponentConvertToGray(SwisTrackCore *stc):
+		Component(stc, "ConvertToGray") {
 
 	// Data structure relations
-	AddDataStructureRead(mCore->mDataStructureInput);
-	AddDataStructureWrite(mCore->mDataStructureImageGray);
+	mDisplayName="Conversion to Grayscale(BGR)";
+	mCategory="Input Conversion";
+	AddDataStructureRead(&(mCore->mDataStructureInput));
+	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 }
 
 THISCLASS::~ComponentConvertToGray() {
 }
 
-bool THISCLASS::Start() {
-	return true;
+void THISCLASS::OnStart() {
 }
 
-bool THISCLASS::Step() {
+void THISCLASS::OnStep() {
 	IplImage *inputimage=mCore->mDataStructureInput.mImage;
-	if (! inputimage) {return true;}
+	if (! inputimage) {return;}
 	
 	try {
 		// We convert the input image in black and white
@@ -39,18 +40,13 @@ bool THISCLASS::Step() {
 		}
 	} catch(...) {
 		AddError("Convertion to gray failed.");
-		return false;
 	}
-
-	return true;
 }
 
-bool THISCLASS::StepCleanup() {
+void THISCLASS::OnStepCleanup() {
 	mCore->mDataStructureImageGray.mImage=0;
-	return true;
 }
 
-bool THISCLASS::Stop() {
-	if (mOutputImage) {cvReleaseImage(mOutputImage);}
-	return true;
+void THISCLASS::OnStop() {
+	if (mOutputImage) {cvReleaseImage(&mOutputImage);}
 }

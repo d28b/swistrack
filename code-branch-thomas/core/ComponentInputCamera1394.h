@@ -7,19 +7,20 @@
 #define _1394
 
 #ifdef _1394
+#include "highgui.h"  // 1394camera.h requires this to be included before
 #include <1394camera.h>
 
 class ComponentInputCamera1394: public Component {
 
 public:
-	ComponentInputCamera1394(SwisTrackCore *stc, const std::string &displayname);
+	ComponentInputCamera1394(SwisTrackCore *stc);
 	~ComponentInputCamera1394();
 
 	// Overwritten Component methods
-	bool Start();
-	bool Step();
-	bool StepCleanup();
-	bool Stop();
+	void OnStart();
+	void OnStep();
+	void OnStepCleanup();
+	void OnStop();
 
 private:
 	//! 1394 Camera handle (CMU 1394 Camera Driver)
@@ -37,9 +38,9 @@ public:
 	~ComponentInputCamera1394();
 
 	// Overwritten Component methods
-	bool Start() {AddError("1394 support was not compiled into this executable."); return false;}
-	bool Step() {AddError("1394 support was not compiled into this executable."); return false;}
-	bool Stop() {AddError("1394 support was not compiled into this executable."); return false;}
+	bool OnStart() {AddError("1394 support was not compiled into this executable."); return false;}
+	bool OnStep() {AddError("1394 support was not compiled into this executable."); return false;}
+	bool OnStop() {AddError("1394 support was not compiled into this executable."); return false;}
 };
 
 #endif

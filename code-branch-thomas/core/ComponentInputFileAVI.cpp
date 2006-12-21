@@ -1,24 +1,24 @@
 #include "ComponentInputFileAVI.h"
 #define THISCLASS ComponentInputFileAVI
 
-THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc, const std::string &displayname):
-		Component(stc, "FileAVI", displayname),
+THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
+		Component(stc, "FileAVI"),
 		mCapture(0), mLastImage(0) {
 
 	// Data structure relations
-	AddDataStructureWrite(mCore->mDataStructureImage);
-	AddDataStructureWrite(mCore->mDataStructureInput);
+	mDisplayName="AVI File";
+	mCategory="Input";
+	AddDataStructureWrite(&(mCore->mDataStructureInput));
 }
 
 THISCLASS::~ComponentInputFileAVI() {
-	if (! mCapture) {return;}
-	cvReleaseCapture(mCapture);
+	if (mCapture) {cvReleaseCapture(&mCapture);}
 }
 
-bool THISCLASS::Start() {
+void THISCLASS::OnStart() {
 	// Open file
 	std::string filename=GetConfigurationString("File", "");
-	mCapture = cvCaptureFromFile(filename);
+	mCapture = cvCaptureFromFile(filename.c_str());
 	
 	// Error? Check whether the file exists or not, to give an appropriate error message to the user
 	if (! mCapture) {
@@ -26,12 +26,12 @@ bool THISCLASS::Start() {
 #ifdef VS2003
 		f=fopen(filename, "r");
 #else
-		fopen_s(&f, filename, "r");
+		fopen_s(&f, filename.c_str(), "r");
 #endif
 		if (f) {
 			fclose(f);
 			AddError("Cannot open AVI file: codec problem, VFW codec required, not DirectShow.");
-			return false;
+			return;
 		} else {
 #ifdef VS2003
 			f = fopen("swistrack.log", "w");
@@ -41,48 +41,38 @@ bool THISCLASS::Start() {
 			fprintf(f, "%s not found", filename);
 			fclose(f);
 			AddError("Cannot open AVI file: file not found.");
-			return false;
+			return;
 		}
 	}
 
 	// Reset to first frame
 	cvSetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES, 0);
-	return true;
 }
 
-bool THISCLASS::Step() {
-	if (! mCapture) {return false;}	
+void THISCLASS::OnStep() {
+	if (! mCapture) {return;}	
 
 	mLastImage=cvQueryFrame(mCapture);
 	if (! mLastImage) {
 		AddError("Could not read frame from AVI file.");
-		return false;
+		return;
 	}
 
 	// AVI files are flipped
 	cvFlip(mLastImage, 0);
 
 	// Set DataStructureImage
-	mCore->mDataStructureImage.mImage=inputimage;
+	mCore->mDataStructureInput.mImage=mLastImage;
 	mCore->mDataStructureInput.mFrameNumber++;
-
-	// Show status
-	std::ostringstream oss;
-	oss << "Frame " << mCore->mDataStructureImage.mFrameNumber << "(" << GetProgressPercent() << " %)";
-	AddInfo(oss.str);
-	return true;
-
 }
 
-bool THISCLASS::StepCleanup() {
-	mCore->mDataStructureImage.mImage=0;
-	if (mLastImage) {cvReleaseImage(mLastImage);}
-	return true;
+void THISCLASS::OnStepCleanup() {
+	mCore->mDataStructureInput.mImage=0;
+	if (mLastImage) {cvReleaseImage(&mLastImage);}
 }
 
-bool THISCLASS::Stop() {
-	if (mCapture) {cvReleaseCapture(mCapture);}
-	return true;
+void THISCLASS::OnStop() {
+	if (mCapture) {cvReleaseCapture(&mCapture);}
 }
 
 double THISCLASS::GetProgressPercent() {
