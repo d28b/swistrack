@@ -9,7 +9,8 @@
 #include "ComponentConvertToBGR.h"
 #include "ComponentBackgroundSubtractionGray.h"
 #include "ComponentThresholdGray.h"
-#include "ComponentParticleFilter.h"
+#include "ComponentBlobDetectionMinMax.h"
+#include "ComponentBlobDetectionCircle.h"
 
 THISCLASS::SwisTrackCore(xmlpp::Element* cfgroot):
 		mConfigurationRoot(cfgroot),
@@ -32,7 +33,8 @@ THISCLASS::SwisTrackCore(xmlpp::Element* cfgroot):
 	mComponents.push_back(new ComponentConvertToBGR(this));
 	mComponents.push_back(new ComponentBackgroundSubtractionGray(this));
 	mComponents.push_back(new ComponentThresholdGray(this));
-	mComponents.push_back(new ComponentParticleFilter(this));
+	mComponents.push_back(new ComponentBlobDetectionMinMax(this));
+	mComponents.push_back(new ComponentBlobDetectionCircle(this));
 
 	// Initialize the list of available data structures
 	mDataStructures.push_back(&mDataStructureInput);

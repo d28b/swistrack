@@ -31,7 +31,7 @@ using namespace std;
 * the camera frame where we want to minimize the prediction area. 
 */
 
-class Calibration : public Component
+class Calibration : public OldComponent
 {
 public:
 	Calibration(ObjectTracker* parent, xmlpp::Element* cfgRoot);

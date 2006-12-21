@@ -13,6 +13,9 @@ THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 }
 
+THISCLASS::~ComponentInputCamera1394() {
+}
+
 void THISCLASS::OnStart() {
 	if (mCamera.CheckLink() != CAM_SUCCESS) {
 		AddError("Cannot access 1394 Camera (Make sure CMU driver is installed).");

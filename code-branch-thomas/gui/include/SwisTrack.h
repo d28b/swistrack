@@ -33,6 +33,7 @@
 #include "constants.h"
 #include "AboutDialog.h"
 #include "XMLCfg.h"
+#include "ComponentListPanel.h"
 
 class Canvas;
 class SwisTrackPanel;
@@ -69,6 +70,9 @@ public:
 	SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size,
 		long style  = wxDEFAULT_FRAME_STYLE);
 	
+	// SwisTrackCore
+	SwisTrackCore *mSwisTrackCore;
+
 	// menu bar and items
     wxMenuBar *menuBar;
   	wxMenu *menuFile;
@@ -80,7 +84,7 @@ public:
 	wxMenu *menuComponents;
 
 	Canvas* canvas;
-	wxListCtrl* mListCtrlComponents;
+	ComponentListPanel* mComponentListPanel;
 	wxPanel* mPanelInformation;
 	wxPanel* mPanelInformation1;
 

@@ -14,7 +14,7 @@
 #endif
 
 
-class Input : public Component
+class Input : public OldComponent
 {
 public:
 	void SetParameters();

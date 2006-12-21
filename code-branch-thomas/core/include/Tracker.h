@@ -19,7 +19,7 @@
 
 class ObjectTracker;
 
-class Tracker : public Component
+class Tracker : public OldComponent
 	{
 	public:
 		CvPoint2D32f* GetTargetPos(int id);

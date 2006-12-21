@@ -156,7 +156,7 @@
 				ExecutionBucket="5"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;L:\glibmm\glib\glibmm;../../xmlcfg/include;../../libblob/include;../../core/include;../../calibration/include;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\libblob\include;L:\opencv\cxcore\include;&quot;L:\libxml++&quot;;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include"
+				AdditionalIncludeDirectories="../include;L:\glibmm\glib\glibmm;../../xmlcfg/include;../../libblob/include;../../core/include;../../core;../../calibration/include;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\libblob\include;L:\opencv\cxcore\include;&quot;L:\libxml++&quot;;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -314,7 +314,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\ComponentListCtrl.cpp"
+				RelativePath="..\src\ComponentListPanel.cpp"
 				>
 			</File>
 			<File
@@ -439,7 +439,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\ComponentListCtrl.h"
+				RelativePath="..\include\ComponentListPanel.h"
 				>
 			</File>
 			<File

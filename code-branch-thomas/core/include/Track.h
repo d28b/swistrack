@@ -60,7 +60,7 @@ using namespace std;
 /*****************************************************************************/
 
 
-class Track : public Component
+class Track : public OldComponent
 	{
 	
 	

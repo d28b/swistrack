@@ -14,7 +14,7 @@
 #include "highgui.h" // only for debugging
 #include "Component.h"
 
-class TrackingImage  : public Component
+class TrackingImage  : public OldComponent
 {
 	public:
 		void ClearCoverageImage();

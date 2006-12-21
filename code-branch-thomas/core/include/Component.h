@@ -4,7 +4,7 @@
 #include <libxml++/libxml++.h>
 #include "XMLCfg.h"
 
-class Component
+class OldComponent
     {
     
     protected:

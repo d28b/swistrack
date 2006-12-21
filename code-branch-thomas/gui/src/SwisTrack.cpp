@@ -278,23 +278,11 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	canvas=new Canvas(this, wxPoint(0, 0), wxSize(40, 30));
 	RecreateToolbar();
 
+	// SwisTrackCore
+	mSwisTrackCore=new SwisTrackCore();
+
 	// List
-	mListCtrlComponents=new wxListCtrl(this, -1);
-	mListCtrlComponents->SetWindowStyle(wxLC_REPORT);
-	mListCtrlComponents->InsertColumn(1, "Component", wxLIST_FORMAT_LEFT, 200);
-	mListCtrlComponents->InsertColumn(1, "I", wxLIST_FORMAT_CENTER, 100);
-	mListCtrlComponents->InsertColumn(1, "BGR", wxLIST_FORMAT_CENTER, 100);
-	mListCtrlComponents->InsertColumn(1, "BGBGR", wxLIST_FORMAT_CENTER, 100);
-	mListCtrlComponents->InsertColumn(1, "Gray", wxLIST_FORMAT_CENTER, 100);
-	mListCtrlComponents->InsertColumn(1, "BGGray", wxLIST_FORMAT_CENTER, 100);
-	mListCtrlComponents->InsertColumn(1, "Binary", wxLIST_FORMAT_CENTER, 100);
-	mListCtrlComponents->InsertColumn(1, "Mask", wxLIST_FORMAT_CENTER, 100);
-	mListCtrlComponents->InsertColumn(1, "P", wxLIST_FORMAT_CENTER, 100);
-	wxListItem li;
-	li.SetText("Camera");
-	li.SetTextColour(*wxBLACK);
-	li.SetColumn(0);
-	mListCtrlComponents->InsertItem(li);
+	mComponentListPanel=new ComponentListPanel(this, mSwisTrackCore);
 
 	// Panel
 	mPanelInformation=new wxPanel(this, -1, wxDefaultPosition, wxSize(200, 20));
@@ -312,7 +300,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
 	SetSizer(vs);
 	vs->Add(hs, 3, wxEXPAND, 0);
-	vs->Add(mListCtrlComponents, 1, wxEXPAND, 0);
+	vs->Add(mComponentListPanel, 1, wxEXPAND, 0);
 
 	wxInitAllImageHandlers();
 
@@ -409,7 +397,8 @@ SwisTrack::~SwisTrack(){
 	if (expparser) delete expparser;
 
 	if (mPanelInformation) delete mPanelInformation;
-	if (mListCtrlComponents) delete mListCtrlComponents;
+	if (mComponentListPanel) delete mComponentListPanel;
+	if (mSwisTrackCore) delete mSwisTrackCore;
 #ifdef MULTITHREAD
 	if (criticalSection) delete criticalSection;
 #endif

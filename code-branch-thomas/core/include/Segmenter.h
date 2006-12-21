@@ -58,7 +58,7 @@ using namespace std;
 	contours that are to small.
 */
 
-class Segmenter : public Component
+class Segmenter : public OldComponent
 	{
 	public:
 		IplImage* GetInputImage();

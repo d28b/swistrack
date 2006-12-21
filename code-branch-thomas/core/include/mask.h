@@ -50,7 +50,7 @@ using namespace std;
 /******************************** prototypes *********************************/
 /*****************************************************************************/
 
-class Mask : public Component
+class Mask : public OldComponent
 {
   public:
     void ToggleDisplay();

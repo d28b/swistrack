@@ -1,14 +1,16 @@
 #include "ComponentListPanel.h"
 #define THISCLASS ComponentListPanel
 
+#include <wx/sizer.h>
+
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
-  EVT_BUTTON  (wxID_ButtonAdd, THISCLASS::OnButtonAdd)
-  EVT_BUTTON  (wxID_ButtonRemove, THISCLASS::OnButtonRemove)
-  EVT_BUTTON  (wxID_ButtonUp, THISCLASS::OnButtonUp)
-  EVT_BUTTON  (wxID_ButtonDown, THISCLASS::OnButtonDown)
+  EVT_BUTTON  (eID_ButtonAdd, THISCLASS::OnButtonAdd)
+  EVT_BUTTON  (eID_ButtonRemove, THISCLASS::OnButtonRemove)
+  EVT_BUTTON  (eID_ButtonUp, THISCLASS::OnButtonUp)
+  EVT_BUTTON  (eID_ButtonDown, THISCLASS::OnButtonDown)
 END_EVENT_TABLE()
 
-THISCLASS::ComponentListCtrl(wxWindow* parent, SwisTrackCore *stc):
+THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrackCore *stc):
 		wxPanel(parent, -1), mSwisTrackCore(stc) {
 
 	// Create List
@@ -21,9 +23,9 @@ THISCLASS::ComponentListCtrl(wxWindow* parent, SwisTrackCore *stc):
 	mList->InsertColumn(col++, "Status", wxLIST_FORMAT_CENTER, 50);
 	
 	// Add columns for data structures
-	SwisTrackCore::tDataStructures::iterator it=SwisTrackCore.mDataStructures.begin();
-	while (it!=SwisTrackCore.mDataStructures.end()) {
-		mList->InsertColumn(0, (*it)->mDisplayName, wxLIST_FORMAT_CENTER, 50);
+	SwisTrackCore::tDataStructures::iterator it=mSwisTrackCore->mDataStructures.begin();
+	while (it!=mSwisTrackCore->mDataStructures.end()) {
+		mList->InsertColumn(col++, (*it)->mDisplayName.c_str(), wxLIST_FORMAT_CENTER, 50);
 		it++;
 	}
 
@@ -31,10 +33,10 @@ THISCLASS::ComponentListCtrl(wxWindow* parent, SwisTrackCore *stc):
 	mList->InsertColumn(col++, "Messages", wxLIST_FORMAT_LEFT, 200);
 
 	// Create Buttons
-	mButtonAdd=new wxButton(this, wxID_ButtonAdd, "+", wxDefaultPosition, wxSize(25, 25));
-	mButtonRemove=new wxButton(this, wxID_ButtonRemove, "-", wxDefaultPosition, wxSize(25, 25));
-	mButtonUp=new wxButton(this, wxID_ButtonUp, "Up", wxDefaultPosition, wxSize(25, 25));
-	mButtonDown=new wxButton(this, wxID_ButtonDown, "Down", wxDefaultPosition, wxSize(25, 25));
+	mButtonAdd=new wxButton(this, eID_ButtonAdd, "+", wxDefaultPosition, wxSize(25, 25));
+	mButtonRemove=new wxButton(this, eID_ButtonRemove, "-", wxDefaultPosition, wxSize(25, 25));
+	mButtonUp=new wxButton(this, eID_ButtonUp, "Up", wxDefaultPosition, wxSize(25, 25));
+	mButtonDown=new wxButton(this, eID_ButtonDown, "Down", wxDefaultPosition, wxSize(25, 25));
 
 	// Layout the components in the panel
 	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
@@ -47,24 +49,25 @@ THISCLASS::ComponentListCtrl(wxWindow* parent, SwisTrackCore *stc):
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(mList, 1, wxEXPAND, 0);
 	hs->Add(vs, 0, 0, 0);
+
+	SetSizer(hs);
 }
 
 void THISCLASS::OnUpdate() {
 	mList->ClearAll();
 
-	SwisTrackCore::tComponentList::iterator it=SwisTrackCore.mComponentList.begin();
-	while (it!=SwisTrackCore.mComponentList.end()) {
+	SwisTrackCore::tComponentList::iterator it=mSwisTrackCore->mComponentList.begin();
+	while (it!=mSwisTrackCore->mComponentList.end()) {
 		int col=0;
+		wxListItem li;
 
 		// Name
-		wxListItem li;
 		li.SetColumn(col++);
-		li.SetText((*it)->mDisplayName);
+		li.SetText((*it)->mDisplayName.c_str());
 		li.SetTextColour(*wxBLACK);
 		mList->InsertItem(li);
 
 		// Status
-		wxListItem li;
 		li.SetColumn(col++);
 		if ((*it)->mStatusHasError) {
 			li.SetText("E");
@@ -77,9 +80,8 @@ void THISCLASS::OnUpdate() {
 		}
 
 		// Data structures
-		SwisTrackCore::tDataStructures::iterator itds=SwisTrackCore.mDataStructures.begin();
-		while (itds!=SwisTrackCore.mDataStructures.end()) {
-			wxListItem li;
+		SwisTrackCore::tDataStructures::iterator itds=mSwisTrackCore->mDataStructures.begin();
+		while (itds!=mSwisTrackCore->mDataStructures.end()) {
 			li.SetColumn(col++);
 			
 			bool read=(*it)->HasDataStructureRead(*itds);
@@ -102,7 +104,6 @@ void THISCLASS::OnUpdate() {
 		}
 
 		// Status messages
-		wxListItem li;
 		li.SetColumn(col++);
 		if ((*it)->mStatusHasError) {
 			li.SetTextColour(*wxRED);
@@ -111,12 +112,14 @@ void THISCLASS::OnUpdate() {
 		}
 		if (((*it)->mStatusHasError) || ((*it)->mStatusHasWarning)) {
 			wxString str;
-			Component::tStatusItemList::iterator itsl=(*its)->mStatus.begin();
-			while (itsl!=(*its)->mStatus.end()) {
-				if ((*itsl)->mType==StatusItem::sTypeError) {
-					str+=(*itsl)->mMessage+" ";
-				} else if ((*itsl)->mType==StatusItem::sTypeWarning) {
-					str+=(*itsl)->mMessage+" ";
+			Component::tStatusItemList::iterator itsl=(*it)->mStatus.begin();
+			while (itsl!=(*it)->mStatus.end()) {
+				if (itsl->mType==StatusItem::sTypeError) {
+					str+=itsl->mMessage.c_str();
+					str+=" ";
+				} else if (itsl->mType==StatusItem::sTypeWarning) {
+					str+=itsl->mMessage.c_str();
+					str+=" ";
 				}
 			}
 			li.SetText(str);

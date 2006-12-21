@@ -10,6 +10,9 @@ THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 }
 
+THISCLASS::~ComponentInputCameraGBit() {
+}
+
 void THISCLASS::OnStart() {
 	//theCamera.SetVideoFrameRate(GetIntValByXPath(cfgRoot, "/Configuration/InputCameraGBit/FrameRate")); 
 }

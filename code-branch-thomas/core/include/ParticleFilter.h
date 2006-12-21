@@ -22,7 +22,7 @@ struct particle{
 	int id;          // associated track
 };
 
-class ParticleFilter : public Component
+class ParticleFilter : public OldComponent
 {
 public:
 	ParticleFilter(xmlpp::Element* cfgRoot,TrackingImage* trackingimg);

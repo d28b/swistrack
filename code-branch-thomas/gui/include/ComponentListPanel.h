@@ -5,19 +5,26 @@ class ComponentListPanel;
 
 #include "SwisTrackCore.h"
 #include <wx/panel.h>
-#include <wx/listview.h>
+#include <wx/listctrl.h>
 #include <wx/button.h>
 
 class ComponentListPanel: public wxPanel {
 
 public:
+	enum eConstants {
+		eID_ButtonAdd,
+		eID_ButtonRemove,
+		eID_ButtonUp,
+		eID_ButtonDown,
+	};
+
 	//! The associated SwisTrackCore object.
 	SwisTrackCore *mSwisTrackCore;
 
 	//! Constructor.
 	ComponentListPanel(wxWindow *parent, SwisTrackCore *stc);
 	//! Destructor.
-	~Component() {}
+	~ComponentListPanel() {}
 
 	void OnUpdate();
 
@@ -27,7 +34,7 @@ public:
 	void OnButtonDown(wxCommandEvent& event);
 
 private:
-	wxListView *mList;
+	wxListCtrl *mList;
 	wxButton *mButtonAdd;
 	wxButton *mButtonRemove;
 	wxButton *mButtonUp;

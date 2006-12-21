@@ -9,7 +9,7 @@
 *
 * \brief Provides data logging functions
 */
-class Output : Component
+class Output : OldComponent
 	{
 	public:
         Output(ObjectTracker* parent, xmlpp::Element* cfgRoot);

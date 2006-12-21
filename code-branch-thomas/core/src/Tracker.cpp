@@ -1154,7 +1154,7 @@ void Tracker::RefreshCoverage()
 
 void Tracker::SetPos(int id,CvPoint2D32f *p)
 {
-	if(id>=0 && id<targets.size()){
+	if((id>=0) && (id<targets.size())){
 	targets.at(id).trajectory.pop_back();
 	targets.at(id).trajectory.push_back(*p);
 	}				

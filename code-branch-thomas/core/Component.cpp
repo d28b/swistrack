@@ -35,9 +35,11 @@ void THISCLASS::AddDataStructureWrite(DataStructure *ds) {
 }
 
 bool THISCLASS::HasDataStructureRead(DataStructure *ds) {
+	return false;
 }
 
 bool THISCLASS::HasDataStructureWrite(DataStructure *ds) {
+	return false;
 }
 
 bool THISCLASS::GetConfigurationBool(const std::string &path, bool defvalue) {
