@@ -1,99 +1,89 @@
+#include "SocketServer.h"
+#define THISCLASS SocketServer
 
 #include "SocketServer.h"
-#include "SwisTrack.h"
 
 BEGIN_EVENT_TABLE(SocketServer, wxEvtHandler)
-EVT_SOCKET(SERVER_ID,  SocketServer::OnServerEvent)
-EVT_SOCKET(SOCKET_ID,  SocketServer::OnSocketEvent)
+	EVT_SOCKET(SERVER_ID, SocketServer::OnServerEvent)
+	EVT_SOCKET(SOCKET_ID, SocketServer::OnSocketEvent)
 END_EVENT_TABLE()
 
+THISCLASS::SocketServer(SwisTrack* swistrack): mSwisTrack(swistrack), mServer(0), mClientList() {
+}
 
-SocketServer::SocketServer(SwisTrack* parent,int socketnumber)
-{
-	this->parent=parent;
+THISCLASS::~SocketServer() {
+	mServer->Destroy();
+}
 
-	calibration=0;
+void THISCLASS::SetPort(int port) {
+	Close();
+	mPort=port;
+	Open();
+}
 
-	// Create the address - defaults to localhost:0 initially
-	wxIPV4address addr;
-	addr.Service(socketnumber);
+void THISCLASS::Open() {
+	if (mServer) {return;}
+	if (mPort<1) {return;}
 
 	// Create the socket
-	m_server = new wxSocketServer(addr);
+	wxIPV4address addr;
+	addr.Service(mPort);
+	addr.AnyAddress();
+	mServer=new wxSocketServer(addr);
 
-	// We use Ok() here to see if the server is really listening
-	if (! m_server->Ok())
-	{
-		parent->SetStatusText("Could not listen at the specified port !\n\n");
+	// Check whether the server is listening.
+	if (! mServer->Ok()) {
+		wxString str;
+		str.Printf("Could not listen at port %d.", mPort);
+		mSwisTrack->SetStatusText(str);
+
+		mServer->Destroy();
+		mServer=0;
 		return;
 	}
-	else
-	{
-		wxString temp;
-		temp.Printf("Server listening at port %d",socketnumber);
-		parent->SetStatusText(temp);
-	}
+
+	// Set a nice status 
+	wxString str;
+	str.Printf("Server listening at port %d.", mPort);
+	mSwisTrack->SetStatusText(str);
 
 	// Setup the event handler and subscribe to connection events
-	m_server->SetEventHandler(*this, SERVER_ID);
-	m_server->SetNotify(wxSOCKET_CONNECTION_FLAG);
-	m_server->Notify(true);
-
-	m_busy = false;
-	m_numClients = 0;
+	mServer->SetEventHandler(*this, SERVER_ID);
+	mServer->SetNotify(wxSOCKET_CONNECTION_FLAG);
+	mServer->Notify(true);
 }
 
-SocketServer::~SocketServer()
-{
-	// No delayed deletion here, as the frame is dying anyway
-	m_server->Destroy();
-	delete m_server;
+void THISCLASS::Close() {
+	if (! mServer) {return;}
+	mServer->Destroy();
+	mServer=0;
 }
 
-void SocketServer::OnServerEvent(wxSocketEvent& event)
-{
-	wxIPV4address addr;
-	wxString s = _("");
-	wxSocketBase *sock;
+void THISCLASS::OnServerEvent(wxSocketEvent& event) {
+	// Only treat connection events
+	if (event.GetSocketEvent() != wxSOCKET_CONNECTION) {return;}
 
-	switch(event.GetSocketEvent())
-	{
-	case wxSOCKET_CONNECTION : s.Append(_("Incoming socket connection\n")); break;
-	default                  : s.Append(_("Unexpected socket event !\n")); break;
-	}
+	// Accept the connection
+	wxSocketBase *sock=mServer->Accept(false);
+	if (! sock) {return;}
 
-	parent->SetStatusText(s);
-
-	// Accept new connection if there is one in the pending
-	// connections queue, else exit. We use Accept(false) for
-	// non-blocking accept (although if we got here, there
-	// should ALWAYS be a pending connection).
-
-	sock = m_server->Accept(false);
-
-	if (sock)
-	{
-		wxString temp;
-		sock->GetPeer(addr);
-		temp.Printf("Connection with %s (%s) established",(addr.Hostname()).c_str(),(addr.IPAddress()).c_str());
-		parent->SetStatusText(temp);
-	}
-	else
-	{
-		parent->SetStatusText(_("Error: couldn't accept a new connection\n\n"));
-		return;
-	}
-
+	// Setup the event handler
 	sock->SetEventHandler(*this, SOCKET_ID);
 	sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
 	sock->Notify(true);
 
-	m_numClients++;
+	// Add this connection to the list of clients
+	mClientList->push_back(sock);
+
+	// Notify the user with a status message
+	wxIPV4address addr;
+	sock->GetPeer(addr);
+	wxString str;
+	str.Printf("Connection with %s:%s established.", addr.Hostname().c_str(), addr.IPAddress().c_str());
+	mSwisTrack->SetStatusText(str);
 }
 
-
-void SocketServer::OnSocketEvent(wxSocketEvent& event)
-{
+void THISCLASS::OnSocketEvent(wxSocketEvent& event) {
 	wxString s = _("OnSocketEvent: ");
 	wxSocketBase *sock = event.GetSocket();
 	wxCommandEvent dummy;
@@ -165,7 +155,7 @@ void SocketServer::OnSocketEvent(wxSocketEvent& event)
 	}
 }
 
-void SocketServer::SendBlobs(wxSocketBase *sock)
+void THISCLASS::SendBlobs(wxSocketBase *sock)
 {
 #ifdef MULTITHREAD
 	wxCriticalSectionLocker locker(*(parent->criticalSection));
@@ -192,7 +182,7 @@ void SocketServer::SendBlobs(wxSocketBase *sock)
 	if(sock->Error()) parent->SetStatusText(_("Writing to socket failed"));  
 }
 
-void SocketServer::SendTracks(wxSocketBase *sock)
+void THISCLASS::SendTracks(wxSocketBase *sock)
 {
 #ifdef MULTITHREAD
   wxCriticalSectionLocker locker(*(parent->criticalSection));
@@ -213,7 +203,7 @@ void SocketServer::SendTracks(wxSocketBase *sock)
 	if(sock->Error()) parent->SetStatusText(_("Writing to socket failed"));  
 }
 
-void SocketServer::SendNumberofBlobs(wxSocketBase *sock)
+void THISCLASS::SendNumberofBlobs(wxSocketBase *sock)
 {
 #ifdef MULTITHREAD
 	wxCriticalSectionLocker locker(*(parent->criticalSection));
@@ -225,7 +215,7 @@ void SocketServer::SendNumberofBlobs(wxSocketBase *sock)
 	if(sock->Error()) parent->SetStatusText(_("Writing to socket failed"));
 }
 
-void SocketServer::SendNumberofTracks(wxSocketBase *sock)
+void THISCLASS::SendNumberofTracks(wxSocketBase *sock)
 {
 #ifdef MULTITHREAD
   wxCriticalSectionLocker locker(*(parent->criticalSection));
@@ -237,7 +227,7 @@ void SocketServer::SendNumberofTracks(wxSocketBase *sock)
 	if(sock->Error()) parent->SetStatusText(_("Writing to socket failed"));
 }
 
-void SocketServer::SendSmallFloat(wxSocketBase *sock, double value)
+void THISCLASS::SendSmallFloat(wxSocketBase *sock, double value)
 {
 
 	wxString buf;
@@ -247,7 +237,7 @@ void SocketServer::SendSmallFloat(wxSocketBase *sock, double value)
 
 }
 
-void SocketServer::SendLargeInteger(wxSocketBase *sock, int value)
+void THISCLASS::SendLargeInteger(wxSocketBase *sock, int value)
 {
 	wxString buf;
 	buf.Printf("%010d",value);

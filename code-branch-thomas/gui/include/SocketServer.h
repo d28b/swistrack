@@ -1,59 +1,69 @@
 #ifndef _SOCKETSERVER_H
 #define _SOCKETSERVER_H
 
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
-  #include "wx/wx.h"
+  #include <wx/wx.h>
 #endif
 
-#include "wx/socket.h"
-
+class SocketServer;
 class SwisTrack;
 
-class SocketServer : public wxEvtHandler
-{
+#include <wx/socket.h>
+
+class SocketServer: public wxEvtHandler, public CommunicationInterface {
+
 public:
 	void SendLargeInteger(wxSocketBase *sock, int value);
 	void SendSmallFloat(wxSocketBase *sock, double value);
 	void SendNumberofTracks(wxSocketBase *sock);
 	void SendNumberofBlobs(wxSocketBase *sock);
 	void SendTracks(wxSocketBase *sock);
-  SocketServer(SwisTrack* parent,int socketnumber);
-  ~SocketServer();
+	SocketServer(SwisTrack* parent, int socketnumber);
+	~SocketServer();
 
-  // event handlers (these functions should _not_ be virtual)
-  void OnServerEvent(wxSocketEvent& event);
-  void OnSocketEvent(wxSocketEvent& event);
+	//! Sets the desired port and tries to start listening.
+	void SetPort(int port);
+	//! Returns the desired port (whether open or not).
+	int GetPort() {return mPort;}
+	//! Returns whether the server is listening or not.
+	bool IsListening() {return (mServer!=0);}
 
-  void SendBlobs(wxSocketBase *sock);
-  void SendTrajectories(wxSocketBase *sock);
-  
+	//! Handles server events.
+	void OnServerEvent(wxSocketEvent& event);
+	//! Handles socket events.
+	void OnSocketEvent(wxSocketEvent& event);
+
+	void SendBlobs(wxSocketBase *sock);
+	void SendTrajectories(wxSocketBase *sock);
+
+	// CommuncationInterface methods.
+	void SendRecord(const wxStringArray *arr);
+
+protected:
+	enum {
+		SERVER_ID = 100,
+		SOCKET_ID = 101
+	};
+
 private:
-  wxSocketServer *m_server;
-  bool            m_busy;
-  int             m_numClients;
-  SwisTrack*	  parent;
-  int			  calibration;
+	//! The socket server.
+	wxSocketServer *mServer;
+	//! The desired port.
+	int mPort;
+	//! The SwisTrack object.
+	SwisTrack* mSwisTrack;
+	//! The list of all connected clients.
+	typedef std::list<wxSocketBase*> tClientList;
+	tClientList mClientList;
 
-  // any class wishing to process wxWidgets events must use this macro
-  DECLARE_EVENT_TABLE()
-};
+	//! Starts listening.
+	void Open();
+	//! Stops listening.
+	void Close();
 
-// --------------------------------------------------------------------------
-// constants
-// --------------------------------------------------------------------------
-
-// IDs for the controls and the menu commands
-enum
-{
-  // menu items
-  SERVER_QUIT = wxID_EXIT,
-  SERVER_ABOUT = wxID_ABOUT,
-
-  // id for sockets
-  SERVER_ID = 100,
-  SOCKET_ID
+	DECLARE_EVENT_TABLE()
 };
 
 #endif

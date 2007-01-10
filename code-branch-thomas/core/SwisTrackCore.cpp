@@ -21,7 +21,13 @@ THISCLASS::SwisTrackCore(xmlpp::Element* cfgroot):
 		mDataStructureBackgroundGray("BackgroundGray", "Grayscale background image"),
 		mDataStructureImageBinary("ImageBinary", "Binary image"),
 		mDataStructureMaskBinary("MaskBinary", "Binary mask"),
-		mDataStructureParticles()
+		mDataStructureParticles(),
+		mCategoryInput("Input", 100, ComponentCategory::sFlagRequired|ComponentCategory::sFlagExclusive),
+		mCategoryInputConversion("Input conversion", 200, ComponentCategory::sFlagRequired),
+		mCategoryPreprocessing("Preprocessing", 300),
+		mCategoryThresholding("Thresholding", 400),
+		mCategoryBlobDetection("Blob detection", 500),
+		mCategoryOutput("Output", 10000)
 		{
 
 	// Initialize the list of available components

@@ -9,7 +9,7 @@ THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):
 
 	// Data structure relations
 	mDisplayName="1394 Camera";
-	mCategory="Input";
+	mCategory=mCore->mCategoryInput;
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 }
 

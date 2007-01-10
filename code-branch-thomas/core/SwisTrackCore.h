@@ -24,7 +24,15 @@ public:
 	typedef std::list<Component*> tComponentList;
 	tComponentList mComponentList;
 
-	//! Data structures
+	//! Component categories.
+	ComponentCategory mCategoryInput;
+	ComponentCategory mCategoryInputConversion;
+	ComponentCategory mCategoryPreprocessing;
+	ComponentCategory mCategoryThresholding;
+	ComponentCategory mCategoryBlobDetection;
+	ComponentCategory mCategoryOutput;
+
+	//! Data structures.
 	DataStructureInput mDataStructureInput;
 	DataStructureImage mDataStructureImageBGR;
 	DataStructureImage mDataStructureBackgroundBGR;
@@ -33,6 +41,9 @@ public:
 	DataStructureImage mDataStructureImageBinary;
 	DataStructureImage mDataStructureMaskBinary;
 	DataStructureParticles mDataStructureParticles;
+
+	//! The associated communication interface.
+	CommunicationInterface *mCommunicationInterface;
 
 	SwisTrackCore(xmlpp::Element* cfgroot=0);
 	~SwisTrackCore() {}

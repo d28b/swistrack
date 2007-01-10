@@ -27,8 +27,8 @@ public:
 	std::string mName;
 	//! The name that is displayed to the user.
 	std::string mDisplayName;
-	//! The category that is displayed to the user.
-	std::string mCategory;
+	//! The category which this component belongs to.
+	ComponentCategory mCategory;
 	//! The default view.
 	std::string mDefaultView;
 

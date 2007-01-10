@@ -6,7 +6,7 @@ THISCLASS::ComponentConvertToBGR(SwisTrackCore *stc):
 
 	// Data structure relations
 	mDisplayName="Conversion to Color (BGR)";
-	mCategory="Input Conversion";
+	mCategory=mCore->mCategoryInputConversion;
 	AddDataStructureRead(&(mCore->mDataStructureInput));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBGR));
 }

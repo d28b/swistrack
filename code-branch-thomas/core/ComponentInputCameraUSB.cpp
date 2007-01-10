@@ -7,7 +7,7 @@ THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
 
 	// Data structure relations
 	mDisplayName="USB Camera";
-	mCategory="Input";
+	mCategory=mCore->mCategoryInput;
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 }
 
