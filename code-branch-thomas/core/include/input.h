@@ -6,7 +6,7 @@
 #include <math.h>
 #include "cv.h"
 #include "highgui.h"
-#include "Component.h"
+#include "OldComponent.h"
 
 #define _1394
 #ifdef _1394

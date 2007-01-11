@@ -11,6 +11,9 @@ class SocketServer;
 class SwisTrack;
 
 #include <wx/socket.h>
+#include <list>
+#include "CommunicationInterface.h"
+#include "SocketServerConnection.h"
 
 class SocketServer: public wxEvtHandler, public CommunicationInterface {
 
@@ -27,8 +30,6 @@ public:
 
 	//! Handles server events.
 	void OnServerEvent(wxSocketEvent& event);
-	//! Called when a message is received.
-	void OnProcessMessage(CommunicationMessage *m);
 
 	// CommuncationInterface methods.
 	bool SendMessage(CommunicationMessage *m);
@@ -53,6 +54,9 @@ private:
 	void Open();
 	//! Stops listening. This doesn't close already open connections.
 	void Close();
+
+	//! Cleans the connection list.
+	void CleanupConnections();
 
 	DECLARE_EVENT_TABLE()
 };

@@ -4,6 +4,7 @@
 class ComponentListPanel;
 
 #include "SwisTrackCore.h"
+#include "ComponentsDialog.h"
 #include <wx/panel.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
@@ -39,6 +40,8 @@ private:
 	wxButton *mButtonRemove;
 	wxButton *mButtonUp;
 	wxButton *mButtonDown;
+
+	ComponentsDialog *mComponentsDialog;
 
 	DECLARE_EVENT_TABLE()
 };

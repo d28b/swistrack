@@ -3,7 +3,7 @@
 
 #include "highgui.h"
 #include "libgeom.h"
-#include "Component.h"
+#include "OldComponent.h"
 #include "ObjectTracker.h"
 #include "Tracker.h"
 #include "TrackingImage.h"

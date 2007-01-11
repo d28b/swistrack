@@ -3,8 +3,8 @@
 #define THISCLASS CommunicationMessage
 
 
-THISCLASS::CommunicationMessage(const std::string &cmd):
-		mParameters(), mCommand(cmd) {
+THISCLASS::CommunicationMessage(const std::string &cmd, CommunicationMessage *inreplyto):
+		mParameters(), mCommand(cmd), mInReplyTo(inreplyto) {
 
 }
 
@@ -18,7 +18,7 @@ bool THISCLASS::GetBool(bool defvalue) {
 	return val;
 }
 
-int THISCLASS::GetConfigurationInt(int defvalue) {
+int THISCLASS::GetInt(int defvalue) {
 	if (mParameters.size()<1) {return defvalue;}
 	std::string t=mParameters.front();
 
@@ -28,7 +28,7 @@ int THISCLASS::GetConfigurationInt(int defvalue) {
 	return val;
 }
 
-double THISCLASS::GetConfigurationDouble(double defvalue) {
+double THISCLASS::GetDouble(double defvalue) {
 	if (mParameters.size()<1) {return defvalue;}
 	std::string t=mParameters.front();
 
@@ -38,7 +38,7 @@ double THISCLASS::GetConfigurationDouble(double defvalue) {
 	return val;
 }
 
-std::string THISCLASS::GetConfigurationString(const std::string &defvalue) {
+std::string THISCLASS::GetString(const std::string &defvalue) {
 	if (mParameters.size()<1) {return defvalue;}
 	std::string t=mParameters.front();
 
@@ -52,21 +52,27 @@ bool THISCLASS::AddBool(bool value) {
 	return true;
 }
 
-bool THISCLASS::SetConfigurationInt(int value) {
+bool THISCLASS::AddInt(int value) {
 	std::ostringstream oss;
 	oss << value;
 	mParameters.push_back(oss.str());
 	return true;
 }
 
-bool THISCLASS::SetConfigurationDouble(double value) {
+bool THISCLASS::AddDouble(double value) {
 	std::ostringstream oss;
 	oss << value;
 	mParameters.push_back(oss.str());
 	return true;
 }
 
-bool THISCLASS::SetConfigurationString(const std::string &value) {
+bool THISCLASS::AddString(const std::string &value) {
 	mParameters.push_back(value);
 	return true;
 }
+
+/*bool THISCLASS::AddString(const char *value) {
+	std::string str(value);
+	mParameters.push_back(str);
+	return true;
+}*/

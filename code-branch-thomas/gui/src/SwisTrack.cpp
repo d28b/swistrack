@@ -36,6 +36,8 @@ If you are working with Firewire cameras make sure you replace the custom driver
 driver.
 */
 #include "SwisTrack.h"
+#define THISCLASS SwisTrack
+
 #include "Canvas.h"
 #include "AviWriter.h"
 #include "SocketServer.h"
@@ -160,7 +162,7 @@ void SwisTrack::RecreateToolbar()
 * \param style	  : Style (Icon, Always on top, etc.)
 */
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
-		wxFrame(NULL, -1, title, pos, size, style) {
+		wxFrame(NULL, -1, title, pos, size, style), mSwisTrackCore(0), mSocketServer(0) {
 
 	show_coverage=0; // don't show coverage image
 	display_speed=5; //initial display speed 5Hz
@@ -175,7 +177,6 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	interceptionpanel = NULL;
 	
 	aviwriter = NULL;
-	socketserver = NULL;
 	parser = NULL;
 	ot = NULL;
 
@@ -278,8 +279,10 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	canvas=new Canvas(this, wxPoint(0, 0), wxSize(40, 30));
 	RecreateToolbar();
 
-	// SwisTrackCore
+	// SwisTrackCore and SocketServer
+	mSocketServer = new SocketServer(this);
 	mSwisTrackCore=new SwisTrackCore();
+	mSwisTrackCore->mCommunicationInterface=mSocketServer;	
 
 	// List
 	mComponentListPanel=new ComponentListPanel(this, mSwisTrackCore);
@@ -313,9 +316,6 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	if (! ret)
 	wxMessageBox(wxT("Failed adding book doc/html/index.hhp"));
 	*/
-
-	/** \todo The SocketServer should go into ObjectTracker and the socket should be a parameter */
-	socketserver = new SocketServer(this, 3000);
 
 	if(!wxFile::Exists("swistrack.exp")){
 		DisplayModal("File swistrack.exp could not be found. Quitting.","Error");
@@ -390,7 +390,6 @@ SwisTrack::~SwisTrack(){
 	ShutDown();
 
 	if (ot) delete ot;
-	if (socketserver) delete socketserver;
 	if (canvas) delete canvas;
 	if (colorbmp) delete colorbmp;
 	if (parser) delete parser;
@@ -398,6 +397,7 @@ SwisTrack::~SwisTrack(){
 
 	if (mPanelInformation) delete mPanelInformation;
 	if (mComponentListPanel) delete mComponentListPanel;
+	if (mSocketServer) delete mSocketServer;
 	if (mSwisTrackCore) delete mSwisTrackCore;
 #ifdef MULTITHREAD
 	if (criticalSection) delete criticalSection;
@@ -1090,10 +1090,39 @@ void SwisTrack::OnHelp(wxCommandEvent& WXUNUSED(event)) {
 	wxLaunchDefaultBrowser("http://en.wikibooks.org/wiki/Swistrack");
 }
 
-void SwisTrack::OnTest(wxCommandEvent& WXUNUSED(event)) {
+void THISCLASS::OnTest(wxCommandEvent& WXUNUSED(event)) {
 	mPanelInformation->Hide();
 	mPanelInformation1->Show();
 	GetSizer()->Layout();
+
+	double px[10];
+	double py[10];
+	double po[10];
+	for (int i=0; i<10; i++) {
+		px[i]=i*0.1;
+		py[i]=i*0.05;
+		po[i]=i*0.1;
+	}
+
+	for (int r=0; r<100; r++) {
+		for (int i=0; i<10; i++) {
+			CommunicationMessage m("PARTICLE");
+			m.AddInt(r);
+			m.AddInt(i);
+			m.AddDouble(px[i]);
+			m.AddDouble(py[i]);
+			m.AddDouble(po[i]);
+			mSocketServer->SendMessage(&m);
+		}
+		CommunicationMessage m("ENDFRAME");
+		mSocketServer->SendMessage(&m);
+
+		for (int i=0; i<10; i++) {
+			px[i]+=sin(po[i])*0.02;
+			py[i]+=sin(po[i])*0.02;
+			po[i]-=i*0.01;
+		}
+	}
 }
 
 void SwisTrack::OnIdle(wxIdleEvent& WXUNUSED(event)){

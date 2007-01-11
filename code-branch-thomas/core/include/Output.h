@@ -1,7 +1,7 @@
 #ifndef _Output_H
 #define _Output_H
 
-#include "Component.h"
+#include "OldComponent.h"
 #include "cv.h"
 #include "ObjectTracker.h"
 

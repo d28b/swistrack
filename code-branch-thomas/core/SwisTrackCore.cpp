@@ -22,8 +22,8 @@ THISCLASS::SwisTrackCore(xmlpp::Element* cfgroot):
 		mDataStructureImageBinary("ImageBinary", "Binary image"),
 		mDataStructureMaskBinary("MaskBinary", "Binary mask"),
 		mDataStructureParticles(),
-		mCategoryInput("Input", 100, ComponentCategory::sFlagRequired|ComponentCategory::sFlagExclusive),
-		mCategoryInputConversion("Input conversion", 200, ComponentCategory::sFlagRequired),
+		mCategoryInput("Input", 100, ComponentCategory::sTypeOne),
+		mCategoryInputConversion("Input conversion", 200, ComponentCategory::sTypeAuto),
 		mCategoryPreprocessing("Preprocessing", 300),
 		mCategoryThresholding("Thresholding", 400),
 		mCategoryBlobDetection("Blob detection", 500),
@@ -50,6 +50,13 @@ THISCLASS::SwisTrackCore(xmlpp::Element* cfgroot):
 	mDataStructures.push_back(&mDataStructureImageBinary);
 	mDataStructures.push_back(&mDataStructureMaskBinary);
 	mDataStructures.push_back(&mDataStructureParticles);
+
+	// TODO remove this
+	mComponentList.push_back(new ComponentInputCameraUSB(this));
+	mComponentList.push_back(new ComponentConvertToGray(this));
+	mComponentList.push_back(new ComponentBackgroundSubtractionGray(this));
+	mComponentList.push_back(new ComponentThresholdGray(this));
+	mComponentList.push_back(new ComponentBlobDetectionMinMax(this));
 }
 
 bool THISCLASS::Start() {

@@ -5,6 +5,8 @@ class SwisTrackCore;
 
 #include <list>
 #include "Component.h"
+#include "ComponentCategory.h"
+#include "CommunicationInterface.h"
 #include "DataStructureInput.h"
 #include "DataStructureImage.h"
 #include "DataStructureParticles.h"

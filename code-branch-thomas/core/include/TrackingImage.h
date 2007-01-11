@@ -12,7 +12,7 @@
 #include "libgeom.h"
 #include "cv.h"
 #include "highgui.h" // only for debugging
-#include "Component.h"
+#include "OldComponent.h"
 
 class TrackingImage  : public OldComponent
 {

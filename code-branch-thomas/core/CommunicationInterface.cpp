@@ -1,4 +1,5 @@
 #include "CommunicationInterface.h"
+#include <algorithm>
 #define THISCLASS CommunicationInterface
 
 void THISCLASS::AddCommandHandler(CommunicationCommandHandler *ch) {

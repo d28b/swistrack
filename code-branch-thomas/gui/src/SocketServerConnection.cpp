@@ -31,7 +31,7 @@ void THISCLASS::OnSocketEvent(wxSocketEvent& event) {
 			mSocket->Read(buffer, 128);
 			int read=mSocket->LastCount();
 			if (read==0) {break;}
-			ProcessData(buffer, read);
+			NMEAProcessData(buffer, read);
 		}
 		break;
 
@@ -51,7 +51,7 @@ void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum)
 		int cc=0;
 		CommunicationMessage::tParameters::iterator it=m->mParameters.begin();
 		while (it!=m->mParameters.end()) {
-			mSubscriptions->push_back(*it);
+			mSubscriptions.push_back(*it);
 			cc++;
 			if (cc>31) {break;}
 			it++;
@@ -62,7 +62,7 @@ void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum)
 	
 	// Otherwise, give the message to the SocketServer for further processing
 	mCurrentRequest=m;
-	mSocketServer->OnProcessMessage(m);
+	mSocketServer->OnCommand(m);
 	mCurrentRequest=0;
 }
 
@@ -76,13 +76,13 @@ void THISCLASS::OnNMEAProcessUnrecognizedChar(unsigned char chr) {
 }
 
 void THISCLASS::OnNMEASend(const std::string &str) {
-	mSocket.Write(str.c_str(), str.length());
+	mSocket->Write(str.c_str(), str.length());
 }
 
-bool SendMessage(CommunicationMessage *m) {
+bool THISCLASS::SendMessage(CommunicationMessage *m) {
 	// If the message is sent in reply to another message, only send it to the sender of the original message
-	if (m->InReplyTo) {
-		if (m->InReplyTo==mCurrentRequest) {
+	if (m->mInReplyTo) {
+		if (m->mInReplyTo==mCurrentRequest) {
 			NMEASendMessage(m);
 			return true;
 		}

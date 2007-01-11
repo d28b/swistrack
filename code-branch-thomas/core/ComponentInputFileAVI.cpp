@@ -7,7 +7,7 @@ THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
 
 	// Data structure relations
 	mDisplayName="AVI File";
-	mCategory=mCore->mCategoryInput;
+	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 }
 

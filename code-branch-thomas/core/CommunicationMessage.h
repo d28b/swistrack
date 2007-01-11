@@ -15,9 +15,11 @@ public:
 	tParameters mParameters;
 	//! The message type (command).
 	std::string mCommand;
+	//! The associated request (if any)
+	CommunicationMessage *mInReplyTo;
 
 	//! Constructor.
-	CommunicationMessage(const std::string &cmd = "");
+	CommunicationMessage(const std::string &cmd = "", CommunicationMessage *inreplyto=0);
 	//! Destructor.
 	~CommunicationMessage() {}
 
@@ -38,6 +40,8 @@ public:
 	bool AddDouble(double value);
 	//! Adds a string to the parameter list.
 	bool AddString(const std::string &value);
+	//! Adds a string to the parameter list.
+	//bool AddString(const char *value);
 };
 
 #endif

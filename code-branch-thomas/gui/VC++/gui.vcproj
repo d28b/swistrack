@@ -318,6 +318,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\ComponentsDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ComponentTreeItem.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\gui.cpp"
 				>
 				<FileConfiguration
@@ -410,6 +418,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\SocketServerConnection.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\SwisTrack.cpp"
 				>
 			</File>
@@ -443,6 +455,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\ComponentsDialog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ComponentTreeItem.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\constants.h"
 				>
 			</File>
@@ -468,6 +488,10 @@
 			</File>
 			<File
 				RelativePath="..\include\SocketServer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\SocketServerConnection.h"
 				>
 			</File>
 			<File

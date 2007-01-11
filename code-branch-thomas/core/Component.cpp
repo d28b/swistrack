@@ -3,7 +3,7 @@
 #define THISCLASS Component
 
 THISCLASS::Component(SwisTrackCore *stc, const std::string &name):
-		mCore(stc), mName(name), mDisplayName(name), mStatus(), mStatusHasError(false), mStatusHasWarning(false), mStarted(false) {
+		mCore(stc), mName(name), mDisplayName(name), mCategory(0), mStatus(), mStatusHasError(false), mStatusHasWarning(false), mStarted(false) {
 
 	//mConfigurationRoot=dynamic_cast<const xmlpp::Element*>(mCore->mConfigurationRoot->find(mName)).begin());
 }

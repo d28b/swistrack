@@ -7,7 +7,11 @@
   #include <wx/wx.h>
 #endif
 
+class SocketServerConnection;
+
 #include "SocketServer.h"
+#include "CommunicationNMEAInterface.h"
+#include <list>
 #include <wx/socket.h>
 
 class SocketServerConnection: public wxEvtHandler, public CommunicationNMEAInterface {
@@ -27,7 +31,10 @@ public:
 
 	//! Sends a message.
 	bool SendMessage(CommunicationMessage *m);
-	
+
+	//! Returns whether this object is still in use or not.
+	bool IsActive() {return (mSocket!=0);}
+
 protected:
 	enum {
 		SOCKET_ID = 100
@@ -43,7 +50,7 @@ private:
 	CommunicationMessage* mCurrentRequest;
 
 	//! The list of subscriptions type.
-	std::list<std::string> tSubscriptions;
+	typedef std::list<std::string> tSubscriptions;
 	//! The list of subscriptions.
 	tSubscriptions mSubscriptions;
 

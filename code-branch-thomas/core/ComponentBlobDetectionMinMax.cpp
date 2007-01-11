@@ -7,7 +7,7 @@ THISCLASS::ComponentBlobDetectionMinMax(SwisTrackCore *stc):
 
 	// Data structure relations
 	mDisplayName="Blob detection with min/max particle size";
-	mCategory=mCore->mCategoryBlobDetection;
+	mCategory=&(mCore->mCategoryBlobDetection);
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 }

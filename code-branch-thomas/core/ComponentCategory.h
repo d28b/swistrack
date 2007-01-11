@@ -4,19 +4,14 @@
 class ComponentCategory;
 
 #include <string>
-#include <list>
-#include <libxml++/libxml++.h>
-#include "StatusItem.h"
-#include "SwisTrackCore.h"
-#include "DataStructure.h"
 
 class ComponentCategory {
 
 public:
-	enum eFlags {
-		sFlagNone=0,
-		sFlagRequired=1,
-		sFlagExclusive=2,
+	enum eCategoryType {
+		sTypeAny=0,
+		sTypeOne,
+		sTypeAuto
 	};
 
 	//! The name that is displayed to the user.
@@ -24,10 +19,10 @@ public:
 	//! The order (0 if any ordering is fine).
 	int mOrder;
 	//! The flags.
-	eFlags mFlags;
+	eCategoryType mType;
 
 	//! Constructor.
-	ComponentCategory(const std::string &name, int order, int flags): mDisplayName(name), mOrder(order), mFlags(flags) {}
+	ComponentCategory(const std::string &name, int order, eCategoryType type=sTypeAny): mDisplayName(name), mOrder(order), mType(type) {}
 	//! Destructor.
 	~ComponentCategory() {}
 };

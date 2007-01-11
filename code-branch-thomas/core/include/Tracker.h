@@ -14,7 +14,7 @@
 #include "TrackingImage.h"
 #include "Track.h"
 #include "ObjectTracker.h"
-#include "Component.h"
+#include "OldComponent.h"
 
 
 class ObjectTracker;

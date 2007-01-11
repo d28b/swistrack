@@ -29,7 +29,7 @@
 #include "libgeom.h"
 #include "Track.h"
 #include "TrackingImage.h"
-#include "Component.h"
+#include "OldComponent.h"
 
 
 

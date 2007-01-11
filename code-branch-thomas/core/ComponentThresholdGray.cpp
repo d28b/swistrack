@@ -7,7 +7,7 @@ THISCLASS::ComponentThresholdGray(SwisTrackCore *stc):
 
 	// Data structure relations
 	mDisplayName="Thresholding (grayscale)";
-	mCategory=mCore->mCategoryThresholding;
+	mCategory=&(mCore->mCategoryThresholding);
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 }

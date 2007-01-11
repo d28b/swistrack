@@ -18,7 +18,7 @@
 #include <math.h>
 #include "cv.h"
 #include "highgui.h"
-#include "Component.h"
+#include "OldComponent.h"
 
 
 

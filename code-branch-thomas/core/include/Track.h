@@ -40,7 +40,7 @@
 #include <math.h>
 #include <cv.h>
 #include "TrackingImage.h"
-#include "Component.h"
+#include "OldComponent.h"
 
 using namespace std;
 

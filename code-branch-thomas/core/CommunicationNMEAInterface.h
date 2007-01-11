@@ -1,6 +1,10 @@
 #ifndef HEADER_CommunicationNMEAInterface
 #define HEADER_CommunicationNMEAInterface
 
+class CommunicationNMEAInterface;
+
+#include "CommunicationMessage.h"
+
 /*!
 	NMEA Interface.
 */
@@ -9,7 +13,7 @@ class CommunicationNMEAInterface {
 private:
 	int mState;
 	static const int mBufferSize=1024;
-	unsigned char mBuffer[mBufferSize];
+	char mBuffer[mBufferSize];
 	int mBufferPos;
 	int mChecksum;
 	CommunicationMessage *mMessage;

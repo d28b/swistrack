@@ -9,7 +9,7 @@ THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore *stc):
 
 	// Data structure relations
 	mDisplayName="Background Subtraction (grayscale)";
-	mCategory=mCore->mCategoryPreprocessing;
+	mCategory=&(mCore->mCategoryPreprocessing);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 }

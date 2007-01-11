@@ -19,6 +19,8 @@
 #include "wx/listctrl.h"  // ListCtrl
 #include "wx/html/htmlwin.h"
 
+class SwisTrack;
+
 //#include "calibration.h"
 #include "ObjectTracker.h"
 // For the auxiliary thread
@@ -34,12 +36,12 @@
 #include "AboutDialog.h"
 #include "XMLCfg.h"
 #include "ComponentListPanel.h"
+#include "SocketServer.h"
 
 class Canvas;
 class SwisTrackPanel;
 class InterceptionPanel;
 class AviWriter;
-class SocketServer;
 class NewExperimentDialog;
 class GuiApp;
 
@@ -70,8 +72,10 @@ public:
 	SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size,
 		long style  = wxDEFAULT_FRAME_STYLE);
 	
-	// SwisTrackCore
+	//! The SwisTrackCore object.
 	SwisTrackCore *mSwisTrackCore;
+	//! The SocketServer object.
+	SocketServer *mSocketServer;
 
 	// menu bar and items
     wxMenuBar *menuBar;
@@ -147,7 +151,6 @@ public:
 
 	// Tool classes
 	AviWriter* aviwriter;
-	SocketServer* socketserver;
 
 	~SwisTrack();
 

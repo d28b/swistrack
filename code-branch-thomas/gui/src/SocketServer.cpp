@@ -1,17 +1,18 @@
 #include "SocketServer.h"
 #define THISCLASS SocketServer
 
+#include "SwisTrack.h"
 #include "SocketServer.h"
 
 BEGIN_EVENT_TABLE(SocketServer, wxEvtHandler)
 	EVT_SOCKET(SERVER_ID, SocketServer::OnServerEvent)
 END_EVENT_TABLE()
 
-THISCLASS::SocketServer(SwisTrack* swistrack): mSwisTrack(swistrack), mServer(0), mClientList() {
+THISCLASS::SocketServer(SwisTrack* swistrack): mSwisTrack(swistrack), mServer(0), mPort(0), mConnections() {
 }
 
 THISCLASS::~SocketServer() {
-	mServer->Destroy();
+	if (mServer) {mServer->Destroy();}
 }
 
 void THISCLASS::SetPort(int port) {
@@ -73,7 +74,7 @@ void THISCLASS::OnServerEvent(wxSocketEvent& event) {
 	SocketServerConnection *ssc=new SocketServerConnection(this, sock);
 
 	// Add this connection to the list of clients
-	mConnections->push_back(ssc);
+	mConnections.push_back(ssc);
 
 	// Notify the user with a status message
 	wxIPV4address addr;
@@ -83,9 +84,6 @@ void THISCLASS::OnServerEvent(wxSocketEvent& event) {
 	mSwisTrack->SetStatusText(str);
 }
 
-void THISCLASS::OnProcessMessage(wxSocketEvent& event) {
-}
-
 void THISCLASS::CleanupConnections() {
 	tConnections::iterator it=mConnections.begin();
 	while (it!=mConnections.end()) {
@@ -93,7 +91,7 @@ void THISCLASS::CleanupConnections() {
 		next++;
 
 		// If the socket is 0, this means that connection has been closed in between
-		if ((*it)->mSocket==0) {
+		if (! (*it)->IsActive()) {
 			delete *it;
 			mConnections.erase(it);
 		}

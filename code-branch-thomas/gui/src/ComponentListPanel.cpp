@@ -11,11 +11,11 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrackCore *stc):
-		wxPanel(parent, -1), mSwisTrackCore(stc) {
+		wxPanel(parent, -1), mSwisTrackCore(stc), mComponentsDialog(0) {
 
 	// Create List
 	mList=new wxListCtrl(this, -1);
-	mList->SetWindowStyle(wxLC_REPORT);
+	mList->SetWindowStyle(wxLC_REPORT|wxLC_HRULES);
 
 	// Add column for component name
 	int col=0;
@@ -51,10 +51,13 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrackCore *stc):
 	hs->Add(vs, 0, 0, 0);
 
 	SetSizer(hs);
+
+	// Update list
+	OnUpdate();
 }
 
 void THISCLASS::OnUpdate() {
-	mList->ClearAll();
+	mList->DeleteAllItems();
 
 	SwisTrackCore::tComponentList::iterator it=mSwisTrackCore->mComponentList.begin();
 	while (it!=mSwisTrackCore->mComponentList.end()) {
@@ -132,12 +135,20 @@ void THISCLASS::OnUpdate() {
 }
 
 void THISCLASS::OnButtonAdd(wxCommandEvent& event) {
-	//mSwisTrackCore->mComponentList.push_back();
-	
+	if (mComponentsDialog==0) {
+		mComponentsDialog=new ComponentsDialog(this->GetParent(), mSwisTrackCore);
+	}
+
+	mComponentsDialog->mSelectedComponent=0;
+	mComponentsDialog->ShowModal();
+	if (mComponentsDialog->mSelectedComponent) {
+		mSwisTrackCore->mComponentList.push_back(mComponentsDialog->mSelectedComponent->Create());
+		OnUpdate();
+	}
 }
 
 void THISCLASS::OnButtonRemove(wxCommandEvent& event) {
-	//mSwisTrackCore->mComponentList.push_back();
+	//mSwisTrackCore->mComponentList.erase();
 }
 
 void THISCLASS::OnButtonUp(wxCommandEvent& event) {

@@ -1,9 +1,9 @@
 #include "CommunicationNMEAInterface.h"
 #define THISCLASS CommunicationNMEAInterface
 
-#include <wx/string.h>
+#include <sstream>
 
-void THISCLASS::OnProcessData(const unsigned char *data, int len) {
+void THISCLASS::NMEAProcessData(const unsigned char *data, int len) {
 	for (int i=0; i<len; i++) {
 		char inchar=data[i];
 		if (mState==0) {
@@ -13,22 +13,22 @@ void THISCLASS::OnProcessData(const unsigned char *data, int len) {
 				mBufferPos=0;
 				mChecksum=0;
 			} else {
-				OnProcessUnrecognizedChar(inchar);
+				OnNMEAProcessUnrecognizedChar(inchar);
 			}
 		} else if (mState==1) {
 			if (inchar==',') {
 				mBuffer[mBufferPos]=0;
-				mMessage->AddString(std::string(mBuffer));
+				mMessage->AddString(mBuffer);
 				mChecksum=mChecksum ^ inchar;
 				mBufferPos=0;
 			} else if (inchar=='*') {
 				mBuffer[mBufferPos]=0;
-				mMessage->AddString(std::string(wxString(mBuffer)));
+				mMessage->AddString(mBuffer);
 				mState=2;
 			} else if (inchar=='\n') {
 				mBuffer[mBufferPos]=0;
-				mMessage->AddString(std::string(wxString(mBuffer)));
-				OnMessage(mMessage, false);
+				mMessage->AddString(mBuffer);
+				OnNMEAProcessMessage(mMessage, false);
 				delete mMessage;
 				mMessage=0;
 				mState=0;
@@ -39,14 +39,14 @@ void THISCLASS::OnProcessData(const unsigned char *data, int len) {
 		} else if (mState==2) {
 			char ch="0123456789ABCDEF"[(mChecksum >> 4) & 0xF];
 			if (inchar=='\n') {
-				OnProcessNMEAChecksumError(mMessage);
+				OnNMEAProcessMessageChecksumError(mMessage);
 				delete mMessage;
 				mMessage=0;
 				mState=0;
 			} else if (inchar==ch) {
 				mState=3;
 			} else {
-				OnProcessNMEAChecksumError(mMessage);
+				OnNMEAProcessMessageChecksumError(mMessage);
 				delete mMessage;
 				mMessage=0;
 				mState=4;
@@ -54,9 +54,9 @@ void THISCLASS::OnProcessData(const unsigned char *data, int len) {
 		} else if (mState==3) {
 			char ch="0123456789ABCDEF"[mChecksum & 0xF];
 			if (inchar==ch) {
-				OnProcessNMEA(mMessage, true);
+				OnNMEAProcessMessage(mMessage, true);
 			} else {
-				OnProcessNMEAChecksumError(mMessage);
+				OnNMEAProcessMessageChecksumError(mMessage);
 			}
 			delete mMessage;
 			mMessage=0;
@@ -68,9 +68,9 @@ void THISCLASS::OnProcessData(const unsigned char *data, int len) {
 	}
 }
 
-void THISCLASS::SendNMEA(CommunicationMessage *m) {
+void THISCLASS::NMEASendMessage(CommunicationMessage *m) {
 	// Concatenate
-	std::istringstream line;
+	std::ostringstream line;
 	line << "$" << m->mCommand;
 	CommunicationMessage::tParameters::iterator it=m->mParameters.begin();
 	while (it != m->mParameters.end()) {
@@ -87,10 +87,10 @@ void THISCLASS::SendNMEA(CommunicationMessage *m) {
 	}
 	char ch1="0123456789ABCDEF"[(checksum >> 4) & 0xF];
 	char ch2="0123456789ABCDEF"[checksum & 0xF];
-	istr << "*" << ch1 << ch2;
+	line << "*" << ch1 << ch2;
 
 	// Send
-	istr << "\r";
-	OnSendData(istr.str());
+	line << "\r";
+	OnNMEASend(line.str());
 	return;
 }

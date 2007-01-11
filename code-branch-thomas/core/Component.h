@@ -9,6 +9,7 @@ class Component;
 #include "StatusItem.h"
 #include "SwisTrackCore.h"
 #include "DataStructure.h"
+#include "ComponentCategory.h"
 
 class Component {
 
@@ -28,7 +29,7 @@ public:
 	//! The name that is displayed to the user.
 	std::string mDisplayName;
 	//! The category which this component belongs to.
-	ComponentCategory mCategory;
+	ComponentCategory *mCategory;
 	//! The default view.
 	std::string mDefaultView;
 

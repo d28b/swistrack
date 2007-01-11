@@ -6,7 +6,7 @@ THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
 
 	// Data structure relations
 	mDisplayName="GBit Camera";
-	mCategory=mCore->mCategoryInput;
+	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 }
 

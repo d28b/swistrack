@@ -4,18 +4,13 @@
 class ComponentsDialog;
 
 #include "SwisTrackCore.h"
-#include <wx/panel.h>
-#include <wx/listctrl.h>
+#include <wx/dialog.h>
+#include <wx/treectrl.h>
 #include <wx/button.h>
 
 class ComponentsDialog: public wxDialog {
 
 public:
-	enum eConstants {
-		eID_ButtonAdd,
-		eID_ButtonRemove,
-	};
-
 	//! The associated SwisTrackCore object.
 	SwisTrackCore *mSwisTrackCore;
 	//! The selected component.
@@ -29,9 +24,13 @@ public:
 	void OnUpdate();
 
 	void OnButtonAdd(wxCommandEvent& event);
-	void OnButtonRemove(wxCommandEvent& event);
-	void OnButtonUp(wxCommandEvent& event);
-	void OnButtonDown(wxCommandEvent& event);
+	void OnButtonCancel(wxCommandEvent& event);
+
+protected:
+	enum eConstants {
+		eID_ButtonAdd,
+		eID_ButtonCancel
+	};
 
 private:
 	wxTreeCtrl *mTree;

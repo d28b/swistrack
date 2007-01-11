@@ -61,7 +61,7 @@ bool GUIApp::OnInit()
 {
    // create the main application window
     frame = new SwisTrack(_T("SWISTrack v3.0.0"),
-                                 wxPoint(-1, -1), wxSize(660, 480));
+                                 wxPoint(-1, -1), wxSize(800, 600));
 
 	SetVendorName(wxT("Swarm-Intelligent Systems Group"));
     SetAppName(wxT("SwisTrack")); 

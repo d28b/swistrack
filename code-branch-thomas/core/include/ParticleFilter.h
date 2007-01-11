@@ -1,7 +1,7 @@
 #ifndef _PARTICLEFILTER_
 #define _PARTICLEFILTER_
 
-#include "Component.h"
+#include "OldComponent.h"
 #include "Segmenter.h"
 #include "TrackingImage.h"
 
