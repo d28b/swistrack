@@ -5,7 +5,6 @@
 
 BEGIN_EVENT_TABLE(SocketServer, wxEvtHandler)
 	EVT_SOCKET(SERVER_ID, SocketServer::OnServerEvent)
-	EVT_SOCKET(SOCKET_ID, SocketServer::OnSocketEvent)
 END_EVENT_TABLE()
 
 THISCLASS::SocketServer(SwisTrack* swistrack): mSwisTrack(swistrack), mServer(0), mClientList() {
@@ -29,7 +28,7 @@ void THISCLASS::Open() {
 	wxIPV4address addr;
 	addr.Service(mPort);
 	addr.AnyAddress();
-	mServer=new wxSocketServer(addr);
+	mServer=new wxSocketServer(addr, wxSOCKET_NOWAIT);
 
 	// Check whether the server is listening.
 	if (! mServer->Ok()) {
@@ -67,13 +66,14 @@ void THISCLASS::OnServerEvent(wxSocketEvent& event) {
 	wxSocketBase *sock=mServer->Accept(false);
 	if (! sock) {return;}
 
-	// Setup the event handler
-	sock->SetEventHandler(*this, SOCKET_ID);
-	sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
-	sock->Notify(true);
+	// Cleanup connections that have been closed in between
+	CleanupConnections();
+
+	// Create a new connection object
+	SocketServerConnection *ssc=new SocketServerConnection(this, sock);
 
 	// Add this connection to the list of clients
-	mClientList->push_back(sock);
+	mConnections->push_back(ssc);
 
 	// Notify the user with a status message
 	wxIPV4address addr;
@@ -83,167 +83,32 @@ void THISCLASS::OnServerEvent(wxSocketEvent& event) {
 	mSwisTrack->SetStatusText(str);
 }
 
-void THISCLASS::OnSocketEvent(wxSocketEvent& event) {
-	wxString s = _("OnSocketEvent: ");
-	wxSocketBase *sock = event.GetSocket();
-	wxCommandEvent dummy;
-#ifdef MULTITHREAD
-	wxCriticalSectionLocker locker(*(parent->criticalSection));
-#endif
+void THISCLASS::OnProcessMessage(wxSocketEvent& event) {
+}
 
-	// Now we process the event
-	switch(event.GetSocketEvent())
-	{
-	case wxSOCKET_INPUT:
-		{
-			// We disable input events, so that the test doesn't trigger
-			// wxSocketEvent again.
-			sock->SetNotify(wxSOCKET_LOST_FLAG);
+void THISCLASS::CleanupConnections() {
+	tConnections::iterator it=mConnections.begin();
+	while (it!=mConnections.end()) {
+		tConnections::iterator next=it;
+		next++;
 
-			// Which test are we going to run?
-			unsigned char c;
-			sock->Read(&c, 1);
-
-			switch (c)
-			{
-			case 'b': SendBlobs(sock); break;													// sends blobs asynch
-			case 'B': {parent->Singlestep(); SendBlobs(sock);} break;							// send blobs synch
-			case 'c': {calibration=0; parent->SetStatusText(_("Calibration is off"));} break;   // calibration off
-			case 'C': {calibration=1; parent->SetStatusText(_("Calibration enabled"));} break;  // calibration on
-			case 'i': {SendLargeInteger(sock,(int) parent->ot->GetProgress(2));} break;			// sends current frame nr
-			case 'I': {SendSmallFloat(sock,100.0*(parent->ot->GetProgress(3)));} break;			// sends progress (%)
-			case 'f': {SendSmallFloat(sock,parent->ot->GetFPS());} break;						// sends framerate (fps)
-			case 'n': SendNumberofBlobs(sock); break;											// sends nr of blobs
-			case 'N': SendNumberofTracks(sock); break;											// sends nr of tracks
-			case 'p': {parent->SetStatus(PAUSED); parent->SetStatusText(_("Paused"));} break;   // pauses tracking
-			case 'R': {parent->StartTracker();} break;											// starts tracker
-			case 's': {parent->Singlestep();} break;											// performes single step
-			case 'S': {parent->SetStatus(RUNNING); parent->SetStatusText(_("Running"));} break; // resumes tracking
-			case '!': {parent->StopTracker();} break;											// stops tracker
-			case 't': SendTracks(sock); break;													// sends tracks asynch
-			case 'T': {parent->Singlestep(); SendTracks(sock);} break;							// sends tracks synch
-
-			default: {
-				wxString tmp;
-				tmp.Printf("Unknown socket command (%c)\n",c);
-				parent->SetStatusText(tmp);
-					 }
-			}
-
-			// Enable input events again.
-			sock->SetNotify(wxSOCKET_LOST_FLAG | wxSOCKET_INPUT_FLAG);
-			break;
+		// If the socket is 0, this means that connection has been closed in between
+		if ((*it)->mSocket==0) {
+			delete *it;
+			mConnections.erase(it);
 		}
-	case wxSOCKET_LOST:
-		{
-			m_numClients--;
 
-			// Destroy() should be used instead of delete wherever possible,
-			// due to the fact that wxSocket uses 'delayed events' (see the
-			// documentation for wxPostEvent) and we don't want an event to
-			// arrive to the event handler (the frame, here) after the socket
-			// has been deleted. Also, we might be doing some other thing with
-			// the socket at the same time; for example, we might be in the
-			// middle of a test or something. Destroy() takes care of all
-			// this for us.
-
-			parent->SetStatusText(_("Deleting socket.\n\n"));
-			sock->Destroy();
-			break;
-		}
-	default: parent->SetStatusText(_("Unknown socket event"));;
+		it=next;
 	}
 }
 
-void THISCLASS::SendBlobs(wxSocketBase *sock)
-{
-#ifdef MULTITHREAD
-	wxCriticalSectionLocker locker(*(parent->criticalSection));
-#endif
-	unsigned int len,n,width;
-	wxString buf;
-	sock->SetFlags(wxSOCKET_WAITALL);
-	n=parent->ot->GetNumberofParticles();
-	buf.Printf("%#04d",n);
-	width=(10+10+2);
-	len=n*width+4;
-	for(unsigned int i=0; i<n; i++){
-		CvPoint2D32f* p;		
-
-		if(calibration){
-			p=parent->ot->GetPos(i);	
-		}
-		else
-			p=parent->ot->GetParticlePos(i);
-
-		buf.Printf("%s %+#010.4f %+#010.4f",buf.c_str(),p->x,p->y);
+bool THISCLASS::SendMessage(CommunicationMessage *m) {
+	bool sent=false;
+	tConnections::iterator it=mConnections.begin();
+	while (it!=mConnections.end()) {
+		bool cursent=(*it)->SendMessage(m);
+		if (cursent) {sent=true;}
+		it++;
 	}
-	sock->Write(buf.GetData(),len);
-	if(sock->Error()) parent->SetStatusText(_("Writing to socket failed"));  
+	return sent;
 }
-
-void THISCLASS::SendTracks(wxSocketBase *sock)
-{
-#ifdef MULTITHREAD
-  wxCriticalSectionLocker locker(*(parent->criticalSection));
-#endif
-	unsigned int len,n,width;
-	wxString buf;
-	sock->SetFlags(wxSOCKET_WAITALL);
-	n=parent->ot->GetNumberofTracks();
-	width=(10+10+2);
-	len=n*width;
-	for(unsigned int i=0; i<n; i++){
-		CvPoint2D32f* p;		
-		p=parent->ot->GetTargetPos(i);
-
-		buf.Printf("%s %+#010.4f %+#010.4f",buf.c_str(),p->x,p->y);
-	}
-	sock->Write(buf.GetData(),len);
-	if(sock->Error()) parent->SetStatusText(_("Writing to socket failed"));  
-}
-
-void THISCLASS::SendNumberofBlobs(wxSocketBase *sock)
-{
-#ifdef MULTITHREAD
-	wxCriticalSectionLocker locker(*(parent->criticalSection));
-#endif
-	wxString buf;
-	int n=parent->ot->GetNumberofParticles();
-	buf.Printf("%04d",n);
-	sock->Write(buf.GetData(),4);
-	if(sock->Error()) parent->SetStatusText(_("Writing to socket failed"));
-}
-
-void THISCLASS::SendNumberofTracks(wxSocketBase *sock)
-{
-#ifdef MULTITHREAD
-  wxCriticalSectionLocker locker(*(parent->criticalSection));
-#endif
-	wxString buf;
-	int n=parent->ot->GetNumberofTracks();
-	buf.Printf("%04d",n);
-	sock->Write(buf.GetData(),4);
-	if(sock->Error()) parent->SetStatusText(_("Writing to socket failed"));
-}
-
-void THISCLASS::SendSmallFloat(wxSocketBase *sock, double value)
-{
-
-	wxString buf;
-	buf.Printf("%05.2f",value);
-	sock->Write(buf.GetData(),5);
-	if(sock->Error()) parent->SetStatusText(_("Writing to socket failed"));
-
-}
-
-void THISCLASS::SendLargeInteger(wxSocketBase *sock, int value)
-{
-	wxString buf;
-	buf.Printf("%010d",value);
-	sock->Write(buf.GetData(),10);
-	if(sock->Error()) parent->SetStatusText(_("Writing to socket failed"));
-
-}
-
-

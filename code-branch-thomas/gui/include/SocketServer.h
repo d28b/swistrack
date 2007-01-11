@@ -1,5 +1,5 @@
-#ifndef _SOCKETSERVER_H
-#define _SOCKETSERVER_H
+#ifndef HEADER_SocketServer
+#define HEADER_SocketServer
 
 #include <wx/wxprec.h>
 
@@ -15,12 +15,7 @@ class SwisTrack;
 class SocketServer: public wxEvtHandler, public CommunicationInterface {
 
 public:
-	void SendLargeInteger(wxSocketBase *sock, int value);
-	void SendSmallFloat(wxSocketBase *sock, double value);
-	void SendNumberofTracks(wxSocketBase *sock);
-	void SendNumberofBlobs(wxSocketBase *sock);
-	void SendTracks(wxSocketBase *sock);
-	SocketServer(SwisTrack* parent, int socketnumber);
+	SocketServer(SwisTrack* swistrack);
 	~SocketServer();
 
 	//! Sets the desired port and tries to start listening.
@@ -32,19 +27,15 @@ public:
 
 	//! Handles server events.
 	void OnServerEvent(wxSocketEvent& event);
-	//! Handles socket events.
-	void OnSocketEvent(wxSocketEvent& event);
-
-	void SendBlobs(wxSocketBase *sock);
-	void SendTrajectories(wxSocketBase *sock);
+	//! Called when a message is received.
+	void OnProcessMessage(CommunicationMessage *m);
 
 	// CommuncationInterface methods.
-	void SendRecord(const wxStringArray *arr);
+	bool SendMessage(CommunicationMessage *m);
 
 protected:
 	enum {
-		SERVER_ID = 100,
-		SOCKET_ID = 101
+		SERVER_ID = 100
 	};
 
 private:
@@ -55,12 +46,12 @@ private:
 	//! The SwisTrack object.
 	SwisTrack* mSwisTrack;
 	//! The list of all connected clients.
-	typedef std::list<wxSocketBase*> tClientList;
-	tClientList mClientList;
+	typedef std::list<SocketServerConnection*> tConnections;
+	tConnections mConnections;
 
 	//! Starts listening.
 	void Open();
-	//! Stops listening.
+	//! Stops listening. This doesn't close already open connections.
 	void Close();
 
 	DECLARE_EVENT_TABLE()

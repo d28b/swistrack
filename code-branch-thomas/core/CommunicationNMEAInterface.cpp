@@ -23,11 +23,11 @@ void THISCLASS::OnProcessData(const unsigned char *data, int len) {
 				mBufferPos=0;
 			} else if (inchar=='*') {
 				mBuffer[mBufferPos]=0;
-				mMessage->AddString(std::string(wxString(mBuffer));
+				mMessage->AddString(std::string(wxString(mBuffer)));
 				mState=2;
 			} else if (inchar=='\n') {
 				mBuffer[mBufferPos]=0;
-				mMessage->AddString(std::string(wxString(mBuffer));
+				mMessage->AddString(std::string(wxString(mBuffer)));
 				OnMessage(mMessage, false);
 				delete mMessage;
 				mMessage=0;

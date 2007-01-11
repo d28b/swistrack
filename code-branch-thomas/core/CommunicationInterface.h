@@ -21,8 +21,8 @@ public:
 	//! Destructor.
 	virtual ~CommunicationInterface() {}
 
-	//! This is called to send a message.
-	virtual void OnSendMessage(CommunicationMessage *m) = 0;
+	//! This is called to send a message. The return value should indicate whether the message has really been sent to at least one client.
+	virtual bool SendMessage(CommunicationMessage *m) = 0;
 
 	//! Registers a new command handler.
 	void AddCommandHandler(CommunicationCommandHandler *ch);

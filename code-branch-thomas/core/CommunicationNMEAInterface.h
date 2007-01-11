@@ -18,20 +18,19 @@ public:
 	//! Constructor.
 	CommunicationNMEAInterface(): mState(0), mBufferPos(0), mChecksum(0), mMessage(0) {}
 
-	// Overwritten DataInterface methods.
-	virtual void OnProcessData(const unsigned char *data, int len);
+	//! Processes incoming data. This method should be called each time a piece of data is received. The data doesn't need to contain a complete NMEA record.
+	void NMEAProcessData(const unsigned char *data, int len);
+	//! This method can be called to send an NMEA message.
+	void NMEASendMessage(CommunicationMessage *m);
 
 	//! Called when a complete NMEA record has been received.
-	virtual void OnProcessNMEA(const wxArrayString &args, bool withchecksum) = 0;
+	virtual void OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum) = 0;
 	//! Called when an NMEA record with a checksum error ist received.
-	virtual void OnProcessNMEAChecksumError(const wxArrayString &args) = 0;
+	virtual void OnNMEAProcessMessageChecksumError(CommunicationMessage *m) = 0;
 	//! Called to process a char that does not belong to an NMEA record.
-	virtual void OnProcessUnrecognizedChar(unsigned char chr) = 0;
-
-	//! Parses NMEA content and calls OnProcessNMEA or OnProcessNMEAChecksumError.
-	//bool ProcessNMEA(const wxString &line);
-	//! Sends a line of text.
-	void SendNMEA(const wxArrayString &args);
+	virtual void OnNMEAProcessUnrecognizedChar(unsigned char chr) = 0;
+	//! Called to send text to the client.
+	virtual void OnNMEASend(const std::string &str) = 0;
 };
 
 #endif
