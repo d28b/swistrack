@@ -13,7 +13,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrackCore *stc):
-		wxPanel(parent, -1), mSwisTrackCore(stc), mComponentsDialog(0) {
+		wxPanel(parent, -1), mSwisTrackCore(stc), mSelectedComponent(0), mComponentsDialog(0) {
 
 	// Create List
 	mList=new wxListCtrl(this, eID_List);
@@ -73,10 +73,14 @@ void THISCLASS::OnUpdate() {
 		li.SetText((*it)->mDisplayName.c_str());
 		li.SetTextColour(*wxBLACK);
 		li.SetData((void*)(*it));
+		if (mSelectedComponent==(*it)) {
+			li.SetState(wxLIST_STATE_SELECTED);
+		}
 		mList->InsertItem(li);
 
 		// Status
 		li.SetColumn(col++);
+		li.SetState(0);
 		if ((*it)->mStatusHasError) {
 			li.SetText("E");
 			li.SetBackgroundColour(wxColour(255, 225, 225));
@@ -152,67 +156,47 @@ void THISCLASS::OnButtonAdd(wxCommandEvent& event) {
 }
 
 void THISCLASS::OnButtonRemove(wxCommandEvent& event) {
-	// Find out which item is selected
-	long selitem = mList->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-	if (selitem<0) {return;}
-
-	// Get the corresponding component
-	Component *sel=(Component*)(mList->GetItemData(selitem));
-	if (! sel) {return;}
-
 	// Find the corresponding component in the list and delete it
-	SwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mComponentList.begin(), mSwisTrackCore->mComponentList.end(), sel);
+	SwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mComponentList.begin(), mSwisTrackCore->mComponentList.end(), mSelectedComponent);
 	if (it==mSwisTrackCore->mComponentList.end()) {return;}
 	mSwisTrackCore->mComponentList.erase(it);
-	delete sel;
+	delete mSelectedComponent;
 
 	// Update the list
 	OnUpdate();
 }
 
 void THISCLASS::OnButtonUp(wxCommandEvent& event) {
-	// Find out which item is selected
-	long selitem = mList->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-	if (selitem<0) {return;}
-
-	// Get the corresponding component
-	Component *sel=(Component*)(mList->GetItemData(selitem));
-	if (! sel) {return;}
-
 	// Find the corresponding component in the list and move it up
-	SwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mComponentList.begin(), mSwisTrackCore->mComponentList.end(), sel);
+	SwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mComponentList.begin(), mSwisTrackCore->mComponentList.end(), mSelectedComponent);
 	if (it==mSwisTrackCore->mComponentList.end()) {return;}
 	SwisTrackCore::tComponentList::iterator it2=it;
 	it2--;
 	if (it2==mSwisTrackCore->mComponentList.end()) {return;}
-	reverse(it2, it);
+	mSwisTrackCore->mComponentList.erase(it);
+	mSwisTrackCore->mComponentList.insert(it2, mSelectedComponent);
 
 	// Update the list
 	OnUpdate();
 }
 
 void THISCLASS::OnButtonDown(wxCommandEvent& event) {
-	// Find out which item is selected
-	long selitem = mList->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-	if (selitem<0) {return;}
-
-	// Get the corresponding component
-	Component *sel=(Component*)(mList->GetItemData(selitem));
-	if (! sel) {return;}
-
 	// Find the corresponding component in the list and move it up
-	SwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mComponentList.begin(), mSwisTrackCore->mComponentList.end(), sel);
+	SwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mComponentList.begin(), mSwisTrackCore->mComponentList.end(), mSelectedComponent);
 	if (it==mSwisTrackCore->mComponentList.end()) {return;}
 	SwisTrackCore::tComponentList::iterator it2=it;
 	it2++;
 	if (it2==mSwisTrackCore->mComponentList.end()) {return;}
-	reverse(it, it2);
+	it2++;
+	mSwisTrackCore->mComponentList.erase(it);
+	mSwisTrackCore->mComponentList.insert(it2, mSelectedComponent);
 
 	// Update the list
 	OnUpdate();
 }
 
 void THISCLASS::OnListItemSelected(wxListEvent& event) {
-	Component *sel=(Component*)(event.GetData());
+	mSelectedComponent=(Component*)(event.GetData());
+
 	// TODO: show configuration panel of this component
 }

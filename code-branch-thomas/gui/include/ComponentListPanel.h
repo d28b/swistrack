@@ -22,6 +22,8 @@ public:
 
 	//! The associated SwisTrackCore object.
 	SwisTrackCore *mSwisTrackCore;
+	//! The selected component.
+	Component *mSelectedComponent;
 
 	//! Constructor.
 	ComponentListPanel(wxWindow *parent, SwisTrackCore *stc);
