@@ -2,6 +2,7 @@
 #define THISCLASS ComponentListPanel
 
 #include <wx/sizer.h>
+#include <algorithm>
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
   EVT_BUTTON (eID_ButtonAdd, THISCLASS::OnButtonAdd)
@@ -78,12 +79,12 @@ void THISCLASS::OnUpdate() {
 		li.SetColumn(col++);
 		if ((*it)->mStatusHasError) {
 			li.SetText("E");
-			li.SetTextColour(*wxRED);
-			mList->InsertItem(li);
+			li.SetBackgroundColour(wxColour(255, 225, 225));
+			mList->SetItem(li);
 		} else if ((*it)->mStatusHasWarning) {
 			li.SetText("W");
-			li.SetTextColour(*wxBLUE);
-			mList->InsertItem(li);
+			li.SetBackgroundColour(wxColour(225, 225, 225));
+			mList->SetItem(li);
 		}
 
 		// Data structures
@@ -95,16 +96,13 @@ void THISCLASS::OnUpdate() {
 			bool write=(*it)->HasDataStructureWrite(*itds);
 			if (read && write) {
 				li.SetText("E");
-				li.SetTextColour(*wxBLUE);
-				mList->InsertItem(li);
+				mList->SetItem(li);
 			} else if (read) {
 				li.SetText("R");
-				li.SetTextColour(*wxBLUE);
-				mList->InsertItem(li);
+				mList->SetItem(li);
 			} else if (write) {
 				li.SetText("W");
-				li.SetTextColour(*wxBLUE);
-				mList->InsertItem(li);
+				mList->SetItem(li);
 			}
 
 			itds++;
@@ -112,11 +110,6 @@ void THISCLASS::OnUpdate() {
 
 		// Status messages
 		li.SetColumn(col++);
-		if ((*it)->mStatusHasError) {
-			li.SetTextColour(*wxRED);
-		} else if ((*it)->mStatusHasWarning) {
-			li.SetTextColour(*wxBLUE);
-		}
 		if (((*it)->mStatusHasError) || ((*it)->mStatusHasWarning)) {
 			wxString str;
 			Component::tStatusItemList::iterator itsl=(*it)->mStatus.begin();
@@ -130,12 +123,12 @@ void THISCLASS::OnUpdate() {
 				}
 			}
 			li.SetText(str);
-			mList->InsertItem(li);
+			mList->SetItem(li);
 		}
 
 		// Next item
 		it++;
-		row++,
+		row++;
 	}
 }
 
@@ -160,18 +153,15 @@ void THISCLASS::OnButtonAdd(wxCommandEvent& event) {
 
 void THISCLASS::OnButtonRemove(wxCommandEvent& event) {
 	// Find out which item is selected
-	long selitem = listctrl->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+	long selitem = mList->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 	if (selitem<0) {return;}
 
 	// Get the corresponding component
-	wxListItem li;
-	li.SetId(selitem);
-	mList->GetItem(li);
-	Component *sel=(Component*)(li.GetData());
+	Component *sel=(Component*)(mList->GetItemData(selitem));
 	if (! sel) {return;}
 
 	// Find the corresponding component in the list and delete it
-	mSwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mComponentList.begin(), mSwisTrackCore->mComponentList.end(), sel);
+	SwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mComponentList.begin(), mSwisTrackCore->mComponentList.end(), sel);
 	if (it==mSwisTrackCore->mComponentList.end()) {return;}
 	mSwisTrackCore->mComponentList.erase(it);
 	delete sel;

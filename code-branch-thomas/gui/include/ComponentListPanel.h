@@ -17,6 +17,7 @@ public:
 		eID_ButtonRemove,
 		eID_ButtonUp,
 		eID_ButtonDown,
+		eID_List,
 	};
 
 	//! The associated SwisTrackCore object.
