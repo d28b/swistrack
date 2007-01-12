@@ -1150,33 +1150,6 @@ void SwisTrack::StartTracker()
 	double alpha=0;
 
 	try {
-
-		if(trackingpanel) trackingpanel->Destroy(); // delete old copy that might exist from a previous run
-		trackingpanel = new SwisTrackPanel(this,"Tracking panel","/CFG/TRACKER","/CFG/COMPONENTS/TRACKER",0); // ...and load new trackingpanel
-	
-		if(particlefilterpanel) particlefilterpanel->Destroy();
-		particlefilterpanel = new SwisTrackPanel(this,"Particle Filter panel","/CFG/PARTICLEFILTER","/CFG/COMPONENTS/PARTICLEFILTER",0);
-
-		if(segmenterpppanel) segmenterpppanel->Destroy();
-		segmenterpppanel = new SwisTrackPanel(this,"Segmenter Post-Processing panel","/CFG/SEGMENTERPP","/CFG/COMPONENTS/SEGMENTERPP",0);
-
-		if(segmenterpanel) segmenterpanel->Destroy();
-		segmenterpanel = new SwisTrackPanel(this,"Segmenter panel","/CFG/SEGMENTER","/CFG/COMPONENTS/SEGMENTER",1);
-
-		if(inputpanel) inputpanel->Destroy();
-		inputpanel = new SwisTrackPanel(this,"Input panel","/CFG/INPUT","/CFG/COMPONENTS/INPUT",1);
-
-		if(interceptionpanel) interceptionpanel->Destroy();
-		interceptionpanel = new InterceptionPanel(this);
-
-		trackingpanel->Show(FALSE);
-		particlefilterpanel->Show(FALSE);
-		segmenterpppanel->Show(FALSE);
-		segmenterpanel->Show(FALSE);
-		inputpanel->Show(FALSE);
-
-		interceptionpanel->Show(FALSE);
-
 		wxToolBarBase *tb = GetToolBar();
 
 		ot=new ObjectTracker(cfgRoot);
@@ -1192,7 +1165,7 @@ void SwisTrack::StartTracker()
 		menuBar->EnableTop(2,TRUE);
 
 		SetStatusText(_T("Searching for objects in the first 30 frames"),0);
-		status=ot->Start();                    
+		status=ot->Start();
 		SetStatusText(_T(""),0);
 		status=ot->Step();
 

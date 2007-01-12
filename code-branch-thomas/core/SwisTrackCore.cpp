@@ -46,6 +46,7 @@ THISCLASS::SwisTrackCore(xmlpp::Element* cfgroot):
 	mDataStructures.push_back(&mDataStructureInput);
 	mDataStructures.push_back(&mDataStructureImageBGR);
 	mDataStructures.push_back(&mDataStructureBackgroundBGR);
+	mDataStructures.push_back(&mDataStructureImageGray);
 	mDataStructures.push_back(&mDataStructureBackgroundGray);
 	mDataStructures.push_back(&mDataStructureImageBinary);
 	mDataStructures.push_back(&mDataStructureMaskBinary);

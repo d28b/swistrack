@@ -171,11 +171,43 @@ void THISCLASS::OnButtonRemove(wxCommandEvent& event) {
 }
 
 void THISCLASS::OnButtonUp(wxCommandEvent& event) {
-	
+	// Find out which item is selected
+	long selitem = mList->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+	if (selitem<0) {return;}
+
+	// Get the corresponding component
+	Component *sel=(Component*)(mList->GetItemData(selitem));
+	if (! sel) {return;}
+
+	// Find the corresponding component in the list and move it up
+	SwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mComponentList.begin(), mSwisTrackCore->mComponentList.end(), sel);
+	if (it==mSwisTrackCore->mComponentList.end()) {return;}
+	SwisTrackCore::tComponentList::iterator it2=it-1;
+	if (it2==mSwisTrackCore->mComponentList.end()) {return;}
+	reverse(it2, it);
+
+	// Update the list
+	OnUpdate();
 }
 
 void THISCLASS::OnButtonDown(wxCommandEvent& event) {
-	
+	// Find out which item is selected
+	long selitem = mList->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+	if (selitem<0) {return;}
+
+	// Get the corresponding component
+	Component *sel=(Component*)(mList->GetItemData(selitem));
+	if (! sel) {return;}
+
+	// Find the corresponding component in the list and move it up
+	SwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mComponentList.begin(), mSwisTrackCore->mComponentList.end(), sel);
+	if (it==mSwisTrackCore->mComponentList.end()) {return;}
+	SwisTrackCore::tComponentList::iterator it2=it+1;
+	if (it2==mSwisTrackCore->mComponentList.end()) {return;}
+	reverse(it2, it);
+
+	// Update the list
+	OnUpdate();
 }
 
 void THISCLASS::OnListItemSelected(wxListEvent& event) {
