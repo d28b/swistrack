@@ -33,6 +33,13 @@ public:
 	//! The default view.
 	std::string mDefaultView;
 
+	//! Data structure list type.
+	typedef std::list<DataStructure*> tDataStructureList;
+	//! The data structures that are read by this component.
+	tDataStructureList mDataStructureRead;
+	//! The data structures that are written by this component.
+	tDataStructureList mDataStructureWrite;
+
 	//! Constructor.
 	Component(SwisTrackCore *stc, const std::string &name);
 	//! Destructor.

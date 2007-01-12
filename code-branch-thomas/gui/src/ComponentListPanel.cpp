@@ -4,18 +4,19 @@
 #include <wx/sizer.h>
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
-  EVT_BUTTON  (eID_ButtonAdd, THISCLASS::OnButtonAdd)
-  EVT_BUTTON  (eID_ButtonRemove, THISCLASS::OnButtonRemove)
-  EVT_BUTTON  (eID_ButtonUp, THISCLASS::OnButtonUp)
-  EVT_BUTTON  (eID_ButtonDown, THISCLASS::OnButtonDown)
+  EVT_BUTTON (eID_ButtonAdd, THISCLASS::OnButtonAdd)
+  EVT_BUTTON (eID_ButtonRemove, THISCLASS::OnButtonRemove)
+  EVT_BUTTON (eID_ButtonUp, THISCLASS::OnButtonUp)
+  EVT_BUTTON (eID_ButtonDown, THISCLASS::OnButtonDown)
+  EVT_LIST_ITEM_SELECTED (eID_List, THISCLASS::OnListItemSelected)
 END_EVENT_TABLE()
 
 THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrackCore *stc):
 		wxPanel(parent, -1), mSwisTrackCore(stc), mComponentsDialog(0) {
 
 	// Create List
-	mList=new wxListCtrl(this, -1);
-	mList->SetWindowStyle(wxLC_REPORT|wxLC_HRULES);
+	mList=new wxListCtrl(this, eID_List);
+	mList->SetWindowStyle(wxLC_REPORT|wxLC_HRULES|wxLC_SINGLE_SEL);
 
 	// Add column for component name
 	int col=0;
@@ -59,15 +60,18 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrackCore *stc):
 void THISCLASS::OnUpdate() {
 	mList->DeleteAllItems();
 
+	int row=0;
 	SwisTrackCore::tComponentList::iterator it=mSwisTrackCore->mComponentList.begin();
 	while (it!=mSwisTrackCore->mComponentList.end()) {
 		int col=0;
 		wxListItem li;
 
 		// Name
+		li.SetId(row);
 		li.SetColumn(col++);
 		li.SetText((*it)->mDisplayName.c_str());
 		li.SetTextColour(*wxBLACK);
+		li.SetData((void*)(*it));
 		mList->InsertItem(li);
 
 		// Status
@@ -129,26 +133,51 @@ void THISCLASS::OnUpdate() {
 			mList->InsertItem(li);
 		}
 
-		// Get next item
+		// Next item
 		it++;
+		row++,
 	}
 }
 
 void THISCLASS::OnButtonAdd(wxCommandEvent& event) {
+	// Create the dialog if necessary
 	if (mComponentsDialog==0) {
 		mComponentsDialog=new ComponentsDialog(this->GetParent(), mSwisTrackCore);
 	}
 
+	// Show dialog, returning if the user selected "Cancel"
 	mComponentsDialog->mSelectedComponent=0;
 	mComponentsDialog->ShowModal();
-	if (mComponentsDialog->mSelectedComponent) {
-		mSwisTrackCore->mComponentList.push_back(mComponentsDialog->mSelectedComponent->Create());
-		OnUpdate();
-	}
+	if (! mComponentsDialog->mSelectedComponent) {return;}
+
+	// Add the new component to the list
+	// TODO: use the group information to add the component in the right place
+	mSwisTrackCore->mComponentList.push_back(mComponentsDialog->mSelectedComponent->Create());
+
+	// Update the list
+	OnUpdate();
 }
 
 void THISCLASS::OnButtonRemove(wxCommandEvent& event) {
-	//mSwisTrackCore->mComponentList.erase();
+	// Find out which item is selected
+	long selitem = listctrl->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+	if (selitem<0) {return;}
+
+	// Get the corresponding component
+	wxListItem li;
+	li.SetId(selitem);
+	mList->GetItem(li);
+	Component *sel=(Component*)(li.GetData());
+	if (! sel) {return;}
+
+	// Find the corresponding component in the list and delete it
+	mSwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mComponentList.begin(), mSwisTrackCore->mComponentList.end(), sel);
+	if (it==mSwisTrackCore->mComponentList.end()) {return;}
+	mSwisTrackCore->mComponentList.erase(it);
+	delete sel;
+
+	// Update the list
+	OnUpdate();
 }
 
 void THISCLASS::OnButtonUp(wxCommandEvent& event) {
@@ -157,4 +186,9 @@ void THISCLASS::OnButtonUp(wxCommandEvent& event) {
 
 void THISCLASS::OnButtonDown(wxCommandEvent& event) {
 	
+}
+
+void THISCLASS::OnListItemSelected(wxListEvent& event) {
+	Component *sel=(Component*)(event.GetData());
+	// TODO: show configuration panel of this component
 }

@@ -1,9 +1,10 @@
 #include "Component.h"
 #include <sstream>
+#include <algorithm>
 #define THISCLASS Component
 
 THISCLASS::Component(SwisTrackCore *stc, const std::string &name):
-		mCore(stc), mName(name), mDisplayName(name), mCategory(0), mStatus(), mStatusHasError(false), mStatusHasWarning(false), mStarted(false) {
+		mCore(stc), mName(name), mDisplayName(name), mCategory(0), mStatus(), mStatusHasError(false), mStatusHasWarning(false), mStarted(false), mDataStructureRead(), mDataStructureWrite() {
 
 	//mConfigurationRoot=dynamic_cast<const xmlpp::Element*>(mCore->mConfigurationRoot->find(mName)).begin());
 }
@@ -29,17 +30,21 @@ void THISCLASS::AddInfo(const std::string &msg) {
 }
 
 void THISCLASS::AddDataStructureRead(DataStructure *ds) {
+	mDataStructureRead.push_back(ds);
 }
 
 void THISCLASS::AddDataStructureWrite(DataStructure *ds) {
+	mDataStructureWrite.push_back(ds);
 }
 
 bool THISCLASS::HasDataStructureRead(DataStructure *ds) {
-	return false;
+	tDataStructureList::iterator it=find(mDataStructureRead.begin(), mDataStructureRead.end(), ds);
+	return (it != mDataStructureRead.end());
 }
 
 bool THISCLASS::HasDataStructureWrite(DataStructure *ds) {
-	return false;
+	tDataStructureList::iterator it=find(mDataStructureWrite.begin(), mDataStructureWrite.end(), ds);
+	return (it != mDataStructureWrite.end());
 }
 
 bool THISCLASS::GetConfigurationBool(const std::string &path, bool defvalue) {

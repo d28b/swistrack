@@ -33,6 +33,7 @@ public:
 	void OnButtonRemove(wxCommandEvent& event);
 	void OnButtonUp(wxCommandEvent& event);
 	void OnButtonDown(wxCommandEvent& event);
+	void OnListItemSelected(wxListEvent& event);
 
 private:
 	wxListCtrl *mList;
