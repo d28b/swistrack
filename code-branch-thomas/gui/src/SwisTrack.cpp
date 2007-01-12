@@ -162,7 +162,7 @@ void SwisTrack::RecreateToolbar()
 * \param style	  : Style (Icon, Always on top, etc.)
 */
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
-		wxFrame(NULL, -1, title, pos, size, style), mSwisTrackCore(0), mSocketServer(0) {
+		wxFrame(NULL, -1, title, pos, size, style), CommunicationCommandHandler(), mSwisTrackCore(0), mSocketServer(0) {
 
 	show_coverage=0; // don't show coverage image
 	display_speed=5; //initial display speed 5Hz
@@ -283,6 +283,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	mSocketServer = new SocketServer(this);
 	mSwisTrackCore=new SwisTrackCore();
 	mSwisTrackCore->mCommunicationInterface=mSocketServer;	
+	mSocketServer->SetPort(3000);
 
 	// List
 	mComponentListPanel=new ComponentListPanel(this, mSwisTrackCore);
@@ -405,6 +406,19 @@ SwisTrack::~SwisTrack(){
 	Close(TRUE);
 }
 
+bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
+	if (m->mCommand=="START") {
+		return true;
+	} else if (m->mCommand=="STOP") {
+		return true;
+	} else if (m->mCommand=="PAUSE") {
+		return true;
+	} else if (m->mCommand=="RESUME") {
+		return true;
+	}
+
+	return false;
+}
 
 /** \brief Event handler for the 'File->New' command
 *
@@ -1105,17 +1119,21 @@ void THISCLASS::OnTest(wxCommandEvent& WXUNUSED(event)) {
 	}
 
 	for (int r=0; r<100; r++) {
+		CommunicationMessage mbegin("BEGINFRAME");
+		mbegin.AddInt(r);
+		mSocketServer->SendMessage(&mbegin);
+
 		for (int i=0; i<10; i++) {
 			CommunicationMessage m("PARTICLE");
-			m.AddInt(r);
 			m.AddInt(i);
 			m.AddDouble(px[i]);
 			m.AddDouble(py[i]);
 			m.AddDouble(po[i]);
 			mSocketServer->SendMessage(&m);
 		}
-		CommunicationMessage m("ENDFRAME");
-		mSocketServer->SendMessage(&m);
+
+		CommunicationMessage mend("ENDFRAME");
+		mSocketServer->SendMessage(&mend);
 
 		for (int i=0; i<10; i++) {
 			px[i]+=sin(po[i])*0.02;

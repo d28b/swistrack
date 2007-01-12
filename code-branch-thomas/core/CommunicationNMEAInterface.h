@@ -23,7 +23,7 @@ public:
 	CommunicationNMEAInterface(): mState(0), mBufferPos(0), mChecksum(0), mMessage(0) {}
 
 	//! Processes incoming data. This method should be called each time a piece of data is received. The data doesn't need to contain a complete NMEA record.
-	void NMEAProcessData(const unsigned char *data, int len);
+	void NMEAProcessData(const char *data, int len);
 	//! This method can be called to send an NMEA message.
 	void NMEASendMessage(CommunicationMessage *m);
 

@@ -11,12 +11,12 @@ void THISCLASS::RemoveCommandHandler(CommunicationCommandHandler *ch) {
 	if (it != mCommandHandlerList.end()) {mCommandHandlerList.erase(it);}
 }
 
-bool THISCLASS::OnCommand(CommunicationMessage *m) {
+bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 	bool ok=false;
 
 	tCommandHandlerList::iterator it=mCommandHandlerList.begin();
 	while (it!=mCommandHandlerList.end()) {
-		bool res=(*it)->OnCommand(m);
+		bool res=(*it)->OnCommunicationCommand(m);
 		if (res) {ok=true;}
 		it++;
 	}

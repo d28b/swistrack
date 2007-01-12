@@ -30,7 +30,7 @@ public:
 	void RemoveCommandHandler(CommunicationCommandHandler *ch);
 
 	//! Relays a message to all command handlers.
-	bool OnCommand(CommunicationMessage *m);
+	bool OnCommunicationCommand(CommunicationMessage *m);
 };
 
 #endif

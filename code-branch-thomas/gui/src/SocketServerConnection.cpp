@@ -15,10 +15,13 @@ THISCLASS::SocketServerConnection(SocketServer* ss, wxSocketBase *sb): mSocketSe
 	mSocket->SetEventHandler(*this, SOCKET_ID);
 	mSocket->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
 	mSocket->Notify(true);
+
+	// TODO remove this
+	mSubscriptions.push_back("*");
 }
 
 THISCLASS::~SocketServerConnection() {
-	mSocket->Destroy();
+	if (mSocket) {mSocket->Destroy();}
 }
 
 void THISCLASS::OnSocketEvent(wxSocketEvent& event) {
@@ -26,7 +29,7 @@ void THISCLASS::OnSocketEvent(wxSocketEvent& event) {
 
 	// We've received something
 	case wxSOCKET_INPUT:
-		unsigned char buffer[128];
+		char buffer[128];
 		while (1) {
 			mSocket->Read(buffer, 128);
 			int read=mSocket->LastCount();
@@ -62,7 +65,7 @@ void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum)
 	
 	// Otherwise, give the message to the SocketServer for further processing
 	mCurrentRequest=m;
-	mSocketServer->OnCommand(m);
+	mSocketServer->OnCommunicationCommand(m);
 	mCurrentRequest=0;
 }
 

@@ -182,7 +182,8 @@ void THISCLASS::OnButtonUp(wxCommandEvent& event) {
 	// Find the corresponding component in the list and move it up
 	SwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mComponentList.begin(), mSwisTrackCore->mComponentList.end(), sel);
 	if (it==mSwisTrackCore->mComponentList.end()) {return;}
-	SwisTrackCore::tComponentList::iterator it2=it-1;
+	SwisTrackCore::tComponentList::iterator it2=it;
+	it2--;
 	if (it2==mSwisTrackCore->mComponentList.end()) {return;}
 	reverse(it2, it);
 
@@ -202,9 +203,10 @@ void THISCLASS::OnButtonDown(wxCommandEvent& event) {
 	// Find the corresponding component in the list and move it up
 	SwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mComponentList.begin(), mSwisTrackCore->mComponentList.end(), sel);
 	if (it==mSwisTrackCore->mComponentList.end()) {return;}
-	SwisTrackCore::tComponentList::iterator it2=it+1;
+	SwisTrackCore::tComponentList::iterator it2=it;
+	it2++;
 	if (it2==mSwisTrackCore->mComponentList.end()) {return;}
-	reverse(it2, it);
+	reverse(it, it2);
 
 	// Update the list
 	OnUpdate();
