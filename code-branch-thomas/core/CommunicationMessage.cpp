@@ -71,8 +71,11 @@ bool THISCLASS::AddString(const std::string &value) {
 	return true;
 }
 
-/*bool THISCLASS::AddString(const char *value) {
-	std::string str(value);
-	mParameters.push_back(str);
+bool THISCLASS::AddParsedArgument(const std::string &value) {
+	if (mCommand=="") {
+		mCommand=value;
+	} else {
+		mParameters.push_back(value);
+	}
 	return true;
-}*/
+}

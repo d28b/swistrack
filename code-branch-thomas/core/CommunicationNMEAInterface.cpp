@@ -18,16 +18,16 @@ void THISCLASS::NMEAProcessData(const char *data, int len) {
 		} else if (mState==1) {
 			if (inchar==',') {
 				mBuffer[mBufferPos]=0;
-				mMessage->AddString(mBuffer);
+				mMessage->AddParsedArgument(mBuffer);
 				mChecksum=mChecksum ^ inchar;
 				mBufferPos=0;
 			} else if (inchar=='*') {
 				mBuffer[mBufferPos]=0;
-				mMessage->AddString(mBuffer);
+				mMessage->AddParsedArgument(mBuffer);
 				mState=2;
 			} else if (inchar=='\n') {
 				mBuffer[mBufferPos]=0;
-				mMessage->AddString(mBuffer);
+				mMessage->AddParsedArgument(mBuffer);
 				OnNMEAProcessMessage(mMessage, false);
 				delete mMessage;
 				mMessage=0;

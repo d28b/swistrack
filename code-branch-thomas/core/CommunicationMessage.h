@@ -40,8 +40,8 @@ public:
 	bool AddDouble(double value);
 	//! Adds a string to the parameter list.
 	bool AddString(const std::string &value);
-	//! Adds a string to the parameter list.
-	//bool AddString(const char *value);
+	//! Sets the command or adds a string to the parameter list.
+	bool AddParsedArgument(const std::string &value);
 };
 
 #endif
