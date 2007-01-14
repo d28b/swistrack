@@ -47,7 +47,10 @@ driver.
 #include "GUIApp.h"
 #include <string.h>
 
-#include "wx/toolbar.h"
+#include <wx/toolbar.h>
+#include <wx/filename.h>
+#include <wx/msgdlg.h>
+
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "bitmaps/gui.xpm"
 #include "bitmaps/new.xpm"
@@ -162,7 +165,7 @@ void SwisTrack::RecreateToolbar()
 * \param style	  : Style (Icon, Always on top, etc.)
 */
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
-		wxFrame(NULL, -1, title, pos, size, style), CommunicationCommandHandler(), mSwisTrackCore(0), mSocketServer(0) {
+		wxFrame(NULL, -1, title, pos, size, style), CommunicationCommandHandler(), mSwisTrackCore(0), mSocketServer(0), mDocument(0) {
 
 	show_coverage=0; // don't show coverage image
 	display_speed=5; //initial display speed 5Hz
@@ -425,50 +428,82 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 Opens the SettingsDialog, which allows specifying parameters as defined in the
 file swistrack.exp.
 */ 
-void SwisTrack::OnMenuFileNew(wxCommandEvent& WXUNUSED(event))
-{
-	SettingsDialog* cfgpan = new SettingsDialog(this);
-	cfgpan->ShowModal();
+void SwisTrack::OnMenuFileNew(wxCommandEvent& WXUNUSED(event)) {
+	SetDocument(new xmlpp::Document());
 }
 
-/** \brief Event handler for the 'File->Open' command
-*
-Opens an open file dialog where the user can choose a configuration and
-parses the file using xmlpp::DomParser().
+void THISCLASS::OnMenuFileOpen(wxCommandEvent& WXUNUSED(event)) {
+	wxFileDialog dlg(this, "Open Configuration", "", "", "SwisTrack Configurations (*.swistrack)|*.swistrack", wxOPEN, wxDefaultPosition);
+	if (dlg->ShowModal() != wxID_OK) {return;}
 
-\see xmlpp
-*/
-void SwisTrack::OnMenuFileOpen(wxCommandEvent& WXUNUSED(event))
-{
-	wxFileDialog *dlg = new wxFileDialog(this,"Open a configuration",
-		"","","Configurations (*.cfg)|*.cfg",
-		wxOPEN,wxDefaultPosition);
-	if(dlg->ShowModal() == wxID_OK)
-	{
-		SetStatusText("Open " + dlg->GetPath(),1);
-		FILE* f;
-		f=fopen((char*) dlg->GetPath().GetData(),"r");
-		if(f){
-			fclose(f);
+	OpenFile(dlg->GetPath());
+}
 
-			try{
-				if(parser) delete parser;
-				parser = new xmlpp::DomParser();
-				parser->parse_file((char*) dlg->GetPath().GetData());
-				document = parser->get_document();
-				cfgRoot = parser->get_document()->get_root_node();
-			}
-			catch (...){
-				throw "Problems encountered when loading configuration. Invalid syntax?";
-			}
-
-			SettingsDialog* cfgpan = new SettingsDialog(this);
-			dlg->Destroy();
-			cfgpan->ShowModal();
-			return;
-		}
+void THISCLASS::OpenFile(const wxString &filename) {
+	// Check if file is readable
+	wxFileName fn(filename);
+	if (! fn.IsFileReadable()) {
+		wxMessageDialog dlg(this, "Unable to read \n\n"+filename, "Open Configuration", wxOK).ShowModal();
+		return;
 	}
-	dlg->Destroy();
+
+	// Read the new file
+	xmlpp::Document *newdocument=0;
+	try {
+		xmlpp::DomParser parser;
+		parser->parse_file(filename.c_str());
+		if (parser==true) {
+			newdocument=parser->get_document();
+		}
+	} catch (...){
+		newdocument=0;
+	}
+
+	if (newdocument==0) {
+		wxMessageDialog dlg(this, "The file \n\n"+filename+" \n\ncould not be loaded. Syntax error?", "Open Configuration", wxOK).ShowModal();
+		return;
+	}
+
+	SetDocument(newdocument);
+}
+
+void THISCLASS::SetDocument(xmlpp::Document *newdocument) {
+	// Close an already open document
+	if (mDocument) {
+		// TODO if necessary, ask the user whether he'd like to save the changes
+		delete mDocument;
+	}
+
+	// Set the new document
+	mDocument=newdocument;
+
+	// Prepare the root node
+	xmlpp::Element *rootnode=mDocument->get_root_node();
+	if (! rootnode) {
+		rootnode=mDocument->create_root_node();
+	}
+
+	Configuration *windowconfig=mConfiguration->GetNode("Window");
+	SetPosition(wxPoint(windowconfig->GetInteger("Left"), windowconfig->GetInteger("Top")));
+	SetSize();
+
+	// The GUI configuration
+	NodeList nodes_gui=rootnode->get_children("GUI");
+	if (nodes_gui.count()==0) {
+		mConfiguration=rootnode->add_child("GUI");
+	} else {
+		mConfiguration=nodes_gui.front();
+	}
+
+	// Read the components
+	NodeList nodes_components=rootnode->get_children("Components");
+	if (nodes_gui.count()==0) {
+		xmlpp::Node *components=mConfiguration=rootnode->add_child("Components");
+		mSwisTrackCore->ReadComponents(components);
+	} else {
+		xmlpp::Node *components=nodes_components.front();
+		mSwisTrackCore->ReadComponents(components);
+	}
 }
 
 /** \brief Event handler for the 'File->Save' command
@@ -480,8 +515,7 @@ and stores the configuration as formatted XML.
 for modes that are not used. There should be a second function that instead
 saves all modes into the default.cfg (Save as default).
 */
-void SwisTrack::OnMenuFileSave(wxCommandEvent& WXUNUSED(event))
-{
+void SwisTrack::OnMenuFileSave(wxCommandEvent& WXUNUSED(event)) {
 	wxFileDialog *dlg = new wxFileDialog(this,"Save a configuration",
 		"","","Configurations (*.cfg)|*.cfg",
 		wxSAVE,wxDefaultPosition);
@@ -498,8 +532,7 @@ void SwisTrack::OnMenuFileSave(wxCommandEvent& WXUNUSED(event))
 Closes the application
 \see ~Swistrack
 */
-void SwisTrack::OnMenuFileQuit(wxCommandEvent& WXUNUSED(event))
-{
+void SwisTrack::OnMenuFileQuit(wxCommandEvent& WXUNUSED(event)) {
 	Close(TRUE);
 }
 

@@ -158,9 +158,8 @@ public:
 
 	 void OnIdle(wxIdleEvent& event);
 
-	 xmlpp::DomParser* parser;
-     xmlpp::Document* document;
-     xmlpp::Element* cfgRoot;
+	 //! The current configuration file.
+	 xmlpp::DomParser* mConfigurationFile;
     
 	 xmlpp::DomParser* expparser;
      xmlpp::Document* expdocument;
