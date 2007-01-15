@@ -7,6 +7,7 @@ class ErrorListDialog;
 #include <wx/dialog.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
+#include <wx/stattext.h>
 
 class ErrorListDialog: public wxDialog {
 
@@ -15,7 +16,7 @@ public:
 	ErrorList *mErrorList;
 
 	//! Constructor.
-	ErrorListDialog(wxWindow *parent, ErrorList *el);
+	ErrorListDialog(wxWindow *parent, ErrorList *el, const wxString &title, const wxString &text);
 	//! Destructor.
 	~ErrorListDialog() {}
 
@@ -30,7 +31,8 @@ protected:
 	};
 
 private:
-	wxListCtrl *mTree;
+	wxListCtrl *mList;
+	wxStaticText *mLabel;
 	wxButton *mButtonOK;
 
 	DECLARE_EVENT_TABLE()

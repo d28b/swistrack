@@ -5,14 +5,15 @@ class ErrorList;
 
 #include <string>
 #include <list>
+#include "ErrorListItem.h"
 
 class ErrorList {
 
 public:
 	//! Parameter list type.
-	typedef std::list<std::string> tList;
+	typedef std::list<ErrorListItem> tList;
 	//! The list of errors.
-	tParameters mList;
+	tList mList;
 
 	//! Constructor.
 	ErrorList(): mList() {}
@@ -21,9 +22,6 @@ public:
 
 	//! Adds an error message.
 	void Add(const std::string &msg, int linenumber=0);
-
-	//! Returns whether the list is empty.
-	bool IsEmpty() {return (mList.count()==0);}
 };
 
 #endif

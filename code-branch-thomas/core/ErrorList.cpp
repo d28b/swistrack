@@ -2,7 +2,7 @@
 #define THISCLASS ErrorList
 
 void THISCLASS::Add(const std::string &msg, int linenumber) {
-	ErrorMessage e;
+	ErrorListItem e;
 	e.mMessage=msg;
 	e.mLineNumber=linenumber;
 	mList.push_back(e);

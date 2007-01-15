@@ -266,6 +266,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ErrorList.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ErrorListItem.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\input.cpp"
 				>
 			</File>
@@ -511,6 +519,14 @@
 			</File>
 			<File
 				RelativePath="..\DataStructureParticles.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ErrorList.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ErrorListItem.h"
 				>
 			</File>
 			<File

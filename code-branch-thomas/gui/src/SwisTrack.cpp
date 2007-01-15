@@ -45,6 +45,7 @@ driver.
 #include "SwisTrackPanel.h"
 #include "InterceptionPanel.h"
 #include "GUIApp.h"
+#include "ErrorListDialog.h"
 
 #include <math.h>
 
@@ -80,6 +81,7 @@ BEGIN_EVENT_TABLE(SwisTrack, wxFrame)
 EVT_MENU(Gui_New, SwisTrack::OnMenuFileNew)
 EVT_MENU(Gui_Open, SwisTrack::OnMenuFileOpen)
 EVT_MENU(Gui_Save, SwisTrack::OnMenuFileSave)
+EVT_MENU(Gui_SaveAs, SwisTrack::OnMenuFileSaveAs)
 EVT_MENU(Gui_Quit,  SwisTrack::OnMenuFileQuit)
 EVT_MENU(Gui_About, SwisTrack::OnMenuHelpAbout)
 EVT_MENU(Gui_Ctrl_Start, SwisTrack::OnMenuControlStart)
@@ -130,9 +132,10 @@ void SwisTrack::RecreateToolbar()
 	//toolBarBitmaps[6] = wxBITMAP(rewind);
 	//toolBarBitmaps[7] = wxBITMAP(singlestepback);
 	toolBarBitmaps[8] = wxBITMAP(singlestep);
-	toolBar->AddTool(Gui_New, _T("Config"), toolBarBitmaps[0], _T("Edit configuration"), wxITEM_CHECK);
-	toolBar->AddTool(Gui_Open, _T("Open"), toolBarBitmaps[1], _T("Open configuration"), wxITEM_CHECK);
-	toolBar->AddTool(Gui_Save, _T("Save"), toolBarBitmaps[2], _T("Save configuration"), wxITEM_CHECK);
+	toolBar->AddTool(Gui_New, _T("New"), toolBarBitmaps[0], _T("New"), wxITEM_CHECK);
+	toolBar->AddTool(Gui_Open, _T("Open"), toolBarBitmaps[1], _T("Open"), wxITEM_CHECK);
+	toolBar->AddTool(Gui_Save, _T("Save"), toolBarBitmaps[2], _T("Save"), wxITEM_CHECK);
+	toolBar->AddTool(Gui_SaveAs, _T("Save"), toolBarBitmaps[2], _T("Save as ..."), wxITEM_CHECK);
 	toolBar->AddSeparator();
 	//toolBar->AddTool(Gui_Ctrl_Rewind, _T("Rewind"), toolBarBitmaps[6], _T("Rewind"), wxITEM_CHECK);    	
 	//toolBar->AddTool(Gui_Ctrl_Singlestepback, _T("Back"), toolBarBitmaps[7], _T("One step back"));    
@@ -166,7 +169,7 @@ void SwisTrack::RecreateToolbar()
 * \param style	  : Style (Icon, Always on top, etc.)
 */
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
-		wxFrame(NULL, -1, title, pos, size, style), CommunicationCommandHandler(), mSwisTrackCore(0), mSocketServer(0), mDocument(0) {
+		wxFrame(NULL, -1, title, pos, size, style), CommunicationCommandHandler(), mSwisTrackCore(0), mSocketServer(0), mFileName("") {
 
 	show_coverage=0; // don't show coverage image
 	display_speed=5; //initial display speed 5Hz
@@ -181,7 +184,6 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	interceptionpanel = NULL;
 	
 	aviwriter = NULL;
-	parser = NULL;
 	ot = NULL;
 
 #ifdef MULTITHREAD
@@ -201,9 +203,10 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	menuTools   = new wxMenu;
 	menuComponents = new wxMenu;
 
-	menuFile->Append(Gui_New, _T("&Config\tCtrl-C"), _T("Edits profile"));
-	menuFile->Append(Gui_Open, _T("&Open\tCtrl-O"), _T("Opens a tracking profile"));
-	menuFile->Append(Gui_Save, _T("&Save\tCtrl-S"), _T("Saves the current tracking profile"));
+	menuFile->Append(Gui_New, _T("&New\tCtrl-C"), _T("Creates a new file"));
+	menuFile->Append(Gui_Open, _T("&Open\tCtrl-O"), _T("Opens a file"));
+	menuFile->Append(Gui_Save, _T("&Save\tCtrl-S"), _T("Saves the current file"));
+	menuFile->Append(Gui_SaveAs, _T("&Save as ..."), _T("Saves the file with another name"));
 	menuFile->AppendSeparator();
 	menuFile->Append(Gui_Quit, _T("E&xit\tAlt-F4"), _T("Quit this program"));
 	menuFile->Enable(Gui_Save,FALSE);
@@ -326,19 +329,12 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 		DisplayModal("File swistrack.exp could not be found. Quitting.","Error");
 		Close(TRUE);
 	}
+
 	if(!wxFile::Exists("default.cfg")){
 		DisplayModal("File default.cfg could not be found. Quitting.","Error");
 		Close(TRUE);
 	}
-	try{
-		parser = new xmlpp::DomParser();
-		parser->parse_file("default.cfg");
-		document = parser->get_document();
-		cfgRoot = parser->get_document()->get_root_node();
-	}
-	catch (...){
-		throw "Problems encountered when opening default.cfg. Invalid syntax?";
-	}
+
 	try{
 		expparser = new xmlpp::DomParser();
 		expparser->parse_file("swistrack.exp");
@@ -397,7 +393,6 @@ SwisTrack::~SwisTrack(){
 	if (ot) delete ot;
 	if (canvas) delete canvas;
 	if (colorbmp) delete colorbmp;
-	if (parser) delete parser;
 	if (expparser) delete expparser;
 
 	if (mPanelInformation) delete mPanelInformation;
@@ -430,35 +425,37 @@ void SwisTrack::OnMenuFileNew(wxCommandEvent& WXUNUSED(event)) {
 
 void THISCLASS::OnMenuFileOpen(wxCommandEvent& WXUNUSED(event)) {
 	wxFileDialog dlg(this, "Open Configuration", "", "", "SwisTrack Configurations (*.swistrack)|*.swistrack", wxOPEN, wxDefaultPosition);
-	if (dlg->ShowModal() != wxID_OK) {return;}
+	if (dlg.ShowModal() != wxID_OK) {return;}
 
-	OpenFile(dlg->GetPath(), true, false);
+	OpenFile(dlg.GetPath(), true, false);
 }
 
 void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astemplate) {
 	// Check if file is readable
 	if (breakonerror) {
-		wxFileName fn(filename);
-		if (! fn.IsFileReadable()) {
-			wxMessageDialog dlg(this, "Unable to read \n\n"+filename, "Open Configuration", wxOK).ShowModal();
-			return;
-		}
+		//wxFileName fn(filename);
+		//if (! fn.IsFileReadable()) {  // TODO: update to 2.8.0 and active this
+		//	wxMessageDialog dlg(this, "Unable to read \n\n"+filename, "Open Configuration", wxOK);
+		//	dlg.ShowModal();
+		//	return;
+		//}
 	}
 
 	// Read the new file
 	xmlpp::DomParser parser;
 	xmlpp::Document *document=0;
 	try {
-		parser->parse_file(filename.c_str());
+		parser.parse_file(filename.c_str());
 		if (parser==true) {
-			document=parser->get_document();
+			document=parser.get_document();
 		}
 	} catch (...){
 		document=0;
 	}
 
 	if ((breakonerror) && (document==0)) {
-		wxMessageDialog dlg(this, "The file \n\n"+filename+" \n\ncould not be loaded. Syntax error?", "Open Configuration", wxOK).ShowModal();
+		wxMessageDialog dlg(this, "The file \n\n"+filename+" \n\ncould not be loaded. Syntax error?", "Open Configuration", wxOK);
+		dlg.ShowModal();
 		return;
 	}
 
@@ -479,10 +476,12 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 
 	// Read the configuration
 	ErrorList errorlist;
-	ConfigurationReadXML(rootnode, &errorlist);
-	if (errorlist.IsEmpty()) {return;}
+	ConfigurationReadXML(document, &errorlist);
+	mComponentListPanel->OnUpdate();
+	if (errorlist.mList.empty()) {return;}
 
-	ErrorListDialog eld(this, "Open File", wxString::Format("The following errors occurred while reading the file '%s':", filename))->ShowModal();
+	ErrorListDialog eld(this, &errorlist, "Open File", wxString::Format("The following errors occurred while reading the file '%s':", filename));
+	eld.ShowModal();
 }
 
 void THISCLASS::ConfigurationReadXML(xmlpp::Document *document, ErrorList *errorlist) {
@@ -500,8 +499,8 @@ void THISCLASS::ConfigurationReadXML(xmlpp::Document *document, ErrorList *error
 	}
 
 	// Get the list of components
-	NodeList nodes_components=rootnode->get_children("Components");
-	if (nodes_components.count()==0) {
+	xmlpp::Node::NodeList nodes_components=rootnode->get_children("Components");
+	if (nodes_components.empty()) {
 		mSwisTrackCore->ConfigurationReadXML(0, errorlist);
 		return;
 	}
@@ -515,11 +514,11 @@ void SwisTrack::OnMenuFileSaveAs(wxCommandEvent& WXUNUSED(event)) {
 	wxFileDialog dlg(this, "Save a configuration", "", "", "Configurations (*.swistrack)|*.swistrack", wxSAVE, wxDefaultPosition);
 	if (dlg.ShowModal() != wxID_OK) {return;}
 	
-	mFileName=dlg->GetPath();
+	mFileName=dlg.GetPath();
 	SaveFile(mFileName);
 }
 
-void SwisTrack::OnMenuFileSave(wxCommandEvent& WXUNUSED(event)) {
+void SwisTrack::OnMenuFileSave(wxCommandEvent& event) {
 	if (mFileName=="") {
 		OnMenuFileSaveAs(event);
 		return;
@@ -529,8 +528,15 @@ void SwisTrack::OnMenuFileSave(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void THISCLASS::SaveFile(const wxString &filename) {
+	// Check if can write to that file
+	//wxFileName fn(filename);
+	//if (! fn.IsFileWritable()) {  // TODO: update to 2.8.0 and active this
+	//	wxMessageDialog dlg(this, "Unable to write \n\n"+filename, "Save File", wxOK).ShowModal();
+	//	return;
+	//}
+
 	// Create an XML document
-	xmlpp::Document document();
+	xmlpp::Document document;
 	xmlpp::Element *rootnode=document.create_root_node("swistrack");
 	xmlpp::Element *components=rootnode->add_child("components");
 
@@ -539,7 +545,14 @@ void THISCLASS::SaveFile(const wxString &filename) {
 	mSwisTrackCore->ConfigurationWriteXML(components, &errorlist);
 
 	// Save
-	document->write_to_file_formatted(filename.c_str());
+	try {
+		document.write_to_file_formatted(filename.c_str());
+	} catch (...) {
+		wxMessageDialog dlg(this, "There was an error writing to \n\n"+filename+"\n\nThe file may be incomplete.", "Save File", wxOK);
+		dlg.ShowModal();
+		return;
+	}
+
 	SetStatusText(filename+" saved!", 1);
 }
 
@@ -1202,7 +1215,7 @@ void SwisTrack::StartTracker()
 	try {
 		wxToolBarBase *tb = GetToolBar();
 
-		ot=new ObjectTracker(cfgRoot);
+		ot=new ObjectTracker(0);
 
 
 		fps=ot->GetFPS(); // read the real fps

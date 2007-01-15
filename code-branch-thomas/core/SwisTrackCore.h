@@ -10,6 +10,7 @@ class SwisTrackCore;
 #include "DataStructureInput.h"
 #include "DataStructureImage.h"
 #include "DataStructureParticles.h"
+#include "ErrorList.h"
 
 class SwisTrackCore {
 
@@ -47,7 +48,9 @@ public:
 	//! The associated communication interface.
 	CommunicationInterface *mCommunicationInterface;
 
+	//! Constructor.
 	SwisTrackCore();
+	//! Destructor.
 	~SwisTrackCore() {}
 
 	//! Starts all the components.
@@ -57,6 +60,8 @@ public:
 	//! Stops all started components.
 	bool Stop();
 
+	//! Clears all deployed components.
+	void Clear();
 	//! Reads the configuration from a XML document.
 	void ConfigurationReadXML(xmlpp::Element* configuration, ErrorList *xmlerr);
 	//! Writes the configuration to a XML document.

@@ -326,6 +326,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\ErrorListDialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\gui.cpp"
 				>
 				<FileConfiguration
@@ -464,6 +468,10 @@
 			</File>
 			<File
 				RelativePath="..\include\constants.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ErrorListDialog.h"
 				>
 			</File>
 			<File

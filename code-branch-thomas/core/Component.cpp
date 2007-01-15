@@ -55,8 +55,8 @@ void THISCLASS::ConfigurationReadXML(xmlpp::Element *configuration, ErrorList *x
 	while (it!=list.end()) {
 		xmlpp::Element *element=dynamic_cast<xmlpp::Element *>(*it);
 		if (element) {
-			Attribute *att_name=element->get_attribute("name");
-			Attribute *att_value=element->get_attribute("value");
+			xmlpp::Attribute *att_name=element->get_attribute("name");
+			xmlpp::Attribute *att_value=element->get_attribute("value");
 			if ((att_name!=0) && (att_value!=0)) {
 				mConfiguration[att_name->get_value()]=att_value->get_value();
 			} else {
@@ -74,8 +74,8 @@ void THISCLASS::ConfigurationWriteXML(xmlpp::Element *configuration, ErrorList *
 	tConfigurationMap::iterator it=mConfiguration.begin();
 	while (it!=mConfiguration.end()) {
 		xmlpp::Element *element=configuration->add_child("parameter");
-		element->set_attribute("name", (*it)->first);
-		element->set_attribute("value", (*it)->second);
+		element->set_attribute("name", it->first);
+		element->set_attribute("value", it->second);
 		it++;
 	}
 }

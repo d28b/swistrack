@@ -12,6 +12,7 @@ enum
     Gui_New,
 	Gui_Open,
 	Gui_Save,
+	Gui_SaveAs,
 	Gui_Quit,
 	Gui_Ctrl_Start,
 	Gui_Ctrl_Rewind,

@@ -10,6 +10,7 @@ class Component;
 #include "SwisTrackCore.h"
 #include "DataStructure.h"
 #include "ComponentCategory.h"
+#include "ErrorList.h"
 
 class Component {
 
@@ -59,7 +60,7 @@ public:
 	//! Reads the configuration from an XML element.
 	void ConfigurationReadXML(xmlpp::Element *element, ErrorList *xmlerr);
 	//! Writes the configuration to an XML element.
-	void ConfigurationReadXML(xmlpp::Element *element, ErrorList *xmlerr);
+	void ConfigurationWriteXML(xmlpp::Element *element, ErrorList *xmlerr);
 
 	//! Returns a boolean from the configuration.
 	bool GetConfigurationBool(const std::string &key, bool defvalue);

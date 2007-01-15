@@ -1,6 +1,7 @@
 #include "SwisTrackCore.h"
 #define THISCLASS SwisTrackCore
 
+#include <sstream>
 #include "ComponentInputCamera1394.h"
 #include "ComponentInputCameraUSB.h"
 #include "ComponentInputCameraGBit.h"
@@ -12,8 +13,7 @@
 #include "ComponentBlobDetectionMinMax.h"
 #include "ComponentBlobDetectionCircle.h"
 
-THISCLASS::SwisTrackCore(xmlpp::Element* cfgroot):
-		mConfigurationRoot(cfgroot),
+THISCLASS::SwisTrackCore():
 		mDataStructureInput(),
 		mDataStructureImageBGR("ImageBGR", "Color image (BGR)"),
 		mDataStructureBackgroundBGR("BackgroundBGR", "Background color image (BGR)"),
@@ -64,7 +64,7 @@ bool THISCLASS::Start() {
 	bool allok=true;
 
 	// Start all components (until first error)
-	tComponentList::iterator it=mDeployedComponents.begin();
+	tComponents::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
 		(*it)->ClearStatus();
 		(*it)->OnStart();
@@ -83,7 +83,7 @@ bool THISCLASS::Stop() {
 	bool allok=true;
 
 	// Stop all components
-	tComponentList::iterator it=mDeployedComponents.end();
+	tComponents::iterator it=mDeployedComponents.end();
 	while (it!=mDeployedComponents.begin()) {
 		it--;
 		if ((*it)->mStarted) {
@@ -101,7 +101,7 @@ bool THISCLASS::Step() {
 	bool allok=true;
 
 	// Run until first error, or until the end (all started components)
-	tComponentList::iterator it=mDeployedComponents.begin();
+	tComponents::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
 		if (! (*it)->mStarted) {break;}
 		(*it)->ClearStatus();
@@ -120,10 +120,22 @@ bool THISCLASS::Step() {
 	return allok;
 }
 
-void THISCLASS::ReadConfigurationXML(xmlpp::Element* configuration, ErrorList *xmlerr) {
-	mConfigurationRoot=cfgroot;
+void THISCLASS::Clear() {
+	tComponents::iterator it=mDeployedComponents.begin();
+	while (it!=mDeployedComponents.end()) {
+		delete (*it);
+		it++;
+	}
+
+	mDeployedComponents.clear();
+}
+
+void THISCLASS::ConfigurationReadXML(xmlpp::Element* configuration, ErrorList *xmlerr) {
+	// Clear the current list of components
+	Clear();
 
 	// Traverse the list and create a Component object for each "component" tag
+	if (! configuration) {return;}
 	xmlpp::Node::NodeList list=configuration->get_children("component");
 	xmlpp::Node::NodeList::iterator it=list.begin();
 	while (it!=list.end()) {
@@ -133,11 +145,11 @@ void THISCLASS::ReadConfigurationXML(xmlpp::Element* configuration, ErrorList *x
 	}
 }
 
-void THISCLASS::ReadConfigurationXMLElement(xmlpp::Element* element, ErrorList *xmlerr) {
+void THISCLASS::ConfigurationReadXMLElement(xmlpp::Element* element, ErrorList *xmlerr) {
 	if (! element) {return;}
 
 	// Get the type attribute
-	Attribute *att_type=element->get_attribute("type");
+	xmlpp::Attribute *att_type=element->get_attribute("type");
 	if (! att_type) {
 		std::ostringstream oss;
 		oss << "The element at line " << element->get_line() << " was ignored because it does not have a 'type' attribute.";
@@ -154,14 +166,14 @@ void THISCLASS::ReadConfigurationXMLElement(xmlpp::Element* element, ErrorList *
 	}
 
 	// Add it to the list
-	Component *newcomponent=component->Create(element);
+	Component *newcomponent=component->Create();
 	mDeployedComponents.push_back(newcomponent);
 	newcomponent->ConfigurationReadXML(element, xmlerr);
 }
 
 void THISCLASS::ConfigurationWriteXML(xmlpp::Element *configuration, ErrorList *xmlerr) {
 	// Add an element for each component
-	tComponentList::iterator it=mDeployedComponents.begin();
+	tComponents::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
 		xmlpp::Element *element=configuration->add_child("component");
 		element->set_attribute("type", (*it)->mName);

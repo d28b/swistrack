@@ -67,9 +67,9 @@ public:
 	CvPoint GetUserEstimateFor(int id);
 	void Finished();
 	void ShutDown();
-   // ctor(s)
-	SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size,
-		long style  = wxDEFAULT_FRAME_STYLE);
+
+	//! Constructor.
+	SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style = wxDEFAULT_FRAME_STYLE);
 	
 	//! The SwisTrackCore object.
 	SwisTrackCore *mSwisTrackCore;
@@ -95,6 +95,13 @@ public:
 	wxBitmap* colorbmp;
 	//int width, height;
 
+	//! Opens a file.
+	void OpenFile(const wxString &filename, bool breakonerror, bool astemplate);
+	//! Reads an XML file.
+	void ConfigurationReadXML(xmlpp::Document *document, ErrorList *errorlist);
+	//! Saves a file.
+	void SaveFile(const wxString &filename);
+
 	// CommuncationCommandHandler methods
 	bool OnCommunicationCommand(CommunicationMessage *m);
 
@@ -105,6 +112,7 @@ public:
 	void OnMenuFileNew(wxCommandEvent& WXUNUSED(event));
 	void OnMenuFileOpen(wxCommandEvent& WXUNUSED(event));
 	void OnMenuFileSave(wxCommandEvent& WXUNUSED(event));
+	void OnMenuFileSaveAs(wxCommandEvent& WXUNUSED(event));
 	void OnMenuFileQuit(wxCommandEvent& WXUNUSED(event));
 	void OnMenuControlStart(wxCommandEvent& WXUNUSED(event));
 	void OnMenuControlPause(wxCommandEvent& WXUNUSED(event));
