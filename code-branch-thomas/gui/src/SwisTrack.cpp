@@ -45,7 +45,8 @@ driver.
 #include "SwisTrackPanel.h"
 #include "InterceptionPanel.h"
 #include "GUIApp.h"
-#include <string.h>
+
+#include <math.h>
 
 #include <wx/toolbar.h>
 #include <wx/filename.h>
@@ -1170,7 +1171,7 @@ void THISCLASS::OnTest(wxCommandEvent& WXUNUSED(event)) {
 
 		for (int i=0; i<10; i++) {
 			px[i]+=sin(po[i])*0.02;
-			py[i]+=sin(po[i])*0.02;
+			py[i]+=cos(po[i])*0.02;
 			po[i]-=i*0.01;
 		}
 	}
