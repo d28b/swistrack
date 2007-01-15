@@ -11,6 +11,7 @@ THISCLASS::CommunicationMessage(const std::string &cmd, CommunicationMessage *in
 bool THISCLASS::GetBool(bool defvalue) {
 	if (mParameters.size()<1) {return defvalue;}
 	std::string t=mParameters.front();
+	mParameters.pop_front();
 
 	std::istringstream istr(t);
 	bool val=0;
@@ -21,6 +22,7 @@ bool THISCLASS::GetBool(bool defvalue) {
 int THISCLASS::GetInt(int defvalue) {
 	if (mParameters.size()<1) {return defvalue;}
 	std::string t=mParameters.front();
+	mParameters.pop_front();
 
 	std::istringstream istr(t);
 	int val=0;
@@ -31,6 +33,7 @@ int THISCLASS::GetInt(int defvalue) {
 double THISCLASS::GetDouble(double defvalue) {
 	if (mParameters.size()<1) {return defvalue;}
 	std::string t=mParameters.front();
+	mParameters.pop_front();
 
 	std::istringstream istr(t);
 	double val=0;
@@ -41,6 +44,7 @@ double THISCLASS::GetDouble(double defvalue) {
 std::string THISCLASS::GetString(const std::string &defvalue) {
 	if (mParameters.size()<1) {return defvalue;}
 	std::string t=mParameters.front();
+	mParameters.pop_front();
 
 	return t;
 }
