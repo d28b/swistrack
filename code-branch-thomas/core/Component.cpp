@@ -47,85 +47,86 @@ bool THISCLASS::HasDataStructureWrite(DataStructure *ds) {
 	return (it != mDataStructureWrite.end());
 }
 
-bool THISCLASS::GetConfigurationBool(const std::string &path, bool defvalue) {
-	xmlpp::Element *e=GetConfigurationElement(path);
-	if (! e) {return defvalue;}
-	xmlpp::TextNode *t=e->get_child_text();
-	if (! t) {return defvalue;}
+void THISCLASS::ConfigurationReadXML(xmlpp::Element *configuration, ErrorList *xmlerr) {
+	mConfiguration.clear();
 
-	std::istringstream istr(t->get_content());
+	xmlpp::Node::NodeList list=configuration->get_children("parameter");
+	xmlpp::Node::NodeList::iterator it=list.begin();
+	while (it!=list.end()) {
+		xmlpp::Element *element=dynamic_cast<xmlpp::Element *>(*it);
+		if (element) {
+			Attribute *att_name=element->get_attribute("name");
+			Attribute *att_value=element->get_attribute("value");
+			if ((att_name!=0) && (att_value!=0)) {
+				mConfiguration[att_name->get_value()]=att_value->get_value();
+			} else {
+				std::ostringstream oss;
+				oss << "The parameter at line " << element->get_line() << " was ignored because either the attribute 'name' or 'value' are missing.";
+				xmlerr->Add(oss.str(), element->get_line());
+			}
+		}
+
+		it++;
+	}
+}
+
+void THISCLASS::ConfigurationWriteXML(xmlpp::Element *configuration, ErrorList *xmlerr) {
+	tConfigurationMap::iterator it=mConfiguration.begin();
+	while (it!=mConfiguration.end()) {
+		xmlpp::Element *element=configuration->add_child("parameter");
+		element->set_attribute("name", (*it)->first);
+		element->set_attribute("value", (*it)->second);
+		it++;
+	}
+}
+
+bool THISCLASS::GetConfigurationBool(const std::string &key, bool defvalue) {
+	std::istringstream istr(mConfiguration[key]);
 	bool val=0;
 	istr >> val;
 	return val;
 }
 
-int THISCLASS::GetConfigurationInt(const std::string &path, int defvalue) {
-	xmlpp::Element *e=GetConfigurationElement(path);
-	if (! e) {return defvalue;}
-	xmlpp::TextNode *t=e->get_child_text();
-	if (! t) {return defvalue;}
-
-	std::istringstream istr(t->get_content());
+int THISCLASS::GetConfigurationInt(const std::string &key, int defvalue) {
+	std::istringstream istr(mConfiguration[key]);
 	int val=0;
 	istr >> val;
 	return val;
 }
 
-double THISCLASS::GetConfigurationDouble(const std::string &path, double defvalue) {
-	xmlpp::Element *e=GetConfigurationElement(path);
-	if (! e) {return defvalue;}
-	xmlpp::TextNode *t=e->get_child_text();
-	if (! t) {return defvalue;}
-
-	std::istringstream istr(t->get_content());
+double THISCLASS::GetConfigurationDouble(const std::string &key, double defvalue) {
+	std::istringstream istr(mConfiguration[key]);
 	double val=0;
 	istr >> val;
 	return val;
 }
 
-std::string THISCLASS::GetConfigurationString(const std::string &path, const std::string &defvalue) {
-	xmlpp::Element *e=GetConfigurationElement(path);
-	if (! e) {return defvalue;}
-	xmlpp::TextNode *t=e->get_child_text();
-	if (! t) {return defvalue;}
-
-	return t->get_content();
+std::string THISCLASS::GetConfigurationString(const std::string &key, const std::string &defvalue) {
+	return mConfiguration[key];
 }
 
-bool THISCLASS::SetConfigurationBool(const std::string &path, bool value) {
-	xmlpp::Element *e=GetConfigurationElement(path);
-	if (! e) {return false;}
-
+bool THISCLASS::SetConfigurationBool(const std::string &key, bool value) {
 	std::ostringstream oss;
 	oss << value;
-	e->set_child_text(oss.str());
+	mConfiguration[key]=oss.str();
 	return true;
 }
 
-bool THISCLASS::SetConfigurationInt(const std::string &path, int value) {
-	xmlpp::Element *e=GetConfigurationElement(path);
-	if (! e) {return false;}
-
+bool THISCLASS::SetConfigurationInt(const std::string &key, int value) {
 	std::ostringstream oss;
 	oss << value;
-	e->set_child_text(oss.str());
+	mConfiguration[key]=oss.str();
 	return true;
 }
 
-bool THISCLASS::SetConfigurationDouble(const std::string &path, double value) {
-	xmlpp::Element *e=GetConfigurationElement(path);
-	if (! e) {return false;}
-
+bool THISCLASS::SetConfigurationDouble(const std::string &key, double value) {
 	std::ostringstream oss;
 	oss << value;
-	e->set_child_text(oss.str());
+	mConfiguration[key]=oss.str();
 	return true;
 }
 
-bool THISCLASS::SetConfigurationString(const std::string &path, const std::string &value) {
-	xmlpp::Element *e=GetConfigurationElement(path);
-	if (! e) {return false;}
-
-	e->set_child_text(value);
+bool THISCLASS::SetConfigurationString(const std::string &key, const std::string &value) {
+	mConfiguration[key]=value;
 	return true;
 }

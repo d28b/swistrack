@@ -31,16 +31,16 @@ THISCLASS::SwisTrackCore(xmlpp::Element* cfgroot):
 		{
 
 	// Initialize the list of available components
-	mComponents.push_back(new ComponentInputCamera1394(this));
-	mComponents.push_back(new ComponentInputCameraUSB(this));
-	mComponents.push_back(new ComponentInputCameraGBit(this));
-	mComponents.push_back(new ComponentInputFileAVI(this));
-	mComponents.push_back(new ComponentConvertToGray(this));
-	mComponents.push_back(new ComponentConvertToBGR(this));
-	mComponents.push_back(new ComponentBackgroundSubtractionGray(this));
-	mComponents.push_back(new ComponentThresholdGray(this));
-	mComponents.push_back(new ComponentBlobDetectionMinMax(this));
-	mComponents.push_back(new ComponentBlobDetectionCircle(this));
+	mAvailableComponents.push_back(new ComponentInputCamera1394(this));
+	mAvailableComponents.push_back(new ComponentInputCameraUSB(this));
+	mAvailableComponents.push_back(new ComponentInputCameraGBit(this));
+	mAvailableComponents.push_back(new ComponentInputFileAVI(this));
+	mAvailableComponents.push_back(new ComponentConvertToGray(this));
+	mAvailableComponents.push_back(new ComponentConvertToBGR(this));
+	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
+	mAvailableComponents.push_back(new ComponentThresholdGray(this));
+	mAvailableComponents.push_back(new ComponentBlobDetectionMinMax(this));
+	mAvailableComponents.push_back(new ComponentBlobDetectionCircle(this));
 
 	// Initialize the list of available data structures
 	mDataStructures.push_back(&mDataStructureInput);
@@ -53,19 +53,19 @@ THISCLASS::SwisTrackCore(xmlpp::Element* cfgroot):
 	mDataStructures.push_back(&mDataStructureParticles);
 
 	// TODO remove this
-	mComponentList.push_back(new ComponentInputCameraUSB(this));
-	mComponentList.push_back(new ComponentConvertToGray(this));
-	mComponentList.push_back(new ComponentBackgroundSubtractionGray(this));
-	mComponentList.push_back(new ComponentThresholdGray(this));
-	mComponentList.push_back(new ComponentBlobDetectionMinMax(this));
+	mDeployedComponents.push_back(new ComponentInputCameraUSB(this));
+	mDeployedComponents.push_back(new ComponentConvertToGray(this));
+	mDeployedComponents.push_back(new ComponentBackgroundSubtractionGray(this));
+	mDeployedComponents.push_back(new ComponentThresholdGray(this));
+	mDeployedComponents.push_back(new ComponentBlobDetectionMinMax(this));
 }
 
 bool THISCLASS::Start() {
 	bool allok=true;
 
 	// Start all components (until first error)
-	tComponentList::iterator it=mComponentList.begin();
-	while (it!=mComponentList.end()) {
+	tComponentList::iterator it=mDeployedComponents.begin();
+	while (it!=mDeployedComponents.end()) {
 		(*it)->ClearStatus();
 		(*it)->OnStart();
 		if ((*it)->mStatusHasError) {
@@ -83,8 +83,8 @@ bool THISCLASS::Stop() {
 	bool allok=true;
 
 	// Stop all components
-	tComponentList::iterator it=mComponentList.end();
-	while (it!=mComponentList.begin()) {
+	tComponentList::iterator it=mDeployedComponents.end();
+	while (it!=mDeployedComponents.begin()) {
 		it--;
 		if ((*it)->mStarted) {
 			(*it)->ClearStatus();
@@ -101,8 +101,8 @@ bool THISCLASS::Step() {
 	bool allok=true;
 
 	// Run until first error, or until the end (all started components)
-	tComponentList::iterator it=mComponentList.begin();
-	while (it!=mComponentList.end()) {
+	tComponentList::iterator it=mDeployedComponents.begin();
+	while (it!=mDeployedComponents.end()) {
 		if (! (*it)->mStarted) {break;}
 		(*it)->ClearStatus();
 		(*it)->OnStep();
@@ -111,11 +111,72 @@ bool THISCLASS::Step() {
 	}
 
 	// and then cleanup what we run
-	while (it!=mComponentList.begin()) {
+	while (it!=mDeployedComponents.begin()) {
 		it--;
 		(*it)->OnStepCleanup();
 		if (! (*it)->mStatusHasError) {allok=false;}
 	}
 
 	return allok;
+}
+
+void THISCLASS::ReadConfigurationXML(xmlpp::Element* configuration, ErrorList *xmlerr) {
+	mConfigurationRoot=cfgroot;
+
+	// Traverse the list and create a Component object for each "component" tag
+	xmlpp::Node::NodeList list=configuration->get_children("component");
+	xmlpp::Node::NodeList::iterator it=list.begin();
+	while (it!=list.end()) {
+		xmlpp::Element *element=dynamic_cast<xmlpp::Element *>(*it);
+		ConfigurationReadXMLElement(element, xmlerr);
+		it++;
+	}
+}
+
+void THISCLASS::ReadConfigurationXMLElement(xmlpp::Element* element, ErrorList *xmlerr) {
+	if (! element) {return;}
+
+	// Get the type attribute
+	Attribute *att_type=element->get_attribute("type");
+	if (! att_type) {
+		std::ostringstream oss;
+		oss << "The element at line " << element->get_line() << " was ignored because it does not have a 'type' attribute.";
+		xmlerr->Add(oss.str(), element->get_line());
+	}
+
+	// Search for the component
+	std::string type=att_type->get_value();
+	Component *component=GetComponentByName(type);
+	if (! component) {
+		std::ostringstream oss;
+		oss << "The element at line " << element->get_line() << " was ignored because there is no component called '" << type << "'.";
+		xmlerr->Add(oss.str(), element->get_line());
+	}
+
+	// Add it to the list
+	Component *newcomponent=component->Create(element);
+	mDeployedComponents.push_back(newcomponent);
+	newcomponent->ConfigurationReadXML(element, xmlerr);
+}
+
+void THISCLASS::ConfigurationWriteXML(xmlpp::Element *configuration, ErrorList *xmlerr) {
+	// Add an element for each component
+	tComponentList::iterator it=mDeployedComponents.begin();
+	while (it!=mDeployedComponents.end()) {
+		xmlpp::Element *element=configuration->add_child("component");
+		element->set_attribute("type", (*it)->mName);
+		(*it)->ConfigurationWriteXML(element, xmlerr);
+
+		it++;
+	}
+}
+
+Component *THISCLASS::GetComponentByName(const std::string &name) {
+	tComponents::iterator it=mAvailableComponents.begin();
+	while (it!=mAvailableComponents.end()) {
+		if ((*it)->mName==name) {return (*it);}
+		it++;
+	}
+
+	return 0;
 }

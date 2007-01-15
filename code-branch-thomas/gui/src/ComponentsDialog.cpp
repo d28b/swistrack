@@ -21,10 +21,10 @@ THISCLASS::ComponentsDialog(wxWindow* parent, SwisTrackCore *stc):
 	wxTreeItemId rootitem=mTree->AddRoot("");
 
 	// Add an item for each component
-	SwisTrackCore::tComponents::iterator it=mSwisTrackCore->mComponents.begin();
+	SwisTrackCore::tComponents::iterator it=mSwisTrackCore->mAvailableComponents.begin();
 	wxTreeItemId curcategoryitem;
 	ComponentCategory *curcategory;
-	while (it!=mSwisTrackCore->mComponents.end()) {
+	while (it!=mSwisTrackCore->mAvailableComponents.end()) {
 		ComponentCategory *category=(*it)->mCategory;
 		if ((! curcategoryitem) || (category!=curcategory)) {
 			curcategoryitem=mTree->AppendItem(rootitem, category->mDisplayName.c_str());

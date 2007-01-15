@@ -430,81 +430,90 @@ Opens the SettingsDialog, which allows specifying parameters as defined in the
 file swistrack.exp.
 */ 
 void SwisTrack::OnMenuFileNew(wxCommandEvent& WXUNUSED(event)) {
-	SetDocument(new xmlpp::Document());
+	OpenFile("default.swistrack", false, true);
 }
 
 void THISCLASS::OnMenuFileOpen(wxCommandEvent& WXUNUSED(event)) {
 	wxFileDialog dlg(this, "Open Configuration", "", "", "SwisTrack Configurations (*.swistrack)|*.swistrack", wxOPEN, wxDefaultPosition);
 	if (dlg->ShowModal() != wxID_OK) {return;}
 
-	OpenFile(dlg->GetPath());
+	OpenFile(dlg->GetPath(), true, false);
 }
 
-void THISCLASS::OpenFile(const wxString &filename) {
+void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astemplate) {
 	// Check if file is readable
-	wxFileName fn(filename);
-	if (! fn.IsFileReadable()) {
-		wxMessageDialog dlg(this, "Unable to read \n\n"+filename, "Open Configuration", wxOK).ShowModal();
-		return;
+	if (breakonerror) {
+		wxFileName fn(filename);
+		if (! fn.IsFileReadable()) {
+			wxMessageDialog dlg(this, "Unable to read \n\n"+filename, "Open Configuration", wxOK).ShowModal();
+			return;
+		}
 	}
 
 	// Read the new file
-	xmlpp::Document *newdocument=0;
+	xmlpp::DomParser parser;
+	xmlpp::Document *document=0;
 	try {
-		xmlpp::DomParser parser;
 		parser->parse_file(filename.c_str());
 		if (parser==true) {
-			newdocument=parser->get_document();
+			document=parser->get_document();
 		}
 	} catch (...){
-		newdocument=0;
+		document=0;
 	}
 
-	if (newdocument==0) {
+	if ((breakonerror) && (document==0)) {
 		wxMessageDialog dlg(this, "The file \n\n"+filename+" \n\ncould not be loaded. Syntax error?", "Open Configuration", wxOK).ShowModal();
 		return;
 	}
 
-	SetDocument(newdocument);
+	// At this point, we consider the SwisTrack configuration to be valid. The next few lines close the current configuration and read the configuration.
+
+	// Close the current configuration
+	if (mChanged) {
+		// TODO if necessary, ask the user whether he'd like to save the changes
+		// return false;
+	}
+
+	// Set the new file name
+	if (astemplate) {
+		mFileName="";
+	} else {
+		mFileName=filename;
+	}
+
+	// Read the configuration
+	ErrorList errorlist;
+	ConfigurationReadXML(rootnode, &errorlist);
+	if (errorlist.IsEmpty()) {return;}
+
+	ErrorListDialog eld(this, "Open File", wxString::Format("The following errors occurred while reading the file '%s':", filename))->ShowModal();
 }
 
-void THISCLASS::SetDocument(xmlpp::Document *newdocument) {
-	// Close an already open document
-	if (mDocument) {
-		// TODO if necessary, ask the user whether he'd like to save the changes
-		delete mDocument;
+void THISCLASS::ConfigurationReadXML(xmlpp::Document *document, ErrorList *errorlist) {
+	// If this method is called without a document, set up an empty component list
+	if (document==0) {
+		mSwisTrackCore->ConfigurationReadXML(0, errorlist);
+		return;
 	}
 
-	// Set the new document
-	mDocument=newdocument;
-
-	// Prepare the root node
-	xmlpp::Element *rootnode=mDocument->get_root_node();
+	// Get the root node
+	xmlpp::Element *rootnode=document->get_root_node();
 	if (! rootnode) {
-		rootnode=mDocument->create_root_node();
+		mSwisTrackCore->ConfigurationReadXML(0, errorlist);
+		return;
 	}
 
-	Configuration *windowconfig=mConfiguration->GetNode("Window");
-	SetPosition(wxPoint(windowconfig->GetInteger("Left"), windowconfig->GetInteger("Top")));
-	SetSize();
-
-	// The GUI configuration
-	NodeList nodes_gui=rootnode->get_children("GUI");
-	if (nodes_gui.count()==0) {
-		mConfiguration=rootnode->add_child("GUI");
-	} else {
-		mConfiguration=nodes_gui.front();
-	}
-
-	// Read the components
+	// Get the list of components
 	NodeList nodes_components=rootnode->get_children("Components");
-	if (nodes_gui.count()==0) {
-		xmlpp::Node *components=mConfiguration=rootnode->add_child("Components");
-		mSwisTrackCore->ReadComponents(components);
-	} else {
-		xmlpp::Node *components=nodes_components.front();
-		mSwisTrackCore->ReadComponents(components);
+	if (nodes_components.count()==0) {
+		mSwisTrackCore->ConfigurationReadXML(0, errorlist);
+		return;
 	}
+
+	// Read the component list
+	xmlpp::Element *components=dynamic_cast<xmlpp::Element *>(nodes_components.front());
+	mSwisTrackCore->ConfigurationReadXML(components, errorlist);
 }
 
 /** \brief Event handler for the 'File->Save' command

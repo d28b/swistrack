@@ -16,17 +16,17 @@ class SwisTrackCore {
 public:
 	//! The list of all available components.
 	typedef std::list<Component*> tComponents;
-	tComponents mComponents;
+	//! The list of all available components.
+	tComponents mAvailableComponents;
+	//! The list of the deployed components.
+	tComponents mDeployedComponents;
 
-	//! The list of all available data structures.
+	//! The list type of all available data structures.
 	typedef std::list<DataStructure*> tDataStructures;
+	//! The list of all available data structures.
 	tDataStructures mDataStructures;
 
-	//! The list of the deployed components.
-	typedef std::list<Component*> tComponentList;
-	tComponentList mComponentList;
-
-	//! Component categories.
+	// Component categories.
 	ComponentCategory mCategoryInput;
 	ComponentCategory mCategoryInputConversion;
 	ComponentCategory mCategoryPreprocessing;
@@ -34,7 +34,7 @@ public:
 	ComponentCategory mCategoryBlobDetection;
 	ComponentCategory mCategoryOutput;
 
-	//! Data structures.
+	// Data structures.
 	DataStructureInput mDataStructureInput;
 	DataStructureImage mDataStructureImageBGR;
 	DataStructureImage mDataStructureBackgroundBGR;
@@ -47,14 +47,26 @@ public:
 	//! The associated communication interface.
 	CommunicationInterface *mCommunicationInterface;
 
-	SwisTrackCore(xmlpp::Element* cfgroot=0);
+	SwisTrackCore();
 	~SwisTrackCore() {}
 
+	//! Starts all the components.
 	bool Start();
+	//! Performs one step, including cleanup.
 	bool Step();
+	//! Stops all started components.
 	bool Stop();
+
+	//! Reads the configuration from a XML document.
+	void ConfigurationReadXML(xmlpp::Element* configuration, ErrorList *xmlerr);
+	//! Writes the configuration to a XML document.
+	void ConfigurationWriteXML(xmlpp::Element* configuration, ErrorList *xmlerr);
+	//! Returns a component by name.
+	Component *GetComponentByName(const std::string &name);
+
 protected:
-	xmlpp::Element* mConfigurationRoot;
+	//! Reads one component from the XML file.
+	void ConfigurationReadXMLElement(xmlpp::Element* element, ErrorList *xmlerr);
 
 };
 

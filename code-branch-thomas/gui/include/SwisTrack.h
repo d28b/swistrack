@@ -156,10 +156,11 @@ public:
 
 	~SwisTrack();
 
-	 void OnIdle(wxIdleEvent& event);
+	void OnIdle(wxIdleEvent& event);
 
-	 //! The current configuration file.
-	 xmlpp::DomParser* mConfigurationFile;
+	//! The current configuration file.
+	wxString mFileName;
+	bool mChanged;
     
 	 xmlpp::DomParser* expparser;
      xmlpp::Document* expdocument;

@@ -56,23 +56,28 @@ public:
 	//! This function must return an new object of its own class.
 	virtual Component *Create() = 0;
 
+	//! Reads the configuration from an XML element.
+	void ConfigurationReadXML(xmlpp::Element *element, ErrorList *xmlerr);
+	//! Writes the configuration to an XML element.
+	void ConfigurationReadXML(xmlpp::Element *element, ErrorList *xmlerr);
+
 	//! Returns a boolean from the configuration.
-	bool GetConfigurationBool(const std::string &path, bool defvalue);
+	bool GetConfigurationBool(const std::string &key, bool defvalue);
 	//! Returns an integer value from the configuration.
-	int GetConfigurationInt(const std::string &path, int defvalue);
+	int GetConfigurationInt(const std::string &key, int defvalue);
 	//! Returns a double from the configuration.
-	double GetConfigurationDouble(const std::string &path, double defvalue);
+	double GetConfigurationDouble(const std::string &key, double defvalue);
 	//! Returns a string from the configuration.
-	std::string GetConfigurationString(const std::string &path, const std::string &defvalue);
+	std::string GetConfigurationString(const std::string &key, const std::string &defvalue);
 
 	//! Sets a boolean value in the configuration.
-	bool SetConfigurationBool(const std::string &path, bool value);
+	bool SetConfigurationBool(const std::string &key, bool value);
 	//! Sets an integer value in the configuration.
-	bool SetConfigurationInt(const std::string &path, int value);
+	bool SetConfigurationInt(const std::string &key, int value);
 	//! Sets a double in the configuration.
-	bool SetConfigurationDouble(const std::string &path, double value);
+	bool SetConfigurationDouble(const std::string &key, double value);
 	//! Sets a string in the configuration.
-	bool SetConfigurationString(const std::string &path, const std::string &value);
+	bool SetConfigurationString(const std::string &key, const std::string &value);
 
 	//! Clears the status list
 	void ClearStatus();
@@ -85,8 +90,10 @@ public:
 protected:
 	//! The associated SwisTrackCore object.
 	SwisTrackCore *mCore;
-	//! The configuration root.
-	xmlpp::Element *mConfigurationRoot;
+	//! The type for configuration values.
+	typedef std::map<std::string, std::string> tConfigurationMap;
+	//! The configuration values.
+	tConfigurationMap mConfiguration;
 
 	//! Adds an error message to the status list.
 	void AddError(const std::string &msg);
@@ -101,9 +108,7 @@ protected:
 	void AddDataStructureWrite(DataStructure *ds);
 
 	//! Returns a configuration element.
-	inline xmlpp::Element* GetConfigurationElement(const std::string &path) {
-		return dynamic_cast<xmlpp::Element*>(*(mConfigurationRoot->find(path).begin()));
-	}
+	xmlpp::Element* GetConfigurationElement(const std::string &name);
 };
 
 #endif
