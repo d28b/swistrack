@@ -1,6 +1,8 @@
 #include "DisplayImage.h"
 #define THISCLASS DisplayImage
 
+#include "wx/dcbuffer.h"
+
 BEGIN_EVENT_TABLE(DisplayImage, wxPanel)
     EVT_PAINT(DisplayImage::OnPaint)
 	EVT_ERASE_BACKGROUND(DisplayImage::EraseBackground)

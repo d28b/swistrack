@@ -7,8 +7,6 @@
   #include "wx/wx.h"
 #endif
 
-#include "wx/dcbuffer.h"  // Allows to draw onto a dc buffer and hence to the screen
-
 #include "SwisTrack.h"
 
 /** \class Canvas

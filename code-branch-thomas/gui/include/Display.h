@@ -7,15 +7,14 @@
   #include "wx/wx.h"
 #endif
 
-#include "wx/panel.h"
-#include "wx/dcbuffer.h"  // Allows to draw onto a dc buffer and hence to the screen
+#include "wx/control.h"
 
 #include "SwisTrackCore.h"
 
 /** \class Display
 * \brief This is the base class for all display panels.
 */
-class Display: public wxPanel {
+class Display: public wxControl {
 
 public:
 	//! The associated SwisTrack GUI.

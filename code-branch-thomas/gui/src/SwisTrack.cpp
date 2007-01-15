@@ -424,11 +424,6 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 	return false;
 }
 
-/** \brief Event handler for the 'File->New' command
-*
-Opens the SettingsDialog, which allows specifying parameters as defined in the
-file swistrack.exp.
-*/ 
 void SwisTrack::OnMenuFileNew(wxCommandEvent& WXUNUSED(event)) {
 	OpenFile("default.swistrack", false, true);
 }
@@ -516,32 +511,38 @@ void THISCLASS::ConfigurationReadXML(xmlpp::Document *document, ErrorList *error
 	mSwisTrackCore->ConfigurationReadXML(components, errorlist);
 }
 
-/** \brief Event handler for the 'File->Save' command
-*
-Opens an save file dialog where the user can save the current configuration,
-and stores the configuration as formatted XML.
-
-\todo This function should create a copy of the XML tree and prune all information
-for modes that are not used. There should be a second function that instead
-saves all modes into the default.cfg (Save as default).
-*/
-void SwisTrack::OnMenuFileSave(wxCommandEvent& WXUNUSED(event)) {
-	wxFileDialog *dlg = new wxFileDialog(this,"Save a configuration",
-		"","","Configurations (*.cfg)|*.cfg",
-		wxSAVE,wxDefaultPosition);
-	if(dlg->ShowModal() == wxID_OK && document)
-	{
-		SetStatusText("Save " + dlg->GetPath(),1);
-		document->write_to_file_formatted((char*) dlg->GetPath().GetData());
-	}
-	dlg->Destroy();
+void SwisTrack::OnMenuFileSaveAs(wxCommandEvent& WXUNUSED(event)) {
+	wxFileDialog dlg(this, "Save a configuration", "", "", "Configurations (*.swistrack)|*.swistrack", wxSAVE, wxDefaultPosition);
+	if (dlg.ShowModal() != wxID_OK) {return;}
+	
+	mFileName=dlg->GetPath();
+	SaveFile(mFileName);
 }
 
-/** \brief Event hanlder for the 'File->Exit' command
+void SwisTrack::OnMenuFileSave(wxCommandEvent& WXUNUSED(event)) {
+	if (mFileName=="") {
+		OnMenuFileSaveAs(event);
+		return;
+	}
 
-Closes the application
-\see ~Swistrack
-*/
+	SaveFile(mFileName);
+}
+
+void THISCLASS::SaveFile(const wxString &filename) {
+	// Create an XML document
+	xmlpp::Document document();
+	xmlpp::Element *rootnode=document.create_root_node("swistrack");
+	xmlpp::Element *components=rootnode->add_child("components");
+
+	// Add all components to this document
+	ErrorList errorlist;
+	mSwisTrackCore->ConfigurationWriteXML(components, &errorlist);
+
+	// Save
+	document->write_to_file_formatted(filename.c_str());
+	SetStatusText(filename+" saved!", 1);
+}
+
 void SwisTrack::OnMenuFileQuit(wxCommandEvent& WXUNUSED(event)) {
 	Close(TRUE);
 }
@@ -552,17 +553,15 @@ void SwisTrack::OnMenuFileQuit(wxCommandEvent& WXUNUSED(event)) {
 
 \see StartTracker()
 */
-void SwisTrack::OnMenuControlStart(wxCommandEvent& WXUNUSED(event))
-{
-	StartTracker();	
+void SwisTrack::OnMenuControlStart(wxCommandEvent& WXUNUSED(event)) {
+	StartTracker();
 }
 
 /** \brief Event handler for the 'File->Control->Pause' command
 *
 * Pauses tracking and toggles the `Pause' button in the GUI.
 */
-void SwisTrack::OnMenuControlPause(wxCommandEvent& WXUNUSED(event))
-{
+void SwisTrack::OnMenuControlPause(wxCommandEvent& WXUNUSED(event)) {
 	menuControl->Enable(Gui_Ctrl_Pause,FALSE);
 	menuControl->Enable(Gui_Ctrl_Continue,TRUE);
 
@@ -578,8 +577,7 @@ void SwisTrack::OnMenuControlPause(wxCommandEvent& WXUNUSED(event))
 Continues tracking (after pause) and toggles the `Pause' button in
 the GUI.
 */
-void SwisTrack::OnMenuControlContinue(wxCommandEvent& WXUNUSED(event))
-{
+void SwisTrack::OnMenuControlContinue(wxCommandEvent& WXUNUSED(event)) {
 	if(status==PAUSED){
 		menuControl->Enable(Gui_Ctrl_Pause,TRUE);
 		menuControl->Enable(Gui_Ctrl_Continue,FALSE);
@@ -600,8 +598,7 @@ void SwisTrack::OnMenuControlContinue(wxCommandEvent& WXUNUSED(event))
 currently disabled. Rewind should issue a command to ObjectTracker which sets
 the AVI pointer 1s back.
 */
-void SwisTrack::OnMenuControlRewind(wxCommandEvent& WXUNUSED(event))
-{
+void SwisTrack::OnMenuControlRewind(wxCommandEvent& WXUNUSED(event)) {
 	wxToolBarBase *tb = GetToolBar();
 	for(int i=Gui_Ctrl_Rewind; i<= Gui_Ctrl_Pause; i++) tb->ToggleTool(i, 0 );
 	tb->ToggleTool(Gui_Ctrl_Rewind, 1 );
@@ -613,8 +610,7 @@ void SwisTrack::OnMenuControlRewind(wxCommandEvent& WXUNUSED(event))
 is currently disabled. This function should issue a command to ObjectTracker which sets
 the AVI pointer 1 frame back.
 */
-void SwisTrack::OnMenuControlSinglestepback(wxCommandEvent& WXUNUSED(event))
-{
+void SwisTrack::OnMenuControlSinglestepback(wxCommandEvent& WXUNUSED(event)) {
 	wxToolBarBase *tb = GetToolBar();
 	for(int i=Gui_Ctrl_Rewind; i<= Gui_Ctrl_Pause; i++) tb->ToggleTool(i, 0 );
 	tb->ToggleTool(Gui_Ctrl_Pause, 1 );
@@ -627,8 +623,7 @@ Performing a single step is equivalent to entering the PAUSE state (i.e. OnIdleE
 does not process the video source), but a single step is executed by calling
 ObjectTracker::Step() and SwisTrack::Update().
 */
-void SwisTrack::Singlestep(){
-	
+void SwisTrack::Singlestep() {
 	wxToolBarBase *tb = GetToolBar();
 	for(int i=Gui_Ctrl_Rewind; i<= Gui_Ctrl_Pause; i++) tb->ToggleTool(i, 0 );
 	tb->ToggleTool(Gui_Ctrl_Pause, 1 );
@@ -650,8 +645,7 @@ void SwisTrack::Singlestep(){
 
 Calls SwisTrack::Singlestep().
 */
-void SwisTrack::OnMenuControlSinglestep(wxCommandEvent& WXUNUSED(event))
-{
+void SwisTrack::OnMenuControlSinglestep(wxCommandEvent& WXUNUSED(event)) {
 	Singlestep();
 }
 
@@ -659,8 +653,7 @@ void SwisTrack::OnMenuControlSinglestep(wxCommandEvent& WXUNUSED(event))
 *
 * Calls SwisTrack::StopTracker().
 */
-void SwisTrack::OnMenuControlStop(wxCommandEvent& WXUNUSED(event))
-{
+void SwisTrack::OnMenuControlStop(wxCommandEvent& WXUNUSED(event)) {
 	StopTracker();
 }
 
@@ -673,8 +666,7 @@ ObjectTracker with this configuration, and a SwisTrackPanel without graphical ou
 Also OnIdleEvent should be modified to either launch a step of tracking or displaying the input
 stream.
 */
-void SwisTrack::OnMenuToolsShow1394Camera(wxCommandEvent& WXUNUSED(event))
-{
+void SwisTrack::OnMenuToolsShow1394Camera(wxCommandEvent& WXUNUSED(event)) {
 #ifdef _1394
 	unsigned char *m_pBitmap;
 	theCamera.InitCamera();
@@ -730,10 +722,9 @@ void SwisTrack::OnChangeDisplaySpeed(wxScrollEvent& WXUNUSED(event))
 *
 * Opens a dialog showing copyright information
 */
-void SwisTrack::OnMenuHelpAbout(wxCommandEvent& WXUNUSED(event))
-{
+void SwisTrack::OnMenuHelpAbout(wxCommandEvent& WXUNUSED(event)) {
 	AboutDialog *dlg = new AboutDialog(this);
-	dlg->SetText("(c) 2004-2006 Swarm-Intelligent Systems Group\nSwiss Federal Institute of Technology\nLausanne, Switzerland\n\nhttp://swistrack.sourceforge.net");
+	dlg->SetText("(c) 2004-2007 Swarm-Intelligent Systems Group\nSwiss Federal Institute of Technology\nLausanne, Switzerland\n\nhttp://swistrack.sourceforge.net");
 	dlg->ShowModal();
 }
 
@@ -744,8 +735,7 @@ void SwisTrack::OnMenuHelpAbout(wxCommandEvent& WXUNUSED(event))
 * Depending on which radio item has been chosen by the user, an 
 * appropriate message is sent to the tracking class.
 */
-void SwisTrack::OnDrawingMode(wxCommandEvent& event)
-{
+void SwisTrack::OnDrawingMode(wxCommandEvent& event) {
 #ifdef MULTITHREAD
 	wxCriticalSectionLocker lock(*criticalSection);
 #endif
@@ -777,7 +767,6 @@ void SwisTrack::OnDrawingMode(wxCommandEvent& event)
 						   }
 						   break;
 	}
-
 }
 
 
