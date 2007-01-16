@@ -438,7 +438,8 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 		//	wxMessageDialog dlg(this, "Unable to read \n\n"+filename, "Open Configuration", wxOK);
 		//	dlg.ShowModal();
 		//	return;
-		//}
+		//}est
+
 	}
 
 	// Read the new file
@@ -1163,7 +1164,7 @@ void THISCLASS::OnTest(wxCommandEvent& WXUNUSED(event)) {
 		po[i]=i*0.1;
 	}
 
-	for (int r=0; r<100; r++) {
+	for (int r=0; r<3000; r++) {
 		CommunicationMessage mbegin("BEGINFRAME");
 		mbegin.AddInt(r);
 		mSocketServer->SendMessage(&mbegin);
@@ -1185,6 +1186,8 @@ void THISCLASS::OnTest(wxCommandEvent& WXUNUSED(event)) {
 			py[i]+=cos(po[i])*0.02;
 			po[i]-=i*0.01;
 		}
+
+		Sleep(100);
 	}
 }
 
