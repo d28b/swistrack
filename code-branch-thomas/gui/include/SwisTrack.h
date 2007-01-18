@@ -1,49 +1,29 @@
-#ifndef _SwisTrack_H
-#define _SwisTrack_H
+#ifndef HEADER_SwisTrack
+#define HEADER_SwisTrack
 
-#define MULTITHREAD
+//#define MULTITHREAD
 
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
-  #include "wx/wx.h"
+  #include <wx/wx.h>
 #endif
-#include "wx/minifram.h"  // Imports the mini frame class (tracker and segmenter panel)
-//#include <wx/html/helpctrl.h>
-#include "wx/spinbutt.h"  // Spinbuttons 
-#include "wx/valgen.h"	  // Generic validators, used in almost every dialgo
-#include "wx/image.h"     // Necessary for image operations
-#include "wx/file.h"	  // File operations (here: FileExists)
-#include "wx/busyinfo.h"  // Imports the wxBusyInfo class (used on shutdown)
-#include "wx/app.h"	      // Provides app functions (setvendorname...)
-#include "wx/listctrl.h"  // ListCtrl
-#include "wx/html/htmlwin.h"
+
+#include <wx/timer.h>  // Spinbuttons 
+
+//#include <wx/spinbutt.h>  // Spinbuttons 
+//#include "wx/valgen.h"	  // Generic validators, used in almost every dialgo
+//#include "wx/image.h"     // Necessary for image operations
+//#include "wx/file.h"	  // File operations (here: FileExists)
+//#include "wx/html/htmlwin.h"
 
 class SwisTrack;
 
-//#include "calibration.h"
-#include "ObjectTracker.h"
-// For the auxiliary thread
-#ifdef MULTITHREAD
-#include "ObjectTrackerThread.h"
-#endif
-
-#ifdef _1394
-#include <1394camera.h>
-#endif
-
-#include "constants.h"
+#include "SwisTrack.Constants.h"
 #include "AboutDialog.h"
-#include "XMLCfg.h"
 #include "ComponentListPanel.h"
 #include "SocketServer.h"
 #include "CanvasPanel.h"
-
-class SwisTrackPanel;
-class InterceptionPanel;
-class AviWriter;
-class NewExperimentDialog;
-class GuiApp;
 
 /** \class SwisTrack
 * \brief Main application window
@@ -53,47 +33,37 @@ class GuiApp;
 */ 
 class SwisTrack: public wxFrame, public CommunicationCommandHandler {
 public:
-	int UserInputModal(wxString msg,wxString title);
-	void DisplayModal(wxString msg, wxString title=_T("Message"));
-	void MakeScreenShot(wxCommandEvent& WXUNUSED(event));
-	void FlipScreen(wxCommandEvent& WXUNUSED(event));
-	void FitCanvas(wxCommandEvent& WXUNUSED(event));
-	void StopTracker();
-	void StartTracker();
-	void SetStatus(int status){ this->status=status;}
-	int GetDisplaySpeed();
-	int GetStatus() const;
-	void OnEnableAVI(wxCommandEvent& event);
-	CvPoint GetUserEstimateFor(int id);
-	void Finished();
-	void ShutDown();
+	// The free run timer.
+	wxTimer mFreeRunTimer;
+	// The free run interval in milliseconds.
+	int mFreeRunInterval;
 
-	//! Constructor.
-	SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style = wxDEFAULT_FRAME_STYLE);
-	
 	//! The SwisTrackCore object.
 	SwisTrackCore *mSwisTrackCore;
 	//! The SocketServer object.
 	SocketServer *mSocketServer;
 
-	// menu bar and items
+	// Menu bar and items
 	wxMenuBar *menuBar;
 	wxMenu *menuFile;
 	wxMenu *menuView;
-	wxMenu *menuControl;
 	wxMenu *menuHelp;
 	wxMenu *menuMode;
 	wxMenu *menuTools;
 	wxMenu *menuComponents;
 
+	int mDisplaySpeed;
+
+	// Main components
 	CanvasPanel* mCanvasPanel;
 	ComponentListPanel* mComponentListPanel;
 	wxPanel* mPanelInformation;
 	wxPanel* mPanelInformation1;
 
-	// bitmap
-	wxBitmap* colorbmp;
-	//int width, height;
+	//! Constructor.
+	SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style = wxDEFAULT_FRAME_STYLE);
+	//! Destructor.
+	~SwisTrack();
 
 	//! Opens a file.
 	void OpenFile(const wxString &filename, bool breakonerror, bool astemplate);
@@ -107,96 +77,90 @@ public:
 
     // event handlers (these functions should _not_ be virtual)
 	void OnHelp(wxCommandEvent& WXUNUSED(event));
+	void OnHelpAbout(wxCommandEvent& WXUNUSED(event));
 	void OnTest(wxCommandEvent& WXUNUSED(event));
-    void OnSetAviOutput(wxCommandEvent& WXUNUSED(event));
-	void OnMenuFileNew(wxCommandEvent& WXUNUSED(event));
-	void OnMenuFileOpen(wxCommandEvent& WXUNUSED(event));
-	void OnMenuFileSave(wxCommandEvent& WXUNUSED(event));
-	void OnMenuFileSaveAs(wxCommandEvent& WXUNUSED(event));
-	void OnMenuFileQuit(wxCommandEvent& WXUNUSED(event));
-	void OnMenuControlStart(wxCommandEvent& WXUNUSED(event));
-	void OnMenuControlPause(wxCommandEvent& WXUNUSED(event));
-	void OnMenuControlContinue(wxCommandEvent& WXUNUSED(event));
-	void OnMenuControlStop(wxCommandEvent& WXUNUSED(event));
-	void OnMenuControlSinglestep(wxCommandEvent& WXUNUSED(event));
-	void Singlestep();
-	void OnMenuControlSinglestepback(wxCommandEvent& WXUNUSED(event));
-	void OnMenuControlRewind(wxCommandEvent& WXUNUSED(event));
-
-	void OnMenuToolsShow1394Camera(wxCommandEvent& WXUNUSED(event));
-    void OnMenuHelpAbout(wxCommandEvent& WXUNUSED(event));
+	void OnFileNew(wxCommandEvent& WXUNUSED(event));
+	void OnFileOpen(wxCommandEvent& WXUNUSED(event));
+	void OnFileSave(wxCommandEvent& WXUNUSED(event));
+	void OnFileSaveAs(wxCommandEvent& WXUNUSED(event));
+	void OnFileQuit(wxCommandEvent& WXUNUSED(event));
+	void OnControlFreeRun(wxCommandEvent& WXUNUSED(event));
+	void OnControlSingleStep(wxCommandEvent& WXUNUSED(event));
+	void OnControlReset(wxCommandEvent& WXUNUSED(event));
 	void OnChangeDisplaySpeed(wxScrollEvent& WXUNUSED(event));
-	
-	void OnMenuViewShowTracker(wxCommandEvent& WXUNUSED(event));
-	void OnMenuViewShowSegmenter(wxCommandEvent& WXUNUSED(event));
-	void OnMenuViewShowInput(wxCommandEvent& WXUNUSED(event));
-	void OnMenuViewShowParticleFilter(wxCommandEvent& WXUNUSED(event));
-	void OnMenuViewShowSegmenterPP(wxCommandEvent& WXUNUSED(event));
+	void OnMakeScreenShot(wxCommandEvent& WXUNUSED(event));
 
-	void OnDrawingMode(wxCommandEvent& event);
- 	void OnMenuIntercept(wxCommandEvent& WXUNUSED(event));
-	
-    //control panels
-	SwisTrackPanel* trackingpanel;
-	SwisTrackPanel* segmenterpanel;
-	SwisTrackPanel* segmenterpppanel;
-	SwisTrackPanel* inputpanel;
-	SwisTrackPanel* particlefilterpanel;
-	InterceptionPanel* interceptionpanel;
+	//! Creates the menu.
+	void BuildMenuBar();
+	//! Creates the toolbar.
+	void BuildToolBar();
 
-	//toolbar
-	void RecreateToolbar();
+	//! Starts free run mode.
+	void StartFreeRun();
+	//! Stops free run mode.
+	void StopFreeRun();
+	//! Performs a single step.
+	void SingleStep();
+	//! Sets the free run interval.
+	void SetFreeRunInterval(int interval);
+	//! Resets the SwisTrackCore object.
+	void Reset();
 
-	void Update();
-
-	
-	CvPoint2D32f* GetPos(int id);
-	int clicked; // keep track of mouse
-	int mx,my;
-	
-#ifdef _1394
-	C1394Camera theCamera;  //!< Camera handle (CMU 1394 Camera Driver)
-#endif
-	ObjectTracker* ot;		//!< The tracking core (ObjectTracker)
-
-	// Tool classes
-	AviWriter* aviwriter;
-
-	~SwisTrack();
-
+	//! The free run timer event.
+	void OnFreeRunTimer(wxTimerEvent& WXUNUSED(event));
+	//! The idle event.
 	void OnIdle(wxIdleEvent& event);
 
 	//! The current configuration file.
 	wxString mFileName;
 	bool mChanged;
-    
-	 xmlpp::DomParser* expparser;
-     xmlpp::Document* expdocument;
-     xmlpp::Element* expRoot;
 
 #ifdef MULTITHREAD
-	 // Critical section used to synchronize the main and auxiliary threads
-	 wxCriticalSection* criticalSection; 
+	// Critical section used to synchronize the main and auxiliary threads
+	wxCriticalSection* mCriticalSection; 
 #endif
-
-protected:
-    // any class wishing to process wxWindows events must use this macro
-    DECLARE_EVENT_TABLE()
 
 private:
-	void RefreshAllDisplays();
-	int display_speed; //!< Display speed that can be changed in the toolbar
+	//void RefreshAllDisplays();
 	double fps;       //!< FPS, read from the avi file
-	wxString avioutfname; //!< File for video output
-	//wxHtmlHelpController help; //!< Help controller
 	int show_coverage;
-	int status;
-	int flip; //!< Flag whether to flip the image
 
-#ifdef MULTITHREAD
-	ObjectTrackerThread* objectTrackerThread; // Object tracker auxiliary thread
-#endif
-	
+protected:
+	// IDs for the controls and the menu commands
+	enum eConstants {
+		sID_New,
+		sID_Open,
+		sID_Save,
+		sID_SaveAs,
+		sID_Quit,
+		sID_Control_FreeRun,
+		sID_Control_SingleStep,
+		sID_Control_Reset,
+		sID_View_ShowTracker,
+		sID_View_ShowParticleFilter,
+		sID_View_ShowSegmenterPP,
+		sID_View_ShowSegmenter,
+		sID_View_ShowInput,
+		sID_View_TrajCross,
+		sID_View_TrajNoID,
+		sID_View_TrajFull,
+		sID_View_TrajNoCross,
+		sID_View_Coverage,
+		sID_View_ShowMask,
+		sID_Mode_Auto,
+		sID_Mode_Manual,
+		sID_Mode_Intercept,
+		sID_Tools_ShowCamera,
+		sID_Tools_Screenshot,
+		sID_DisplaySpeed,
+		sID_Intercept_Done,
+		sID_Intercept_Pick,
+		sID_Help,
+		sID_Test,
+		sID_About = wxID_ABOUT   // this must be wxID_ABOUT to put it in the Mac OS X "Apple" menu
+	};
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

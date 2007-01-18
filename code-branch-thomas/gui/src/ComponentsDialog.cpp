@@ -21,7 +21,7 @@ THISCLASS::ComponentsDialog(wxWindow* parent, SwisTrackCore *stc):
 	wxTreeItemId rootitem=mTree->AddRoot("");
 
 	// Add an item for each component
-	SwisTrackCore::tComponents::iterator it=mSwisTrackCore->mAvailableComponents.begin();
+	SwisTrackCore::tComponentList::iterator it=mSwisTrackCore->mAvailableComponents.begin();
 	wxTreeItemId curcategoryitem;
 	ComponentCategory *curcategory;
 	while (it!=mSwisTrackCore->mAvailableComponents.end()) {

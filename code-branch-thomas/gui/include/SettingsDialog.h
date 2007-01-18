@@ -10,7 +10,6 @@
 #include "wx/listbox.h"
 #include "wx/spinctrl.h"
 #include "wx/event.h"
-#include "constants.h"
 
 #include "SwisTrack.h"
 #include <libxml++/libxml++.h>

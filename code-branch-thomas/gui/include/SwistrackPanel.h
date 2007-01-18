@@ -5,7 +5,6 @@
 #include "wx/valgen.h"	  // Generic validators, used in almost every dialgo
 #include "wx/slider.h"
 
-#include "constants.h"
 #include "SwisTrack.h"
 #include "SwisTrackPanelCanvas.h"
 

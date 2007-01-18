@@ -10,7 +10,7 @@ THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
 	mDisplayName="USB Camera";
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
-	AddDisplayImage(&mDisplayImage);
+	AddDisplayImage(&mDisplayImageOutput);
 }
 
 THISCLASS::~ComponentInputCameraUSB() {
@@ -47,10 +47,10 @@ void THISCLASS::OnStep() {
 	mCore->mDataStructureInput.mFrameNumber++;
 
 	// Let the DisplayImage know about our image
-	mDisplayImage.mNewImage=mCurrentImage;
-	std::ostringstream oss;
-	oss << "Frame " << mCore->mDataStructureInput.mFrameNumber;
-	mDisplayImage.mAnnotation1=oss.str();
+	mDisplayImageOutput.mNewImage=mCurrentImage;
+	//std::ostringstream oss;
+	//oss << "Frame " << mCore->mDataStructureInput.mFrameNumber;
+	//mDisplayImageOutput.mAnnotation1=oss.str();
 }
 
 void THISCLASS::OnStepCleanup() {
@@ -62,9 +62,6 @@ void THISCLASS::OnStop() {
 	if (! mCapture) {return;}
 
 	cvReleaseCapture(&mCapture);
-}
-
-void THISCLASS::OnDisplayImageUpdate(const std::string &) {
 }
 
 double THISCLASS::GetFPS() {

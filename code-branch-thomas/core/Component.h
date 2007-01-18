@@ -58,8 +58,10 @@ public:
 	virtual void OnStep() = 0;
 	//! This event is called to cleanup a previously performed step.
 	virtual void OnStepCleanup() = 0;
-	//! This event is called to stop the component. No further OnStep() will be called before OnStart().
+	//! This event is called to stop the component. No further OnStep() will be called before OnStart(). Note that this method does not necessarily need to reset everything - the next call to OnStart may continue at the same place unless the configuration has changed.
 	virtual void OnStop() = 0;
+	//! This event is called to reset the component. This should reset all internal variables.
+	virtual void OnReset() {};
 	//! This function must return an new object of its own class.
 	virtual Component *Create() = 0;
 

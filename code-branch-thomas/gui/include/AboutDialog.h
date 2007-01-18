@@ -1,5 +1,5 @@
-#ifndef _ABOUTDIALOG_H
-#define _ABOUTDIALOG_H
+#ifndef HEADER_AboutDialog
+#define HEADER_AboutDialog
 
 #include "wx/wxprec.h"
 
@@ -7,21 +7,15 @@
   #include "wx/wx.h"
 #endif
  
-/** \class AboutDialog
-*
-* \brief Displays "about" dialog
-*/
-class AboutDialog : public wxDialog
-{
+//! About dialog.
+class AboutDialog: public wxDialog {
+
 public:
+	//! Constructor.
 	AboutDialog(wxWindow *parent);
-	virtual ~AboutDialog(){}
-	void SetText(const wxString& text);
+	//! Destructor.
+	~AboutDialog() {}
 
-	private: 
-
-	wxStaticText *m_pInfoText;
-	wxButton *m_pOkButton;
 };
 
 #endif

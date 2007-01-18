@@ -21,17 +21,30 @@ class Canvas;
 */
 class Canvas: public wxControl {
 
-private:
-	 CanvasPanel* mCanvasPanel;
-	 IplImage *mImage;
-  
 public:
+	//! The associated CanvasPanel.
+	CanvasPanel* mCanvasPanel;
+	//! The current image.
+	IplImage *mImage;
+	//! Whether the image should be flipped vertically (TODO not implemented).
+	IplImage *mFlipVertically;
+	//! Whether the image should be flipped horizontally (TODO not implemented).
+	IplImage *mFlipHorizontally;
+
+	// Constructor.
 	Canvas(CanvasPanel *cp);
+	// Destructor.
+	~Canvas();
 
+	//! Overwritten to avoid painting the background.
 	void EraseBackground(wxEraseEvent& event);
-	void OnMouseClick(wxMouseEvent &event);
+	//! Handles left click.
+	void OnMouseLeftClick(wxMouseEvent &event);
+	//! Handles right click.
+	void OnMouseRightClick(wxMouseEvent &event);
+	//! Handles mouse move.
 	void OnMouseMove(wxMouseEvent &event);
-
+	//! Paints the canvas.
 	void OnPaint(wxPaintEvent& WXUNUSED(event));
 
 	//! This sets a new image. Note that this class cleans up and frees old image automatically.

@@ -9,28 +9,38 @@
 
 class CanvasPanel;
 
+#include <wx/stattext.h>
 #include "SwisTrack.h"
+#include "Canvas.h"
 #include "DisplayImageSubscriberInterface.h"
 
 /** \class CanvasPanel
-* \brief The panel containing the canvas and the annotations
+* \brief The panel containing the canvas and the annotations.
 */
 class CanvasPanel: public wxPanel, public DisplayImageSubscriberInterface {
 
-private:
-	SwisTrack *mSwisTrack;
-	Canvas *mCanvas;
-	wxStaticText mTitle;
-	wxStaticText mAnnotation1;
-	wxStaticText mAnnotation2;
-	wxStaticText mAnnotation3;
-	wxMenu *mMenu;
-  
 public:
+	//! The associated SwisTrack object.
+	SwisTrack *mSwisTrack;
+	//! The canvas.
+	Canvas *mCanvas;
+	//! The title text.
+	wxStaticText *mTitle;
+	//! The popup menu.
+	wxMenu *mMenu;
+	//! The update rate (only each mUpdateRate image is displayed). If mUpdateRate==0, visualization is disabled.
+	int mUpdateRate;
+	//! The update rate counter.
+	int mUpdateCounter;
+
+	//! Constructor.
 	CanvasPanel(SwisTrack *st);
+	//! Destructor.
 	~CanvasPanel();
 
+	//! The corresponding GUI event handler.
 	void OnMouseLeftDown(wxMouseEvent &event);
+	//! The corresponding GUI event handler.
 	void OnMenu(wxCommandEvent& event);
 
 	// DisplayImageSubscriberInterface methods

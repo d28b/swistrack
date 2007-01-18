@@ -55,10 +55,12 @@ public:
 
 	//! Starts all the components.
 	bool Start();
-	//! Performs one step, including cleanup.
+	//! Performs one complete step, including cleanup.
 	bool Step();
 	//! Stops all started components.
 	bool Stop();
+	//! Resets all started components.
+	void Reset();
 
 	//! Clears all deployed components.
 	void Clear();
@@ -69,7 +71,13 @@ public:
 	//! Returns a component by name.
 	Component *GetComponentByName(const std::string &name);
 
+	//! Returns whether the components have been started.
+	bool IsStarted() {return mStarted;}
+
 protected:
+	//! Whether the components have been started or not.
+	bool mStarted;
+
 	//! Reads one component from the XML file.
 	void ConfigurationReadXMLElement(xmlpp::Element* element, ErrorList *xmlerr);
 

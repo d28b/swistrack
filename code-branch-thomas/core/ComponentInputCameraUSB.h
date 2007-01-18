@@ -4,6 +4,7 @@
 #include "cv.h"
 #include "highgui.h"
 #include "Component.h"
+#include "DisplayImageStandard.h"
 
 class ComponentInputCameraUSB: public Component {
 
@@ -27,7 +28,7 @@ private:
 	IplImage* mCurrentImage;
 
 	//! The DisplayImage showing the last acquired image.
-	DisplayImageStandard mDisplayImage;
+	DisplayImageStandard mDisplayImageOutput;
 };
 
 #endif

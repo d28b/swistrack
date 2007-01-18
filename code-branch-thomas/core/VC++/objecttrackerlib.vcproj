@@ -178,10 +178,6 @@
 			Name="Source Files"
 			>
 			<File
-				RelativePath="..\src\calibration.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\CommunicationCommandHandler.cpp"
 				>
 			</File>
@@ -286,86 +282,8 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\input.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\mask.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\src\ObjectTracker.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\src\Output.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\Particle.cpp"
 				>
-			</File>
-			<File
-				RelativePath="..\src\ParticleFilter.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\Segmenter.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\StatusItem.cpp"
@@ -375,80 +293,10 @@
 				RelativePath="..\SwisTrackCore.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\src\Track.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\src\Tracker.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\src\TrackingImage.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			>
-			<File
-				RelativePath="..\include\calibration.h"
-				>
-			</File>
 			<File
 				RelativePath="..\CommunicationCommandHandler.h"
 				>
@@ -554,35 +402,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\input.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\mask.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\ObjectTracker.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\OldComponent.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\Output.h"
-				>
-			</File>
-			<File
 				RelativePath="..\Particle.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\ParticleFilter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\Segmenter.h"
 				>
 			</File>
 			<File
@@ -591,22 +411,6 @@
 			</File>
 			<File
 				RelativePath="..\SwisTrackCore.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\Track.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\Tracker.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\TrackingImage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\ui.h"
 				>
 			</File>
 		</Filter>

@@ -1,5 +1,7 @@
 #include "Canvas.h"
-#define THISCLASS CanvasPanel
+#define THISCLASS Canvas
+
+#include <wx/image.h>
 
 BEGIN_EVENT_TABLE(THISCLASS, wxControl)
     EVT_PAINT(THISCLASS::OnPaint)
@@ -14,7 +16,10 @@ THISCLASS::Canvas(CanvasPanel *cp):
  
 }
 
-void THISCLASS::EraseBackground(wxEraseEvent& event){
+THISCLASS::~Canvas() {
+}
+
+void THISCLASS::EraseBackground(wxEraseEvent& event) {
 	// Overwrite this method to avoid drawing the background
 }
 
@@ -23,7 +28,7 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 
 	if (mImage==0) {
 		wxSize size=GetClientSize();
-		dc.DrawRectangle(0, 0, size.width, size.height);
+		dc.DrawRectangle(0, 0, size.GetWidth(), size.GetHeight());
 		return;
 	}
 

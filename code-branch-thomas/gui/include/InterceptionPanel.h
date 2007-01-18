@@ -10,7 +10,6 @@
 #include "wx/minifram.h"  // Imports the mini frame class (tracker and segmenter panel)
 #include "wx/valgen.h"	  // Generic validators, used in almost every dialgo
 
-#include "constants.h"
 #include "SwisTrack.h"
 
 

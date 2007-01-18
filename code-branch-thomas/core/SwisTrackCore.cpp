@@ -61,10 +61,11 @@ THISCLASS::SwisTrackCore():
 }
 
 bool THISCLASS::Start() {
-	bool allok=true;
+	if (mStarted) {return false;}
 
 	// Start all components (until first error)
-	tComponents::iterator it=mDeployedComponents.begin();
+	bool allok=true;
+	tComponentList::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
 		(*it)->ClearStatus();
 		(*it)->OnStart();
@@ -76,14 +77,16 @@ bool THISCLASS::Start() {
 		it++;
 	}
 
+	mStarted=true;
 	return allok;
 }
 
 bool THISCLASS::Stop() {
-	bool allok=true;
+	if (! mStarted) {return false;}
 
 	// Stop all components
-	tComponents::iterator it=mDeployedComponents.end();
+	bool allok=true;
+	tComponentList::iterator it=mDeployedComponents.end();
 	while (it!=mDeployedComponents.begin()) {
 		it--;
 		if ((*it)->mStarted) {
@@ -94,14 +97,16 @@ bool THISCLASS::Stop() {
 		}
 	}
 
+	mStarted=false;
 	return allok;
 }
 
 bool THISCLASS::Step() {
-	bool allok=true;
+	if (! mStarted) {return false;}
 
 	// Run until first error, or until the end (all started components)
-	tComponents::iterator it=mDeployedComponents.begin();
+	bool allok=true;
+	tComponentList::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
 		if (! (*it)->mStarted) {break;}
 		(*it)->ClearStatus();
@@ -120,8 +125,20 @@ bool THISCLASS::Step() {
 	return allok;
 }
 
+void THISCLASS::Reset() {
+	if (mStarted) {return;}
+
+	// Start all components (until first error)
+	tComponentList::iterator it=mDeployedComponents.begin();
+	while (it!=mDeployedComponents.end()) {
+		(*it)->ClearStatus();
+		(*it)->OnReset();
+		it++;
+	}
+}
+
 void THISCLASS::Clear() {
-	tComponents::iterator it=mDeployedComponents.begin();
+	tComponentList::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
 		delete (*it);
 		it++;
@@ -173,7 +190,7 @@ void THISCLASS::ConfigurationReadXMLElement(xmlpp::Element* element, ErrorList *
 
 void THISCLASS::ConfigurationWriteXML(xmlpp::Element *configuration, ErrorList *xmlerr) {
 	// Add an element for each component
-	tComponents::iterator it=mDeployedComponents.begin();
+	tComponentList::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
 		xmlpp::Element *element=configuration->add_child("component");
 		element->set_attribute("type", (*it)->mName);
@@ -184,7 +201,7 @@ void THISCLASS::ConfigurationWriteXML(xmlpp::Element *configuration, ErrorList *
 }
 
 Component *THISCLASS::GetComponentByName(const std::string &name) {
-	tComponents::iterator it=mAvailableComponents.begin();
+	tComponentList::iterator it=mAvailableComponents.begin();
 	while (it!=mAvailableComponents.end()) {
 		if ((*it)->mName==name) {return (*it);}
 		it++;

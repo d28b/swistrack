@@ -21,9 +21,12 @@ public:
 	//! Destructor.
 	~ComponentsDialog() {}
 
+	//! Updates the component list.
 	void OnUpdate();
 
+	//! Handles the corresponding GUI event.
 	void OnButtonAdd(wxCommandEvent& event);
+	//! Handles the corresponding GUI event.
 	void OnButtonCancel(wxCommandEvent& event);
 
 protected:
@@ -33,8 +36,11 @@ protected:
 	};
 
 private:
+	//! The tree with the components.
 	wxTreeCtrl *mTree;
+	//! The corresponding GUI object.
 	wxButton *mButtonAdd;
+	//! The corresponding GUI object.
 	wxButton *mButtonCancel;
 
 	DECLARE_EVENT_TABLE()

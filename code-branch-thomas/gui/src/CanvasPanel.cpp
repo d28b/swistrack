@@ -2,6 +2,7 @@
 #define THISCLASS CanvasPanel
 
 #include "cv.h"
+#include <sstream>
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_LEFT_DOWN(THISCLASS::OnMouseLeftDown)
@@ -11,29 +12,33 @@ END_EVENT_TABLE()
 THISCLASS::CanvasPanel(SwisTrack *st):
 		wxPanel(st, -1, wxDefaultPosition, wxSize(100, 100)),
 		DisplayImageSubscriberInterface(),
-		mSwisTrack(st), mMenu(0) {
+		mSwisTrack(st), mMenu(0), mUpdateRate(1), mUpdateCounter(0) {
 
 	// Create the canvas
 	mCanvas=new Canvas(this);
 
 	// Create the combo box
-	mTitle=new wxComboBox(this, eID_ComboBox);
-	mTitle->SetStyle(wxCB_READONLY);
-	mTitle->PushEventHandler(this);
+	mTitle=new wxStaticText(this, -1, "Test");
+	//mTitle->PushEventHandler(this);
 
 	// Layout the components in the panel
 	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
-	vs->Add(mTitle, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT_HORIZONTAL, 0);
+	vs->Add(mTitle, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
 	vs->Add(mCanvas, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 0);
 	SetSizer(vs);
 }
 
-~THISCLASS::CanvasPanel() {
+THISCLASS::~CanvasPanel() {
 }
 
 void THISCLASS::OnDisplayImageChanged(DisplayImage *di) {
+	if (mUpdateRate==0) {return;}
+	mUpdateCounter--;
+	if (mUpdateCounter>0) {return;}
+	mUpdateCounter=mUpdateRate;
+
 	wxSize size=GetClientSize();
-	IplImage *img=di->CreateImage(size.width, size.height);
+	IplImage *img=di->CreateImage(size.GetWidth(), size.GetHeight());
 	mCanvas->SetImage(img);
 }
 
@@ -46,6 +51,7 @@ void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 	mMenu = new wxMenu;
 
 	// Add all possible displays
+	int id=1;
 	SwisTrackCore *stc=mSwisTrack->mSwisTrackCore;
 	SwisTrackCore::tComponentList::iterator it=stc->mDeployedComponents.begin();
 	while (it!=stc->mDeployedComponents.end()) {
@@ -53,7 +59,7 @@ void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 
 		Component::tDisplayImageList::iterator itdi=c->mDisplayImages.begin();
 		while (itdi!=c->mDisplayImages.end()) {
-			mDisplayImage *di=(*it);
+			DisplayImage *di=(*itdi);
 
 			std::ostringstream oss;
 			oss << c->mDisplayName << ": " << di->mDisplayName;

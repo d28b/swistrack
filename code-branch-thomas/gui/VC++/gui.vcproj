@@ -270,7 +270,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\src\AviWriter.cpp"
+				RelativePath="..\src\Application.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -334,76 +334,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\gui.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\src\InterceptionPanel.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\src\ObjectTrackerThread.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\SettingsDialog.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\src\SocketServer.cpp"
 				>
 				<FileConfiguration
@@ -433,14 +363,6 @@
 				RelativePath="..\src\SwisTrack.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\src\SwisTrackPanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\SwisTrackPanelCanvas.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -451,7 +373,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\AviWriter.h"
+				RelativePath="..\include\Application.h"
 				>
 			</File>
 			<File
@@ -475,31 +397,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\constants.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\ErrorListDialog.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\GUIApp.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\InterceptionPanel.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\ObjectTrackerThread.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\resource.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\SettingsDialog.h"
 				>
 			</File>
 			<File
@@ -512,18 +414,6 @@
 			</File>
 			<File
 				RelativePath="..\include\SwisTrack.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\SwistrackPanel.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\SwisTrackPanelCanvas.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\xmlcfg\include\xmlcfg.h"
 				>
 			</File>
 		</Filter>
