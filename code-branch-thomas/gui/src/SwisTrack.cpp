@@ -952,7 +952,7 @@ void SwisTrack::RefreshAllDisplays()
 		canvas->Refresh();
 		delete(colorimg);
 		cvReleaseImage(&tmp);
-	}	
+	}
 
 	if(ot->GetBinaryPointer() && GetMenuBar()->GetMenu(2)->IsChecked(Gui_View_ShowSegmenter)){
 		IplImage* tmp = cvCreateImage(cvSize(ot->GetBinaryPointer()->width,ot->GetBinaryPointer()->height),

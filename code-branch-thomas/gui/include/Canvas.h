@@ -11,6 +11,7 @@ class Canvas;
 
 #include "wx/dcbuffer.h"
 #include "SwisTrack.h"
+#include "cv.h"
 
 /** \class Canvas
 * \brief Creates a canvas to draw tracking progress
@@ -21,18 +22,20 @@ class Canvas;
 class Canvas: public wxControl {
 
 private:
-	 SwisTrack* parent;
-	 int status;
-	 int dragging; 
+	 CanvasPanel* mCanvasPanel;
+	 IplImage *mImage;
   
 public:
-	Canvas(SwisTrack *parent, const wxPoint& pos, const wxSize& size);
+	Canvas(CanvasPanel *cp);
 
 	void EraseBackground(wxEraseEvent& event);
 	void OnMouseClick(wxMouseEvent &event);
 	void OnMouseMove(wxMouseEvent &event);
 
 	void OnPaint(wxPaintEvent& WXUNUSED(event));
+
+	//! This sets a new image. Note that this class cleans up and frees old image automatically.
+	void SetImage(IplImage *img);
 
 	DECLARE_EVENT_TABLE()
 };
