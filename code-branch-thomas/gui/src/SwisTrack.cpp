@@ -38,7 +38,7 @@ driver.
 #include "SwisTrack.h"
 #define THISCLASS SwisTrack
 
-#include "Canvas.h"
+#include "CanvasPanel.h"
 #include "AviWriter.h"
 #include "SocketServer.h"
 #include "SettingsDialog.h"
@@ -283,7 +283,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 #endif // wxUSE_STATUSBAR
 
 	colorbmp = new wxBitmap(640, 480);
-	canvas=new Canvas(this, wxPoint(0, 0), wxSize(40, 30));
+	mCanvasPanel=new CanvasPanel(this, wxPoint(0, 0), wxDefaultSize);
 	RecreateToolbar();
 
 	// SwisTrackCore and SocketServer
@@ -304,7 +304,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 
 	// Setup frame contents
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
-	hs->Add(canvas, 1, wxALL|wxSHAPED|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 10);
+	hs->Add(mCanvasPanel, 1, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 10);
 	hs->Add(mPanelInformation, 0, wxEXPAND, 0);
 	hs->Add(mPanelInformation1, 0, wxEXPAND, 0);
 
@@ -325,23 +325,22 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	wxMessageBox(wxT("Failed adding book doc/html/index.hhp"));
 	*/
 
-	if(!wxFile::Exists("swistrack.exp")){
+	if (!wxFile::Exists("swistrack.exp")){
 		DisplayModal("File swistrack.exp could not be found. Quitting.","Error");
 		Close(TRUE);
 	}
 
-	if(!wxFile::Exists("default.cfg")){
+	if (!wxFile::Exists("default.cfg")){
 		DisplayModal("File default.cfg could not be found. Quitting.","Error");
 		Close(TRUE);
 	}
 
-	try{
+	try {
 		expparser = new xmlpp::DomParser();
 		expparser->parse_file("swistrack.exp");
 		expdocument = expparser->get_document();
 		expRoot = expparser->get_document()->get_root_node();
-	}
-	catch (...){
+	} catch (...) {
 		throw "Problems encountered when opening swistrack.exp. Invalid syntax?";
 	}
 }

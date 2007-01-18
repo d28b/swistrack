@@ -7,12 +7,15 @@
 class DisplayImage {
 
 public:
-	//! The image.
-	IplImage *mImage;
 	//! The internal name.
 	std::string mName;
 	//! The name displayed to the user.
 	std::string mDisplayName;
+
+	//! Annotation 1, usually displayed below the image.
+	std::string mAnnotation1;
+	//! Annotation 2, usually displayed below the image.
+	std::string mAnnotation2;
 
 	//! The list type of subscribers.
 	typedef std::list<DisplayImageSubscriberInterface *> tSubscribers;
@@ -24,8 +27,13 @@ public:
 	//! Destructor.
 	~DisplayImage() {}
 
-	//! Called to draw the display image. Note that this function is only called if there is at least one subscriber.
-	OnPaint() = 0;
+	//! Called to draw the display image. This function is called once for each subscriber, with the desired width/height. The returned IplImage must be released using ReleaseImage.
+	virtual IplImage *CreateImage(int maxwidth, int maxheight) = 0;
+	//! Releases an image.
+	void ReleaseImage(IplImage *image);
+
+	//! Calculates the maximum size.
+	CvSize CalculateMaxSize(int srcwidth, int srcheight, int maxwidth, int maxheight);
 };
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef _Canvas_H
-#define _Canvas_H
+#ifndef HEADER_Canvas
+#define HEADER_Canvas
 
 #include "wx/wxprec.h"
 
@@ -17,11 +17,9 @@
 * This class implements an OnPaint method and an event handler
 * for mouse clicks on the canvas.
 */
-class Canvas: public wxPanel // wxScrolledWindow
-{
+class Canvas: public wxControl {
+
 private:
-	 int default_width;
-	 int default_height;
 	 SwisTrack* parent;
 	 int status;
 	 int dragging; 
@@ -29,10 +27,10 @@ private:
 public:
 	void OnMouseClick(wxMouseEvent &event);
 	void OnMouseMove(wxMouseEvent &event);
-    Canvas(SwisTrack *parent, const wxPoint& pos, const wxSize& size);
+	Canvas(SwisTrack *parent, const wxPoint& pos, const wxSize& size);
 	void EraseBackground(wxEraseEvent& event);
-  	
-    void OnPaint(wxPaintEvent& WXUNUSED(event));
+
+	void OnPaint(wxPaintEvent& WXUNUSED(event));
 	wxSize GetDefaultSize(){return(wxSize(default_width,default_height));}
 	void SetDefaultSize(wxSize size){default_width=size.GetWidth(); default_height=size.GetHeight();}
 	void SetSizeToDefault(){SetSize(default_width,default_height);};

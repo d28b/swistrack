@@ -3,7 +3,8 @@
 
 THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
 		Component(stc, "CameraUSB"),
-		mCapture(0), mLastImage(0) {
+		mCapture(0), mCurrentImage(0),
+		mDisplayImageOutput(this, "Output") {
 
 	// Data structure relations
 	mDisplayName="USB Camera";
@@ -23,8 +24,8 @@ void THISCLASS::OnStart() {
 		return;
 	}
 
-	mLastImage = cvQueryFrame(mCapture);
-	if (! mLastImage) {
+	mCurrentImage = cvQueryFrame(mCapture);
+	if (! mCurrentImage) {
 		AddError("Could not retrieve image from USB camera.");
 		return;
 	}
@@ -34,26 +35,35 @@ void THISCLASS::OnStep() {
 	if (! mCapture) {return;}	
 
 	// Read from camera
-	mLastImage = cvQueryFrame(mCapture);
-	if (! mLastImage) {
+	mCurrentImage = cvQueryFrame(mCapture);
+	if (! mCurrentImage) {
 		AddError("Could not retrieve image from USB camera.");
 		return;
 	}
 
 	// Set DataStructureImage
-	mCore->mDataStructureInput.mImage=mLastImage;	
+	mCore->mDataStructureInput.mImage=mCurrentImage;
 	mCore->mDataStructureInput.mFrameNumber++;
+
+	// Let the DisplayImage know about our image
+	mDisplayImage.mNewImage=mCurrentImage;
+	std::ostringstream oss;
+	oss << "Frame " << mCore->mDataStructureInput.mFrameNumber;
+	mDisplayImage.mAnnotation1=oss.str();
 }
 
 void THISCLASS::OnStepCleanup() {
 	mCore->mDataStructureInput.mImage=0;
-	if (mLastImage) {cvReleaseImage(&mLastImage);}
+	if (mCurrentImage) {cvReleaseImage(&mCurrentImage);}
 }
 
 void THISCLASS::OnStop() {
 	if (! mCapture) {return;}
 
 	cvReleaseCapture(&mCapture);
+}
+
+void THISCLASS::OnDisplayImageUpdate(const std::string &) {
 }
 
 double THISCLASS::GetFPS() {

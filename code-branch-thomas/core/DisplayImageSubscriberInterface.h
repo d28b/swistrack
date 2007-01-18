@@ -12,7 +12,7 @@ public:
 	~DisplayImageSubscriberInterface() {}
 
 	//! Called when a display image changes.
-	OnDisplayImageChanged(DisplayImage *displayimage) = 0;
+	virtual void OnDisplayImageChanged(DisplayImage *displayimage) = 0;
 };
 
 #endif

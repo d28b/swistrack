@@ -37,6 +37,10 @@ void THISCLASS::AddDataStructureWrite(DataStructure *ds) {
 	mDataStructureWrite.push_back(ds);
 }
 
+void THISCLASS::AddDisplayImage(DisplayImage *di) {
+	mDisplayImages.push_back(di);
+}
+
 bool THISCLASS::HasDataStructureRead(DataStructure *ds) {
 	tDataStructureList::iterator it=find(mDataStructureRead.begin(), mDataStructureRead.end(), ds);
 	return (it != mDataStructureRead.end());

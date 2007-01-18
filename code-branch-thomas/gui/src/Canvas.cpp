@@ -1,4 +1,5 @@
 #include "Canvas.h"
+#define THISCLASS CanvasPanel
 
 BEGIN_EVENT_TABLE(Canvas, wxPanel)
     EVT_PAINT(Canvas::OnPaint)

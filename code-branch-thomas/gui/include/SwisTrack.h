@@ -51,7 +51,7 @@ class GuiApp;
 * The class extends the wxFrame class and displays tracking progress using ObjectTracker which
 * is triggered by idle events. Also, it implements all event handlers of the GUI.
 */ 
-class SwisTrack : public wxFrame, public CommunicationCommandHandler {
+class SwisTrack: public wxFrame, public CommunicationCommandHandler {
 public:
 	int UserInputModal(wxString msg,wxString title);
 	void DisplayModal(wxString msg, wxString title=_T("Message"));
@@ -77,8 +77,8 @@ public:
 	SocketServer *mSocketServer;
 
 	// menu bar and items
-    wxMenuBar *menuBar;
-  	wxMenu *menuFile;
+	wxMenuBar *menuBar;
+	wxMenu *menuFile;
 	wxMenu *menuView;
 	wxMenu *menuControl;
 	wxMenu *menuHelp;
@@ -86,7 +86,7 @@ public:
 	wxMenu *menuTools;
 	wxMenu *menuComponents;
 
-	Canvas* canvas;
+	CanvasPanel* mCanvasPanel;
 	ComponentListPanel* mComponentListPanel;
 	wxPanel* mPanelInformation;
 	wxPanel* mPanelInformation1;

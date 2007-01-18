@@ -24,7 +24,10 @@ private:
 	//! Pointer to the capture object.
 	CvCapture* mCapture;
 	//! The last acquired image.
-	IplImage* mLastImage;
+	IplImage* mCurrentImage;
+
+	//! The DisplayImage showing the last acquired image.
+	DisplayImageStandard mDisplayImage;
 };
 
 #endif

@@ -41,6 +41,11 @@ public:
 	//! The data structures that are written by this component.
 	tDataStructureList mDataStructureWrite;
 
+	//! DisplayImage list type.
+	typedef std::list<DisplayImage*> tDisplayImageList;
+	//! The DisplayImage objects that this component provides.
+	tDisplayImageList mDisplayImages;
+
 	//! Constructor.
 	Component(SwisTrackCore *stc, const std::string &name);
 	//! Destructor.
@@ -107,6 +112,9 @@ protected:
 	void AddDataStructureRead(DataStructure *ds);
 	//! Registers a data structure that the component modifies.
 	void AddDataStructureWrite(DataStructure *ds);
+
+	//! Registers a display image.
+	void AddDisplayImage(DisplayImage *di);
 
 	//! Returns a configuration element.
 	xmlpp::Element* GetConfigurationElement(const std::string &name);
