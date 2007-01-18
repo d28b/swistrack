@@ -290,7 +290,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	mSocketServer = new SocketServer(this);
 	mSwisTrackCore=new SwisTrackCore();
 	mSwisTrackCore->mCommunicationInterface=mSocketServer;	
-	mSocketServer->SetPort(3000);
+	mSocketServer->SetPort(3001);
 
 	// List
 	mComponentListPanel=new ComponentListPanel(this, mSwisTrackCore);
@@ -1170,12 +1170,14 @@ void THISCLASS::OnTest(wxCommandEvent& WXUNUSED(event)) {
 		mSocketServer->SendMessage(&mbegin);
 
 		for (int i=0; i<10; i++) {
-			CommunicationMessage m("PARTICLE");
-			m.AddInt(i);
-			m.AddDouble(px[i]);
-			m.AddDouble(py[i]);
-			m.AddDouble(po[i]);
-			mSocketServer->SendMessage(&m);
+			if ((px[i]<=0.2) && (py[i]>=0)) {
+				CommunicationMessage m("PARTICLE");
+				m.AddInt(i);
+				m.AddDouble(px[i]);
+				m.AddDouble(py[i]);
+				m.AddDouble(po[i]);
+				mSocketServer->SendMessage(&m);
+			}
 		}
 
 		CommunicationMessage mend("ENDFRAME");
