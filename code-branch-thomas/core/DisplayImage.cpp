@@ -7,7 +7,7 @@ CvSize THISCLASS::CalculateMaxSize(int srcwidth, int srcheight, int maxwidth, in
 	double r=1;
 	if (r>rw) {r=rw;}
 	if (r>rh) {r=rh;}
-	return CvSize((int)floor(srcwidth*r+0.5), (int)floor(srcheight*r+0.5));
+	return cvSize((int)floor(srcwidth*r+0.5), (int)floor(srcheight*r+0.5));
 }
 
 void THISCLASS::ReleaseImage(IplImage *image) {

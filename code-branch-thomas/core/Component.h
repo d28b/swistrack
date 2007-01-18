@@ -11,6 +11,7 @@ class Component;
 #include "DataStructure.h"
 #include "ComponentCategory.h"
 #include "ErrorList.h"
+#include "DisplayImage.h"
 
 class Component {
 

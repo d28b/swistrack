@@ -1,7 +1,10 @@
 #ifndef HEADER_DisplayImageSubscriberInterface
 #define HEADER_DisplayImageSubscriberInterface
 
+class DisplayImageSubscriberInterface;
+
 #include <string>
+#include "DisplayImage.h"
 
 class DisplayImageSubscriberInterface {
 

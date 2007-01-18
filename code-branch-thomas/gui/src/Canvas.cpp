@@ -1,7 +1,7 @@
 #include "Canvas.h"
 #define THISCLASS CanvasPanel
 
-BEGIN_EVENT_TABLE(Canvas, wxPanel)
+BEGIN_EVENT_TABLE(Canvas, wxControl)
     EVT_PAINT(Canvas::OnPaint)
 	EVT_ERASE_BACKGROUND(Canvas::EraseBackground)
     EVT_LEFT_DOWN(Canvas::OnMouseClick)
@@ -27,7 +27,7 @@ wxPanel(parent, -1, pos, size)
 * erase background event (EVT_ERASE_BACKGROUND).
 */
 void Canvas::EraseBackground(wxEraseEvent& event){
-	}
+}
 
 /** \brief Event handler for the canvas' OnPaint event
 *

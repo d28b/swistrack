@@ -1,8 +1,12 @@
 #ifndef HEADER_DisplayImage
 #define HEADER_DisplayImage
 
+class DisplayImage;
+
 #include <string>
+#include <list>
 #include "cv.h"
+#include "DisplayImageSubscriberInterface.h"
 
 class DisplayImage {
 

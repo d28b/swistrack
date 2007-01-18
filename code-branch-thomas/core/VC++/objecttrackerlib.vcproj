@@ -266,6 +266,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\DisplayImage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\DisplayImageStandard.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\DisplayImageSubscriberInterface.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\ErrorList.cpp"
 				>
 			</File>
@@ -519,6 +531,18 @@
 			</File>
 			<File
 				RelativePath="..\DataStructureParticles.h"
+				>
+			</File>
+			<File
+				RelativePath="..\DisplayImage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\DisplayImageStandard.h"
+				>
+			</File>
+			<File
+				RelativePath="..\DisplayImageSubscriberInterface.h"
 				>
 			</File>
 			<File

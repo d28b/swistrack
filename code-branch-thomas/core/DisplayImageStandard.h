@@ -1,17 +1,19 @@
 #ifndef HEADER_DisplayImageStandard
 #define HEADER_DisplayImageStandard
 
+class DisplayImageStandard;
+
 #include <string>
 #include "DisplayImage.h"
 
-class DisplayImageStandard {
+class DisplayImageStandard: public DisplayImage {
 
 public:
 	//! The image to use for display.
 	IplImage *mNewImage;
 
 	//! Constructor.
-	DisplayImageStandard(Component *c, const std::string &name, const std::string &displayname): mDisplayImage(c, name, displayname) {}
+	DisplayImageStandard(const std::string &name, const std::string &displayname): DisplayImage(name, displayname) {}
 	//! Destructor.
 	~DisplayImageStandard() {}
 

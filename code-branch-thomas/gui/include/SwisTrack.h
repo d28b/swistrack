@@ -37,8 +37,8 @@ class SwisTrack;
 #include "XMLCfg.h"
 #include "ComponentListPanel.h"
 #include "SocketServer.h"
+#include "CanvasPanel.h"
 
-class Canvas;
 class SwisTrackPanel;
 class InterceptionPanel;
 class AviWriter;

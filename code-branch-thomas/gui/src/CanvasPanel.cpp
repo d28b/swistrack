@@ -6,8 +6,6 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::CanvasPanel(SwisTrack *st): wxPanel(st, -1, wxDefaultPosition, wxSize(100, 100)), mSwisTrack(st) {
-		CanvasPanel(SwisTrack *st);
-
 	// Create the canvas
 	mCanvas=new Canvas(this);
 	
@@ -32,7 +30,7 @@ THISCLASS::CanvasPanel(SwisTrack *st): wxPanel(st, -1, wxDefaultPosition, wxSize
 ~THISCLASS::CanvasPanel() {
 }
 
-void Canvas::OnMouseLeftDown(wxMouseEvent &event) {
+void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 	wxMessageDialog dlg(this, "Test", "Test", wxOK);
 	dlg.ShowModal();
 }

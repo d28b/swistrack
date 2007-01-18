@@ -7,12 +7,14 @@
   #include "wx/wx.h"
 #endif
 
+class CanvasPanel;
+
 #include "SwisTrack.h"
 
 /** \class CanvasPanel
 * \brief The panel containing the canvas and the annotations
 */
-class CanvasPanel: public wxPanel, public wxEvtHandler {
+class CanvasPanel: public wxPanel {
 
 private:
 	SwisTrack* mSwisTrack;
@@ -24,6 +26,8 @@ private:
 public:
 	CanvasPanel(SwisTrack *st);
 	~CanvasPanel();
+
+	void OnMouseLeftDown(wxMouseEvent &event);
 
 	DECLARE_EVENT_TABLE()
 };

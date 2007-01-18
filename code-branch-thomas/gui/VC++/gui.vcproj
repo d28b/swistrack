@@ -314,6 +314,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\CanvasPanel.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\ComponentListPanel.cpp"
 				>
 			</File>
@@ -452,6 +456,10 @@
 			</File>
 			<File
 				RelativePath="..\include\Canvas.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\CanvasPanel.h"
 				>
 			</File>
 			<File
