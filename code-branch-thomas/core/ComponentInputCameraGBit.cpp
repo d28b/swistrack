@@ -17,6 +17,9 @@ void THISCLASS::OnStart() {
 	//theCamera.SetVideoFrameRate(GetIntValByXPath(cfgRoot, "/Configuration/InputCameraGBit/FrameRate")); 
 }
 
+void THISCLASS::OnReloadConfiguration() {
+}
+
 void THISCLASS::OnStep() {
 }
 

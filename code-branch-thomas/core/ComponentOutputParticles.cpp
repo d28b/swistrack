@@ -43,6 +43,9 @@ void THISCLASS::OnStep() {
 	mCore->mCommunicationInterface->SendMessage(&mend);
 }
 
+void THISCLASS::OnReloadConfiguration() {
+}
+
 void THISCLASS::OnStepCleanup() {
 }
 

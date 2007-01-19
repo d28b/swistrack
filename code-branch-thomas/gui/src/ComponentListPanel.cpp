@@ -125,6 +125,8 @@ void THISCLASS::OnUpdate() {
 					str+=itsl->mMessage.c_str();
 					str+=" ";
 				}
+
+				itsl++;
 			}
 			li.SetText(str);
 			mList->SetItem(li);
@@ -137,6 +139,8 @@ void THISCLASS::OnUpdate() {
 }
 
 void THISCLASS::OnButtonAdd(wxCommandEvent& event) {
+	if (mSwisTrackCore->EditRequest()) {return;}
+
 	// Create the dialog if necessary
 	if (mComponentsDialog==0) {
 		mComponentsDialog=new ComponentsDialog(this->GetParent(), mSwisTrackCore);

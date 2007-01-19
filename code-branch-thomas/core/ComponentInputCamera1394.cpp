@@ -56,6 +56,9 @@ void THISCLASS::OnStart() {
 	mCore->mDataStructureInput.mImage=mLastImage;
 }
 
+void THISCLASS::OnReloadConfiguration() {
+}
+
 void THISCLASS::OnStep() {
 	// Get image from camera
 	int status=mCamera.AcquireImage();	

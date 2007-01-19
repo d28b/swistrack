@@ -35,6 +35,9 @@ void THISCLASS::OnStart() {
 	return;
 }
 
+void THISCLASS::OnReloadConfiguration() {
+}
+
 void THISCLASS::OnStep() {
 	std::vector<Particle> rejectedparticles;
 

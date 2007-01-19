@@ -17,6 +17,9 @@ THISCLASS::~ComponentConvertToGray() {
 void THISCLASS::OnStart() {
 }
 
+void THISCLASS::OnReloadConfiguration() {
+}
+
 void THISCLASS::OnStep() {
 	IplImage *inputimage=mCore->mDataStructureInput.mImage;
 	if (! inputimage) {return;}

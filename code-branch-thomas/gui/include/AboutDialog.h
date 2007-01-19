@@ -1,10 +1,10 @@
 #ifndef HEADER_AboutDialog
 #define HEADER_AboutDialog
 
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
-  #include "wx/wx.h"
+  #include <wx/wx.h>
 #endif
  
 //! About dialog.

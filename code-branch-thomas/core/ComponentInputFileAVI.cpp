@@ -49,6 +49,9 @@ void THISCLASS::OnStart() {
 	cvSetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES, 0);
 }
 
+void THISCLASS::OnReloadConfiguration() {
+}
+
 void THISCLASS::OnStep() {
 	if (! mCapture) {return;}	
 

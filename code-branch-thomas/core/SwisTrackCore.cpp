@@ -27,7 +27,9 @@ THISCLASS::SwisTrackCore():
 		mCategoryPreprocessing("Preprocessing", 300),
 		mCategoryThresholding("Thresholding", 400),
 		mCategoryBlobDetection("Blob detection", 500),
-		mCategoryOutput("Output", 10000)
+		mCategoryOutput("Output", 10000),
+		mAvailableComponents(), mDeployedComponents(), mDataStructures(),
+		mStarted(false), mSeriousMode(false)
 		{
 
 	// Initialize the list of available components
@@ -60,8 +62,12 @@ THISCLASS::SwisTrackCore():
 	mDeployedComponents.push_back(new ComponentBlobDetectionMinMax(this));
 }
 
-bool THISCLASS::Start() {
+bool THISCLASS::Start(bool seriousmode) {
 	if (mStarted) {return false;}
+
+	// Update the flags
+	mStarted=true;
+	mSeriousMode=seriousmode;
 
 	// Start all components (until first error)
 	bool allok=true;
@@ -77,7 +83,6 @@ bool THISCLASS::Start() {
 		it++;
 	}
 
-	mStarted=true;
 	return allok;
 }
 
@@ -97,7 +102,9 @@ bool THISCLASS::Stop() {
 		}
 	}
 
+	// Update flags
 	mStarted=false;
+	mSeriousMode=false;
 	return allok;
 }
 
@@ -125,16 +132,21 @@ bool THISCLASS::Step() {
 	return allok;
 }
 
-void THISCLASS::Reset() {
-	if (mStarted) {return;}
+bool THISCLASS::ReloadConfiguration() {
+	if (! mStarted) {return false;}
 
 	// Start all components (until first error)
+	bool allok=true;
 	tComponentList::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
+		if (! (*it)->mStarted) {break;}
 		(*it)->ClearStatus();
-		(*it)->OnReset();
+		(*it)->OnReloadConfiguration();
+		if (! (*it)->mStatusHasError) {allok=false;}
 		it++;
 	}
+
+	return allok;
 }
 
 void THISCLASS::Clear() {

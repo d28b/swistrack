@@ -54,13 +54,13 @@ public:
 	~SwisTrackCore() {}
 
 	//! Starts all the components.
-	bool Start();
+	bool Start(bool seriousmode);
 	//! Performs one complete step, including cleanup.
 	bool Step();
 	//! Stops all started components.
 	bool Stop();
-	//! Resets all started components.
-	void Reset();
+	//! Reloads the configuration while a session is runnning. Note that not all configuration parameters may be reloaded. This function may also be called in serious mode.
+	bool ReloadConfiguration();
 
 	//! Clears all deployed components.
 	void Clear();
@@ -73,10 +73,14 @@ public:
 
 	//! Returns whether the components have been started.
 	bool IsStarted() {return mStarted;}
+	//! Returns whether the components have been started in serious mode.
+	bool IsStartedInSeriousMode() {return (mStarted && mSeriousMode);}
 
 protected:
 	//! Whether the components have been started or not.
 	bool mStarted;
+	//! Whether the components have been started or not.
+	bool mSeriousMode;
 
 	//! Reads one component from the XML file.
 	void ConfigurationReadXMLElement(xmlpp::Element* element, ErrorList *xmlerr);

@@ -1,15 +1,15 @@
 #ifndef HEADER_Canvas
 #define HEADER_Canvas
 
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
-  #include "wx/wx.h"
+  #include <wx/wx.h>
 #endif
 
 class Canvas;
 
-#include "wx/dcbuffer.h"
+#include <wx/dcbuffer.h>
 #include "SwisTrack.h"
 #include "cv.h"
 

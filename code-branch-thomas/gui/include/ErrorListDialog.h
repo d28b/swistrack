@@ -1,6 +1,12 @@
 #ifndef HEADER_ErrorListDialog
 #define HEADER_ErrorListDialog
 
+#include <wx/wxprec.h>
+
+#ifndef WX_PRECOMP
+  #include <wx/wx.h>
+#endif
+
 class ErrorListDialog;
 
 #include "SwisTrackCore.h"

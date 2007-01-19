@@ -56,6 +56,9 @@ void THISCLASS::OnStart() {
 	cvReleaseImage(&bg);
 }
 
+void THISCLASS::OnReloadConfiguration() {
+}
+
 void THISCLASS::OnStep() {
 	IplImage *inputimage=mCore->mDataStructureImageGray.mImage;
 	if (! inputimage) {return;}

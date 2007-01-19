@@ -16,6 +16,10 @@ THISCLASS::~ComponentThresholdGray() {
 }
 
 void THISCLASS::OnStart() {
+	OnReloadConfiguration();
+}
+
+void THISCLASS::OnReloadConfiguration() {
 	mThreshold=GetConfigurationInt("Threshold", 128);
 }
 

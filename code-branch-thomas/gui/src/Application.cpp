@@ -2,6 +2,7 @@
 #define THISCLASS Application
 
 #include <wx/app.h>
+#include <wx/image.h>
 
 /** \file Application.cpp
 * \brief Mainfile for the project
@@ -33,6 +34,9 @@ bool THISCLASS::OnInit() {
 	// Set some main application parameters.
 	SetVendorName(wxT("Swarm-Intelligent Systems Group, EPFL, Lausanne, Switzerland"));
 	SetAppName(wxT("SwisTrack")); 
+
+	// Initialize all available image handlers
+	wxInitAllImageHandlers();
 
 	// Create the main application window
 	SwisTrack *st = new SwisTrack(_T("SWISTrack 4.0.0"), wxPoint(-1, -1), wxSize(800, 600));

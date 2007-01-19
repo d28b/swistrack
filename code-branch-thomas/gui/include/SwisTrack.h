@@ -84,9 +84,9 @@ public:
 	void OnFileSave(wxCommandEvent& WXUNUSED(event));
 	void OnFileSaveAs(wxCommandEvent& WXUNUSED(event));
 	void OnFileQuit(wxCommandEvent& WXUNUSED(event));
+	void OnControlSeriousMode(wxCommandEvent& WXUNUSED(event));
 	void OnControlFreeRun(wxCommandEvent& WXUNUSED(event));
 	void OnControlSingleStep(wxCommandEvent& WXUNUSED(event));
-	void OnControlReset(wxCommandEvent& WXUNUSED(event));
 	void OnChangeDisplaySpeed(wxScrollEvent& WXUNUSED(event));
 	void OnMakeScreenShot(wxCommandEvent& WXUNUSED(event));
 
@@ -95,16 +95,18 @@ public:
 	//! Creates the toolbar.
 	void BuildToolBar();
 
-	//! Starts free run mode.
-	void StartFreeRun();
-	//! Stops free run mode.
-	void StopFreeRun();
-	//! Performs a single step.
+	//! Starts the serious mode.
+	void StartSeriousMode();
+	//! Stops the serious mode.
+	void StopSeriousMode();
+	//! Performs a single step. If necessary, the core is started (in non-serious mode).
 	void SingleStep();
+	//! Reloads the configuration. If the core is started in serious mode, this only reloads a subset of the parameters. Otherwise, a complete core stop/start is done.
+	void ReloadConfiguration();
 	//! Sets the free run interval.
-	void SetFreeRunInterval(int interval);
-	//! Resets the SwisTrackCore object.
-	void Reset();
+	void SetTriggerTimer(int interval);
+	//! Sets the free run interval.
+	void SetTriggerManual();
 
 	//! The free run timer event.
 	void OnFreeRunTimer(wxTimerEvent& WXUNUSED(event));
@@ -133,9 +135,9 @@ protected:
 		sID_Save,
 		sID_SaveAs,
 		sID_Quit,
+		sID_Control_SeriousMode,
 		sID_Control_FreeRun,
 		sID_Control_SingleStep,
-		sID_Control_Reset,
 		sID_View_ShowTracker,
 		sID_View_ShowParticleFilter,
 		sID_View_ShowSegmenterPP,

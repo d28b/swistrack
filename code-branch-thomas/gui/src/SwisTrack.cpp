@@ -78,9 +78,9 @@ BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 	EVT_MENU(sID_Save, THISCLASS::OnFileSave)
 	EVT_MENU(sID_SaveAs, THISCLASS::OnFileSaveAs)
 	EVT_MENU(sID_Quit,  THISCLASS::OnFileQuit)
+	EVT_MENU(sID_Control_SeriousMode, THISCLASS::OnControlSeriousMode)
 	EVT_MENU(sID_Control_FreeRun, THISCLASS::OnControlFreeRun)
 	EVT_MENU(sID_Control_SingleStep, THISCLASS::OnControlSingleStep)
-	EVT_MENU(sID_Control_Reset, THISCLASS::OnControlReset)
 	EVT_MENU(sID_Tools_Screenshot, SwisTrack::OnMakeScreenShot)
 	EVT_COMMAND_SCROLL(sID_DisplaySpeed, SwisTrack::OnChangeDisplaySpeed)
 	EVT_MENU(sID_Help, SwisTrack::OnHelp)
@@ -91,14 +91,14 @@ BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 END_EVENT_TABLE()
 
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
-		wxFrame(NULL, -1, title, pos, size, style), CommunicationCommandHandler(), mSwisTrackCore(0), mSocketServer(0), mFileName("") {
+		wxFrame(NULL, -1, title, pos, size, style),
+		CommunicationCommandHandler(),
+		mSwisTrackCore(0), mSocketServer(0), mFileName(""), mFreeRunInterval(1000) {
 
 #ifdef MULTITHREAD
 	criticalSection = new wxCriticalSection();
 #endif
 
-	// Initialize all available image handlers
-	wxInitAllImageHandlers();
 
 	show_coverage=0; // don't show coverage image
 	fps=30; // initial guess for the FPS of our video
@@ -149,9 +149,8 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 Deallocates all memory and closes the application.
 */
 SwisTrack::~SwisTrack(){
-	StopFreeRun();
-	mSwisTrackCore->Stop();
-	mSwisTrackCore->Reset();
+	SetTriggerManual();
+	StopSeriousMode();
 
 	if (mCanvasPanel) {delete mCanvasPanel;}
 	if (mPanelInformation) {delete mPanelInformation;}
@@ -175,14 +174,14 @@ void THISCLASS::BuildMenuBar() {
 	menuFile    = new wxMenu;
 	menuBar->Append(menuFile, _T("&File"));
 
-	menuHelp    = new wxMenu;
-	menuBar->Append(menuHelp, _T("&Help"));
-
 	menuView    = new wxMenu;
 	menuBar->Append(menuView,_T("&View"));
 
 	menuTools   = new wxMenu;
 	menuBar->Append(menuTools,_T("&Tools"));
+
+	menuHelp    = new wxMenu;
+	menuBar->Append(menuHelp, _T("&Help"));
 
 	menuFile->Append(sID_New, _T("&New\tCtrl-C"), _T("Creates a new file"));
 	menuFile->Append(sID_Open, _T("&Open\tCtrl-O"), _T("Opens a file"));
@@ -244,9 +243,10 @@ void THISCLASS::BuildToolBar() {
 	toolbar->AddTool(sID_Open, _T("Open"), wxBITMAP(open), _T("Open"));
 	toolbar->AddTool(sID_Save, _T("Save"), wxBITMAP(save), _T("Save"));
 	toolbar->AddSeparator();
+	toolbar->AddTool(sID_Control_SeriousMode, _T("Serious"), wxBITMAP(play), _T("Serious"), wxITEM_CHECK);
+	toolbar->AddSeparator();
 	toolbar->AddTool(sID_Control_FreeRun, _T("Free-run"), wxBITMAP(play), _T("Free-run mode"), wxITEM_CHECK);
 	toolbar->AddTool(sID_Control_SingleStep, _T("Step"), wxBITMAP(singlestep), _T("One step"));
-	toolbar->AddTool(sID_Control_Reset, _T("Reset"), wxBITMAP(rewind), _T("Reset"));
 	toolbar->AddSeparator();
 	toolbar->AddTool(sID_Mode_Intercept, _T("Intercept"), wxBITMAP(finger), _T("Override data association"));
 	toolbar->AddSeparator();
@@ -261,32 +261,49 @@ void THISCLASS::BuildToolBar() {
 	toolbar->SetRows(1 ? 1 : 10 / 1);
 }
 
-void THISCLASS::StartFreeRun() {
-	wxToolBarBase *toolbar = GetToolBar();
-	toolbar->ToggleTool(sID_Control_FreeRun, true);
-
-	mFreeRunTimer.Start();
+void THISCLASS::SingleStep() {
+	// Start (if necessary) and perform a step
+	mSwisTrackCore->Start(false);
+	mSwisTrackCore->Step();
+	mComponentListPanel->OnUpdate();
 }
 
-void THISCLASS::StopFreeRun() {
-	wxToolBarBase *toolbar = GetToolBar();
-	toolbar->ToggleTool(sID_Control_FreeRun, false);
+void THISCLASS::ReloadConfiguration() {
+	// In serious mode, we just call ReloadConfiguration which may not update all configuration parameters.
+	// Otherwise, we stop the simulation (it is automatically restarted upon the next step).
+	if (mSwisTrackCore->IsStartedInSeriousMode()) {
+		mSwisTrackCore->ReloadConfiguration();
+		mComponentListPanel->OnUpdate();
+	} else {
+		mSwisTrackCore->Stop();
+		mComponentListPanel->OnUpdate();
+	}
+}
 
+void THISCLASS::StartSeriousMode() {
+	if (mSwisTrackCore->IsStartedInSeriousMode()) {return;}
+	mSwisTrackCore->Stop();
+	GetToolBar()->ToggleTool(sID_Control_SeriousMode, true);
+	mSwisTrackCore->Start(true);
+	mComponentListPanel->OnUpdate();
+}
+
+void THISCLASS::StopSeriousMode() {
+	if (! mSwisTrackCore->IsStartedInSeriousMode()) {return;}
+	mSwisTrackCore->Stop();
+	GetToolBar()->ToggleTool(sID_Control_SeriousMode, false);
+	mComponentListPanel->OnUpdate();
+}
+
+void THISCLASS::SetTriggerManual() {
+	GetToolBar()->ToggleTool(sID_Control_FreeRun, false);
 	mFreeRunTimer.Stop();
 }
 
-void THISCLASS::SingleStep() {
-	mSwisTrackCore->Start();
-	mSwisTrackCore->Step();
-}
-
-void THISCLASS::Reset() {	
-	mSwisTrackCore->Stop();
-	mSwisTrackCore->Reset();
-}
-
-void THISCLASS::SetFreeRunInterval(int ms) {
+void THISCLASS::SetTriggerTimer(int ms) {
+	GetToolBar()->ToggleTool(sID_Control_FreeRun, true);
 	mFreeRunInterval=ms;
+	if (! mFreeRunTimer.IsRunning()) {mFreeRunTimer.Start(mFreeRunInterval);}
 }
 
 void THISCLASS::OnFreeRunTimer(wxTimerEvent& WXUNUSED(event)) {
@@ -299,20 +316,25 @@ void THISCLASS::OnFreeRunTimer(wxTimerEvent& WXUNUSED(event)) {
 
 bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 	if (m->mCommand=="START") {
-		StartFreeRun();
+		StartSeriousMode();
 		return true;
 	} else if (m->mCommand=="STOP") {
-		StopFreeRun();
+		StopSeriousMode();
 		return true;
 	} else if (m->mCommand=="STEP") {
 		SingleStep();
 		return true;
-	} else if (m->mCommand=="RESET") {
-		Reset();
+	} else if (m->mCommand=="RELOADCONFIGURATION") {
+		ReloadConfiguration();
 		return true;
-	} else if (m->mCommand=="INTERVAL") {
-		double interval=m->GetDouble(1);
-		SetFreeRunInterval(interval);
+	} else if (m->mCommand=="TRIGGER") {
+		std::string type=m->GetString("MANUAL");
+		if (type=="TIMER") {
+			double interval=m->GetDouble(1);
+			SetTriggerTimer(interval);
+		} else {
+			SetTriggerManual();
+		}
 		return true;
 	}
 
@@ -461,16 +483,24 @@ void SwisTrack::OnFileQuit(wxCommandEvent& WXUNUSED(event)) {
 	Close(TRUE);
 }
 
+void THISCLASS::OnControlSeriousMode(wxCommandEvent& WXUNUSED(event)) {
+	if (mSwisTrackCore->IsStartedInSeriousMode()) {
+		StartSeriousMode();
+	} else {
+		StopSeriousMode();
+	}
+}
+
 void THISCLASS::OnControlFreeRun(wxCommandEvent& WXUNUSED(event)) {
-	StartFreeRun();
+	if (mFreeRunTimer.IsRunning()) {
+		SetTriggerManual();
+	} else {
+		SetTriggerTimer(mFreeRunInterval);
+	}
 }
 
 void THISCLASS::OnControlSingleStep(wxCommandEvent& WXUNUSED(event)) {
 	SingleStep();
-}
-
-void THISCLASS::OnControlReset(wxCommandEvent& WXUNUSED(event)) {
-	Reset();
 }
 
 void THISCLASS::OnChangeDisplaySpeed(wxScrollEvent& WXUNUSED(event)) {

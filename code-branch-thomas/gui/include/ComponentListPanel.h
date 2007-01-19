@@ -1,6 +1,12 @@
 #ifndef HEADER_ComponentListPanel
 #define HEADER_ComponentListPanel
 
+#include <wx/wxprec.h>
+
+#ifndef WX_PRECOMP
+  #include <wx/wx.h>
+#endif
+
 class ComponentListPanel;
 
 #include "SwisTrackCore.h"

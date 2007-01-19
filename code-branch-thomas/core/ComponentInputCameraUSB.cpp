@@ -32,6 +32,9 @@ void THISCLASS::OnStart() {
 	}
 }
 
+void THISCLASS::OnReloadConfiguration() {
+}
+
 void THISCLASS::OnStep() {
 	if (! mCapture) {return;}	
 

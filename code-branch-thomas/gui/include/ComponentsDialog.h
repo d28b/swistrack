@@ -1,6 +1,12 @@
 #ifndef HEADER_ComponentsDialog
 #define HEADER_ComponentsDialog
 
+#include <wx/wxprec.h>
+
+#ifndef WX_PRECOMP
+  #include <wx/wx.h>
+#endif
+
 class ComponentsDialog;
 
 #include "SwisTrackCore.h"
