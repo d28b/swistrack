@@ -26,8 +26,6 @@ public:
 	Canvas *mCanvas;
 	//! The title text.
 	wxStaticText *mTitle;
-	//! The popup menu.
-	wxMenu *mMenu;
 	//! The update rate (only each mUpdateRate image is displayed). If mUpdateRate==0, visualization is disabled.
 	int mUpdateRate;
 	//! The update rate counter.
@@ -40,8 +38,6 @@ public:
 
 	//! The corresponding GUI event handler.
 	void OnMouseLeftDown(wxMouseEvent &event);
-	//! The corresponding GUI event handler.
-	void OnMenu(wxCommandEvent& event);
 
 	// DisplayImageSubscriberInterface methods
 	void OnDisplayImageChanged(DisplayImage *di);

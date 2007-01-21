@@ -1,0 +1,5 @@
+This folder contains the SWISTrack core classes. These classes could in principle be used without the GUI part.
+
+All classes are implemented in plain C++ using the STL library. All strings are std::string objects. For image processing, OpenCV is used. In addition, the code relies on a couple of camera interface libraries.
+
+For more information, please refer to the code documentation created with Doxygen.

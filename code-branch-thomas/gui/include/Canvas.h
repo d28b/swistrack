@@ -24,31 +24,41 @@ class Canvas: public wxControl {
 public:
 	//! The associated CanvasPanel.
 	CanvasPanel* mCanvasPanel;
-	//! The current image.
-	IplImage *mImage;
 	//! Whether the image should be flipped vertically (TODO not implemented).
-	IplImage *mFlipVertically;
+	bool mFlipVertically;
 	//! Whether the image should be flipped horizontally (TODO not implemented).
-	IplImage *mFlipHorizontally;
+	bool mFlipHorizontally;
 
 	// Constructor.
 	Canvas(CanvasPanel *cp);
 	// Destructor.
 	~Canvas();
 
-	//! Overwritten to avoid painting the background.
-	void EraseBackground(wxEraseEvent& event);
-	//! Handles left click.
-	void OnMouseLeftClick(wxMouseEvent &event);
-	//! Handles right click.
-	void OnMouseRightClick(wxMouseEvent &event);
-	//! Handles mouse move.
-	void OnMouseMove(wxMouseEvent &event);
-	//! Paints the canvas.
-	void OnPaint(wxPaintEvent& WXUNUSED(event));
-
 	//! This sets a new image. Note that this class cleans up and frees old image automatically.
 	void SetImage(IplImage *img);
+
+private:
+	enum {
+		sID_SaveImageAs
+	};
+
+	//! The current image.
+	IplImage *mImage;
+	//! The popup menu.
+	wxMenu *mMenu;
+
+	//! The corresponding GUI event handler.
+	void OnMenuSaveImageAs(wxCommandEvent& event);
+	//! Overwritten to avoid painting the background.
+	void OnEraseBackground(wxEraseEvent& event);
+	//! The corresponding GUI event handler.
+	void OnMouseLeftDown(wxMouseEvent &event);
+	//! The corresponding GUI event handler.
+	void OnMouseRightDown(wxMouseEvent &event);
+	//! The corresponding GUI event handler.
+	void OnMouseMove(wxMouseEvent &event);
+	//! The corresponding GUI event handler.
+	void OnPaint(wxPaintEvent& WXUNUSED(event));
 
 	DECLARE_EVENT_TABLE()
 };

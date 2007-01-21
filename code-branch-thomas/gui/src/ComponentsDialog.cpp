@@ -43,13 +43,13 @@ THISCLASS::ComponentsDialog(wxWindow* parent, SwisTrackCore *stc):
 	// Layout the components in the panel
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
 	hs->AddStretchSpacer(1);
-	hs->Add(mButtonAdd, 0, 0, 0);
-	hs->Add(mButtonCancel, 0, 0, 0);
+	hs->Add(mButtonAdd, 0, wxALL, 4);
+	hs->Add(mButtonCancel, 0, wxALL, 4);
 	hs->AddStretchSpacer(1);
 
 	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
-	vs->Add(mTree, 1, wxEXPAND, 0);
-	vs->Add(hs, 0, 0, 0);
+	vs->Add(mTree, 1, wxEXPAND|wxALL, 8);
+	vs->Add(hs, 0, wxALL, 8);
 
 	SetSizer(vs);
 }

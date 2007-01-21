@@ -564,18 +564,4 @@ void THISCLASS::OnIdle(wxIdleEvent& WXUNUSED(event)) {
 }
 
 void SwisTrack::OnMakeScreenShot(wxCommandEvent& WXUNUSED(event)) {
-	IplImage *img=mCanvasPanel->mCanvas->mImage;
-	if (img==0) {return;}
-
-	wxFileDialog *dlg = new wxFileDialog(this, "Save current image", "", "", "Bitmap (*.bmp)|*.bmp", wxSAVE, wxDefaultPosition);
-	if (dlg->ShowModal() != wxID_OK)	{return;}
-
-	wxString filename=dlg->GetPath();
-	if(! cvSaveImage(filename.c_str(), img)) {
-		wxMessageDialog dlg(this, "The file could not be saved!", "Save current image", wxOK);
-		dlg.ShowModal();
-		return;
-	}
-
-	SetStatusText(filename + " saved!", 1);
 }
