@@ -12,22 +12,18 @@ class SwisTrackCore;
 #include "DataStructureParticles.h"
 #include "ErrorList.h"
 
+//! The main class of the core part of SwisTrack. This class holds everything together.
 class SwisTrackCore {
+friend class SwisTrackEditor;
 
 public:
-	//! The list of all available components.
-	typedef std::list<Component*> tComponentList;
-	//! The list of all available components.
-	tComponentList mAvailableComponents;
-	//! The list of the deployed components.
-	tComponentList mDeployedComponents;
+	typedef std::list<Component*> tComponentList;	//!< A list of components type.
+	tComponentList mAvailableComponents;			//!< The list of all available components.
 
-	//! The list type of all available data structures.
-	typedef std::list<DataStructure*> tDataStructures;
-	//! The list of all available data structures.
-	tDataStructures mDataStructures;
+	typedef std::list<DataStructure*> tDataStructureList;	//!< A list of data structures type.
+	tDataStructureList mDataStructures;						//!< The list of all available data structures.
 
-	// Component categories.
+	// Component categories
 	ComponentCategory mCategoryInput;
 	ComponentCategory mCategoryInputConversion;
 	ComponentCategory mCategoryPreprocessing;
@@ -35,31 +31,28 @@ public:
 	ComponentCategory mCategoryBlobDetection;
 	ComponentCategory mCategoryOutput;
 
-	// Data structures.
+	// Data structures
 	DataStructureInput mDataStructureInput;
 	DataStructureImage mDataStructureImageBGR;
-	DataStructureImage mDataStructureBackgroundBGR;
 	DataStructureImage mDataStructureImageGray;
-	DataStructureImage mDataStructureBackgroundGray;
 	DataStructureImage mDataStructureImageBinary;
 	DataStructureImage mDataStructureMaskBinary;
 	DataStructureParticles mDataStructureParticles;
 
-	//! The associated communication interface.
-	CommunicationInterface *mCommunicationInterface;
+	CommunicationInterface *mCommunicationInterface;	//!< The associated communication interface.
 
 	//! Constructor.
 	SwisTrackCore();
 	//! Destructor.
 	~SwisTrackCore() {}
 
-	//! Starts all the components.
+	//! Starts all the components. This may only be called if IsStarted()==false.
 	bool Start(bool seriousmode);
-	//! Performs one complete step, including cleanup.
+	//! Performs one complete step, including cleanup. This may only be called if IsStarted()==true.
 	bool Step();
-	//! Stops all started components.
+	//! Stops all started components. This may only be called if IsStarted()==true.
 	bool Stop();
-	//! Reloads the configuration while a session is runnning. Note that not all configuration parameters may be reloaded. This function may also be called in serious mode.
+	//! Reloads the configuration while a session is runnning. This may only be called if IsStarted()==false. Note that not all configuration parameters may be reloaded. This function may also be called in serious mode.
 	bool ReloadConfiguration();
 
 	//! Clears all deployed components.
@@ -76,11 +69,22 @@ public:
 	//! Returns whether the components have been started in serious mode.
 	bool IsStartedInSeriousMode() {return (mStarted && mSeriousMode);}
 
+	//! Adds an object to the list of interfaces. Objects on this list will be informed upon changes.
+	bool AddInterface(SwisTrackCoreInterface *stc);
+	//! Removes an object from the list of interfaces.
+	bool RemoveInterface(SwisTrackCoreInterface *stc);
+
 protected:
-	//! Whether the components have been started or not.
-	bool mStarted;
-	//! Whether the components have been started or not.
-	bool mSeriousMode;
+	bool mStarted;		//!< Whether the components have been started or not.
+	bool mSeriousMode;	//!< Whether the components are running in serious mode or not. Note that this is only valid if mStarted=true.
+	int mEditLocks;		//!< The number of edit locks.
+
+	tComponentList mDeployedComponents;		//!< The list of deployed components.
+
+	//! The list type of SwisTrackCoreInterface objects.
+	typedef std::list<SwisTrackCoreInterface*> tSwisTrackCoreInterfaceList;
+	//! The list of SwisTrackCoreInterface objects.
+	tSwisTrackCoreInterfaceList mSwisTrackCoreInterfaces;
 
 	//! Reads one component from the XML file.
 	void ConfigurationReadXMLElement(xmlpp::Element* element, ErrorList *xmlerr);

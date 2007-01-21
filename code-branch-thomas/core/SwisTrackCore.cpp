@@ -16,9 +16,7 @@
 THISCLASS::SwisTrackCore():
 		mDataStructureInput(),
 		mDataStructureImageBGR("ImageBGR", "Color image (BGR)"),
-		mDataStructureBackgroundBGR("BackgroundBGR", "Background color image (BGR)"),
 		mDataStructureImageGray("ImageGray", "Grayscale image"),
-		mDataStructureBackgroundGray("BackgroundGray", "Grayscale background image"),
 		mDataStructureImageBinary("ImageBinary", "Binary image"),
 		mDataStructureMaskBinary("MaskBinary", "Binary mask"),
 		mDataStructureParticles(),
@@ -28,8 +26,8 @@ THISCLASS::SwisTrackCore():
 		mCategoryThresholding("Thresholding", 400),
 		mCategoryBlobDetection("Blob detection", 500),
 		mCategoryOutput("Output", 10000),
-		mAvailableComponents(), mDeployedComponents(), mDataStructures(),
-		mStarted(false), mSeriousMode(false)
+		mAvailableComponents(), mDeployedComponents(), mDataStructures(), mSwisTrackCoreInterfaces(),
+		mStarted(false), mSeriousMode(false), mEditLocks(0)
 		{
 
 	// Initialize the list of available components
@@ -47,9 +45,7 @@ THISCLASS::SwisTrackCore():
 	// Initialize the list of available data structures
 	mDataStructures.push_back(&mDataStructureInput);
 	mDataStructures.push_back(&mDataStructureImageBGR);
-	mDataStructures.push_back(&mDataStructureBackgroundBGR);
 	mDataStructures.push_back(&mDataStructureImageGray);
-	mDataStructures.push_back(&mDataStructureBackgroundGray);
 	mDataStructures.push_back(&mDataStructureImageBinary);
 	mDataStructures.push_back(&mDataStructureMaskBinary);
 	mDataStructures.push_back(&mDataStructureParticles);
@@ -64,33 +60,50 @@ THISCLASS::SwisTrackCore():
 
 bool THISCLASS::Start(bool seriousmode) {
 	if (mStarted) {return false;}
+	if (mEditLocks>0) {return false;}
 
+	// Notify the interfaces
+	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
+	while (iti!=mSwisTrackCoreInterfaces.end()) {
+		(*iti)->OnBeforeStart(seriousmode);
+		iti++;
+	}
+	
 	// Update the flags
 	mStarted=true;
 	mSeriousMode=seriousmode;
 
 	// Start all components (until first error)
-	bool allok=true;
 	tComponentList::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
 		(*it)->ClearStatus();
 		(*it)->OnStart();
-		if ((*it)->mStatusHasError) {
-			allok=false;
-			break;
-		}
+		if ((*it)->mStatusHasError) {break;}
 		(*it)->mStarted=true;
 		it++;
 	}
 
-	return allok;
+	// Notify the interfaces
+	iti=mSwisTrackCoreInterfaces.begin();
+	while (iti!=mSwisTrackCoreInterfaces.end()) {
+		(*iti)->OnAfterStart(seriousmode);
+		iti++;
+	}
+
+	return true;
 }
 
 bool THISCLASS::Stop() {
 	if (! mStarted) {return false;}
 
+	// Notify the interfaces
+	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
+	while (iti!=mSwisTrackCoreInterfaces.end()) {
+		(*iti)->OnBeforeStop();
+		iti++;
+	}
+
 	// Stop all components
-	bool allok=true;
 	tComponentList::iterator it=mDeployedComponents.end();
 	while (it!=mDeployedComponents.begin()) {
 		it--;
@@ -98,55 +111,79 @@ bool THISCLASS::Stop() {
 			(*it)->ClearStatus();
 			(*it)->OnStop();
 			(*it)->mStarted=false;
-			if (! (*it)->mStatusHasError) {allok=false;}
 		}
 	}
 
 	// Update flags
 	mStarted=false;
 	mSeriousMode=false;
-	return allok;
+
+	// Notify the interfaces
+	iti=mSwisTrackCoreInterfaces.begin();
+	while (iti!=mSwisTrackCoreInterfaces.end()) {
+		(*iti)->OnAfterStop();
+		iti++;
+	}
+
+	return true;
 }
 
 bool THISCLASS::Step() {
 	if (! mStarted) {return false;}
 
+	// Notify the interfaces
+	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
+	while (iti!=mSwisTrackCoreInterfaces.end()) {
+		(*iti)->OnBeforeStep();
+		iti++;
+	}
+
 	// Run until first error, or until the end (all started components)
-	bool allok=true;
 	tComponentList::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
 		if (! (*it)->mStarted) {break;}
 		(*it)->ClearStatus();
 		(*it)->OnStep();
-		if (! (*it)->mStatusHasError) {allok=false; break;}
+		if (! (*it)->mStatusHasError) {break;}
 		it++;
+	}
+
+	// Notify the interfaces
+	iti=mSwisTrackCoreInterfaces.begin();
+	while (iti!=mSwisTrackCoreInterfaces.end()) {
+		(*iti)->OnStepReady();
+		iti++;
 	}
 
 	// and then cleanup what we run
 	while (it!=mDeployedComponents.begin()) {
 		it--;
 		(*it)->OnStepCleanup();
-		if (! (*it)->mStatusHasError) {allok=false;}
 	}
 
-	return allok;
+	// Notify the interfaces
+	iti=mSwisTrackCoreInterfaces.begin();
+	while (iti!=mSwisTrackCoreInterfaces.end()) {
+		(*iti)->OnAfterStep();
+		iti++;
+	}
+
+	return true;
 }
 
 bool THISCLASS::ReloadConfiguration() {
 	if (! mStarted) {return false;}
 
 	// Start all components (until first error)
-	bool allok=true;
 	tComponentList::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
 		if (! (*it)->mStarted) {break;}
 		(*it)->ClearStatus();
 		(*it)->OnReloadConfiguration();
-		if (! (*it)->mStatusHasError) {allok=false;}
 		it++;
 	}
 
-	return allok;
+	return true;
 }
 
 void THISCLASS::Clear() {
@@ -220,4 +257,14 @@ Component *THISCLASS::GetComponentByName(const std::string &name) {
 	}
 
 	return 0;
+}
+
+void AddInterface(SwisTrackCoreInterface *stc) {
+	mSwisTrackCoreInterfaces.push_back(stc);
+}
+
+void RemoveInterface(SwisTrackCoreInterface *stc) {
+	tSwisTrackCoreInterfaceList::iterator it=find(mSwisTrackCoreInterfaces.begin(), mSwisTrackCoreInterfaces.end());
+	if (it==mSwisTrackCoreInterfaces.end()) {return;}
+	mSwisTrackCoreInterfaces.erase(it);
 }
