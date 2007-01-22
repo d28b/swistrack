@@ -39,7 +39,13 @@ int THISCLASS::Run(int argc, char *argv[]) {
 	// Execute
 	mSwisTrackCore->Start(true);
 	while (1) {
-		select();
+		fd_set fhset;
+		FD_ZERO(&fhset);
+		FD_SET(0, &fhset);
+		struct timeval timeout;
+		timeout.tv_sec=1;
+		timeout.tv_usec=0;
+		int res = select(1, &fhset, NULL, NULL, &timeout);
 	}
 
 	return 0;
@@ -126,14 +132,25 @@ void THISCLASS::ConfigurationReadXML(SwisTrackCoreEditor *stce, xmlpp::Document 
 	// Get the root node
 	xmlpp::Element *rootnode=document->get_root_node();
 	if (! rootnode) {
-		stce->ConfigurationReadXML(0, errorlist);
+		errorlist->Add("No root node found.");
 		return;
 	}
+
+	// Get the trigger node
+	xmlpp::Node::NodeList nodes_trigger=rootnode->get_children("Trigger");
+	if (nodes_trigger.empty()) {
+		errorlist->Add("Node 'Trigger' missing!", rootnode->get_line());
+		return;
+	}
+
+	// Read the trigger configuration
+	xmlpp::Element *trigger=dynamic_cast<xmlpp::Element *>(nodes_trigger.front());
+	mTrigger->ConfigurationReadXML(trigger, errorlist);
 
 	// Get the list of components
 	xmlpp::Node::NodeList nodes_components=rootnode->get_children("Components");
 	if (nodes_components.empty()) {
-		stce->ConfigurationReadXML(0, errorlist);
+		errorlist->Add("Node 'Components' missing!", rootnode->get_line());
 		return;
 	}
 
@@ -141,3 +158,4 @@ void THISCLASS::ConfigurationReadXML(SwisTrackCoreEditor *stce, xmlpp::Document 
 	xmlpp::Element *components=dynamic_cast<xmlpp::Element *>(nodes_components.front());
 	stce->ConfigurationReadXML(components, errorlist);
 }
+

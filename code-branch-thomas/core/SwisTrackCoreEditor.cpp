@@ -67,7 +67,7 @@ void THISCLASS::ConfigurationReadXMLElement(xmlpp::Element* element, ErrorList *
 	xmlpp::Attribute *att_type=element->get_attribute("type");
 	if (! att_type) {
 		std::ostringstream oss;
-		oss << "The element at line " << element->get_line() << " was ignored because it does not have a 'type' attribute.";
+		oss << "The component at line " << element->get_line() << " was ignored because it does not have a 'type' attribute.";
 		xmlerr->Add(oss.str(), element->get_line());
 	}
 
@@ -76,7 +76,7 @@ void THISCLASS::ConfigurationReadXMLElement(xmlpp::Element* element, ErrorList *
 	Component *component=GetComponentByName(type);
 	if (! component) {
 		std::ostringstream oss;
-		oss << "The element at line " << element->get_line() << " was ignored because there is no component called '" << type << "'.";
+		oss << "The component at line " << element->get_line() << " was ignored because there is no component called '" << type << "'.";
 		xmlerr->Add(oss.str(), element->get_line());
 	}
 

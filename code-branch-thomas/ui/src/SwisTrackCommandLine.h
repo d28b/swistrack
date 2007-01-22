@@ -9,12 +9,16 @@ class SwisTrackCommandLine;
 class SwisTrackCommandLine {
 
 public:
-	mSwisTrackCore *mSwisTrackCore;		//!< The SwisTrackCore object.
+	// Variables read from the command line
 	std::string mExeName;				//!< The name of the executable file.
 	std::string mFileName;				//!< The name of the file to open.
-	bool mHelp;							//!< True if the --help option was given on the command line. 
-	bool mVersion;						//!< True if the --version option was given on the command line. 
-	
+	bool mHelp;							//!< True if the --help option was given on the command line.
+	bool mVersion;						//!< True if the --version option was given on the command line.
+
+	// SwisTrackCore and configuration
+	mSwisTrackCore *mSwisTrackCore;		//!< The SwisTrackCore object.
+	int mTriggerInterval;				//!< The interval of the trigger in milliseconds. If 0, manual trigger is chosen.
+
 	//! Constructor.
 	SwisTrackCommandLine();
 	//! Destructor.
