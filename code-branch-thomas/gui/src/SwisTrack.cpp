@@ -35,6 +35,7 @@ usually installing a codec pack like the KazaaLite codec pack solves all of this
 If you are working with Firewire cameras make sure you replace the custom driver that comes with the camera with the CMU1394
 driver.
 */
+
 #include "SwisTrack.h"
 #define THISCLASS SwisTrack
 
@@ -98,10 +99,6 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 #ifdef MULTITHREAD
 	criticalSection = new wxCriticalSection();
 #endif
-
-
-	show_coverage=0; // don't show coverage image
-	fps=30; // initial guess for the FPS of our video
 
 #if wxUSE_STATUSBAR
 	CreateStatusBar(2);
@@ -251,6 +248,7 @@ void THISCLASS::BuildToolBar() {
 	toolbar->AddTool(sID_Mode_Intercept, _T("Intercept"), wxBITMAP(finger), _T("Override data association"));
 	toolbar->AddSeparator();
 
+	int fps=30;
 	wxSlider *slider = new wxSlider(toolbar, sID_DisplaySpeed, 0, 0,(int) fps, wxDefaultPosition, wxSize(155,-1), wxSL_AUTOTICKS|wxSL_LABELS, wxGenericValidator(&mDisplaySpeed));
 	slider->SetTickFreq(5, 0);
 	slider->SetToolTip(_T("Display refresh (Hz)"));
@@ -342,6 +340,7 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 }
 
 void SwisTrack::OnFileNew(wxCommandEvent& WXUNUSED(event)) {
+	StopSeriousMode();
 	OpenFile("default.swistrack", false, true);
 }
 
@@ -349,10 +348,14 @@ void THISCLASS::OnFileOpen(wxCommandEvent& WXUNUSED(event)) {
 	wxFileDialog dlg(this, "Open Configuration", "", "", "SwisTrack Configurations (*.swistrack)|*.swistrack", wxOPEN, wxDefaultPosition);
 	if (dlg.ShowModal() != wxID_OK) {return;}
 
+	StopSeriousMode();
 	OpenFile(dlg.GetPath(), true, false);
 }
 
 void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astemplate) {
+	SwisTrackCoreEditor stce;
+	if (! stce.IsEditable()) {return;}
+
 	// Check if file is readable
 	if (breakonerror) {
 		//wxFileName fn(filename);
@@ -360,8 +363,7 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 		//	wxMessageDialog dlg(this, "Unable to read \n\n"+filename, "Open Configuration", wxOK);
 		//	dlg.ShowModal();
 		//	return;
-		//}est
-
+		//}
 	}
 
 	// Read the new file
@@ -399,7 +401,7 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 
 	// Read the configuration
 	ErrorList errorlist;
-	ConfigurationReadXML(document, &errorlist);
+	ConfigurationReadXML(&stce, document, &errorlist);
 	mComponentListPanel->OnUpdate();
 	if (errorlist.mList.empty()) {return;}
 
@@ -407,30 +409,30 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	eld.ShowModal();
 }
 
-void THISCLASS::ConfigurationReadXML(xmlpp::Document *document, ErrorList *errorlist) {
+void THISCLASS::ConfigurationReadXML(SwisTrackCoreEditor *stce, xmlpp::Document *document, ErrorList *errorlist) {
 	// If this method is called without a document, set up an empty component list
 	if (document==0) {
-		mSwisTrackCore->ConfigurationReadXML(0, errorlist);
+		stce->ConfigurationReadXML(0, errorlist);
 		return;
 	}
 
 	// Get the root node
 	xmlpp::Element *rootnode=document->get_root_node();
 	if (! rootnode) {
-		mSwisTrackCore->ConfigurationReadXML(0, errorlist);
+		stce->ConfigurationReadXML(0, errorlist);
 		return;
 	}
 
 	// Get the list of components
 	xmlpp::Node::NodeList nodes_components=rootnode->get_children("Components");
 	if (nodes_components.empty()) {
-		mSwisTrackCore->ConfigurationReadXML(0, errorlist);
+		stce->ConfigurationReadXML(0, errorlist);
 		return;
 	}
 
 	// Read the component list
 	xmlpp::Element *components=dynamic_cast<xmlpp::Element *>(nodes_components.front());
-	mSwisTrackCore->ConfigurationReadXML(components, errorlist);
+	stce->ConfigurationReadXML(components, errorlist);
 }
 
 void THISCLASS::OnFileSaveAs(wxCommandEvent& WXUNUSED(event)) {

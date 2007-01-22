@@ -55,10 +55,6 @@ public:
 	//! Reloads the configuration while a session is runnning. This may only be called if IsStarted()==false. Note that not all configuration parameters may be reloaded. This function may also be called in serious mode.
 	bool ReloadConfiguration();
 
-	//! Clears all deployed components.
-	void Clear();
-	//! Reads the configuration from a XML document.
-	void ConfigurationReadXML(xmlpp::Element* configuration, ErrorList *xmlerr);
 	//! Writes the configuration to a XML document.
 	void ConfigurationWriteXML(xmlpp::Element* configuration, ErrorList *xmlerr);
 	//! Returns a component by name.
@@ -86,9 +82,10 @@ protected:
 	//! The list of SwisTrackCoreInterface objects.
 	tSwisTrackCoreInterfaceList mSwisTrackCoreInterfaces;
 
-	//! Reads one component from the XML file.
-	void ConfigurationReadXMLElement(xmlpp::Element* element, ErrorList *xmlerr);
-
+	//! Increments the edit locks. If this is the first 
+	bool IncrementEditLocks();
+	//! Decrements the edit locks.
+	void DecrementEditLocks();
 };
 
 #endif

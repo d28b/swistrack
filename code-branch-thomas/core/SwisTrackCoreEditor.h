@@ -17,13 +17,21 @@ public:
 	//! Returns whether the SwisTrackCore object is editable or not.
 	bool IsEditable() {return (mSwisTrackCore!=0);}
 
-	//! Clears all deployed components.
-	void Clear();
 	//! Returns a component by name.
 	Component *GetComponentByName(const std::string &name);
 
+	//! Clears all deployed components.
+	void Clear();
+	//! Clears all deployed components.
+	void Clear();
+	//! Reads the configuration from a XML document.
+	void ConfigurationReadXML(xmlpp::Element* configuration, ErrorList *xmlerr);
+
 private:
 	SwisTrackCore *mSwisTrackCore;		//!< The associated SwisTrackCore object.
+
+	//! Reads one component from the XML file.
+	void ConfigurationReadXMLElement(xmlpp::Element* element, ErrorList *xmlerr);
 
 };
 

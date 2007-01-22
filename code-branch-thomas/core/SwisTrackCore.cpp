@@ -186,57 +186,6 @@ bool THISCLASS::ReloadConfiguration() {
 	return true;
 }
 
-void THISCLASS::Clear() {
-	tComponentList::iterator it=mDeployedComponents.begin();
-	while (it!=mDeployedComponents.end()) {
-		delete (*it);
-		it++;
-	}
-
-	mDeployedComponents.clear();
-}
-
-void THISCLASS::ConfigurationReadXML(xmlpp::Element* configuration, ErrorList *xmlerr) {
-	// Clear the current list of components
-	Clear();
-
-	// Traverse the list and create a Component object for each "component" tag
-	if (! configuration) {return;}
-	xmlpp::Node::NodeList list=configuration->get_children("component");
-	xmlpp::Node::NodeList::iterator it=list.begin();
-	while (it!=list.end()) {
-		xmlpp::Element *element=dynamic_cast<xmlpp::Element *>(*it);
-		ConfigurationReadXMLElement(element, xmlerr);
-		it++;
-	}
-}
-
-void THISCLASS::ConfigurationReadXMLElement(xmlpp::Element* element, ErrorList *xmlerr) {
-	if (! element) {return;}
-
-	// Get the type attribute
-	xmlpp::Attribute *att_type=element->get_attribute("type");
-	if (! att_type) {
-		std::ostringstream oss;
-		oss << "The element at line " << element->get_line() << " was ignored because it does not have a 'type' attribute.";
-		xmlerr->Add(oss.str(), element->get_line());
-	}
-
-	// Search for the component
-	std::string type=att_type->get_value();
-	Component *component=GetComponentByName(type);
-	if (! component) {
-		std::ostringstream oss;
-		oss << "The element at line " << element->get_line() << " was ignored because there is no component called '" << type << "'.";
-		xmlerr->Add(oss.str(), element->get_line());
-	}
-
-	// Add it to the list
-	Component *newcomponent=component->Create();
-	mDeployedComponents.push_back(newcomponent);
-	newcomponent->ConfigurationReadXML(element, xmlerr);
-}
-
 void THISCLASS::ConfigurationWriteXML(xmlpp::Element *configuration, ErrorList *xmlerr) {
 	// Add an element for each component
 	tComponentList::iterator it=mDeployedComponents.begin();
@@ -259,12 +208,50 @@ Component *THISCLASS::GetComponentByName(const std::string &name) {
 	return 0;
 }
 
-void AddInterface(SwisTrackCoreInterface *stc) {
+bool THISCLASS::IncrementEditLocks() {
+	if (mEditLocks>0) {return true;}
+
+	// If started in serious mode, editing is not allowed
+	if (IsStartedInSeriousMode()) {return false;}
+
+	// If started in test mode, stop and allow editing
+	Stop();
+
+	// Notify the interfaces
+	iti=mSwisTrackCoreInterfaces.begin();
+	while (iti!=mSwisTrackCoreInterfaces.end()) {
+		(*iti)->OnBeforeEdit();
+		iti++;
+	}
+
+	mEditLocks=1;
+	return true;
+}
+
+void THISCLASS::DecrementEditLocks() {
+	if (mEditLocks<1) {return;}
+
+	// Decrement and return if there are still other locks
+	mEditLocks--;
+	if (mEditLocks>0) {return;}
+
+	// Notify the interfaces
+	iti=mSwisTrackCoreInterfaces.begin();
+	while (iti!=mSwisTrackCoreInterfaces.end()) {
+		(*iti)->OnAfterEdit();
+		iti++;
+	}
+
+	return true;
+}
+
+void THISCLASS::AddInterface(SwisTrackCoreInterface *stc) {
 	mSwisTrackCoreInterfaces.push_back(stc);
 }
 
-void RemoveInterface(SwisTrackCoreInterface *stc) {
+void THISCLASS::RemoveInterface(SwisTrackCoreInterface *stc) {
 	tSwisTrackCoreInterfaceList::iterator it=find(mSwisTrackCoreInterfaces.begin(), mSwisTrackCoreInterfaces.end());
 	if (it==mSwisTrackCoreInterfaces.end()) {return;}
 	mSwisTrackCoreInterfaces.erase(it);
 }
+

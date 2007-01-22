@@ -193,8 +193,8 @@ void THISCLASS::OnAfterEdit() {
 }
 
 void THISCLASS::OnButtonAdd(wxCommandEvent& event) {
-	// Make sure we are allowed to edit
-	if (mSwisTrackCore->EditBegin()) {return;}
+	SwisTrackCoreEditor stce;
+	if (! stce->IsEditable()) {return;}
 
 	// Create the dialog if necessary
 	if (mComponentsDialog==0) {
@@ -208,51 +208,45 @@ void THISCLASS::OnButtonAdd(wxCommandEvent& event) {
 
 	// Add the new component to the list
 	// TODO: use the group information to add the component in the right place
-	mSwisTrackCore->mDeployedComponents.push_back(mComponentsDialog->mSelectedComponent->Create());
-
-	// Update the list
-	mSwisTrackCore->EditEnd();
-	OnUpdate();
+	mSwisTrackCore::tComponentList *cl=stce.GetComponentList();
+	cl->push_back(mComponentsDialog->mSelectedComponent->Create());
 }
 
 void THISCLASS::OnButtonRemove(wxCommandEvent& event) {
-	// Find the corresponding component in the list and delete it
-	SwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mDeployedComponents.begin(), mSwisTrackCore->mDeployedComponents.end(), mSelectedComponent);
-	if (it==mSwisTrackCore->mDeployedComponents.end()) {return;}
-	mSwisTrackCore->mDeployedComponents.erase(it);
-	delete mSelectedComponent;
+	SwisTrackCoreEditor stce;
+	if (! stce->IsEditable()) {return;}
 
-	// Update the list
-	OnUpdate();
+	// Find the corresponding component in the list and delete it
+	mSwisTrackCore::tComponentList *cl=stce.GetComponentList();
+	SwisTrackCore::tComponentList::iterator it=find(cl->begin(), cl->end(), mSelectedComponent);
+	if (it==cl->.end()) {return;}
+	cl->erase(it);
+	delete mSelectedComponent;
 }
 
 void THISCLASS::OnButtonUp(wxCommandEvent& event) {
 	// Find the corresponding component in the list and move it up
-	SwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mDeployedComponents.begin(), mSwisTrackCore->mDeployedComponents.end(), mSelectedComponent);
-	if (it==mSwisTrackCore->mDeployedComponents.end()) {return;}
+	mSwisTrackCore::tComponentList *cl=stce.GetComponentList();
+	SwisTrackCore::tComponentList::iterator it=find(cl->begin(), cl->end(), mSelectedComponent);
+	if (it==cl->end()) {return;}
 	SwisTrackCore::tComponentList::iterator it2=it;
 	it2--;
-	if (it2==mSwisTrackCore->mDeployedComponents.end()) {return;}
-	mSwisTrackCore->mDeployedComponents.erase(it);
-	mSwisTrackCore->mDeployedComponents.insert(it2, mSelectedComponent);
-
-	// Update the list
-	OnUpdate();
+	if (it2==cl->end()) {return;}
+	cl->erase(it);
+	cl->insert(it2, mSelectedComponent);
 }
 
 void THISCLASS::OnButtonDown(wxCommandEvent& event) {
 	// Find the corresponding component in the list and move it up
-	SwisTrackCore::tComponentList::iterator it=find(mSwisTrackCore->mDeployedComponents.begin(), mSwisTrackCore->mDeployedComponents.end(), mSelectedComponent);
-	if (it==mSwisTrackCore->mDeployedComponents.end()) {return;}
+	mSwisTrackCore::tComponentList *cl=stce.GetComponentList();
+	SwisTrackCore::tComponentList::iterator it=find(cl->begin(), cl->end(), mSelectedComponent);
+	if (it==cl->end()) {return;}
 	SwisTrackCore::tComponentList::iterator it2=it;
 	it2++;
-	if (it2==mSwisTrackCore->mDeployedComponents.end()) {return;}
+	if (it2==cl->end()) {return;}
 	it2++;
-	mSwisTrackCore->mDeployedComponents.erase(it);
-	mSwisTrackCore->mDeployedComponents.insert(it2, mSelectedComponent);
-
-	// Update the list
-	OnUpdate();
+	cl->erase(it);
+	cl->insert(it2, mSelectedComponent);
 }
 
 void THISCLASS::OnListItemSelected(wxListEvent& event) {

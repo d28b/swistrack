@@ -9,14 +9,6 @@
   #include <wx/wx.h>
 #endif
 
-#include <wx/timer.h>  // Spinbuttons 
-
-//#include <wx/spinbutt.h>  // Spinbuttons 
-//#include "wx/valgen.h"	  // Generic validators, used in almost every dialgo
-//#include "wx/image.h"     // Necessary for image operations
-//#include "wx/file.h"	  // File operations (here: FileExists)
-//#include "wx/html/htmlwin.h"
-
 class SwisTrack;
 
 #include "SwisTrack.Constants.h"
@@ -24,24 +16,23 @@ class SwisTrack;
 #include "ComponentListPanel.h"
 #include "SocketServer.h"
 #include "CanvasPanel.h"
+#include <wx/timer.h>
 
-/** \class SwisTrack
-* \brief Main application window
-*
-* The class extends the wxFrame class and displays tracking progress using ObjectTracker which
-* is triggered by idle events. Also, it implements all event handlers of the GUI.
-*/ 
+//! Main application window.
+/*!
+	Description ...
+*/
 class SwisTrack: public wxFrame, public CommunicationCommandHandler {
-public:
-	// The free run timer.
-	wxTimer mFreeRunTimer;
-	// The free run interval in milliseconds.
-	int mFreeRunInterval;
 
-	//! The SwisTrackCore object.
-	SwisTrackCore *mSwisTrackCore;
-	//! The SocketServer object.
-	SocketServer *mSocketServer;
+public:
+	wxTimer mFreeRunTimer;		//!< The free run timer.
+	int mFreeRunInterval;		//!< The free run interval in milliseconds.
+
+	SwisTrackCore *mSwisTrackCore;	//!< The SwisTrackCore object.
+	SocketServer *mSocketServer;	//!< The SocketServer object.
+
+	wxString mFileName;		//!< The current configuration file.
+	bool mChanged;			//!< Whether the file has been modified. This flag is currently ignored.
 
 	// Menu bar and items
 	wxMenuBar *menuBar;
@@ -67,15 +58,13 @@ public:
 
 	//! Opens a file.
 	void OpenFile(const wxString &filename, bool breakonerror, bool astemplate);
-	//! Reads an XML file.
-	void ConfigurationReadXML(xmlpp::Document *document, ErrorList *errorlist);
 	//! Saves a file.
 	void SaveFile(const wxString &filename);
 
 	// CommuncationCommandHandler methods
 	bool OnCommunicationCommand(CommunicationMessage *m);
 
-    // event handlers (these functions should _not_ be virtual)
+    // Event handlers
 	void OnHelp(wxCommandEvent& WXUNUSED(event));
 	void OnHelpAbout(wxCommandEvent& WXUNUSED(event));
 	void OnTest(wxCommandEvent& WXUNUSED(event));
@@ -113,19 +102,14 @@ public:
 	//! The idle event.
 	void OnIdle(wxIdleEvent& event);
 
-	//! The current configuration file.
-	wxString mFileName;
-	bool mChanged;
-
 #ifdef MULTITHREAD
 	// Critical section used to synchronize the main and auxiliary threads
 	wxCriticalSection* mCriticalSection; 
 #endif
 
 private:
-	//void RefreshAllDisplays();
-	double fps;       //!< FPS, read from the avi file
-	int show_coverage;
+	//! Reads the configuration from an XML file. This method is used by OpenFile().
+	void ConfigurationReadXML(SwisTrackCoreEditor *stce, xmlpp::Document *document, ErrorList *errorlist);
 
 protected:
 	// IDs for the controls and the menu commands
