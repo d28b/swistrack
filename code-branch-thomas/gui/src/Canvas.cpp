@@ -2,10 +2,11 @@
 #define THISCLASS Canvas
 
 #include <wx/image.h>
+#include <highgui.h>
 
 BEGIN_EVENT_TABLE(THISCLASS, wxControl)
     EVT_PAINT(THISCLASS::OnPaint)
-	EVT_ERASE_BACKGROUND(THISCLASS::EraseBackground)
+	EVT_ERASE_BACKGROUND(THISCLASS::OnEraseBackground)
     EVT_LEFT_DOWN(THISCLASS::OnMouseLeftDown)
 	EVT_RIGHT_DOWN(THISCLASS::OnMouseRightDown)
 	EVT_MOTION(THISCLASS::OnMouseMove)
@@ -69,6 +70,4 @@ void THISCLASS::OnMenuSaveImageAs(wxCommandEvent& event) {
 		dlg.ShowModal();
 		return;
 	}
-
-	SetStatusText(filename + " saved!", 1);
 }

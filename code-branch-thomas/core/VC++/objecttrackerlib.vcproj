@@ -293,6 +293,14 @@
 				RelativePath="..\SwisTrackCore.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\SwisTrackCoreEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\SwisTrackCoreInterface.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -411,6 +419,14 @@
 			</File>
 			<File
 				RelativePath="..\SwisTrackCore.h"
+				>
+			</File>
+			<File
+				RelativePath="..\SwisTrackCoreEditor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\SwisTrackCoreInterface.h"
 				>
 			</File>
 		</Filter>

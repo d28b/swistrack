@@ -10,22 +10,23 @@
 class CanvasAnnotation;
 
 #include <wx/dcbuffer.h>
+#include <cv.h>
 #include "SwisTrack.h"
-#include "cv.h"
+#include "CanvasPanel.h"
 
 //! The control below the main canvas, displaying information about the image.
 class CanvasAnnotation: public wxControl {
 
 public:
-	//! The associated CanvasAnnotationPanel.
-	CanvasAnnotationPanel* mCanvasAnnotationPanel;
+	//! The associated CanvasPanel.
+	CanvasPanel* mCanvasPanel;
 	//! The text shown on the left side.
 	wxString mTextLeft;
 	//! The text shown on the right side.
 	wxString mTextRight;
 
 	// Constructor.
-	CanvasAnnotation(CanvasAnnotationPanel *cp);
+	CanvasAnnotation(CanvasPanel *cp);
 	// Destructor.
 	~CanvasAnnotation();
 
@@ -33,11 +34,10 @@ public:
 	void OnMouseLeftClick(wxMouseEvent &event);
 	//! Handles right click.
 	void OnMouseRightClick(wxMouseEvent &event);
+	//! Handles mouse move.
+	void OnMouseMove(wxMouseEvent &event);
 	//! Paints the canvas.
 	void OnPaint(wxPaintEvent& WXUNUSED(event));
-
-	//! This sets a new image. Note that this class cleans up and frees old image automatically.
-	void SetImage(IplImage *img);
 
 	DECLARE_EVENT_TABLE()
 };

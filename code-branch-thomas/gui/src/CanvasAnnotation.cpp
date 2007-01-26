@@ -10,17 +10,13 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 	EVT_MOTION(THISCLASS::OnMouseMove)
 END_EVENT_TABLE()
 
-THISCLASS::CanvasAnnotation(CanvasAnnotationPanel *cp):
-		wxControl(cp, -1), mCanvasAnnotationPanel(cp), mTextLeft(), mTextRight() {
+THISCLASS::CanvasAnnotation(CanvasPanel *cp):
+		wxControl(cp, -1), mCanvasPanel(cp), mTextLeft(), mTextRight() {
 
-	SetBackgroundColor(*wxBLACK);
+	SetBackgroundColour(*wxBLACK);
 }
 
 THISCLASS::~CanvasAnnotation() {
-}
-
-void THISCLASS::EraseBackground(wxEraseEvent& event) {
-	// Overwrite this method to avoid drawing the background
 }
 
 void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
@@ -36,15 +32,12 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	dc.DrawText(mTextLeft, 0, 0);
 
 	// Right
-	wxSize textsize=dc.GetTextExtent(mTextRight);
-	dc.DrawText(mTextRight, 0, size.GetWidth()-textsize.GetWidth());
-}
-
-void THISCLASS::SetImage(IplImage *img) {
-	SetSize(img->width, img->height);
-	cvReleaseImage(&mImage);
-	mImage=img;
-	Refresh(false);
+	//wxSize textsize=dc.GetTextExtent(mTextRight); TODO 2.8.0
+	//dc.DrawText(mTextRight, 0, size.GetWidth()-textsize.GetWidth());
+	wxCoord w;
+	wxCoord h;
+	dc.GetTextExtent(mTextRight, &w, &h);
+	dc.DrawText(mTextRight, 0, size.GetWidth()-w);
 }
 
 void THISCLASS::OnMouseLeftClick(wxMouseEvent &event) {

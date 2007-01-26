@@ -11,17 +11,23 @@ class SwisTrackCore;
 #include "DataStructureImage.h"
 #include "DataStructureParticles.h"
 #include "ErrorList.h"
+#include "SwisTrackCoreInterface.h"
+class SwisTrackCoreEditor;
 
 //! The main class of the core part of SwisTrack. This class holds everything together.
 class SwisTrackCore {
-friend class SwisTrackEditor;
+friend class SwisTrackCoreEditor;
 
 public:
-	typedef std::list<Component*> tComponentList;	//!< A list of components type.
-	tComponentList mAvailableComponents;			//!< The list of all available components.
+	//! A list of components type.
+	typedef std::list<Component*> tComponentList;
+	//! A list of data structures type.
+	typedef std::list<DataStructure*> tDataStructureList;
+	//! A list of SwisTrackCoreInterface objects.
+	typedef std::list<SwisTrackCoreInterface*> tSwisTrackCoreInterfaceList;
 
-	typedef std::list<DataStructure*> tDataStructureList;	//!< A list of data structures type.
-	tDataStructureList mDataStructures;						//!< The list of all available data structures.
+	tComponentList mAvailableComponents;			//!< The list of all available components.
+	tDataStructureList mDataStructures;				//!< The list of all available data structures.
 
 	// Component categories
 	ComponentCategory mCategoryInput;
@@ -57,6 +63,9 @@ public:
 
 	//! Writes the configuration to a XML document.
 	void ConfigurationWriteXML(xmlpp::Element* configuration, ErrorList *xmlerr);
+
+	//! Returns the list of deployed components. Note that this list can only be read. To modify the list, you need to use a SwisTrackCoreEditor object.
+	const SwisTrackCore::tComponentList *GetDeployedComponents() {return &mDeployedComponents;}
 	//! Returns a component by name.
 	Component *GetComponentByName(const std::string &name);
 
@@ -66,21 +75,17 @@ public:
 	bool IsStartedInSeriousMode() {return (mStarted && mSeriousMode);}
 
 	//! Adds an object to the list of interfaces. Objects on this list will be informed upon changes.
-	bool AddInterface(SwisTrackCoreInterface *stc);
+	void AddInterface(SwisTrackCoreInterface *stc);
 	//! Removes an object from the list of interfaces.
-	bool RemoveInterface(SwisTrackCoreInterface *stc);
+	void RemoveInterface(SwisTrackCoreInterface *stc);
 
 protected:
 	bool mStarted;		//!< Whether the components have been started or not.
 	bool mSeriousMode;	//!< Whether the components are running in serious mode or not. Note that this is only valid if mStarted=true.
 	int mEditLocks;		//!< The number of edit locks.
 
-	tComponentList mDeployedComponents;		//!< The list of deployed components.
-
-	//! The list type of SwisTrackCoreInterface objects.
-	typedef std::list<SwisTrackCoreInterface*> tSwisTrackCoreInterfaceList;
-	//! The list of SwisTrackCoreInterface objects.
-	tSwisTrackCoreInterfaceList mSwisTrackCoreInterfaces;
+	tComponentList mDeployedComponents;						//!< The list of deployed components.
+	tSwisTrackCoreInterfaceList mSwisTrackCoreInterfaces;	//!< The list of SwisTrackCoreInterface objects.
 
 	//! Increments the edit locks. If this is the first 
 	bool IncrementEditLocks();

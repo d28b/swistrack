@@ -3,12 +3,13 @@
 
 #include <wx/sizer.h>
 #include <algorithm>
+#include "SwisTrackCoreEditor.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
-  EVT_BUTTON (eID_ButtonAdd, THISCLASS::OnButtonAdd)
-  EVT_BUTTON (eID_ButtonRemove, THISCLASS::OnButtonRemove)
-  EVT_BUTTON (eID_ButtonUp, THISCLASS::OnButtonUp)
-  EVT_BUTTON (eID_ButtonDown, THISCLASS::OnButtonDown)
+  EVT_BUTTON (eID_ButtonAdd, THISCLASS::OnButtonAddClick)
+  EVT_BUTTON (eID_ButtonRemove, THISCLASS::OnButtonRemoveClick)
+  EVT_BUTTON (eID_ButtonUp, THISCLASS::OnButtonUpClick)
+  EVT_BUTTON (eID_ButtonDown, THISCLASS::OnButtonDownClick)
   EVT_LIST_ITEM_SELECTED (eID_List, THISCLASS::OnListItemSelected)
 END_EVENT_TABLE()
 
@@ -29,7 +30,7 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrackCore *stc):
 	mList->InsertColumn(col++, "Component", wxLIST_FORMAT_LEFT, 200);
 
 	// Add columns for data structures
-	SwisTrackCore::tDataStructures::iterator it=mSwisTrackCore->mDataStructures.begin();
+	SwisTrackCore::tDataStructureList::iterator it=mSwisTrackCore->mDataStructures.begin();
 	while (it!=mSwisTrackCore->mDataStructures.end()) {
 		mList->InsertColumn(col++, (*it)->mDisplayName.c_str(), wxLIST_FORMAT_CENTER, 50);
 		it++;
@@ -60,7 +61,7 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrackCore *stc):
 	SetSizer(hs);
 
 	// Update list
-	OnUpdate();
+	Update();
 }
 
 void THISCLASS::Update() {
@@ -69,8 +70,9 @@ void THISCLASS::Update() {
 
 	// Add all components
 	int row=0;
-	SwisTrackCore::tComponentList::iterator it=mSwisTrackCore->mDeployedComponents.begin();
-	while (it!=mSwisTrackCore->mDeployedComponents.end()) {
+	const SwisTrackCore::tComponentList *cl=mSwisTrackCore->GetDeployedComponents();
+	SwisTrackCore::tComponentList::const_iterator it=cl->begin();
+	while (it!=cl->end()) {
 		int col=0;
 		wxListItem li;
 
@@ -86,7 +88,7 @@ void THISCLASS::Update() {
 		mList->InsertItem(li);
 
 		// Data structures
-		SwisTrackCore::tDataStructures::iterator itds=mSwisTrackCore->mDataStructures.begin();
+		SwisTrackCore::tDataStructureList::iterator itds=mSwisTrackCore->mDataStructures.begin();
 		while (itds!=mSwisTrackCore->mDataStructures.end()) {
 			li.SetColumn(col++);
 			
@@ -132,22 +134,22 @@ void THISCLASS::UpdateStatus() {
 
 		// Update the color
 		if (c->mStatusHasError) {
-			mList->SetItemBackgroundColour(wxColour(255, 225, 225));
-		} else if ((*it)->mStatusHasWarning) {
-			mList->SetItemBackgroundColour(wxColour(225, 225, 225));
+			mList->SetItemBackgroundColour(item, wxColour(255, 225, 225));
+		} else if (c->mStatusHasWarning) {
+			mList->SetItemBackgroundColour(item, wxColour(225, 225, 225));
 		} else {
-			mList->SetItemBackgroundColour(*wxWHITE);
+			mList->SetItemBackgroundColour(item, *wxWHITE);
 		}
 
 		// Status messages
-		if (((*it)->mStatusHasError) || ((*it)->mStatusHasWarning)) {
+		if ((c->mStatusHasError) || (c->mStatusHasWarning)) {
 			wxListItem li;
 			li.SetId(item);
-			li.SetColumn(mMessageColumn);
+			li.SetColumn(mColumnMessages);
 
 			wxString str;
-			Component::tStatusItemList::iterator itsl=(*it)->mStatus.begin();
-			while (itsl!=(*it)->mStatus.end()) {
+			Component::tStatusItemList::iterator itsl=c->mStatus.begin();
+			while (itsl!=c->mStatus.end()) {
 				if (itsl->mType==StatusItem::sTypeError) {
 					str+=itsl->mMessage.c_str();
 					str+=" ";
@@ -169,19 +171,19 @@ void THISCLASS::OnAfterStart(bool seriousmode) {
 	UpdateStatus();
 
 	if (seriousmode) {
-		mButtonAdd->SetEnabled(false);
-		mButtonRemove->SetEnabled(false);
-		mButtonUp->SetEnabled(false);
-		mButtonDown->SetEnabled(false);
+		mButtonAdd->Enable(false);
+		mButtonRemove->Enable(false);
+		mButtonUp->Enable(false);
+		mButtonDown->Enable(false);
 	}
 }
 
 void THISCLASS::OnAfterStop() {
 	UpdateStatus();
-	mButtonAdd->SetEnabled(true);
-	mButtonRemove->SetEnabled(true);
-	mButtonUp->SetEnabled(true);
-	mButtonDown->SetEnabled(true);
+	mButtonAdd->Enable(true);
+	mButtonRemove->Enable(true);
+	mButtonUp->Enable(true);
+	mButtonDown->Enable(true);
 }
 
 void THISCLASS::OnAfterStep() {
@@ -192,9 +194,9 @@ void THISCLASS::OnAfterEdit() {
 	Update();
 }
 
-void THISCLASS::OnButtonAdd(wxCommandEvent& event) {
-	SwisTrackCoreEditor stce;
-	if (! stce->IsEditable()) {return;}
+void THISCLASS::OnButtonAddClick(wxCommandEvent& event) {
+	SwisTrackCoreEditor stce(mSwisTrackCore);
+	if (! stce.IsEditable()) {return;}
 
 	// Create the dialog if necessary
 	if (mComponentsDialog==0) {
@@ -208,25 +210,28 @@ void THISCLASS::OnButtonAdd(wxCommandEvent& event) {
 
 	// Add the new component to the list
 	// TODO: use the group information to add the component in the right place
-	mSwisTrackCore::tComponentList *cl=stce.GetComponentList();
+	SwisTrackCore::tComponentList *cl=stce.GetDeployedComponents();
 	cl->push_back(mComponentsDialog->mSelectedComponent->Create());
 }
 
-void THISCLASS::OnButtonRemove(wxCommandEvent& event) {
-	SwisTrackCoreEditor stce;
-	if (! stce->IsEditable()) {return;}
+void THISCLASS::OnButtonRemoveClick(wxCommandEvent& event) {
+	SwisTrackCoreEditor stce(mSwisTrackCore);
+	if (! stce.IsEditable()) {return;}
 
 	// Find the corresponding component in the list and delete it
-	mSwisTrackCore::tComponentList *cl=stce.GetComponentList();
+	SwisTrackCore::tComponentList *cl=stce.GetDeployedComponents();
 	SwisTrackCore::tComponentList::iterator it=find(cl->begin(), cl->end(), mSelectedComponent);
-	if (it==cl->.end()) {return;}
+	if (it==cl->end()) {return;}
 	cl->erase(it);
 	delete mSelectedComponent;
 }
 
-void THISCLASS::OnButtonUp(wxCommandEvent& event) {
+void THISCLASS::OnButtonUpClick(wxCommandEvent& event) {
+	SwisTrackCoreEditor stce(mSwisTrackCore);
+	if (! stce.IsEditable()) {return;}
+
 	// Find the corresponding component in the list and move it up
-	mSwisTrackCore::tComponentList *cl=stce.GetComponentList();
+	SwisTrackCore::tComponentList *cl=stce.GetDeployedComponents();
 	SwisTrackCore::tComponentList::iterator it=find(cl->begin(), cl->end(), mSelectedComponent);
 	if (it==cl->end()) {return;}
 	SwisTrackCore::tComponentList::iterator it2=it;
@@ -236,9 +241,12 @@ void THISCLASS::OnButtonUp(wxCommandEvent& event) {
 	cl->insert(it2, mSelectedComponent);
 }
 
-void THISCLASS::OnButtonDown(wxCommandEvent& event) {
+void THISCLASS::OnButtonDownClick(wxCommandEvent& event) {
+	SwisTrackCoreEditor stce(mSwisTrackCore);
+	if (! stce.IsEditable()) {return;}
+
 	// Find the corresponding component in the list and move it up
-	mSwisTrackCore::tComponentList *cl=stce.GetComponentList();
+	SwisTrackCore::tComponentList *cl=stce.GetDeployedComponents();
 	SwisTrackCore::tComponentList::iterator it=find(cl->begin(), cl->end(), mSelectedComponent);
 	if (it==cl->end()) {return;}
 	SwisTrackCore::tComponentList::iterator it2=it;

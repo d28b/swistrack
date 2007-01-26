@@ -1,6 +1,7 @@
 #include "CanvasTitle.h"
 #define THISCLASS CanvasTitle
 
+#include <sstream>
 #include <wx/image.h>
 
 BEGIN_EVENT_TABLE(THISCLASS, wxControl)
@@ -12,10 +13,10 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
     EVT_PAINT(THISCLASS::OnPaint)
 END_EVENT_TABLE()
 
-THISCLASS::CanvasTitle(CanvasTitlePanel *cp):
-		wxControl(cp, -1), mCanvasTitlePanel(cp), mTitle(""), mHighlight(false) {
+THISCLASS::CanvasTitle(CanvasPanel *cp):
+		wxControl(cp, -1), mCanvasPanel(cp), mTitle(""), mHighlight(false) {
 
-	SetBackgroundColor(*wxBLACK);
+	SetBackgroundColour(*wxBLACK);
 	wxFont f=GetFont();
 	f.SetWeight(wxFONTWEIGHT_BOLD);
 	f.SetUnderlined(true);
@@ -33,7 +34,7 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	if (mHighlight) {
 		dc.SetTextForeground(*wxWHITE);
 	} else {
-		dc.SetTextForeground(*wxYELLOW);
+		dc.SetTextForeground(wxColour(255, 255, 0));
 	}
 	dc.DrawText(mTitle, 0, 0);
 }
@@ -45,9 +46,10 @@ void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 
 	// Add all possible displays
 	int id=1;
-	SwisTrackCore *stc=mSwisTrack->mSwisTrackCore;
-	SwisTrackCore::tComponentList::iterator it=stc->mDeployedComponents.begin();
-	while (it!=stc->mDeployedComponents.end()) {
+	SwisTrackCore *stc=mCanvasPanel->mSwisTrack->mSwisTrackCore;
+	const SwisTrackCore::tComponentList *cl=stc->GetDeployedComponents();
+	SwisTrackCore::tComponentList::const_iterator it=cl->begin();
+	while (it!=cl->end()) {
 		Component *c=(*it);
 
 		Component::tDisplayImageList::iterator itdi=c->mDisplayImages.begin();

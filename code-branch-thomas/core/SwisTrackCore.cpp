@@ -2,6 +2,7 @@
 #define THISCLASS SwisTrackCore
 
 #include <sstream>
+#include <algorithm>
 #include "ComponentInputCamera1394.h"
 #include "ComponentInputCameraUSB.h"
 #include "ComponentInputCameraGBit.h"
@@ -218,10 +219,10 @@ bool THISCLASS::IncrementEditLocks() {
 	Stop();
 
 	// Notify the interfaces
-	iti=mSwisTrackCoreInterfaces.begin();
-	while (iti!=mSwisTrackCoreInterfaces.end()) {
-		(*iti)->OnBeforeEdit();
-		iti++;
+	tSwisTrackCoreInterfaceList::iterator it=mSwisTrackCoreInterfaces.begin();
+	while (it!=mSwisTrackCoreInterfaces.end()) {
+		(*it)->OnBeforeEdit();
+		it++;
 	}
 
 	mEditLocks=1;
@@ -236,13 +237,11 @@ void THISCLASS::DecrementEditLocks() {
 	if (mEditLocks>0) {return;}
 
 	// Notify the interfaces
-	iti=mSwisTrackCoreInterfaces.begin();
-	while (iti!=mSwisTrackCoreInterfaces.end()) {
-		(*iti)->OnAfterEdit();
-		iti++;
+	tSwisTrackCoreInterfaceList::iterator it=mSwisTrackCoreInterfaces.begin();
+	while (it!=mSwisTrackCoreInterfaces.end()) {
+		(*it)->OnAfterEdit();
+		it++;
 	}
-
-	return true;
 }
 
 void THISCLASS::AddInterface(SwisTrackCoreInterface *stc) {
@@ -250,7 +249,7 @@ void THISCLASS::AddInterface(SwisTrackCoreInterface *stc) {
 }
 
 void THISCLASS::RemoveInterface(SwisTrackCoreInterface *stc) {
-	tSwisTrackCoreInterfaceList::iterator it=find(mSwisTrackCoreInterfaces.begin(), mSwisTrackCoreInterfaces.end());
+	tSwisTrackCoreInterfaceList::iterator it=find(mSwisTrackCoreInterfaces.begin(), mSwisTrackCoreInterfaces.end(), stc);
 	if (it==mSwisTrackCoreInterfaces.end()) {return;}
 	mSwisTrackCoreInterfaces.erase(it);
 }

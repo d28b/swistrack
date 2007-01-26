@@ -42,6 +42,7 @@ driver.
 #include "CanvasPanel.h"
 #include "SocketServer.h"
 #include "ErrorListDialog.h"
+#include "SwisTrackCoreEditor.h"
 
 #include <math.h>
 #include <highgui.h>
@@ -263,7 +264,6 @@ void THISCLASS::SingleStep() {
 	// Start (if necessary) and perform a step
 	mSwisTrackCore->Start(false);
 	mSwisTrackCore->Step();
-	mComponentListPanel->OnUpdate();
 }
 
 void THISCLASS::ReloadConfiguration() {
@@ -271,10 +271,8 @@ void THISCLASS::ReloadConfiguration() {
 	// Otherwise, we stop the simulation (it is automatically restarted upon the next step).
 	if (mSwisTrackCore->IsStartedInSeriousMode()) {
 		mSwisTrackCore->ReloadConfiguration();
-		mComponentListPanel->OnUpdate();
 	} else {
 		mSwisTrackCore->Stop();
-		mComponentListPanel->OnUpdate();
 	}
 }
 
@@ -283,14 +281,12 @@ void THISCLASS::StartSeriousMode() {
 	mSwisTrackCore->Stop();
 	GetToolBar()->ToggleTool(sID_Control_SeriousMode, true);
 	mSwisTrackCore->Start(true);
-	mComponentListPanel->OnUpdate();
 }
 
 void THISCLASS::StopSeriousMode() {
 	if (! mSwisTrackCore->IsStartedInSeriousMode()) {return;}
 	mSwisTrackCore->Stop();
 	GetToolBar()->ToggleTool(sID_Control_SeriousMode, false);
-	mComponentListPanel->OnUpdate();
 }
 
 void THISCLASS::SetTriggerManual() {
@@ -353,7 +349,7 @@ void THISCLASS::OnFileOpen(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astemplate) {
-	SwisTrackCoreEditor stce;
+	SwisTrackCoreEditor stce(mSwisTrackCore);
 	if (! stce.IsEditable()) {return;}
 
 	// Check if file is readable
@@ -402,7 +398,6 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	// Read the configuration
 	ErrorList errorlist;
 	ConfigurationReadXML(&stce, document, &errorlist);
-	mComponentListPanel->OnUpdate();
 	if (errorlist.mList.empty()) {return;}
 
 	ErrorListDialog eld(this, &errorlist, "Open File", wxString::Format("The following errors occurred while reading the file '%s':", filename));
@@ -487,9 +482,9 @@ void SwisTrack::OnFileQuit(wxCommandEvent& WXUNUSED(event)) {
 
 void THISCLASS::OnControlSeriousMode(wxCommandEvent& WXUNUSED(event)) {
 	if (mSwisTrackCore->IsStartedInSeriousMode()) {
-		StartSeriousMode();
-	} else {
 		StopSeriousMode();
+	} else {
+		StartSeriousMode();
 	}
 }
 

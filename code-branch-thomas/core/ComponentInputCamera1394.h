@@ -1,13 +1,13 @@
 #ifndef HEADER_ComponentInputCamera1394
 #define HEADER_ComponentInputCamera1394
 
-#include "cv.h"
 #include "Component.h"
 
 #define _1394
 
 #ifdef _1394
-#include "highgui.h"  // 1394camera.h requires this to be included before
+#include <cv.h>
+#include <highgui.h>  // 1394camera.h requires this to be included before
 #include <1394camera.h>
 
 //! An input component that interfaces a Firewire 1394 camera.

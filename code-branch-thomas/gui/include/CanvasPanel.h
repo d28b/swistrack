@@ -12,6 +12,8 @@ class CanvasPanel;
 #include <wx/stattext.h>
 #include "SwisTrack.h"
 #include "Canvas.h"
+#include "CanvasTitle.h"
+#include "CanvasAnnotation.h"
 #include "DisplayImageSubscriberInterface.h"
 
 /** \class CanvasPanel
@@ -25,7 +27,9 @@ public:
 	//! The canvas.
 	Canvas *mCanvas;
 	//! The title text.
-	wxStaticText *mTitle;
+	CanvasTitle *mTitle;
+	//! The title text.
+	CanvasAnnotation *mAnnotation;
 	//! The update rate (only each mUpdateRate image is displayed). If mUpdateRate==0, visualization is disabled.
 	int mUpdateRate;
 	//! The update rate counter.

@@ -17,11 +17,8 @@ public:
 	//! Returns whether the SwisTrackCore object is editable or not.
 	bool IsEditable() {return (mSwisTrackCore!=0);}
 
-	//! Returns a component by name.
-	Component *GetComponentByName(const std::string &name);
-
-	//! Clears all deployed components.
-	void Clear();
+	//! Returns the list of deployed components. Note that this list may only be edited as long as the SwisTrackCoreEditor object exists.
+	SwisTrackCore::tComponentList *GetDeployedComponents();
 	//! Clears all deployed components.
 	void Clear();
 	//! Reads the configuration from a XML document.

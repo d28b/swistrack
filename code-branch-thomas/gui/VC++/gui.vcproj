@@ -314,7 +314,15 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\CanvasAnnotation.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\CanvasPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\CanvasTitle.cpp"
 				>
 			</File>
 			<File
@@ -381,7 +389,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\CanvasAnnotation.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\CanvasPanel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\CanvasTitle.h"
 				>
 			</File>
 			<File

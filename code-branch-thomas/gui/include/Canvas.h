@@ -11,7 +11,7 @@ class Canvas;
 
 #include <wx/dcbuffer.h>
 #include "SwisTrack.h"
-#include "cv.h"
+#include <cv.h>
 
 /** \class Canvas
 * \brief Creates a canvas to draw tracking progress

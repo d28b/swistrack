@@ -26,15 +26,15 @@ THISCLASS::~SwisTrackCoreEditor() {
 	mSwisTrackCore->DecrementEditLocks();
 }
 
-SwisTrackCore::tComponentList *THISCLASS::GetComponentList() {
-	if (! mSwisTrackCore) {return;}
-	return &(mSwisTrackCore.mDeployedComponents);
+SwisTrackCore::tComponentList *THISCLASS::GetDeployedComponents() {
+	if (! mSwisTrackCore) {return 0;}
+	return &(mSwisTrackCore->mDeployedComponents);
 }
 
 void THISCLASS::Clear() {
 	if (! mSwisTrackCore) {return;}
 
-	tComponentList::iterator it=mSwisTrackCore->mDeployedComponents.begin();
+	SwisTrackCore::tComponentList::iterator it=mSwisTrackCore->mDeployedComponents.begin();
 	while (it!=mSwisTrackCore->mDeployedComponents.end()) {
 		delete (*it);
 		it++;
@@ -73,7 +73,7 @@ void THISCLASS::ConfigurationReadXMLElement(xmlpp::Element* element, ErrorList *
 
 	// Search for the component
 	std::string type=att_type->get_value();
-	Component *component=GetComponentByName(type);
+	Component *component=mSwisTrackCore->GetComponentByName(type);
 	if (! component) {
 		std::ostringstream oss;
 		oss << "The component at line " << element->get_line() << " was ignored because there is no component called '" << type << "'.";
