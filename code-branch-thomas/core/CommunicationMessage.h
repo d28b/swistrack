@@ -6,17 +6,16 @@ class CommunicationMessage;
 #include <string>
 #include <list>
 
+//! A communication message tailored for NMEA message.
 class CommunicationMessage {
 
 public:
 	//! Parameter list type.
 	typedef std::list<std::string> tParameters;
-	//! The list of message parameters.
-	tParameters mParameters;
-	//! The message type (command).
-	std::string mCommand;
-	//! The associated request (if any)
-	CommunicationMessage *mInReplyTo;
+
+	tParameters mParameters;			//!< The list of message parameters.
+	std::string mCommand;				//!< The message type (command).
+	CommunicationMessage *mInReplyTo;	//!< The associated request (if any).
 
 	//! Constructor.
 	CommunicationMessage(const std::string &cmd = "", CommunicationMessage *inreplyto=0);

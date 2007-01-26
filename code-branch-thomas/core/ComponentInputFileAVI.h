@@ -6,7 +6,7 @@
 #include "highgui.h"
 #include "Component.h"
 
-//! An input component that reads an AVI file.
+//! An input component that reads an AVI file using the CV library.
 class ComponentInputFileAVI: public Component {
 
 public:
@@ -29,10 +29,8 @@ public:
 	double GetFPS();
 
 private:
-	//! Pointer to AVI sequence.
-	CvCapture* mCapture;
-	//! The last acquired image.
-	IplImage* mLastImage;
+	CvCapture* mCapture;	//!< Pointer to AVI sequence.
+	IplImage* mLastImage;	//!< The last acquired image.
 };
 
 #endif

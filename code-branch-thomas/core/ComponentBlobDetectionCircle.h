@@ -3,10 +3,13 @@
 
 #include "Component.h"
 
+//! A component that detect circular blobs.
 class ComponentBlobDetectionCircle: public Component {
 
 public:
+	//! Constructor.
 	ComponentBlobDetectionCircle(SwisTrackCore *stc);
+	//! Destructor.
 	~ComponentBlobDetectionCircle();
 
 	// Overwritten Component methods
@@ -18,7 +21,7 @@ public:
 	Component *Create() {return new ComponentBlobDetectionCircle(mCore);}
 
 private:
-	DataStructureParticles::tParticleVector mParticles;
+	DataStructureParticles::tParticleVector mParticles;		//!< The list of detected particles. This is the list given to DataStructureParticles.
 };
 
 #endif

@@ -7,13 +7,14 @@ class ErrorList;
 #include <list>
 #include "ErrorListItem.h"
 
+//! A list of error messages. This is used by the XML functions.
 class ErrorList {
 
 public:
 	//! Parameter list type.
 	typedef std::list<ErrorListItem> tList;
-	//! The list of errors.
-	tList mList;
+
+	tList mList;	//!< The list of errors.
 
 	//! Constructor.
 	ErrorList(): mList() {}

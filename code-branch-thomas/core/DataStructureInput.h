@@ -6,13 +6,12 @@
 class DataStructureInput: public DataStructureImage {
 
 public:
-	//! Frame number
-	int mFrameNumber;
-	//! Frames per second
-	double mFramesPerSecond;
+	int mFrameNumber;			//!< Frame number.
+	double mFramesPerSecond;	//!< Frames per second.
 
 	//! Constructor.
 	DataStructureInput(): DataStructureImage("Input", "Input"), mFrameNumber(0), mFramesPerSecond(-1) {mDisplayName="Input";}
+	//! Destructor.
 	~DataStructureInput() {}
 };
 

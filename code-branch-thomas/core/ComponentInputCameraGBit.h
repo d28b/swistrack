@@ -3,10 +3,13 @@
 
 #include "Component.h"
 
+//! An input component for GBit cameras.
 class ComponentInputCameraGBit: public Component {
 
 public:
+	//! Constructor.
 	ComponentInputCameraGBit(SwisTrackCore *stc);
+	//! Destructor.
 	~ComponentInputCameraGBit();
 
 	// Overwritten Component methods

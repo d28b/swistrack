@@ -13,27 +13,23 @@ class Component;
 #include "ErrorList.h"
 #include "DisplayImage.h"
 
+// The base class for all components.
 class Component {
 
 public:
 	//! Status item list type.
 	typedef std::list<StatusItem> tStatusItemList;
-	//! The status item list (mostly list of errors).
-	tStatusItemList mStatus;
-	//! Whether there is an error in the status item list.
-	bool mStatusHasError;
-	//! Whether there is a warning in the status item list.
-	bool mStatusHasWarning;
-	//! Tells whether the component is started. This flag is set and reset by the SwisTrackCore class and should not be used by the components.
-	bool mStarted;
-	//! The internal name of the component (used to save configuration).
-	std::string mName;
-	//! The name that is displayed to the user.
-	std::string mDisplayName;
-	//! The category which this component belongs to.
-	ComponentCategory *mCategory;
-	//! The default view.
-	std::string mDefaultView;
+	//! The type for configuration values.
+	typedef std::map<std::string, std::string> tConfigurationMap;
+
+	tStatusItemList mStatus;		//!< The status item list (mostly list of errors).
+	bool mStatusHasError;			//!< Whether there is an error in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)
+	bool mStatusHasWarning;			//!< Whether there is a warning in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)
+	bool mStarted;					//!< Tells whether the component is started. This flag is set and reset by the SwisTrackCore class and should not be used by the components.
+	std::string mName;				//!< The internal name of the component (used to save configuration).
+	std::string mDisplayName;		//!< The name that is displayed to the user.
+	ComponentCategory *mCategory;	//!< The category which this component belongs to.
+	std::string mDefaultView;		//!< The default view (not used).
 
 	//! Data structure list type.
 	typedef std::list<DataStructure*> tDataStructureList;
@@ -97,12 +93,8 @@ public:
 	bool HasDataStructureWrite(DataStructure *ds);
 
 protected:
-	//! The associated SwisTrackCore object.
-	SwisTrackCore *mCore;
-	//! The type for configuration values.
-	typedef std::map<std::string, std::string> tConfigurationMap;
-	//! The configuration values.
-	tConfigurationMap mConfiguration;
+	SwisTrackCore *mCore; 				//!< The associated SwisTrackCore object.
+	tConfigurationMap mConfiguration;	//!< The configuration values.
 
 	//! Adds an error message to the status list.
 	void AddError(const std::string &msg);

@@ -10,10 +10,13 @@
 #include "highgui.h"  // 1394camera.h requires this to be included before
 #include <1394camera.h>
 
+//! An input component that interfaces a Firewire 1394 camera.
 class ComponentInputCamera1394: public Component {
 
 public:
+	//! Constructor.
 	ComponentInputCamera1394(SwisTrackCore *stc);
+	//! Destructor.
 	~ComponentInputCamera1394();
 
 	// Overwritten Component methods

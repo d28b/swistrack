@@ -6,6 +6,7 @@ class DisplayImageSubscriberInterface;
 #include <string>
 #include "DisplayImage.h"
 
+//! This is the interface for subscribers to DisplayImage classes.
 class DisplayImageSubscriberInterface {
 
 public:

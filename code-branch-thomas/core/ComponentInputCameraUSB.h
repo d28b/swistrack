@@ -6,10 +6,13 @@
 #include "Component.h"
 #include "DisplayImageStandard.h"
 
+//! An input component that interfaces a USB camera using the CV library.
 class ComponentInputCameraUSB: public Component {
 
 public:
+	//! Constructor.
 	ComponentInputCameraUSB(SwisTrackCore *stc);
+	//! Destructor.
 	~ComponentInputCameraUSB();
 
 	// Overwritten Component methods
@@ -23,13 +26,10 @@ public:
 	double GetFPS();
 
 private:
-	//! Pointer to the capture object.
-	CvCapture* mCapture;
-	//! The last acquired image.
-	IplImage* mCurrentImage;
+	CvCapture* mCapture;		//!< Pointer to the capture object.
+	IplImage* mCurrentImage;	//!< The last acquired image.
 
-	//! The DisplayImage showing the last acquired image.
-	DisplayImageStandard mDisplayImageOutput;
+	DisplayImageStandard mDisplayImageOutput;		//!< The DisplayImage showing the last acquired image.
 };
 
 #endif

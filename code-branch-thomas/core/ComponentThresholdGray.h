@@ -4,10 +4,13 @@
 #include "cv.h"
 #include "Component.h"
 
+//! A component that applies a constant threshold to a grayscale image. The output is a binary image.
 class ComponentThresholdGray: public Component {
 
 public:
+	//! Constructor.
 	ComponentThresholdGray(SwisTrackCore *stc);
+	//! Destructor.
 	~ComponentThresholdGray();
 
 	// Overwritten Component methods
@@ -19,9 +22,10 @@ public:
 	Component *Create() {return new ComponentThresholdGray(mCore);}
 
 private:
-	IplImage *mOutputImage;
-	int mThreshold;
+	IplImage *mOutputImage;		//!< The image created by this component.
+	int mThreshold;				//!< (configuration) Threshold value.
 
+	// Prepares the output image (recreates the image if necessary).
 	inline void PrepareOutputImage(IplImage *inputimage) {
 		if (mOutputImage) {
 			if ((mOutputImage->width==inputimage->width) && (mOutputImage->height==inputimage->height)) {return;}

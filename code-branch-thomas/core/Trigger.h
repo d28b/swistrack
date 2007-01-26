@@ -3,11 +3,11 @@
 
 class Trigger;
 
+//! Holds information about the trigger.
 class Trigger {
 
 public:
-	//! The interval of the trigger in milliseconds. If this is 0, manual trigger is chosen.
-	int mInterval;
+	int mInterval;	//!< The interval of the trigger in milliseconds. If this is 0, manual trigger is chosen.
 
 	//! Constructor.
 	Trigger(): mInterval(0) {}

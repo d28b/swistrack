@@ -3,27 +3,19 @@
 
 #include "cv.h"
 
-/** \class particle
-* \brief Stores parameters and track id of a particle.
-* A particle allows for storing its center (sub-pixel accuracy), its size, compactness, orientation, color, and the id 
-* of its associated track.
-*/
+//! A particle.
 class Particle {
 
 public:
-	//! Associated track
-	int mID;
-	/** Particle center */
-	CvPoint2D32f mCenter;
-	/** Particle area */
-	double mArea;
-	/** The contour's compactness (area/circumference ratio) */
-	double mCompactness;
-	/** The contour's orientation (not calculated at this time) */
-	double mOrientation;
+	int mID;				//!< ID of the particle, or of its associated track.
+	CvPoint2D32f mCenter;	//!< Particle center.
+	double mArea;			//!< Particle area.
+	double mCompactness;	//!< The contour's compactness (area/circumference ratio).
+	double mOrientation;	//!< The contour's orientation (not calculated at this time).
 
 	//! Constructor.
 	Particle(): mCenter(), mArea(0), mCompactness(0), mOrientation(0), mID(-1) {}
+	//! Destructor.
 	~Particle() {}
 };
 

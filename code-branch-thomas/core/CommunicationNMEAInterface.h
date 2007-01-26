@@ -5,22 +5,22 @@ class CommunicationNMEAInterface;
 
 #include "CommunicationMessage.h"
 
-/*!
-	NMEA Interface.
-*/
+//! NMEA parser.
 class CommunicationNMEAInterface {
 
 private:
-	int mState;
-	static const int mBufferSize=1024;
-	char mBuffer[mBufferSize];
-	int mBufferPos;
-	int mChecksum;
-	CommunicationMessage *mMessage;
+	int mState;							//!< The current parser state.
+	static const int mBufferSize=1024;	//!< The size of the input buffer in number of chars. Messages longer than this will be cut.
+	char mBuffer[mBufferSize];			//!< The buffer holding unprocessed characters.
+	int mBufferPos;						//!< The current position in mBuffer.
+	int mChecksum;						//!< The current checksum.
+	CommunicationMessage *mMessage;		//!< The associated CommunicationMessage.
 
 public:
 	//! Constructor.
 	CommunicationNMEAInterface(): mState(0), mBufferPos(0), mChecksum(0), mMessage(0) {}
+	//! Destructor.
+	~CommunicationNMEAInterface() {}
 
 	//! Processes incoming data. This method should be called each time a piece of data is received. The data doesn't need to contain a complete NMEA record.
 	void NMEAProcessData(const char *data, int len);

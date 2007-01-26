@@ -14,10 +14,8 @@ public:
 		sTypeInfo
 	};
 
-	//! The status message type.
-	eType mType;
-	//! The message text.
-	std::string mMessage;
+	eType mType;			//!< The status message type.
+	std::string mMessage;	//!< The message text.
 
 	//! Constructor.
 	StatusItem(): mType(sTypeInfo), mMessage("") {}

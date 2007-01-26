@@ -6,13 +6,12 @@ class ErrorListItemItem;
 #include <string>
 #include <list>
 
+// An item in an error list.
 class ErrorListItem {
 
 public:
-	//! The error message.
-	std::string mMessage;
-	//! The line number.
-	int mLineNumber;
+	std::string mMessage;	//!< The error message.
+	int mLineNumber;		//!< The line number.
 
 	//! Constructor.
 	ErrorListItem(): mMessage(""), mLineNumber(0) {}

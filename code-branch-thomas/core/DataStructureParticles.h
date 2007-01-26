@@ -6,17 +6,18 @@
 #include "DataStructure.h"
 #include "Particle.h"
 
+// A DataStructure holding a list of particles.
 class DataStructureParticles: public DataStructure {
 
 public:
 	//! Particle vector type.
 	typedef std::vector<Particle> tParticleVector;
 
-	//! Vector of particles.
-	tParticleVector *mParticles;
+	tParticleVector *mParticles;	//!< Vector of particles.
 
 	//! Constructor.
 	DataStructureParticles(): DataStructure("Particles"), mParticles(0) {}
+	//! Destructor.
 	~DataStructureParticles() {}
 };
 

@@ -3,20 +3,17 @@
 
 #include <string>
 
+//! The base class for data structures.
 class DataStructure {
 
 public:
-	//! Name of this data structure.
-	std::string mName;
-	std::string mDisplayName;
+	std::string mName;			//!< The internal name of this data structure. This should only contain english letters and numbers.
+	std::string mDisplayName;	//!< The name that is displayed to the user.
 
 	//! Constructor.
-	DataStructure(): mName("") {}
-	DataStructure(const std::string &name): mName(name) {}
-
+	DataStructure(const std::string &name=""): mName(name) {}
 	//! Destructor.
 	virtual ~DataStructure() {}
-
 };
 
 #endif

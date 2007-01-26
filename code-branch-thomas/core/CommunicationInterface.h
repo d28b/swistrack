@@ -8,13 +8,14 @@ class CommunicationInterface;
 #include "CommunicationMessage.h"
 #include "CommunicationCommandHandler.h"
 
+//! The interface class for communication messages. In the current SwisTrack, this interface is implemented as a TCP server which forwards the messages to TCP clients.
 class CommunicationInterface {
 
 public:
 	//! Command handler list type.
 	typedef std::list<CommunicationCommandHandler*> tCommandHandlerList;
-	//! The list of command handlers.
-	tCommandHandlerList mCommandHandlerList;
+
+	tCommandHandlerList mCommandHandlerList; //!< The list of command handlers.
 
 	//! Constructor.
 	CommunicationInterface(): mCommandHandlerList() {}
