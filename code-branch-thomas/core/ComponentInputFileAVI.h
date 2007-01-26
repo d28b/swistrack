@@ -6,10 +6,13 @@
 #include "highgui.h"
 #include "Component.h"
 
+//! An input component that reads an AVI file.
 class ComponentInputFileAVI: public Component {
 
 public:
+	//! Constructor.
 	ComponentInputFileAVI(SwisTrackCore *stc);
+	//! Destructor.
 	~ComponentInputFileAVI();
 
 	// Overwritten Component methods
