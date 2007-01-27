@@ -462,7 +462,7 @@ void THISCLASS::SaveFile(const wxString &filename) {
 
 	// Add all components to this document
 	ErrorList errorlist;
-	mSwisTrackCore->ConfigurationWriteXML(components, &errorlist);
+mSwisTrackCore->ConfigurationWriteXML(components, &errorlist);
 
 	// Save
 	try {
