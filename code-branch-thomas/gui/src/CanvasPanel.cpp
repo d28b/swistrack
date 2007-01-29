@@ -6,6 +6,7 @@
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_LEFT_DOWN(THISCLASS::OnMouseLeftDown)
+	EVT_RESIZE(THISCLASS::OnResize)
 END_EVENT_TABLE()
 
 THISCLASS::CanvasPanel(SwisTrack *st):
@@ -60,4 +61,7 @@ void THISCLASS::OnDisplayImageChanged(DisplayImage *di) {
 }
 
 void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
+}
+
+void THISCLASS::OnResize(wxMouseEvent &event) {
 }
