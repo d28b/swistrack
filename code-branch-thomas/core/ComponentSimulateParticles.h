@@ -24,14 +24,15 @@ public:
 	Component *Create() {return new ComponentSimulateParticles(mCore);}
 
 private:
-	CvSize mCameraOrigin;		//!< (configuration) The origin of the virtual camera.
-	double mCameraRotation;		//!< (configuration) The rotation of the virtual camera in rad.
-	double mCameraPixelSize;	//!< (configuration) The pixel size of the virtual camera. Note that pixels are supposed to be square.
-	CvSize mCameraSize;			//!< (configuration) The width and height (in pixels) of the virtual camera.
-	double mPositionNoise;		//!< (configuration) (unimplemented) The variance of the gaussian noise superimposed to the particle positions.
-	double mAngleNoise;			//!< (configuration) (unimplemented) The variance of the gaussian noise superimposed to the particle angles.
-	std::strind mFile;			//!< (configuration) The simulation file to be read.
+	CvSize mCameraOrigin;			//!< (configuration) The origin of the virtual camera.
+	double mCameraRotation;			//!< (configuration) The rotation of the virtual camera in rad.
+	double mCameraPixelSize;		//!< (configuration) The pixel size of the virtual camera. Note that pixels are supposed to be square.
+	CvSize mCameraSize;				//!< (configuration) The width and height (in pixels) of the virtual camera.
+	double mPositionNoiseStdDev;	//!< (configuration) The standard deviation of the gaussian noise superimposed to the particle position. This noise is added to both x and y component of the position.
+	double mAngleNoiseStdDev;		//!< (configuration) The standard deviation of the gaussian noise superimposed to the particle angles.
 
+	SimulationParticles mSimulationParticles;				//!< The frames with the particle.
+	int mFrameNumber;										//!< The current frame number.
 	DataStructureParticles::tParticleVector mParticles;		//!< The list of currently injected particles.
 };
 

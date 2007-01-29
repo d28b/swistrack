@@ -21,6 +21,10 @@ public:
 	typedef std::list<StatusItem> tStatusItemList;
 	//! The type for configuration values.
 	typedef std::map<std::string, std::string> tConfigurationMap;
+	//! DisplayImage list type.
+	typedef std::list<DisplayImage*> tDisplayImageList;
+	//! Data structure list type.
+	typedef std::list<DataStructure*> tDataStructureList;
 
 	tStatusItemList mStatus;		//!< The status item list (mostly list of errors).
 	bool mStatusHasError;			//!< Whether there is an error in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)
@@ -31,17 +35,9 @@ public:
 	ComponentCategory *mCategory;	//!< The category which this component belongs to.
 	std::string mDefaultView;		//!< The default view (not used).
 
-	//! Data structure list type.
-	typedef std::list<DataStructure*> tDataStructureList;
-	//! The data structures that are read by this component.
-	tDataStructureList mDataStructureRead;
-	//! The data structures that are written by this component.
-	tDataStructureList mDataStructureWrite;
-
-	//! DisplayImage list type.
-	typedef std::list<DisplayImage*> tDisplayImageList;
-	//! The DisplayImage objects that this component provides.
-	tDisplayImageList mDisplayImages;
+	tDataStructureList mDataStructureRead;		//! The data structures that are read by this component.
+	tDataStructureList mDataStructureWrite;		//! The data structures that are written by this component.
+	tDisplayImageList mDisplayImages;			//! The DisplayImage objects that this component provides.
 
 	//! Constructor.
 	Component(SwisTrackCore *stc, const std::string &name);

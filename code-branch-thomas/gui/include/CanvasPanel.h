@@ -42,6 +42,8 @@ public:
 
 	//! The corresponding GUI event handler.
 	void OnMouseLeftDown(wxMouseEvent &event);
+	//! The corresponding GUI event handler.
+	void OnResize(wxMouseEvent &event);
 
 	// DisplayImageSubscriberInterface methods
 	void OnDisplayImageChanged(DisplayImage *di);
