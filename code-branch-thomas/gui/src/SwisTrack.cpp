@@ -360,7 +360,7 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 
 	// Open the file
 	ConfigurationReaderXML cr;
-	if (! cr.PrepareRead()) {
+	if (! cr.Open(filename)) {
 		if (breakonerror) {
 			wxMessageDialog dlg(this, "The file \n\n"+filename+" \n\ncould not be loaded. Syntax error?", "Open Configuration", wxOK);
 			dlg.ShowModal();

@@ -1,6 +1,7 @@
 #include "SwisTrackCommandLine.h"
 #define THISCLASS SwisTrackCommandLine
 
+#include <sys/select.h>
 #include "SwisTrackCore.h"
 
 THISCLASS::SwisTrackCommandLine():
@@ -35,19 +36,27 @@ int THISCLASS::Run(int argc, char *argv[]) {
 	// Create a new SwisTrackCore object and open the file
 	mSwisTrackCore=new SwisTrackCore();
 	OpenFile();
-	
+
 	// Execute
 	mSwisTrackCore->Start(true);
 	while (1) {
 		fd_set fhset;
 		FD_ZERO(&fhset);
 		FD_SET(0, &fhset);
+
 		struct timeval timeout;
-		timeout.tv_sec=1;
-		timeout.tv_usec=0;
+		timeout.tv_sec=mTriggerInterval / 1000;
+		timeout.tv_usec=(mTriggerInterval-timeout.tv_sec*1000)*1000;
 		int res = select(1, &fhset, NULL, NULL, &timeout);
+
+		if (res>0) {
+			break;
+		} else {
+			mSwisTrackCore->Step();
+		}
 	}
 
+	mSwisTrackCore->Stop();
 	return 0;
 }
 
@@ -88,74 +97,25 @@ void THISCLASS::PrintVersion() {
 }
 
 bool THISCLASS::OpenFile() {
-	SwisTrackCoreEditor stce(mSwisTrackCore);
-	if (! stce.IsEditable()) {return false;}
+	ConfigurationReaderXML cr;
 
-	// Read the new file
-	xmlpp::DomParser parser;
-	xmlpp::Document *document=0;
-	try {
-		parser.parse_file(mFileName.c_str());
-		if (parser==true) {
-			document=parser.get_document();
-		}
-	} catch (...) {
-		document=0;
-	}
-
-	if (document==0) {
+	if (! cr.Open(mFileName)) {
 		std::cerr << "The file \'" << mFileName << "\' could not be loaded. Syntax error?" << std::endl;
 		return false;
 	}
 
 	// Read the configuration
-	ErrorList errorlist;
+	mSwisTrackCore->Stop();
+	cr.ReadComponents(mSwisTrackCore);
+	mTriggerInterval=cr.ReadTriggerInterval();
 	ConfigurationReadXML(&stce, document, &errorlist);
-	if (errorlist.mList.empty()) {return true;}
+	if (cr.mErrorList.mList.empty()) {return true;}
 
 	// Display the errors
 	std::cerr << "The following errors occured while reading the XML file:" << std::endl;
-	errorlist.tList::iterator it=errorlist.mList.begin();
-	while (it!=errorlist.mList.end()) {
+	errorlist.tList::iterator it=cr.mErrorList.mList.begin();
+	while (it!=cr.mErrorList.mList.end()) {
 		std::cerr << "  Line " << (*it).mLine << ": " << (*it).mMessage << std::endl;		
 	}
 	return false;
 }
-
-void THISCLASS::ConfigurationReadXML(SwisTrackCoreEditor *stce, xmlpp::Document *document, ErrorList *errorlist) {
-	// If this method is called without a document, set up an empty component list
-	if (document==0) {
-		stce->ConfigurationReadXML(0, errorlist);
-		return;
-	}
-
-	// Get the root node
-	xmlpp::Element *rootnode=document->get_root_node();
-	if (! rootnode) {
-		errorlist->Add("No root node found.");
-		return;
-	}
-
-	// Get the trigger node
-	xmlpp::Node::NodeList nodes_trigger=rootnode->get_children("Trigger");
-	if (nodes_trigger.empty()) {
-		errorlist->Add("Node 'Trigger' missing!", rootnode->get_line());
-		return;
-	}
-
-	// Read the trigger configuration
-	xmlpp::Element *trigger=dynamic_cast<xmlpp::Element *>(nodes_trigger.front());
-	mTrigger->ConfigurationReadXML(trigger, errorlist);
-
-	// Get the list of components
-	xmlpp::Node::NodeList nodes_components=rootnode->get_children("Components");
-	if (nodes_components.empty()) {
-		errorlist->Add("Node 'Components' missing!", rootnode->get_line());
-		return;
-	}
-
-	// Read the component list
-	xmlpp::Element *components=dynamic_cast<xmlpp::Element *>(nodes_components.front());
-	stce->ConfigurationReadXML(components, errorlist);
-}
-
