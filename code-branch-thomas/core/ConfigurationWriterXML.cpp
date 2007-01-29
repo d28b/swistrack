@@ -1,83 +1,83 @@
 #include "ConfigurationWriterXML.h"
 #define THISCLASS ConfigurationWriterXML
 
-bool THISCLASS::Open(const std::string &filename, ErrorList *errorlist) {
-	// Read the file
-	xmlpp::DomParser parser;
-	xmlpp::Document *document=0;
-	try {
-		parser.parse_file(filename.c_str());
-		if (parser==true) {
-			document=parser.get_document();
-		}
-	} catch (...) {
-		document=0;
-	}
+THISCLASS::ConfigurationWriterXML():
+		mErrorList(), mParser(), mDocument(0) {
 
-	if (document==0) {return false;}
-	return true;
+	mSelectedNode=mDocument.create_root_node("swistrack");
 }
 
-	if ((breakonerror) && (document==0)) {
-		wxMessageDialog dlg(this, "The file \n\n"+filename+" \n\ncould not be loaded. Syntax error?", "Open Configuration", wxOK);
-		dlg.ShowModal();
-		return;
-	}
+void THISCLASS::WriteComponents(SwisTrackCore *stc) {
+	SelectRootNode();
+	xmlpp::Element *node=SelectNode("components");
+	stc->ConfigurationWriteXML(node, &mErrorList);
+	SelectRootNode();
+}
 
-	// At this point, we consider the SwisTrack configuration to be valid. The next few lines close the current configuration and read the configuration.
-
-	// Close the current configuration
-	if (mChanged) {
-		// TODO if necessary, ask the user whether he'd like to save the changes
-		// return false;
-	}
-
-	// Set the new file name
-	if (astemplate) {
-		mFileName="";
+void THISCLASS::WriteTriggerInterval(int interval) {
+	SelectRootNode();
+	xmlpp::Element *node=SelectNode("trigger");
+	if (interval==0) {
+		node->set_attribute("mode", "manual");
 	} else {
-		mFileName=filename;
+		node->set_attribute("mode", "timer");
+		WriteInt("interval", interval);
 	}
-
-	// Read the configuration
-	ErrorList errorlist;
-	ConfigurationReadXML(&stce, document, &errorlist);
-	if (errorlist.mList.empty()) {return;}
-
-
+	SelectRootNode();
 }
 
-
-
-	if (! element) {return;}
-
-
-	// Get the mode attribute
-	xmlpp::Attribute *att_type=element->get_attribute("mode");
-	if (! att_type) {
-		xmlerr->Add("The 'mode' attribute of the node 'ConfigurationWriterXML' is missing.", element->get_line());
-		return;
-	}
-	std::string type=att_type->get_value();
-
-	if (type=="timer") {
-		xmlpp::Node::NodeList nodes_interval=rootnode->get_children("Interval");
-		if (nodes_ConfigurationWriterXML.empty()) {
-			errorlist->Add("The interval for the timer ConfigurationWriterXML is not specified!", rootnode->get_line());
-			return;
-		}
-	}
-
+xmlpp::Element *THISCLASS::SelectRootNode() {
+	mSelectedNode=mDocument->get_root_node();
+	return mSelectedNode;
 }
 
-void THISCLASS::ConfigurationWriteXML(xmlpp::Element *configuration, ErrorList *xmlerr) {
-	// Add an element for each component
-	tComponentList::iterator it=mDeployedComponents.begin();
-	while (it!=mDeployedComponents.end()) {
-		xmlpp::Element *element=configuration->add_child("component");
-		element->set_attribute("type", (*it)->mName);
-		(*it)->ConfigurationWriteXML(element, xmlerr);
-
+xmlpp::Element *THISCLASS::SelectNode(const std::string &name) {
+	// Return the first element (if any)
+	xmlpp::Node::NodeList nodes=mSelectedNode->get_children(name);
+	xmlpp::Node::NodeList::iterator it=nodes.begin();
+	while (it!=nodes.end()) {
+		xmlpp::Element *node=dynamic_cast<xmlpp::Element*>(*it);
+		if (node) {mSelectedNode=node; return mSelectedNode;}
 		it++;
 	}
+
+	// If no node was found, create one
+	mSelectedNode=mSelectedNode->add_child(name);
+	return mSelectedNode;
+}
+
+void THISCLASS::WriteString(const std::string &name, const std::string &value) {
+	xmlpp::Element *node=mSelectedNode->add_child(name);
+	node->set_child_text(value);
+}
+
+void THISCLASS::WriteBool(const std::string &name, bool value) {
+	xmlpp::Element *node=mSelectedNode->add_child(name);
+	std::ostringstream oss;
+	oss << value;
+	node->set_child_text(oss.str());
+}
+
+void THISCLASS::WriteInt(const std::string &name, int value) {
+	xmlpp::Element *node=mSelectedNode->add_child(name);
+	std::ostringstream oss;
+	oss << value;
+	node->set_child_text(oss.str());
+}
+
+void THISCLASS::WriteDouble(const std::string &name, double value) {
+	xmlpp::Element *node=mSelectedNode->add_child(name);
+	std::ostringstream oss;
+	oss << value;
+	node->set_child_text(oss.str());
+}
+
+bool THISCLASS::Save(const std::string &filename) {
+	try {
+		document.write_to_file_formatted(filename);
+	} catch (...) {
+		return false;
+	}
+
+	return true;
 }

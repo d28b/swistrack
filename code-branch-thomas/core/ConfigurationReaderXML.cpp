@@ -35,7 +35,7 @@ bool THISCLASS::ReadComponents(SwisTrackCore *stc) {
 	}
 
 	// Get the list of components
-	xmlpp::Node::NodeList nodes=rootnode->get_children("Components");
+	xmlpp::Node::NodeList nodes=rootnode->get_children("components");
 	if (nodes.empty()) {
 		stce.ConfigurationReadXML(0, &mErrorList);
 		return true;
@@ -46,49 +46,88 @@ bool THISCLASS::ReadComponents(SwisTrackCore *stc) {
 	stce.ConfigurationReadXML(components, &mErrorList);
 }
 
-
 int THISCLASS::ReadTriggerInterval() {
+	// Get the trigger node
+	xmlpp::Element *node=GetElement("trigger");
+	if (! node) {return 0;}
+
+	// Get the mode attribute
+	xmlpp::Attribute *att_type=node->get_attribute("mode");
+	if (! att_type) {
+		errorlist->Add("The trigger node requires a 'mode' attribute ('timer' or 'manual')!", node->get_line());
+		return 0;
+	}
+	std::string type=att_type->get_value();
+
+	// If we are in timer mode, return the interval
+	if (type=="timer") {
+		int interval=ReadInt("trigger/interval", 0);
+		if (interval==0) {
+			errorlist->Add("The timer trigger requires a node 'interval' specifying the interval in milliseconds!", node->get_line());
+		}
+		return interval;
+	} else if (type=="manual") {
+		return 0;
+	}
+
+	// Anything else means error
+	errorlist->Add("Invalid trigger mode: valid modes are 'timer' and 'manual'!", node->get_line());
+	return 0;
+}
+
+xmlpp::Element *THISCLASS::GetElement(const std::string &path) {
 	if (! mDocument) {return 0;}
 
 	// Get the root node
 	xmlpp::Element *rootnode=document->get_root_node();
 	if (! rootnode) {return 0;}
 
-	// Get the mode attribute
-	xmlpp::Attribute *att_type=element->get_attribute("mode");
-	if (! att_type) {
-		xmlerr->Add("The 'mode' attribute of the node 'ConfigurationReaderXML' is missing.", element->get_line());
-		return;
-	}
-	std::string type=att_type->get_value();
+	// Find the element in the tree
+	xmlpp::Node::NodeList nodes=rootnode->find(path);
 
-	// If we are in timer mode, return the interval
-	if (type=="timer") {
-		xmlpp::Node::NodeList nodes=rootnode->get_children("Interval");
-		if (nodes.empty()) {
-			errorlist->Add("The interval for the timer ConfigurationReaderXML is not specified!", rootnode->get_line());
-			return 0;
-		}
-		xmlpp::TextNode *tn=dynamic_cast<xmlpp::TextNode*>(nodes.front());
-		std::istringstream iss(tn->get_content());
-		iss >> 
-	} else if (type=="manual") {
-		return 0;
+	// Return the first element (if any)
+	xmlpp::Node::NodeList::iterator it=nodes.begin();
+	while (it!=nodes.end()) {
+		xmlpp::Element *node=dynamic_cast<xmlpp::Element*>(*it);
+		if (node) {return node;}
+		it++;
 	}
 
-	// Anything else means error
-	errorlist->Add("The interval for the timer ConfigurationReaderXML is not specified!", rootnode->get_line());
+	return 0;
 }
 
-int THISCLASS::ReadBool(const std::string &path, bool defvalue) {
-	xmlpp::Node::NodeList nodes=rootnode->get_children("Interval");
-	if (nodes.empty()) {
-		errorlist->Add("The interval for the timer ConfigurationReaderXML is not specified!", rootnode->get_line());
-		return 0;
-	}
+std::string THISCLASS::ReadString(const std::string &xpath, const std::string &defvalue) {
+	xmlpp::Element *node=GetElement(xpath);
+	if (! node) {return defvalue;}
 
-	xmlpp::TextNode *tn=dynamic_cast<xmlpp::TextNode*>(nodes.front());
-	std::istringstream iss(tn->get_content());
-	iss >> 
+	xmlpp::TextNode *tn=node.get_child_text();
+	if (! tn) {return defvalue;}
+	return tn->get_content();
+}
 
+bool THISCLASS::ReadBool(const std::string &xpath, bool defvalue) {
+	std::string str=ReadString(xpath, "");
+	if (str=="") {return defvalue;}
+
+	std::istringstream iss(str);
+	iss >> defvalue;
+	return defvalue;
+}
+
+int THISCLASS::ReadInt(const std::string &xpath, int defvalue) {
+	std::string str=ReadString(xpath, "");
+	if (str=="") {return defvalue;}
+
+	std::istringstream iss(str);
+	iss >> defvalue;
+	return defvalue;
+}
+
+double THISCLASS::ReadDouble(const std::string &xpath, double defvalue) {
+	std::string str=ReadString(xpath, "");
+	if (str=="") {return defvalue;}
+
+	std::istringstream iss(str);
+	iss >> defvalue;
+	return defvalue;
 }

@@ -95,7 +95,7 @@ END_EVENT_TABLE()
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
 		wxFrame(NULL, -1, title, pos, size, style),
 		CommunicationCommandHandler(),
-		mSwisTrackCore(0), mSocketServer(0), mFileName(""), mFreeRunInterval(1000) {
+		mSwisTrackCore(0), mSocketServer(0), mFileName(""), mTriggerInterval(1000) {
 
 #ifdef MULTITHREAD
 	criticalSection = new wxCriticalSection();
@@ -291,21 +291,21 @@ void THISCLASS::StopSeriousMode() {
 
 void THISCLASS::SetTriggerManual() {
 	GetToolBar()->ToggleTool(sID_Control_FreeRun, false);
-	mFreeRunTimer.Stop();
+	mTriggerTimer.Stop();
 }
 
 void THISCLASS::SetTriggerTimer(int ms) {
 	if (ms==0) {return SetTriggerManual();}
 	GetToolBar()->ToggleTool(sID_Control_FreeRun, true);
-	mFreeRunInterval=ms;
-	if (! mFreeRunTimer.IsRunning()) {mFreeRunTimer.Start(mFreeRunInterval);}
+	mTriggerInterval=ms;
+	if (! mTriggerTimer.IsRunning()) {mTriggerTimer.Start(mTriggerInterval);}
 }
 
 void THISCLASS::OnFreeRunTimer(wxTimerEvent& WXUNUSED(event)) {
 	SingleStep();
-	if (mFreeRunTimer.GetInterval()!=mFreeRunInterval) {
-		mFreeRunTimer.Stop();
-		mFreeRunTimer.Start(mFreeRunInterval);
+	if (mTriggerTimer.GetInterval()!=mTriggerInterval) {
+		mTriggerTimer.Stop();
+		mTriggerTimer.Start(mTriggerInterval);
 	}
 }
 
@@ -337,7 +337,6 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 }
 
 void SwisTrack::OnFileNew(wxCommandEvent& WXUNUSED(event)) {
-	StopSeriousMode();
 	OpenFile("default.swistrack", false, true);
 }
 
@@ -345,7 +344,6 @@ void THISCLASS::OnFileOpen(wxCommandEvent& WXUNUSED(event)) {
 	wxFileDialog dlg(this, "Open Configuration", "", "", "SwisTrack Configurations (*.swistrack)|*.swistrack", wxOPEN, wxDefaultPosition);
 	if (dlg.ShowModal() != wxID_OK) {return;}
 
-	StopSeriousMode();
 	OpenFile(dlg.GetPath(), true, false);
 }
 
@@ -386,7 +384,8 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	}
 
 	// Read the configuration
-	cr.ReadComponents();
+	StopSeriousMode();
+	cr.ReadComponents(mSwisTrackCore);
 	SetTriggerTimer(cr.ReadTriggerInterval());
 
 	// TODO read window position or other parameters there
@@ -423,19 +422,12 @@ void THISCLASS::SaveFile(const wxString &filename) {
 	//	return;
 	//}
 
-	// Create an XML document
-	xmlpp::Document document;
-	xmlpp::Element *rootnode=document.create_root_node("swistrack");
-	xmlpp::Element *components=rootnode->add_child("components");
+	// Save the file
+	ConfigurationWriterXML cw;
+	cw.WriteComponents();
+	cw.WriteTriggerInterval(mTriggerInterval);
 
-	// Add all components to this document
-	ErrorList errorlist;
-mSwisTrackCore->ConfigurationWriteXML(components, &errorlist);
-
-	// Save
-	try {
-		document.write_to_file_formatted(filename.c_str());
-	} catch (...) {
+	if (cw.Save(filename)) {
 		wxMessageDialog dlg(this, "There was an error writing to \n\n"+filename+"\n\nThe file may be incomplete.", "Save File", wxOK);
 		dlg.ShowModal();
 		return;
@@ -457,10 +449,10 @@ void THISCLASS::OnControlSeriousMode(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void THISCLASS::OnControlFreeRun(wxCommandEvent& WXUNUSED(event)) {
-	if (mFreeRunTimer.IsRunning()) {
+	if (mTriggerTimer.IsRunning()) {
 		SetTriggerManual();
 	} else {
-		SetTriggerTimer(mFreeRunInterval);
+		SetTriggerTimer(mTriggerInterval);
 	}
 }
 

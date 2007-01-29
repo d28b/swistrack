@@ -24,14 +24,14 @@ class SwisTrack;
 class SwisTrack: public wxFrame, public CommunicationCommandHandler {
 
 public:
-	wxTimer mFreeRunTimer;		//!< The free run timer.
-	int mFreeRunInterval;		//!< The free run interval in milliseconds.
+	wxTimer mTriggerTimer;			//!< The timer that triggers the steps.
+	int mTriggerInterval;			//!< The trigger timer interval in milliseconds.
 
 	SwisTrackCore *mSwisTrackCore;	//!< The SwisTrackCore object.
 	SocketServer *mSocketServer;	//!< The SocketServer object.
 
-	wxString mFileName;		//!< The current configuration file.
-	bool mChanged;			//!< Whether the file has been modified. This flag is currently ignored.
+	wxString mFileName;				//!< The current configuration file.
+	bool mChanged;					//!< Whether the file has been modified. This flag is currently ignored.
 
 	// Menu bar and items
 	wxMenuBar *menuBar;

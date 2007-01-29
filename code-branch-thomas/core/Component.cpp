@@ -86,22 +86,19 @@ void THISCLASS::ConfigurationWriteXML(xmlpp::Element *configuration, ErrorList *
 
 bool THISCLASS::GetConfigurationBool(const std::string &key, bool defvalue) {
 	std::istringstream istr(mConfiguration[key]);
-	bool val=0;
-	istr >> val;
+	istr >> defvalue;
 	return val;
 }
 
 int THISCLASS::GetConfigurationInt(const std::string &key, int defvalue) {
 	std::istringstream istr(mConfiguration[key]);
-	int val=0;
-	istr >> val;
+	istr >> defvalue;
 	return val;
 }
 
 double THISCLASS::GetConfigurationDouble(const std::string &key, double defvalue) {
 	std::istringstream istr(mConfiguration[key]);
-	double val=0;
-	istr >> val;
+	istr >> defvalue;
 	return val;
 }
 
