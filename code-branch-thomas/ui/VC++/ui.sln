@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SwisTrack-Core", "..\..\core\VC++\objecttrackerlib.vcproj", "{D010B136-96BD-4D44-B4F0-30388FB460B7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SwisTrack-UI", "swistrack_batch.vcproj", "{5AAA8691-FCCB-4198-AA5F-2E59CB865A96}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D010B136-96BD-4D44-B4F0-30388FB460B7} = {D010B136-96BD-4D44-B4F0-30388FB460B7}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Debug|Win32.Build.0 = Debug|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release|Win32.ActiveCfg = Release|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release|Win32.Build.0 = Release|Win32
+		{5AAA8691-FCCB-4198-AA5F-2E59CB865A96}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5AAA8691-FCCB-4198-AA5F-2E59CB865A96}.Debug|Win32.Build.0 = Debug|Win32
+		{5AAA8691-FCCB-4198-AA5F-2E59CB865A96}.Release|Win32.ActiveCfg = Release|Win32
+		{5AAA8691-FCCB-4198-AA5F-2E59CB865A96}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

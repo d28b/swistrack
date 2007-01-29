@@ -14,19 +14,19 @@ class RandomNormal {
 protected:
 	RandomMersenneTwister *mRandomMersenneTwister;
 	unsigned long kn[128];
-	float wn[128], fn[128];
+	double wn[128], fn[128];
 
-	float nfix(long hz, unsigned long iz);
+	double nfix(long hz, unsigned long iz);
 
 public:
 	//! Constructor.
 	RandomNormal(RandomMersenneTwister *rmt);
 
 	//! Returns a double with a gaussian distribution.
-	float Normal() {
+	double Normal() {
 		long hz=mRandomMersenneTwister->randInt();
 		unsigned long iz=hz & 127;
-		return (abs(hz)<kn[iz]) ? hz*wn[iz] : nfix(hz, iz);
+		return ((unsigned long)abs(hz)<kn[iz]) ? hz*wn[iz] : nfix(hz, iz);
 	}
 };
 

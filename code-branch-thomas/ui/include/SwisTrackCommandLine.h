@@ -16,7 +16,7 @@ public:
 	bool mVersion;						//!< True if the --version option was given on the command line.
 
 	// SwisTrackCore and configuration
-	mSwisTrackCore *mSwisTrackCore;		//!< The SwisTrackCore object.
+	SwisTrackCore *mSwisTrackCore;		//!< The SwisTrackCore object.
 	int mTriggerInterval;				//!< The interval of the trigger in milliseconds. If 0, manual trigger is chosen.
 
 	//! Constructor.
@@ -29,7 +29,13 @@ public:
 
 	//! Parse the command line.
 	bool ParseCommandLine(int argc, char *argv[]);
+	//! Prints the help screen.
+	void PrintHelp();
+	//! Prints version information.
+	void PrintVersion();
 
+	//! Opens a file.
+	bool OpenFile(const std::string &filename);
 };
 
 #endif

@@ -31,8 +31,8 @@ THISCLASS::RandomExponential(RandomMersenneTwister *rmt): mRandomMersenneTwister
 
 #define UNI (.5 + (signed) SHR3 * .2328306e-9)
 
-float THISCLASS::efix(unsigned long jz, unsigned long iz) { /*provides REXP if #define cannot */
-	float x;
+double THISCLASS::efix(unsigned long jz, unsigned long iz) { /*provides REXP if #define cannot */
+	double x;
 
 	for (;;) {
 		if (iz==0) {

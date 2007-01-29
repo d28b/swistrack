@@ -10,7 +10,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxDialog)
 END_EVENT_TABLE()
 
 THISCLASS::ComponentsDialog(wxWindow* parent, SwisTrackCore *stc):
-		wxDialog(parent, -1, "Add Component", wxDefaultPosition, wxSize(200, 400), wxDEFAULT_DIALOG_STYLE), mSwisTrackCore(stc), mSelectedComponent(0) {
+		wxDialog(parent, -1, "Add Component", wxDefaultPosition, wxSize(400, 400), wxDEFAULT_DIALOG_STYLE), mSwisTrackCore(stc), mSelectedComponent(0) {
 
 
 	// Create tree control
@@ -49,7 +49,7 @@ THISCLASS::ComponentsDialog(wxWindow* parent, SwisTrackCore *stc):
 
 	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
 	vs->Add(mTree, 1, wxEXPAND|wxALL, 8);
-	vs->Add(hs, 0, wxALL, 8);
+	vs->Add(hs, 0, wxLEFT|wxRIGHT|wxBOTTOM, 8);
 
 	SetSizer(vs);
 }

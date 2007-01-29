@@ -43,6 +43,8 @@ driver.
 #include "SocketServer.h"
 #include "ErrorListDialog.h"
 #include "SwisTrackCoreEditor.h"
+#include "ConfigurationReaderXML.h"
+#include "ConfigurationWriterXML.h"
 
 #include <math.h>
 #include <highgui.h>
@@ -360,7 +362,7 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 
 	// Open the file
 	ConfigurationReaderXML cr;
-	if (! cr.Open(filename)) {
+	if (! cr.Open(filename.c_str())) {
 		if (breakonerror) {
 			wxMessageDialog dlg(this, "The file \n\n"+filename+" \n\ncould not be loaded. Syntax error?", "Open Configuration", wxOK);
 			dlg.ShowModal();
@@ -386,14 +388,14 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	// Read the configuration
 	StopSeriousMode();
 	cr.ReadComponents(mSwisTrackCore);
-	SetTriggerTimer(cr.ReadTriggerInterval());
+	SetTriggerTimer(cr.ReadTriggerInterval(0));
 
 	// TODO read window position or other parameters there
 	// cr.ReadInt("Window/x")
 
 	// Show errors if there are any
 	if (cr.mErrorList.mList.empty()) {return;}
-	ErrorListDialog eld(this, &errorlist, "Open File", wxString::Format("The following errors occurred while reading the file '%s':", filename));
+	ErrorListDialog eld(this, &(cr.mErrorList), "Open File", wxString::Format("The following errors occurred while reading the file '%s':", filename));
 	eld.ShowModal();
 }
 
@@ -424,10 +426,10 @@ void THISCLASS::SaveFile(const wxString &filename) {
 
 	// Save the file
 	ConfigurationWriterXML cw;
-	cw.WriteComponents();
+	cw.WriteComponents(mSwisTrackCore);
 	cw.WriteTriggerInterval(mTriggerInterval);
 
-	if (cw.Save(filename)) {
+	if (cw.Save(filename.c_str())) {
 		wxMessageDialog dlg(this, "There was an error writing to \n\n"+filename+"\n\nThe file may be incomplete.", "Save File", wxOK);
 		dlg.ShowModal();
 		return;

@@ -1,8 +1,10 @@
 #include "SwisTrackCommandLine.h"
 #define THISCLASS SwisTrackCommandLine
 
-#include <sys/select.h>
+//#include <sys/select.h>
+#include <iostream>
 #include "SwisTrackCore.h"
+#include "ConfigurationReaderXML.h"
 
 THISCLASS::SwisTrackCommandLine():
 		mSwisTrackCore(0), mExeName(),
@@ -35,19 +37,20 @@ int THISCLASS::Run(int argc, char *argv[]) {
 
 	// Create a new SwisTrackCore object and open the file
 	mSwisTrackCore=new SwisTrackCore();
-	OpenFile();
+	OpenFile(mFileName);
 
 	// Execute
 	mSwisTrackCore->Start(true);
 	while (1) {
-		fd_set fhset;
-		FD_ZERO(&fhset);
-		FD_SET(0, &fhset);
+		//fd_set fhset;
+		//FD_ZERO(&fhset);
+		//FD_SET(0, &fhset);
 
-		struct timeval timeout;
-		timeout.tv_sec=mTriggerInterval / 1000;
-		timeout.tv_usec=(mTriggerInterval-timeout.tv_sec*1000)*1000;
-		int res = select(1, &fhset, NULL, NULL, &timeout);
+		//struct timeval timeout;
+		//timeout.tv_sec=mTriggerInterval / 1000;
+		//timeout.tv_usec=(mTriggerInterval-timeout.tv_sec*1000)*1000;
+		//int res = select(1, &fhset, NULL, NULL, &timeout);
+		int res=0;
 
 		if (res>0) {
 			break;
@@ -79,6 +82,8 @@ bool THISCLASS::ParseCommandLine(int argc, char *argv[]) {
 			mFileName=arg;
 		}
 	}
+
+	return true;
 }
 
 void THISCLASS::PrintHelp() {
@@ -96,26 +101,25 @@ void THISCLASS::PrintVersion() {
 	std::cout << "SwisTrack Command Line Tool 4.0" << std::endl;
 }
 
-bool THISCLASS::OpenFile() {
+bool THISCLASS::OpenFile(const std::string &filename) {
 	ConfigurationReaderXML cr;
 
-	if (! cr.Open(mFileName)) {
-		std::cerr << "The file \'" << mFileName << "\' could not be loaded. Syntax error?" << std::endl;
+	if (! cr.Open(filename)) {
+		std::cerr << "The file \'" << filename << "\' could not be loaded. Syntax error?" << std::endl;
 		return false;
 	}
 
 	// Read the configuration
 	mSwisTrackCore->Stop();
 	cr.ReadComponents(mSwisTrackCore);
-	mTriggerInterval=cr.ReadTriggerInterval();
-	ConfigurationReadXML(&stce, document, &errorlist);
+	mTriggerInterval=cr.ReadTriggerInterval(0);
 	if (cr.mErrorList.mList.empty()) {return true;}
 
 	// Display the errors
 	std::cerr << "The following errors occured while reading the XML file:" << std::endl;
-	errorlist.tList::iterator it=cr.mErrorList.mList.begin();
+	ErrorList::tList::iterator it=cr.mErrorList.mList.begin();
 	while (it!=cr.mErrorList.mList.end()) {
-		std::cerr << "  Line " << (*it).mLine << ": " << (*it).mMessage << std::endl;		
+		std::cerr << "  Line " << it->mLineNumber << ": " << it->mMessage << std::endl;		
 	}
 	return false;
 }

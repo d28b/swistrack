@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="gui"
+	Name="SwisTrack-GUI"
 	ProjectGUID="{44405FF3-5736-429E-B8E3-DE423B43038B}"
 	RootNamespace="gui"
 	>
@@ -509,10 +509,6 @@
 				RelativePath="bitmaps\singlestepback.bmp"
 				>
 			</File>
-		</Filter>
-		<Filter
-			Name="libraries"
-			>
 		</Filter>
 		<File
 			RelativePath="documentation.oxy"

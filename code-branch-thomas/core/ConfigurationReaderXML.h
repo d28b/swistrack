@@ -3,6 +3,7 @@
 
 class ConfigurationReaderXML;
 
+#include <libxml++/libxml++.h>
 #include "SwisTrackCore.h"
 
 //! Reads a SwisTrack configuration from an XML file.
@@ -22,7 +23,7 @@ public:
 	//! Opens an XML document. If this function returns true, the document can be read.
 	bool Open(const std::string &filename);
 	//! Returns whether a document is open.
-	bool IsOpen() {return (document!=0);}
+	bool IsOpen() {return (mDocument!=0);}
 
 	//! Returns the XML document. (This function is not needed unless the application needs to access the XML document in a different way.)
 	xmlpp::Document *GetDocument() {return mDocument;}

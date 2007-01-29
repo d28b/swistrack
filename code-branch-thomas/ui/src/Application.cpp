@@ -7,5 +7,5 @@
 
 int main(int argc, char *argv[]) {
 	SwisTrackCommandLine stcl;
-	return stcl->Run(argc, argv);
+	return stcl.Run(argc, argv);
 }

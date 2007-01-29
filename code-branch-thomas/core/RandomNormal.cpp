@@ -30,9 +30,9 @@ THISCLASS::RandomNormal(RandomMersenneTwister *rmt): mRandomMersenneTwister(rmt)
 	}
 }
 
-float THISCLASS::nfix(long hz, unsigned long iz) {
-	const float r = 3.442620f;
-	float x, y;
+double THISCLASS::nfix(long hz, unsigned long iz) {
+	const double r = 3.442620f;
+	double x, y;
 
 	for (;;) {
 		x=hz*wn[iz];

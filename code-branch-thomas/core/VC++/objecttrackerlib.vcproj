@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="objecttrackerlib"
+	Name="SwisTrack-Core"
 	ProjectGUID="{D010B136-96BD-4D44-B4F0-30388FB460B7}"
 	RootNamespace="objecttrackerlib"
 	>
@@ -44,7 +44,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;../../xmlcfg/include;../../libblob/include;../include;../../calibration/include;&quot;L:\libxml++&quot;;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include"
+				AdditionalIncludeDirectories="../include;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;../../libblob/include;&quot;L:\libxml++&quot;;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -246,6 +246,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ConfigurationReaderXML.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ConfigurationWriterXML.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\DataStructure.cpp"
 				>
 			</File>
@@ -283,6 +291,22 @@
 			</File>
 			<File
 				RelativePath="..\Particle.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Random.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\RandomExponential.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\RandomNormal.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\RandomPoisson.cpp"
 				>
 			</File>
 			<File
@@ -374,6 +398,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ConfigurationReaderXML.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ConfigurationWriterXML.h"
+				>
+			</File>
+			<File
 				RelativePath="..\DataStructure.h"
 				>
 			</File>
@@ -414,6 +446,26 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Random.h"
+				>
+			</File>
+			<File
+				RelativePath="..\RandomExponential.h"
+				>
+			</File>
+			<File
+				RelativePath="..\RandomMersenneTwister.h"
+				>
+			</File>
+			<File
+				RelativePath="..\RandomNormal.h"
+				>
+			</File>
+			<File
+				RelativePath="..\RandomPoisson.h"
+				>
+			</File>
+			<File
 				RelativePath="..\StatusItem.h"
 				>
 			</File>
@@ -429,10 +481,6 @@
 				RelativePath="..\SwisTrackCoreInterface.h"
 				>
 			</File>
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			>
 		</Filter>
 	</Files>
 	<Globals>

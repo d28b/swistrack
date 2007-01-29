@@ -70,17 +70,17 @@ public:
 	}
 
 	//! Returns a float with a gaussian distribution.
-	float Normal() {
+	double Normal() {
 		return smRandomNormal->Normal();
 	}
 
 	//! Returns a float with a gaussian distribution with a given standard deviation and mean.
-	float Normal(float mean, float stddev) {
+	double Normal(float mean, float stddev) {
 		return smRandomNormal->Normal()*stddev+mean;
 	}
 
 	//! Returns a float with an exponential distribution.
-	float Exponential() {
+	double Exponential() {
 		return smRandomExponential->Exponential();
 	}
 

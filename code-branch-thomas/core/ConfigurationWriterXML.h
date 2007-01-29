@@ -3,6 +3,10 @@
 
 class ConfigurationWriterXML;
 
+#include <libxml++/libxml++.h>
+#include "SwisTrackCore.h"
+#include "ErrorList.h"
+
 //! Read.
 class ConfigurationWriterXML {
 
@@ -18,7 +22,7 @@ public:
 	bool Save(const std::string &filename);
 
 	//! Returns the XML document. (This function is not needed unless the application needs to access the XML document in a different way.)
-	xmlpp::Document *GetDocument() {return mDocument;}
+	xmlpp::Document *GetDocument() {return &mDocument;}
 
 	//! Writes the trigger interval.
 	void WriteComponents(SwisTrackCore *stc);
@@ -41,7 +45,7 @@ public:
 
 protected:
 	xmlpp::Document mDocument;		//!< The document.
-	xmlpp::Element mSelectedNode;	//!< The currently selected node.
+	xmlpp::Element *mSelectedNode;	//!< The currently selected node.
 
 };
 

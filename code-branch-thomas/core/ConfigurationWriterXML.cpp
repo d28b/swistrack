@@ -1,8 +1,10 @@
 #include "ConfigurationWriterXML.h"
 #define THISCLASS ConfigurationWriterXML
 
+#include <sstream>
+
 THISCLASS::ConfigurationWriterXML():
-		mErrorList(), mParser(), mDocument(0) {
+		mErrorList(), mDocument(), mSelectedNode(0) {
 
 	mSelectedNode=mDocument.create_root_node("swistrack");
 }
@@ -27,7 +29,7 @@ void THISCLASS::WriteTriggerInterval(int interval) {
 }
 
 xmlpp::Element *THISCLASS::SelectRootNode() {
-	mSelectedNode=mDocument->get_root_node();
+	mSelectedNode=mDocument.get_root_node();
 	return mSelectedNode;
 }
 
@@ -74,7 +76,7 @@ void THISCLASS::WriteDouble(const std::string &name, double value) {
 
 bool THISCLASS::Save(const std::string &filename) {
 	try {
-		document.write_to_file_formatted(filename);
+		mDocument.write_to_file_formatted(filename);
 	} catch (...) {
 		return false;
 	}

@@ -4,6 +4,7 @@
 class SwisTrackCore;
 
 #include <list>
+#include <libxml++/libxml++.h>
 #include "Component.h"
 #include "ComponentCategory.h"
 #include "CommunicationInterface.h"
