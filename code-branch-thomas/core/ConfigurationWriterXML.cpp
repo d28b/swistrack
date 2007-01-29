@@ -1,5 +1,5 @@
-#include "ConfigurationXML.h"
-#define THISCLASS ConfigurationXML
+#include "ConfigurationWriterXML.h"
+#define THISCLASS ConfigurationWriterXML
 
 bool THISCLASS::Open(const std::string &filename, ErrorList *errorlist) {
 	// Read the file
@@ -55,15 +55,15 @@ bool THISCLASS::Open(const std::string &filename, ErrorList *errorlist) {
 	// Get the mode attribute
 	xmlpp::Attribute *att_type=element->get_attribute("mode");
 	if (! att_type) {
-		xmlerr->Add("The 'mode' attribute of the node 'ConfigurationXML' is missing.", element->get_line());
+		xmlerr->Add("The 'mode' attribute of the node 'ConfigurationWriterXML' is missing.", element->get_line());
 		return;
 	}
 	std::string type=att_type->get_value();
 
 	if (type=="timer") {
 		xmlpp::Node::NodeList nodes_interval=rootnode->get_children("Interval");
-		if (nodes_ConfigurationXML.empty()) {
-			errorlist->Add("The interval for the timer ConfigurationXML is not specified!", rootnode->get_line());
+		if (nodes_ConfigurationWriterXML.empty()) {
+			errorlist->Add("The interval for the timer ConfigurationWriterXML is not specified!", rootnode->get_line());
 			return;
 		}
 	}

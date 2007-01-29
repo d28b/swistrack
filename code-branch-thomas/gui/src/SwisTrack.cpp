@@ -295,6 +295,7 @@ void THISCLASS::SetTriggerManual() {
 }
 
 void THISCLASS::SetTriggerTimer(int ms) {
+	if (ms==0) {return SetTriggerManual();}
 	GetToolBar()->ToggleTool(sID_Control_FreeRun, true);
 	mFreeRunInterval=ms;
 	if (! mFreeRunTimer.IsRunning()) {mFreeRunTimer.Start(mFreeRunInterval);}
@@ -349,10 +350,7 @@ void THISCLASS::OnFileOpen(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astemplate) {
-	SwisTrackCoreEditor stce(mSwisTrackCore);
-	if (! stce.IsEditable()) {return;}
-
-	// Check if file is readable
+	// Check if file exists and is readable
 	if (breakonerror) {
 		//wxFileName fn(filename);
 		//if (! fn.IsFileReadable()) {  // TODO: update to wxWidgets 2.8.0 and active this
@@ -362,22 +360,14 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 		//}
 	}
 
-	// Read the new file
-	xmlpp::DomParser parser;
-	xmlpp::Document *document=0;
-	try {
-		parser.parse_file(filename.c_str());
-		if (parser==true) {
-			document=parser.get_document();
+	// Open the file
+	ConfigurationReaderXML cr;
+	if (! cr.PrepareRead()) {
+		if (breakonerror) {
+			wxMessageDialog dlg(this, "The file \n\n"+filename+" \n\ncould not be loaded. Syntax error?", "Open Configuration", wxOK);
+			dlg.ShowModal();
+			return;
 		}
-	} catch (...) {
-		document=0;
-	}
-
-	if ((breakonerror) && (document==0)) {
-		wxMessageDialog dlg(this, "The file \n\n"+filename+" \n\ncould not be loaded. Syntax error?", "Open Configuration", wxOK);
-		dlg.ShowModal();
-		return;
 	}
 
 	// At this point, we consider the SwisTrack configuration to be valid. The next few lines close the current configuration and read the configuration.
@@ -396,38 +386,16 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	}
 
 	// Read the configuration
-	ErrorList errorlist;
-	ConfigurationReadXML(&stce, document, &errorlist);
-	if (errorlist.mList.empty()) {return;}
+	cr.ReadComponents();
+	SetTriggerTimer(cr.ReadTriggerInterval());
 
+	// TODO read window position or other parameters there
+	// cr.ReadInt("Window/x")
+
+	// Show errors if there are any
+	if (cr.mErrorList.mList.empty()) {return;}
 	ErrorListDialog eld(this, &errorlist, "Open File", wxString::Format("The following errors occurred while reading the file '%s':", filename));
 	eld.ShowModal();
-}
-
-void THISCLASS::ConfigurationReadXML(SwisTrackCoreEditor *stce, xmlpp::Document *document, ErrorList *errorlist) {
-	// If this method is called without a document, set up an empty component list
-	if (document==0) {
-		stce->ConfigurationReadXML(0, errorlist);
-		return;
-	}
-
-	// Get the root node
-	xmlpp::Element *rootnode=document->get_root_node();
-	if (! rootnode) {
-		stce->ConfigurationReadXML(0, errorlist);
-		return;
-	}
-
-	// Get the list of components
-	xmlpp::Node::NodeList nodes_components=rootnode->get_children("Components");
-	if (nodes_components.empty()) {
-		stce->ConfigurationReadXML(0, errorlist);
-		return;
-	}
-
-	// Read the component list
-	xmlpp::Element *components=dynamic_cast<xmlpp::Element *>(nodes_components.front());
-	stce->ConfigurationReadXML(components, errorlist);
 }
 
 void THISCLASS::OnFileSaveAs(wxCommandEvent& WXUNUSED(event)) {

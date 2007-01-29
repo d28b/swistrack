@@ -106,10 +106,6 @@ public:
 	wxCriticalSection* mCriticalSection; 
 #endif
 
-private:
-	//! Reads the configuration from an XML file. This method is used by OpenFile().
-	void ConfigurationReadXML(SwisTrackCoreEditor *stce, xmlpp::Document *document, ErrorList *errorlist);
-
 protected:
 	// IDs for the controls and the menu commands
 	enum eConstants {

@@ -11,8 +11,8 @@ class SimulationParticles: public CommunicationNMEAInterface {
 public:
 	//! Information about one frame.
 	typedef struct {
-		int number,
-		DataStructureParticles::tParticleVector particles
+		int number;
+		DataStructureParticles::tParticleVector particles;
 	} tFrame;
 	//! A list of frames type.
 	typedef std::list<tFrame> tFrameList;
