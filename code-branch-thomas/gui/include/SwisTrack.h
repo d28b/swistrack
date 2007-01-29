@@ -11,7 +11,6 @@
 
 class SwisTrack;
 
-#include "SwisTrack.Constants.h"
 #include "AboutDialog.h"
 #include "ComponentListPanel.h"
 #include "SocketServer.h"
