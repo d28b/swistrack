@@ -52,11 +52,27 @@ THISCLASS::SwisTrackCore():
 	mDataStructures.push_back(&mDataStructureParticles);
 
 	// TODO remove this
-	mDeployedComponents.push_back(new ComponentInputCameraUSB(this));
+	mDeployedComponents.push_back(new ComponentInputCamera1394(this));
 	mDeployedComponents.push_back(new ComponentConvertToGray(this));
 	mDeployedComponents.push_back(new ComponentBackgroundSubtractionGray(this));
 	mDeployedComponents.push_back(new ComponentThresholdGray(this));
 	mDeployedComponents.push_back(new ComponentBlobDetectionMinMax(this));
+}
+
+THISCLASS::~SwisTrackCore() {
+	// Delete deployed components
+	tComponentList::iterator itd=mDeployedComponents.begin();
+	while (itd!=mDeployedComponents.end()) {
+		delete (*itd);
+		itd++;
+	}
+
+	// Delete available components
+	tComponentList::iterator ita=mAvailableComponents.begin();
+	while (ita!=mAvailableComponents.end()) {
+		delete (*ita);
+		ita++;
+	}
 }
 
 bool THISCLASS::Start(bool seriousmode) {

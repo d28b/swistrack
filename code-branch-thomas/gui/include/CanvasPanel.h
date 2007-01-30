@@ -22,18 +22,7 @@ class CanvasPanel;
 class CanvasPanel: public wxPanel, public DisplayImageSubscriberInterface {
 
 public:
-	//! The associated SwisTrack object.
-	SwisTrack *mSwisTrack;
-	//! The canvas.
-	Canvas *mCanvas;
-	//! The title text.
-	CanvasTitle *mTitle;
-	//! The title text.
-	CanvasAnnotation *mAnnotation;
-	//! The update rate (only each mUpdateRate image is displayed). If mUpdateRate==0, visualization is disabled.
-	int mUpdateRate;
-	//! The update rate counter.
-	int mUpdateCounter;
+	SwisTrack *mSwisTrack;			//!< The associated SwisTrack object.
 
 	//! Constructor.
 	CanvasPanel(SwisTrack *st);
@@ -47,6 +36,15 @@ public:
 
 	// DisplayImageSubscriberInterface methods
 	void OnDisplayImageChanged(DisplayImage *di);
+
+private:
+	Canvas *mCanvas;						//!< The canvas.
+	CanvasTitle *mCanvasTitle;				//!< The title box.
+	CanvasAnnotation *mCanvasAnnotation;	//!< The annotation box.
+
+	int mUpdateRate;				//!< The update rate (only each mUpdateRate image is displayed). If mUpdateRate==0, visualization is disabled.
+	int mUpdateCounter;				//!< The update rate counter.
+	wxSize mAvailableSpace;			//!< The available space for the image.
 
 	DECLARE_EVENT_TABLE()
 };

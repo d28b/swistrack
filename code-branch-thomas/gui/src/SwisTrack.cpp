@@ -85,13 +85,13 @@ BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 	EVT_MENU(sID_Control_SeriousMode, THISCLASS::OnControlSeriousMode)
 	EVT_MENU(sID_Control_FreeRun, THISCLASS::OnControlFreeRun)
 	EVT_MENU(sID_Control_SingleStep, THISCLASS::OnControlSingleStep)
-	EVT_MENU(sID_Tools_Screenshot, SwisTrack::OnMakeScreenShot)
-	EVT_COMMAND_SCROLL(sID_DisplaySpeed, SwisTrack::OnChangeDisplaySpeed)
-	EVT_MENU(sID_Help, SwisTrack::OnHelp)
-	EVT_MENU(sID_Test, SwisTrack::OnTest)
+	EVT_MENU(sID_Tools_Screenshot, THISCLASS::OnMakeScreenShot)
+	EVT_COMMAND_SCROLL(sID_DisplaySpeed, THISCLASS::OnChangeDisplaySpeed)
+	EVT_MENU(sID_Help, THISCLASS::OnHelp)
+	EVT_MENU(sID_Test, THISCLASS::OnTest)
 	EVT_MENU(sID_About, THISCLASS::OnHelpAbout)
 	EVT_TIMER(wxID_ANY, THISCLASS::OnFreeRunTimer)
-	EVT_IDLE(SwisTrack::OnIdle)
+	EVT_IDLE(THISCLASS::OnIdle)
 END_EVENT_TABLE()
 
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
@@ -117,8 +117,8 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	mCanvasPanel=new CanvasPanel(this);
 
 	// SwisTrackCore and SocketServer
-	mSocketServer = new SocketServer(this);
 	mSwisTrackCore=new SwisTrackCore();
+	mSocketServer=new SocketServer(this);
 	mSwisTrackCore->mCommunicationInterface=mSocketServer;	
 	mSocketServer->SetPort(3001);
 
@@ -152,17 +152,12 @@ SwisTrack::~SwisTrack(){
 	SetTriggerManual();
 	StopSeriousMode();
 
-	if (mCanvasPanel) {delete mCanvasPanel;}
-	if (mPanelInformation) {delete mPanelInformation;}
-	if (mComponentListPanel) {delete mComponentListPanel;}
 	if (mSocketServer) {delete mSocketServer;}
 	if (mSwisTrackCore) {delete mSwisTrackCore;}
 
 #ifdef MULTITHREAD
 	if (mCriticalSection) {delete mCriticalSection;}
 #endif
-
-	Close(TRUE);
 }
 
 void THISCLASS::BuildMenuBar() {
@@ -225,7 +220,7 @@ void THISCLASS::BuildMenuBar() {
 
 	menuHelp->Append(sID_Help, _T("&Manual"), _T("Opens the manual"));
 	menuHelp->Append(sID_Test, _T("&Test"), _T("Test"));
-	menuHelp->Append(sID_About, _T("&About...\tF1"), _T("Show about dialog"));
+	menuHelp->Append(sID_About, _T("&About ...\tF1"), _T("Show about dialog"));
 
 	menuBar->Check(sID_View_TrajFull, TRUE);
 	menuBar->Check(sID_View_ShowMask, FALSE);
@@ -440,6 +435,7 @@ void THISCLASS::SaveFile(const wxString &filename) {
 
 void SwisTrack::OnFileQuit(wxCommandEvent& WXUNUSED(event)) {
 	Close(TRUE);
+	Destroy();
 }
 
 void THISCLASS::OnControlSeriousMode(wxCommandEvent& WXUNUSED(event)) {

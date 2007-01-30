@@ -64,6 +64,10 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrackCore *stc):
 	Update();
 }
 
+THISCLASS::~ComponentListPanel() {
+	if (mComponentsDialog) {mComponentsDialog->Destroy();}
+}
+
 void THISCLASS::Update() {
 	// Empty the list
 	mList->DeleteAllItems();

@@ -14,8 +14,9 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 END_EVENT_TABLE()
 
 THISCLASS::CanvasTitle(CanvasPanel *cp):
-		wxControl(cp, -1), mCanvasPanel(cp), mTitle(""), mHighlight(false) {
+		wxControl(cp, -1), mCanvasPanel(cp), mTitle(""), mHighlight(false), mMenu(0) {
 
+	SetWindowStyle(wxNO_BORDER);
 	SetBackgroundColour(*wxBLACK);
 	wxFont f=GetFont();
 	f.SetWeight(wxFONTWEIGHT_BOLD);

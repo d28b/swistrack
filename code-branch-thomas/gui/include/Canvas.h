@@ -36,6 +36,8 @@ public:
 
 	//! This sets a new image. Note that this class cleans up and frees old image automatically.
 	void SetImage(IplImage *img);
+	//! This returns the current image.
+	IplImage *GetImage() {return mImage;}
 
 private:
 	enum {
@@ -45,7 +47,7 @@ private:
 	//! The current image.
 	IplImage *mImage;
 	//! The popup menu.
-	wxMenu *mMenu;
+	wxMenu mPopupMenu;
 
 	//! The corresponding GUI event handler.
 	void OnMenuSaveImageAs(wxCommandEvent& event);

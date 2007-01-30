@@ -15,7 +15,6 @@ public:
 	AboutDialog(wxWindow *parent);
 	//! Destructor.
 	~AboutDialog() {}
-
 };
 
 #endif

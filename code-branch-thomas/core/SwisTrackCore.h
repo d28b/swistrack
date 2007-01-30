@@ -51,7 +51,7 @@ public:
 	//! Constructor.
 	SwisTrackCore();
 	//! Destructor.
-	~SwisTrackCore() {}
+	~SwisTrackCore();
 
 	//! Starts all the components. This may only be called if IsStarted()==false.
 	bool Start(bool seriousmode);

@@ -510,10 +510,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath="documentation.oxy"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

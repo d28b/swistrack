@@ -26,7 +26,7 @@ public:
 	//! Constructor.
 	ComponentListPanel(wxWindow *parent, SwisTrackCore *stc);
 	//! Destructor.
-	~ComponentListPanel() {}
+	~ComponentListPanel();
 
 	//! Updates the list completely.
 	void Update();

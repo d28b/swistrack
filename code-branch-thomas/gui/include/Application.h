@@ -2,6 +2,7 @@
 #define HEADER_Application
 
 #include <wx/wxprec.h>
+#include "SwisTrack.h"
 
 #ifndef WX_PRECOMP
   #include <wx/wx.h>
@@ -9,18 +10,16 @@
 
 class Application;
 
-#include "SwisTrack.h"
-
-/** \class Application
-* \brief Main application.
-*/ 
+//! Application
 class Application: public wxApp {
 
 public:
-	//! Runs the program.
-	bool OnInit();
+	SwisTrack *mSwisTrack;		//!< The main window.
 
-	//! The SwisTrack 
-	SwisTrack* mSwisTrack;
+	//! Called upon program initialization.
+	bool OnInit();
+	//! Called upon program termination.
+	int OnExit();
+
 };
 #endif

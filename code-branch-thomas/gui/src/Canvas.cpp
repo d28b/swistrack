@@ -14,10 +14,14 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 END_EVENT_TABLE()
 
 THISCLASS::Canvas(CanvasPanel *cp):
-		wxControl(cp, -1), mCanvasPanel(cp), mImage(0), mMenu(0) {
+		wxControl(cp, -1), mCanvasPanel(cp), mImage(0), mPopupMenu() {
 
-	mMenu = new wxMenu;
-	mMenu->Append(sID_SaveImageAs, "Save image as ...");
+	SetWindowStyle(wxNO_BORDER);
+
+	mPopupMenu.Append(sID_SaveImageAs, "Save image as ...");
+
+	wxFont f=GetFont();
+	f.SetWeight(wxNORMAL);
 }
 
 THISCLASS::~Canvas() {
@@ -32,7 +36,10 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 
 	if (mImage==0) {
 		wxSize size=GetClientSize();
+		dc.SetBrush(*wxWHITE_BRUSH);
 		dc.DrawRectangle(0, 0, size.GetWidth(), size.GetHeight());
+		dc.SetFont(GetFont());
+		dc.DrawText("No image.", 4, 4);
 		return;
 	}
 
@@ -52,7 +59,7 @@ void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 }
 
 void THISCLASS::OnMouseRightDown(wxMouseEvent &event) {
-	PopupMenu(mMenu);
+	PopupMenu(&mPopupMenu);
 }
 
 void THISCLASS::OnMouseMove(wxMouseEvent &event) {

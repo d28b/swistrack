@@ -14,10 +14,12 @@ THISCLASS::CanvasPanel(SwisTrack *st):
 		DisplayImageSubscriberInterface(),
 		mSwisTrack(st), mUpdateRate(1), mUpdateCounter(0) {
 
+	SetBackgroundColour(st->GetBackgroundColour());
+
 	// Create the canvas, title and annotation box
 	mCanvas=new Canvas(this);
-	mTitle=new CanvasTitle(this);
-	mAnnotation=new CanvasAnnotation(this);
+	mCanvasTitle=new CanvasTitle(this);
+	mCanvasAnnotation=new CanvasAnnotation(this);
 
 	// Layout the components in the panel
 	//wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
@@ -35,33 +37,69 @@ void THISCLASS::OnDisplayImageChanged(DisplayImage *di) {
 	if (mUpdateCounter>0) {return;}
 	mUpdateCounter=mUpdateRate;
 
-	// Calculate the available space
-	wxSize size=GetClientSize();
-	wxSize titlesize=mTitle->GetClientSize();
-	wxSize annotationsize=mAnnotation->GetClientSize();
-
-	int maximagewidth=size.GetWidth();
-	int maximageheight=size.GetHeight()-titlesize.GetHeight()-annotationsize.GetHeight();
-	if (maximageheight<10) {
-		Hide();
-		return;
-	}
+	// Do nothing if the canvas is invisible
+	if (! mCanvas->IsShown()) {return;}
 
 	// Get the new image
-	IplImage *img=di->CreateImage(maximagewidth, maximageheight);
+	IplImage *img=di->CreateImage(mAvailableSpace.GetWidth(), mAvailableSpace.GetHeight());
 	mCanvas->SetImage(img);
 
-	// Layout the children
-	int x=(size.GetWidth()-img->width)/2;
-	int y=(size.GetHeight()-img->height)/2;
-	mCanvas->SetSize(x, y, img->width, img->height);
-	mTitle->SetSize(x, y-titlesize.GetHeight(), img->width, titlesize.GetHeight());
-	mAnnotation->SetSize(x, y+img->height, img->width, annotationsize.GetHeight());
-	Show();
+	// Set title and annotation
+	mCanvasTitle->mTitle=di->mDisplayName.c_str();
+	mCanvasAnnotation->mTextLeft=di->mAnnotation1.c_str();
+	mCanvasAnnotation->mTextRight=di->mAnnotation2.c_str();
+
+	// Move the children
+	OnSize(wxSizeEvent());
 }
 
 void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 }
 
 void THISCLASS::OnSize(wxSizeEvent &event) {
+	// Get the sizes
+	wxSize size=GetClientSize();
+	wxSize titlesize=mCanvasTitle->GetClientSize();
+	titlesize.SetHeight(20);
+	wxSize annotationsize=mCanvasAnnotation->GetClientSize();
+	annotationsize.SetHeight(20);
+	IplImage *img=mCanvas->GetImage();
+
+	// Set the available space (for future images)
+	mAvailableSpace.SetWidth(size.GetWidth());
+	mAvailableSpace.SetHeight(size.GetHeight()-titlesize.GetHeight()-annotationsize.GetHeight());
+
+	if ((mAvailableSpace.GetWidth()<30) || (mAvailableSpace.GetHeight()<30)) {
+		mCanvasTitle->Hide();
+		mCanvas->Hide();
+		mCanvasAnnotation->Hide();
+		return;
+	}
+
+	// Determine the size of the image
+	int imagewidth=320;
+	int imageheight=180;
+	if (img) {
+		imagewidth=img->width;
+		imageheight=img->height;
+	}
+	if (imagewidth>mAvailableSpace.GetWidth()) {
+		imagewidth=mAvailableSpace.GetWidth();
+	}
+	if (imageheight>mAvailableSpace.GetHeight()) {
+		imageheight=mAvailableSpace.GetHeight();
+	}
+
+	// Layout the children
+	int x=(size.GetWidth()-imagewidth)/2;
+	int y=(size.GetHeight()-imageheight-titlesize.GetHeight()-annotationsize.GetHeight())/2;
+	mCanvasTitle->SetSize(x, y, imagewidth, titlesize.GetHeight());
+	y+=titlesize.GetHeight();
+	mCanvas->SetSize(x, y, imagewidth, imageheight);
+	y+=imageheight;
+	mCanvasAnnotation->SetSize(x, y, imagewidth, annotationsize.GetHeight());
+
+	mCanvasTitle->Show();
+	mCanvas->Show();
+	mCanvasAnnotation->Show();
 }

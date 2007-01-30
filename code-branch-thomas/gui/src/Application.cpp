@@ -3,6 +3,7 @@
 
 #include <wx/app.h>
 #include <wx/image.h>
+#include "AboutDialog.h"
 
 /** \file Application.cpp
 * \brief Mainfile for the project
@@ -39,7 +40,7 @@ bool THISCLASS::OnInit() {
 	wxInitAllImageHandlers();
 
 	// Create the main application window
-	SwisTrack *st = new SwisTrack(_T("SWISTrack 4.0.0"), wxPoint(-1, -1), wxSize(800, 600));
+	mSwisTrack = new SwisTrack(_T("SWISTrack 4.0.0"), wxPoint(-1, -1), wxSize(800, 600));
 
 #if defined(__WIN16__) || defined(__WXMOTIF__)
 	int width, height;
@@ -48,7 +49,12 @@ bool THISCLASS::OnInit() {
 #endif
 
 	// Show
-    st->Show(TRUE);
-	SetTopWindow(st);
+    mSwisTrack->Show(TRUE);
+	SetTopWindow(mSwisTrack);
     return TRUE;
+}
+
+int THISCLASS::OnExit() {
+	//delete mSwisTrack;
+	return 0;
 }
