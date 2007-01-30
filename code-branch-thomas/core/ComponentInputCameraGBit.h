@@ -21,6 +21,7 @@ public:
 	Component *Create() {return new ComponentInputCameraGBit(mCore);}
 
 private:
+	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last acquired image.
 
 };
 

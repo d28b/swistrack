@@ -5,12 +5,14 @@
 
 THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):
 		Component(stc, "Camera1394"),
-		mCamera(), mLastImage(0) {
+		mCamera(), mLastImage(0), mFrameNumber(0),
+		mDisplayImageOutput("Output", "Output") {
 
 	// Data structure relations
 	mDisplayName="1394 Camera";
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
+	AddDisplayImage(&mDisplayImageOutput);
 }
 
 THISCLASS::~ComponentInputCamera1394() {
@@ -52,8 +54,8 @@ void THISCLASS::OnStart() {
 		return;
 	}
 
-	mLastImage=cvCreateImage(cvSize(mCamera.m_width, mCamera.m_height), 8, 3);
-	mCore->mDataStructureInput.mImage=mLastImage;
+	mFrameNumber=0;
+	mCurrentImage=cvCreateImage(cvSize(mCamera.m_width, mCamera.m_height), 8, 3);
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -61,6 +63,7 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	// Get image from camera
+	mFrameNumber++;
 	int status=mCamera.AcquireImage();	
 	switch (status) {
 	case CAM_SUCCESS:
@@ -74,14 +77,20 @@ void THISCLASS::OnStep() {
 	}
 
 	// Point the input IplImage to the camera buffer
-	mLastImage->imageData=(char*)mCamera.m_pData;
+	mCurrentImage->imageData=(char*)mCamera.m_pData;
 
 	// Convert the input in the right format (RGB to BGR)
-	cvCvtColor(mLastImage, mLastImage, CV_RGB2BGR);
+	cvCvtColor(mCurrentImage, mCurrentImage, CV_RGB2BGR);
 	
 	// Set this image in the DataStructureImage
-	mCore->mDataStructureInput.mImage=mLastImage;
-	mCore->mDataStructureInput.mFrameNumber++;
+	mCore->mDataStructureInput.mImage=mCurrentImage;
+	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
+
+	// Let the DisplayImage know about our image
+	mDisplayImageOutput.mNewImage=mCurrentImage;
+	std::ostringstream oss;
+	oss << "Frame " << mFrameNumber << ", " << mCurrentImage.width << "x" << mCurrentImage.height;
+	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 
 void THISCLASS::OnStepCleanup() {

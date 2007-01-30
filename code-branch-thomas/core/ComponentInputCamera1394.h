@@ -28,10 +28,11 @@ public:
 	Component *Create() {return new ComponentInputCamera1394(mCore);}
 
 private:
-	//! 1394 Camera handle (CMU 1394 Camera Driver)
-	C1394Camera mCamera;  //!< Camera handle 
-	//! The last acquired image.
-	IplImage* mLastImage;
+	C1394Camera mCamera;	//! 1394 Camera handle (CMU 1394 Camera Driver)
+	IplImage* mLastImage;	//! The last acquired image.
+	int mFrameNumber;		//! The frame number since the component was started.
+
+	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last acquired image.
 };
 
 #else

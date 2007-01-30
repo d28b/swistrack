@@ -22,7 +22,8 @@ public:
 	Component *Create() {return new ComponentConvertToBGR(mCore);}
 
 private:
-	IplImage *mOutputImage;		//!< The image created by this component.
+	IplImage *mOutputImage;						//!< The image created by this component.
+	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last acquired image.
 
 	// Prepares the output image (recreates the image if necessary).
 	inline void PrepareOutputImage(IplImage *inputimage) {

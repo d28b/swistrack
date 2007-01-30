@@ -2,7 +2,8 @@
 #define THISCLASS ComponentConvertToGray
 
 THISCLASS::ComponentConvertToGray(SwisTrackCore *stc):
-		Component(stc, "ConvertToGray") {
+		Component(stc, "ConvertToGray"),
+		mDisplayImageOutput("Output", "Output") {
 
 	// Data structure relations
 	mDisplayName="Conversion to Grayscale(BGR)";
@@ -25,7 +26,7 @@ void THISCLASS::OnStep() {
 	if (! inputimage) {return;}
 	
 	try {
-		// We convert the input image in black and white
+		// We convert the input image to black and white
 		switch (inputimage->nChannels) {
 		case 3:	// BGR case, we convert to gray
 			PrepareOutputImage(inputimage);
@@ -44,6 +45,12 @@ void THISCLASS::OnStep() {
 	} catch(...) {
 		AddError("Convertion to gray failed.");
 	}
+
+	// Let the DisplayImage know about our image
+	mDisplayImageOutput.mNewImage=mOutputImage;
+	std::ostringstream oss;
+	oss << "Grayscale image, " << mOutputImage.width << "x" << mOutputImage.height;
+	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 
 void THISCLASS::OnStepCleanup() {

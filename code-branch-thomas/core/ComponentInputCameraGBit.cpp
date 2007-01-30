@@ -2,12 +2,14 @@
 #define THISCLASS ComponentInputCameraGBit
 
 THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
-		Component(stc, "CameraGBit") {
+		Component(stc, "CameraGBit"),
+		mDisplayImageOutput("Output", "Output") {
 
 	// Data structure relations
 	mDisplayName="GBit Camera";
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
+	AddDisplayImage(&mDisplayImageOutput);
 }
 
 THISCLASS::~ComponentInputCameraGBit() {

@@ -2,7 +2,8 @@
 #define THISCLASS ComponentConvertToBGR
 
 THISCLASS::ComponentConvertToBGR(SwisTrackCore *stc):
-		Component(stc, "ConvertToBGR") {
+		Component(stc, "ConvertToBGR"),
+		mDisplayImageOutput("Output", "Output") {
 
 	// Data structure relations
 	mDisplayName="Conversion to Color (BGR)";
@@ -44,6 +45,12 @@ void THISCLASS::OnStep() {
 	} catch(...) {
 		AddError("Convertion to gray failed.");
 	}
+
+	// Let the DisplayImage know about our image
+	mDisplayImageOutput.mNewImage=mOutputImage;
+	std::ostringstream oss;
+	oss << "BGR image, " << mOutputImage.width << "x" << mOutputImage.height;
+	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 
 void THISCLASS::OnStepCleanup() {

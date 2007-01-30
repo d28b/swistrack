@@ -39,7 +39,8 @@ void THISCLASS::OnStep() {
 	if (! mCapture) {return;}	
 
 	// Read from camera
-	mCurrentImage = cvQueryFrame(mCapture);
+	int framenumber=(int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES);
+	mCurrentImage=cvQueryFrame(mCapture);
 	if (! mCurrentImage) {
 		AddError("Could not retrieve image from USB camera.");
 		return;
@@ -47,18 +48,18 @@ void THISCLASS::OnStep() {
 
 	// Set DataStructureImage
 	mCore->mDataStructureInput.mImage=mCurrentImage;
-	mCore->mDataStructureInput.mFrameNumber++;
+	mCore->mDataStructureInput.mFrameNumber=framenumber;
 
 	// Let the DisplayImage know about our image
 	mDisplayImageOutput.mNewImage=mCurrentImage;
-	//std::ostringstream oss;
-	//oss << "Frame " << mCore->mDataStructureInput.mFrameNumber;
-	//mDisplayImageOutput.mAnnotation1=oss.str();
+	std::ostringstream oss;
+	oss << "Frame " << framenumber << ", " << mCurrentImage.width << "x" << mCurrentImage.height;
+	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 
 void THISCLASS::OnStepCleanup() {
 	mCore->mDataStructureInput.mImage=0;
-	if (mCurrentImage) {cvReleaseImage(&mCurrentImage);}
+	//mCurrentImage should not be released here, as this is handled by the HighGUI library
 }
 
 void THISCLASS::OnStop() {

@@ -3,12 +3,14 @@
 
 THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
 		Component(stc, "FileAVI"),
-		mCapture(0), mLastImage(0) {
+		mCapture(0), mCurrentImage(0),
+		mDisplayImageOutput("Output", "Output") {
 
 	// Data structure relations
 	mDisplayName="AVI File";
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
+	AddDisplayImage(&mDisplayImageOutput);
 }
 
 THISCLASS::~ComponentInputFileAVI() {
@@ -55,23 +57,32 @@ void THISCLASS::OnReloadConfiguration() {
 void THISCLASS::OnStep() {
 	if (! mCapture) {return;}	
 
-	mLastImage=cvQueryFrame(mCapture);
-	if (! mLastImage) {
+	// Read the next frame
+	int framenumber=(int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES);
+	int framecount=(int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_FRAME_COUNT);
+	mCurrentImage=cvQueryFrame(mCapture);
+	if (! mCurrentImage) {
 		AddError("Could not read frame from AVI file.");
 		return;
 	}
 
 	// AVI files are flipped
-	cvFlip(mLastImage, 0);
+	cvFlip(mCurrentImage, 0);
 
 	// Set DataStructureImage
-	mCore->mDataStructureInput.mImage=mLastImage;
-	mCore->mDataStructureInput.mFrameNumber++;
+	mCore->mDataStructureInput.mImage=mCurrentImage;
+	mCore->mDataStructureInput.mFrameNumber=framenumber;
+
+	// Let the DisplayImage know about our image
+	mDisplayImageOutput.mNewImage=mCurrentImage;
+	std::ostringstream oss;
+	oss << "Frame " << framenumber << " / " << framecount << ", " << mCurrentImage.width << "x" << mCurrentImage.height;
+	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 
 void THISCLASS::OnStepCleanup() {
 	mCore->mDataStructureInput.mImage=0;
-	//mLastImage should not be released here, as this is handled by the HighGUI library
+	//mCurrentImage should not be released here, as this is handled by the HighGUI library
 }
 
 void THISCLASS::OnStop() {

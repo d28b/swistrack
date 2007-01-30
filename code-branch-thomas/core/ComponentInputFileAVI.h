@@ -29,8 +29,10 @@ public:
 	double GetFPS();
 
 private:
-	CvCapture* mCapture;	//!< Pointer to AVI sequence.
-	IplImage* mLastImage;	//!< The last acquired image.
+	CvCapture* mCapture;		//!< Pointer to AVI sequence.
+	IplImage* mCurrentImage;	//!< The last acquired image.
+
+	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last acquired image.
 };
 
 #endif
