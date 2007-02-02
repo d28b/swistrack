@@ -19,8 +19,10 @@ class CanvasTitle: public wxControl {
 public:
 	//! The associated CanvasPanel.
 	CanvasPanel* mCanvasPanel;
-	//! The title text.
+	//! The title text (displayed on the left).
 	wxString mTitle;
+	//! The text on the right.
+	wxString mTextRight;
 	//! Whether the title is highlighted (during mouse over) or not.
 	bool mHighlight;
 	//! The popup menu.
@@ -30,6 +32,9 @@ public:
 	CanvasTitle(CanvasPanel *cp);
 	// Destructor.
 	~CanvasTitle();
+
+	//! Sets the text.
+	void SetText(const std::string &title, const std::string &textright=0);
 
 private:
 	//! The corresponding GUI event handler.

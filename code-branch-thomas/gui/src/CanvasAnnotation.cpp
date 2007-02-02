@@ -49,3 +49,9 @@ void THISCLASS::OnMouseRightClick(wxMouseEvent &event) {
 
 void THISCLASS::OnMouseMove(wxMouseEvent &event) {
 }
+
+void THISCLASS::SetText(const std::string &textleft, const std::string &textright) {
+	mTextLeft=textleft;
+	mTextRight=textright;
+	Refresh(true);
+}

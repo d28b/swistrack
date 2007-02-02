@@ -35,12 +35,15 @@ public:
 	void OnSize(wxSizeEvent &event);
 
 	// DisplayImageSubscriberInterface methods
+	void OnDisplayImageSubscribe(DisplayImage *di);
 	void OnDisplayImageChanged(DisplayImage *di);
+	void OnDisplayImageUnsubscribe(DisplayImage *di);
 
 private:
 	Canvas *mCanvas;						//!< The canvas.
 	CanvasTitle *mCanvasTitle;				//!< The title box.
 	CanvasAnnotation *mCanvasAnnotation;	//!< The annotation box.
+	DisplayImage *mCurrentDisplayImage;		//!< The DisplayImage currently subscribed to.
 
 	int mUpdateRate;				//!< The update rate (only each mUpdateRate image is displayed). If mUpdateRate==0, visualization is disabled.
 	int mUpdateCounter;				//!< The update rate counter.

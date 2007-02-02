@@ -12,7 +12,7 @@ END_EVENT_TABLE()
 THISCLASS::CanvasPanel(SwisTrack *st):
 		wxPanel(st, -1, wxDefaultPosition, wxSize(100, 100)),
 		DisplayImageSubscriberInterface(),
-		mSwisTrack(st), mUpdateRate(1), mUpdateCounter(0) {
+		mSwisTrack(st), mUpdateRate(1), mUpdateCounter(0), mCurrentDisplayImage(0) {
 
 	SetBackgroundColour(st->GetBackgroundColour());
 
@@ -31,7 +31,17 @@ THISCLASS::CanvasPanel(SwisTrack *st):
 THISCLASS::~CanvasPanel() {
 }
 
+void THISCLASS::OnDisplayImageSubscribe(DisplayImage *di) {
+	mUpdateCounter=0;
+	mCurrentDisplayImage=di;
+	mCanvasTitle->SetText(di->mDisplayName.c_str());
+	mCanvasAnnotation->SetText("", "");
+}
+
 void THISCLASS::OnDisplayImageChanged(DisplayImage *di) {
+	if (mCurrentDisplayImage!=di) {return;}
+
+	// Show only every mUpdateRate image
 	if (mUpdateRate==0) {return;}
 	mUpdateCounter--;
 	if (mUpdateCounter>0) {return;}
@@ -45,12 +55,20 @@ void THISCLASS::OnDisplayImageChanged(DisplayImage *di) {
 	mCanvas->SetImage(img);
 
 	// Set title and annotation
-	mCanvasTitle->mTitle=di->mDisplayName.c_str();
-	mCanvasAnnotation->mTextLeft=di->mAnnotation1.c_str();
-	mCanvasAnnotation->mTextRight=di->mAnnotation2.c_str();
+	mCanvasTitle->SetText(di->mDisplayName.c_str());
+	mCanvasAnnotation->SetText(di->mAnnotation1.c_str(), di->mAnnotation2.c_str());
 
 	// Move the children
 	OnSize(wxSizeEvent());
+}
+
+void THISCLASS::OnDisplayImageSubscribe(DisplayImage *di) {
+	if (mCurrentDisplayImage!=di) {return;}
+
+	mCurrentDisplayImage=0;
+	mCanvas->SetImage(0);
+	mCanvasTitle->SetText("No display (maximum speed)");
+	mCanvasAnnotation->SetText("", "");
 }
 
 void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {

@@ -15,8 +15,12 @@ public:
 	//! Destructor.
 	~DisplayImageSubscriberInterface() {}
 
+	//! Called when subscribing to a DisplayImage.
+	virtual void OnDisplayImageSubscribe(DisplayImage *di) = 0;
 	//! Called when a display image changes.
 	virtual void OnDisplayImageChanged(DisplayImage *di) = 0;
+	//! Called when unsubscribing from a DisplayImage.
+	virtual void OnDisplayImageUnsubscribe(DisplayImage *di) = 0;
 };
 
 #endif

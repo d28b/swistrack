@@ -30,13 +30,17 @@ public:
 	// Destructor.
 	~CanvasAnnotation();
 
-	//! Handles left click.
+	//! Sets the text.
+	void SetText(const std::string &textleft, const std::string &textright);
+
+private:
+	//! The corresponding GUI event handler.
 	void OnMouseLeftClick(wxMouseEvent &event);
-	//! Handles right click.
+	//! The corresponding GUI event handler.
 	void OnMouseRightClick(wxMouseEvent &event);
-	//! Handles mouse move.
+	//! The corresponding GUI event handler.
 	void OnMouseMove(wxMouseEvent &event);
-	//! Paints the canvas.
+	//! The corresponding GUI event handler.
 	void OnPaint(wxPaintEvent& WXUNUSED(event));
 
 	DECLARE_EVENT_TABLE()

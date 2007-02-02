@@ -18,10 +18,6 @@ THISCLASS::CanvasTitle(CanvasPanel *cp):
 
 	SetWindowStyle(wxNO_BORDER);
 	SetBackgroundColour(*wxBLACK);
-	wxFont f=GetFont();
-	f.SetWeight(wxFONTWEIGHT_BOLD);
-	f.SetUnderlined(true);
-	SetFont(f);
 }
 
 THISCLASS::~CanvasTitle() {
@@ -31,7 +27,10 @@ THISCLASS::~CanvasTitle() {
 void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	wxPaintDC dc(this);
 
+	// Left
 	wxFont f=GetFont();
+	f.SetWeight(wxFONTWEIGHT_BOLD);
+	f.SetUnderlined(true);
 	dc.SetFont(f);
 	if (mHighlight) {
 		dc.SetTextForeground(*wxWHITE);
@@ -39,6 +38,17 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 		dc.SetTextForeground(wxColour(255, 255, 0));
 	}
 	dc.DrawText(mTitle, 0, 0);
+
+	// Right
+	//wxSize textsize=dc.GetTextExtent(mTextRight); TODO 2.8.0
+	//dc.DrawText(mTextRight, 0, size.GetWidth()-textsize.GetWidth());
+	f.SetWeight(wxFONTWEIGHT_NORMAL);
+	f.SetUnderlined(false);
+	dc.SetFont(f);
+	wxCoord w;
+	wxCoord h;
+	dc.GetTextExtent(mTextRight, &w, &h);
+	dc.DrawText(mTextRight, 0, size.GetWidth()-w);
 }
 
 void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
@@ -94,6 +104,12 @@ void THISCLASS::OnMenu(wxCommandEvent& event) {
 	mCanvasPanel->SetDisplayImage(di);
 }
 
+void THISCLASS::SetText(const std::string &title, const std::string &textright) {
+	mTitle=title;
+	mTextRight=textright;
+	Refresh(true);
+}
+
 DisplayImage *THISCLASS::GetDisplayImage(int selid) {
 	if (selid<1) {return 0;}
 
@@ -119,3 +135,4 @@ DisplayImage *THISCLASS::GetDisplayImage(int selid) {
 
 	return 0;
 }
+>>>>>>> .r263
