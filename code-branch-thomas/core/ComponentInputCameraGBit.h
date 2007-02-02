@@ -2,6 +2,7 @@
 #define HEADER_ComponentInputCameraGBit
 
 #include "Component.h"
+#include "DisplayImageStandard.h"
 
 //! An input component for GBit cameras.
 class ComponentInputCameraGBit: public Component {

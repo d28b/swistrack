@@ -25,6 +25,7 @@ THISCLASS::CanvasTitle(CanvasPanel *cp):
 }
 
 THISCLASS::~CanvasTitle() {
+	if (mMenu) {delete mMenu;}
 }
 
 void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
@@ -44,6 +45,9 @@ void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 	// Create a new menu
 	if (mMenu) {delete mMenu;}
 	mMenu = new wxMenu;
+
+	// Add the no-display option
+	mMenu->Append(0, "No display (maximum speed)");
 
 	// Add all possible displays
 	int id=1;
@@ -86,6 +90,32 @@ void THISCLASS::OnMouseLeave(wxMouseEvent &event) {
 }
 
 void THISCLASS::OnMenu(wxCommandEvent& event) {
-	wxMessageDialog dlg(this, "Test2", "Test2", wxOK);
-	dlg.ShowModal();
+	DisplayImage *di=GetDisplayImage(event.GetId());
+	mCanvasPanel->SetDisplayImage(di);
+}
+
+DisplayImage *THISCLASS::GetDisplayImage(int selid) {
+	if (selid<1) {return 0;}
+
+	int id=1;
+	SwisTrackCore *stc=mCanvasPanel->mSwisTrack->mSwisTrackCore;
+	const SwisTrackCore::tComponentList *cl=stc->GetDeployedComponents();
+	SwisTrackCore::tComponentList::const_iterator it=cl->begin();
+	while (it!=cl->end()) {
+		Component *c=(*it);
+
+		Component::tDisplayImageList::iterator itdi=c->mDisplayImages.begin();
+		while (itdi!=c->mDisplayImages.end()) {
+			if (id==selid) {
+				return (*itdi);
+			}
+
+			id++;
+			itdi++;
+		}
+
+		it++;
+	}
+
+	return 0;
 }

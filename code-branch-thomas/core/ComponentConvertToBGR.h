@@ -3,6 +3,7 @@
 
 #include "cv.h"
 #include "Component.h"
+#include "DisplayImageStandard.h"
 
 //! A component that converts the input image (any format) to BGR.
 class ComponentConvertToBGR: public Component {

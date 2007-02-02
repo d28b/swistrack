@@ -2,10 +2,11 @@
 #define THISCLASS ComponentInputCamera1394
 
 #ifdef _1394
+#include <sstream>
 
 THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):
 		Component(stc, "Camera1394"),
-		mCamera(), mLastImage(0), mFrameNumber(0),
+		mCamera(), mCurrentImage(0), mFrameNumber(0),
 		mDisplayImageOutput("Output", "Output") {
 
 	// Data structure relations
@@ -89,7 +90,7 @@ void THISCLASS::OnStep() {
 	// Let the DisplayImage know about our image
 	mDisplayImageOutput.mNewImage=mCurrentImage;
 	std::ostringstream oss;
-	oss << "Frame " << mFrameNumber << ", " << mCurrentImage.width << "x" << mCurrentImage.height;
+	oss << "Frame " << mFrameNumber << ", " << mCurrentImage->width << "x" << mCurrentImage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 

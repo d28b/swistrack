@@ -1,6 +1,8 @@
 #include "ComponentInputFileAVI.h"
 #define THISCLASS ComponentInputFileAVI
 
+#include <sstream>
+
 THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
 		Component(stc, "FileAVI"),
 		mCapture(0), mCurrentImage(0),
@@ -76,7 +78,7 @@ void THISCLASS::OnStep() {
 	// Let the DisplayImage know about our image
 	mDisplayImageOutput.mNewImage=mCurrentImage;
 	std::ostringstream oss;
-	oss << "Frame " << framenumber << " / " << framecount << ", " << mCurrentImage.width << "x" << mCurrentImage.height;
+	oss << "Frame " << framenumber << " / " << framecount << ", " << mCurrentImage->width << "x" << mCurrentImage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 

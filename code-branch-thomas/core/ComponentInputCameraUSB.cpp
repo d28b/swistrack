@@ -1,6 +1,8 @@
 #include "ComponentInputCameraUSB.h"
 #define THISCLASS ComponentInputCameraUSB
 
+#include <sstream>
+
 THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
 		Component(stc, "CameraUSB"),
 		mCapture(0), mCurrentImage(0),
@@ -53,7 +55,7 @@ void THISCLASS::OnStep() {
 	// Let the DisplayImage know about our image
 	mDisplayImageOutput.mNewImage=mCurrentImage;
 	std::ostringstream oss;
-	oss << "Frame " << framenumber << ", " << mCurrentImage.width << "x" << mCurrentImage.height;
+	oss << "Frame " << framenumber << ", " << mCurrentImage->width << "x" << mCurrentImage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 

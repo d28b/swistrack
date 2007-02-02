@@ -5,6 +5,7 @@
 #include "cv.h"
 #include "highgui.h"
 #include "Component.h"
+#include "DisplayImageStandard.h"
 
 //! An input component that reads an AVI file using the CV library.
 class ComponentInputFileAVI: public Component {

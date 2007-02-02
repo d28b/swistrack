@@ -9,6 +9,7 @@
 #include <cv.h>
 #include <highgui.h>  // 1394camera.h requires this to be included before
 #include <1394camera.h>
+#include "DisplayImageStandard.h"
 
 //! An input component that interfaces a Firewire 1394 camera.
 class ComponentInputCamera1394: public Component {
@@ -28,9 +29,9 @@ public:
 	Component *Create() {return new ComponentInputCamera1394(mCore);}
 
 private:
-	C1394Camera mCamera;	//! 1394 Camera handle (CMU 1394 Camera Driver)
-	IplImage* mLastImage;	//! The last acquired image.
-	int mFrameNumber;		//! The frame number since the component was started.
+	C1394Camera mCamera;		//! 1394 Camera handle (CMU 1394 Camera Driver)
+	IplImage* mCurrentImage;	//! The last acquired image.
+	int mFrameNumber;			//! The frame number since the component was started.
 
 	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last acquired image.
 };

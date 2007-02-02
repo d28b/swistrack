@@ -1,6 +1,8 @@
 #include "ComponentConvertToGray.h"
 #define THISCLASS ComponentConvertToGray
 
+#include <sstream>
+
 THISCLASS::ComponentConvertToGray(SwisTrackCore *stc):
 		Component(stc, "ConvertToGray"),
 		mDisplayImageOutput("Output", "Output") {
@@ -49,7 +51,7 @@ void THISCLASS::OnStep() {
 	// Let the DisplayImage know about our image
 	mDisplayImageOutput.mNewImage=mOutputImage;
 	std::ostringstream oss;
-	oss << "Grayscale image, " << mOutputImage.width << "x" << mOutputImage.height;
+	oss << "Grayscale image, " << mOutputImage->width << "x" << mOutputImage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 

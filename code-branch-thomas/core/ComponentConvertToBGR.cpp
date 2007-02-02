@@ -1,6 +1,8 @@
 #include "ComponentConvertToBGR.h"
 #define THISCLASS ComponentConvertToBGR
 
+#include <sstream>
+
 THISCLASS::ComponentConvertToBGR(SwisTrackCore *stc):
 		Component(stc, "ConvertToBGR"),
 		mDisplayImageOutput("Output", "Output") {
@@ -49,7 +51,7 @@ void THISCLASS::OnStep() {
 	// Let the DisplayImage know about our image
 	mDisplayImageOutput.mNewImage=mOutputImage;
 	std::ostringstream oss;
-	oss << "BGR image, " << mOutputImage.width << "x" << mOutputImage.height;
+	oss << "BGR image, " << mOutputImage->width << "x" << mOutputImage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 

@@ -45,6 +45,9 @@ private:
 	//! The corresponding GUI event handler.
 	void OnMenu(wxCommandEvent& event);
 
+	//! Returns the DisplayImage associated with the index.
+	DisplayImage *THISCLASS::GetDisplayImage(int selid) {
+
 	DECLARE_EVENT_TABLE()
 };
 
