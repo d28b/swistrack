@@ -14,6 +14,7 @@
 #include "ComponentBlobDetectionMinMax.h"
 #include "ComponentBlobDetectionCircle.h"
 #include "ComponentSimulationParticles.h"
+#include "ComponentCalibrationLinear.h"
 #include "ComponentOutputParticles.h"
 
 THISCLASS::SwisTrackCore():
@@ -28,9 +29,10 @@ THISCLASS::SwisTrackCore():
 		mCategoryPreprocessing("Preprocessing", 300),
 		mCategoryThresholding("Thresholding", 400),
 		mCategoryBlobDetection("Blob detection", 500),
+		mCategoryCalibration("Calibration", 600),
 		mCategoryOutput("Output", 10000),
 		mAvailableComponents(), mDeployedComponents(), mDataStructures(), mSwisTrackCoreInterfaces(),
-		mStarted(false), mSeriousMode(false), mEditLocks(0)
+		mStarted(false), mProductiveMode(false), mEditLocks(0)
 		{
 
 	// Initialize the list of available components
@@ -45,6 +47,7 @@ THISCLASS::SwisTrackCore():
 	mAvailableComponents.push_back(new ComponentBlobDetectionMinMax(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionCircle(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
+	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 
 	// Initialize the list of available data structures
@@ -52,12 +55,7 @@ THISCLASS::SwisTrackCore():
 	mDataStructures.push_back(&mDataStructureImageBGR);
 	mDataStructures.push_back(&mDataStructureImageGray);
 	mDataStructures.push_back(&mDataStructureImageBinary);
-	mDataStructures.push_back(&mDataStructureMaskBinary);
 	mDataStructures.push_back(&mDataStructureParticles);
-
-	// TODO remove this
-	mDeployedComponents.push_back(new ComponentSimulationParticles(this));
-	mDeployedComponents.push_back(new ComponentOutputParticles(this));
 }
 
 THISCLASS::~SwisTrackCore() {
@@ -76,20 +74,20 @@ THISCLASS::~SwisTrackCore() {
 	}
 }
 
-bool THISCLASS::Start(bool seriousmode) {
+bool THISCLASS::Start(bool productivemode) {
 	if (mStarted) {return false;}
 	if (mEditLocks>0) {return false;}
 
 	// Notify the interfaces
 	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
 	while (iti!=mSwisTrackCoreInterfaces.end()) {
-		(*iti)->OnBeforeStart(seriousmode);
+		(*iti)->OnBeforeStart(productivemode);
 		iti++;
 	}
 	
 	// Update the flags
 	mStarted=true;
-	mSeriousMode=seriousmode;
+	mProductiveMode=productivemode;
 
 	// Start all components (until first error)
 	tComponentList::iterator it=mDeployedComponents.begin();
@@ -104,7 +102,7 @@ bool THISCLASS::Start(bool seriousmode) {
 	// Notify the interfaces
 	iti=mSwisTrackCoreInterfaces.begin();
 	while (iti!=mSwisTrackCoreInterfaces.end()) {
-		(*iti)->OnAfterStart(seriousmode);
+		(*iti)->OnAfterStart(productivemode);
 		iti++;
 	}
 
@@ -134,7 +132,7 @@ bool THISCLASS::Stop() {
 
 	// Update flags
 	mStarted=false;
-	mSeriousMode=false;
+	mProductiveMode=false;
 
 	// Notify the interfaces
 	iti=mSwisTrackCoreInterfaces.begin();
@@ -229,8 +227,8 @@ Component *THISCLASS::GetComponentByName(const std::string &name) {
 bool THISCLASS::IncrementEditLocks() {
 	if (mEditLocks>0) {return true;}
 
-	// If started in serious mode, editing is not allowed
-	if (IsStartedInSeriousMode()) {return false;}
+	// If started in productive mode, editing is not allowed
+	if (IsStartedInProductiveMode()) {return false;}
 
 	// If started in test mode, stop and allow editing
 	Stop();

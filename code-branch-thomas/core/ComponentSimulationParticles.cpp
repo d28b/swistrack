@@ -21,12 +21,12 @@ THISCLASS::~ComponentSimulationParticles() {
 }
 
 void THISCLASS::OnStart() {
-	bool serious=mCore->IsStartedInSeriousMode();
+	bool productive=mCore->IsStartedInProductiveMode();
 
-	// Read the file (if the filename changed or if we are in serious mode)
+	// Read the file (if the filename changed or if we are in productive mode)
 	std::string filename=GetConfigurationString("File", "");
 	filename="C:\\simulation2.txt";
-	if (serious || (mSimulationParticles.GetFileName()!=filename)) {
+	if (productive || (mSimulationParticles.GetFileName()!=filename)) {
 		if (! mSimulationParticles.Read(filename)) {
 			std::ostringstream oss;
 			oss << "The file \'" << filename << "\' could not be read.";
@@ -81,10 +81,10 @@ void THISCLASS::OnStep() {
 	mFrameNumber++;
 	SimulationParticles::tFrame *frame=mSimulationParticles.NextFrame(mFrameNumber);
 	
-	// Copy the particles of the current frame
+	// Clear the particles
 	mParticles.clear();
 
-	// Add noise
+	// Add those particles that are in the range of the camera
 	Random r;
 	DataStructureParticles::tParticleVector::iterator it=frame->particles.begin();
 	while (it!=frame->particles.end()) {

@@ -1,11 +1,11 @@
-#include "SocketServerConnection.h"
-#define THISCLASS SocketServerConnection
+#include "TCPServerConnection.h"
+#define THISCLASS TCPServerConnection
 
-BEGIN_EVENT_TABLE(SocketServerConnection, wxEvtHandler)
-	EVT_SOCKET(SOCKET_ID, SocketServerConnection::OnSocketEvent)
+BEGIN_EVENT_TABLE(TCPServerConnection, wxEvtHandler)
+	EVT_SOCKET(SOCKET_ID, TCPServerConnection::OnSocketEvent)
 END_EVENT_TABLE()
 
-THISCLASS::SocketServerConnection(SocketServer* ss, wxSocketBase *sb): mSocketServer(ss), mSocket(sb), mCurrentRequest(0), mSubscriptions() {
+THISCLASS::TCPServerConnection(TCPServer* ss, wxSocketBase *sb): mTCPServer(ss), mSocket(sb), mCurrentRequest(0), mSubscriptions() {
 	// Configure the socket to be non-blocking
 	mSocket->SetFlags(wxSOCKET_NOWAIT);
 	
@@ -18,7 +18,7 @@ THISCLASS::SocketServerConnection(SocketServer* ss, wxSocketBase *sb): mSocketSe
 	mSubscriptions.push_back("*");
 }
 
-THISCLASS::~SocketServerConnection() {
+THISCLASS::~TCPServerConnection() {
 	if (! mSocket) {return;}
 	mSocket->Destroy();
 }
@@ -65,9 +65,9 @@ void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum)
 		return;
 	}
 	
-	// Otherwise, give the message to the SocketServer for further processing
+	// Otherwise, give the message to the TCPServer for further processing
 	mCurrentRequest=m;
-	mSocketServer->OnCommunicationCommand(m);
+	mTCPServer->OnCommunicationCommand(m);
 	mCurrentRequest=0;
 }
 

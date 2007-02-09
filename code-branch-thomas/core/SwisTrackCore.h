@@ -36,6 +36,7 @@ public:
 	ComponentCategory mCategoryPreprocessing;
 	ComponentCategory mCategoryThresholding;
 	ComponentCategory mCategoryBlobDetection;
+	ComponentCategory mCategoryCalibration;
 	ComponentCategory mCategoryOutput;
 
 	// Data structures
@@ -43,7 +44,6 @@ public:
 	DataStructureImage mDataStructureImageBGR;
 	DataStructureImage mDataStructureImageGray;
 	DataStructureImage mDataStructureImageBinary;
-	DataStructureImage mDataStructureMaskBinary;
 	DataStructureParticles mDataStructureParticles;
 
 	CommunicationInterface *mCommunicationInterface;	//!< The associated communication interface.
@@ -54,12 +54,12 @@ public:
 	~SwisTrackCore();
 
 	//! Starts all the components. This may only be called if IsStarted()==false.
-	bool Start(bool seriousmode);
+	bool Start(bool productivemode);
 	//! Performs one complete step, including cleanup. This may only be called if IsStarted()==true.
 	bool Step();
 	//! Stops all started components. This may only be called if IsStarted()==true.
 	bool Stop();
-	//! Reloads the configuration while a session is runnning. This may only be called if IsStarted()==false. Note that not all configuration parameters may be reloaded. This function may also be called in serious mode.
+	//! Reloads the configuration while a session is runnning. This may only be called if IsStarted()==false. Note that not all configuration parameters may be reloaded. This function may also be called in productive mode.
 	bool ReloadConfiguration();
 
 	//! Writes the configuration to a XML document.
@@ -72,8 +72,8 @@ public:
 
 	//! Returns whether the components have been started.
 	bool IsStarted() {return mStarted;}
-	//! Returns whether the components have been started in serious mode.
-	bool IsStartedInSeriousMode() {return (mStarted && mSeriousMode);}
+	//! Returns whether the components have been started in productive mode.
+	bool IsStartedInProductiveMode() {return (mStarted && mProductiveMode);}
 
 	//! Adds an object to the list of interfaces. Objects on this list will be informed upon changes.
 	void AddInterface(SwisTrackCoreInterface *stc);
@@ -82,7 +82,7 @@ public:
 
 protected:
 	bool mStarted;		//!< Whether the components have been started or not.
-	bool mSeriousMode;	//!< Whether the components are running in serious mode or not. Note that this is only valid if mStarted=true.
+	bool mProductiveMode;	//!< Whether the components are running in productive mode or not. Note that this is only valid if mStarted=true.
 	int mEditLocks;		//!< The number of edit locks.
 
 	tComponentList mDeployedComponents;						//!< The list of deployed components.

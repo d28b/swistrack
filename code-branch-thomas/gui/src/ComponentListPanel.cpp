@@ -171,10 +171,10 @@ void THISCLASS::UpdateStatus() {
 	}
 }
 
-void THISCLASS::OnAfterStart(bool seriousmode) {
+void THISCLASS::OnAfterStart(bool productivemode) {
 	UpdateStatus();
 
-	if (seriousmode) {
+	if (productivemode) {
 		mButtonAdd->Enable(false);
 		mButtonRemove->Enable(false);
 		mButtonUp->Enable(false);

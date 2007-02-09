@@ -1,17 +1,17 @@
-#include "SocketServer.h"
-#define THISCLASS SocketServer
+#include "TCPServer.h"
+#define THISCLASS TCPServer
 
 #include "SwisTrack.h"
-#include "SocketServer.h"
+#include "TCPServer.h"
 
-BEGIN_EVENT_TABLE(SocketServer, wxEvtHandler)
-	EVT_SOCKET(SERVER_ID, SocketServer::OnServerEvent)
+BEGIN_EVENT_TABLE(TCPServer, wxEvtHandler)
+	EVT_SOCKET(SERVER_ID, TCPServer::OnServerEvent)
 END_EVENT_TABLE()
 
-THISCLASS::SocketServer(SwisTrack* swistrack): mSwisTrack(swistrack), mServer(0), mPort(0), mConnections() {
+THISCLASS::TCPServer(SwisTrack* swistrack): mSwisTrack(swistrack), mServer(0), mPort(0), mConnections() {
 }
 
-THISCLASS::~SocketServer() {
+THISCLASS::~TCPServer() {
 	if (mServer) {mServer->Destroy();}
 }
 
@@ -42,11 +42,6 @@ void THISCLASS::Open() {
 		return;
 	}
 
-	// Set a nice status 
-	wxString str;
-	str.Printf("Server listening at port %d.", mPort);
-	mSwisTrack->SetStatusText(str);
-
 	// Setup the event handler and subscribe to connection events
 	mServer->SetEventHandler(*this, SERVER_ID);
 	mServer->SetNotify(wxSOCKET_CONNECTION_FLAG);
@@ -71,7 +66,7 @@ void THISCLASS::OnServerEvent(wxSocketEvent& event) {
 	CleanupConnections();
 
 	// Create a new connection object
-	SocketServerConnection *ssc=new SocketServerConnection(this, sock);
+	TCPServerConnection *ssc=new TCPServerConnection(this, sock);
 
 	// Add this connection to the list of clients
 	mConnections.push_back(ssc);

@@ -1,5 +1,5 @@
-#ifndef HEADER_SocketServerConnection
-#define HEADER_SocketServerConnection
+#ifndef HEADER_TCPServerConnection
+#define HEADER_TCPServerConnection
 
 #include <wx/wxprec.h>
 
@@ -7,18 +7,18 @@
   #include <wx/wx.h>
 #endif
 
-class SocketServerConnection;
+class TCPServerConnection;
 
-#include "SocketServer.h"
+#include "TCPServer.h"
 #include "CommunicationNMEAInterface.h"
 #include <list>
 #include <wx/socket.h>
 
-class SocketServerConnection: public wxEvtHandler, public CommunicationNMEAInterface {
+class TCPServerConnection: public wxEvtHandler, public CommunicationNMEAInterface {
 
 public:
-	SocketServerConnection(SocketServer* ss, wxSocketBase *sb);
-	~SocketServerConnection();
+	TCPServerConnection(TCPServer* ss, wxSocketBase *sb);
+	~TCPServerConnection();
 
 	//! Handles socket events.
 	void OnSocketEvent(wxSocketEvent& event);
@@ -44,7 +44,7 @@ private:
 	//! The socket object.
 	wxSocketBase *mSocket;
 	//! The socket server object.
-	SocketServer* mSocketServer;
+	TCPServer* mTCPServer;
 
 	//! The current request. This is 0 unless a request is being processed.
 	CommunicationMessage* mCurrentRequest;

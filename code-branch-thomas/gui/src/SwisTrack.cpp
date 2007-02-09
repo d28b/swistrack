@@ -40,7 +40,7 @@ driver.
 #define THISCLASS SwisTrack
 
 #include "CanvasPanel.h"
-#include "SocketServer.h"
+#include "TCPServer.h"
 #include "ErrorListDialog.h"
 #include "SwisTrackCoreEditor.h"
 #include "ConfigurationReaderXML.h"
@@ -82,7 +82,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 	EVT_MENU(sID_Save, THISCLASS::OnFileSave)
 	EVT_MENU(sID_SaveAs, THISCLASS::OnFileSaveAs)
 	EVT_MENU(sID_Quit,  THISCLASS::OnFileQuit)
-	EVT_MENU(sID_Control_SeriousMode, THISCLASS::OnControlSeriousMode)
+	EVT_MENU(sID_Control_ProductiveMode, THISCLASS::OnControlProductiveMode)
 	EVT_MENU(sID_Control_FreeRun, THISCLASS::OnControlFreeRun)
 	EVT_MENU(sID_Control_SingleStep, THISCLASS::OnControlSingleStep)
 	EVT_MENU(sID_Tools_Server, THISCLASS::OnToolsServer)
@@ -97,7 +97,7 @@ END_EVENT_TABLE()
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
 		wxFrame(NULL, -1, title, pos, size, style),
 		CommunicationCommandHandler(),
-		mSwisTrackCore(0), mSocketServer(0), mFileName(""), mTriggerInterval(1000) {
+		mSwisTrackCore(0), mTCPServer(0), mFileName(""), mTriggerInterval(1000) {
 
 #ifdef MULTITHREAD
 	criticalSection = new wxCriticalSection();
@@ -112,11 +112,11 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	// The canvas panel
 	mCanvasPanel=new CanvasPanel(this);
 
-	// SwisTrackCore and SocketServer
+	// SwisTrackCore and TCPServer
 	mSwisTrackCore=new SwisTrackCore();
-	mSocketServer=new SocketServer(this);
-	mSwisTrackCore->mCommunicationInterface=mSocketServer;	
-	mSocketServer->AddCommandHandler(this);
+	mTCPServer=new TCPServer(this);
+	mSwisTrackCore->mCommunicationInterface=mTCPServer;	
+	mTCPServer->AddCommandHandler(this);
 
 	// List
 	mComponentListPanel=new ComponentListPanel(this, mSwisTrackCore);
@@ -149,9 +149,9 @@ Deallocates all memory and closes the application.
 */
 SwisTrack::~SwisTrack(){
 	SetTriggerManual();
-	StopSeriousMode();
+	StopProductiveMode();
 
-	delete mSocketServer;
+	delete mTCPServer;
 	delete mSwisTrackCore;
 	delete mTriggerTimer;
 
@@ -201,7 +201,7 @@ void THISCLASS::BuildToolBar() {
 	toolbar->AddTool(sID_Open, _T("Open"), wxBITMAP(open), _T("Open"));
 	toolbar->AddTool(sID_Save, _T("Save"), wxBITMAP(save), _T("Save"));
 	toolbar->AddSeparator();
-	toolbar->AddTool(sID_Control_SeriousMode, _T("Productive"), wxBITMAP(play), _T("Productive"), wxITEM_CHECK);
+	toolbar->AddTool(sID_Control_ProductiveMode, _T("Productive"), wxBITMAP(play), _T("Productive"), wxITEM_CHECK);
 	toolbar->AddSeparator();
 	toolbar->AddTool(sID_Control_FreeRun, _T("Free-run"), wxBITMAP(play), _T("Free-run mode"), wxITEM_CHECK);
 	toolbar->AddTool(sID_Control_SingleStep, _T("Step"), wxBITMAP(singlestep), _T("One step"));
@@ -239,26 +239,26 @@ void THISCLASS::SingleStep() {
 }
 
 void THISCLASS::ReloadConfiguration() {
-	// In serious mode, we just call ReloadConfiguration which may not update all configuration parameters.
+	// In productive mode, we just call ReloadConfiguration which may not update all configuration parameters.
 	// Otherwise, we stop the simulation (it is automatically restarted upon the next step).
-	if (mSwisTrackCore->IsStartedInSeriousMode()) {
+	if (mSwisTrackCore->IsStartedInProductiveMode()) {
 		mSwisTrackCore->ReloadConfiguration();
 	} else {
 		mSwisTrackCore->Stop();
 	}
 }
 
-void THISCLASS::StartSeriousMode() {
-	if (mSwisTrackCore->IsStartedInSeriousMode()) {return;}
+void THISCLASS::StartProductiveMode() {
+	if (mSwisTrackCore->IsStartedInProductiveMode()) {return;}
 	mSwisTrackCore->Stop();
-	GetToolBar()->ToggleTool(sID_Control_SeriousMode, true);
+	GetToolBar()->ToggleTool(sID_Control_ProductiveMode, true);
 	mSwisTrackCore->Start(true);
 }
 
-void THISCLASS::StopSeriousMode() {
-	if (! mSwisTrackCore->IsStartedInSeriousMode()) {return;}
+void THISCLASS::StopProductiveMode() {
+	if (! mSwisTrackCore->IsStartedInProductiveMode()) {return;}
 	mSwisTrackCore->Stop();
-	GetToolBar()->ToggleTool(sID_Control_SeriousMode, false);
+	GetToolBar()->ToggleTool(sID_Control_ProductiveMode, false);
 }
 
 void THISCLASS::SetTriggerManual() {
@@ -288,10 +288,10 @@ void THISCLASS::OnFreeRunTimer(wxTimerEvent& WXUNUSED(event)) {
 
 bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 	if (m->mCommand=="START") {
-		StartSeriousMode();
+		StartProductiveMode();
 		return true;
 	} else if (m->mCommand=="STOP") {
-		StopSeriousMode();
+		StopProductiveMode();
 		return true;
 	} else if (m->mCommand=="STEP") {
 		SingleStep();
@@ -363,13 +363,13 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	}
 
 	// Read the configuration
-	StopSeriousMode();
+	StopProductiveMode();
 	cr.ReadComponents(mSwisTrackCore);
 	SetTriggerTimer(cr.ReadTriggerInterval(0));
 
 	// Read other settings
-	mSocketServer->SetPort(cr.ReadInt("server/port", 3000));
-	SetStatusText(wxString::Format("%d", mSocketServer->GetPort()), sStatusField_ServerPort);
+	mTCPServer->SetPort(cr.ReadInt("server/port", 3000));
+	SetStatusText(wxString::Format("%d", mTCPServer->GetPort()), sStatusField_ServerPort);
 
 	// Show errors if there are any
 	if (cr.mErrorList.mList.empty()) {return;}
@@ -410,7 +410,7 @@ void THISCLASS::SaveFile(const wxString &filename) {
 	// Save other settings
 	cw.SelectRootNode();
 	cw.SelectNode("server");
-	cw.WriteInt("port", mSocketServer->GetPort());
+	cw.WriteInt("port", mTCPServer->GetPort());
 
 	if (! cw.Save(filename.c_str())) {
 		wxMessageDialog dlg(this, "There was an error writing to \n\n"+filename+"\n\nThe file may be incomplete.", "Save File", wxOK);
@@ -426,11 +426,11 @@ void SwisTrack::OnFileQuit(wxCommandEvent& WXUNUSED(event)) {
 	Destroy();
 }
 
-void THISCLASS::OnControlSeriousMode(wxCommandEvent& WXUNUSED(event)) {
-	if (mSwisTrackCore->IsStartedInSeriousMode()) {
-		StopSeriousMode();
+void THISCLASS::OnControlProductiveMode(wxCommandEvent& WXUNUSED(event)) {
+	if (mSwisTrackCore->IsStartedInProductiveMode()) {
+		StopProductiveMode();
 	} else {
-		StartSeriousMode();
+		StartProductiveMode();
 	}
 }
 

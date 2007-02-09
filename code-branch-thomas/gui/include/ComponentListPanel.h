@@ -45,8 +45,8 @@ public:
 	void OnListItemSelected(wxListEvent& event);
 
 	// SwisTrackCoreInterface methods
-	void OnBeforeStart(bool seriousmode) {};
-	void OnAfterStart(bool seriousmode);
+	void OnBeforeStart(bool productivemode) {};
+	void OnAfterStart(bool productivemode);
 	void OnBeforeStop() {};
 	void OnAfterStop();
 	void OnBeforeStep() {};

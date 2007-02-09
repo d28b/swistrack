@@ -1,5 +1,5 @@
-#ifndef HEADER_SocketServer
-#define HEADER_SocketServer
+#ifndef HEADER_TCPServer
+#define HEADER_TCPServer
 
 #include <wx/wxprec.h>
 
@@ -7,19 +7,19 @@
   #include <wx/wx.h>
 #endif
 
-class SocketServer;
+class TCPServer;
 class SwisTrack;
 
 #include <wx/socket.h>
 #include <list>
 #include "CommunicationInterface.h"
-#include "SocketServerConnection.h"
+#include "TCPServerConnection.h"
 
-class SocketServer: public wxEvtHandler, public CommunicationInterface {
+class TCPServer: public wxEvtHandler, public CommunicationInterface {
 
 public:
-	SocketServer(SwisTrack* swistrack);
-	~SocketServer();
+	TCPServer(SwisTrack* swistrack);
+	~TCPServer();
 
 	//! Sets the desired port and tries to start listening.
 	void SetPort(int port);
@@ -47,7 +47,7 @@ private:
 	//! The SwisTrack object.
 	SwisTrack* mSwisTrack;
 	//! The list of all connected clients.
-	typedef std::list<SocketServerConnection*> tConnections;
+	typedef std::list<TCPServerConnection*> tConnections;
 	tConnections mConnections;
 
 	//! Starts listening.

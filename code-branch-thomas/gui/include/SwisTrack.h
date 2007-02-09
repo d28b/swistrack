@@ -13,7 +13,7 @@ class SwisTrack;
 
 #include "AboutDialog.h"
 #include "ComponentListPanel.h"
-#include "SocketServer.h"
+#include "TCPServer.h"
 #include "CanvasPanel.h"
 #include <wx/timer.h>
 
@@ -28,7 +28,7 @@ public:
 	int mTriggerInterval;			//!< The trigger timer interval in milliseconds.
 
 	SwisTrackCore *mSwisTrackCore;	//!< The SwisTrackCore object.
-	SocketServer *mSocketServer;	//!< The SocketServer object.
+	TCPServer *mTCPServer;	//!< The TCPServer object.
 
 	wxString mFileName;				//!< The current configuration file.
 	bool mChanged;					//!< Whether the file has been modified. This flag is currently ignored.
@@ -65,7 +65,7 @@ public:
 	void OnFileSave(wxCommandEvent& WXUNUSED(event));
 	void OnFileSaveAs(wxCommandEvent& WXUNUSED(event));
 	void OnFileQuit(wxCommandEvent& WXUNUSED(event));
-	void OnControlSeriousMode(wxCommandEvent& WXUNUSED(event));
+	void OnControlProductiveMode(wxCommandEvent& WXUNUSED(event));
 	void OnControlFreeRun(wxCommandEvent& WXUNUSED(event));
 	void OnControlSingleStep(wxCommandEvent& WXUNUSED(event));
 	void OnChangeDisplaySpeed(wxScrollEvent& WXUNUSED(event));
@@ -81,13 +81,13 @@ public:
 	//! Creates the status bar.
 	void BuildStatusBar();
 
-	//! Starts the serious mode.
-	void StartSeriousMode();
-	//! Stops the serious mode.
-	void StopSeriousMode();
-	//! Performs a single step. If necessary, the core is started (in non-serious mode).
+	//! Starts the productive mode.
+	void StartProductiveMode();
+	//! Stops the productive mode.
+	void StopProductiveMode();
+	//! Performs a single step. If necessary, the core is started (in non-productive mode).
 	void SingleStep();
-	//! Reloads the configuration. If the core is started in serious mode, this only reloads a subset of the parameters. Otherwise, a complete core stop/start is done.
+	//! Reloads the configuration. If the core is started in productive mode, this only reloads a subset of the parameters. Otherwise, a complete core stop/start is done.
 	void ReloadConfiguration();
 	//! Sets the free run interval.
 	void SetTriggerTimer(int interval);
@@ -112,7 +112,7 @@ protected:
 		sID_Save,
 		sID_SaveAs,
 		sID_Quit,
-		sID_Control_SeriousMode,
+		sID_Control_ProductiveMode,
 		sID_Control_FreeRun,
 		sID_Control_SingleStep,
 		sID_Tools_Server,

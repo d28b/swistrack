@@ -16,9 +16,9 @@ public:
 	~SwisTrackCoreInterface() {}
 
 	//! Called before the components are started.
-	virtual void OnBeforeStart(bool seriousmode) = 0;
+	virtual void OnBeforeStart(bool productivemode) = 0;
 	//! Called after the components have been started.
-	virtual void OnAfterStart(bool seriousmode) = 0;
+	virtual void OnAfterStart(bool productivemode) = 0;
 
 	//! Called before the components are stopped.
 	virtual void OnBeforeStop() = 0;
