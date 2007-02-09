@@ -36,11 +36,11 @@ void THISCLASS::OnStart() {
 	if ((videoformat<0) || (videoformat>2)) {AddError("VideoMode must be 0, 1 or 2."); return;}
 	mCamera.SetVideoFormat(videoformat);
 
-	int videomode=GetConfigurationInt("VideoMode", 0);
+	int videomode=GetConfigurationInt("VideoMode", 5);
 	if ((videomode<0) || (videomode>5)) {AddError("VideoMode must be in [0, 5]."); return;}
 	mCamera.SetVideoMode(videomode);
 	
-	mCamera.SetVideoFrameRate(GetConfigurationInt("FrameRate", 10)); 
+	mCamera.SetVideoFrameRate(GetConfigurationInt("FrameRate", 2)); 
 	mCamera.m_controlGain.SetAutoMode(GetConfigurationInt("AutoGain", 1)); 
 	mCamera.m_controlAutoExposure.TurnOn(GetConfigurationInt("AutoExposure", 1)); 
 	mCamera.m_controlWhiteBalance.SetAutoMode(GetConfigurationInt("AutoWhiteBalance", 0));
@@ -78,9 +78,9 @@ void THISCLASS::OnStep() {
 	}
 
 	// Point the input IplImage to the camera buffer
-	mCurrentImage->imageData=(char*)mCamera.m_pData;
+	mCurrentImage->imageData=(char*)mCamera.m_pData;  FIXME
 
-	// Convert the input in the right format (RGB to BGR)
+	// Convert the input to the right format (RGB to BGR)
 	cvCvtColor(mCurrentImage, mCurrentImage, CV_RGB2BGR);
 	
 	// Set this image in the DataStructureImage

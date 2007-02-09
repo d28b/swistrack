@@ -24,7 +24,7 @@ class SwisTrack;
 class SwisTrack: public wxFrame, public CommunicationCommandHandler {
 
 public:
-	wxTimer mTriggerTimer;			//!< The timer that triggers the steps.
+	wxTimer *mTriggerTimer;			//!< The timer that triggers the steps.
 	int mTriggerInterval;			//!< The trigger timer interval in milliseconds.
 
 	SwisTrackCore *mSwisTrackCore;	//!< The SwisTrackCore object.
@@ -34,13 +34,9 @@ public:
 	bool mChanged;					//!< Whether the file has been modified. This flag is currently ignored.
 
 	// Menu bar and items
-	wxMenuBar *menuBar;
-	wxMenu *menuFile;
-	wxMenu *menuView;
-	wxMenu *menuHelp;
-	wxMenu *menuMode;
-	wxMenu *menuTools;
-	wxMenu *menuComponents;
+	wxMenu *mMenuFile;
+	wxMenu *mMenuTools;
+	wxMenu *mMenuHelp;
 
 	int mDisplaySpeed;
 
@@ -64,9 +60,6 @@ public:
 	bool OnCommunicationCommand(CommunicationMessage *m);
 
     // Event handlers
-	void OnHelp(wxCommandEvent& WXUNUSED(event));
-	void OnHelpAbout(wxCommandEvent& WXUNUSED(event));
-	void OnTest(wxCommandEvent& WXUNUSED(event));
 	void OnFileNew(wxCommandEvent& WXUNUSED(event));
 	void OnFileOpen(wxCommandEvent& WXUNUSED(event));
 	void OnFileSave(wxCommandEvent& WXUNUSED(event));
@@ -76,12 +69,17 @@ public:
 	void OnControlFreeRun(wxCommandEvent& WXUNUSED(event));
 	void OnControlSingleStep(wxCommandEvent& WXUNUSED(event));
 	void OnChangeDisplaySpeed(wxScrollEvent& WXUNUSED(event));
-	void OnMakeScreenShot(wxCommandEvent& WXUNUSED(event));
+	void OnToolsServer(wxCommandEvent& WXUNUSED(event));
+	void OnHelp(wxCommandEvent& WXUNUSED(event));
+	void OnTest(wxCommandEvent& WXUNUSED(event));
+	void OnHelpAbout(wxCommandEvent& WXUNUSED(event));
 
 	//! Creates the menu.
 	void BuildMenuBar();
 	//! Creates the toolbar.
 	void BuildToolBar();
+	//! Creates the status bar.
+	void BuildStatusBar();
 
 	//! Starts the serious mode.
 	void StartSeriousMode();
@@ -108,7 +106,7 @@ public:
 
 protected:
 	// IDs for the controls and the menu commands
-	enum eConstants {
+	enum eIDs {
 		sID_New,
 		sID_Open,
 		sID_Save,
@@ -117,28 +115,17 @@ protected:
 		sID_Control_SeriousMode,
 		sID_Control_FreeRun,
 		sID_Control_SingleStep,
-		sID_View_ShowTracker,
-		sID_View_ShowParticleFilter,
-		sID_View_ShowSegmenterPP,
-		sID_View_ShowSegmenter,
-		sID_View_ShowInput,
-		sID_View_TrajCross,
-		sID_View_TrajNoID,
-		sID_View_TrajFull,
-		sID_View_TrajNoCross,
-		sID_View_Coverage,
-		sID_View_ShowMask,
-		sID_Mode_Auto,
-		sID_Mode_Manual,
-		sID_Mode_Intercept,
-		sID_Tools_ShowCamera,
-		sID_Tools_Screenshot,
+		sID_Tools_Server,
 		sID_DisplaySpeed,
-		sID_Intercept_Done,
-		sID_Intercept_Pick,
 		sID_Help,
 		sID_Test,
 		sID_About = wxID_ABOUT   // this must be wxID_ABOUT to put it in the Mac OS X "Apple" menu
+	};
+
+	enum eStatusFields {
+		sStatusField_Messages=0,
+		sStatusField_ServerPort=1,
+		sStatusField_Trigger=2,
 	};
 
     DECLARE_EVENT_TABLE()

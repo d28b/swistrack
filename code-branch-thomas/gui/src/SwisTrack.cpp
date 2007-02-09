@@ -85,7 +85,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 	EVT_MENU(sID_Control_SeriousMode, THISCLASS::OnControlSeriousMode)
 	EVT_MENU(sID_Control_FreeRun, THISCLASS::OnControlFreeRun)
 	EVT_MENU(sID_Control_SingleStep, THISCLASS::OnControlSingleStep)
-	EVT_MENU(sID_Tools_Screenshot, THISCLASS::OnMakeScreenShot)
+	EVT_MENU(sID_Tools_Server, THISCLASS::OnToolsServer)
 	EVT_COMMAND_SCROLL(sID_DisplaySpeed, THISCLASS::OnChangeDisplaySpeed)
 	EVT_MENU(sID_Help, THISCLASS::OnHelp)
 	EVT_MENU(sID_Test, THISCLASS::OnTest)
@@ -103,15 +103,11 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	criticalSection = new wxCriticalSection();
 #endif
 
-#if wxUSE_STATUSBAR
-	CreateStatusBar(2);
-	SetStatusText(_T("Welcome to SwisTrack!"));
-#endif // wxUSE_STATUSBAR
-
 	// General initialization
 	SetIcon(wxICON(gui));
 	BuildMenuBar();
 	BuildToolBar();
+	BuildStatusBar();
 
 	// The canvas panel
 	mCanvasPanel=new CanvasPanel(this);
@@ -120,7 +116,6 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	mSwisTrackCore=new SwisTrackCore();
 	mSocketServer=new SocketServer(this);
 	mSwisTrackCore->mCommunicationInterface=mSocketServer;	
-	mSocketServer->SetPort(3002);
 	mSocketServer->AddCommandHandler(this);
 
 	// List
@@ -143,6 +138,9 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	vs->Add(hs, 3, wxEXPAND, 0);
 	vs->Add(mComponentListPanel, 1, wxEXPAND, 0);
 	SetSizer(vs);
+
+	// The timer used for the free run mode
+	mTriggerTimer=new wxTimer(this);
 }
 
 /*! \brief Destructor
@@ -153,8 +151,9 @@ SwisTrack::~SwisTrack(){
 	SetTriggerManual();
 	StopSeriousMode();
 
-	if (mSocketServer) {delete mSocketServer;}
-	if (mSwisTrackCore) {delete mSwisTrackCore;}
+	delete mSocketServer;
+	delete mSwisTrackCore;
+	delete mTriggerTimer;
 
 #ifdef MULTITHREAD
 	if (mCriticalSection) {delete mCriticalSection;}
@@ -163,68 +162,31 @@ SwisTrack::~SwisTrack(){
 
 void THISCLASS::BuildMenuBar() {
 	// Create a menu bar
-	menuBar = new wxMenuBar();
-	SetMenuBar(menuBar);
+	SetMenuBar(new wxMenuBar());
 
 	// Create menus
-	menuFile    = new wxMenu;
-	menuBar->Append(menuFile, _T("&File"));
+	mMenuFile = new wxMenu;
+	GetMenuBar()->Append(mMenuFile, _T("&File"));
 
-	menuView    = new wxMenu;
-	menuBar->Append(menuView,_T("&View"));
+	mMenuTools = new wxMenu;
+	GetMenuBar()->Append(mMenuTools,_T("&Tools"));
 
-	menuTools   = new wxMenu;
-	menuBar->Append(menuTools,_T("&Tools"));
+	mMenuHelp = new wxMenu;
+	GetMenuBar()->Append(mMenuHelp, _T("&Help"));
 
-	menuHelp    = new wxMenu;
-	menuBar->Append(menuHelp, _T("&Help"));
+	mMenuFile->Append(sID_New, _T("&New\tCtrl-C"), _T("Creates a new file"));
+	mMenuFile->Append(sID_Open, _T("&Open\tCtrl-O"), _T("Opens a file"));
+	mMenuFile->Append(sID_Save, _T("&Save\tCtrl-S"), _T("Saves the current file"));
+	mMenuFile->Append(sID_SaveAs, _T("&Save as ..."), _T("Saves the file with another name"));
+	mMenuFile->AppendSeparator();
+	mMenuFile->Append(sID_Quit, _T("E&xit\tAlt-F4"), _T("Quit this program"));
+	mMenuFile->Enable(sID_Save,FALSE);
 
-	menuFile->Append(sID_New, _T("&New\tCtrl-C"), _T("Creates a new file"));
-	menuFile->Append(sID_Open, _T("&Open\tCtrl-O"), _T("Opens a file"));
-	menuFile->Append(sID_Save, _T("&Save\tCtrl-S"), _T("Saves the current file"));
-	menuFile->Append(sID_SaveAs, _T("&Save as ..."), _T("Saves the file with another name"));
-	menuFile->AppendSeparator();
-	menuFile->Append(sID_Quit, _T("E&xit\tAlt-F4"), _T("Quit this program"));
-	menuFile->Enable(sID_Save,FALSE);
+	mMenuTools->Append(sID_Tools_Server, _T("TCP Server ..."), _T("TCP server settings"));
 
-	menuView->Append(sID_View_ShowTracker, _T("Show Tracker Panel"), _T("Toggles window where tracking parameters can be changed"),TRUE);
-	menuView->Check (sID_View_ShowTracker, FALSE);
-	menuView->Append(sID_View_ShowParticleFilter, _T("Show Particle Filter Panel"), _T("Toggles window where particle filters parameters can be changed"),TRUE);
-	menuView->Check (sID_View_ShowParticleFilter, FALSE);
-	menuView->Append(sID_View_ShowSegmenterPP, _T("Show Segmenter Post-Processing Panel"), _T("Toggles window where parameters for segmentation post-processing can be changed"),TRUE);
-	menuView->Check (sID_View_ShowSegmenterPP, FALSE);
-	menuView->Append(sID_View_ShowSegmenter, _T("Show Segmenter Panel"), _T("Toggles window where segmenter parameters can be changed"),TRUE);
-	menuView->Check(sID_View_ShowSegmenter ,FALSE);
-	menuView->Append(sID_View_ShowInput, _T("Show Input Panel"), _T("Toggles window where input parameters can be changed"),TRUE);
-	menuView->Check(sID_View_ShowInput, FALSE);
-	menuView->AppendSeparator();
-	menuView->AppendRadioItem(sID_View_TrajCross, _T("cross only"));
-	menuView->AppendRadioItem(sID_View_TrajNoID, _T("trace and cross"));
-	menuView->AppendRadioItem(sID_View_TrajNoCross, _T("trace and ID"));
-	menuView->AppendRadioItem(sID_View_TrajFull, _T("trace, cross, and ID"));
-	menuView->AppendRadioItem(sID_View_Coverage, _T("coverage"));
-	menuView->AppendSeparator();
-	menuView->Append(sID_View_ShowMask, _T("Show Mask"), _T("Displays the contours given by the mask image"),TRUE);
-	menuView->Enable(sID_View_ShowMask, FALSE);
-	menuView->Check(sID_View_ShowMask, FALSE);
-
-	menuTools->Append(sID_Tools_ShowCamera, _T("Display camera"), _T("Displays data from a IEEE1394 firewire camera"));
-	menuTools->AppendSeparator();
-	menuTools->Append(sID_Tools_Screenshot, _T("Save Bitmap"), _T("Saves the current view to a file"));
-
-#ifdef _1394
-	if(theCamera.CheckLink() != CAM_SUCCESS)    
-		menuTools->Enable(sID_Tools_ShowCamera, FALSE);
-	else
-		menuTools->Enable(sID_Tools_ShowCamera, TRUE);
-#endif
-
-	menuHelp->Append(sID_Help, _T("&Manual"), _T("Opens the manual"));
-	menuHelp->Append(sID_Test, _T("&Test"), _T("Test"));
-	menuHelp->Append(sID_About, _T("&About ...\tF1"), _T("Show about dialog"));
-
-	menuBar->Check(sID_View_TrajFull, TRUE);
-	menuBar->Check(sID_View_ShowMask, FALSE);
+	mMenuHelp->Append(sID_Help, _T("&Manual"), _T("Opens the manual"));
+	mMenuHelp->Append(sID_Test, _T("&Test"), _T("Test"));
+	mMenuHelp->Append(sID_About, _T("&About ...\tF1"), _T("Show about dialog"));
 }
 
 void THISCLASS::BuildToolBar() {
@@ -244,8 +206,6 @@ void THISCLASS::BuildToolBar() {
 	toolbar->AddTool(sID_Control_FreeRun, _T("Free-run"), wxBITMAP(play), _T("Free-run mode"), wxITEM_CHECK);
 	toolbar->AddTool(sID_Control_SingleStep, _T("Step"), wxBITMAP(singlestep), _T("One step"));
 	toolbar->AddSeparator();
-	toolbar->AddTool(sID_Mode_Intercept, _T("Intercept"), wxBITMAP(finger), _T("Override data association"));
-	toolbar->AddSeparator();
 
 	int fps=30;
 	wxSlider *slider = new wxSlider(toolbar, sID_DisplaySpeed, 0, 0,(int) fps, wxDefaultPosition, wxSize(155,-1), wxSL_AUTOTICKS|wxSL_LABELS, wxGenericValidator(&mDisplaySpeed));
@@ -256,6 +216,20 @@ void THISCLASS::BuildToolBar() {
 
 	toolbar->Realize();
 	toolbar->SetRows(1 ? 1 : 10 / 1);
+}
+
+void THISCLASS::BuildStatusBar() {
+#if wxUSE_STATUSBAR
+	int n=3;
+	int w[3]={-1, 50, 120};
+
+	CreateStatusBar(n);
+	SetStatusWidths(n, w);
+
+	SetStatusText(_T("Welcome to SwisTrack!"), sStatusField_Messages);
+	SetStatusText(_T("Closed"), sStatusField_ServerPort);
+	SetStatusText(_T("Manual"), sStatusField_Trigger);
+#endif // wxUSE_STATUSBAR
 }
 
 void THISCLASS::SingleStep() {
@@ -289,21 +263,26 @@ void THISCLASS::StopSeriousMode() {
 
 void THISCLASS::SetTriggerManual() {
 	GetToolBar()->ToggleTool(sID_Control_FreeRun, false);
-	mTriggerTimer.Stop();
+	SetStatusText("Manual", sStatusField_Trigger);
+	mTriggerTimer->Stop();
 }
 
 void THISCLASS::SetTriggerTimer(int ms) {
 	if (ms==0) {return SetTriggerManual();}
-	GetToolBar()->ToggleTool(sID_Control_FreeRun, true);
+
 	mTriggerInterval=ms;
-	if (! mTriggerTimer.IsRunning()) {mTriggerTimer.Start(mTriggerInterval);}
+	GetToolBar()->ToggleTool(sID_Control_FreeRun, true);
+	SetStatusText(wxString::Format("%d ms / %.1f FPS", mTriggerInterval), sStatusField_Trigger);
+	if (! mTriggerTimer->IsRunning()) {
+		mTriggerTimer->Start(mTriggerInterval);
+	}
 }
 
 void THISCLASS::OnFreeRunTimer(wxTimerEvent& WXUNUSED(event)) {
 	SingleStep();
-	if (mTriggerTimer.GetInterval()!=mTriggerInterval) {
-		mTriggerTimer.Stop();
-		mTriggerTimer.Start(mTriggerInterval);
+	if (mTriggerTimer->GetInterval()!=mTriggerInterval) {
+		mTriggerTimer->Stop();
+		mTriggerTimer->Start(mTriggerInterval);
 	}
 }
 
@@ -377,8 +356,10 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	// Set the new file name
 	if (astemplate) {
 		mFileName="";
+		SetTitle("SwisTrack");
 	} else {
 		mFileName=filename;
+		SetTitle(mFileName+" - SwisTrack");
 	}
 
 	// Read the configuration
@@ -386,8 +367,9 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	cr.ReadComponents(mSwisTrackCore);
 	SetTriggerTimer(cr.ReadTriggerInterval(0));
 
-	// TODO read window position or other parameters there
-	// cr.ReadInt("Window/x")
+	// Read other settings
+	mSocketServer->SetPort(cr.ReadInt("server/port", 3000));
+	SetStatusText(wxString::Format("%d", mSocketServer->GetPort()), sStatusField_ServerPort);
 
 	// Show errors if there are any
 	if (cr.mErrorList.mList.empty()) {return;}
@@ -425,13 +407,18 @@ void THISCLASS::SaveFile(const wxString &filename) {
 	cw.WriteComponents(mSwisTrackCore);
 	cw.WriteTriggerInterval(mTriggerInterval);
 
+	// Save other settings
+	cw.SelectRootNode();
+	cw.SelectNode("server");
+	cw.WriteInt("port", mSocketServer->GetPort());
+
 	if (! cw.Save(filename.c_str())) {
 		wxMessageDialog dlg(this, "There was an error writing to \n\n"+filename+"\n\nThe file may be incomplete.", "Save File", wxOK);
 		dlg.ShowModal();
 		return;
 	}
 
-	SetStatusText(filename+" saved!", 1);
+	SetStatusText(filename+" saved!", sStatusField_Messages);
 }
 
 void SwisTrack::OnFileQuit(wxCommandEvent& WXUNUSED(event)) {
@@ -448,7 +435,7 @@ void THISCLASS::OnControlSeriousMode(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void THISCLASS::OnControlFreeRun(wxCommandEvent& WXUNUSED(event)) {
-	if (mTriggerTimer.IsRunning()) {
+	if (mTriggerTimer->IsRunning()) {
 		SetTriggerManual();
 	} else {
 		SetTriggerTimer(mTriggerInterval);
@@ -477,47 +464,11 @@ void THISCLASS::OnTest(wxCommandEvent& WXUNUSED(event)) {
 	mPanelInformation->Hide();
 	mPanelInformation1->Show();
 	GetSizer()->Layout();
-
-	double px[10];
-	double py[10];
-	double po[10];
-	for (int i=0; i<10; i++) {
-		px[i]=i*0.1;
-		py[i]=i*0.05;
-		po[i]=i*0.1;
-	}
-
-	for (int r=0; r<3000; r++) {
-		CommunicationMessage mbegin("BEGINFRAME");
-		mbegin.AddInt(r);
-		mSocketServer->SendMessage(&mbegin);
-
-		for (int i=0; i<10; i++) {
-			if ((px[i]<=0.2) && (py[i]>=0)) {
-				CommunicationMessage m("PARTICLE");
-				m.AddInt(i);
-				m.AddDouble(px[i]);
-				m.AddDouble(py[i]);
-				m.AddDouble(po[i]);
-				mSocketServer->SendMessage(&m);
-			}
-		}
-
-		CommunicationMessage mend("ENDFRAME");
-		mSocketServer->SendMessage(&mend);
-
-		for (int i=0; i<10; i++) {
-			px[i]+=sin(po[i])*0.02;
-			py[i]+=cos(po[i])*0.02;
-			po[i]-=i*0.01;
-		}
-
-		Sleep(100);
-	}
 }
 
 void THISCLASS::OnIdle(wxIdleEvent& WXUNUSED(event)) {
 }
 
-void SwisTrack::OnMakeScreenShot(wxCommandEvent& WXUNUSED(event)) {
+void SwisTrack::OnToolsServer(wxCommandEvent& WXUNUSED(event)) {
+	
 }

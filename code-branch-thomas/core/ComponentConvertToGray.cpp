@@ -5,6 +5,7 @@
 
 THISCLASS::ComponentConvertToGray(SwisTrackCore *stc):
 		Component(stc, "ConvertToGray"),
+		mOutputImage(0),
 		mDisplayImageOutput("Output", "Output") {
 
 	// Data structure relations

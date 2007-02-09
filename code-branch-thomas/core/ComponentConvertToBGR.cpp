@@ -5,6 +5,7 @@
 
 THISCLASS::ComponentConvertToBGR(SwisTrackCore *stc):
 		Component(stc, "ConvertToBGR"),
+		mOutputImage(0),
 		mDisplayImageOutput("Output", "Output") {
 
 	// Data structure relations

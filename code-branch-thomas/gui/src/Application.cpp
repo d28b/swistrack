@@ -33,13 +33,20 @@ IMPLEMENT_APP(Application)
 bool THISCLASS::OnInit() {
 	// Set some main application parameters.
 	SetVendorName(wxT("Swarm-Intelligent Systems Group, EPFL, Lausanne, Switzerland"));
-	SetAppName(wxT("SwisTrack")); 
+	SetAppName(wxT("SwisTrack"));
 
 	// Initialize all available image handlers
 	wxInitAllImageHandlers();
 
 	// Create the main application window
-	mSwisTrack = new SwisTrack(_T("SWISTrack 4.0.0"), wxPoint(-1, -1), wxSize(800, 600));
+	mSwisTrack = new SwisTrack(_T("SwisTrack"), wxPoint(-1, -1), wxSize(800, 600));
+
+	// Open a file
+	if (argc>1) {
+		mSwisTrack->OpenFile(argv[1], true, false);
+	} else {
+		mSwisTrack->OpenFile("default.swistrack", false, true);
+	}
 
 #if defined(__WIN16__) || defined(__WXMOTIF__)
 	int width, height;

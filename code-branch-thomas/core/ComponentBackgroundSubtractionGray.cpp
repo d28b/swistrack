@@ -18,7 +18,11 @@ THISCLASS::~ComponentBackgroundSubtractionGray() {
 }
 
 void THISCLASS::OnStart() {
-	IplImage* bg = cvLoadImage(GetConfigurationString("BackgroundImage", "").c_str(), -1);
+	std::string filename=GetConfigurationString("BackgroundImage", "");
+	IplImage* bg=0;
+	if (filename!="") {
+		bg=cvLoadImage(filename.c_str(), -1);
+	}
 	if (! bg) {
 		AddError("Cannot open background file.");
 		return;
