@@ -29,6 +29,7 @@ void THISCLASS::OnStep() {
 	mCore->mCommunicationInterface->SendMessage(&mbegin);
 
 	DataStructureParticles::tParticleVector *p=mCore->mDataStructureParticles.mParticles;
+	if (!p) {return;}
 	DataStructureParticles::tParticleVector::iterator it=p->begin();
 	while (it!=p->end()) {
 		CommunicationMessage m("PARTICLE");
@@ -37,6 +38,7 @@ void THISCLASS::OnStep() {
 		m.AddDouble(it->mCenter.y);
 		m.AddDouble(it->mOrientation);
 		mCore->mCommunicationInterface->SendMessage(&m);
+		it++;
 	}
 
 	CommunicationMessage mend("ENDFRAME");

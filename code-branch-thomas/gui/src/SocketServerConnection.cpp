@@ -1,8 +1,6 @@
 #include "SocketServerConnection.h"
 #define THISCLASS SocketServerConnection
 
-#include "SocketServerConnection.h"
-
 BEGIN_EVENT_TABLE(SocketServerConnection, wxEvtHandler)
 	EVT_SOCKET(SOCKET_ID, SocketServerConnection::OnSocketEvent)
 END_EVENT_TABLE()
@@ -21,10 +19,12 @@ THISCLASS::SocketServerConnection(SocketServer* ss, wxSocketBase *sb): mSocketSe
 }
 
 THISCLASS::~SocketServerConnection() {
-	if (mSocket) {mSocket->Destroy();}
+	if (! mSocket) {return;}
+	mSocket->Destroy();
 }
 
 void THISCLASS::OnSocketEvent(wxSocketEvent& event) {
+	if (! mSocket) {return;}
 	switch (event.GetSocketEvent()) {
 
 	// We've received something
@@ -47,7 +47,9 @@ void THISCLASS::OnSocketEvent(wxSocketEvent& event) {
 }
 
 void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum) {
-	// If the used wants to subscribe, we process the message by ourselves.
+	if (! mSocket) {return;}
+
+	// If the user wants to subscribe, we process the message by ourselves.
 	if (m->mCommand=="SUBSCRIBE") {
 		mSubscriptions.clear();
 		
@@ -79,10 +81,13 @@ void THISCLASS::OnNMEAProcessUnrecognizedChar(unsigned char chr) {
 }
 
 void THISCLASS::OnNMEASend(const std::string &str) {
+	if (! mSocket) {return;}
 	mSocket->Write(str.c_str(), str.length());
 }
 
 bool THISCLASS::SendMessage(CommunicationMessage *m) {
+	if (! mSocket) {return false;}
+
 	// If the message is sent in reply to another message, only send it to the sender of the original message
 	if (m->mInReplyTo) {
 		if (m->mInReplyTo==mCurrentRequest) {

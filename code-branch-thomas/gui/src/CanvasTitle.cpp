@@ -48,7 +48,7 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	wxCoord w;
 	wxCoord h;
 	dc.GetTextExtent(mTextRight, &w, &h);
-	dc.DrawText(mTextRight, 0, size.GetWidth()-w);
+	//dc.DrawText(mTextRight, 0, size.GetWidth()-w); TODO
 }
 
 void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
@@ -101,10 +101,10 @@ void THISCLASS::OnMouseLeave(wxMouseEvent &event) {
 
 void THISCLASS::OnMenu(wxCommandEvent& event) {
 	DisplayImage *di=GetDisplayImage(event.GetId());
-	mCanvasPanel->SetDisplayImage(di);
+	//mCanvasPanel->SetDisplayImage(di); TODO
 }
 
-void THISCLASS::SetText(const std::string &title, const std::string &textright) {
+void THISCLASS::SetText(const wxString &title, const wxString &textright) {
 	mTitle=title;
 	mTextRight=textright;
 	Refresh(true);
@@ -135,4 +135,3 @@ DisplayImage *THISCLASS::GetDisplayImage(int selid) {
 
 	return 0;
 }
->>>>>>> .r263

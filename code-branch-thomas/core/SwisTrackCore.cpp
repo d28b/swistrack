@@ -13,6 +13,8 @@
 #include "ComponentThresholdGray.h"
 #include "ComponentBlobDetectionMinMax.h"
 #include "ComponentBlobDetectionCircle.h"
+#include "ComponentSimulationParticles.h"
+#include "ComponentOutputParticles.h"
 
 THISCLASS::SwisTrackCore():
 		mDataStructureInput(),
@@ -42,6 +44,8 @@ THISCLASS::SwisTrackCore():
 	mAvailableComponents.push_back(new ComponentThresholdGray(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionMinMax(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionCircle(this));
+	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
+	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 
 	// Initialize the list of available data structures
 	mDataStructures.push_back(&mDataStructureInput);
@@ -52,11 +56,8 @@ THISCLASS::SwisTrackCore():
 	mDataStructures.push_back(&mDataStructureParticles);
 
 	// TODO remove this
-	mDeployedComponents.push_back(new ComponentInputCamera1394(this));
-	mDeployedComponents.push_back(new ComponentConvertToGray(this));
-	mDeployedComponents.push_back(new ComponentBackgroundSubtractionGray(this));
-	mDeployedComponents.push_back(new ComponentThresholdGray(this));
-	mDeployedComponents.push_back(new ComponentBlobDetectionMinMax(this));
+	mDeployedComponents.push_back(new ComponentSimulationParticles(this));
+	mDeployedComponents.push_back(new ComponentOutputParticles(this));
 }
 
 THISCLASS::~SwisTrackCore() {
@@ -161,7 +162,7 @@ bool THISCLASS::Step() {
 		if (! (*it)->mStarted) {break;}
 		(*it)->ClearStatus();
 		(*it)->OnStep();
-		if (! (*it)->mStatusHasError) {break;}
+		if ((*it)->mStatusHasError) {break;}
 		it++;
 	}
 

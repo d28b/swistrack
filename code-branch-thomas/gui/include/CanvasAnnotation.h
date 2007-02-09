@@ -31,7 +31,7 @@ public:
 	~CanvasAnnotation();
 
 	//! Sets the text.
-	void SetText(const std::string &textleft, const std::string &textright);
+	void SetText(const wxString &textleft, const wxString &textright);
 
 private:
 	//! The corresponding GUI event handler.

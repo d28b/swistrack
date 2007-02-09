@@ -103,6 +103,7 @@ double THISCLASS::GetConfigurationDouble(const std::string &key, double defvalue
 }
 
 std::string THISCLASS::GetConfigurationString(const std::string &key, const std::string &defvalue) {
+	// TODO: check whether key exists
 	return mConfiguration[key];
 }
 

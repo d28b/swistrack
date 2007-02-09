@@ -4,6 +4,7 @@
 #include <string>
 #include <list>
 #include "DataStructureParticles.h"
+#include "CommunicationNMEAInterface.h"
 
 //! Reads and holds a simulation of particles.
 class SimulationParticles: public CommunicationNMEAInterface {
@@ -17,8 +18,10 @@ public:
 	//! A list of frames type.
 	typedef std::list<tFrame> tFrameList;
 
+	tFrameList mFrames;					//!< The frames.
+
 	//! Constructor.
-	SimulationParticles(): mFilename(""), mFrames(), mCurrentFrame(mFrames.end()), mEmptyFrame() {}
+	SimulationParticles(): mFileName(""), mFrames(), mCurrentFrame(mFrames.end()), mEmptyFrame() {}
 	//! Destructor.
 	~SimulationParticles() {}
 
@@ -34,9 +37,8 @@ public:
 
 protected:
 	std::string mFileName;				//!< The name of the file currently open.
-	tFrameList mFrames;					//!< The frames.
 	tFrameList::iterator mCurrentFrame;	//!< The current frame.
-	tFrameList mEmptyFrame;				//!< Used if a frame was not available in the simualtion file.
+	tFrame mEmptyFrame;				//!< Used if a frame was not available in the simualtion file.
 
 	// CommuncationNMEAInterface methods.
 	void OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum);

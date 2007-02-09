@@ -3,7 +3,6 @@
 
 #include <wx/app.h>
 #include <wx/image.h>
-#include "AboutDialog.h"
 
 /** \file Application.cpp
 * \brief Mainfile for the project

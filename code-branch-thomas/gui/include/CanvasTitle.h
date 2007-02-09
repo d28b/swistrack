@@ -34,7 +34,7 @@ public:
 	~CanvasTitle();
 
 	//! Sets the text.
-	void SetText(const std::string &title, const std::string &textright=0);
+	void SetText(const wxString &title, const wxString &textright);
 
 private:
 	//! The corresponding GUI event handler.
@@ -51,7 +51,7 @@ private:
 	void OnMenu(wxCommandEvent& event);
 
 	//! Returns the DisplayImage associated with the index.
-	DisplayImage *THISCLASS::GetDisplayImage(int selid) {
+	DisplayImage *GetDisplayImage(int selid);
 
 	DECLARE_EVENT_TABLE()
 };

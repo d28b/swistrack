@@ -242,6 +242,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ComponentSimulationParticles.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\ComponentThresholdGray.cpp"
 				>
 			</File>
@@ -307,6 +311,10 @@
 			</File>
 			<File
 				RelativePath="..\RandomPoisson.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\SimulationParticles.cpp"
 				>
 			</File>
 			<File
@@ -394,6 +402,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ComponentSimulationParticles.h"
+				>
+			</File>
+			<File
 				RelativePath="..\ComponentThresholdGray.h"
 				>
 			</File>
@@ -463,6 +475,10 @@
 			</File>
 			<File
 				RelativePath="..\RandomPoisson.h"
+				>
+			</File>
+			<File
+				RelativePath="..\SimulationParticles.h"
 				>
 			</File>
 			<File

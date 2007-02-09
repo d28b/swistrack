@@ -120,7 +120,8 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	mSwisTrackCore=new SwisTrackCore();
 	mSocketServer=new SocketServer(this);
 	mSwisTrackCore->mCommunicationInterface=mSocketServer;	
-	mSocketServer->SetPort(3001);
+	mSocketServer->SetPort(3002);
+	mSocketServer->AddCommandHandler(this);
 
 	// List
 	mComponentListPanel=new ComponentListPanel(this, mSwisTrackCore);
@@ -238,7 +239,7 @@ void THISCLASS::BuildToolBar() {
 	toolbar->AddTool(sID_Open, _T("Open"), wxBITMAP(open), _T("Open"));
 	toolbar->AddTool(sID_Save, _T("Save"), wxBITMAP(save), _T("Save"));
 	toolbar->AddSeparator();
-	toolbar->AddTool(sID_Control_SeriousMode, _T("Serious"), wxBITMAP(play), _T("Serious"), wxITEM_CHECK);
+	toolbar->AddTool(sID_Control_SeriousMode, _T("Productive"), wxBITMAP(play), _T("Productive"), wxITEM_CHECK);
 	toolbar->AddSeparator();
 	toolbar->AddTool(sID_Control_FreeRun, _T("Free-run"), wxBITMAP(play), _T("Free-run mode"), wxITEM_CHECK);
 	toolbar->AddTool(sID_Control_SingleStep, _T("Step"), wxBITMAP(singlestep), _T("One step"));
@@ -424,7 +425,7 @@ void THISCLASS::SaveFile(const wxString &filename) {
 	cw.WriteComponents(mSwisTrackCore);
 	cw.WriteTriggerInterval(mTriggerInterval);
 
-	if (cw.Save(filename.c_str())) {
+	if (! cw.Save(filename.c_str())) {
 		wxMessageDialog dlg(this, "There was an error writing to \n\n"+filename+"\n\nThe file may be incomplete.", "Save File", wxOK);
 		dlg.ShowModal();
 		return;

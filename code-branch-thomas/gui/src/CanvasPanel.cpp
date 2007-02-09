@@ -34,7 +34,7 @@ THISCLASS::~CanvasPanel() {
 void THISCLASS::OnDisplayImageSubscribe(DisplayImage *di) {
 	mUpdateCounter=0;
 	mCurrentDisplayImage=di;
-	mCanvasTitle->SetText(di->mDisplayName.c_str());
+	mCanvasTitle->SetText(di->mDisplayName.c_str(), "");
 	mCanvasAnnotation->SetText("", "");
 }
 
@@ -55,19 +55,19 @@ void THISCLASS::OnDisplayImageChanged(DisplayImage *di) {
 	mCanvas->SetImage(img);
 
 	// Set title and annotation
-	mCanvasTitle->SetText(di->mDisplayName.c_str());
+	mCanvasTitle->SetText(di->mDisplayName.c_str(), "");
 	mCanvasAnnotation->SetText(di->mAnnotation1.c_str(), di->mAnnotation2.c_str());
 
 	// Move the children
 	OnSize(wxSizeEvent());
 }
 
-void THISCLASS::OnDisplayImageSubscribe(DisplayImage *di) {
+void THISCLASS::OnDisplayImageUnsubscribe(DisplayImage *di) {
 	if (mCurrentDisplayImage!=di) {return;}
 
 	mCurrentDisplayImage=0;
 	mCanvas->SetImage(0);
-	mCanvasTitle->SetText("No display (maximum speed)");
+	mCanvasTitle->SetText("No display (maximum speed)", "");
 	mCanvasAnnotation->SetText("", "");
 }
 

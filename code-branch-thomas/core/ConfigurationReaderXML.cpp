@@ -6,15 +6,13 @@
 
 bool THISCLASS::Open(const std::string &filename) {
 	// Read the file
-	xmlpp::DomParser parser;
-	xmlpp::Document *document=0;
+	mDocument=0;
 	try {
-		parser.parse_file(filename.c_str());
-		if (parser==true) {
-			document=parser.get_document();
+		mParser.parse_file(filename.c_str());
+		if (mParser==true) {
+			mDocument=mParser.get_document();
 		}
 	} catch (...) {
-		document=0;
 	}
 
 	return IsOpen();
