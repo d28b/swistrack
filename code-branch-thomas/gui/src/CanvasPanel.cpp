@@ -31,7 +31,16 @@ THISCLASS::CanvasPanel(SwisTrack *st):
 THISCLASS::~CanvasPanel() {
 }
 
+void THISCLASS::SetDisplayImage(DisplayImage *di) {
+	if (! di) {return;}
+	di->Subscribe(this);
+}
+
 void THISCLASS::OnDisplayImageSubscribe(DisplayImage *di) {
+	if (mCurrentDisplayImage) {
+		mCurrentDisplayImage->Unsubscribe(this);
+	}
+
 	mUpdateCounter=0;
 	mCurrentDisplayImage=di;
 	mCanvasTitle->SetText(di->mDisplayName.c_str(), "");

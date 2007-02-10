@@ -26,6 +26,11 @@ public:
 	//! Destructor.
 	~DisplayImage() {}
 
+	//! Adds a subscriber.
+	void Subscribe(DisplayImageSubscriberInterface *disi);
+	//! Removes a subscriber.
+	void Unsubscribe(DisplayImageSubscriberInterface *disi);
+
 	//! Called to draw the display image. This function is called once for each subscriber, with the desired width/height. The returned IplImage must be released using ReleaseImage.
 	virtual IplImage *CreateImage(int maxwidth, int maxheight) = 0;
 	//! Releases an image.

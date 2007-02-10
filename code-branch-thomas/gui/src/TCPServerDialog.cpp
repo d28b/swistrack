@@ -11,7 +11,7 @@ THISCLASS::TCPServerDialog(wxWindow *parent):
 	wxPanel *p=new wxPanel(this, -1);
 
 	wxBoxSizer *pvs=new wxBoxSizer(wxVERTICAL);
-	wxStaticText *title=new wxStaticText(p, -1, "TCP Server Sett");
+	wxStaticText *title=new wxStaticText(p, -1, "TCP Server Settings");
 	wxFont f=title->GetFont();
 	f.SetWeight(wxFONTWEIGHT_BOLD);
 	title->SetFont(f);

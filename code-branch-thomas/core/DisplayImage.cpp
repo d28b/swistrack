@@ -1,6 +1,16 @@
 #include "DisplayImage.h"
 #define THISCLASS DisplayImage
 
+void THISCLASS::Subscribe(DisplayImageSubscriberInterface *disi) {
+	mSubscribers.push_back(disi);
+}
+
+void THISCLASS::Unsubscribe(DisplayImageSubscriberInterface *disi) {
+	tSubscriber::iterator *it=find(mSubscribers.begin(), mSubscribers.end(), disi);
+	if (it==mSubscribers.end()) {return;}
+	mSubscribers.erase(it);
+}
+
 CvSize THISCLASS::CalculateMaxSize(int srcwidth, int srcheight, int maxwidth, int maxheight) {
 	double rw=(double)(maxwidth)/(double)(srcwidth);
 	double rh=(double)(maxheight)/(double)(srcheight);

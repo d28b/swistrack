@@ -29,6 +29,8 @@ public:
 	//! Destructor.
 	~CanvasPanel();
 
+	void SetDisplayImage(DisplayImage *di);
+
 	//! The corresponding GUI event handler.
 	void OnMouseLeftDown(wxMouseEvent &event);
 	//! The corresponding GUI event handler.

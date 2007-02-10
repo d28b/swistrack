@@ -101,7 +101,7 @@ void THISCLASS::OnMouseLeave(wxMouseEvent &event) {
 
 void THISCLASS::OnMenu(wxCommandEvent& event) {
 	DisplayImage *di=GetDisplayImage(event.GetId());
-	//mCanvasPanel->SetDisplayImage(di); TODO
+	mCanvasPanel->SetDisplayImage(di);
 }
 
 void THISCLASS::SetText(const wxString &title, const wxString &textright) {
