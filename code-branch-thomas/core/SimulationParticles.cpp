@@ -5,29 +5,15 @@
 #include <algorithm>
 
 bool THISCLASS::Read(const std::string &filename) {
-	// Reset the data
+	// Close the file if necessary and reset the state
+	if (! mFile->is_open()) {mFile->close();}
 	mFrames.clear();
 	mCurrentFrame=mFrames.end();
+	mFileName="";
 
 	// Open file
-	std::ifstream file(filename.c_str(), std::ios::in);
-	if (! file.is_open()) {return false;}
-
-	// Read
-	char buffer[1024];
-	int len;
-	while (1) {
-		file.read(buffer, sizeof(buffer));
-		len=file.gcount();
-		if (len<1) {break;}
-		NMEAProcessData(buffer, len);
-	}
-
-	// Close
-	file.close();
-
-	// Sort the frames by their frame number.
-	//sort(mFrames.begin(), mFrames.end(), class test{bool operator < (const tFrame &frame1, const tFrame &frame2) {return frame1.number<frame2.number;}})
+	mFile->open(filename.c_str(), std::ios::in);
+	if (! mFile->is_open()) {return false;}
 
 	// Set the new filename
 	mFileName=filename;
@@ -65,24 +51,68 @@ void THISCLASS::OnNMEASend(const std::string &str) {
 	// We don't write
 }
 
-THISCLASS::tFrame *THISCLASS::FirstFrame() {
-	mCurrentFrame=mFrames.begin();
-	if (mCurrentFrame==mFrames.end()) {
-		mEmptyFrame.number=0;
-		return &mEmptyFrame;
-	}
+bool THISCLASS::ReadBlock() {
+	if (! mFile->is_open()) {return false;}
 
+	char buffer[1024];
+	mFile.read(buffer, sizeof(buffer));
+	int len=mFile.gcount();
+	if (len<1) {return false;}
+	NMEAProcessData(buffer, len);
+	return true;
+}
+
+THISCLASS::tFrame *THISCLASS::FirstFrame() {
+	while (1) {
+		// Move to the first frame
+		mCurrentFrame=mFrames.begin();
+
+		// Found? Great ...
+		if (mCurrentFrame!=mFrames.end()) {
+			return &*mCurrentFrame;
+		}
+
+		// Read the next block in the file and quit if we are at the end of the file
+		if (! ReadBlock()) {
+			return 0;
+		}
+	}
+}
+
+THISCLASS::tFrame *THISCLASS::NextFrame() {
+	while (1) {
+		// Try incrementing
+		tFrame::iterator nextframe=mCurrentFrame;
+		nextframe++;
+
+		// Found? Great ...
+		if (nextframe!=mFrames.end()) {
+			mCurrentFrame=nextframe;
+			return &*mCurrentFrame;
+		}
+
+		// Read the next block in the file and quit if we are at the end of the file
+		if (! ReadBlock()) {
+			mCurrentFrame=mFrames.end();
+			return 0;
+		}
+	}
+}
+
+THISCLASS::tFrame *THISCLASS::GetCurrentFrame() {
+	if (mCurrentFrame==mFrames.end()) {return 0;}
 	return &*mCurrentFrame;
 }
 
-THISCLASS::tFrame *THISCLASS::NextFrame(int number) {
-	while (mCurrentFrame!=mFrames.end()) {
+THISCLASS::tFrame *THISCLASS::GetFutureFrameByNumber(int number) {
+	while (1) {
 		if (mCurrentFrame->number == number) {return &*mCurrentFrame;}
 		if (mCurrentFrame->number > number) {break;}
-		mCurrentFrame++;
+		if (! NextFrame()) {break;}
 	}
 
 	// If no frame is available for this frame number, pretend to have a frame with no particles
 	mEmptyFrame.number=number;
 	return &mEmptyFrame;
 }
+

@@ -30,15 +30,20 @@ public:
 	//! Returns the file name of the current simulation.
 	std::string GetFileName() {return mFileName;}
 
-	//! Moves to the first frame and returns a pointer to it.
+	//! Moves to the first frame in the file and returns it. If the file is empty, 0 is returned.
 	tFrame *FirstFrame();
-	//! Moves to the next frame with the given number and returns a pointer to it. This function must be called with increasing frame numbers, but frame numbers may be left out.
-	tFrame *NextFrame(int number);
+	//! Moves to the next frame in the file and returns it. At the end of the file, 0 is returned.
+	tFrame *NextFrame();
+	//! Returns the current frame (the same as the last call to FirstFrame() or NextFrame()).
+	tFrame *GetCurrentFrame();
+	//! Moves to the next frame with the given number and returns a pointer to it. This function must be called with increasing frame numbers, but frame numbers may be left out. If the frame with this number doesn't exist, an empty frame with that number is returned.
+	tFrame *GetFutureFrameByNumber(int number);
 
 protected:
 	std::string mFileName;				//!< The name of the file currently open.
+	std::ifstream mFile;				//!< The file.
 	tFrameList::iterator mCurrentFrame;	//!< The current frame.
-	tFrame mEmptyFrame;				//!< Used if a frame was not available in the simualtion file.
+	tFrame mEmptyFrame;					//!< Used if a frame was not available in the simulation file.
 
 	// CommuncationNMEAInterface methods.
 	void OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum);
@@ -46,6 +51,8 @@ protected:
 	void OnNMEAProcessUnrecognizedChar(unsigned char chr);
 	void OnNMEASend(const std::string &str);
 
+	//! Reads the next block in the file.
+	bool THISCLASS::ReadBlock();
 };
 
 #endif
