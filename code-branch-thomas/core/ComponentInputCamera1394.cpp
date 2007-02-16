@@ -78,7 +78,7 @@ void THISCLASS::OnStep() {
 	}
 
 	// Point the input IplImage to the camera buffer
-	mCurrentImage->imageData=(char*)mCamera.m_pData;  FIXME
+	mCurrentImage->imageData=(char*)mCamera.m_pData;  //FIXME
 
 	// Convert the input to the right format (RGB to BGR)
 	cvCvtColor(mCurrentImage, mCurrentImage, CV_RGB2BGR);

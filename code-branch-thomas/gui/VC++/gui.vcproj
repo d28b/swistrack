@@ -342,33 +342,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\SocketServer.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\src\SocketServerConnection.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\src\SwisTrack.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\TCPServer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\TCPServerConnection.cpp"
 				>
 			</File>
 		</Filter>
@@ -421,15 +403,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\SocketServer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\SocketServerConnection.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\SwisTrack.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\TCPServer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\TCPServerConnection.h"
 				>
 			</File>
 		</Filter>

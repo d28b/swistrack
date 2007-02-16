@@ -48,7 +48,11 @@ void THISCLASS::OnStart() {
 
 	// Start the simulation at the first frame
 	SimulationParticles::tFrame *frame=mSimulationParticles.FirstFrame();
-	mFrameNumber=frame->number-1;
+	if (frame) {
+		mFrameNumber=frame->number-1;
+	} else {
+		mFrameNumber=0;
+	}
 
 	// Data structure initialization
 	mCore->mDataStructureInput.mFrameNumber=0;
@@ -79,13 +83,13 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	mFrameNumber++;
-	SimulationParticles::tFrame *frame=mSimulationParticles.NextFrame(mFrameNumber);
+	SimulationParticles::tFrame *frame=mSimulationParticles.GetFutureFrameByNumber(mFrameNumber);
 	
 	// Clear the particles
 	mParticles.clear();
 
 	// Add those particles that are in the range of the camera
-	Random r;
+	//Random r;  // This adds 4 memory leaks !!!
 	DataStructureParticles::tParticleVector::iterator it=frame->particles.begin();
 	while (it!=frame->particles.end()) {
 		float sx=(it->mCenter.x-mCameraOrigin.x)/mCameraPixelSize;
@@ -96,9 +100,9 @@ void THISCLASS::OnStep() {
 		if ((x>=0) && (y>=0) && (x<mCameraSize.width) && (y<mCameraSize.height)) {
 			Particle p;
 			p.mID=it->mID;
-			p.mCenter.x=x+(float)r.Normal(0, mPositionNoiseStdDev);
-			p.mCenter.y=y+(float)r.Normal(0, mPositionNoiseStdDev);
-			p.mOrientation=it->mOrientation+(float)r.Normal(0, mAngleNoiseStdDev);
+			//p.mCenter.x=x+(float)r.Normal(0, mPositionNoiseStdDev);
+			//p.mCenter.y=y+(float)r.Normal(0, mPositionNoiseStdDev);
+			//p.mOrientation=it->mOrientation+(float)r.Normal(0, mAngleNoiseStdDev);
 			mParticles.push_back(p);
 		}
 

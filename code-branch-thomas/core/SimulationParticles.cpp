@@ -4,6 +4,17 @@
 #include <fstream>
 #include <algorithm>
 
+THISCLASS::SimulationParticles():
+		mFileName(""), mFile(0), mFrames(),
+		mCurrentFrame(mFrames.end()), mEmptyFrame() {
+
+	mFile=new std::ifstream();
+}
+
+THISCLASS::~SimulationParticles() {
+	delete mFile;
+}
+
 bool THISCLASS::Read(const std::string &filename) {
 	// Close the file if necessary and reset the state
 	if (! mFile->is_open()) {mFile->close();}
@@ -12,6 +23,7 @@ bool THISCLASS::Read(const std::string &filename) {
 	mFileName="";
 
 	// Open file
+	mFile->clear();
 	mFile->open(filename.c_str(), std::ios::in);
 	if (! mFile->is_open()) {return false;}
 
@@ -55,8 +67,8 @@ bool THISCLASS::ReadBlock() {
 	if (! mFile->is_open()) {return false;}
 
 	char buffer[1024];
-	mFile.read(buffer, sizeof(buffer));
-	int len=mFile.gcount();
+	mFile->read(buffer, sizeof(buffer));
+	int len=mFile->gcount();
 	if (len<1) {return false;}
 	NMEAProcessData(buffer, len);
 	return true;
@@ -82,7 +94,7 @@ THISCLASS::tFrame *THISCLASS::FirstFrame() {
 THISCLASS::tFrame *THISCLASS::NextFrame() {
 	while (1) {
 		// Try incrementing
-		tFrame::iterator nextframe=mCurrentFrame;
+		tFrameList::iterator nextframe=mCurrentFrame;
 		nextframe++;
 
 		// Found? Great ...
@@ -105,7 +117,7 @@ THISCLASS::tFrame *THISCLASS::GetCurrentFrame() {
 }
 
 THISCLASS::tFrame *THISCLASS::GetFutureFrameByNumber(int number) {
-	while (1) {
+	while (mCurrentFrame!=mFrames.end()) {
 		if (mCurrentFrame->number == number) {return &*mCurrentFrame;}
 		if (mCurrentFrame->number > number) {break;}
 		if (! NextFrame()) {break;}

@@ -13,13 +13,13 @@ class DisplayImage {
 
 public:
 	//! The list type of subscribers.
-	typedef std::list<DisplayImageSubscriberInterface *> tSubscribers;
+	typedef std::list<DisplayImageSubscriberInterface *> tSubscriberList;
 
 	std::string mName;			//!< The internal name.
 	std::string mDisplayName;	//!< The name displayed to the user.
 	std::string mAnnotation1;	//!< Annotation 1, usually displayed below the image.
 	std::string mAnnotation2;	//!< Annotation 2, usually displayed below the image.
-	tSubscribers mSubscribers;	//!< The list of subscribers.
+	tSubscriberList mSubscribers;	//!< The list of subscribers.
 
 	//! Constructor.
 	DisplayImage(const std::string &name, const std::string &displayname): mName(name), mDisplayName(displayname) {}

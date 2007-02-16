@@ -39,6 +39,7 @@ THISCLASS::ComponentsDialog(wxWindow* parent, SwisTrackCore *stc):
 	// Create Buttons
 	mButtonAdd=new wxButton(this, eID_ButtonAdd, "Add", wxDefaultPosition, wxDefaultSize);
 	mButtonCancel=new wxButton(this, eID_ButtonCancel, "Cancel", wxDefaultPosition, wxDefaultSize);
+	mButtonAdd->SetDefault();
 
 	// Layout the components in the panel
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);

@@ -48,7 +48,7 @@ void THISCLASS::ConfigurationReadXML(xmlpp::Element* configuration, ErrorList *x
 
 	// Clear the current list of components
 	Clear();
-
+ 
 	// Traverse the list and create a Component object for each "component" tag
 	if (! configuration) {return;}
 	xmlpp::Node::NodeList list=configuration->get_children("component");

@@ -91,7 +91,7 @@ void THISCLASS::NMEASendMessage(CommunicationMessage *m) {
 	line << "*" << ch1 << ch2;
 
 	// Send
-	line << "\r";
+	line << "\r\n";
 	OnNMEASend(line.str());
 	return;
 }

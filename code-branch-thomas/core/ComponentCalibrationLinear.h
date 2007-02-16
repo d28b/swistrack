@@ -23,7 +23,7 @@ public:
 	void OnStop();
 	Component *Create() {return new ComponentCalibrationLinear(mCore);}
 
-	Transform(Particle *p);
+	void Transform(Particle *p);
 
 private:
 	CvPoint2D32f mWorldTopLeft;			//!< (configuration) The world coordinates of the corresponding corner.

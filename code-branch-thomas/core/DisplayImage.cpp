@@ -1,12 +1,14 @@
 #include "DisplayImage.h"
 #define THISCLASS DisplayImage
 
+#include <algorithm>
+
 void THISCLASS::Subscribe(DisplayImageSubscriberInterface *disi) {
 	mSubscribers.push_back(disi);
 }
 
 void THISCLASS::Unsubscribe(DisplayImageSubscriberInterface *disi) {
-	tSubscriber::iterator *it=find(mSubscribers.begin(), mSubscribers.end(), disi);
+	tSubscriberList::iterator it=find(mSubscribers.begin(), mSubscribers.end(), disi);
 	if (it==mSubscribers.end()) {return;}
 	mSubscribers.erase(it);
 }

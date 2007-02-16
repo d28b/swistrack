@@ -61,6 +61,8 @@ private:
 	void OnMouseMove(wxMouseEvent &event);
 	//! The corresponding GUI event handler.
 	void OnPaint(wxPaintEvent& WXUNUSED(event));
+	//! The corresponding GUI event handler.
+	void OnSize(wxSizeEvent &event);
 
 	DECLARE_EVENT_TABLE()
 };

@@ -210,6 +210,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ComponentCalibrationLinear.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\ComponentCategory.cpp"
 				>
 			</File>
@@ -367,6 +371,10 @@
 			</File>
 			<File
 				RelativePath="..\ComponentBlobDetectionMinMax.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ComponentCalibrationLinear.h"
 				>
 			</File>
 			<File

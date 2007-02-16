@@ -3,6 +3,7 @@
 
 #include <string>
 #include <list>
+#include <fstream>
 #include "DataStructureParticles.h"
 #include "CommunicationNMEAInterface.h"
 
@@ -21,9 +22,9 @@ public:
 	tFrameList mFrames;					//!< The frames.
 
 	//! Constructor.
-	SimulationParticles(): mFileName(""), mFrames(), mCurrentFrame(mFrames.end()), mEmptyFrame() {}
+	SimulationParticles();
 	//! Destructor.
-	~SimulationParticles() {}
+	~SimulationParticles();
 
 	//! Reads a simulation file.
 	bool Read(const std::string &filename);
@@ -41,7 +42,7 @@ public:
 
 protected:
 	std::string mFileName;				//!< The name of the file currently open.
-	std::ifstream mFile;				//!< The file.
+	std::ifstream *mFile;				//!< The file.
 	tFrameList::iterator mCurrentFrame;	//!< The current frame.
 	tFrame mEmptyFrame;					//!< Used if a frame was not available in the simulation file.
 
@@ -52,7 +53,7 @@ protected:
 	void OnNMEASend(const std::string &str);
 
 	//! Reads the next block in the file.
-	bool THISCLASS::ReadBlock();
+	bool ReadBlock();
 };
 
 #endif

@@ -22,7 +22,7 @@ THISCLASS::SwisTrackCore():
 		mDataStructureImageBGR("ImageBGR", "Color image (BGR)"),
 		mDataStructureImageGray("ImageGray", "Grayscale image"),
 		mDataStructureImageBinary("ImageBinary", "Binary image"),
-		mDataStructureMaskBinary("MaskBinary", "Binary mask"),
+		//mDataStructureMaskBinary("MaskBinary", "Binary mask"),
 		mDataStructureParticles(),
 		mCategoryInput("Input", 100, ComponentCategory::sTypeOne),
 		mCategoryInputConversion("Input conversion", 200, ComponentCategory::sTypeAuto),
@@ -72,6 +72,9 @@ THISCLASS::~SwisTrackCore() {
 		delete (*ita);
 		ita++;
 	}
+
+	mAvailableComponents.clear();
+	mDeployedComponents.clear();
 }
 
 bool THISCLASS::Start(bool productivemode) {

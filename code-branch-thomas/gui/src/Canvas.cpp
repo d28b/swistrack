@@ -7,6 +7,7 @@
 BEGIN_EVENT_TABLE(THISCLASS, wxControl)
     EVT_PAINT(THISCLASS::OnPaint)
 	EVT_ERASE_BACKGROUND(THISCLASS::OnEraseBackground)
+	EVT_SIZE(THISCLASS::OnSize)
     EVT_LEFT_DOWN(THISCLASS::OnMouseLeftDown)
 	EVT_RIGHT_DOWN(THISCLASS::OnMouseRightDown)
 	EVT_MOTION(THISCLASS::OnMouseMove)
@@ -63,6 +64,10 @@ void THISCLASS::OnMouseRightDown(wxMouseEvent &event) {
 }
 
 void THISCLASS::OnMouseMove(wxMouseEvent &event) {
+}
+
+void THISCLASS::OnSize(wxSizeEvent &event) {
+	Refresh(true);
 }
 
 void THISCLASS::OnMenuSaveImageAs(wxCommandEvent& event) {
