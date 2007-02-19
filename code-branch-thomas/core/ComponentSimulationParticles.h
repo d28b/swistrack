@@ -5,6 +5,7 @@
 #include "Component.h"
 #include "DataStructureParticles.h"
 #include "SimulationParticles.h"
+#include "DisplayImageParticles.h"
 #include <vector>
 
 //! A component that simulates moving particles. The particle movements are read from a file with NMEA records. Only particles within a certain rectangular area (virtual camera) will be injected.
@@ -32,7 +33,7 @@ private:
 	float mPositionNoiseStdDev;		//!< (configuration) The standard deviation of the gaussian noise superimposed to the particle position. This noise is added to both x and y component of the position.
 	float mAngleNoiseStdDev;		//!< (configuration) The standard deviation of the gaussian noise superimposed to the particle angles.
 
-	SimulationParticles mSimulationParticles;				//!< The frames with the particle.
+	SimulationParticles *mSimulationParticles;				//!< The frames with the particle.
 	int mFrameNumber;										//!< The current frame number.
 	DataStructureParticles::tParticleVector mParticles;		//!< The list of currently injected particles.
 

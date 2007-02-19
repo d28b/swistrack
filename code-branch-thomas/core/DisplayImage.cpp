@@ -5,12 +5,22 @@
 
 void THISCLASS::Subscribe(DisplayImageSubscriberInterface *disi) {
 	mSubscribers.push_back(disi);
+	disi->OnDisplayImageSubscribe(this);
 }
 
 void THISCLASS::Unsubscribe(DisplayImageSubscriberInterface *disi) {
 	tSubscriberList::iterator it=find(mSubscribers.begin(), mSubscribers.end(), disi);
 	if (it==mSubscribers.end()) {return;}
+	disi->OnDisplayImageUnsubscribe(this);
 	mSubscribers.erase(it);
+}
+
+void THISCLASS::OnChanged() {
+	tSubscriberList::iterator it=mSubscribers.begin();
+	while (it!=mSubscribers.end()) {
+		(*it)->OnDisplayImageChanged(this);
+		it++;
+	}
 }
 
 CvSize THISCLASS::CalculateMaxSize(int srcwidth, int srcheight, int maxwidth, int maxheight) {
@@ -25,11 +35,11 @@ CvSize THISCLASS::CalculateMaxSize(int srcwidth, int srcheight, int maxwidth, in
 CvSize THISCLASS::CalculateMaxSize(double ratio, int maxwidth, int maxheight) {
 	double width=(double)(maxheight)*ratio;
 	if (width<maxwidth) {
-		return cvSize((int)floor(width*r+0.5), maxheight);
+		return cvSize((int)floor(width+0.5), maxheight);
 	}
 
 	double height=(double)(maxwidth)/ratio;
-	return cvSize(maxwidth, (int)floor(height*r+0.5));
+	return cvSize(maxwidth, (int)floor(height+0.5));
 }
 
 void THISCLASS::ReleaseImage(IplImage *image) {

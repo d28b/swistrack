@@ -19,17 +19,18 @@ public:
 	//! A list of frames type.
 	typedef std::list<tFrame> tFrameList;
 
-	tFrameList mFrames;					//!< The frames.
+	tFrameList mFrames;			//!< The frames.
+	tFrame mFrameRead;			//!< The frame that is currently being read.
 
 	//! Constructor.
-	SimulationParticles();
+	SimulationParticles(const std::string &filename);
 	//! Destructor.
 	~SimulationParticles();
 
-	//! Reads a simulation file.
-	bool Read(const std::string &filename);
 	//! Returns the file name of the current simulation.
 	std::string GetFileName() {return mFileName;}
+	//! Returns true if the file could be opened.
+	bool IsOpen() {return mFile->is_open();}
 
 	//! Moves to the first frame in the file and returns it. If the file is empty, 0 is returned.
 	tFrame *FirstFrame();

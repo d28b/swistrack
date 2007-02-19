@@ -164,6 +164,11 @@ bool THISCLASS::Step() {
 		(*it)->ClearStatus();
 		(*it)->OnStep();
 		if ((*it)->mStatusHasError) {break;}
+		Component::tDisplayImageList::iterator itdi=(*it)->mDisplayImages.begin();
+		while (itdi!=(*it)->mDisplayImages.end()) {
+			(*itdi)->OnChanged();
+			itdi++;
+		}
 		it++;
 	}
 

@@ -53,7 +53,7 @@ void THISCLASS::OnStep() {
 	mCore->mDataStructureInput.mFrameNumber=framenumber;
 
 	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mNewImage=mCurrentImage;
+	mDisplayImageOutput.mImage=mCurrentImage;
 	std::ostringstream oss;
 	oss << "Frame " << framenumber << ", " << mCurrentImage->width << "x" << mCurrentImage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();

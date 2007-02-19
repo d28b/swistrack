@@ -50,7 +50,7 @@ void THISCLASS::OnStep() {
 	}
 
 	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mNewImage=mOutputImage;
+	mDisplayImageOutput.mImage=mOutputImage;
 	std::ostringstream oss;
 	oss << "BGR image, " << mOutputImage->width << "x" << mOutputImage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();

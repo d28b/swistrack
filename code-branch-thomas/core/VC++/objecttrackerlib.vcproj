@@ -282,6 +282,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\DisplayImageParticles.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\DisplayImageStandard.cpp"
 				>
 			</File>
@@ -443,6 +447,10 @@
 			</File>
 			<File
 				RelativePath="..\DisplayImage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\DisplayImageParticles.h"
 				>
 			</File>
 			<File

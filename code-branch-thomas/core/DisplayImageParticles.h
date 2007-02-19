@@ -5,6 +5,7 @@ class DisplayImageParticles;
 
 #include <string>
 #include "DisplayImage.h"
+#include "DataStructureParticles.h"
 
 //! A DisplayImage that just copies an existing image.
 class DisplayImageParticles: public DisplayImage {
@@ -16,9 +17,9 @@ public:
 	DataStructureParticles::tParticleVector *mParticles;	//!< The particles to display.
 
 	//! Constructor.
-	DisplayImageParticles(const std::string &name, const std::string &displayname): DisplayImage(name, displayname) {}
+	DisplayImageParticles(const std::string &name, const std::string &displayname);
 	//! Destructor.
-	~DisplayImageParticles() {}
+	~DisplayImageParticles();
 
 	// DisplayImage methods
 	IplImage *CreateImage(int maxwidth, int maxheight);

@@ -8,7 +8,7 @@ THISCLASS::ComponentSimulationParticles(SwisTrackCore *stc):
 		Component(stc, "SimulationParticles"),
 		mCameraOrigin(cvPoint2D32f(0, 0)), mCameraRotation(0), mCameraPixelSize(1), mCameraSize(cvSize2D32f(640, 480)),
 		mPositionNoiseStdDev(0), mAngleNoiseStdDev(1),
-		mSimulationParticles(), mParticles(),
+		mSimulationParticles(0), mParticles(),
 		mDisplayImageOutput("Output", "Output") {
 
 	// Data structure relations
@@ -28,28 +28,32 @@ void THISCLASS::OnStart() {
 	// Read the file (if the filename changed or if we are in productive mode)
 	std::string filename=GetConfigurationString("File", "");
 	filename="C:\\simulation2.txt";
-	if (productive || (mSimulationParticles.GetFileName()!=filename)) {
-		if (! mSimulationParticles.Read(filename)) {
+	if (productive || (mSimulationParticles==0) || (mSimulationParticles->GetFileName()!=filename)) {
+		delete mSimulationParticles;
+		mSimulationParticles=new SimulationParticles(filename);
+		if (! mSimulationParticles->IsOpen()) {
 			std::ostringstream oss;
 			oss << "The file \'" << filename << "\' could not be read.";
 			AddError(oss.str());
+			delete mSimulationParticles;
+			mSimulationParticles=0;
 		}
 	}
 
 	// Check whether we have a file or not
-	if (mSimulationParticles.GetFileName()=="") {
+	if (! mSimulationParticles) {
 		AddError("No simulation file loaded.");
 	} else {
 		std::ostringstream oss;
-		oss << "\'" << mSimulationParticles.GetFileName() << "\': " << mSimulationParticles.mFrames.size() << " frames";
+		oss << "File \'" << mSimulationParticles->GetFileName() << "\' loaded.";
 		AddInfo(oss.str());
 	}
 
 	// Load other values
 	OnReloadConfiguration();
 
-	// Start the simulation at the first frame
-	SimulationParticles::tFrame *frame=mSimulationParticles.FirstFrame();
+	// Start the simulation at the first frame that is available in the file
+	SimulationParticles::tFrame *frame=mSimulationParticles->FirstFrame();
 	if (frame) {
 		mFrameNumber=frame->number-1;
 	} else {
@@ -85,13 +89,13 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	mFrameNumber++;
-	SimulationParticles::tFrame *frame=mSimulationParticles.GetFutureFrameByNumber(mFrameNumber);
-	
+	SimulationParticles::tFrame *frame=mSimulationParticles->GetFutureFrameByNumber(mFrameNumber);
+
 	// Clear the particles
 	mParticles.clear();
 
 	// Add those particles that are in the range of the camera
-	//Random r;  // This adds 4 memory leaks !!!
+	Random r;  // This adds 4 memory leaks (init of static variables) !!!
 	DataStructureParticles::tParticleVector::iterator it=frame->particles.begin();
 	while (it!=frame->particles.end()) {
 		float sx=(it->mCenter.x-mCameraOrigin.x)/mCameraPixelSize;
@@ -102,9 +106,9 @@ void THISCLASS::OnStep() {
 		if ((x>=0) && (y>=0) && (x<mCameraSize.width) && (y<mCameraSize.height)) {
 			Particle p;
 			p.mID=it->mID;
-			//p.mCenter.x=x+(float)r.Normal(0, mPositionNoiseStdDev);
-			//p.mCenter.y=y+(float)r.Normal(0, mPositionNoiseStdDev);
-			//p.mOrientation=it->mOrientation+(float)r.Normal(0, mAngleNoiseStdDev);
+			p.mCenter.x=x+(float)r.Normal(0, mPositionNoiseStdDev);
+			p.mCenter.y=y+(float)r.Normal(0, mPositionNoiseStdDev);
+			p.mOrientation=it->mOrientation+(float)r.Normal(0, mAngleNoiseStdDev);
 			mParticles.push_back(p);
 		}
 
@@ -117,11 +121,11 @@ void THISCLASS::OnStep() {
 
 	// Let the DisplayImage know about our image
 	mDisplayImageOutput.mImage=0;
-	mDisplayImageOutput.mTopLeft=cvSize(0, 0);
-	mDisplayImageOutput.mBottomRight=mCameraSize;
+	mDisplayImageOutput.mTopLeft=cvPoint2D32f(0, 0);
+	mDisplayImageOutput.mBottomRight=cvPoint2D32f(mCameraSize.width, mCameraSize.height);
 	mDisplayImageOutput.mParticles=&mParticles;
 	std::ostringstream oss;
-	oss << "Frame " << mFrameNumber << ", " << mCameraSize->width << "x" << mCameraSize->height;
+	oss << "Frame " << mFrameNumber << ", " << mCameraSize.width << "x" << mCameraSize.height;
 	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 

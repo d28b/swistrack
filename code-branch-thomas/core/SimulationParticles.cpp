@@ -4,49 +4,39 @@
 #include <fstream>
 #include <algorithm>
 
-THISCLASS::SimulationParticles():
-		mFileName(""), mFile(0), mFrames(),
+THISCLASS::SimulationParticles(const std::string &filename):
+		mFileName(filename), mFile(0), mFrames(), mFrameRead(),
 		mCurrentFrame(mFrames.end()), mEmptyFrame() {
 
+	// Initialize structures
+	mFrameRead.number=0;
+	mFrameRead.particles.clear();
+	mCurrentFrame=mFrames.end();
+
+	// Open file
 	mFile=new std::ifstream();
+	mFile->clear();
+	mFile->open(filename.c_str(), std::ios::in);
+	if (! mFile->is_open()) {return;}
 }
 
 THISCLASS::~SimulationParticles() {
 	delete mFile;
 }
 
-bool THISCLASS::Read(const std::string &filename) {
-	// Close the file if necessary and reset the state
-	if (! mFile->is_open()) {mFile->close();}
-	mFrames.clear();
-	mCurrentFrame=mFrames.end();
-	mFileName="";
-
-	// Open file
-	mFile->clear();
-	mFile->open(filename.c_str(), std::ios::in);
-	if (! mFile->is_open()) {return false;}
-
-	// Set the new filename
-	mFileName=filename;
-	return true;
-}
-
 void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum) {
 	if (m->mCommand=="BEGINFRAME") {
-		tFrame frame;
-		frame.number=m->GetInt(0);
-		mFrames.push_back(frame);
+		mFrameRead.number=m->GetInt(0);
+		mFrameRead.particles.clear();
 	} else if (m->mCommand=="PARTICLE") {
-		if (! mFrames.empty()) {
-			Particle p;
-			p.mID=m->GetInt(0);
-			p.mCenter.x=(float)m->GetDouble(0);
-			p.mCenter.y=(float)m->GetDouble(0);
-			p.mOrientation=(float)m->GetDouble(0);
-			mFrames.back().particles.push_back(p);
-		}
+		Particle p;
+		p.mID=m->GetInt(0);
+		p.mCenter.x=(float)m->GetDouble(0);
+		p.mCenter.y=(float)m->GetDouble(0);
+		p.mOrientation=(float)m->GetDouble(0);
+		mFrameRead.particles.push_back(p);
 	} else if (m->mCommand=="ENDFRAME") {
+		mFrames.push_back(mFrameRead);
 	}
 }
 
