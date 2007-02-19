@@ -36,8 +36,10 @@ public:
 	//! Releases an image.
 	void ReleaseImage(IplImage *image);
 
-	//! Calculates the maximum size.
+	//! Calculates the maximum size given the size of the source image. The returned size is either the size of the source image, or a scaled down rectangle (to fit into maxwidth/maxheight) with the same proportions.
 	CvSize CalculateMaxSize(int srcwidth, int srcheight, int maxwidth, int maxheight);
+	//! Calculates the maximum size given a ratio=width/height. The returned size is the largest rectangle with this width/heigth ratio that fits into the maxwidth/maxheight rectangle.
+	CvSize CalculateMaxSize(double ratio, int maxwidth, int maxheight) {
 };
 
 #endif

@@ -35,6 +35,8 @@ private:
 	SimulationParticles mSimulationParticles;				//!< The frames with the particle.
 	int mFrameNumber;										//!< The current frame number.
 	DataStructureParticles::tParticleVector mParticles;		//!< The list of currently injected particles.
+
+	DisplayImageParticles mDisplayImageOutput;	//!< The DisplayImage showing the particles.
 };
 
 #endif

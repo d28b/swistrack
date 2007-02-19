@@ -10,7 +10,7 @@ class DisplayImageStandard;
 class DisplayImageStandard: public DisplayImage {
 
 public:
-	IplImage *mNewImage;	//!< The image to use for display. This class will create a copy of this image upon request.
+	IplImage *mImage;	//!< The image to use for display. This class will create a copy of this image upon request.
 
 	//! Constructor.
 	DisplayImageStandard(const std::string &name, const std::string &displayname): DisplayImage(name, displayname) {}

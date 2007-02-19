@@ -8,13 +8,15 @@ THISCLASS::ComponentSimulationParticles(SwisTrackCore *stc):
 		Component(stc, "SimulationParticles"),
 		mCameraOrigin(cvPoint2D32f(0, 0)), mCameraRotation(0), mCameraPixelSize(1), mCameraSize(cvSize2D32f(640, 480)),
 		mPositionNoiseStdDev(0), mAngleNoiseStdDev(1),
-		mSimulationParticles(), mParticles() {
+		mSimulationParticles(), mParticles(),
+		mDisplayImageOutput("Output", "Output") {
 
 	// Data structure relations
 	mDisplayName="Particle simulation";
 	mCategory=&(mCore->mCategoryBlobDetection);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
+	AddDisplayImage(&mDisplayImageOutput);
 }
 
 THISCLASS::~ComponentSimulationParticles() {
@@ -112,6 +114,15 @@ void THISCLASS::OnStep() {
 	// Set these particles
 	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
 	mCore->mDataStructureParticles.mParticles=&mParticles;
+
+	// Let the DisplayImage know about our image
+	mDisplayImageOutput.mImage=0;
+	mDisplayImageOutput.mTopLeft=cvSize(0, 0);
+	mDisplayImageOutput.mBottomRight=mCameraSize;
+	mDisplayImageOutput.mParticles=&mParticles;
+	std::ostringstream oss;
+	oss << "Frame " << mFrameNumber << ", " << mCameraSize->width << "x" << mCameraSize->height;
+	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 
 void THISCLASS::OnStepCleanup() {
