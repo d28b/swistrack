@@ -24,11 +24,11 @@ class SwisTrack;
 class SwisTrack: public wxFrame, public CommunicationCommandHandler {
 
 public:
-	wxTimer *mTriggerTimer;			//!< The timer that triggers the steps.
-	int mTriggerInterval;			//!< The trigger timer interval in milliseconds.
+	wxTimer *mTriggerFreeRunTimer;	//!< The timer that triggers the steps.
+	int mTriggerFreeRunInterval;	//!< The trigger timer interval in milliseconds.
 
 	SwisTrackCore *mSwisTrackCore;	//!< The SwisTrackCore object.
-	TCPServer *mTCPServer;	//!< The TCPServer object.
+	TCPServer *mTCPServer;			//!< The TCPServer object.
 
 	wxString mFileName;				//!< The current configuration file.
 	bool mChanged;					//!< Whether the file has been modified. This flag is currently ignored.
@@ -90,7 +90,7 @@ public:
 	//! Reloads the configuration. If the core is started in productive mode, this only reloads a subset of the parameters. Otherwise, a complete core stop/start is done.
 	void ReloadConfiguration();
 	//! Sets the free run interval.
-	void SetTriggerTimer(int interval);
+	void SetTriggerFreeRun();
 	//! Sets the free run interval.
 	void SetTriggerManual();
 

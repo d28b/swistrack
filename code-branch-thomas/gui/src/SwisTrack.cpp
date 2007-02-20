@@ -46,6 +46,8 @@ driver.
 #include "ConfigurationReaderXML.h"
 #include "ConfigurationWriterXML.h"
 
+#include <algorithm>
+#include <cctype>
 #include <math.h>
 #include <highgui.h>
 
@@ -97,7 +99,7 @@ END_EVENT_TABLE()
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
 		wxFrame(NULL, -1, title, pos, size, style),
 		CommunicationCommandHandler(),
-		mSwisTrackCore(0), mTCPServer(0), mFileName(""), mTriggerInterval(1000) {
+		mSwisTrackCore(0), mTCPServer(0), mFileName(""), mTriggerFreeRunInterval(1000) {
 
 #ifdef MULTITHREAD
 	criticalSection = new wxCriticalSection();
@@ -140,7 +142,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	SetSizer(vs);
 
 	// The timer used for the free run mode
-	mTriggerTimer=new wxTimer(this);
+	mTriggerFreeRunTimer=new wxTimer(this);
 }
 
 /*! \brief Destructor
@@ -153,7 +155,7 @@ SwisTrack::~SwisTrack(){
 
 	delete mTCPServer;
 	delete mSwisTrackCore;
-	delete mTriggerTimer;
+	delete mTriggerFreeRunTimer;
 
 #ifdef MULTITHREAD
 	if (mCriticalSection) {delete mCriticalSection;}
@@ -264,25 +266,22 @@ void THISCLASS::StopProductiveMode() {
 void THISCLASS::SetTriggerManual() {
 	GetToolBar()->ToggleTool(sID_Control_FreeRun, false);
 	SetStatusText("Manual", sStatusField_Trigger);
-	mTriggerTimer->Stop();
+	mTriggerFreeRunTimer->Stop();
 }
 
-void THISCLASS::SetTriggerTimer(int ms) {
-	if (ms==0) {return SetTriggerManual();}
-
-	mTriggerInterval=ms;
+void THISCLASS::SetTriggerFreeRun() {
 	GetToolBar()->ToggleTool(sID_Control_FreeRun, true);
-	SetStatusText(wxString::Format("%d ms / %.1f FPS", mTriggerInterval), sStatusField_Trigger);
-	if (! mTriggerTimer->IsRunning()) {
-		mTriggerTimer->Start(mTriggerInterval);
+	if (! mTriggerFreeRunTimer->IsRunning()) {
+		mTriggerFreeRunTimer->Start(mTriggerFreeRunInterval);
 	}
 }
 
 void THISCLASS::OnFreeRunTimer(wxTimerEvent& WXUNUSED(event)) {
 	SingleStep();
-	if (mTriggerTimer->GetInterval()!=mTriggerInterval) {
-		mTriggerTimer->Stop();
-		mTriggerTimer->Start(mTriggerInterval);
+	if (mTriggerFreeRunTimer->GetInterval()!=mTriggerFreeRunInterval) {
+		mTriggerFreeRunTimer->Stop();
+		mTriggerFreeRunTimer->Start(mTriggerFreeRunInterval);
+		SetStatusText(wxString::Format("%d ms / %.1f FPS", mTriggerFreeRunInterval, 1/(double)mTriggerFreeRunInterval), sStatusField_Trigger);
 	}
 }
 
@@ -301,9 +300,10 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 		return true;
 	} else if (m->mCommand=="TRIGGER") {
 		std::string type=m->GetString("MANUAL");
-		if (type=="TIMER") {
-			double interval=m->GetDouble(1);
-			SetTriggerTimer(interval);
+		std::transform(type.begin(), type.end(), type.begin(), std::toupper);
+		if (type=="FREERUN") {
+			mTriggerFreeRunInterval=m->GetDouble(1);
+			SetTriggerFreeRun();
 		} else {
 			SetTriggerManual();
 		}
@@ -365,7 +365,14 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	// Read the configuration
 	StopProductiveMode();
 	cr.ReadComponents(mSwisTrackCore);
-	SetTriggerTimer(cr.ReadTriggerInterval(0));
+	mTriggerFreeRunInterval=cr.ReadInt("trigger/freerun/interval", 1000);
+	std::string type=cr.ReadString("trigger/mode", "manual");
+	std::transform(type.begin(), type.end(), type.begin(), std::tolower);
+	if (type=="freerun") {
+		SetTriggerFreeRun();
+	} else {
+		SetTriggerManual();
+	}
 
 	// Read other settings
 	mTCPServer->SetPort(cr.ReadInt("server/port", 3000));
@@ -405,7 +412,17 @@ void THISCLASS::SaveFile(const wxString &filename) {
 	// Save the file
 	ConfigurationWriterXML cw;
 	cw.WriteComponents(mSwisTrackCore);
-	cw.WriteTriggerInterval(mTriggerInterval);
+
+	// Save the trigger settings
+	cw.SelectRootNode();
+	cw.SelectNode("trigger");
+	if (mTriggerFreeRunTimer->IsRunning()) {
+		cw.WriteString("mode", "freerun");
+	} else {
+		cw.WriteString("mode", "manual");
+	}
+	cw.SelectNode("freerun");
+	cw.WriteInt("interval", mTriggerFreeRunInterval);
 
 	// Save other settings
 	cw.SelectRootNode();
@@ -435,10 +452,10 @@ void THISCLASS::OnControlProductiveMode(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void THISCLASS::OnControlFreeRun(wxCommandEvent& WXUNUSED(event)) {
-	if (mTriggerTimer->IsRunning()) {
+	if (mTriggerFreeRunTimer->IsRunning()) {
 		SetTriggerManual();
 	} else {
-		SetTriggerTimer(mTriggerInterval);
+		SetTriggerFreeRun();
 	}
 }
 

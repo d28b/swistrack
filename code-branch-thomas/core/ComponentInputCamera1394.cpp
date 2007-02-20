@@ -7,7 +7,7 @@
 THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):
 		Component(stc, "Camera1394"),
 		mCamera(), mCurrentImage(0), mFrameNumber(0),
-		mDisplayImageOutput("Output", "Output") {
+		mDisplayImageOutput("Output", "1394 Camera: Input Frame") {
 
 	// Data structure relations
 	mDisplayName="1394 Camera";
@@ -21,25 +21,28 @@ THISCLASS::~ComponentInputCamera1394() {
 
 void THISCLASS::OnStart() {
 	if (mCamera.CheckLink() != CAM_SUCCESS) {
-		AddError("Cannot access 1394 Camera (Make sure CMU driver is installed).");
+		AddError("Cannot access 1394 Camera. Make sure the CMU driver is installed.");
 		return;
 	}
 
-	if (mCamera.InitCamera() != CAM_SUCCESS) {
-		AddError("Cannot initialize 1394 Camera.");
+	int res=mCamera.InitCamera();
+	if (res != CAM_SUCCESS) {
+		std::ostringstream oss;
+		oss << "Cannot initialize the camera (Error " << res << ").";
+		AddError(oss.str());
 		return;
 	}
 
 	mCamera.StatusControlRegisters();
 
-	int videoformat=GetConfigurationInt("VideoFormat", 0);
+	int videoformat=GetConfigurationInt("VideoFormat", 1);
 	if ((videoformat<0) || (videoformat>2)) {AddError("VideoMode must be 0, 1 or 2."); return;}
 	mCamera.SetVideoFormat(videoformat);
 
-	int videomode=GetConfigurationInt("VideoMode", 5);
+	int videomode=GetConfigurationInt("VideoMode", 4);
 	if ((videomode<0) || (videomode>5)) {AddError("VideoMode must be in [0, 5]."); return;}
 	mCamera.SetVideoMode(videomode);
-	
+
 	mCamera.SetVideoFrameRate(GetConfigurationInt("FrameRate", 2)); 
 	mCamera.m_controlGain.SetAutoMode(GetConfigurationInt("AutoGain", 1)); 
 	mCamera.m_controlAutoExposure.TurnOn(GetConfigurationInt("AutoExposure", 1)); 
@@ -78,11 +81,12 @@ void THISCLASS::OnStep() {
 	}
 
 	// Point the input IplImage to the camera buffer
-	mCurrentImage->imageData=(char*)mCamera.m_pData;  //FIXME
+	mCamera.getRGB((unsigned char *)mCurrentImage->imageData);
+	//mCurrentImage->imageData=(char*)mCamera.m_pData;  // doesn't work because the data doesn't have the same format
 
 	// Convert the input to the right format (RGB to BGR)
 	cvCvtColor(mCurrentImage, mCurrentImage, CV_RGB2BGR);
-	
+
 	// Set this image in the DataStructureImage
 	mCore->mDataStructureInput.mImage=mCurrentImage;
 	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
@@ -99,6 +103,10 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
+	if (mCamera.StopImageAcquisition() != 0) {
+		AddError("Could not stop image acquisition.");
+		return;
+	}
 }
 
 #endif

@@ -48,35 +48,6 @@ bool THISCLASS::ReadComponents(SwisTrackCore *stc) {
 	return true;
 }
 
-int THISCLASS::ReadTriggerInterval(int defvalue) {
-	// Get the trigger node
-	xmlpp::Element *node=GetElement("trigger");
-	if (! node) {return defvalue;}
-
-	// Get the mode attribute
-	xmlpp::Attribute *att_type=node->get_attribute("mode");
-	if (! att_type) {
-		mErrorList.Add("The trigger node requires a 'mode' attribute ('timer' or 'manual')!", node->get_line());
-		return defvalue;
-	}
-	std::string type=att_type->get_value();
-
-	// If we are in timer mode, return the interval
-	if (type=="timer") {
-		int interval=ReadInt("trigger/interval", 0);
-		if (interval==0) {
-			mErrorList.Add("The timer trigger requires a node 'interval' specifying the interval in milliseconds!", node->get_line());
-		}
-		return interval;
-	} else if (type=="manual") {
-		return defvalue;
-	}
-
-	// Anything else means error
-	mErrorList.Add("Invalid trigger mode: valid modes are 'timer' and 'manual'!", node->get_line());
-	return defvalue;
-}
-
 xmlpp::Element *THISCLASS::GetElement(const std::string &path) {
 	if (! mDocument) {return 0;}
 

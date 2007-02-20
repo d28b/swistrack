@@ -37,7 +37,7 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	} else {
 		dc.SetTextForeground(wxColour(255, 255, 0));
 	}
-	dc.DrawText(mTitle, 0, 0);
+	dc.DrawText(mTitle, 4, 2);
 
 	// Right
 	//wxSize textsize=dc.GetTextExtent(mTextRight); TODO 2.8.0
@@ -48,7 +48,7 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	wxCoord w;
 	wxCoord h;
 	dc.GetTextExtent(mTextRight, &w, &h);
-	//dc.DrawText(mTextRight, 0, size.GetWidth()-w); TODO
+	//dc.DrawText(mTextRight, 2, size.GetWidth()-w-4); TODO
 }
 
 void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
@@ -72,7 +72,7 @@ void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 			DisplayImage *di=(*itdi);
 
 			std::ostringstream oss;
-			oss << c->mDisplayName << ": " << di->mDisplayName;
+			oss << di->mDisplayName;
 			mMenu->Append(id++, oss.str().c_str());
 
 			itdi++;

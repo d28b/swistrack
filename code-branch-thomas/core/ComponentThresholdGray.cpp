@@ -1,15 +1,19 @@
 #include "ComponentThresholdGray.h"
 #define THISCLASS ComponentThresholdGray
 
+#include <sstream>
+
 THISCLASS::ComponentThresholdGray(SwisTrackCore *stc):
 		Component(stc, "ThresholdGray"),
-		mOutputImage(0), mThreshold(128) {
+		mOutputImage(0), mThreshold(128),
+		mDisplayImageOutput("Output", "After thresholding") {
 
 	// Data structure relations
 	mDisplayName="Thresholding (grayscale)";
 	mCategory=&(mCore->mCategoryThresholding);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
+	AddDisplayImage(&mDisplayImageOutput);
 }
 
 THISCLASS::~ComponentThresholdGray() {
@@ -34,6 +38,12 @@ void THISCLASS::OnStep() {
 	} catch (...) {
 		AddError("Thresholding failed.");
 	}
+
+	// Let the DisplayImage know about our image
+	mDisplayImageOutput.mImage=mOutputImage;
+	std::ostringstream oss;
+	oss << "Binary image, " << mOutputImage->width << "x" << mOutputImage->height;
+	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 
 void THISCLASS::OnStepCleanup() {

@@ -32,8 +32,6 @@ public:
 
 	//! Reads the components and uses the supplied SwisTrackCoreEditor to set them. If no document is open, an empty component list is created and the return value will be true. If the return value is false, the SwisTrackCore object was not editable.
 	bool ReadComponents(SwisTrackCore *stc);
-	//! Reads the trigger interval.
-	int ReadTriggerInterval(int defvalue);
 
 	//! Reads a string.
 	std::string ReadString(const std::string &xpath, const std::string &defvalue);

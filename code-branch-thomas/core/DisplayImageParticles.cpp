@@ -12,7 +12,7 @@ THISCLASS::~DisplayImageParticles() {
 
 IplImage *THISCLASS::CreateImage(int maxwidth, int maxheight) {
 	IplImage* img;
-	if (mImage==0) {
+	if (mImage) {
 		// Calculate the maximum size
 		CvSize size=CalculateMaxSize(mImage->width, mImage->height, maxwidth, maxheight);
 	
@@ -34,6 +34,7 @@ IplImage *THISCLASS::CreateImage(int maxwidth, int maxheight) {
 		int x=(int)floor(it->mCenter.x+0.5);
 		int y=(int)floor(it->mCenter.y+0.5);
 		cvRectangle(img, cvPoint(x-2, y-2), cvPoint(x+2, y+2), cvScalar(192,0,0), 1);
+		it++;
 	}
 	return img;
 }

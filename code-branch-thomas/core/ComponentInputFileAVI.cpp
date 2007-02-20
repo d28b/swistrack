@@ -6,7 +6,7 @@
 THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
 		Component(stc, "FileAVI"),
 		mCapture(0), mCurrentImage(0),
-		mDisplayImageOutput("Output", "Output") {
+		mDisplayImageOutput("Output", "AVI File: Unprocessed Frame") {
 
 	// Data structure relations
 	mDisplayName="AVI File";

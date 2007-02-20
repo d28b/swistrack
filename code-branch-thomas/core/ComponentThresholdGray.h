@@ -3,6 +3,7 @@
 
 #include "cv.h"
 #include "Component.h"
+#include "DisplayImageStandard.h"
 
 //! A component that applies a constant threshold to a grayscale image. The output is a binary image.
 class ComponentThresholdGray: public Component {
@@ -22,8 +23,9 @@ public:
 	Component *Create() {return new ComponentThresholdGray(mCore);}
 
 private:
-	IplImage *mOutputImage;		//!< The image created by this component.
-	int mThreshold;				//!< (configuration) Threshold value.
+	IplImage *mOutputImage;						//!< The image created by this component.
+	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the output of this component.
+	int mThreshold;								//!< (configuration) Threshold value.
 
 	// Prepares the output image (recreates the image if necessary).
 	inline void PrepareOutputImage(IplImage *inputimage) {

@@ -26,13 +26,24 @@ THISCLASS::CanvasPanel(SwisTrack *st):
 	//vs->Add(mTitle, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
 	//vs->Add(mCanvas, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 0);
 	//SetSizer(vs);
+
+	SetDisplayImage(0);
 }
 
 THISCLASS::~CanvasPanel() {
 }
 
 void THISCLASS::SetDisplayImage(DisplayImage *di) {
-	if (! di) {return;}
+	if (! di) {
+		if (mCurrentDisplayImage) {
+			mCurrentDisplayImage->Unsubscribe(this);
+		}
+		mCurrentDisplayImage=0;
+		mCanvasTitle->SetText("No display (maximum speed)", "");
+		mCanvasAnnotation->SetText("", "");
+		return;
+	}
+
 	di->Subscribe(this);
 }
 
@@ -44,7 +55,7 @@ void THISCLASS::OnDisplayImageSubscribe(DisplayImage *di) {
 	mUpdateCounter=0;
 	mCurrentDisplayImage=di;
 	mCanvasTitle->SetText(di->mDisplayName.c_str(), "");
-	mCanvasAnnotation->SetText("", "");
+	mCanvasAnnotation->SetText("The image will be shown after the next step.", "");
 }
 
 void THISCLASS::OnDisplayImageChanged(DisplayImage *di) {

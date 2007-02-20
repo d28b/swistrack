@@ -26,8 +26,6 @@ public:
 
 	//! Writes the trigger interval.
 	void WriteComponents(SwisTrackCore *stc);
-	//! Writes the trigger interval.
-	void WriteTriggerInterval(int interval);
 
 	//! Selects the root node.
 	xmlpp::Element *SelectRootNode();

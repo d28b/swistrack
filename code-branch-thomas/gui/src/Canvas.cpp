@@ -35,24 +35,46 @@ void THISCLASS::OnEraseBackground(wxEraseEvent& event) {
 void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	wxPaintDC dc(this);
 
+	// Check if we need to convert the image
+	if (mImage) {
+		if (mImage->nChannels==3) {
+		} else if (mImage->nChannels==1) {
+			IplImage *imgcolor=cvCreateImage(cvSize(mImage->width, mImage->height), mImage->depth, 3);
+			cvCvtColor(mImage, imgcolor, CV_GRAY2BGR);
+			cvReleaseImage(&mImage);
+			mImage=imgcolor;
+		} else {
+			mDisplayError="Cannot display image: wrong format.";
+			cvReleaseImage(&mImage);
+			mImage=0;
+		}
+	}
+
+	// Display an error if no image can be displayed
 	if (mImage==0) {
 		wxSize size=GetClientSize();
+		dc.SetPen(*wxWHITE_PEN);
 		dc.SetBrush(*wxWHITE_BRUSH);
 		dc.DrawRectangle(0, 0, size.GetWidth(), size.GetHeight());
 		dc.SetFont(GetFont());
-		dc.DrawText("No image.", 4, 4);
+		if (mDisplayError=="") {
+			dc.DrawText("No image.", 4, 4);
+		} else {
+			dc.DrawText(mDisplayError, 4, 4);
+		}
 		return;
 	}
 
 	wxImage img(mImage->width, mImage->height, (unsigned char*) mImage->imageData, true);
-	wxBitmap bmp(img, 3);
+	wxBitmap bmp(img);
 	dc.DrawBitmap(bmp, 0, 0, false);
 }
 
 void THISCLASS::SetImage(IplImage *img) {
-	SetSize(img->width, img->height);
+	// Delete the old image and set the new image
 	cvReleaseImage(&mImage);
 	mImage=img;
+	mDisplayError="";
 	Refresh(false);
 }
 

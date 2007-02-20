@@ -24,7 +24,7 @@ public:
 
 private:
 	IplImage *mOutputImage;						//!< The image created by this component.
-	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last acquired image.
+	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the output of this component.
 
 	// Prepares the output image (recreates the image if necessary).
 	inline void PrepareOutputImage(IplImage *inputimage) {

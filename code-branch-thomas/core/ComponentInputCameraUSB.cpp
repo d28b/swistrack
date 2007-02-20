@@ -6,7 +6,7 @@
 THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
 		Component(stc, "CameraUSB"),
 		mCapture(0), mCurrentImage(0),
-		mDisplayImageOutput("Output", "Output") {
+		mDisplayImageOutput("Output", "USB Camera: Input Frame") {
 
 	// Data structure relations
 	mDisplayName="USB Camera";

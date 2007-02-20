@@ -2,7 +2,6 @@
 #define THISCLASS ComponentCalibrationLinear
 
 #include <sstream>
-#include "Random.h"
 #include "DataStructureParticles.h"
 
 THISCLASS::ComponentCalibrationLinear(SwisTrackCore *stc):

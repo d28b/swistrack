@@ -8,7 +8,7 @@ IplImage *THISCLASS::CreateImage(int maxwidth, int maxheight) {
 	CvSize size=CalculateMaxSize(mImage->width, mImage->height, maxwidth, maxheight);
 
 	// Create a resized copy of the image
-	IplImage* img=cvCreateImage(size, IPL_DEPTH_8U, 3);
+	IplImage* img=cvCreateImage(size, IPL_DEPTH_8U, mImage->nChannels);
 	cvResize(mImage, img);
 	return img;
 }

@@ -6,13 +6,14 @@
 THISCLASS::ComponentConvertToGray(SwisTrackCore *stc):
 		Component(stc, "ConvertToGray"),
 		mOutputImage(0),
-		mDisplayImageOutput("Output", "Output") {
+		mDisplayImageOutput("Output", "After conversion to grayscale") {
 
 	// Data structure relations
-	mDisplayName="Conversion to Grayscale(BGR)";
+	mDisplayName="Conversion to Grayscale";
 	mCategory=&(mCore->mCategoryInputConversion);
 	AddDataStructureRead(&(mCore->mDataStructureInput));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
+	AddDisplayImage(&mDisplayImageOutput);
 }
 
 THISCLASS::~ComponentConvertToGray() {

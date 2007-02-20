@@ -9,7 +9,7 @@ THISCLASS::ComponentSimulationParticles(SwisTrackCore *stc):
 		mCameraOrigin(cvPoint2D32f(0, 0)), mCameraRotation(0), mCameraPixelSize(1), mCameraSize(cvSize2D32f(640, 480)),
 		mPositionNoiseStdDev(0), mAngleNoiseStdDev(1),
 		mSimulationParticles(0), mParticles(),
-		mDisplayImageOutput("Output", "Output") {
+		mDisplayImageOutput("Output", "Particle Simulation: Output") {
 
 	// Data structure relations
 	mDisplayName="Particle simulation";
@@ -20,6 +20,7 @@ THISCLASS::ComponentSimulationParticles(SwisTrackCore *stc):
 }
 
 THISCLASS::~ComponentSimulationParticles() {
+	delete mSimulationParticles;
 }
 
 void THISCLASS::OnStart() {
@@ -27,7 +28,6 @@ void THISCLASS::OnStart() {
 
 	// Read the file (if the filename changed or if we are in productive mode)
 	std::string filename=GetConfigurationString("File", "");
-	filename="C:\\simulation2.txt";
 	if (productive || (mSimulationParticles==0) || (mSimulationParticles->GetFileName()!=filename)) {
 		delete mSimulationParticles;
 		mSimulationParticles=new SimulationParticles(filename);

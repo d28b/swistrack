@@ -3,6 +3,7 @@
 
 #include "cv.h"
 #include "Component.h"
+#include "DisplayImageStandard.h"
 
 //! A component subtracting a fixed background from a grayscale image.
 class ComponentBackgroundSubtractionGray: public Component {
@@ -22,9 +23,11 @@ public:
 	Component *Create() {return new ComponentBackgroundSubtractionGray(mCore);}
 
 private:
-	IplImage *mBackgroundImage;
-	double mBackgroundImageMean;
-	bool mCorrectMean;
+	IplImage *mBackgroundImage;		//!< The background image.
+	double mBackgroundImageMean;	//!< The mean of the background image.
+	bool mCorrectMean;				//!< (configuration) Whether to correct for the mean or not.
+
+	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last processed image.
 };
 
 #endif

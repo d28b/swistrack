@@ -22,12 +22,9 @@ class Canvas;
 class Canvas: public wxControl {
 
 public:
-	//! The associated CanvasPanel.
-	CanvasPanel* mCanvasPanel;
-	//! Whether the image should be flipped vertically (TODO not implemented).
-	bool mFlipVertically;
-	//! Whether the image should be flipped horizontally (TODO not implemented).
-	bool mFlipHorizontally;
+	CanvasPanel* mCanvasPanel;	//! The associated CanvasPanel.
+	bool mFlipVertically;		//! Whether the image should be flipped vertically (TODO not implemented).
+	bool mFlipHorizontally;		//! Whether the image should be flipped horizontally (TODO not implemented).
 
 	// Constructor.
 	Canvas(CanvasPanel *cp);
@@ -44,10 +41,9 @@ private:
 		sID_SaveImageAs
 	};
 
-	//! The current image.
-	IplImage *mImage;
-	//! The popup menu.
-	wxMenu mPopupMenu;
+	IplImage *mImage;			//!< The current image.
+	wxString mDisplayError;	//!< The error displayed if no image can be drawn.
+	wxMenu mPopupMenu;			//!< The popup menu.
 
 	//! The corresponding GUI event handler.
 	void OnMenuSaveImageAs(wxCommandEvent& event);

@@ -2,16 +2,19 @@
 #define THISCLASS ComponentBackgroundSubtractionGray
 
 #include <highgui.h>
+#include <sstream>
 
 THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore *stc):
 		Component(stc, "BackgroundSubtraction"),
-		mBackgroundImageMean(0), mBackgroundImage(0), mCorrectMean(true) {
+		mBackgroundImageMean(0), mBackgroundImage(0), mCorrectMean(true),
+		mDisplayImageOutput("Output", "After background subtraction") {
 
 	// Data structure relations
 	mDisplayName="Background Subtraction (grayscale)";
 	mCategory=&(mCore->mCategoryPreprocessing);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
+	AddDisplayImage(&mDisplayImageOutput);
 }
 
 THISCLASS::~ComponentBackgroundSubtractionGray() {
@@ -29,19 +32,15 @@ void THISCLASS::OnStart() {
 	}
 
 	mBackgroundImage=cvCreateImage(cvSize(bg->width, bg->height), bg->depth, 1);
-	if (! mBackgroundImage) {
-		AddError("Cannot create background image.");
-		return;
-	}
 
 	switch (bg->nChannels) {
-	case 3:	// BGR case, we convert in gray
+	case 3:	// BGR case, we convert to gray
 		cvCvtColor(bg, mBackgroundImage, CV_BGR2GRAY);
 		break;
 	case 1:	// Already in gray
 		cvCopy(bg, mBackgroundImage);
 		break;
-	default:	// other cases, we take the first channel
+	default: // Other cases, we take the first channel
 		cvCvtPixToPlane(bg, mBackgroundImage, NULL, NULL, NULL);
 		break;
 	}
@@ -70,14 +69,21 @@ void THISCLASS::OnStep() {
 
 	try {
 		// Correct the tmpImage with the difference in image mean
-		if (mCorrectMean)
+		if (mCorrectMean) {
 			cvAddS(inputimage, cvScalar(mBackgroundImageMean-cvMean(inputimage)), inputimage);
+		}
 
 		// Background Substraction
 		cvAbsDiff(inputimage, mBackgroundImage, inputimage);
 	} catch(...) {
 		AddError("Background subtraction failed.");
 	}
+
+	// Let the DisplayImage know about our image
+	mDisplayImageOutput.mImage=inputimage;
+	std::ostringstream oss;
+	oss << "After background subtraction, " << inputimage->width << "x" << inputimage->height;
+	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 
 void THISCLASS::OnStepCleanup() {

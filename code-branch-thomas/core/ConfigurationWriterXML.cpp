@@ -16,18 +16,6 @@ void THISCLASS::WriteComponents(SwisTrackCore *stc) {
 	SelectRootNode();
 }
 
-void THISCLASS::WriteTriggerInterval(int interval) {
-	SelectRootNode();
-	xmlpp::Element *node=SelectNode("trigger");
-	if (interval==0) {
-		node->set_attribute("mode", "manual");
-	} else {
-		node->set_attribute("mode", "timer");
-		WriteInt("interval", interval);
-	}
-	SelectRootNode();
-}
-
 xmlpp::Element *THISCLASS::SelectRootNode() {
 	mSelectedNode=mDocument.get_root_node();
 	return mSelectedNode;

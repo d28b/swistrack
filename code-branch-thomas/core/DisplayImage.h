@@ -23,9 +23,9 @@ public:
 	tSubscriberList mSubscribers;	//!< The list of subscribers.
 
 	//! Constructor.
-	DisplayImage(const std::string &name, const std::string &displayname): mName(name), mDisplayName(displayname) {}
+	DisplayImage(const std::string &name, const std::string &displayname);
 	//! Destructor.
-	~DisplayImage() {}
+	~DisplayImage();
 
 	//! Adds a subscriber.
 	void Subscribe(DisplayImageSubscriberInterface *disi);

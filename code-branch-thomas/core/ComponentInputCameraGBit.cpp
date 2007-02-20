@@ -3,7 +3,7 @@
 
 THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
 		Component(stc, "CameraGBit"),
-		mDisplayImageOutput("Output", "Output") {
+		mDisplayImageOutput("Output", "GBit Camera: Input Frame") {
 
 	// Data structure relations
 	mDisplayName="GBit Camera";
