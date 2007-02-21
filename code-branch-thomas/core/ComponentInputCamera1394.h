@@ -3,7 +3,7 @@
 
 #include "Component.h"
 
-#define _1394
+//#define _1394
 
 #ifdef _1394
 #include <cv.h>
@@ -42,12 +42,15 @@ class ComponentInputCamera1394: public Component {
 
 public:
 	ComponentInputCamera1394(SwisTrackCore *stc): Component(stc, "Camera1394") {}
-	~ComponentInputCamera1394();
+	~ComponentInputCamera1394() {}
 
 	// Overwritten Component methods
-	bool OnStart() {AddError("1394 support was not compiled into this executable."); return false;}
-	bool OnStep() {AddError("1394 support was not compiled into this executable."); return false;}
-	bool OnStop() {AddError("1394 support was not compiled into this executable."); return false;}
+	void OnStart() {AddError("1394 support was not compiled into this executable.");}
+	void OnReloadConfiguration() {AddError("1394 support was not compiled into this executable.");}
+	void OnStep() {AddError("1394 support was not compiled into this executable.");}
+	void OnStepCleanup() {}
+	void OnStop() {AddError("1394 support was not compiled into this executable.");}
+	Component *Create() {return new ComponentInputCamera1394(mCore);}
 };
 
 #endif

@@ -2,6 +2,7 @@
 #define THISCLASS SwisTrackCoreEditor
 
 #include <sstream>
+#include <wx/xml/xml.h>
 #include "ComponentInputCamera1394.h"
 #include "ComponentInputCameraUSB.h"
 #include "ComponentInputCameraGBit.h"
@@ -43,7 +44,7 @@ void THISCLASS::Clear() {
 	mSwisTrackCore->mDeployedComponents.clear();
 }
 
-void THISCLASS::ConfigurationReadXML(xmlpp::Element* configuration, ErrorList *xmlerr) {
+void THISCLASS::ConfigurationReadXML(wxXmlNode* configuration, ErrorList *xmlerr) {
 	if (! mSwisTrackCore) {return;}
 
 	// Clear the current list of components
@@ -51,37 +52,41 @@ void THISCLASS::ConfigurationReadXML(xmlpp::Element* configuration, ErrorList *x
  
 	// Traverse the list and create a Component object for each "component" tag
 	if (! configuration) {return;}
-	xmlpp::Node::NodeList list=configuration->get_children("component");
-	xmlpp::Node::NodeList::iterator it=list.begin();
-	while (it!=list.end()) {
-		xmlpp::Element *element=dynamic_cast<xmlpp::Element *>(*it);
-		ConfigurationReadXMLElement(element, xmlerr);
-		it++;
+	wxXmlNode *node=configuration->GetChildren();
+	while (node) {
+		if (node->GetName()=="component") {
+			ConfigurationReadXMLElement(node, xmlerr);
+		}
+		node=node->GetNext();
 	}
 }
 
-void THISCLASS::ConfigurationReadXMLElement(xmlpp::Element* element, ErrorList *xmlerr) {
-	if (! element) {return;}
+void THISCLASS::ConfigurationReadXMLElement(wxXmlNode* node, ErrorList *xmlerr) {
+	if (! node) {return;}
 
 	// Get the type attribute
-	xmlpp::Attribute *att_type=element->get_attribute("type");
-	if (! att_type) {
+	wxString type;
+	wxXmlProperty *prop=node->GetProperties();
+	while (prop) {
+		if (prop->GetName()=="type") {type=prop->GetValue();}
+		prop=prop->GetNext();
+	}
+	if (type=="") {
 		std::ostringstream oss;
-		oss << "The component at line " << element->get_line() << " was ignored because it does not have a 'type' attribute.";
-		xmlerr->Add(oss.str(), element->get_line());
+		oss << "A component was ignored because it does not have a 'type' attribute.";
+		xmlerr->Add(oss.str(), 0);
 	}
 
 	// Search for the component
-	std::string type=att_type->get_value();
-	Component *component=mSwisTrackCore->GetComponentByName(type);
+	Component *component=mSwisTrackCore->GetComponentByName(type.c_str());
 	if (! component) {
 		std::ostringstream oss;
-		oss << "The component at line " << element->get_line() << " was ignored because there is no component called '" << type << "'.";
-		xmlerr->Add(oss.str(), element->get_line());
+		oss << "The component '" << type << "' was ignored because there is no component with this name.";
+		xmlerr->Add(oss.str(), 0);
 	}
 
 	// Add it to the list
 	Component *newcomponent=component->Create();
 	mSwisTrackCore->mDeployedComponents.push_back(newcomponent);
-	newcomponent->ConfigurationReadXML(element, xmlerr);
+	newcomponent->ConfigurationReadXML(node, xmlerr);
 }

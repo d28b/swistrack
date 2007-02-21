@@ -3,7 +3,7 @@
 
 class ConfigurationReaderXML;
 
-#include <libxml++/libxml++.h>
+#include <wx/xml/xml.h>
 #include "SwisTrackCore.h"
 
 //! Reads a SwisTrack configuration from an XML file.
@@ -16,35 +16,48 @@ public:
 	ErrorList mErrorList;	//!< Error messages are added here.
 
 	//! Constructor.
-	ConfigurationReaderXML(): mErrorList(), mParser(), mDocument(0) {}
+	ConfigurationReaderXML(): mErrorList(), mDocument(), mIsOpen(false), mSelectedNode(0) {}
 	//! Destructor.
 	~ConfigurationReaderXML() {}
 
 	//! Opens an XML document. If this function returns true, the document can be read.
-	bool Open(const std::string &filename);
+	bool Open(const wxString &filename);
 	//! Returns whether a document is open.
-	bool IsOpen() {return (mDocument!=0);}
+	bool IsOpen() {return mIsOpen;}
 
-	//! Returns the XML document. (This function is not needed unless the application needs to access the XML document in a different way.)
-	xmlpp::Document *GetDocument() {return mDocument;}
-	//! Returns the first element that matches with the given xpath expression, or 0 if none was found.
-	xmlpp::Element *GetElement(const std::string &xpath);
+	//! Selects the root node.
+	wxXmlNode *SelectNode(wxXmlNode *node);
+	//! Selects the root node.
+	wxXmlNode *SelectRootNode() {return SelectNode(GetRootNode());}
+	//! Selects a child node of the current node. If this node doesn't exist, it is created.
+	wxXmlNode *SelectChildNode(const wxString &name) {return SelectNode(GetChildNode(name));}
+	//! Selects the parent node of the current node.
+	wxXmlNode *SelectParentNode() {return SelectNode(GetParentNode());}
+	//! Returns the root node.
+	wxXmlNode *GetRootNode();
+	//! Returns a child node of the current node or 0 if no such child exists.
+	wxXmlNode *HasChildNode(const wxString &name);
+	//! Returns a child node of the current node. If this node doesn't exist, it is created.
+	wxXmlNode *GetChildNode(const wxString &name);
+	//! Returns the parent node of the current node.
+	wxXmlNode *GetParentNode();
 
 	//! Reads the components and uses the supplied SwisTrackCoreEditor to set them. If no document is open, an empty component list is created and the return value will be true. If the return value is false, the SwisTrackCore object was not editable.
 	bool ReadComponents(SwisTrackCore *stc);
 
 	//! Reads a string.
-	std::string ReadString(const std::string &xpath, const std::string &defvalue);
+	wxString ReadString(const wxString &xpath, const wxString &defvalue);
 	//! Reads a boolean value.
-	bool ReadBool(const std::string &xpath, bool defvalue);
+	bool ReadBool(const wxString &xpath, bool defvalue);
 	//! Reads an integer.
-	int ReadInt(const std::string &xpath, int defvalue);
+	int ReadInt(const wxString &xpath, int defvalue);
 	//! Reads a double.
-	double ReadDouble(const std::string &xpath, double defvalue);
+	double ReadDouble(const wxString &xpath, double defvalue);
 
 protected:
-	xmlpp::DomParser mParser;		//!< The XML parser.
-	xmlpp::Document *mDocument;		//!< The document.
+	wxXmlDocument mDocument;		//!< The document.
+	bool mIsOpen;					//!< Whether the document is open or not.
+	wxXmlNode *mSelectedNode;		//!< The currently selected node.
 
 };
 

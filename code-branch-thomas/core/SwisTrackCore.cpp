@@ -210,13 +210,14 @@ bool THISCLASS::ReloadConfiguration() {
 	return true;
 }
 
-void THISCLASS::ConfigurationWriteXML(xmlpp::Element *configuration, ErrorList *xmlerr) {
+void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmlerr) {
 	// Add an element for each component
 	tComponentList::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
-		xmlpp::Element *element=configuration->add_child("component");
-		element->set_attribute("type", (*it)->mName);
-		(*it)->ConfigurationWriteXML(element, xmlerr);
+		wxXmlNode *node=new wxXmlNode(0, wxXML_ELEMENT_NODE, "component");
+		configuration->AddChild(node);
+		node->AddProperty("type", (*it)->mName);
+		(*it)->ConfigurationWriteXML(node, xmlerr);
 
 		it++;
 	}

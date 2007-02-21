@@ -17,7 +17,6 @@ THISCLASS::SimulationParticles(const std::string &filename):
 	mFile=new std::ifstream();
 	mFile->clear();
 	mFile->open(filename.c_str(), std::ios::in);
-	if (! mFile->is_open()) {return;}
 }
 
 THISCLASS::~SimulationParticles() {

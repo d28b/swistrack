@@ -2,105 +2,119 @@
 #define THISCLASS ConfigurationReaderXML
 
 #include <sstream>
+#include <wx/log.h>
 #include "SwisTrackCoreEditor.h"
 
-bool THISCLASS::Open(const std::string &filename) {
+bool THISCLASS::Open(const wxString &filename) {
 	// Read the file
-	mDocument=0;
-	try {
-		mParser.parse_file(filename.c_str());
-		if (mParser==true) {
-			mDocument=mParser.get_document();
-		}
-	} catch (...) {
+	wxLogNull log;
+	mIsOpen=mDocument.Load(filename);
+	if (! mIsOpen) {
+		mDocument.SetRoot(new wxXmlNode(0, wxXML_ELEMENT_NODE, "swistrack"));
+		SelectRootNode();
+		return false;
 	}
 
-	return IsOpen();
+	// Select the root element and check its name
+	SelectRootNode();
+	if (mSelectedNode->GetName() != "swistrack") {
+		mIsOpen=false;
+		return false;
+	}
+
+	return true;
+}
+
+wxXmlNode *THISCLASS::SelectNode(wxXmlNode *node) {
+	mSelectedNode=node;
+	return mSelectedNode;
+}
+
+wxXmlNode *THISCLASS::GetRootNode() {
+	return mDocument.GetRoot();
+}
+
+wxXmlNode *THISCLASS::HasChildNode(const wxString &name) {
+	// Return the first element (if any)
+	wxXmlNode *node=mSelectedNode->GetChildren();
+	while (node) {
+		if (node->GetName()==name) {
+			return node;
+		}
+		node=node->GetNext();
+	}
+	return 0;
+}
+
+wxXmlNode *THISCLASS::GetChildNode(const wxString &name) {
+	// Return the first element (if any)
+	wxXmlNode *lastsibling=0;
+	wxXmlNode *node=mSelectedNode->GetChildren();
+	while (node) {
+		if (node->GetName()==name) {
+			return node;
+		}
+		lastsibling=node;
+		node=node->GetNext();
+	}
+
+	// If no node was found, create one
+	wxXmlNode *newnode=new wxXmlNode(0, wxXML_ELEMENT_NODE, name);
+	if (lastsibling) {
+		lastsibling->SetNext(newnode);
+	} else {
+		mSelectedNode->AddChild(newnode);
+	}
+	return newnode;
+}
+
+wxXmlNode *THISCLASS::GetParentNode() {
+	wxXmlNode *node=mSelectedNode->GetParent();
+	if (node) {return node;}
+	return mSelectedNode;
 }
 
 bool THISCLASS::ReadComponents(SwisTrackCore *stc) {
 	SwisTrackCoreEditor stce(stc);
 	if (! stce.IsEditable()) {return false;}
 
-	// If this method is called without a document, set up an empty component list
-	if (mDocument==0) {
-		stce.ConfigurationReadXML(0, &mErrorList);
-		return true;
-	}
-
-	// Get the root node
-	xmlpp::Element *rootnode=mDocument->get_root_node();
-	if (! rootnode) {
-		stce.ConfigurationReadXML(0, &mErrorList);
-		return true;
-	}
-
-	// Get the list of components
-	xmlpp::Node::NodeList nodes=rootnode->get_children("components");
-	if (nodes.empty()) {
-		stce.ConfigurationReadXML(0, &mErrorList);
-		return true;
-	}
-
 	// Read the component list
-	xmlpp::Element *components=dynamic_cast<xmlpp::Element *>(nodes.front());
-	stce.ConfigurationReadXML(components, &mErrorList);
+	SelectRootNode();
+	stce.ConfigurationReadXML(GetChildNode("components"), &mErrorList);
 	return true;
 }
 
-xmlpp::Element *THISCLASS::GetElement(const std::string &path) {
-	if (! mDocument) {return 0;}
-
-	// Get the root node
-	xmlpp::Element *rootnode=mDocument->get_root_node();
-	if (! rootnode) {return 0;}
-
-	// Find the element in the tree
-	xmlpp::NodeSet nodes=rootnode->find(path);
-
-	// Return the first element (if any)
-	xmlpp::NodeSet::iterator it=nodes.begin();
-	while (it!=nodes.end()) {
-		xmlpp::Element *node=dynamic_cast<xmlpp::Element*>(*it);
-		if (node) {return node;}
-		it++;
-	}
-
-	return 0;
-}
-
-std::string THISCLASS::ReadString(const std::string &xpath, const std::string &defvalue) {
-	xmlpp::Element *node=GetElement(xpath);
+wxString THISCLASS::ReadString(const wxString &name, const wxString &defvalue) {
+	wxXmlNode *node=HasChildNode(name);
 	if (! node) {return defvalue;}
-
-	xmlpp::TextNode *tn=node->get_child_text();
-	if (! tn) {return defvalue;}
-	return tn->get_content();
+	return node->GetNodeContent();
 }
 
-bool THISCLASS::ReadBool(const std::string &xpath, bool defvalue) {
-	std::string str=ReadString(xpath, "");
+bool THISCLASS::ReadBool(const wxString &name, bool defvalue) {
+	wxString str=ReadString(name, "");
 	if (str=="") {return defvalue;}
 
-	std::istringstream iss(str);
-	iss >> defvalue;
-	return defvalue;
+	str.MakeLower();
+	if (str=="true") {return true;}
+	if (str=="false") {return false;}
+	long value=(defvalue ? 1 : 0);
+	str.ToLong(&value);
+	return (value!=0);
 }
 
-int THISCLASS::ReadInt(const std::string &xpath, int defvalue) {
-	std::string str=ReadString(xpath, "");
+int THISCLASS::ReadInt(const wxString &name, int defvalue) {
+	wxString str=ReadString(name, "");
 	if (str=="") {return defvalue;}
 
-	std::istringstream iss(str);
-	iss >> defvalue;
-	return defvalue;
+	long value=(long)defvalue;
+	str.ToLong(&value);
+	return value;
 }
 
-double THISCLASS::ReadDouble(const std::string &xpath, double defvalue) {
-	std::string str=ReadString(xpath, "");
+double THISCLASS::ReadDouble(const wxString &name, double defvalue) {
+	wxString str=ReadString(name, "");
 	if (str=="") {return defvalue;}
 
-	std::istringstream iss(str);
-	iss >> defvalue;
+	str.ToDouble(&defvalue);
 	return defvalue;
 }

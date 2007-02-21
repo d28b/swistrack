@@ -19,20 +19,23 @@ THISCLASS::ComponentsDialog(wxWindow* parent, SwisTrackCore *stc):
 
 	// Add the root element
 	wxTreeItemId rootitem=mTree->AddRoot("");
+	wxTreeItemId rootitem2=mTree->GetRootItem();
 
 	// Add an item for each component
 	SwisTrackCore::tComponentList::iterator it=mSwisTrackCore->mAvailableComponents.begin();
 	wxTreeItemId curcategoryitem;
-	ComponentCategory *curcategory;
+	ComponentCategory *curcategory=0;
 	while (it!=mSwisTrackCore->mAvailableComponents.end()) {
 		ComponentCategory *category=(*it)->mCategory;
-		if ((! curcategoryitem) || (category!=curcategory)) {
-			curcategoryitem=mTree->AppendItem(rootitem, category->mDisplayName.c_str());
-			mTree->Expand(curcategoryitem);
-			curcategory=category;
-		}
+		if (category) {
+			if ((! curcategoryitem) || (category!=curcategory)) {
+				curcategoryitem=mTree->AppendItem(rootitem, category->mDisplayName.c_str());
+				mTree->Expand(curcategoryitem);
+				curcategory=category;
+			}
 
-		wxTreeItemId item=mTree->AppendItem(curcategoryitem, (*it)->mDisplayName.c_str(), -1, -1, new ComponentTreeItem(*it));
+			wxTreeItemId item=mTree->AppendItem(curcategoryitem, (*it)->mDisplayName.c_str(), -1, -1, new ComponentTreeItem(*it));
+		}
 		it++;
 	}
 

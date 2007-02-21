@@ -35,18 +35,11 @@ void THISCLASS::OnStart() {
 			std::ostringstream oss;
 			oss << "The file \'" << filename << "\' could not be read.";
 			AddError(oss.str());
-			delete mSimulationParticles;
-			mSimulationParticles=0;
+		} else {
+			std::ostringstream oss;
+			oss << "File \'" << mSimulationParticles->GetFileName() << "\' loaded.";
+			AddInfo(oss.str());
 		}
-	}
-
-	// Check whether we have a file or not
-	if (! mSimulationParticles) {
-		AddError("No simulation file loaded.");
-	} else {
-		std::ostringstream oss;
-		oss << "File \'" << mSimulationParticles->GetFileName() << "\' loaded.";
-		AddInfo(oss.str());
 	}
 
 	// Load other values

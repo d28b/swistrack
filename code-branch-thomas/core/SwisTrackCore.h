@@ -4,7 +4,7 @@
 class SwisTrackCore;
 
 #include <list>
-#include <libxml++/libxml++.h>
+#include <wx/xml/xml.h>
 #include "Component.h"
 #include "ComponentCategory.h"
 #include "CommunicationInterface.h"
@@ -63,7 +63,7 @@ public:
 	bool ReloadConfiguration();
 
 	//! Writes the configuration to a XML document.
-	void ConfigurationWriteXML(xmlpp::Element* configuration, ErrorList *xmlerr);
+	void ConfigurationWriteXML(wxXmlNode* configuration, ErrorList *xmlerr);
 
 	//! Returns the list of deployed components. Note that this list can only be read. To modify the list, you need to use a SwisTrackCoreEditor object.
 	const SwisTrackCore::tComponentList *GetDeployedComponents() {return &mDeployedComponents;}

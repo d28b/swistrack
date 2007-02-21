@@ -5,7 +5,8 @@ class Component;
 
 #include <string>
 #include <list>
-#include <libxml++/libxml++.h>
+#include <map>
+#include <wx/xml/xml.h>
 #include "StatusItem.h"
 #include "SwisTrackCore.h"
 #include "DataStructure.h"
@@ -58,9 +59,9 @@ public:
 	virtual Component *Create() = 0;
 
 	//! Reads the configuration from an XML element.
-	void ConfigurationReadXML(xmlpp::Element *element, ErrorList *xmlerr);
+	void ConfigurationReadXML(wxXmlNode *element, ErrorList *xmlerr);
 	//! Writes the configuration to an XML element.
-	void ConfigurationWriteXML(xmlpp::Element *element, ErrorList *xmlerr);
+	void ConfigurationWriteXML(wxXmlNode *element, ErrorList *xmlerr);
 
 	//! Returns a boolean from the configuration.
 	bool GetConfigurationBool(const std::string &key, bool defvalue);
@@ -108,7 +109,7 @@ protected:
 	void AddDisplayImage(DisplayImage *di);
 
 	//! Returns a configuration element.
-	xmlpp::Element* GetConfigurationElement(const std::string &name);
+	wxXmlNode* GetConfigurationElement(const std::string &name);
 };
 
 #endif

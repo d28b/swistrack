@@ -6,7 +6,7 @@
 THISCLASS::Component(SwisTrackCore *stc, const std::string &name):
 		mCore(stc), mName(name), mDisplayName(name), mCategory(0), mStatus(), mStatusHasError(false), mStatusHasWarning(false), mStarted(false), mDataStructureRead(), mDataStructureWrite() {
 
-	//mConfigurationRoot=dynamic_cast<const xmlpp::Element*>(mCore->mConfigurationRoot->find(mName)).begin());
+	//mConfigurationRoot=dynamic_cast<const wxXmlNode*>(mCore->mConfigurationRoot->find(mName)).begin());
 }
 
 void THISCLASS::ClearStatus() {
@@ -51,35 +51,40 @@ bool THISCLASS::HasDataStructureWrite(DataStructure *ds) {
 	return (it != mDataStructureWrite.end());
 }
 
-void THISCLASS::ConfigurationReadXML(xmlpp::Element *configuration, ErrorList *xmlerr) {
+void THISCLASS::ConfigurationReadXML(wxXmlNode *configuration, ErrorList *xmlerr) {
 	mConfiguration.clear();
 
-	xmlpp::Node::NodeList list=configuration->get_children("parameter");
-	xmlpp::Node::NodeList::iterator it=list.begin();
-	while (it!=list.end()) {
-		xmlpp::Element *element=dynamic_cast<xmlpp::Element *>(*it);
-		if (element) {
-			xmlpp::Attribute *att_name=element->get_attribute("name");
-			xmlpp::Attribute *att_value=element->get_attribute("value");
-			if ((att_name!=0) && (att_value!=0)) {
-				mConfiguration[att_name->get_value()]=att_value->get_value();
-			} else {
+	wxXmlNode *node=configuration->GetChildren();
+	while (node) {
+		if (node->GetName()=="parameter") {
+			wxString name="";
+			wxString value="";
+			wxXmlProperty *prop=node->GetProperties();
+			while (prop) {
+				if (prop->GetName()=="name") {name=prop->GetValue();}
+				if (prop->GetName()=="value") {value=prop->GetValue();}
+				prop=prop->GetNext();
+			}
+			if ((name=="") && (value=="")) {
 				std::ostringstream oss;
-				oss << "The parameter at line " << element->get_line() << " was ignored because either the attribute 'name' or 'value' are missing.";
-				xmlerr->Add(oss.str(), element->get_line());
+				oss << "A parameter of the component '" << mName << "' was ignored because either the attribute 'name' or 'value' are missing.";
+				xmlerr->Add(oss.str(), 0);  // The current wxXml implementation doesn't care about line numbers.
+			} else {
+				mConfiguration[name.c_str()]=value.c_str();
 			}
 		}
 
-		it++;
+		node=node->GetNext();
 	}
 }
 
-void THISCLASS::ConfigurationWriteXML(xmlpp::Element *configuration, ErrorList *xmlerr) {
+void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmlerr) {
 	tConfigurationMap::iterator it=mConfiguration.begin();
 	while (it!=mConfiguration.end()) {
-		xmlpp::Element *element=configuration->add_child("parameter");
-		element->set_attribute("name", it->first);
-		element->set_attribute("value", it->second);
+		wxXmlNode *node=new wxXmlNode(0, wxXML_ELEMENT_NODE, "parameter");
+		configuration->AddChild(node);
+		node->AddProperty("name", it->first.c_str());
+		node->AddProperty("value", it->second.c_str());
 		it++;
 	}
 }

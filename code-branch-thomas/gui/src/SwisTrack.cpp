@@ -353,6 +353,15 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 		// return false;
 	}
 
+	// Split the filename
+	wxString path;
+	wxString name;
+	wxString extension;
+	wxFileName::SplitPath(mFileName, &path, &name, &extension);
+
+	// Change the CWD
+	wxFileName::SetCwd(path);
+
 	// Set the new file name
 	if (astemplate) {
 		mFileName="";
@@ -362,20 +371,27 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 		SetTitle(mFileName+" - SwisTrack");
 	}
 
-	// Read the configuration
+	// Read the components
 	StopProductiveMode();
 	cr.ReadComponents(mSwisTrackCore);
-	mTriggerFreeRunInterval=cr.ReadInt("trigger/freerun/interval", 1000);
-	std::string type=cr.ReadString("trigger/mode", "manual");
-	std::transform(type.begin(), type.end(), type.begin(), std::tolower);
+
+	// Read the trigger settings
+	cr.SelectRootNode();
+	cr.SelectChildNode("trigger");
+	wxString type=cr.ReadString("mode", "manual");
+	cr.SelectChildNode("freerun");
+	mTriggerFreeRunInterval=cr.ReadInt("interval", 1000);
+	type.MakeLower();
 	if (type=="freerun") {
 		SetTriggerFreeRun();
 	} else {
 		SetTriggerManual();
 	}
 
-	// Read other settings
-	mTCPServer->SetPort(cr.ReadInt("server/port", 3000));
+	// Read the server settings
+	cr.SelectRootNode();
+	cr.SelectChildNode("server");
+	mTCPServer->SetPort(cr.ReadInt("port", 3000));
 	SetStatusText(wxString::Format("%d", mTCPServer->GetPort()), sStatusField_ServerPort);
 
 	// Show errors if there are any
@@ -415,18 +431,18 @@ void THISCLASS::SaveFile(const wxString &filename) {
 
 	// Save the trigger settings
 	cw.SelectRootNode();
-	cw.SelectNode("trigger");
+	cw.SelectChildNode("trigger");
 	if (mTriggerFreeRunTimer->IsRunning()) {
 		cw.WriteString("mode", "freerun");
 	} else {
 		cw.WriteString("mode", "manual");
 	}
-	cw.SelectNode("freerun");
+	cw.SelectChildNode("freerun");
 	cw.WriteInt("interval", mTriggerFreeRunInterval);
 
 	// Save other settings
 	cw.SelectRootNode();
-	cw.SelectNode("server");
+	cw.SelectChildNode("server");
 	cw.WriteInt("port", mTCPServer->GetPort());
 
 	if (! cw.Save(filename.c_str())) {

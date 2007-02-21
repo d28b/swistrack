@@ -3,6 +3,7 @@
 
 class SwisTrackCoreEditor;
 
+#include <wx/xml/xml.h>
 #include "SwisTrackCore.h"
 
 //! An editor for SwisTrackCore objects. If you want to modify the list of deployed components, you have to use this class.
@@ -22,13 +23,13 @@ public:
 	//! Clears all deployed components.
 	void Clear();
 	//! Reads the configuration from a XML document.
-	void ConfigurationReadXML(xmlpp::Element* configuration, ErrorList *xmlerr);
+	void ConfigurationReadXML(wxXmlNode* configuration, ErrorList *xmlerr);
 
 private:
 	SwisTrackCore *mSwisTrackCore;		//!< The associated SwisTrackCore object.
 
 	//! Reads one component from the XML file.
-	void ConfigurationReadXMLElement(xmlpp::Element* element, ErrorList *xmlerr);
+	void ConfigurationReadXMLElement(wxXmlNode* element, ErrorList *xmlerr);
 
 };
 
