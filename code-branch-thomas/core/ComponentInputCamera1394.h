@@ -3,9 +3,9 @@
 
 #include "Component.h"
 
-//#define _1394
+//#define USE_CAMERA_CMU_1394
 
-#ifdef _1394
+#ifdef USE_CAMERA_CMU_1394
 #include <cv.h>
 #include <highgui.h>  // 1394camera.h requires this to be included before
 #include <1394camera.h>
@@ -29,7 +29,7 @@ public:
 	Component *Create() {return new ComponentInputCamera1394(mCore);}
 
 private:
-	C1394Camera mCamera;		//!< 1394 Camera handle (CMU 1394 Camera Driver)
+	C1394Camera mCamera;		//!< Camera handle.
 	IplImage* mCurrentImage;	//!< The last acquired image.
 	int mFrameNumber;			//!< The frame number since the component was started.
 

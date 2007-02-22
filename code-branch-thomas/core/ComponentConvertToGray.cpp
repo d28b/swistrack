@@ -51,9 +51,9 @@ void THISCLASS::OnStep() {
 	}
 
 	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mOutputImage;
+	mDisplayImageOutput.mImage=mCore->mDataStructureImageGray.mImage;
 	std::ostringstream oss;
-	oss << "Grayscale image, " << mOutputImage->width << "x" << mOutputImage->height;
+	oss << "Grayscale image, " << mDisplayImageOutput.mImage->width << "x" << mDisplayImageOutput.mImage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 

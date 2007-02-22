@@ -1,7 +1,7 @@
 #include "ComponentInputCamera1394.h"
 #define THISCLASS ComponentInputCamera1394
 
-#ifdef _1394
+#ifdef USE_CAMERA_CMU_1394
 #include <sstream>
 
 THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):

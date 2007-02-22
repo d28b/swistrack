@@ -59,6 +59,8 @@ THISCLASS::SwisTrackCore():
 }
 
 THISCLASS::~SwisTrackCore() {
+	Stop();
+
 	// Delete deployed components
 	tComponentList::iterator itd=mDeployedComponents.begin();
 	while (itd!=mDeployedComponents.end()) {

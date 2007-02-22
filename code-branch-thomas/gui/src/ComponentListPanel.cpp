@@ -167,6 +167,12 @@ void THISCLASS::UpdateStatus() {
 			li.SetText(str);
 
 			mList->SetItem(li);
+		} else {
+			wxListItem li;
+			li.SetId(item);
+			li.SetColumn(mColumnMessages);
+			li.SetText("");
+			mList->SetItem(li);
 		}
 	}
 }

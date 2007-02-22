@@ -44,7 +44,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;../../libblob/include;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include"
+				AdditionalIncludeDirectories="../include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 0.8\pylon\include&quot;;&quot;L:\Basler\Pylon 0.8\genicam\library\cpp\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
