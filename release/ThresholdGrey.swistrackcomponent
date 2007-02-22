@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<name>Threshold a greyscale image</name>
+	<description>Thresholds a greyscale image.</description>
+	<display>Output</display>
+
+	<configuration type="integer">
+		<name>Threshold</name>
+		<min>0</min>
+		<max>255</max>
+		<display>Output</display>
+	</configuration>
+</swistrackcomponent>
