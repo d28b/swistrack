@@ -17,10 +17,8 @@ class ComponentsDialog;
 class ComponentsDialog: public wxDialog {
 
 public:
-	//! The associated SwisTrackCore object.
-	SwisTrackCore *mSwisTrackCore;
-	//! The selected component.
-	Component *mSelectedComponent;
+	SwisTrackCore *mSwisTrackCore;		//!< The associated SwisTrackCore object.
+	Component *mSelectedComponent;		//!< The selected component.
 
 	//! Constructor.
 	ComponentsDialog(wxWindow *parent, SwisTrackCore *stc);
@@ -42,12 +40,9 @@ protected:
 	};
 
 private:
-	//! The tree with the components.
-	wxTreeCtrl *mTree;
-	//! The corresponding GUI object.
-	wxButton *mButtonAdd;
-	//! The corresponding GUI object.
-	wxButton *mButtonCancel;
+	wxTreeCtrl *mTree;			//!< The tree with the components.
+	wxButton *mButtonAdd;		//!< The corresponding GUI object.
+	wxButton *mButtonCancel;	//!< The corresponding GUI object.
 
 	DECLARE_EVENT_TABLE()
 };

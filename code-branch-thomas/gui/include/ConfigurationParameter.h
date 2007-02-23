@@ -1,5 +1,5 @@
-#ifndef HEADER_ComponentListPanel
-#define HEADER_ComponentListPanel
+#ifndef HEADER_ConfigurationParameter
+#define HEADER_ConfigurationParameter
 
 #include <wx/wxprec.h>
 
@@ -7,24 +7,27 @@
   #include <wx/wx.h>
 #endif
 
-class ComponentListPanel;
+class ConfigurationParameter;
 
 #include "SwisTrackCore.h"
-#include "ComponentsDialog.h"
 #include <wx/panel.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
 
-class ComponentListPanel: public wxPanel, public SwisTrackCoreInterface {
+class ConfigurationParameter: public wxPanel, public SwisTrackCoreInterface {
 
 public:
-	SwisTrackCore *mSwisTrackCore;		//!< The associated SwisTrackCore object.
-	Component *mSelectedComponent;		//!< The selected component.
+	//! The associated SwisTrackCore object.
+	SwisTrackCore *mSwisTrackCore;
+	//! The component.
+	Component *mComponent;
+	//! The component.
+	Component *mComponent;
 
 	//! Constructor.
-	ComponentListPanel(wxWindow *parent, SwisTrackCore *stc);
+	ConfigurationParameter(wxWindow *parent, SwisTrackCore *stc);
 	//! Destructor.
-	~ComponentListPanel();
+	~ConfigurationParameter();
 
 	//! Updates the list completely.
 	void Update();
@@ -43,15 +46,15 @@ public:
 	void OnListItemSelected(wxListEvent& event);
 
 	// SwisTrackCoreInterface methods
-	void OnBeforeStart(bool productivemode) {};
-	void OnAfterStart(bool productivemode);
+	void OnBeforeStart(bool productivemode);
+	void OnAfterStart(bool productivemode) {};
 	void OnBeforeStop() {};
 	void OnAfterStop();
 	void OnBeforeStep() {};
 	void OnStepReady() {};
-	void OnAfterStep();
+	void OnAfterStep() {};
 	void OnBeforeEdit() {};
-	void OnAfterEdit();
+	void OnAfterEdit() {};
 
 private:
 	//! GUI constants.
@@ -63,14 +66,21 @@ private:
 		eID_List,
 	};
 
-	wxListCtrl *mList;			//!< The corresponding GUI widget.
-	int mColumnMessages;		//!< The column number of the messages.
-	wxButton *mButtonAdd;		//!< The corresponding GUI widget.
-	wxButton *mButtonRemove;	//!< The corresponding GUI widget.
-	wxButton *mButtonUp;		//!< The corresponding GUI widget.
-	wxButton *mButtonDown;		//!< The corresponding GUI widget.
+	//! The corresponding GUI widget.
+	wxListCtrl *mList;
+	//! The column number of the message.
+	int mColumnMessages;
+	//! The corresponding GUI widget.
+	wxButton *mButtonAdd;
+	//! The corresponding GUI widget.
+	wxButton *mButtonRemove;
+	//! The corresponding GUI widget.
+	wxButton *mButtonUp;
+	//! The corresponding GUI widget.
+	wxButton *mButtonDown;
 
-	ComponentsDialog *mComponentsDialog;	//!< The component selector dialog used when adding a new component.
+	//! The component selector dialog used when adding a new component.
+	ComponentsDialog *mComponentsDialog;
 
 	DECLARE_EVENT_TABLE()
 };

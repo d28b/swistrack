@@ -1,5 +1,5 @@
-#ifndef HEADER_ComponentListPanel
-#define HEADER_ComponentListPanel
+#ifndef HEADER_ConfigurationPanel
+#define HEADER_ConfigurationPanel
 
 #include <wx/wxprec.h>
 
@@ -7,7 +7,7 @@
   #include <wx/wx.h>
 #endif
 
-class ComponentListPanel;
+class ConfigurationPanel;
 
 #include "SwisTrackCore.h"
 #include "ComponentsDialog.h"
@@ -15,16 +15,18 @@ class ComponentListPanel;
 #include <wx/listctrl.h>
 #include <wx/button.h>
 
-class ComponentListPanel: public wxPanel, public SwisTrackCoreInterface {
+class ConfigurationPanel: public wxPanel, public SwisTrackCoreInterface {
 
 public:
-	SwisTrackCore *mSwisTrackCore;		//!< The associated SwisTrackCore object.
-	Component *mSelectedComponent;		//!< The selected component.
+	//! The associated SwisTrackCore object.
+	SwisTrackCore *mSwisTrackCore;
+	//! The selected component.
+	Component *mSelectedComponent;
 
 	//! Constructor.
-	ComponentListPanel(wxWindow *parent, SwisTrackCore *stc);
+	ConfigurationPanel(wxWindow *parent, SwisTrackCore *stc);
 	//! Destructor.
-	~ComponentListPanel();
+	~ConfigurationPanel();
 
 	//! Updates the list completely.
 	void Update();
@@ -63,14 +65,21 @@ private:
 		eID_List,
 	};
 
-	wxListCtrl *mList;			//!< The corresponding GUI widget.
-	int mColumnMessages;		//!< The column number of the messages.
-	wxButton *mButtonAdd;		//!< The corresponding GUI widget.
-	wxButton *mButtonRemove;	//!< The corresponding GUI widget.
-	wxButton *mButtonUp;		//!< The corresponding GUI widget.
-	wxButton *mButtonDown;		//!< The corresponding GUI widget.
+	//! The corresponding GUI widget.
+	wxListCtrl *mList;
+	//! The column number of the message.
+	int mColumnMessages;
+	//! The corresponding GUI widget.
+	wxButton *mButtonAdd;
+	//! The corresponding GUI widget.
+	wxButton *mButtonRemove;
+	//! The corresponding GUI widget.
+	wxButton *mButtonUp;
+	//! The corresponding GUI widget.
+	wxButton *mButtonDown;
 
-	ComponentsDialog *mComponentsDialog;	//!< The component selector dialog used when adding a new component.
+	//! The component selector dialog used when adding a new component.
+	ComponentsDialog *mComponentsDialog;
 
 	DECLARE_EVENT_TABLE()
 };

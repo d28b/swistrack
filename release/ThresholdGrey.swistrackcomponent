@@ -4,10 +4,12 @@
 	<description>Thresholds a greyscale image.</description>
 	<display>Output</display>
 
-	<configuration type="integer">
-		<name>Threshold</name>
-		<min>0</min>
-		<max>255</max>
-		<display>Output</display>
+	<configuration>
+		<parameter type="integer">
+			<label>Threshold</label>
+			<min>0</min>
+			<max>255</max>
+			<display>Output</display>
+		</parameter>
 	</configuration>
 </swistrackcomponent>
