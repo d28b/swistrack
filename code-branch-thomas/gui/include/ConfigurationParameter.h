@@ -17,33 +17,20 @@ class ConfigurationParameter;
 class ConfigurationParameter: public wxPanel, public SwisTrackCoreInterface {
 
 public:
-	//! The associated SwisTrackCore object.
-	SwisTrackCore *mSwisTrackCore;
-	//! The component.
-	Component *mComponent;
-	//! The component.
-	Component *mComponent;
+	SwisTrackCore *mSwisTrackCore;	//!< The associated SwisTrackCore object.
+	SwisTrack *mSwisTrack;			//!< The associated SwisTrack object.
+	Component *mComponent;			//!< The component.
 
 	//! Constructor.
-	ConfigurationParameter(wxWindow *parent, SwisTrackCore *stc);
+	ConfigurationParameter(wxWindow *parent);
 	//! Destructor.
 	~ConfigurationParameter();
 
-	//! Updates the list completely.
-	void Update();
-	//! Updates the status messages.
-	void UpdateStatus();
-
-	//! Handles the corresponding GUI event.
-	void OnButtonAddClick(wxCommandEvent& event);
-	//! Handles the corresponding GUI event.
-	void OnButtonRemoveClick(wxCommandEvent& event);
-	//! Handles the corresponding GUI event.
-	void OnButtonUpClick(wxCommandEvent& event);
-	//! Handles the corresponding GUI event.
-	void OnButtonDownClick(wxCommandEvent& event);
-	//! Handles the corresponding GUI event.
-	void OnListItemSelected(wxListEvent& event);
+	//! Initializes the parameter.
+	void Initialize(SwisTrack *st, wxXmlNode *node);
+	
+	//! This method is called (by the method Initialize) to initialize the parameter. This method must be implemented by the subclass and is called exactly once (immediately after creating the parameter object).
+	virtual void OnInitialize(wxXmlNode *node) = 0;
 
 	// SwisTrackCoreInterface methods
 	void OnBeforeStart(bool productivemode);
@@ -56,31 +43,12 @@ public:
 	void OnBeforeEdit() {};
 	void OnAfterEdit() {};
 
+protected:
+	wxString mName;			//!< The name of the parameter.
+	wxString mDisplay;		//!< The display to be selected when the parameter is changed.
+	bool mReloadable;		//!< If true, the parameters can be applied by reloading the parameters of this component (without restarting the components).
+
 private:
-	//! GUI constants.
-	enum eConstants {
-		eID_ButtonAdd,
-		eID_ButtonRemove,
-		eID_ButtonUp,
-		eID_ButtonDown,
-		eID_List,
-	};
-
-	//! The corresponding GUI widget.
-	wxListCtrl *mList;
-	//! The column number of the message.
-	int mColumnMessages;
-	//! The corresponding GUI widget.
-	wxButton *mButtonAdd;
-	//! The corresponding GUI widget.
-	wxButton *mButtonRemove;
-	//! The corresponding GUI widget.
-	wxButton *mButtonUp;
-	//! The corresponding GUI widget.
-	wxButton *mButtonDown;
-
-	//! The component selector dialog used when adding a new component.
-	ComponentsDialog *mComponentsDialog;
 
 	DECLARE_EVENT_TABLE()
 };

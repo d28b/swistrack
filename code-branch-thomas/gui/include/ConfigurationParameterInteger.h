@@ -15,7 +15,7 @@ class ConfigurationParameterInteger: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterInteger(wxWindow* parent, wxXmlNode *node);
+	ConfigurationParameterInteger(wxWindow* parent, wxXmlNode *node, SwisTrack *st);
 	//! Destructor.
 	~ConfigurationParameterInteger();
 
