@@ -15,9 +15,13 @@ class ConfigurationParameterInteger: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterInteger(wxWindow* parent, wxXmlNode *node, SwisTrack *st);
+	ConfigurationParameterInteger(wxWindow* parent);
 	//! Destructor.
 	~ConfigurationParameterInteger();
+
+	// ConfigurationParameter methods
+	virtual void OnInitialize(ConfigurationXML *config);
+	virtual void OnUpdate();
 
 	//! Handles the corresponding GUI event.
 	void OnTextUpdated(wxCommandEvent& event);
@@ -26,8 +30,9 @@ public:
 
 private:
 	wxTextCtrl *mTextCtrl;		//!< The corresponding GUI widget.
-	int mMin;					//!< The minimum value allowed.
-	int mMax;					//!< The maximum value allowed.
+	int mValueMin;				//!< The minimum value allowed.
+	int mValueMax;				//!< The maximum value allowed.
+	int mValueDefault;			//!< The default value.
 
 	DECLARE_EVENT_TABLE()
 };

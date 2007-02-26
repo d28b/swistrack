@@ -26,7 +26,7 @@ bool THISCLASS::Open(const wxString &filename) {
 
 	// Select the root element and check its name
 	SetRootNode(mDocument.GetRoot());
-	if (GetRootNode() != "swistrack") {
+	if (GetRootNode()->GetName() != "swistrack") {
 		mIsOpen=false;
 		return false;
 	}

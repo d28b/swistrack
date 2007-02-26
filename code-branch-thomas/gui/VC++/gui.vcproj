@@ -194,7 +194,7 @@
 				OutputFile="../../../release/swistrack.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\core\lib;L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\1394camera\lib;L:\opencv\lib;&quot;L:\Basler\Pylon 0.8\pylon\lib&quot;;&quot;L:\Basler\Pylon 0.8\genicam\library\cpp\lib\win32_i86&quot;"
+				AdditionalLibraryDirectories="..\..\core\lib;L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\1394camera\lib;L:\opencv\lib;&quot;L:\Basler\Pylon 0.9\pylon\lib&quot;;&quot;L:\Basler\Pylon 0.9\genicam\library\cpp\lib\win32_i86&quot;"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="libci.lib;msvcrt.lib;libc.lib"
 				GenerateDebugInformation="true"
@@ -338,6 +338,22 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\ConfigurationPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ConfigurationParameter.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ConfigurationParameterFactory.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ConfigurationParameterInteger.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\ErrorListDialog.cpp"
 				>
 			</File>
@@ -392,6 +408,22 @@
 			</File>
 			<File
 				RelativePath="..\include\ComponentTreeItem.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ConfigurationPanel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ConfigurationParameter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ConfigurationParameterFactory.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ConfigurationParameterInteger.h"
 				>
 			</File>
 			<File

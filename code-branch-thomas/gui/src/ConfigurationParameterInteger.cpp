@@ -7,15 +7,13 @@
 #include "SwisTrackCoreEditor.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
-  EVT_COMMAND_TEXT_UPDATED (wxID_ANY, THISCLASS::OnTextUpdated)
+  EVT_TEXT (wxID_ANY, THISCLASS::OnTextUpdated)
   EVT_TEXT_ENTER (wxID_ANY, THISCLASS::OnTextEnter)
-  EVT_BUTTON (eID_ButtonUp, THISCLASS::OnButtonUpClick)
-  EVT_BUTTON (eID_ButtonDown, THISCLASS::OnButtonDownClick)
-  EVT_LIST_ITEM_SELECTED (eID_List, THISCLASS::OnListItemSelected)
 END_EVENT_TABLE()
 
-THISCLASS::ConfigurationParameterInteger(wxWindow* parent, SwisTrack *st):
-		ConfigurationParameter(parent, st) {
+THISCLASS::ConfigurationParameterInteger(wxWindow* parent):
+		ConfigurationParameter(parent),
+		mValueMin(0), mValueMax(255), mValueDefault(0) {
 
 }
 
@@ -31,7 +29,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config) {
 
 	// Create the controls
 	wxStaticText *label=new wxStaticText(this, -1, config->ReadString("name", ""), wxDefaultPosition, wxSize(100, 25), wxST_NO_AUTORESIZE);
-	mTextCtrl=new wxStaticText(this, -1, "", wxDefaultPosition, wxSize(50, 25), wxTE_RIGHT|wxTE_PROCESS_ENTER);
+	mTextCtrl=new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(50, 25), wxTE_RIGHT|wxTE_PROCESS_ENTER);
 	wxStaticText *unitlabel=new wxStaticText(this, -1, config->ReadString("unit", ""), wxDefaultPosition, wxSize(50, 25), wxST_NO_AUTORESIZE);
 
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
@@ -42,22 +40,22 @@ void THISCLASS::OnInitialize(ConfigurationXML *config) {
 }
 
 void THISCLASS::OnUpdate() {
-	int value=mComponent->GetConfigurationInt(mName, mValueDefault);
-	mText->SetText(wxString::Format("%d", value));
+	int value=mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
+	mTextCtrl->SetValue(wxString::Format("%d", value));
 }
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	long value=(long)mValueDefault;
-	mText->GetText().ToLong(&value);
+	mTextCtrl->GetValue().ToLong(&value);
 	if (value<mValueMin) {value=mValueMin;}
 	if (value>mValueMax) {value=mValueMax;}
-	mComponent->SetConfigurationInt(value);
+	int curvalue=mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
+	if (curvalue==value) {return;}
+
+	mComponent->SetConfigurationInt(mName.c_str(), value);
+	CommitChanges();
 }
 
 void THISCLASS::OnTextEnter(wxCommandEvent& event) {
-	long value=(long)mValueDefault;
-	mText->GetText().ToLong(&value);
-	if (value<mValueMin) {value=mValueMin;}
-	if (value>mValueMax) {value=mValueMax;}
-	mComponent->SetConfigurationInt(value);
+	OnTextUpdated(event);
 }

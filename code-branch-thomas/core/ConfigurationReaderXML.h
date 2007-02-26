@@ -5,12 +5,13 @@ class ConfigurationReaderXML;
 
 #include <wx/xml/xml.h>
 #include "SwisTrackCore.h"
+#include "ConfigurationXML.h"
 
 //! Reads a SwisTrack configuration from an XML file.
 /*!
 	Create this an object of this class on the stack and call PrepareRead(). If this returns true, you can call ReadComponents(), ReadTriggerInterval(), ... to read the file. (If the latter methods are called without any open document, the default values are returned.)
 */
-class ConfigurationReaderXML {
+class ConfigurationReaderXML: public ConfigurationXML {
 
 public:
 	ErrorList mErrorList;	//!< Error messages are added here.

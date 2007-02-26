@@ -10,6 +10,8 @@
 class ConfigurationParameter;
 
 #include "SwisTrackCore.h"
+#include "SwisTrack.h"
+#include "ConfigurationXML.h"
 #include <wx/panel.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
@@ -27,10 +29,14 @@ public:
 	~ConfigurationParameter();
 
 	//! Initializes the parameter.
-	void Initialize(SwisTrack *st, wxXmlNode *node);
-	
+	void Initialize(SwisTrack *st, ConfigurationXML *config);
 	//! This method is called (by the method Initialize) to initialize the parameter. This method must be implemented by the subclass and is called exactly once (immediately after creating the parameter object).
-	virtual void OnInitialize(wxXmlNode *node) = 0;
+	virtual void OnInitialize(ConfigurationXML *config) = 0;
+	//! This method is called after the component configuration has been modified.
+	virtual void OnUpdate() = 0;
+
+	//! Restarts or reloads the components to commit the changes made in the configuration.
+	void CommitChanges();
 
 	// SwisTrackCoreInterface methods
 	void OnBeforeStart(bool productivemode);
@@ -48,9 +54,6 @@ protected:
 	wxString mDisplay;		//!< The display to be selected when the parameter is changed.
 	bool mReloadable;		//!< If true, the parameters can be applied by reloading the parameters of this component (without restarting the components).
 
-private:
-
-	DECLARE_EVENT_TABLE()
 };
 
 #endif
