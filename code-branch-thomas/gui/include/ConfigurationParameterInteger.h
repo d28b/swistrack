@@ -20,7 +20,9 @@ public:
 	~ConfigurationParameterInteger();
 
 	//! Handles the corresponding GUI event.
-	void OnButtonAddClick(wxCommandEvent& event);
+	void OnTextUpdated(wxCommandEvent& event);
+	//! Handles the corresponding GUI event.
+	void OnTextEnter(wxCommandEvent& event);
 
 private:
 	wxTextCtrl *mTextCtrl;		//!< The corresponding GUI widget.
