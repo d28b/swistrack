@@ -236,7 +236,7 @@ Component *THISCLASS::GetComponentByName(const std::string &name) {
 }
 
 bool THISCLASS::IncrementEditLocks() {
-	if (mEditLocks>0) {return true;}
+	if (mEditLocks>0) {mEditLocks++; return true;}
 
 	// If started in productive mode, editing is not allowed
 	if (IsStartedInProductiveMode()) {return false;}

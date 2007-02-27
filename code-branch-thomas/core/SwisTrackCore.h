@@ -88,7 +88,7 @@ protected:
 	tComponentList mDeployedComponents;						//!< The list of deployed components.
 	tSwisTrackCoreInterfaceList mSwisTrackCoreInterfaces;	//!< The list of SwisTrackCoreInterface objects.
 
-	//! Increments the edit locks. If this is the first 
+	//! Increments the edit locks.
 	bool IncrementEditLocks();
 	//! Decrements the edit locks.
 	void DecrementEditLocks();

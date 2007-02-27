@@ -3,16 +3,6 @@
 
 #include <sstream>
 #include <wx/xml/xml.h>
-#include "ComponentInputCamera1394.h"
-#include "ComponentInputCameraUSB.h"
-#include "ComponentInputCameraGBit.h"
-#include "ComponentInputFileAVI.h"
-#include "ComponentConvertToGray.h"
-#include "ComponentConvertToBGR.h"
-#include "ComponentBackgroundSubtractionGray.h"
-#include "ComponentThresholdGray.h"
-#include "ComponentBlobDetectionMinMax.h"
-#include "ComponentBlobDetectionCircle.h"
 
 THISCLASS::SwisTrackCoreEditor(SwisTrackCore *stc): mSwisTrackCore(0) {
 	// Try to enter edit mode
@@ -88,5 +78,6 @@ void THISCLASS::ConfigurationReadXMLElement(wxXmlNode* node, ErrorList *xmlerr) 
 	// Add it to the list
 	Component *newcomponent=component->Create();
 	mSwisTrackCore->mDeployedComponents.push_back(newcomponent);
-	newcomponent->ConfigurationReadXML(node, xmlerr);
+	ComponentEditor ce(component);
+	ce.ConfigurationReadXML(node, xmlerr);
 }

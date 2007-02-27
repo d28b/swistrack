@@ -58,8 +58,6 @@ public:
 	//! This function must return an new object of its own class.
 	virtual Component *Create() = 0;
 
-	//! Reads the configuration from an XML element.
-	void ConfigurationReadXML(wxXmlNode *element, ErrorList *xmlerr);
 	//! Writes the configuration to an XML element.
 	void ConfigurationWriteXML(wxXmlNode *element, ErrorList *xmlerr);
 
@@ -71,15 +69,6 @@ public:
 	double GetConfigurationDouble(const std::string &key, double defvalue);
 	//! Returns a string from the configuration.
 	std::string GetConfigurationString(const std::string &key, const std::string &defvalue);
-
-	//! Sets a boolean value in the configuration.
-	bool SetConfigurationBool(const std::string &key, bool value);
-	//! Sets an integer value in the configuration.
-	bool SetConfigurationInt(const std::string &key, int value);
-	//! Sets a double in the configuration.
-	bool SetConfigurationDouble(const std::string &key, double value);
-	//! Sets a string in the configuration.
-	bool SetConfigurationString(const std::string &key, const std::string &value);
 
 	//! Clears the status list
 	void ClearStatus();
@@ -108,8 +97,10 @@ protected:
 	//! Registers a display image.
 	void AddDisplayImage(DisplayImage *di);
 
-	//! Returns a configuration element.
-	wxXmlNode* GetConfigurationElement(const std::string &name);
+	//! Increments the edit locks.
+	bool IncrementEditLocks();
+	//! Decrements the edit locks.
+	void DecrementEditLocks();
 };
 
 #endif

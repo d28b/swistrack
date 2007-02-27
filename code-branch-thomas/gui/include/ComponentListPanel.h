@@ -19,7 +19,6 @@ class ComponentListPanel: public wxPanel, public SwisTrackCoreInterface {
 
 public:
 	SwisTrack *mSwisTrack;				//!< The associated SwisTrack object.
-	//SwisTrackCore *mSwisTrackCore;		//!< The associated SwisTrackCore object.
 	Component *mSelectedComponent;		//!< The selected component.
 
 	//! Constructor.
@@ -53,6 +52,8 @@ public:
 	void OnAfterStep();
 	void OnBeforeEdit() {};
 	void OnAfterEdit();
+	void OnBeforeEditComponent(Component *c) {};
+	void OnAfterEditComponent(Component *c) {};
 
 private:
 	//! GUI constants.

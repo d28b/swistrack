@@ -56,3 +56,9 @@ void THISCLASS::OnBeforeStart(bool productivemode) {
 void THISCLASS::OnAfterStop() {
 	this->Show();
 }
+
+void OnAfterEditComponent(Component *c) {
+	if (mComponent!=c) {return;}
+	
+	OnUpdate();
+}

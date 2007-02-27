@@ -47,6 +47,8 @@ public:
 	void OnAfterStep() {};
 	void OnBeforeEdit() {};
 	void OnAfterEdit() {};
+	void OnBeforeEditComponent(Component *c) {};
+	void OnAfterEditComponent(Component *c);
 
 protected:
 	wxString mName;			//!< The (internal) name of the parameter as it is written in component settings.

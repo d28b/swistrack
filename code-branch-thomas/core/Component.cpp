@@ -51,33 +51,6 @@ bool THISCLASS::HasDataStructureWrite(DataStructure *ds) {
 	return (it != mDataStructureWrite.end());
 }
 
-void THISCLASS::ConfigurationReadXML(wxXmlNode *configuration, ErrorList *xmlerr) {
-	mConfiguration.clear();
-
-	wxXmlNode *node=configuration->GetChildren();
-	while (node) {
-		if (node->GetName()=="parameter") {
-			wxString name="";
-			wxString value="";
-			wxXmlProperty *prop=node->GetProperties();
-			while (prop) {
-				if (prop->GetName()=="name") {name=prop->GetValue();}
-				if (prop->GetName()=="value") {value=prop->GetValue();}
-				prop=prop->GetNext();
-			}
-			if ((name=="") && (value=="")) {
-				std::ostringstream oss;
-				oss << "A parameter of the component '" << mName << "' was ignored because either the attribute 'name' or 'value' are missing.";
-				xmlerr->Add(oss.str(), 0);  // The current wxXml implementation doesn't care about line numbers.
-			} else {
-				mConfiguration[name.c_str()]=value.c_str();
-			}
-		}
-
-		node=node->GetNext();
-	}
-}
-
 void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmlerr) {
 	tConfigurationMap::iterator it=mConfiguration.begin();
 	while (it!=mConfiguration.end()) {
@@ -108,32 +81,36 @@ double THISCLASS::GetConfigurationDouble(const std::string &key, double defvalue
 }
 
 std::string THISCLASS::GetConfigurationString(const std::string &key, const std::string &defvalue) {
-	// TODO: check whether key exists
+	tConfigurationMap::const_iterator it=mConfiguration.find(key);
+	if (it==mConfiguration.end()) {return defvalue;}
 	return mConfiguration[key];
 }
 
-bool THISCLASS::SetConfigurationBool(const std::string &key, bool value) {
-	std::ostringstream oss;
-	oss << value;
-	mConfiguration[key]=oss.str();
+bool THISCLASS::IncrementEditLocks() {
+	if (mEditLocks>0) {mEditLocks++; return true;}
+
+	// Notify the interfaces
+	tSwisTrackCoreInterfaceList::iterator it=mCore->mSwisTrackCoreInterfaces.begin();
+	while (it!=mCore->mSwisTrackCoreInterfaces.end()) {
+		(*it)->OnBeforeEditComponent(this);
+		it++;
+	}
+
+	mEditLocks=1;
 	return true;
 }
 
-bool THISCLASS::SetConfigurationInt(const std::string &key, int value) {
-	std::ostringstream oss;
-	oss << value;
-	mConfiguration[key]=oss.str();
-	return true;
-}
+void THISCLASS::DecrementEditLocks() {
+	if (mEditLocks<1) {return;}
 
-bool THISCLASS::SetConfigurationDouble(const std::string &key, double value) {
-	std::ostringstream oss;
-	oss << value;
-	mConfiguration[key]=oss.str();
-	return true;
-}
+	// Decrement and return if there are still other locks
+	mEditLocks--;
+	if (mEditLocks>0) {return;}
 
-bool THISCLASS::SetConfigurationString(const std::string &key, const std::string &value) {
-	mConfiguration[key]=value;
-	return true;
+	// Notify the interfaces
+	tSwisTrackCoreInterfaceList::iterator it=mCore->mSwisTrackCoreInterfaces.begin();
+	while (it!=mCore->mSwisTrackCoreInterfaces.end()) {
+		(*it)->OnAfterEditComponent(this);
+		it++;
+	}
 }

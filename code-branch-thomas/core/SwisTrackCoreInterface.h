@@ -36,6 +36,11 @@ public:
 	virtual void OnBeforeEdit() = 0;
 	//! Called after the component list has been modified.
 	virtual void OnAfterEdit() = 0;
+
+	//! Called before a component is modified.
+	virtual void OnBeforeEditComponent(Component *c) = 0;
+	//! Called after a component has been modified.
+	virtual void OnAfterEditComponent(Component *c) = 0;
 };
 
 #endif
