@@ -41,6 +41,8 @@ public:
 	void OnButtonDownClick(wxCommandEvent& event);
 	//! Handles the corresponding GUI event.
 	void OnListItemSelected(wxListEvent& event);
+	//! Handles the corresponding GUI event.
+	void OnListItemDeselected(wxListEvent& event);
 
 	// SwisTrackCoreInterface methods
 	void OnBeforeStart(bool productivemode) {};

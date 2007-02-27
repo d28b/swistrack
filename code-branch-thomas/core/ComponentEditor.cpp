@@ -34,7 +34,7 @@ void THISCLASS::ConfigurationReadXML(wxXmlNode *configuration, ErrorList *xmlerr
 			}
 			if ((name=="") && (value=="")) {
 				std::ostringstream oss;
-				oss << "A parameter of the component '" << mName << "' was ignored because either the attribute 'name' or 'value' are missing.";
+				oss << "A parameter of the component '" << mComponent->mName << "' was ignored because either the attribute 'name' or 'value' are missing.";
 				xmlerr->Add(oss.str(), 0);  // The current wxXml implementation doesn't care about line numbers.
 			} else {
 				mComponent->mConfiguration[name.c_str()]=value.c_str();
@@ -46,7 +46,7 @@ void THISCLASS::ConfigurationReadXML(wxXmlNode *configuration, ErrorList *xmlerr
 }
 
 bool THISCLASS::SetConfigurationBool(const std::string &key, bool value) {
-	if (! mComponent) {return;}
+	if (! mComponent) {return false;}
 	std::ostringstream oss;
 	oss << value;
 	mComponent->mConfiguration[key]=oss.str();
@@ -54,7 +54,7 @@ bool THISCLASS::SetConfigurationBool(const std::string &key, bool value) {
 }
 
 bool THISCLASS::SetConfigurationInt(const std::string &key, int value) {
-	if (! mComponent) {return;}
+	if (! mComponent) {return false;}
 	std::ostringstream oss;
 	oss << value;
 	mComponent->mConfiguration[key]=oss.str();
@@ -62,7 +62,7 @@ bool THISCLASS::SetConfigurationInt(const std::string &key, int value) {
 }
 
 bool THISCLASS::SetConfigurationDouble(const std::string &key, double value) {
-	if (! mComponent) {return;}
+	if (! mComponent) {return false;}
 	std::ostringstream oss;
 	oss << value;
 	mComponent->mConfiguration[key]=oss.str();
@@ -70,7 +70,7 @@ bool THISCLASS::SetConfigurationDouble(const std::string &key, double value) {
 }
 
 bool THISCLASS::SetConfigurationString(const std::string &key, const std::string &value) {
-	if (! mComponent) {return;}
+	if (! mComponent) {return false;}
 	mComponent->mConfiguration[key]=value;
 	return true;
 }

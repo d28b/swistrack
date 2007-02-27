@@ -5,6 +5,7 @@
 #include <wx/stattext.h>
 #include <algorithm>
 #include "SwisTrackCoreEditor.h"
+#include "ComponentEditor.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
   EVT_TEXT (wxID_ANY, THISCLASS::OnTextUpdated)
@@ -30,7 +31,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Create the controls
 	wxStaticText *label=new wxStaticText(this, -1, config->ReadString("label", ""), wxDefaultPosition, wxSize(75, -1), wxST_NO_AUTORESIZE);
 	mTextCtrl=new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(50, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
-	wxStaticText *unitlabel=new wxStaticText(this, -1, config->ReadString("unit", ""), wxDefaultPosition, wxSize(75, -1), wxST_NO_AUTORESIZE);
+	wxStaticText *unitlabel=new wxStaticText(this, -1, " "+config->ReadString("unit", ""), wxDefaultPosition, wxSize(75, -1), wxST_NO_AUTORESIZE);
 
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(label, 1, wxALIGN_CENTER_VERTICAL, 0);
@@ -52,7 +53,11 @@ void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	int curvalue=mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
 	if (curvalue==value) {return;}
 
-	mComponent->SetConfigurationInt(mName.c_str(), value);
+	// Set the new configuration values
+	ComponentEditor ce(mComponent);
+	ce.SetConfigurationInt(mName.c_str(), value);
+
+	// Commit these changes
 	CommitChanges();
 }
 

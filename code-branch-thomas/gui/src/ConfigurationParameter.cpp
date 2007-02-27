@@ -6,7 +6,7 @@
 #include "SwisTrackCoreEditor.h"
 
 THISCLASS::ConfigurationParameter(wxWindow* parent):
-		wxPanel(parent, -1), mSwisTrack(0), mSwisTrackCore(0), mComponent(0),
+		wxPanel(parent, -1), mSwisTrack(0), mComponent(0),
 		mLabel(""), mDisplay(""), mReloadable(true) {
 
 
@@ -30,17 +30,18 @@ void THISCLASS::Initialize(SwisTrack *st, Component *c, ConfigurationXML *config
 	mLabel=config->ReadString("label", "");
 	mDisplay=config->ReadString("display", "");
 	mReloadable=config->ReadBool("reloadable", true);
-	
+
 	// Initializes the parameter
 	OnInitialize(config, errorlist);
+	OnUpdate();
 }
 
 void THISCLASS::CommitChanges() {
 	if (mReloadable) {
-		mSwisTrackCore->ReloadConfiguration();
+		mSwisTrack->mSwisTrackCore->ReloadConfiguration();
 	} else {
-		if (mSwisTrackCore->IsStartedInProductiveMode()) {return;}
-		mSwisTrackCore->Stop();
+		if (mSwisTrack->mSwisTrackCore->IsStartedInProductiveMode()) {return;}
+		mSwisTrack->mSwisTrackCore->Stop();
 	}
 }
 
@@ -57,7 +58,7 @@ void THISCLASS::OnAfterStop() {
 	this->Show();
 }
 
-void OnAfterEditComponent(Component *c) {
+void THISCLASS::OnAfterEditComponent(Component *c) {
 	if (mComponent!=c) {return;}
 	
 	OnUpdate();

@@ -226,6 +226,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ComponentEditor.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\ComponentInputCamera1394.cpp"
 				>
 			</File>
@@ -395,6 +399,10 @@
 			</File>
 			<File
 				RelativePath="..\ComponentConvertToGray.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ComponentEditor.h"
 				>
 			</File>
 			<File

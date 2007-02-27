@@ -4,13 +4,15 @@
 	<description>Subtracts a background image.</description>
 	<display>Output</display>
 
-	<configuration type="image">
-		<name>Background image</name>
-		<display>BackgroundImage</display>
-	</configuration>
-	<configuration type="checkbox">
-		<name>Correct Mean</name>
-		<default>1</default>
-		<display>Output</display>
+	<configuration>
+		<parameter type="image">
+			<name>Background image</name>
+			<display>BackgroundImage</display>
+		</parameter>
+		<parameter type="checkbox">
+			<name>Correct Mean</name>
+			<default>1</default>
+			<display>Output</display>
+		</parameter>
 	</configuration>
 </swistrackcomponent>

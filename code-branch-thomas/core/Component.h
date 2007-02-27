@@ -16,6 +16,7 @@ class Component;
 
 // The base class for all components.
 class Component {
+friend class ComponentEditor;
 
 public:
 	//! Status item list type.
@@ -81,6 +82,7 @@ public:
 protected:
 	SwisTrackCore *mCore; 				//!< The associated SwisTrackCore object.
 	tConfigurationMap mConfiguration;	//!< The configuration values.
+	int mEditLocks;						//!< The number of edit locks.
 
 	//! Adds an error message to the status list.
 	void AddError(const std::string &msg);

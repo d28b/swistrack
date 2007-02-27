@@ -90,7 +90,7 @@ bool THISCLASS::IncrementEditLocks() {
 	if (mEditLocks>0) {mEditLocks++; return true;}
 
 	// Notify the interfaces
-	tSwisTrackCoreInterfaceList::iterator it=mCore->mSwisTrackCoreInterfaces.begin();
+	SwisTrackCore::tSwisTrackCoreInterfaceList::iterator it=mCore->mSwisTrackCoreInterfaces.begin();
 	while (it!=mCore->mSwisTrackCoreInterfaces.end()) {
 		(*it)->OnBeforeEditComponent(this);
 		it++;
@@ -108,7 +108,7 @@ void THISCLASS::DecrementEditLocks() {
 	if (mEditLocks>0) {return;}
 
 	// Notify the interfaces
-	tSwisTrackCoreInterfaceList::iterator it=mCore->mSwisTrackCoreInterfaces.begin();
+	SwisTrackCore::tSwisTrackCoreInterfaceList::iterator it=mCore->mSwisTrackCoreInterfaces.begin();
 	while (it!=mCore->mSwisTrackCoreInterfaces.end()) {
 		(*it)->OnAfterEditComponent(this);
 		it++;

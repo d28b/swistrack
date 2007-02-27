@@ -10,6 +10,7 @@
 			<label>Threshold</label>
 			<min>0</min>
 			<max>255</max>
+			<unit>tt</unit>
 			<display>Output</display>
 			<reloadable>true</reloadable>
 		</parameter>

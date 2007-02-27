@@ -4,36 +4,38 @@
 	<description>Reads particles from a file (NMEA 0183 records).</description>
 	<display>Output</display>
 
-	<configuration type="file">
-		<name>Simulation file</name>
-		<display>Output</display>
-	</configuration>
-	<configuration type="point_double">
-		<name>Camera origin</name>
-		<unit>m</unit>
-		<default>
-			<x>0</x>
-			<y>0</y>
-		</default>
-		<display>Output</display>
-	</configuration>
-	<configuration type="angle">
-		<name>Camera orientation</name>
-		<min>0</min>
-		<max>6.2831853</max>
-		<default>0</default>
-		<display>Output</display>
-	</configuration>
-	<configuration type="double">
-		<name>Pixel size</name>
-		<unit>m</unit>
-		<default>1</default>
-		<display>Output</display>
-	</configuration>
-	<configuration type="size_double">
-		<name>Camera size</name>
-		<unit>pixels</unit>
-		<default>1</default>
-		<display>Output</display>
+	<configuration>
+		<parameter type="file">
+			<name>Simulation file</name>
+			<display>Output</display>
+		</parameter>
+		<parameter type="point_double">
+			<name>Camera origin</name>
+			<unit>m</unit>
+			<default>
+				<x>0</x>
+				<y>0</y>
+			</default>
+			<display>Output</display>
+		</parameter>
+		<parameter type="angle">
+			<name>Camera orientation</name>
+			<min>0</min>
+			<max>6.2831853</max>
+			<default>0</default>
+			<display>Output</display>
+		</parameter>
+		<parameter type="double">
+			<name>Pixel size</name>
+			<unit>m</unit>
+			<default>1</default>
+			<display>Output</display>
+		</parameter>
+		<parameter type="size_double">
+			<name>Camera size</name>
+			<unit>pixels</unit>
+			<default>1</default>
+			<display>Output</display>
+		</parameter>
 	</configuration>
 </swistrackcomponent>

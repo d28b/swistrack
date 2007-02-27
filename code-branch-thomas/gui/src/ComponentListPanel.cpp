@@ -11,6 +11,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
   EVT_BUTTON (eID_ButtonUp, THISCLASS::OnButtonUpClick)
   EVT_BUTTON (eID_ButtonDown, THISCLASS::OnButtonDownClick)
   EVT_LIST_ITEM_SELECTED (eID_List, THISCLASS::OnListItemSelected)
+  EVT_LIST_ITEM_DESELECTED (eID_List, THISCLASS::OnListItemDeselected)
 END_EVENT_TABLE()
 
 THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
@@ -66,6 +67,10 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 }
 
 THISCLASS::~ComponentListPanel() {
+	// Remove from the SwisTrackCore subscriber list
+	mSwisTrack->mSwisTrackCore->RemoveInterface(this);
+
+	// Delete the dialog
 	if (mComponentsDialog) {mComponentsDialog->Destroy();}
 }
 
@@ -273,4 +278,8 @@ void THISCLASS::OnListItemSelected(wxListEvent& event) {
 	mSelectedComponent=(Component*)(event.GetData());
 
 	mSwisTrack->SetConfigurationPanel(mSelectedComponent);
+}
+
+void THISCLASS::OnListItemDeselected(wxListEvent& event) {
+	mSwisTrack->SetConfigurationPanel(0);
 }

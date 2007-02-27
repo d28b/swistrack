@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>GBit Camera</friendlyname>
+	<description>Grabs an image from the GBit Camera (Basler Pylon Driver).</description>
+	<display>Output</display>
+
+	<configuration>
+		<parameter type="gbit_cameralist">
+			<name>Device</name>
+			<label>Camera</label>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="list">
+			<name>Mode</name>
+			<label>Mode</label>
+			<items>
+				<item key="color">Color (YUV422)</item>
+				<item key="color">Mono 8 bit</item>
+			</items>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

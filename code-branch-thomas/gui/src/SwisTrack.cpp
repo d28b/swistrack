@@ -98,13 +98,16 @@ SwisTrack::~SwisTrack(){
 	SetTriggerManual();
 	StopProductiveMode();
 
-	delete mTCPServer;
-	delete mSwisTrackCore;
+	// Delete the trigger timer
 	delete mTriggerFreeRunTimer;
 
-#ifdef MULTITHREAD
-	if (mCriticalSection) {delete mCriticalSection;}
-#endif
+	// Delete the components that rely on SwisTrackCore
+	mComponentListPanel->Destroy();
+	mConfigurationPanel->Destroy();
+
+	// Delete the TCP server and the SwisTrackCore object
+	delete mTCPServer;
+	delete mSwisTrackCore;
 }
 
 void THISCLASS::BuildMenuBar() {

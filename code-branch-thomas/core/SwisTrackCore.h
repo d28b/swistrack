@@ -27,8 +27,9 @@ public:
 	//! A list of SwisTrackCoreInterface objects.
 	typedef std::list<SwisTrackCoreInterface*> tSwisTrackCoreInterfaceList;
 
-	tComponentList mAvailableComponents;			//!< The list of all available components.
-	tDataStructureList mDataStructures;				//!< The list of all available data structures.
+	tComponentList mAvailableComponents;					//!< The list of all available components.
+	tDataStructureList mDataStructures;						//!< The list of all available data structures.
+	tSwisTrackCoreInterfaceList mSwisTrackCoreInterfaces;	//!< The list of SwisTrackCoreInterface objects.
 
 	// Component categories
 	ComponentCategory mCategoryInput;
@@ -81,12 +82,11 @@ public:
 	void RemoveInterface(SwisTrackCoreInterface *stc);
 
 protected:
-	bool mStarted;		//!< Whether the components have been started or not.
+	bool mStarted;			//!< Whether the components have been started or not.
 	bool mProductiveMode;	//!< Whether the components are running in productive mode or not. Note that this is only valid if mStarted=true.
-	int mEditLocks;		//!< The number of edit locks.
+	int mEditLocks;			//!< The number of edit locks.
 
 	tComponentList mDeployedComponents;						//!< The list of deployed components.
-	tSwisTrackCoreInterfaceList mSwisTrackCoreInterfaces;	//!< The list of SwisTrackCoreInterface objects.
 
 	//! Increments the edit locks.
 	bool IncrementEditLocks();
