@@ -5,7 +5,7 @@
 #include "SwisTrack.h"
 
 #ifndef WX_PRECOMP
-  #include <wx/wx.h>
+	#include <wx/wx.h>
 #endif
 
 class Application;
@@ -14,7 +14,8 @@ class Application;
 class Application: public wxApp {
 
 public:
-	SwisTrack *mSwisTrack;		//!< The main window.
+	SwisTrack *mSwisTrack;			//!< The main window.
+	wxString mApplicationFolder;	//!< The application folder. The default file as well as all *.swistrackconfiguration files are read from this folder.
 
 	//! Called upon program initialization.
 	bool OnInit();
@@ -22,4 +23,7 @@ public:
 	int OnExit();
 
 };
+
+DECLARE_APP(Application)
+
 #endif

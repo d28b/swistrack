@@ -20,7 +20,7 @@ public:
 	~ConfigurationParameterInteger();
 
 	// ConfigurationParameter methods
-	virtual void OnInitialize(ConfigurationXML *config);
+	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
 	virtual void OnUpdate();
 
 	//! Handles the corresponding GUI event.

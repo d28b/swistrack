@@ -157,10 +157,10 @@ void THISCLASS::OnStop() {
 	mStreamGrabber=0;
 	mCamera->Close();
 	mTransportLayer->DestroyDevice(mCamera);
+	Pylon::CTlFactory& tlfactory=Pylon::CTlFactory::GetInstance();
+	tlfactory.DestroyTl(mTransportLayer);
 	mCamera=0;
 	mTransportLayer=0;
-	//Pylon::CTlFactory& tlfactory=Pylon::CTlFactory::GetInstance();
-	//tlfactory.DestroyTl(mTransportLayer);
 }
 
 #endif

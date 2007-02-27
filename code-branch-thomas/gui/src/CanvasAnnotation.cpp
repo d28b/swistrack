@@ -33,12 +33,12 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	dc.DrawText(mTextLeft, 4, 2);
 
 	// Right
-	//wxSize textsize=dc.GetTextExtent(mTextRight); TODO 2.8.0
-	//dc.DrawText(mTextRight, 2, size.GetWidth()-textsize.GetWidth());
-	wxCoord w;
-	wxCoord h;
-	dc.GetTextExtent(mTextRight, &w, &h);
-	dc.DrawText(mTextRight, 2, size.GetWidth()-w-4);
+	wxSize textsize=dc.GetTextExtent(mTextRight);
+	dc.DrawText(mTextRight, 2, size.GetWidth()-textsize.GetWidth());
+	//wxCoord w;
+	//wxCoord h;
+	//dc.GetTextExtent(mTextRight, &w, &h);
+	//dc.DrawText(mTextRight, 2, size.GetWidth()-w-4);
 }
 
 void THISCLASS::OnMouseLeftClick(wxMouseEvent &event) {

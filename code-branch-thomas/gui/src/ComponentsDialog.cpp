@@ -53,7 +53,7 @@ THISCLASS::ComponentsDialog(wxWindow* parent, SwisTrackCore *stc):
 
 	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
 	vs->Add(mTree, 1, wxEXPAND|wxALL, 8);
-	vs->Add(hs, 0, wxLEFT|wxRIGHT|wxBOTTOM, 8);
+	vs->Add(hs, 0, wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM, 8);
 
 	SetSizer(vs);
 }

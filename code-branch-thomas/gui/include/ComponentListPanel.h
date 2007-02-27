@@ -9,7 +9,7 @@
 
 class ComponentListPanel;
 
-#include "SwisTrackCore.h"
+#include "SwisTrack.h"
 #include "ComponentsDialog.h"
 #include <wx/panel.h>
 #include <wx/listctrl.h>
@@ -18,11 +18,12 @@ class ComponentListPanel;
 class ComponentListPanel: public wxPanel, public SwisTrackCoreInterface {
 
 public:
-	SwisTrackCore *mSwisTrackCore;		//!< The associated SwisTrackCore object.
+	SwisTrack *mSwisTrack;				//!< The associated SwisTrack object.
+	//SwisTrackCore *mSwisTrackCore;		//!< The associated SwisTrackCore object.
 	Component *mSelectedComponent;		//!< The selected component.
 
 	//! Constructor.
-	ComponentListPanel(wxWindow *parent, SwisTrackCore *stc);
+	ComponentListPanel(wxWindow *parent, SwisTrack *st);
 	//! Destructor.
 	~ComponentListPanel();
 

@@ -12,9 +12,10 @@
 class SwisTrack;
 
 #include "AboutDialog.h"
-#include "ComponentListPanel.h"
 #include "TCPServer.h"
 #include "CanvasPanel.h"
+#include "ComponentListPanel.h"
+#include "ConfigurationPanel.h"
 #include <wx/timer.h>
 
 //! Main application window.
@@ -33,18 +34,7 @@ public:
 	wxString mFileName;				//!< The current configuration file.
 	bool mChanged;					//!< Whether the file has been modified. This flag is currently ignored.
 
-	// Menu bar and items
-	wxMenu *mMenuFile;
-	wxMenu *mMenuTools;
-	wxMenu *mMenuHelp;
-
 	int mDisplaySpeed;
-
-	// Main components
-	CanvasPanel* mCanvasPanel;
-	ComponentListPanel* mComponentListPanel;
-	wxPanel* mPanelInformation;
-	wxPanel* mPanelInformation1;
 
 	//! Constructor.
 	SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style = wxDEFAULT_FRAME_STYLE);
@@ -55,6 +45,9 @@ public:
 	void OpenFile(const wxString &filename, bool breakonerror, bool astemplate);
 	//! Saves a file.
 	void SaveFile(const wxString &filename);
+
+	//! Sets the configuration panel on the right side.
+	void SetConfigurationPanel(Component *c);
 
 	// CommuncationCommandHandler methods
 	bool OnCommunicationCommand(CommunicationMessage *m);
@@ -73,13 +66,6 @@ public:
 	void OnHelp(wxCommandEvent& WXUNUSED(event));
 	void OnTest(wxCommandEvent& WXUNUSED(event));
 	void OnHelpAbout(wxCommandEvent& WXUNUSED(event));
-
-	//! Creates the menu.
-	void BuildMenuBar();
-	//! Creates the toolbar.
-	void BuildToolBar();
-	//! Creates the status bar.
-	void BuildStatusBar();
 
 	//! Starts the productive mode.
 	void StartProductiveMode();
@@ -105,7 +91,12 @@ public:
 #endif
 
 protected:
-	// IDs for the controls and the menu commands
+	wxBoxSizer *mHorizontalSizer;				//!< The horizonal sizer containing the canvas panel and the component configuration panel.
+	CanvasPanel *mCanvasPanel;					//!< The panel in the center displaying the current image.
+	ComponentListPanel *mComponentListPanel;	//!< The list of components in the bottom of the window.
+	ConfigurationPanel *mConfigurationPanel;	//!< The component configuration panel shown on the right.
+
+	//! IDs for the controls and the menu commands
 	enum eIDs {
 		sID_New,
 		sID_Open,
@@ -122,11 +113,19 @@ protected:
 		sID_About = wxID_ABOUT   // this must be wxID_ABOUT to put it in the Mac OS X "Apple" menu
 	};
 
+	//! Status field IDs
 	enum eStatusFields {
 		sStatusField_Messages=0,
 		sStatusField_ServerPort=1,
 		sStatusField_Trigger=2,
 	};
+
+	//! Creates the menu.
+	void BuildMenuBar();
+	//! Creates the toolbar.
+	void BuildToolBar();
+	//! Creates the status bar.
+	void BuildStatusBar();
 
     DECLARE_EVENT_TABLE()
 };

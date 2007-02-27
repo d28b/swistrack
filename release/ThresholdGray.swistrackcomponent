@@ -1,15 +1,17 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<name>Threshold a greyscale image</name>
-	<description>Thresholds a greyscale image.</description>
+	<friendlyname>Threshold a grayscale image</friendlyname>
+	<description>Thresholds a grayscale image and stores the result in a binary image.</description>
 	<display>Output</display>
 
 	<configuration>
 		<parameter type="integer">
+			<name>Threshold</name>
 			<label>Threshold</label>
 			<min>0</min>
 			<max>255</max>
 			<display>Output</display>
+			<reloadable>true</reloadable>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

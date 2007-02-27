@@ -15,34 +15,25 @@ class ConfigurationPanel;
 #include <wx/panel.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
+#include <wx/filename.h>
 
-class ConfigurationPanel: public wxPanel, public SwisTrackCoreInterface {
+class ConfigurationPanel: public wxPanel {
 
 public:
-	SwisTrack *mSwisTrack;				//! The associated SwisTrack object.
-	SwisTrackCore *mSwisTrackCore;		//! The associated SwisTrackCore object.
-	Component *mComponent;				//! The associated component.
-	wxString mComponentDisplayName;		//! The name of the component.
-	wxString mComponentDescription;		//! The description of the component.
-	wxString mComponentDefaultDisplay;	//! The default display.
+	SwisTrack *mSwisTrack;			//!< The associated SwisTrack object.
+	Component *mComponent;			//!< The associated component.
+	ErrorList mErrorList;			//!< The list of errors.
 
 	//! Constructor.
-	ConfigurationPanel(wxWindow *parent, SwisTrackCore *stc);
+	ConfigurationPanel(wxWindow *parent, SwisTrack *st, Component *c);
 	//! Destructor.
 	~ConfigurationPanel();
 
-	// SwisTrackCoreInterface methods
-	void OnBeforeStart(bool productivemode) {};
-	void OnAfterStart(bool productivemode) {};
-	void OnBeforeStop() {};
-	void OnAfterStop() {};
-	void OnBeforeStep() {};
-	void OnStepReady() {};
-	void OnAfterStep() {};
-	void OnBeforeEdit() {};
-	void OnAfterEdit() {};
-
 private:
+	wxStaticText *mLabelTitle;			//! The label holding the title of the component.
+
+	//! Reads the *.swistrackcomponent file.
+	void Read(const wxFileName &filename);
 	//! Reads the configuration parameters for this component.
 	void ReadConfiguration(wxXmlNode *configurationnode);
 	//! Reads one configuration parameter.

@@ -7,31 +7,32 @@
 
 THISCLASS::ConfigurationParameter(wxWindow* parent):
 		wxPanel(parent, -1), mSwisTrack(0), mSwisTrackCore(0), mComponent(0),
-		mName(""), mDisplay(""), mReloadable(true) {
+		mLabel(""), mDisplay(""), mReloadable(true) {
 
 
 }
 
 THISCLASS::~ConfigurationParameter() {
-
+	mSwisTrack->mSwisTrackCore->RemoveInterface(this);
 }
 
-void THISCLASS::Initialize(SwisTrack *st, ConfigurationXML *config) {
+void THISCLASS::Initialize(SwisTrack *st, Component *c, ConfigurationXML *config, ErrorList *errorlist) {
 	// Set the associated objects
 	mSwisTrack=st;
-	mSwisTrackCore=st->mSwisTrackCore;
+	mComponent=c;
 
 	// Add SwisTrackCoreInterface
-	mSwisTrackCore->AddInterface(this);
+	mSwisTrack->mSwisTrackCore->AddInterface(this);
 
 	// Read general configuration
 	config->SelectRootNode();
 	mName=config->ReadString("name", "");
+	mLabel=config->ReadString("label", "");
 	mDisplay=config->ReadString("display", "");
 	mReloadable=config->ReadBool("reloadable", true);
 	
 	// Initializes the parameter
-	OnInitialize(config);
+	OnInitialize(config, errorlist);
 }
 
 void THISCLASS::CommitChanges() {

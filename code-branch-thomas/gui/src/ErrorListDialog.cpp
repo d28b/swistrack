@@ -9,12 +9,12 @@ BEGIN_EVENT_TABLE(THISCLASS, wxDialog)
 END_EVENT_TABLE()
 
 THISCLASS::ErrorListDialog(wxWindow *parent, ErrorList *el, const wxString &title, const wxString &text):
-		wxDialog(parent, -1, title, wxDefaultPosition, wxSize(400, 300), wxDEFAULT_DIALOG_STYLE), mErrorList(el) {
+		wxDialog(parent, -1, title, wxDefaultPosition, wxSize(500, 300), wxDEFAULT_DIALOG_STYLE), mErrorList(el) {
 
 	// Create list control
 	mList=new wxListCtrl(this, -1);
 	mList->SetWindowStyle(wxLC_REPORT|wxLC_HRULES|wxLC_SINGLE_SEL);
-	mList->InsertColumn(0, "Line", wxLIST_FORMAT_RIGHT, 100);
+	mList->InsertColumn(0, "Line", wxLIST_FORMAT_RIGHT, 50);
 	mList->InsertColumn(1, "Error message", wxLIST_FORMAT_LEFT, 400);
 
 	// Create other controls
@@ -24,13 +24,13 @@ THISCLASS::ErrorListDialog(wxWindow *parent, ErrorList *el, const wxString &titl
 	// Layout the components in the panel
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
 	hs->AddStretchSpacer(1);
-	hs->Add(mButtonOK, 0, 0, 0);
+	hs->Add(mButtonOK, 0, wxALL, 4);
 	hs->AddStretchSpacer(1);
 
 	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
-	vs->Add(mLabel, 1, wxEXPAND, 0);
-	vs->Add(mList, 1, wxEXPAND, 0);
-	vs->Add(hs, 0, 0, 0);
+	vs->Add(mLabel, 0, wxEXPAND|wxTOP|wxLEFT|wxRIGHT, 8);
+	vs->Add(mList, 1, wxEXPAND|wxALL, 8);
+	vs->Add(hs, 0, wxEXPAND|wxBOTTOM|wxLEFT|wxRIGHT, 8);
 
 	SetSizer(vs);
 

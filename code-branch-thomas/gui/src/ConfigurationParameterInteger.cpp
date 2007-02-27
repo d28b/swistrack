@@ -20,7 +20,7 @@ THISCLASS::ConfigurationParameterInteger(wxWindow* parent):
 THISCLASS::~ConfigurationParameterInteger() {
 }
 
-void THISCLASS::OnInitialize(ConfigurationXML *config) {
+void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
 	mValueMin=config->ReadInt("min", 0);
@@ -28,14 +28,14 @@ void THISCLASS::OnInitialize(ConfigurationXML *config) {
 	mValueDefault=config->ReadInt("default", 0);
 
 	// Create the controls
-	wxStaticText *label=new wxStaticText(this, -1, config->ReadString("name", ""), wxDefaultPosition, wxSize(100, 25), wxST_NO_AUTORESIZE);
-	mTextCtrl=new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(50, 25), wxTE_RIGHT|wxTE_PROCESS_ENTER);
-	wxStaticText *unitlabel=new wxStaticText(this, -1, config->ReadString("unit", ""), wxDefaultPosition, wxSize(50, 25), wxST_NO_AUTORESIZE);
+	wxStaticText *label=new wxStaticText(this, -1, config->ReadString("label", ""), wxDefaultPosition, wxSize(75, -1), wxST_NO_AUTORESIZE);
+	mTextCtrl=new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(50, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
+	wxStaticText *unitlabel=new wxStaticText(this, -1, config->ReadString("unit", ""), wxDefaultPosition, wxSize(75, -1), wxST_NO_AUTORESIZE);
 
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
-	hs->Add(label, 1, 0, 0);
-	hs->Add(mTextCtrl, 0, 0, 0);
-	hs->Add(unitlabel, 0, 0, 0);
+	hs->Add(label, 1, wxALIGN_CENTER_VERTICAL, 0);
+	hs->Add(mTextCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
+	hs->Add(unitlabel, 0, wxALIGN_CENTER_VERTICAL, 0);
 	SetSizer(hs);
 }
 

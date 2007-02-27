@@ -19,7 +19,6 @@ class ConfigurationParameter;
 class ConfigurationParameter: public wxPanel, public SwisTrackCoreInterface {
 
 public:
-	SwisTrackCore *mSwisTrackCore;	//!< The associated SwisTrackCore object.
 	SwisTrack *mSwisTrack;			//!< The associated SwisTrack object.
 	Component *mComponent;			//!< The component.
 
@@ -29,9 +28,9 @@ public:
 	~ConfigurationParameter();
 
 	//! Initializes the parameter.
-	void Initialize(SwisTrack *st, ConfigurationXML *config);
+	void Initialize(SwisTrack *st, Component *c, ConfigurationXML *config, ErrorList *errorlist);
 	//! This method is called (by the method Initialize) to initialize the parameter. This method must be implemented by the subclass and is called exactly once (immediately after creating the parameter object).
-	virtual void OnInitialize(ConfigurationXML *config) = 0;
+	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist) = 0;
 	//! This method is called after the component configuration has been modified.
 	virtual void OnUpdate() = 0;
 
@@ -50,7 +49,8 @@ public:
 	void OnAfterEdit() {};
 
 protected:
-	wxString mName;			//!< The name of the parameter.
+	wxString mName;			//!< The (internal) name of the parameter as it is written in component settings.
+	wxString mLabel;		//!< The main label of the parameter.
 	wxString mDisplay;		//!< The display to be selected when the parameter is changed.
 	bool mReloadable;		//!< If true, the parameters can be applied by reloading the parameters of this component (without restarting the components).
 

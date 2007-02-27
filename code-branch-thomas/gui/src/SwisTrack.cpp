@@ -1,44 +1,7 @@
-/*! \mainpage My Personal Index Page
-\section intro_sec Introduction
-
-\section prog_sec Getting started
-You will need to install the following libraries 
-
-- libxml2
-- libxml++ (http://sourceforge.net/projects/libxmlplusplus)
-- OpenCV (http://sourceforge.net/projects/opencvlibrary)
-- WxWidgets (http://www.wxwidgets.org)
-
-Windows only:
-
-- CMU 1394 Firewire Driver
-
-SwisTrack is divided in three projects Objecttracker, GUI, and UI. Objecttracker 
-contains all methods for acquiring and processing images, whereas GUI and UI are a graphical and
-a command line interface, respectively.
-
-Hence, you will first need to build objecttracker.lib and then link it into either the GUI or
-the UI project.
-
-\subsection visual_studio Visual Studio 2005 Settings
-
-Make sure you set the working directories for release and debug compilation to 'release', otherwise SwisTrack won't find
-its configuration files 'swistrack.exp' and 'default.cfg' (Alt-F7, Configuration Properties, Debugging, Working directory).
-
-
-\subsection samples Running the examples
-
-When running the samples, make sure you have a recent version of DivX installed. If you have problems, try to open 
-the video files with Virtualdub first. SwisTrack (and VirtualDub) use so called VfW drivers and not DirectMedia drivers,
-usually installing a codec pack like the KazaaLite codec pack solves all of this problems.
-
-If you are working with Firewire cameras make sure you replace the custom driver that comes with the camera with the CMU1394
-driver.
-*/
-
 #include "SwisTrack.h"
 #define THISCLASS SwisTrack
 
+#include "Application.h"
 #include "CanvasPanel.h"
 #include "TCPServer.h"
 #include "ErrorListDialog.h"
@@ -68,16 +31,6 @@ driver.
 #include "bitmaps/singlestep.xpm"
 #endif
 
-/**
-\todo
-
-- does not start if tracks cannot be found
-- threshold over 255 should be not allowed
-- generic error handling routine needs to be implemented in the idleevent
-- make sure video frame rate is stored correctly (not 30Hz if the camera was only 15), toolbar needs to be updated similarly
-
-*/
-
 BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 	EVT_MENU(sID_New, THISCLASS::OnFileNew)
 	EVT_MENU(sID_Open, THISCLASS::OnFileOpen)
@@ -99,7 +52,8 @@ END_EVENT_TABLE()
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
 		wxFrame(NULL, -1, title, pos, size, style),
 		CommunicationCommandHandler(),
-		mSwisTrackCore(0), mTCPServer(0), mFileName(""), mTriggerFreeRunInterval(1000) {
+		mSwisTrackCore(0), mTCPServer(0), mFileName(""), mTriggerFreeRunInterval(1000),
+		mHorizontalSizer(0), mCanvasPanel(0), mComponentListPanel(0), mConfigurationPanel(0) {
 
 #ifdef MULTITHREAD
 	criticalSection = new wxCriticalSection();
@@ -121,23 +75,18 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	mTCPServer->AddCommandHandler(this);
 
 	// List
-	mComponentListPanel=new ComponentListPanel(this, mSwisTrackCore);
+	mComponentListPanel=new ComponentListPanel(this, this);
 
-	// Panel
-	mPanelInformation=new wxPanel(this, -1, wxDefaultPosition, wxSize(200, 20));
-	mPanelInformation->SetBackgroundColour(*wxBLUE);
-	mPanelInformation1=new wxPanel(this, -1, wxDefaultPosition, wxSize(200, 20));
-	mPanelInformation1->SetBackgroundColour(*wxRED);
-	mPanelInformation1->Hide();
+	// Configuration panel
+	mConfigurationPanel=new ConfigurationPanel(this, this, 0);
 
 	// Setup frame contents
-	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
-	hs->Add(mCanvasPanel, 1, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 10);
-	hs->Add(mPanelInformation, 0, wxEXPAND, 0);
-	hs->Add(mPanelInformation1, 0, wxEXPAND, 0);
+	mHorizontalSizer=new wxBoxSizer(wxHORIZONTAL);
+	mHorizontalSizer->Add(mCanvasPanel, 1, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 10);
+	mHorizontalSizer->Add(mConfigurationPanel, 0, wxEXPAND, 0);
 
 	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
-	vs->Add(hs, 3, wxEXPAND, 0);
+	vs->Add(mHorizontalSizer, 3, wxEXPAND, 0);
 	vs->Add(mComponentListPanel, 1, wxEXPAND, 0);
 	SetSizer(vs);
 
@@ -145,10 +94,6 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	mTriggerFreeRunTimer=new wxTimer(this);
 }
 
-/*! \brief Destructor
-
-Deallocates all memory and closes the application.
-*/
 SwisTrack::~SwisTrack(){
 	SetTriggerManual();
 	StopProductiveMode();
@@ -167,28 +112,28 @@ void THISCLASS::BuildMenuBar() {
 	SetMenuBar(new wxMenuBar());
 
 	// Create menus
-	mMenuFile = new wxMenu;
-	GetMenuBar()->Append(mMenuFile, _T("&File"));
+	wxMenu *menufile = new wxMenu;
+	GetMenuBar()->Append(menufile, _T("&File"));
 
-	mMenuTools = new wxMenu;
-	GetMenuBar()->Append(mMenuTools,_T("&Tools"));
+	wxMenu *menutools = new wxMenu;
+	GetMenuBar()->Append(menutools,_T("&Tools"));
 
-	mMenuHelp = new wxMenu;
-	GetMenuBar()->Append(mMenuHelp, _T("&Help"));
+	wxMenu *menuhelp = new wxMenu;
+	GetMenuBar()->Append(menuhelp, _T("&Help"));
 
-	mMenuFile->Append(sID_New, _T("&New\tCtrl-C"), _T("Creates a new file"));
-	mMenuFile->Append(sID_Open, _T("&Open\tCtrl-O"), _T("Opens a file"));
-	mMenuFile->Append(sID_Save, _T("&Save\tCtrl-S"), _T("Saves the current file"));
-	mMenuFile->Append(sID_SaveAs, _T("&Save as ..."), _T("Saves the file with another name"));
-	mMenuFile->AppendSeparator();
-	mMenuFile->Append(sID_Quit, _T("E&xit\tAlt-F4"), _T("Quit this program"));
-	mMenuFile->Enable(sID_Save,FALSE);
+	menufile->Append(sID_New, _T("&New\tCtrl-C"), _T("Creates a new file"));
+	menufile->Append(sID_Open, _T("&Open\tCtrl-O"), _T("Opens a file"));
+	menufile->Append(sID_Save, _T("&Save\tCtrl-S"), _T("Saves the current file"));
+	menufile->Append(sID_SaveAs, _T("&Save as ..."), _T("Saves the file with another name"));
+	menufile->AppendSeparator();
+	menufile->Append(sID_Quit, _T("E&xit\tAlt-F4"), _T("Quit this program"));
+	menufile->Enable(sID_Save,FALSE);
 
-	mMenuTools->Append(sID_Tools_Server, _T("TCP Server ..."), _T("TCP server settings"));
+	menutools->Append(sID_Tools_Server, _T("TCP Server ..."), _T("TCP server settings"));
 
-	mMenuHelp->Append(sID_Help, _T("&Manual"), _T("Opens the manual"));
-	mMenuHelp->Append(sID_Test, _T("&Test"), _T("Test"));
-	mMenuHelp->Append(sID_About, _T("&About ...\tF1"), _T("Show about dialog"));
+	menuhelp->Append(sID_Help, _T("&Manual"), _T("Opens the manual"));
+	menuhelp->Append(sID_Test, _T("&Test"), _T("Test"));
+	menuhelp->Append(sID_About, _T("&About ...\tF1"), _T("Show about dialog"));
 }
 
 void THISCLASS::BuildToolBar() {
@@ -232,6 +177,24 @@ void THISCLASS::BuildStatusBar() {
 	SetStatusText(_T("Closed"), sStatusField_ServerPort);
 	SetStatusText(_T("Manual"), sStatusField_Trigger);
 #endif // wxUSE_STATUSBAR
+}
+
+void THISCLASS::SetConfigurationPanel(Component *c) {
+	if (mConfigurationPanel->mComponent==c) {return;}
+
+	// Destroy the hold panel
+	mConfigurationPanel->Destroy();
+
+	// Create a new panel
+	mConfigurationPanel=new ConfigurationPanel(this, this, c);
+	mHorizontalSizer->Add(mConfigurationPanel, 0, wxEXPAND, 0);
+	GetSizer()->Layout();
+
+	// Show errors
+	if (mConfigurationPanel->mErrorList.mList.empty()) {return;}
+	if (mSwisTrackCore->IsStartedInProductiveMode()) {return;}
+	ErrorListDialog eld(this, &(mConfigurationPanel->mErrorList), "Component configuration", "The following errors occurred while reading the component configuration description:");
+	eld.ShowModal();
 }
 
 void THISCLASS::SingleStep() {
@@ -314,7 +277,7 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 }
 
 void SwisTrack::OnFileNew(wxCommandEvent& WXUNUSED(event)) {
-	OpenFile("default.swistrack", false, true);
+	OpenFile(wxGetApp().mApplicationFolder+"/default.swistrack", false, true);
 }
 
 void THISCLASS::OnFileOpen(wxCommandEvent& WXUNUSED(event)) {
@@ -327,12 +290,12 @@ void THISCLASS::OnFileOpen(wxCommandEvent& WXUNUSED(event)) {
 void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astemplate) {
 	// Check if file exists and is readable
 	if (breakonerror) {
-		//wxFileName fn(filename);
-		//if (! fn.IsFileReadable()) {  // TODO: update to wxWidgets 2.8.0 and active this
-		//	wxMessageDialog dlg(this, "Unable to read \n\n"+filename, "Open Configuration", wxOK);
-		//	dlg.ShowModal();
-		//	return;
-		//}
+		wxFileName fn(filename);
+		if (! fn.IsFileReadable()) {
+			wxMessageDialog dlg(this, "Unable to read \n\n"+filename, "Open Configuration", wxOK);
+			dlg.ShowModal();
+			return;
+		}
 	}
 
 	// Open the file
@@ -419,11 +382,12 @@ void THISCLASS::OnFileSave(wxCommandEvent& event) {
 
 void THISCLASS::SaveFile(const wxString &filename) {
 	// Check if can write to that file
-	//wxFileName fn(filename);
-	//if (! fn.IsFileWritable()) {  // TODO: update to 2.8.0 and active this
-	//	wxMessageDialog dlg(this, "Unable to write \n\n"+filename, "Save File", wxOK).ShowModal();
-	//	return;
-	//}
+	wxFileName fn(filename);
+	if (! fn.IsFileWritable()) {
+		wxMessageDialog dlg(this, "Unable to write \n\n"+filename, "Save File", wxOK);
+		dlg.ShowModal();
+		return;
+	}
 
 	// Save the file
 	ConfigurationWriterXML cw;
@@ -494,9 +458,9 @@ void THISCLASS::OnHelp(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void THISCLASS::OnTest(wxCommandEvent& WXUNUSED(event)) {
-	mPanelInformation->Hide();
-	mPanelInformation1->Show();
-	GetSizer()->Layout();
+	//mPanelInformation->Hide();
+	//mPanelInformation1->Show();
+	//GetSizer()->Layout();
 }
 
 void THISCLASS::OnIdle(wxIdleEvent& WXUNUSED(event)) {

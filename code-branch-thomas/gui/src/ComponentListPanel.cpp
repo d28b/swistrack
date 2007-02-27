@@ -13,13 +13,14 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
   EVT_LIST_ITEM_SELECTED (eID_List, THISCLASS::OnListItemSelected)
 END_EVENT_TABLE()
 
-THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrackCore *stc):
+THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 		wxPanel(parent, -1),
 		SwisTrackCoreInterface(),
-		mSwisTrackCore(stc), mSelectedComponent(0), mComponentsDialog(0) {
+		mSwisTrack(st), mSelectedComponent(0), mComponentsDialog(0) {
 
 	// Add SwisTrackCoreInterface
-	mSwisTrackCore->AddInterface(this);
+	SwisTrackCore *stc=mSwisTrack->mSwisTrackCore;
+	stc->AddInterface(this);
 
 	// Create List
 	mList=new wxListCtrl(this, eID_List);
@@ -30,8 +31,8 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrackCore *stc):
 	mList->InsertColumn(col++, "Component", wxLIST_FORMAT_LEFT, 200);
 
 	// Add columns for data structures
-	SwisTrackCore::tDataStructureList::iterator it=mSwisTrackCore->mDataStructures.begin();
-	while (it!=mSwisTrackCore->mDataStructures.end()) {
+	SwisTrackCore::tDataStructureList::iterator it=stc->mDataStructures.begin();
+	while (it!=stc->mDataStructures.end()) {
 		mList->InsertColumn(col++, (*it)->mDisplayName.c_str(), wxLIST_FORMAT_CENTER, 50);
 		it++;
 	}
@@ -74,7 +75,8 @@ void THISCLASS::Update() {
 
 	// Add all components
 	int row=0;
-	const SwisTrackCore::tComponentList *cl=mSwisTrackCore->GetDeployedComponents();
+	SwisTrackCore *stc=mSwisTrack->mSwisTrackCore;
+	const SwisTrackCore::tComponentList *cl=stc->GetDeployedComponents();
 	SwisTrackCore::tComponentList::const_iterator it=cl->begin();
 	while (it!=cl->end()) {
 		int col=0;
@@ -92,8 +94,8 @@ void THISCLASS::Update() {
 		mList->InsertItem(li);
 
 		// Data structures
-		SwisTrackCore::tDataStructureList::iterator itds=mSwisTrackCore->mDataStructures.begin();
-		while (itds!=mSwisTrackCore->mDataStructures.end()) {
+		SwisTrackCore::tDataStructureList::iterator itds=stc->mDataStructures.begin();
+		while (itds!=stc->mDataStructures.end()) {
 			li.SetColumn(col++);
 			
 			bool read=(*it)->HasDataStructureRead(*itds);
@@ -205,12 +207,12 @@ void THISCLASS::OnAfterEdit() {
 }
 
 void THISCLASS::OnButtonAddClick(wxCommandEvent& event) {
-	SwisTrackCoreEditor stce(mSwisTrackCore);
+	SwisTrackCoreEditor stce(mSwisTrack->mSwisTrackCore);
 	if (! stce.IsEditable()) {return;}
 
 	// Create the dialog if necessary
 	if (mComponentsDialog==0) {
-		mComponentsDialog=new ComponentsDialog(this->GetParent(), mSwisTrackCore);
+		mComponentsDialog=new ComponentsDialog(this->GetParent(), mSwisTrack->mSwisTrackCore);
 	}
 
 	// Show dialog, returning if the user selected "Cancel"
@@ -225,7 +227,7 @@ void THISCLASS::OnButtonAddClick(wxCommandEvent& event) {
 }
 
 void THISCLASS::OnButtonRemoveClick(wxCommandEvent& event) {
-	SwisTrackCoreEditor stce(mSwisTrackCore);
+	SwisTrackCoreEditor stce(mSwisTrack->mSwisTrackCore);
 	if (! stce.IsEditable()) {return;}
 
 	// Find the corresponding component in the list and delete it
@@ -237,7 +239,7 @@ void THISCLASS::OnButtonRemoveClick(wxCommandEvent& event) {
 }
 
 void THISCLASS::OnButtonUpClick(wxCommandEvent& event) {
-	SwisTrackCoreEditor stce(mSwisTrackCore);
+	SwisTrackCoreEditor stce(mSwisTrack->mSwisTrackCore);
 	if (! stce.IsEditable()) {return;}
 
 	// Find the corresponding component in the list and move it up
@@ -252,7 +254,7 @@ void THISCLASS::OnButtonUpClick(wxCommandEvent& event) {
 }
 
 void THISCLASS::OnButtonDownClick(wxCommandEvent& event) {
-	SwisTrackCoreEditor stce(mSwisTrackCore);
+	SwisTrackCoreEditor stce(mSwisTrack->mSwisTrackCore);
 	if (! stce.IsEditable()) {return;}
 
 	// Find the corresponding component in the list and move it up
@@ -270,5 +272,5 @@ void THISCLASS::OnButtonDownClick(wxCommandEvent& event) {
 void THISCLASS::OnListItemSelected(wxListEvent& event) {
 	mSelectedComponent=(Component*)(event.GetData());
 
-	// TODO: show configuration panel of this component
+	mSwisTrack->SetConfigurationPanel(mSelectedComponent);
 }

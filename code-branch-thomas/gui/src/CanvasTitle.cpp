@@ -27,8 +27,11 @@ THISCLASS::~CanvasTitle() {
 void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	wxPaintDC dc(this);
 
-	// Left
+	// Prepare
 	wxFont f=GetFont();
+	wxSize size=GetClientSize();
+
+	// Left
 	f.SetWeight(wxFONTWEIGHT_BOLD);
 	f.SetUnderlined(true);
 	dc.SetFont(f);
@@ -40,15 +43,17 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	dc.DrawText(mTitle, 4, 2);
 
 	// Right
-	//wxSize textsize=dc.GetTextExtent(mTextRight); TODO 2.8.0
-	//dc.DrawText(mTextRight, 0, size.GetWidth()-textsize.GetWidth());
 	f.SetWeight(wxFONTWEIGHT_NORMAL);
 	f.SetUnderlined(false);
 	dc.SetFont(f);
-	wxCoord w;
-	wxCoord h;
-	dc.GetTextExtent(mTextRight, &w, &h);
-	//dc.DrawText(mTextRight, 2, size.GetWidth()-w-4); TODO
+	dc.SetTextForeground(*wxWHITE);
+	wxSize textsize=dc.GetTextExtent(mTextRight);
+	dc.DrawText(mTextRight, 0, size.GetWidth()-textsize.GetWidth());
+
+	//wxCoord w;
+	//wxCoord h;
+	//dc.GetTextExtent(mTextRight, &w, &h);
+	//dc.DrawText(mTextRight, 2, size.GetWidth()-w-4);
 }
 
 void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
