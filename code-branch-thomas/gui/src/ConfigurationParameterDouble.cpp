@@ -31,7 +31,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Create the controls
 	wxStaticText *label=new wxStaticText(this, -1, config->ReadString("label", ""), wxDefaultPosition, wxSize(75, -1), wxST_NO_AUTORESIZE);
 	mTextCtrl=new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(50, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
-	wxStaticText *unitlabel=new wxStaticText(this, -1, " "+config->ReadString("unit", ""), wxDefaultPosition, wxSize(75, -1), wxST_NO_AUTORESIZE);
+	wxStaticText *unitlabel=new wxStaticText(this, -1, " "+config->ReadString("unit", ""), wxDefaultPosition, wxSize(50, -1), wxST_NO_AUTORESIZE);
 
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(label, 1, wxALIGN_CENTER_VERTICAL, 0);
@@ -42,7 +42,9 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 
 void THISCLASS::OnUpdate() {
 	double value=mComponent->GetConfigurationDouble(mName.c_str(), mValueDefault);
-	mTextCtrl->SetValue(wxString::Format("%f", value));
+	wxString text;
+	text.Printf("%0.3f", value);
+	mTextCtrl->ChangeValue(text);
 }
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {

@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<name>Calibration with a linear model</name>
+	<description>This component applies a linear transformation to the particles to transform their pixel coordinates to a world coordinates.</description>
+	<display>Output</display>
+
+	<configuration>
+		<title>Camera coordinates</title>
+		<label>In a first step, the pixel coordinates are transformed into the following reference frame:</label>
+		<parameter type="pointInteger">
+			<name>CameraTopLeft</name>
+			<label>Top left corner of the camera</label>
+			<default>
+				<x>0</x>
+				<y>0</y>
+			</default>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="pointInteger">
+			<name>CameraBottomRight</name>
+			<label>Bottom right corner of the camera</label>
+			<default>
+				<x>1</x>
+				<y>1</y>
+			</default>
+			<display>Output</display>
+		</parameter>
+		<line/>
+		<title>World coordinates</title>
+		<label>In a second step, the camera coordinates are transformed into the following world coordinates:</label>
+		<parameter type="pointInteger">
+			<name>WorldTopLeft</name>
+			<label>Top left corner of the world</label>
+			<default>
+				<x>0</x>
+				<y>0</y>
+			</default>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="pointInteger">
+			<name>WorldBottomRight</name>
+			<label>Bottom right corner of the world</label>
+			<default>
+				<x>1</x>
+				<y>1</y>
+			</default>
+			<display>Output</display>
+		</parameter>
+
+	</configuration>
+</swistrackcomponent>

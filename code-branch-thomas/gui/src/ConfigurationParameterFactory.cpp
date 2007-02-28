@@ -10,20 +10,20 @@
 #include "ConfigurationParameterPointInteger.h"
 
 ConfigurationParameter *THISCLASS::Create(const wxString &type, wxWindow* parent) {
-	type.MakeLower();
+	wxString typelc=type.Lower();
 
 	// Basic data types
-	if (type=="integer") {return new ConfigurationParameterInteger(parent);}
-	if (type=="double") {return new ConfigurationParameterDouble(parent);}
-	if (type=="string") {return new ConfigurationParameterString(parent);}
-	if (type=="dropdownlist") {return new ConfigurationParameterDropdownList(parent);}
+	if (typelc=="integer") {return new ConfigurationParameterInteger(parent);}
+	if (typelc=="double") {return new ConfigurationParameterDouble(parent);}
+	if (typelc=="string") {return new ConfigurationParameterString(parent);}
+	if (typelc=="dropdownlist") {return new ConfigurationParameterDropdownList(parent);}
 
 	// Files
-	if (type=="file") {return new ConfigurationParameterFile(parent);}
-	if (type=="image") {return new ConfigurationParameterImage(parent);}
+	if (typelc=="file") {return new ConfigurationParameterFile(parent);}
+	if (typelc=="image") {return new ConfigurationParameterImage(parent);}
 
 	// Points
-	if (type=="pointinteger") {return new ConfigurationParameterPointInteger(parent);}
+	if (typelc=="pointinteger") {return new ConfigurationParameterPointInteger(parent);}
 
 	return 0;
 }

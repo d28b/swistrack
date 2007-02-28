@@ -104,19 +104,40 @@ void THISCLASS::ReadConfiguration(wxXmlNode *configurationnode) {
 
 	wxXmlNode *node=configurationnode->GetChildren();
 	while (node) {
-		ReadParameter(node);
+		ReadConfigurationNode(node);
 		node=node->GetNext();
 	}
 
 	return;
 }
 
+void THISCLASS::ReadConfigurationNode(wxXmlNode *node) {
+	wxString nodename=node->GetName();
+	if (nodename=="parameter") {
+		ReadParameter(node);
+	} else if (nodename=="label") {
+		wxStaticText *label=new wxStaticText(this, -1, node->GetNodeContent());
+		label->Wrap(190);
+		GetSizer()->Add(label, 0, wxEXPAND|wxALL, 4);
+	} else if (nodename=="title") {
+		wxStaticText *label=new wxStaticText(this, -1, node->GetNodeContent());
+		wxFont f=label->GetFont();
+		f.SetWeight(wxFONTWEIGHT_BOLD);
+		label->SetFont(f);
+		label->Wrap(190);
+		GetSizer()->Add(label, 0, wxEXPAND|wxALL, 4);
+	} else if (nodename=="line") {
+		wxStaticLine *line=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL);
+		GetSizer()->Add(line, 0, wxEXPAND|wxALL, 4);
+	} else {
+		std::ostringstream oss;
+		oss << "Invalid node '" << nodename << "' in 'configuration'. Allowed types are 'line', 'label', 'title' and 'parameter'.";
+		mErrorList.Add(oss.str());
+	}
+}
+
 void THISCLASS::ReadParameter(wxXmlNode *node) {
 	if (! node) {return;}
-	if (node->GetName()!="parameter") {
-		mErrorList.Add("All nodes in 'configuration' must be of type 'parameter'.");
-		return;
-	}
 
 	// Find out the type and create a new object
 	wxString type=GetPropertyString(node, "type", "");

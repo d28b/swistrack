@@ -15,7 +15,7 @@ END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterImage(wxWindow* parent):
 		ConfigurationParameter(parent),
-		mValueDefault(0) {
+		mValueDefault("") {
 
 }
 
@@ -29,7 +29,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 
 	// Create the controls
 	wxStaticText *label=new wxStaticText(this, -1, config->ReadString("label", ""), wxDefaultPosition, wxSize(75, -1), wxST_NO_AUTORESIZE);
-	mTextCtrl=new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(50, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
+	mTextCtrl=new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(75, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
 	mButton=new wxButton(this, -1, "...", wxDefaultPosition, wxSize(25, -1), wxST_NO_AUTORESIZE);
 
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
@@ -40,8 +40,8 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 }
 
 void THISCLASS::OnUpdate() {
-	wxString value=mComponent->GetConfigurationString(mName.c_str(), mValueDefault);
-	mTextCtrl->SetValue(value);
+	wxString value=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
+	mTextCtrl->ChangeValue(value);
 }
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
@@ -53,18 +53,18 @@ void THISCLASS::OnTextEnter(wxCommandEvent& event) {
 }
 
 void THISCLASS::OnButtonClicked(wxCommandEvent& event) {
-	wxFileDialog dlg(this, "Select file", "", mTextCtrl->GetValue(), mFileFilter, wxFD_OPEN);
+	wxFileDialog dlg(this, "Select file", "", mTextCtrl->GetValue(), "GIF|*.gif|JPG|*.jpg|BMP|*.bmp|All files|*.*", wxFD_OPEN);
 	if (dlg.ShowModal() != wxID_OK) {return;}
 	SetValue(dlg.GetPath());
 }
 
 void THISCLASS::SetValue(const wxString &value) {
-	wxString curvalue=mComponent->GetConfigurationString(mName.c_str(), mValueDefault);
+	wxString curvalue=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
 	if (curvalue==value) {return;}
 
 	// Set the new configuration values
 	ComponentEditor ce(mComponent);
-	ce.SetConfigurationString(mName.c_str(), value);
+	ce.SetConfigurationString(mName.c_str(), value.c_str());
 
 	// Commit these changes
 	CommitChanges();

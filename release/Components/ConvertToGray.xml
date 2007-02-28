@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Conversion to Grayscale</friendlyname>
+	<description>Converts an input image to a grayscale image for further processing. (If the input image is a grayscale image already, the same image is used without making a copy.)</description>
+	<display>Output</display>
+
+	<configuration>
+		<label>This component does not have any configuration values.</label>
+	</configuration>
+</swistrackcomponent>

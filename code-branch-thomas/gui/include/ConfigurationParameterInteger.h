@@ -9,6 +9,7 @@
 
 class ConfigurationParameterInteger;
 
+#include <wx/spinctrl.h>
 #include "ConfigurationParameter.h"
 
 class ConfigurationParameterInteger: public ConfigurationParameter {
@@ -31,10 +32,12 @@ public:
 	//! Handles the corresponding GUI event.
 	void OnTextEnter(wxCommandEvent& event);
 	//! Handles the corresponding GUI event.
-	void OnScrollChanged(wxCommandEvent& event);
+	void OnSpin(wxSpinEvent& event);
+	//! Handles the corresponding GUI event.
+	void OnScrollChanged(wxScrollEvent& event);
 
 private:
-	wxTextCtrl *mTextCtrl;		//!< The corresponding GUI widget.
+	wxSpinCtrl *mSpinCtrl;		//!< The corresponding GUI widget.
 	wxSlider *mSlider;			//!< The corresponding GUI widget.
 	int mValueMin;				//!< The minimum value allowed.
 	int mValueMax;				//!< The maximum value allowed.

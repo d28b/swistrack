@@ -1,5 +1,5 @@
-#ifndef HEADER_ConfigurationParameterString
-#define HEADER_ConfigurationParameterString
+#ifndef HEADER_ConfigurationParameterDropdownList
+#define HEADER_ConfigurationParameterDropdownList
 
 #include <wx/wxprec.h>
 
@@ -7,17 +7,17 @@
   #include <wx/wx.h>
 #endif
 
-class ConfigurationParameterString;
+class ConfigurationParameterDropdownList;
 
 #include "ConfigurationParameter.h"
 
-class ConfigurationParameterString: public ConfigurationParameter {
+class ConfigurationParameterDropdownList: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterString(wxWindow* parent);
+	ConfigurationParameterDropdownList(wxWindow* parent);
 	//! Destructor.
-	~ConfigurationParameterString();
+	~ConfigurationParameterDropdownList();
 
 	// ConfigurationParameter methods
 	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);

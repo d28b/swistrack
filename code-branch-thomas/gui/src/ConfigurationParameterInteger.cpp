@@ -10,6 +10,7 @@
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_TEXT (wxID_ANY, THISCLASS::OnTextUpdated)
 	EVT_TEXT_ENTER (wxID_ANY, THISCLASS::OnTextEnter)
+	EVT_SPINCTRL (wxID_ANY, THISCLASS::OnSpin)
 	EVT_COMMAND_SCROLL_CHANGED (wxID_ANY, THISCLASS::OnScrollChanged)
 END_EVENT_TABLE()
 
@@ -31,34 +32,43 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 
 	// Create the controls
 	wxStaticText *label=new wxStaticText(this, -1, config->ReadString("label", ""), wxDefaultPosition, wxSize(75, -1), wxST_NO_AUTORESIZE);
-	mTextCtrl=new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(50, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
+	mSpinCtrl=new wxSpinCtrl(this, -1, "", wxDefaultPosition, wxSize(50, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER, mValueMin, mValueMax, mValueDefault);
 	wxStaticText *unitlabel=new wxStaticText(this, -1, " "+config->ReadString("unit", ""), wxDefaultPosition, wxSize(50, -1), wxST_NO_AUTORESIZE);
-	mSlider = new wxSlider(this, -1, mValueMin, mValueMax, mValueDefault, wxDefaultPosition, wxSize(175,-1), wxSL_AUTOTICKS);
+	mSlider = new wxSlider(this, -1, mValueDefault, mValueMin, mValueMax, wxDefaultPosition, wxSize(175,-1), wxSL_AUTOTICKS);
 
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(label, 1, wxALIGN_CENTER_VERTICAL, 0);
-	hs->Add(mTextCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
+	hs->Add(mSpinCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(unitlabel, 0, wxALIGN_CENTER_VERTICAL, 0);
-	SetSizer(hs);
+
+	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
+	vs->Add(hs, 0, 0, 0);
+	vs->Add(mSlider, 0, 0, 0);
+	SetSizer(vs);
 }
 
 void THISCLASS::OnUpdate() {
 	int value=mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
-	mTextCtrl->SetValue(wxString::Format("%d", value));
+	mSpinCtrl->SetValue(wxString::Format("%d", value));
 	mSlider->SetValue(value);
 }
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
-	long value=(long)mValueDefault;
-	mTextCtrl->GetValue().ToLong(&value);
-	SetValue((int)value);
+	//long value=(long)mValueDefault;
+	//mSpinCtrl->GetValue().ToLong(&value);
+	//SetValue((int)value);
+	SetValue(mSpinCtrl->GetValue());
 }
 
 void THISCLASS::OnTextEnter(wxCommandEvent& event) {
 	OnTextUpdated(event);
 }
 
-void THISCLASS::OnScrollChanged(wxCommandEvent& event) {
+void THISCLASS::OnSpin(wxSpinEvent& event) {
+	SetValue(mSpinCtrl->GetValue());
+}
+
+void THISCLASS::OnScrollChanged(wxScrollEvent& event) {
 	SetValue(mSlider->GetValue());
 }
 

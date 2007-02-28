@@ -346,11 +346,35 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\ConfigurationParameterDouble.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ConfigurationParameterDropdownList.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\ConfigurationParameterFactory.cpp"
 				>
 			</File>
 			<File
+				RelativePath="..\src\ConfigurationParameterFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ConfigurationParameterImage.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\ConfigurationParameterInteger.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ConfigurationParameterPointInteger.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ConfigurationParameterString.cpp"
 				>
 			</File>
 			<File
@@ -419,11 +443,35 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\ConfigurationParameterDouble.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ConfigurationParameterDropdownList.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\ConfigurationParameterFactory.h"
 				>
 			</File>
 			<File
+				RelativePath="..\include\ConfigurationParameterFile.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ConfigurationParameterImage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\ConfigurationParameterInteger.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ConfigurationParameterPointInteger.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ConfigurationParameterString.h"
 				>
 			</File>
 			<File

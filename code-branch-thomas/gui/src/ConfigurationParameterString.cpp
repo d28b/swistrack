@@ -14,7 +14,7 @@ END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterString(wxWindow* parent):
 		ConfigurationParameter(parent),
-		mValueDefault(0) {
+		mValueDefault("") {
 
 }
 
@@ -37,8 +37,8 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 }
 
 void THISCLASS::OnUpdate() {
-	wxString value=mComponent->GetConfigurationString(mName.c_str(), mValueDefault);
-	mTextCtrl->SetValue(value);
+	wxString value=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
+	mTextCtrl->ChangeValue(value);
 }
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
@@ -50,12 +50,12 @@ void THISCLASS::OnTextEnter(wxCommandEvent& event) {
 }
 
 void THISCLASS::SetValue(const wxString &value) {
-	wxString curvalue=mComponent->GetConfigurationString(mName.c_str(), mValueDefault);
+	wxString curvalue=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
 	if (curvalue==value) {return;}
 
 	// Set the new configuration values
 	ComponentEditor ce(mComponent);
-	ce.SetConfigurationString(mName.c_str(), value);
+	ce.SetConfigurationString(mName.c_str(), value.c_str());
 
 	// Commit these changes
 	CommitChanges();

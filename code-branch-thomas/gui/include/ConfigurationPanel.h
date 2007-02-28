@@ -36,6 +36,8 @@ private:
 	void Read(const wxFileName &filename);
 	//! Reads the configuration parameters for this component.
 	void ReadConfiguration(wxXmlNode *configurationnode);
+	//! Reads one configuration node.
+	void ReadConfigurationNode(wxXmlNode *node);
 	//! Reads one configuration parameter.
 	void ReadParameter(wxXmlNode *node);
 	//! Returns a property of an XML node.

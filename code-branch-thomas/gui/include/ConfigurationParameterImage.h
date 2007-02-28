@@ -15,9 +15,9 @@ class ConfigurationParameterImage: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterFile(wxWindow* parent);
+	ConfigurationParameterImage(wxWindow* parent);
 	//! Destructor.
-	~ConfigurationParameterFile();
+	~ConfigurationParameterImage();
 
 	// ConfigurationParameter methods
 	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
@@ -35,6 +35,7 @@ public:
 
 private:
 	wxTextCtrl *mTextCtrl;		//!< The corresponding GUI widget.
+	wxButton *mButton;			//!< The corresponding GUI widget.
 	wxString mValueDefault;		//!< The default value.
 
 	DECLARE_EVENT_TABLE()
