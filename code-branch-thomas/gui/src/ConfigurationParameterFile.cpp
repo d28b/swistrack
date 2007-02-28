@@ -15,6 +15,7 @@ END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterFile(wxWindow* parent):
 		ConfigurationParameter(parent),
+		mTextCtrl(0), mButton(0),
 		mValueDefault("") {
 
 }

@@ -5,24 +5,18 @@
 	<display>Output</display>
 
 	<configuration>
-		<parameter type="dropdownlist">
+		<parameter type="gbit_cameralist">
 			<name>Device</name>
 			<label>Camera</label>
-			<items>
-				<item key="0">Camera 1</item>
-				<item key="1">Camera 2</item>
-				<item key="2">Camera 3</item>
-				<item key="3">Camera 4</item>
-			</items>
 			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
-		<parameter type="dropdownlist">
+		<parameter type="list">
 			<name>Mode</name>
 			<label>Mode</label>
 			<items>
 				<item key="color">Color (YUV422)</item>
-				<item key="mono">Mono 8 bit</item>
+				<item key="mono">Mono (8 bit)</item>
 			</items>
 			<display>Output</display>
 			<reloadable>false</reloadable>

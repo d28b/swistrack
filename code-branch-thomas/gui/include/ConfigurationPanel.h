@@ -31,6 +31,11 @@ public:
 
 private:
 	wxStaticText *mLabelTitle;			//! The label holding the title of the component.
+	wxString mHelpURL;					//! The URL to open when to user asks for help.
+
+	enum eIDs {
+		sID_HelpURL,
+	};
 
 	//! Reads the *.swistrackcomponent file.
 	void Read(const wxFileName &filename);

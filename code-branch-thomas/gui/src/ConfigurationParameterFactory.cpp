@@ -24,6 +24,9 @@ ConfigurationParameter *THISCLASS::Create(const wxString &type, wxWindow* parent
 
 	// Points
 	if (typelc=="pointinteger") {return new ConfigurationParameterPointInteger(parent);}
+	if (typelc=="pointdouble") {return new ConfigurationParameterPointDouble(parent);}
+	if (typelc=="sizeinteger") {return new ConfigurationParameterSizeInteger(parent);}
+	if (typelc=="sizedouble") {return new ConfigurationParameterSizeDouble(parent);}
 
 	return 0;
 }

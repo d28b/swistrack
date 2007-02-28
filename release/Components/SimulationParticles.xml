@@ -8,6 +8,7 @@
 		<parameter type="file">
 			<name>File</name>
 			<label>Simulation file</label>
+			<filter>NMEA 0183 data file|*.*</filter>
 			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>

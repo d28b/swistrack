@@ -30,12 +30,16 @@ public:
 	void OnTextUpdated(wxCommandEvent& event);
 	//! Handles the corresponding GUI event.
 	void OnTextEnter(wxCommandEvent& event);
+	//! Handles the corresponding GUI event.
+	void OnScrollChanged(wxScrollEvent& event);
 
 private:
 	wxTextCtrl *mTextCtrl;		//!< The corresponding GUI widget.
-	double mValueMin;				//!< The minimum value allowed.
-	double mValueMax;				//!< The maximum value allowed.
-	double mValueDefault;			//!< The default value.
+	wxSlider *mSlider;			//!< The corresponding GUI widget.
+	double mValueMin;			//!< The minimum value allowed.
+	double mValueMax;			//!< The maximum value allowed.
+	double mValueDefault;		//!< The default value.
+	double mSliderStep;			//!< The increment of the slider.
 
 	DECLARE_EVENT_TABLE()
 };

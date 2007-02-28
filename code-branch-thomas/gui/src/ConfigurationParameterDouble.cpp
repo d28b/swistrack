@@ -14,7 +14,8 @@ END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterDouble(wxWindow* parent):
 		ConfigurationParameter(parent),
-		mValueMin(0), mValueMax(1), mValueDefault(0) {
+		mSpinCtrl(0), mSlider(0),
+		mValueMin(0), mValueMax(1), mValueDefault(0), mSliderStep(1) {
 
 }
 
@@ -33,18 +34,26 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	mTextCtrl=new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(50, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
 	wxStaticText *unitlabel=new wxStaticText(this, -1, " "+config->ReadString("unit", ""), wxDefaultPosition, wxSize(50, -1), wxST_NO_AUTORESIZE);
 
+	if (config->ReadBool("slider", false)) {
+		mSliderStep=config->ReadDouble("sliderstep", 1);
+		mSlider = new wxSlider(this, -1, (int)floor((mValueDefault-mValueMin)/mSliderStep+0.5), 0, (int)floor((mValueMax-mValueMin)/mSliderStep+0.5), wxDefaultPosition, wxSize(175,-1)); //wxSL_AUTOTICKS
+	}
+
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(label, 1, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mTextCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(unitlabel, 0, wxALIGN_CENTER_VERTICAL, 0);
-	SetSizer(hs);
+
+	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
+	vs->Add(hs, 0, 0, 0);
+	if (mSlider) {vs->Add(mSlider, 0, 0, 0);}
+	SetSizer(vs);
 }
 
 void THISCLASS::OnUpdate() {
 	double value=mComponent->GetConfigurationDouble(mName.c_str(), mValueDefault);
-	wxString text;
-	text.Printf("%0.3f", value);
-	mTextCtrl->ChangeValue(text);
+	mTextCtrl->SetValue(wxString::Format("%f", value));
+	mSlider->SetValue((int)floor((mValueMax-mValueMin)/mSliderStep+0.5));
 }
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
@@ -55,6 +64,10 @@ void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 
 void THISCLASS::OnTextEnter(wxCommandEvent& event) {
 	OnTextUpdated(event);
+}
+
+void THISCLASS::OnScrollChanged(wxScrollEvent& event) {
+	SetValue(mSlider->GetValue()*nSliderStep+mValueMin);
 }
 
 void THISCLASS::SetValue(double value) {

@@ -11,6 +11,7 @@
 #include "ConfigurationXML.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
+	EVT_LEFT_UP (THISCLASS::OnHelpClick)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationPanel(wxWindow *parent, SwisTrack *st, Component *c):
@@ -77,11 +78,22 @@ void THISCLASS::Read(const wxFileName &filename) {
 		mLabelTitle->SetLabel(friendlyname);
 	}
 
-	// Add a description
+	// Add a description (if available)
 	wxString description=config.ReadString("description", "");
 	if (description!="") {
 		wxStaticText *label=new wxStaticText(this, -1, description);
 		label->Wrap(190);
+		GetSizer()->Add(label, 0, wxEXPAND|wxALL, 4);
+	}
+
+	// Add a help button (if available)
+	mHelpURL=config.ReadString("url", "");
+	if (mHelpURL!="") {
+		wxStaticText *label=new wxStaticText(this, sID_HelpURL, "More information ...");
+		wxFont f=label.GetFont();
+		f.SetUnderlined(true);
+		label.SetFont(f);
+		label.SetForegroundColour(*wxBLUE);
 		GetSizer()->Add(label, 0, wxEXPAND|wxALL, 4);
 	}
 
@@ -170,4 +182,9 @@ wxString THISCLASS::GetPropertyString(wxXmlNode *node, const wxString &name, con
 
 	// Return default value if not found
 	return defvalue;
+}
+
+void THISCLASS::OnItemSelected(wxMouseEvent& event) {
+	if (event.GetId()!=sID_HelpURL) {return;}
+	wxLaunchDefaultBrowser(mHelpURL);
 }
