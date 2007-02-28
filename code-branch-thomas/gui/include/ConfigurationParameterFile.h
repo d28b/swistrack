@@ -1,5 +1,5 @@
-#ifndef HEADER_ConfigurationParameterInteger
-#define HEADER_ConfigurationParameterInteger
+#ifndef HEADER_ConfigurationParameterFile
+#define HEADER_ConfigurationParameterFile
 
 #include <wx/wxprec.h>
 
@@ -7,38 +7,37 @@
   #include <wx/wx.h>
 #endif
 
-class ConfigurationParameterInteger;
+class ConfigurationParameterFile;
 
 #include "ConfigurationParameter.h"
 
-class ConfigurationParameterInteger: public ConfigurationParameter {
+class ConfigurationParameterFile: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterInteger(wxWindow* parent);
+	ConfigurationParameterFile(wxWindow* parent);
 	//! Destructor.
-	~ConfigurationParameterInteger();
+	~ConfigurationParameterFile();
 
 	// ConfigurationParameter methods
 	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
 	virtual void OnUpdate();
 
 	//! Sets a new value of the component parameter and commits these changes.
-	void SetValue(int value);
+	void SetValue(const wxString &value);
 
 	//! Handles the corresponding GUI event.
 	void OnTextUpdated(wxCommandEvent& event);
 	//! Handles the corresponding GUI event.
 	void OnTextEnter(wxCommandEvent& event);
 	//! Handles the corresponding GUI event.
-	void OnScrollChanged(wxCommandEvent& event);
+	void OnButtonClicked(wxCommandEvent& event);
 
 private:
 	wxTextCtrl *mTextCtrl;		//!< The corresponding GUI widget.
-	wxSlider *mSlider;			//!< The corresponding GUI widget.
-	int mValueMin;				//!< The minimum value allowed.
-	int mValueMax;				//!< The maximum value allowed.
-	int mValueDefault;			//!< The default value.
+	wxButton *mButton;			//!< The corresponding GUI widget.
+	wxString mValueDefault;		//!< The default value.
+	wxString mFileFilter;		//!< The file filter shown in the file selection dialog box.
 
 	DECLARE_EVENT_TABLE()
 };

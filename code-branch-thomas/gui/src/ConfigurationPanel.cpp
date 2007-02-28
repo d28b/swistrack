@@ -38,7 +38,8 @@ THISCLASS::ConfigurationPanel(wxWindow *parent, SwisTrack *st, Component *c):
 	GetSizer()->Add(mLabelTitle, 0, wxEXPAND|wxALL, 4);
 
 	// Read the configuration and create the parameter panels
-	wxFileName filename(wxGetApp().mApplicationFolder, mComponent->mName.c_str(), "swistrackcomponent");
+	wxFileName filename(wxGetApp().mApplicationFolder, mComponent->mName.c_str(), "xml");
+	filename.AppendDir("Components");
 	Read(filename);
 
 	// In case of errors, show a dialog with the error messages and add a label to the panel

@@ -284,7 +284,7 @@ void SwisTrack::OnFileNew(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void THISCLASS::OnFileOpen(wxCommandEvent& WXUNUSED(event)) {
-	wxFileDialog dlg(this, "Open Configuration", "", "", "SwisTrack Configurations (*.swistrack)|*.swistrack", wxOPEN, wxDefaultPosition);
+	wxFileDialog dlg(this, "Open Configuration", "", "", "SwisTrack Configurations (*.swistrack)|*.swistrack", wxFD_OPEN);
 	if (dlg.ShowModal() != wxID_OK) {return;}
 
 	OpenFile(dlg.GetPath(), true, false);
