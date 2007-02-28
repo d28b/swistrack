@@ -20,10 +20,6 @@ public:
 	//! Destructor.
 	~ConfigurationParameterInteger();
 
-	// ConfigurationParameter methods
-	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
-	virtual void OnUpdate();
-
 	//! Sets a new value of the component parameter and commits these changes.
 	void SetValue(int value);
 
@@ -36,12 +32,16 @@ public:
 	//! Handles the corresponding GUI event.
 	void OnScrollChanged(wxScrollEvent& event);
 
-private:
+protected:
 	wxSpinCtrl *mSpinCtrl;		//!< The corresponding GUI widget.
 	wxSlider *mSlider;			//!< The corresponding GUI widget.
 	int mValueMin;				//!< The minimum value allowed.
 	int mValueMax;				//!< The maximum value allowed.
 	int mValueDefault;			//!< The default value.
+
+	// ConfigurationParameter methods
+	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
+	virtual void OnUpdate();
 
 	DECLARE_EVENT_TABLE()
 };

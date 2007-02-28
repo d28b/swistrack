@@ -39,6 +39,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 		mSlider = new wxSlider(this, -1, (int)floor((mValueDefault-mValueMin)/mSliderStep+0.5), 0, (int)floor((mValueMax-mValueMin)/mSliderStep+0.5), wxDefaultPosition, wxSize(175,-1)); //wxSL_AUTOTICKS
 	}
 
+	// Layout the controls
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(label, 1, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mTextCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
@@ -52,8 +53,8 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 
 void THISCLASS::OnUpdate() {
 	double value=mComponent->GetConfigurationDouble(mName.c_str(), mValueDefault);
-	mTextCtrl->SetValue(wxString::Format("%f", value));
-	mSlider->SetValue((int)floor((mValueMax-mValueMin)/mSliderStep+0.5));
+	if (mFocusWindow!=mTextCtrl) {mTextCtrl->SetValue(wxString::Format("%f", value));}
+	if (mFocusWindow!=mSlider) {mSlider->SetValue((int)floor((mValueMax-mValueMin)/mSliderStep+0.5));}
 }
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
@@ -71,8 +72,14 @@ void THISCLASS::OnScrollChanged(wxScrollEvent& event) {
 }
 
 void THISCLASS::SetValue(double value) {
+	// If we are in OnUpdate(), do nothing
+	if (mUpdating) {return;}
+
+	// Check bounds
 	if (value<mValueMin) {value=mValueMin;}
 	if (value>mValueMax) {value=mValueMax;}
+
+	// Check if the same value is set already
 	double curvalue=mComponent->GetConfigurationDouble(mName.c_str(), mValueDefault);
 	if (curvalue==value) {return;}
 

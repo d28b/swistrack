@@ -30,6 +30,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	wxStaticText *label=new wxStaticText(this, -1, config->ReadString("label", ""), wxDefaultPosition, wxSize(75, -1), wxST_NO_AUTORESIZE);
 	mTextCtrl=new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(100, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
 
+	// Layout the controls
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(label, 1, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mTextCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
@@ -37,8 +38,9 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 }
 
 void THISCLASS::OnUpdate() {
+	if (mFocusWindow==mTextCtrl) {return;}
 	wxString value=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
-	mTextCtrl->ChangeValue(value);
+	mTextCtrl->SetValue(value);
 }
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
@@ -50,6 +52,10 @@ void THISCLASS::OnTextEnter(wxCommandEvent& event) {
 }
 
 void THISCLASS::SetValue(const wxString &value) {
+	// If we are in OnUpdate(), do nothing
+	if (mUpdating) {return;}
+
+	// Check if the same value is set already
 	wxString curvalue=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
 	if (curvalue==value) {return;}
 

@@ -46,6 +46,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	wxStaticText *labelx=new wxStaticText(this, -1, config->ReadString("labelx", "X")+" ", wxDefaultPosition, wxSize(40, -1), wxST_NO_AUTORESIZE|wxALIGN_RIGHT);
 	wxStaticText *labely=new wxStaticText(this, -1, config->ReadString("labely", "Y")+" ", wxDefaultPosition, wxSize(40, -1), wxST_NO_AUTORESIZE|wxALIGN_RIGHT);
 
+	// Layout the controls
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(labelx, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mSpinCtrlX, 0, wxALIGN_CENTER_VERTICAL, 0);
@@ -61,8 +62,8 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 void THISCLASS::OnUpdate() {
 	int valuex=mComponent->GetConfigurationInt((mName+".x").c_str(), mValueDefaultX);
 	int valuey=mComponent->GetConfigurationInt((mName+".y").c_str(), mValueDefaultY);
-	mSpinCtrlX->ChangeValue(wxString::Format("%d", valuex));
-	mSpinCtrlY->ChangeValue(wxString::Format("%d", valuey));
+	if (mFocusWindow!=mSpinCtrlX) {mSpinCtrlX->SetValue(wxString::Format("%d", valuex));}
+	if (mFocusWindow!=mSpinCtrlX) {mSpinCtrlY->SetValue(wxString::Format("%d", valuey));}
 }
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
@@ -82,10 +83,16 @@ void THISCLASS::OnSpin(wxSpinEvent& event) {
 }
 
 void THISCLASS::SetValue(int valuex, int valuey) {
+	// If we are in OnUpdate(), do nothing
+	if (mUpdating) {return;}
+
+	// Check bounds
 	if (valuex<mValueMinX) {valuex=mValueMinX;}
 	if (valuex>mValueMaxX) {valuex=mValueMaxX;}
 	if (valuey<mValueMinY) {valuey=mValueMinY;}
 	if (valuey>mValueMaxY) {valuey=mValueMaxY;}
+
+	// Check if the same value is set already
 	int curvaluex=mComponent->GetConfigurationInt((mName+".x").c_str(), mValueDefaultX);
 	int curvaluey=mComponent->GetConfigurationInt((mName+".y").c_str(), mValueDefaultY);
 	if ((curvaluex==valuex) && (curvaluey==valuey)) {return;}

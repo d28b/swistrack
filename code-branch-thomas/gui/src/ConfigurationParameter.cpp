@@ -5,9 +5,15 @@
 #include <algorithm>
 #include "SwisTrackCoreEditor.h"
 
+BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
+	EVT_SET_FOCUS (THISCLASS::OnSetFocus)
+	EVT_KILL_FOCUS (THISCLASS::OnKillFocus)
+END_EVENT_TABLE()
+
 THISCLASS::ConfigurationParameter(wxWindow* parent):
 		wxPanel(parent, -1), mSwisTrack(0), mComponent(0),
-		mLabel(""), mDisplay(""), mReloadable(true) {
+		mLabel(""), mDisplay(""), mReloadable(true),
+		mUpdating(true), mFocusEvent(0) {
 
 
 }
@@ -34,6 +40,7 @@ void THISCLASS::Initialize(SwisTrack *st, Component *c, ConfigurationXML *config
 	// Initializes the parameter
 	OnInitialize(config, errorlist);
 	OnUpdate();
+	mUpdating=false;
 }
 
 void THISCLASS::CommitChanges() {
@@ -59,7 +66,18 @@ void THISCLASS::OnAfterStop() {
 }
 
 void THISCLASS::OnAfterEditComponent(Component *c) {
+	if (mUpdating) {return;}
 	if (mComponent!=c) {return;}
-	
+
+	mUpdating=true;
 	OnUpdate();
+	mUpdating=false;
+}
+
+void THISCLASS::OnSetFocus(wxFocusEvent &event) {
+	mFocusWindow=(wxWindow *)event.GetEventObject();
+}
+
+void THISCLASS::OnKillFocus(wxFocusEvent &event) {
+	if (mFocusWindow==(wxWindow *)event.GetEventObject()) {mFocusEvent=0;}
 }

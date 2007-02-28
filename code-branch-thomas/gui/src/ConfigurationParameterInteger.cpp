@@ -40,6 +40,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 		mSlider = new wxSlider(this, -1, mValueDefault, mValueMin, mValueMax, wxDefaultPosition, wxSize(175,-1)); //wxSL_AUTOTICKS
 	}
 
+	// Layout the controls
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(label, 1, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mSpinCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
@@ -53,8 +54,8 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 
 void THISCLASS::OnUpdate() {
 	int value=mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
-	mSpinCtrl->SetValue(value);
-	mSlider->SetValue(value);
+	if (mFocusWindow!=mSpinCtrl) {mSpinCtrl->SetValue(value);}
+	if (mFocusWindow!=mSlider) {mSlider->SetValue(value);}
 }
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
@@ -74,8 +75,14 @@ void THISCLASS::OnScrollChanged(wxScrollEvent& event) {
 }
 
 void THISCLASS::SetValue(int value) {
+	// If we are in OnUpdate(), do nothing
+	if (mUpdating) {return;}
+
+	// Check bounds
 	if (value<mValueMin) {value=mValueMin;}
 	if (value>mValueMax) {value=mValueMax;}
+	
+	// Check if the same value is set already
 	int curvalue=mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
 	if (curvalue==value) {return;}
 
