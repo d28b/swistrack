@@ -8,7 +8,7 @@
 THISCLASS::AboutDialog(wxWindow *parent):
 		wxDialog(parent, -1, "About SwisTrack", wxDefaultPosition, wxSize(400, 200), wxDEFAULT_DIALOG_STYLE)	{
 
-	wxPanel *p=new wxPanel(this, -1);
+	wxPanel *p=new wxPanel(this, wxID_ANY);
 
 	wxBoxSizer *pvs=new wxBoxSizer(wxVERTICAL);
 	wxStaticText *title=new wxStaticText(p, -1, "SWISTrack 4.0");
@@ -30,7 +30,7 @@ THISCLASS::AboutDialog(wxWindow *parent):
 
 	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
 	vs->Add(p, 1, wxEXPAND|wxALL, 10);
-	vs->Add(new wxStaticLine(this, -1), 0, wxEXPAND|wxLEFT|wxRIGHT, 10);
+	vs->Add(new wxStaticLine(this, wxID_ANY), 0, wxEXPAND|wxLEFT|wxRIGHT, 10);
 	vs->Add(new wxButton(this, wxID_OK, "Close"), 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	SetSizer(vs);
 }

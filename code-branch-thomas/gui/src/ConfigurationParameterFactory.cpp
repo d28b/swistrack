@@ -8,9 +8,8 @@
 #include "ConfigurationParameterFile.h"
 #include "ConfigurationParameterImage.h"
 #include "ConfigurationParameterPointInteger.h"
-//#include "ConfigurationParameterPointDouble.h"
-//#include "ConfigurationParameterSizeInteger.h"
-//#include "ConfigurationParameterSizeDouble.h"
+#include "ConfigurationParameterPointDouble.h"
+#include "ConfigurationParameterAngle.h"
 
 ConfigurationParameter *THISCLASS::Create(const wxString &type, wxWindow* parent) {
 	wxString typelc=type.Lower();
@@ -27,9 +26,10 @@ ConfigurationParameter *THISCLASS::Create(const wxString &type, wxWindow* parent
 
 	// Points
 	if (typelc=="pointinteger") {return new ConfigurationParameterPointInteger(parent);}
-	//if (typelc=="pointdouble") {return new ConfigurationParameterPointDouble(parent);}
-	//if (typelc=="sizeinteger") {return new ConfigurationParameterSizeInteger(parent);}
-	//if (typelc=="sizedouble") {return new ConfigurationParameterSizeDouble(parent);}
+	if (typelc=="pointdouble") {return new ConfigurationParameterPointDouble(parent);}
+
+	// Special types
+	if (typelc=="angle") {return new ConfigurationParameterAngle(parent);}
 
 	return 0;
 }

@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
 	<name>Calibration with a linear model</name>
-	<description>This component applies a linear transformation to the particles to transform their pixel coordinates to a world coordinates.</description>
+	<description>This component applies a linear transformation to the particles to transform their pixel coordinates to a world coordinates. Basically, a camera rectangle is mapped onto a tetragon.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentCalibrationLinear</url>
 	<display>Output</display>
 
 	<configuration>
-		<title>Camera coordinates</title>
-		<label>In a first step, the pixel coordinates are transformed into the following reference frame:</label>
-		<parameter type="pointInteger">
+		<title>Rectangle on the camera image</title>
+		<parameter type="pointDouble">
 			<name>CameraTopLeft</name>
-			<label>Top left corner of the camera</label>
+			<label>Top left corner of the rectangle (pixels)</label>
 			<default>
 				<x>0</x>
 				<y>0</y>
@@ -17,9 +17,9 @@
 			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
-		<parameter type="pointInteger">
+		<parameter type="pointDouble">
 			<name>CameraBottomRight</name>
-			<label>Bottom right corner of the camera</label>
+			<label>Bottom right corner of the rectangle (pixels)</label>
 			<default>
 				<x>1</x>
 				<y>1</y>
@@ -28,8 +28,8 @@
 		</parameter>
 		<line/>
 		<title>World coordinates</title>
-		<label>In a second step, the camera coordinates are transformed into the following world coordinates:</label>
-		<parameter type="pointInteger">
+		<label>The corners of the camera rectangle correspond to the following world coordinates:</label>
+		<parameter type="pointDouble">
 			<name>WorldTopLeft</name>
 			<label>Top left corner of the world</label>
 			<default>
@@ -39,7 +39,25 @@
 			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
-		<parameter type="pointInteger">
+		<parameter type="pointDouble">
+			<name>WorldTopRight</name>
+			<label>Top right corner of the world</label>
+			<default>
+				<x>1</x>
+				<y>0</y>
+			</default>
+			<display>Output</display>
+		</parameter>
+		<parameter type="pointDouble">
+			<name>WorldBottomLeft</name>
+			<label>Bottom left corner of the world</label>
+			<default>
+				<x>0</x>
+				<y>1</y>
+			</default>
+			<display>Output</display>
+		</parameter>
+		<parameter type="pointDouble">
 			<name>WorldBottomRight</name>
 			<label>Bottom right corner of the world</label>
 			<default>

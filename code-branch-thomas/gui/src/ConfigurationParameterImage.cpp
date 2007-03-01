@@ -8,7 +8,6 @@
 #include "ComponentEditor.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
-	EVT_TEXT (wxID_ANY, THISCLASS::OnTextUpdated)
 	EVT_TEXT_ENTER (wxID_ANY, THISCLASS::OnTextEnter)
 	EVT_BUTTON (wxID_ANY, THISCLASS::OnButtonClicked)
 END_EVENT_TABLE()
@@ -29,50 +28,56 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	mValueDefault=config->ReadString("default", "");
 
 	// Create the controls
-	wxStaticText *label=new wxStaticText(this, -1, config->ReadString("label", ""), wxDefaultPosition, wxSize(75, -1), wxST_NO_AUTORESIZE);
-	mTextCtrl=new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(75, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
-	mButton=new wxButton(this, -1, "...", wxDefaultPosition, wxSize(25, -1), wxST_NO_AUTORESIZE);
+	wxStaticText *label=new wxStaticText(this, wxID_ANY, config->ReadString("label", ""), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
+	mTextCtrl=new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxSize(scParameterWidth-25, -1), wxTE_PROCESS_ENTER);
+	mTextCtrl->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
+	mButton=new wxButton(this, wxID_ANY, "...", wxDefaultPosition, wxSize(25, -1), wxST_NO_AUTORESIZE);
 
 	// Layout the controls
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
-	hs->Add(label, 1, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mTextCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mButton, 0, wxALIGN_CENTER_VERTICAL, 0);
-	SetSizer(hs);
+
+	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
+	vs->Add(label, 0, wxBOTTOM, 2);
+	vs->Add(hs, 0, 0, 0);
+	SetSizer(vs);
 }
 
-void THISCLASS::OnUpdate() {
-	if (mFocusWindow==mTextCtrl) {return;}
+void THISCLASS::OnUpdate(wxWindow *updateprotection) {
+	if (updateprotection==mTextCtrl) {return;}
 	wxString value=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
 	mTextCtrl->SetValue(value);
 }
 
-void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
-	SetValue(mTextCtrl->GetValue());
+bool THISCLASS::ValidateNewValue() {
+	return true;
 }
 
-void THISCLASS::OnTextEnter(wxCommandEvent& event) {
-	OnTextUpdated(event);
+bool THISCLASS::CompareNewValue() {
+	wxString value=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
+	return (value==mNewValue);
+}
+
+void THISCLASS::OnSetNewValue() {
+	ComponentEditor ce(mComponent);
+	ce.SetConfigurationString(mName.c_str(), mNewValue.c_str());
 }
 
 void THISCLASS::OnButtonClicked(wxCommandEvent& event) {
 	wxFileDialog dlg(this, "Select file", "", mTextCtrl->GetValue(), "GIF|*.gif|JPG|*.jpg|BMP|*.bmp|All files|*.*", wxFD_OPEN);
 	if (dlg.ShowModal() != wxID_OK) {return;}
-	SetValue(dlg.GetPath());
+	mNewValue=dlg.GetPath();
+	ValidateNewValue();
+	SetNewValue();
 }
 
-void THISCLASS::SetValue(const wxString &value) {
-	// If we are in OnUpdate(), do nothing
-	if (mUpdating) {return;}
+void THISCLASS::OnTextEnter(wxCommandEvent& event) {
+	mNewValue=mTextCtrl->GetValue();
+	ValidateNewValue();
+	SetNewValue();
+}
 
-	// Check if the same value is set already
-	wxString curvalue=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
-	if (curvalue==value) {return;}
-
-	// Set the new configuration values
-	ComponentEditor ce(mComponent);
-	ce.SetConfigurationString(mName.c_str(), value.c_str());
-
-	// Commit these changes
-	CommitChanges();
+void THISCLASS::OnKillFocus(wxFocusEvent& event) {
+	OnTextEnter(wxCommandEvent());
 }

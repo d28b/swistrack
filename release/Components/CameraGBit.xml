@@ -5,13 +5,19 @@
 	<display>Output</display>
 
 	<configuration>
-		<parameter type="gbit_cameralist">
+		<parameter type="dropdownlist">
 			<name>Device</name>
 			<label>Camera</label>
+			<items>
+				<item key="0">Camera 1</item>
+				<item key="1">Camera 2</item>
+				<item key="2">Camera 3</item>
+				<item key="3">Camera 4</item>
+			</items>
 			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
-		<parameter type="list">
+		<parameter type="dropdownlist">
 			<name>Mode</name>
 			<label>Mode</label>
 			<items>

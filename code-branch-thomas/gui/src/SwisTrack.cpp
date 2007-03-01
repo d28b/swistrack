@@ -11,7 +11,7 @@
 
 #include <algorithm>
 #include <cctype>
-#include <math.h>
+#include <cmath>
 #include <highgui.h>
 
 #include <wx/toolbar.h>

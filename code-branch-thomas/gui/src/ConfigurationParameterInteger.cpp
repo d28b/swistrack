@@ -27,22 +27,23 @@ THISCLASS::~ConfigurationParameterInteger() {
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
-	mValueMin=config->ReadInt("min", 0);
-	mValueMax=config->ReadInt("max", 255);
+	mValueMin=config->ReadInt("min", INT_MIN);
+	mValueMax=config->ReadInt("max", INT_MAX);
 	mValueDefault=config->ReadInt("default", 0);
 
 	// Create the controls
-	wxStaticText *label=new wxStaticText(this, -1, config->ReadString("label", ""), wxDefaultPosition, wxSize(75, -1), wxST_NO_AUTORESIZE);
-	mSpinCtrl=new wxSpinCtrl(this, -1, "", wxDefaultPosition, wxSize(50, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER, mValueMin, mValueMax, mValueDefault);
-	wxStaticText *unitlabel=new wxStaticText(this, -1, " "+config->ReadString("unit", ""), wxDefaultPosition, wxSize(50, -1), wxST_NO_AUTORESIZE);
+	wxStaticText *label=new wxStaticText(this, wxID_ANY, config->ReadString("label", ""), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
+	mSpinCtrl=new wxSpinCtrl(this, wxID_ANY, "", wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER, mValueMin, mValueMax, mValueDefault);
+	mSpinCtrl->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
+	wxStaticText *unitlabel=new wxStaticText(this, wxID_ANY, " "+config->ReadString("unit", ""), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
 
 	if (config->ReadBool("slider", false)) {
-		mSlider = new wxSlider(this, -1, mValueDefault, mValueMin, mValueMax, wxDefaultPosition, wxSize(175,-1)); //wxSL_AUTOTICKS
+		mSlider = new wxSlider(this, wxID_ANY, mValueDefault, mValueMin, mValueMax, wxDefaultPosition, wxSize(175,-1)); //wxSL_AUTOTICKS
 	}
 
 	// Layout the controls
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
-	hs->Add(label, 1, wxALIGN_CENTER_VERTICAL, 0);
+	hs->Add(label, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mSpinCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(unitlabel, 0, wxALIGN_CENTER_VERTICAL, 0);
 
@@ -52,44 +53,66 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	SetSizer(vs);
 }
 
-void THISCLASS::OnUpdate() {
+void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 	int value=mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
-	if (mFocusWindow!=mSpinCtrl) {mSpinCtrl->SetValue(value);}
-	if (mFocusWindow!=mSlider) {mSlider->SetValue(value);}
+	if (updateprotection!=mSpinCtrl) {mSpinCtrl->SetValue(value);}
+	if ((mSlider) && (updateprotection!=mSlider)) {mSlider->SetValue(value);}
+}
+
+bool THISCLASS::ValidateNewValue() {
+	bool valid=true;
+
+	// Check bounds
+	if (mNewValue<mValueMin) {mNewValue=mValueMin; valid=false;}
+	if (mNewValue>mValueMax) {mNewValue=mValueMax; valid=false;}
+
+	return valid;
+}
+
+bool THISCLASS::CompareNewValue() {
+	int value=mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
+	return (value==mNewValue);
+}
+
+void THISCLASS::OnSetNewValue() {
+	ComponentEditor ce(mComponent);
+	ce.SetConfigurationInt(mName.c_str(), mNewValue);
 }
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
-	SetValue(mSpinCtrl->GetValue());
+	mNewValue=mSpinCtrl->GetValue();
+
+	if (ValidateNewValue()) {
+		mSpinCtrl->SetOwnForegroundColour(*wxBLACK);
+	} else {
+		mSpinCtrl->SetOwnForegroundColour(*wxRED);
+	}
+	mSpinCtrl->Refresh();
+
+	if (! CompareNewValue()) {return;}
+	SetNewValue(mSpinCtrl);
 }
 
 void THISCLASS::OnTextEnter(wxCommandEvent& event) {
-	OnTextUpdated(event);
+	mNewValue=mSpinCtrl->GetValue();
+	ValidateNewValue();
+	SetNewValue();
 }
 
 void THISCLASS::OnSpin(wxSpinEvent& event) {
-	SetValue(mSpinCtrl->GetValue());
+	mNewValue=mSpinCtrl->GetValue();
+	ValidateNewValue();
+	if (CompareNewValue()) {return;}
+	SetNewValue(mSpinCtrl);
+}
+
+void THISCLASS::OnKillFocus(wxFocusEvent& event) {
+	OnTextEnter(wxCommandEvent());
 }
 
 void THISCLASS::OnScrollChanged(wxScrollEvent& event) {
-	SetValue(mSlider->GetValue());
-}
-
-void THISCLASS::SetValue(int value) {
-	// If we are in OnUpdate(), do nothing
-	if (mUpdating) {return;}
-
-	// Check bounds
-	if (value<mValueMin) {value=mValueMin;}
-	if (value>mValueMax) {value=mValueMax;}
-	
-	// Check if the same value is set already
-	int curvalue=mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
-	if (curvalue==value) {return;}
-
-	// Set the new configuration values
-	ComponentEditor ce(mComponent);
-	ce.SetConfigurationInt(mName.c_str(), value);
-
-	// Commit these changes
-	CommitChanges();
+	mNewValue=mSlider->GetValue();
+	ValidateNewValue();
+	if (CompareNewValue()) {return;}
+	SetNewValue(mSlider);
 }

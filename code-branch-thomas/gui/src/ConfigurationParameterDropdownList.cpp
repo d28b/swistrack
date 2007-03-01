@@ -32,12 +32,12 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	mValueDefault=config->ReadString("default", "");
 
 	// Create the controls
-	wxStaticText *label=new wxStaticText(this, -1, config->ReadString("label", ""), wxDefaultPosition, wxSize(75, -1), wxST_NO_AUTORESIZE);
-	mComboBox=new wxComboBox(this, -1, "", wxDefaultPosition, wxSize(100, -1), 0, NULL, wxCB_READONLY);
+	wxStaticText *label=new wxStaticText(this, wxID_ANY, config->ReadString("label", ""), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
+	mComboBox=new wxComboBox(this, wxID_ANY, "", wxDefaultPosition, wxSize(scTextBoxWidth+scUnitWidth, -1), 0, NULL, wxCB_READONLY);
 
 	// Layout the controls
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
-	hs->Add(label, 1, wxALIGN_CENTER_VERTICAL, 0);
+	hs->Add(label, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mComboBox, 0, wxALIGN_CENTER_VERTICAL, 0);
 	SetSizer(hs);
 
@@ -58,9 +58,9 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	}
 }
 
-void THISCLASS::OnUpdate() {
-	if (mFocusWindow==mComboBox) {return;}
-		
+void THISCLASS::OnUpdate(wxWindow *updateprotection) {
+	if (updateprotection==mComboBox) {return;}
+
 	// Fetch the configuration value
 	wxString value=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
 
@@ -79,25 +79,26 @@ void THISCLASS::OnUpdate() {
 	mComboBox->Append(value, itemvalue);
 }
 
+bool THISCLASS::ValidateNewValue() {
+	return true;
+}
+
+bool THISCLASS::CompareNewValue() {
+	wxString value=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
+	return (value==mNewValue);
+}
+
+void THISCLASS::OnSetNewValue() {
+	ComponentEditor ce(mComponent);
+	ce.SetConfigurationString(mName.c_str(), mNewValue.c_str());
+}
+
 void THISCLASS::OnItemSelected(wxCommandEvent& event) {
 	int sel=mComboBox->GetSelection();
 	if (sel==wxNOT_FOUND) {return;}
 	wxString *itemvalue=(wxString *)mComboBox->GetClientData(sel);
-	SetValue(*itemvalue);
-}
-
-void THISCLASS::SetValue(const wxString &value) {
-	// If we are in OnUpdate(), do nothing
-	if (mUpdating) {return;}
-
-	// Check if the same value is set already
-	wxString curvalue=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
-	if (curvalue==value) {return;}
-
-	// Set the new configuration values
-	ComponentEditor ce(mComponent);
-	ce.SetConfigurationString(mName.c_str(), value.c_str());
-
-	// Commit these changes
-	CommitChanges();
+	mNewValue=*itemvalue;
+	ValidateNewValue();
+	if (! CompareNewValue()) {return;}
+	SetNewValue(mComboBox);
 }

@@ -14,7 +14,7 @@ THISCLASS::ComponentsDialog(wxWindow* parent, SwisTrackCore *stc):
 
 
 	// Create tree control
-	mTree=new wxTreeCtrl(this, -1);
+	mTree=new wxTreeCtrl(this, wxID_ANY);
 	mTree->SetWindowStyle(wxTR_HAS_BUTTONS|wxTR_HIDE_ROOT);
 
 	// Add the root element

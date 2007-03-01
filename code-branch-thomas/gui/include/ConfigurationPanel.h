@@ -12,7 +12,7 @@ class ConfigurationPanel;
 #include "SwisTrack.h"
 #include "SwisTrackCore.h"
 #include "ComponentsDialog.h"
-#include <wx/panel.h>
+#include <wx/scrolwin.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
 #include <wx/filename.h>
@@ -20,22 +20,21 @@ class ConfigurationPanel;
 class ConfigurationPanel: public wxPanel {
 
 public:
-	SwisTrack *mSwisTrack;			//!< The associated SwisTrack object.
-	Component *mComponent;			//!< The associated component.
-	ErrorList mErrorList;			//!< The list of errors.
+	SwisTrack *mSwisTrack;					//!< The associated SwisTrack object.
+	Component *mComponent;					//!< The associated component.
+	ErrorList mErrorList;					//!< The list of errors.
 
 	//! Constructor.
 	ConfigurationPanel(wxWindow *parent, SwisTrack *st, Component *c);
 	//! Destructor.
 	~ConfigurationPanel();
 
-private:
-	wxStaticText *mLabelTitle;			//! The label holding the title of the component.
-	wxString mHelpURL;					//! The URL to open when to user asks for help.
-
-	enum eIDs {
-		sID_HelpURL,
-	};
+protected:
+	wxScrolledWindow *mPanel;				//!< The main panel with the parameters.
+	wxBoxSizer *mPanelSizer;				//!< The main sizer of the panel (where the parameter components go in).
+	wxStaticText *mLabelTitle;				//!< The label holding the title of the component.
+	wxString mHelpURL;						//!< The URL to open when to user asks for help.
+	static const int scParameterWidth=200;	//!< The width of a parameter (or another element).
 
 	//! Reads the *.swistrackcomponent file.
 	void Read(const wxFileName &filename);
@@ -48,7 +47,8 @@ private:
 	//! Returns a property of an XML node.
 	wxString GetPropertyString(wxXmlNode *node, const wxString &name, const wxString &defvalue);
 
-	DECLARE_EVENT_TABLE()
+	//! Handles the corresponding GUI event.
+	void OnHelpURLClick(wxMouseEvent& event);
 };
 
 #endif

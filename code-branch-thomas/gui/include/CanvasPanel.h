@@ -9,6 +9,7 @@
 
 class CanvasPanel;
 
+#include <wx/panel.h>
 #include <wx/stattext.h>
 #include "SwisTrack.h"
 #include "Canvas.h"

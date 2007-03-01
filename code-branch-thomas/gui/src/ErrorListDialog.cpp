@@ -12,13 +12,13 @@ THISCLASS::ErrorListDialog(wxWindow *parent, ErrorList *el, const wxString &titl
 		wxDialog(parent, -1, title, wxDefaultPosition, wxSize(500, 300), wxDEFAULT_DIALOG_STYLE), mErrorList(el) {
 
 	// Create list control
-	mList=new wxListCtrl(this, -1);
+	mList=new wxListCtrl(this, wxID_ANY);
 	mList->SetWindowStyle(wxLC_REPORT|wxLC_HRULES|wxLC_SINGLE_SEL);
 	mList->InsertColumn(0, "Line", wxLIST_FORMAT_RIGHT, 50);
 	mList->InsertColumn(1, "Error message", wxLIST_FORMAT_LEFT, 400);
 
 	// Create other controls
-	mLabel=new wxStaticText(this, -1, text);
+	mLabel=new wxStaticText(this, wxID_ANY, text);
 	mButtonOK=new wxButton(this, eID_ButtonOK, "OK");
 
 	// Layout the components in the panel

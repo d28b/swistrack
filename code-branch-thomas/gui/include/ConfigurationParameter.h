@@ -19,8 +19,8 @@ class ConfigurationParameter;
 class ConfigurationParameter: public wxPanel, public SwisTrackCoreInterface {
 
 public:
-	SwisTrack *mSwisTrack;			//!< The associated SwisTrack object.
-	Component *mComponent;			//!< The component.
+	SwisTrack *mSwisTrack;					//!< The associated SwisTrack object.
+	Component *mComponent;					//!< The component.
 
 	//! Constructor.
 	ConfigurationParameter(wxWindow *parent);
@@ -51,22 +51,27 @@ protected:
 	wxString mLabel;		//!< The main label of the parameter.
 	wxString mDisplay;		//!< The display to be selected when the parameter is changed.
 	bool mReloadable;		//!< If true, the parameters can be applied by reloading the parameters of this component (without restarting the components).
+	static const int scParameterWidth=200;	//!< The width of a parameter.
+	static const int scLabelWidth=75;		//!< The width of a label.
+	static const int scIndentWidth=25;		//!< The indent width.
+	static const int scTextBoxWidth=75;		//!< The width of a text box.
+	static const int scUnitWidth=50;		//!< The width of a unit label.
 
+private:
 	// Update control variables
-	bool mUpdating;			//!< This variable is set to true during OnUpdate in order to avoid an update causing another update. This is also set to true until the parameter object is initialized.
-	wxWindow *mFocusWindow;	//!< The window that currently has the focus. Such windows (especially text boxes) should in general not be updated since the user is about to do that.
+	bool mUpdating;					//!< This variable is set to true during OnUpdate in order to avoid an update causing another update. This is also set to true until the parameter object is initialized.
+	wxWindow *mUpdateProtection;	//!< The window to protect against updates. This is usually the window having the focus (since the user is editing it, it is not nice to reset values).
 
+protected:
 	//! This method is called (by the method Initialize) to initialize the parameter. This method must be implemented by the subclass and is called exactly once (immediately after creating the parameter object).
 	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist) = 0;
-	//! This method is called after the component configuration has been modified.
-	virtual void OnUpdate() = 0;
+	//! This method is called after the component configuration has been modified. The updateprotection window (e.g. text box) should not be updated.
+	virtual void OnUpdate(wxWindow *updateprotection) = 0;
+	//! This method is called by SetNewValue() to set the new value in the .
+	virtual void OnSetNewValue() = 0;
 
-	//! Handles the corresponding GUI event.
-	void OnSetFocus(wxFocusEvent &event);
-	//! Handles the corresponding GUI event.
-	void OnKillFocus(wxFocusEvent &event);
-
-	DECLARE_EVENT_TABLE()
+	//! Sets the new value. The provided window (e.g. text box) will be protected against updates caused by this call.
+	void SetNewValue(wxWindow *updateprotection=0);
 };
 
 #endif

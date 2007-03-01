@@ -5,15 +5,10 @@
 #include <algorithm>
 #include "SwisTrackCoreEditor.h"
 
-BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
-	EVT_SET_FOCUS (THISCLASS::OnSetFocus)
-	EVT_KILL_FOCUS (THISCLASS::OnKillFocus)
-END_EVENT_TABLE()
-
 THISCLASS::ConfigurationParameter(wxWindow* parent):
 		wxPanel(parent, -1), mSwisTrack(0), mComponent(0),
 		mLabel(""), mDisplay(""), mReloadable(true),
-		mUpdating(true), mFocusEvent(0) {
+		mUpdating(true), mUpdateProtection(0) {
 
 
 }
@@ -39,16 +34,30 @@ void THISCLASS::Initialize(SwisTrack *st, Component *c, ConfigurationXML *config
 
 	// Initializes the parameter
 	OnInitialize(config, errorlist);
-	OnUpdate();
+	OnUpdate(0);
 	mUpdating=false;
 }
 
-void THISCLASS::CommitChanges() {
+
+void THISCLASS::SetNewValue(wxWindow *updateprotection) {
+	// If we are in OnUpdate(), do nothing
+	if (mUpdating) {return;}
+
+	// Set the new configuration values
+	mUpdateProtection=updateprotection;
+	OnSetNewValue();
+	mUpdateProtection=0;
+
+	// Reload the configuration and perform a step
 	if (mReloadable) {
 		mSwisTrack->mSwisTrackCore->ReloadConfiguration();
+		if (mSwisTrack->mSwisTrackCore->IsStartedInProductiveMode()) {return;}
+		mSwisTrack->mSwisTrackCore->Step();
 	} else {
 		if (mSwisTrack->mSwisTrackCore->IsStartedInProductiveMode()) {return;}
 		mSwisTrack->mSwisTrackCore->Stop();
+		mSwisTrack->mSwisTrackCore->Start(false);
+		mSwisTrack->mSwisTrackCore->Step();
 	}
 }
 
@@ -70,14 +79,6 @@ void THISCLASS::OnAfterEditComponent(Component *c) {
 	if (mComponent!=c) {return;}
 
 	mUpdating=true;
-	OnUpdate();
+	OnUpdate(mUpdateProtection);
 	mUpdating=false;
-}
-
-void THISCLASS::OnSetFocus(wxFocusEvent &event) {
-	mFocusWindow=(wxWindow *)event.GetEventObject();
-}
-
-void THISCLASS::OnKillFocus(wxFocusEvent &event) {
-	if (mFocusWindow==(wxWindow *)event.GetEventObject()) {mFocusEvent=0;}
 }

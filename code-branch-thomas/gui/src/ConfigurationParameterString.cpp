@@ -27,42 +27,50 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	mValueDefault=config->ReadString("default", "");
 
 	// Create the controls
-	wxStaticText *label=new wxStaticText(this, -1, config->ReadString("label", ""), wxDefaultPosition, wxSize(75, -1), wxST_NO_AUTORESIZE);
-	mTextCtrl=new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(100, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
+	wxStaticText *label=new wxStaticText(this, wxID_ANY, config->ReadString("label", ""), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
+	mTextCtrl=new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxSize(scTextBoxWidth+scUnitWidth, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
+	mTextCtrl->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
 
 	// Layout the controls
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
-	hs->Add(label, 1, wxALIGN_CENTER_VERTICAL, 0);
+	hs->Add(label, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mTextCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
 	SetSizer(hs);
 }
 
-void THISCLASS::OnUpdate() {
-	if (mFocusWindow==mTextCtrl) {return;}
+void THISCLASS::OnUpdate(wxWindow *updateprotection) {
+	if (updateprotection==mTextCtrl) {return;}
 	wxString value=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
 	mTextCtrl->SetValue(value);
 }
 
+bool THISCLASS::ValidateNewValue() {
+	return true;
+}
+
+bool THISCLASS::CompareNewValue() {
+	wxString value=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
+	return (value==mNewValue);
+}
+
+void THISCLASS::OnSetNewValue() {
+	ComponentEditor ce(mComponent);
+	ce.SetConfigurationString(mName.c_str(), mNewValue.c_str());
+}
+
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
-	SetValue(mTextCtrl->GetValue());
+	mNewValue=mTextCtrl->GetValue();
+	ValidateNewValue();
+	if (! CompareNewValue()) {return;}
+	SetNewValue(mTextCtrl);
 }
 
 void THISCLASS::OnTextEnter(wxCommandEvent& event) {
-	OnTextUpdated(event);
+	mNewValue=mTextCtrl->GetValue();
+	ValidateNewValue();
+	SetNewValue();
 }
 
-void THISCLASS::SetValue(const wxString &value) {
-	// If we are in OnUpdate(), do nothing
-	if (mUpdating) {return;}
-
-	// Check if the same value is set already
-	wxString curvalue=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
-	if (curvalue==value) {return;}
-
-	// Set the new configuration values
-	ComponentEditor ce(mComponent);
-	ce.SetConfigurationString(mName.c_str(), value.c_str());
-
-	// Commit these changes
-	CommitChanges();
+void THISCLASS::OnKillFocus(wxFocusEvent& event) {
+	OnTextEnter(wxCommandEvent());
 }

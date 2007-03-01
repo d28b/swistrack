@@ -2,6 +2,7 @@
 #define THISCLASS ComponentListPanel
 
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <algorithm>
 #include "SwisTrackCoreEditor.h"
 
@@ -43,13 +44,15 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 	mList->InsertColumn(col++, "Messages", wxLIST_FORMAT_LEFT, 200);
 
 	// Create Buttons
+	wxStaticLine *line=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 2), wxLI_HORIZONTAL);
 	mButtonAdd=new wxButton(this, eID_ButtonAdd, "+", wxDefaultPosition, wxSize(25, 25));
 	mButtonRemove=new wxButton(this, eID_ButtonRemove, "-", wxDefaultPosition, wxSize(25, 25));
-	mButtonUp=new wxButton(this, eID_ButtonUp, "Up", wxDefaultPosition, wxSize(25, 25));
+	mButtonUp=new wxBitmapButton(this, eID_ButtonUp, wxBITMAP(up), wxDefaultPosition, wxSize(25, 25));
 	mButtonDown=new wxButton(this, eID_ButtonDown, "Down", wxDefaultPosition, wxSize(25, 25));
 
 	// Layout the components in the panel
 	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
+	vs->Add(line, 0, 0, 0);
 	vs->Add(mButtonAdd, 0, 0, 0);
 	vs->Add(mButtonRemove, 0, 0, 0);
 	vs->AddStretchSpacer(1);
@@ -58,7 +61,7 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(mList, 1, wxEXPAND, 0);
-	hs->Add(vs, 0, 0, 0);
+	hs->Add(vs, 0, wxEXPAND, 0);
 
 	SetSizer(hs);
 

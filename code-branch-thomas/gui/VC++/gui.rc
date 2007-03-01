@@ -1,12 +1,12 @@
-//Microsoft Developer Studio generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "../include/resource.h"
 /////////////////////////////////////////////////////////////////////////////
-// Neutral resources
+// English (U.S.) resources
 
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
-#ifdef _WIN32sd
-LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
 #endif //_WIN32
 
@@ -15,24 +15,20 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 // Bitmap
 //
 
-NEW                     BITMAP  DISCARDABLE     "../bitmaps\\new.bmp"
-OPEN                    BITMAP  DISCARDABLE     "../bitmaps\\open.bmp"
-SAVE                    BITMAP  DISCARDABLE     "../bitmaps\\save.bmp"
-WXBITMAP_STD_COLOURS    BITMAP  DISCARDABLE     "../bitmaps\\colours.bmp"
-FINGER                  BITMAP  DISCARDABLE     "../bitmaps\\finger.bmp"
-PLAY                    BITMAP  DISCARDABLE     "../bitmaps\\play.bmp"
-PAUSE                   BITMAP  DISCARDABLE     "../bitmaps\\pause.bmp"
-REWIND                  BITMAP  DISCARDABLE     "../bitmaps\\rewind.bmp"
-SINGLESTEPBACK          BITMAP  DISCARDABLE     "../bitmaps\\singlestepback.bmp"
-SINGLESTEP              BITMAP  DISCARDABLE     "../bitmaps\\singlestep.bmp"
-#endif    // Neutral resources
-/////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+BMP_NEW                     BITMAP                  "../bitmaps/new.bmp"
+BMP_OPEN                    BITMAP                  "../bitmaps/open.bmp"
+BMP_SAVE                    BITMAP                  "../bitmaps/save.bmp"
+BMP_WXBITMAP_STD_COLOURS    BITMAP                  "../bitmaps/colours.bmp"
+BMP_FINGER                  BITMAP                  "../bitmaps/finger.bmp"
+BMP_PLAY                    BITMAP                  "../bitmaps/play.bmp"
+BMP_PAUSE                   BITMAP                  "../bitmaps/pause.bmp"
+BMP_REWIND                  BITMAP                  "../bitmaps/rewind.bmp"
+BMP_SINGLESTEPBACK          BITMAP                  "../bitmaps/singlestepback.bmp"
+BMP_SINGLESTEP              BITMAP                  "../bitmaps/singlestep.bmp"
+BMP_UP                      BITMAP                  "../bitmaps/up.bmp"
+BMP_DOWN                    BITMAP                  "../bitmaps/down.bmp"
+BMP_PLUS                    BITMAP                  "../bitmaps/plus.bmp"
+BMP_MINUS                   BITMAP                  "../bitmaps/minus.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -41,7 +37,7 @@ SINGLESTEP              BITMAP  DISCARDABLE     "../bitmaps\\singlestep.bmp"
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-GUI                     ICON    DISCARDABLE     "../ressources/gui.ico"
+GUI                     ICON                    "../bitmap/gui.ico"
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -49,17 +45,17 @@ GUI                     ICON    DISCARDABLE     "../ressources/gui.ico"
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE DISCARDABLE 
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE DISCARDABLE 
+2 TEXTINCLUDE 
 BEGIN
     "\0"
 END
 
-3 TEXTINCLUDE DISCARDABLE 
+3 TEXTINCLUDE 
 BEGIN
     "\r\n"
     "\0"

@@ -346,6 +346,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\ConfigurationParameterAngle.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\ConfigurationParameterDouble.cpp"
 				>
 			</File>
@@ -367,6 +371,10 @@
 			</File>
 			<File
 				RelativePath="..\src\ConfigurationParameterInteger.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ConfigurationParameterPointDouble.cpp"
 				>
 			</File>
 			<File
@@ -443,6 +451,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\ConfigurationParameterAngle.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\ConfigurationParameterDouble.h"
 				>
 			</File>
@@ -464,6 +476,10 @@
 			</File>
 			<File
 				RelativePath="..\include\ConfigurationParameterInteger.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ConfigurationParameterPointDouble.h"
 				>
 			</File>
 			<File
@@ -500,18 +516,6 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath="bitmaps\bitmap1.bmp"
-				>
-			</File>
-			<File
-				RelativePath="bitmaps\colours.bmp"
-				>
-			</File>
-			<File
-				RelativePath="bitmaps\finger.bmp"
-				>
-			</File>
-			<File
 				RelativePath="..\ressources\gui.ico"
 				>
 			</File>
@@ -534,42 +538,6 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="bitmaps\hand.bmp"
-				>
-			</File>
-			<File
-				RelativePath="bitmaps\new.bmp"
-				>
-			</File>
-			<File
-				RelativePath="bitmaps\open.bmp"
-				>
-			</File>
-			<File
-				RelativePath="bitmaps\pause.bmp"
-				>
-			</File>
-			<File
-				RelativePath="bitmaps\play.bmp"
-				>
-			</File>
-			<File
-				RelativePath="bitmaps\rewind.bmp"
-				>
-			</File>
-			<File
-				RelativePath="bitmaps\save.bmp"
-				>
-			</File>
-			<File
-				RelativePath="bitmaps\singlestep.bmp"
-				>
-			</File>
-			<File
-				RelativePath="bitmaps\singlestepback.bmp"
-				>
 			</File>
 		</Filter>
 	</Files>
