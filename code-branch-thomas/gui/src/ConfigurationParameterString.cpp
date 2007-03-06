@@ -61,7 +61,7 @@ void THISCLASS::OnSetNewValue() {
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	mNewValue=mTextCtrl->GetValue();
 	ValidateNewValue();
-	if (! CompareNewValue()) {return;}
+	if (CompareNewValue()) {return;}
 	SetNewValue(mTextCtrl);
 }
 

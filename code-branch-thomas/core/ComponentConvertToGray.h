@@ -26,7 +26,10 @@ private:
 	IplImage *mOutputImage;						//!< The image created by this component.
 	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last acquired image.
 
-	// Prepares the output image (recreates the image if necessary).
+	//! Converts from packed YUV422 to grayscale.
+	void CvtYUV422ToGray(IplImage *inputimage, IplImage *outputimage);
+
+	//! Prepares the output image (recreates the image if necessary).
 	inline void PrepareOutputImage(IplImage *inputimage) {
 		if (mOutputImage) {
 			if ((mOutputImage->width==inputimage->width) && (mOutputImage->height==inputimage->height) && (mOutputImage->depth==inputimage->depth)) {return;}

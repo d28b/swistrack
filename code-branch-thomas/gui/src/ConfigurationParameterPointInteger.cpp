@@ -127,7 +127,7 @@ void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	}
 	mSpinCtrlX->Refresh();
 
-	if (! CompareNewValue()) {return;}
+	if (CompareNewValue()) {return;}
 	if (event.GetId()==sID_X) {
 		SetNewValue(mSpinCtrlX);
 	} else {

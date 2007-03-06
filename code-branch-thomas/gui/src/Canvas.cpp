@@ -65,7 +65,25 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 		return;
 	}
 
-	wxImage img(mImage->width, mImage->height, (unsigned char*) mImage->imageData, true);
+	// Convert BGR to RGB
+	wxImage img(mImage->width, mImage->height, false);
+	unsigned char *crl=(unsigned char *)mImage->imageData;
+	unsigned char *cw=img.GetData();
+	for (int y=0; y<mImage->height; y++) {
+		unsigned char *cr=crl;
+		for (int x=0; x<mImage->width; x++) {
+			int b=(int)*cr; cr++;
+			int g=(int)*cr; cr++;
+			int r=(int)*cr; cr++;
+
+			*cw=r; cw++;
+			*cw=g; cw++;
+			*cw=b; cw++;
+		}
+		crl+=mImage->widthStep;
+	}
+
+	//wxImage img(mImage->width, mImage->height, (unsigned char*) mImage->imageData, true);
 	wxBitmap bmp(img);
 	dc.DrawBitmap(bmp, 0, 0, false);
 }

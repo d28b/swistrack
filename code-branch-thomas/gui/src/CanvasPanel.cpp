@@ -9,8 +9,8 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_SIZE(THISCLASS::OnSize)
 END_EVENT_TABLE()
 
-THISCLASS::CanvasPanel(SwisTrack *st):
-		wxPanel(st, -1, wxDefaultPosition, wxSize(100, 100)),
+THISCLASS::CanvasPanel(wxWindow *parent, SwisTrack *st):
+		wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 100)),
 		DisplayImageSubscriberInterface(),
 		mSwisTrack(st), mUpdateRate(1), mUpdateCounter(0), mCurrentDisplayImage(0) {
 
@@ -31,6 +31,7 @@ THISCLASS::CanvasPanel(SwisTrack *st):
 }
 
 THISCLASS::~CanvasPanel() {
+	SetDisplayImage(0);
 }
 
 void THISCLASS::SetDisplayImage(DisplayImage *di) {

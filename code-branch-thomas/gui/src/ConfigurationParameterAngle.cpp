@@ -13,6 +13,7 @@
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_TEXT (wxID_ANY, THISCLASS::OnTextUpdated)
 	EVT_TEXT_ENTER (wxID_ANY, THISCLASS::OnTextEnter)
+	EVT_COMMAND_SCROLL_CHANGED (wxID_ANY, THISCLASS::OnScrollChanged)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterAngle(wxWindow* parent):
@@ -40,7 +41,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 
 	if (config->ReadBool("slider", false)) {
 		mSliderStep=config->ReadDouble("sliderstep", PI/180);
-		mSlider = new wxSlider(this, wxID_ANY, (int)floor((mValueDefault-mValueMin)/mSliderStep+0.5), 0, (int)floor((mValueMax-mValueMin)/mSliderStep+0.5), wxDefaultPosition, wxSize(175,-1)); //wxSL_AUTOTICKS
+		mSlider = new wxSlider(this, wxID_ANY, (int)floor((mValueDefault-mValueMin)/mSliderStep+0.5), 0, (int)floor((mValueMax-mValueMin)/mSliderStep+0.5), wxDefaultPosition, wxSize(scParameterWidth, -1), wxSL_AUTOTICKS);
 	}
 
 	// Layout the controls
@@ -58,7 +59,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 	double value=mComponent->GetConfigurationDouble(mName.c_str(), mValueDefault);
 	if (updateprotection!=mTextCtrl) {mTextCtrl->SetValue(wxString::Format("%f", value*180/PI));}
-	if ((mSlider) && (updateprotection!=mSlider)) {mSlider->SetValue((int)floor((mValueMax-mValueMin)/mSliderStep+0.5));}
+	if ((mSlider) && (updateprotection!=mSlider)) {mSlider->SetValue((int)floor((value-mValueMin)/mSliderStep+0.5));}
 }
 
 bool THISCLASS::ValidateNewValue() {
@@ -110,7 +111,7 @@ void THISCLASS::OnKillFocus(wxFocusEvent& event) {
 }
 
 void THISCLASS::OnScrollChanged(wxScrollEvent& event) {
-	mNewValue=mSlider->GetValue();
+	mNewValue=mSlider->GetValue()*mSliderStep+mValueMin;
 	ValidateNewValue();
 	if (CompareNewValue()) {return;}
 	SetNewValue(mSlider);

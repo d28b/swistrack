@@ -3,16 +3,17 @@
 
 #include <wx/sizer.h>
 #include <wx/statline.h>
+#include <wx/minifram.h>
 #include <algorithm>
 #include "SwisTrackCoreEditor.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
-  EVT_BUTTON (eID_ButtonAdd, THISCLASS::OnButtonAddClick)
-  EVT_BUTTON (eID_ButtonRemove, THISCLASS::OnButtonRemoveClick)
-  EVT_BUTTON (eID_ButtonUp, THISCLASS::OnButtonUpClick)
-  EVT_BUTTON (eID_ButtonDown, THISCLASS::OnButtonDownClick)
-  EVT_LIST_ITEM_SELECTED (eID_List, THISCLASS::OnListItemSelected)
-  EVT_LIST_ITEM_DESELECTED (eID_List, THISCLASS::OnListItemDeselected)
+	EVT_BUTTON (eID_ButtonAdd, THISCLASS::OnButtonAddClick)
+	EVT_BUTTON (eID_ButtonRemove, THISCLASS::OnButtonRemoveClick)
+	EVT_BUTTON (eID_ButtonUp, THISCLASS::OnButtonUpClick)
+	EVT_BUTTON (eID_ButtonDown, THISCLASS::OnButtonDownClick)
+	EVT_LIST_ITEM_SELECTED (eID_List, THISCLASS::OnListItemSelected)
+	EVT_LIST_ITEM_DESELECTED (eID_List, THISCLASS::OnListItemDeselected)
 END_EVENT_TABLE()
 
 THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
@@ -27,6 +28,7 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 	// Create List
 	mList=new wxListCtrl(this, eID_List);
 	mList->SetWindowStyle(wxLC_REPORT|wxLC_HRULES|wxLC_SINGLE_SEL);
+	mList->Connect(wxID_ANY, wxEVT_LEFT_DCLICK, wxMouseEventHandler(THISCLASS::OnListLeftDoubleClick), 0, this);
 
 	// Add column for the component name
 	int col=0;
@@ -45,10 +47,10 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 
 	// Create Buttons
 	wxStaticLine *line=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 2), wxLI_HORIZONTAL);
-	mButtonAdd=new wxButton(this, eID_ButtonAdd, "+", wxDefaultPosition, wxSize(25, 25));
-	mButtonRemove=new wxButton(this, eID_ButtonRemove, "-", wxDefaultPosition, wxSize(25, 25));
-	mButtonUp=new wxBitmapButton(this, eID_ButtonUp, wxBITMAP(up), wxDefaultPosition, wxSize(25, 25));
-	mButtonDown=new wxButton(this, eID_ButtonDown, "Down", wxDefaultPosition, wxSize(25, 25));
+	mButtonAdd=new wxBitmapButton(this, eID_ButtonAdd, wxBITMAP(bitmap_plus), wxDefaultPosition, wxSize(25, 25));
+	mButtonRemove=new wxBitmapButton(this, eID_ButtonRemove, wxBITMAP(bitmap_minus), wxDefaultPosition, wxSize(25, 25));
+	mButtonUp=new wxBitmapButton(this, eID_ButtonUp, wxBITMAP(bitmap_up), wxDefaultPosition, wxSize(25, 25));
+	mButtonDown=new wxBitmapButton(this, eID_ButtonDown, wxBITMAP(bitmap_down), wxDefaultPosition, wxSize(25, 25));
 
 	// Layout the components in the panel
 	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
@@ -285,4 +287,10 @@ void THISCLASS::OnListItemSelected(wxListEvent& event) {
 
 void THISCLASS::OnListItemDeselected(wxListEvent& event) {
 	mSwisTrack->SetConfigurationPanel(0);
+}
+
+void THISCLASS::OnListLeftDoubleClick(wxMouseEvent& event) {
+	wxMiniFrame *frame=new wxMiniFrame(this, -1,_("Display"), wxDefaultPosition, wxDefaultSize, wxCAPTION | wxRESIZE_BORDER | wxCLOSE_BOX | wxSYSTEM_MENU);
+	new ConfigurationPanel(frame, mSwisTrack, mSelectedComponent);
+	frame->Show();
 }

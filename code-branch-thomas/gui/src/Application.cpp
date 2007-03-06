@@ -4,6 +4,7 @@
 #include <wx/app.h>
 #include <wx/image.h>
 #include <wx/filefn.h>
+#include "Random.h"
 
 IMPLEMENT_APP(Application)
 
@@ -14,6 +15,9 @@ bool THISCLASS::OnInit() {
 
 	// Take the current directory as the application folder
 	mApplicationFolder=wxGetCwd();
+
+	// Initialize the random number generator
+	Random::Initialize();
 
 	// Initialize all available image handlers
 	wxInitAllImageHandlers();
@@ -41,6 +45,8 @@ bool THISCLASS::OnInit() {
 }
 
 int THISCLASS::OnExit() {
-	//delete mSwisTrack;
+	// Uninitialize the random number generator
+	Random::Uninitialize();
+
 	return 0;
 }

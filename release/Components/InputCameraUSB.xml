@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>USB Camera</friendlyname>
+	<description>Grabs an image from a USB camera (OpenCV).</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentInputCameraUSB</url>
+	<display>Output</display>
+
+	<configuration>
+		<label>There is no configuration for this component.</label>
+	</configuration>
+</swistrackcomponent>

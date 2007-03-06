@@ -24,7 +24,7 @@ THISCLASS::AboutDialog(wxWindow *parent):
 	pvs->Add(new wxStaticText(p, -1, "http://swistrack.sourceforge.net"));
 
 	wxBoxSizer *phs=new wxBoxSizer(wxHORIZONTAL);
-	phs->Add(new wxStaticBitmap(p, -1, wxICON(gui)), 0, wxRIGHT, 10);
+	phs->Add(new wxStaticBitmap(p, -1, wxICON(icon_gui)), 0, wxRIGHT, 10);
 	phs->Add(pvs);
 	p->SetSizer(phs);
 

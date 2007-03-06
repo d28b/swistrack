@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Blob detection</friendlyname>
+	<description>Applies blob detection on a binary image. Only blobs of a certain size are considered.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/BlobDetectionMinMax</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="integer">
+			<name>MaxNumber</name>
+			<label>Max. blobs</label>
+			<min>1</min>
+			<max>50</max>
+			<default>10</default>
+			<unit>blobs</unit>
+			<slider>true</slider>
+			<display>Output</display>
+		</parameter>
+		<parameter type="double">
+			<name>MinArea</name>
+			<label>Min. blob size</label>
+			<min>0</min>
+			<default>10</default>
+			<unit>pixels</unit>
+			<display>Output</display>
+		</parameter>
+		<parameter type="double">
+			<name>MaxArea</name>
+			<label>Max. blob size</label>
+			<min>0</min>
+			<default>100</default>
+			<unit>pixels</unit>
+			<display>Output</display>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

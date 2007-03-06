@@ -5,7 +5,7 @@
 #include <sstream>
 
 THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):
-		Component(stc, "Camera1394"),
+		Component(stc, "InputCamera1394"),
 		mCamera(), mCurrentImage(0), mFrameNumber(0),
 		mDisplayImageOutput("Output", "1394 Camera: Input Frame") {
 
@@ -36,7 +36,7 @@ void THISCLASS::OnStart() {
 	mCamera.StatusControlRegisters();
 
 	int videoformat=GetConfigurationInt("VideoFormat", 1);
-	if ((videoformat<0) || (videoformat>2)) {AddError("VideoMode must be 0, 1 or 2."); return;}
+	if ((videoformat<0) || (videoformat>2)) {AddError("VideoFormat must be 0, 1 or 2."); return;}
 	mCamera.SetVideoFormat(videoformat);
 
 	int videomode=GetConfigurationInt("VideoMode", 4);

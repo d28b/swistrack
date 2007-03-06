@@ -1,5 +1,6 @@
 #include "Component.h"
 #include <sstream>
+#include <cctype>
 #include <algorithm>
 #define THISCLASS Component
 
@@ -51,6 +52,16 @@ bool THISCLASS::HasDataStructureWrite(DataStructure *ds) {
 	return (it != mDataStructureWrite.end());
 }
 
+DisplayImage *THISCLASS::GetDisplayImageByName(const std::string &name) {
+	tDisplayImageList::iterator it=mDisplayImages.begin();
+	while (it!=mDisplayImages.end()) {
+		if ((*it)->mName==name) {return (*it);}
+		it++;
+	}
+
+	return 0;
+}
+
 void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmlerr) {
 	tConfigurationMap::iterator it=mConfiguration.begin();
 	while (it!=mConfiguration.end()) {
@@ -63,9 +74,16 @@ void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmler
 }
 
 bool THISCLASS::GetConfigurationBool(const std::string &key, bool defvalue) {
-	std::istringstream istr(mConfiguration[key]);
-	istr >> defvalue;
-	return defvalue;
+	std::string str=mConfiguration[key];
+	if (str=="") {return defvalue;}
+
+	std::transform(str.begin(), str.end(), str.begin(), std::tolower);
+	if (str=="true") {return true;}
+	if (str=="false") {return false;}
+	int value=(defvalue ? 1 : 0);
+	std::istringstream istr(str);
+	istr >> value;
+	return (value!=0);
 }
 
 int THISCLASS::GetConfigurationInt(const std::string &key, int defvalue) {

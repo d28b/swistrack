@@ -23,6 +23,8 @@ public:
 	SwisTrack *mSwisTrack;					//!< The associated SwisTrack object.
 	Component *mComponent;					//!< The associated component.
 	ErrorList mErrorList;					//!< The list of errors.
+	wxString mHelpURL;						//!< The URL to open when to user asks for help.
+	wxString mDisplayImageName;				//!< The name of the default display image to show.
 
 	//! Constructor.
 	ConfigurationPanel(wxWindow *parent, SwisTrack *st, Component *c);
@@ -33,7 +35,6 @@ protected:
 	wxScrolledWindow *mPanel;				//!< The main panel with the parameters.
 	wxBoxSizer *mPanelSizer;				//!< The main sizer of the panel (where the parameter components go in).
 	wxStaticText *mLabelTitle;				//!< The label holding the title of the component.
-	wxString mHelpURL;						//!< The URL to open when to user asks for help.
 	static const int scParameterWidth=200;	//!< The width of a parameter (or another element).
 
 	//! Reads the *.swistrackcomponent file.

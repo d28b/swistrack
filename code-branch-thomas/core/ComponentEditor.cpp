@@ -47,9 +47,7 @@ void THISCLASS::ConfigurationReadXML(wxXmlNode *configuration, ErrorList *xmlerr
 
 bool THISCLASS::SetConfigurationBool(const std::string &key, bool value) {
 	if (! mComponent) {return false;}
-	std::ostringstream oss;
-	oss << value;
-	mComponent->mConfiguration[key]=oss.str();
+	mComponent->mConfiguration[key]=(value ? "true" : "false");
 	return true;
 }
 

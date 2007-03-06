@@ -43,6 +43,8 @@ public:
 	void OnListItemSelected(wxListEvent& event);
 	//! Handles the corresponding GUI event.
 	void OnListItemDeselected(wxListEvent& event);
+	//! Handles the corresponding GUI event.
+	void OnListLeftDoubleClick(wxMouseEvent& event);
 
 	// SwisTrackCoreInterface methods
 	void OnBeforeStart(bool productivemode) {};
@@ -69,10 +71,10 @@ private:
 
 	wxListCtrl *mList;			//!< The corresponding GUI widget.
 	int mColumnMessages;		//!< The column number of the messages.
-	wxButton *mButtonAdd;		//!< The corresponding GUI widget.
-	wxButton *mButtonRemove;	//!< The corresponding GUI widget.
-	wxButton *mButtonUp;		//!< The corresponding GUI widget.
-	wxButton *mButtonDown;		//!< The corresponding GUI widget.
+	wxBitmapButton *mButtonAdd;		//!< The corresponding GUI widget.
+	wxBitmapButton *mButtonRemove;	//!< The corresponding GUI widget.
+	wxBitmapButton *mButtonUp;		//!< The corresponding GUI widget.
+	wxBitmapButton *mButtonDown;		//!< The corresponding GUI widget.
 
 	ComponentsDialog *mComponentsDialog;	//!< The component selector dialog used when adding a new component.
 

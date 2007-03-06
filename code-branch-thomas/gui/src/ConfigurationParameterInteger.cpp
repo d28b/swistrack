@@ -22,6 +22,7 @@ THISCLASS::ConfigurationParameterInteger(wxWindow* parent):
 }
 
 THISCLASS::~ConfigurationParameterInteger() {
+	mSpinCtrl->Disconnect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
 }
 
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
@@ -38,7 +39,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	wxStaticText *unitlabel=new wxStaticText(this, wxID_ANY, " "+config->ReadString("unit", ""), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
 
 	if (config->ReadBool("slider", false)) {
-		mSlider = new wxSlider(this, wxID_ANY, mValueDefault, mValueMin, mValueMax, wxDefaultPosition, wxSize(175,-1)); //wxSL_AUTOTICKS
+		mSlider = new wxSlider(this, wxID_ANY, mValueDefault, mValueMin, mValueMax, wxDefaultPosition, wxSize(scParameterWidth, -1), wxSL_AUTOTICKS);
 	}
 
 	// Layout the controls
@@ -89,7 +90,7 @@ void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	}
 	mSpinCtrl->Refresh();
 
-	if (! CompareNewValue()) {return;}
+	if (CompareNewValue()) {return;}
 	SetNewValue(mSpinCtrl);
 }
 

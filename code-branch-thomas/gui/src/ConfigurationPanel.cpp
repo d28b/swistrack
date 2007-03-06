@@ -85,8 +85,11 @@ void THISCLASS::Read(const wxFileName &filename) {
 		mPanelSizer->Add(label, 0, wxEXPAND|wxALL, 4);
 	}
 
-	// Add a help button (if available)
+	// Read other properties
 	mHelpURL=config.ReadString("url", "");
+	mDisplayImageName=config.ReadString("displayimage", "");
+
+	// Add a help button (if available)
 	if (mHelpURL!="") {
 		wxStaticText *label=new wxStaticText(mPanel, wxID_ANY, "More information ...");
 		wxFont f=label->GetFont();
@@ -96,9 +99,6 @@ void THISCLASS::Read(const wxFileName &filename) {
 		label->Connect(wxID_ANY, wxEVT_LEFT_UP, wxMouseEventHandler(THISCLASS::OnHelpURLClick), 0, this);
 		mPanelSizer->Add(label, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 4);
 	}
-
-	// Set the display image (TODO)
-	//wxString display=config.ReadString("display", "");
 
 	wxStaticLine *line=new wxStaticLine(mPanel, wxID_ANY, wxDefaultPosition, wxSize(200, 2), wxLI_HORIZONTAL);
 	mPanelSizer->Add(line, 0, wxEXPAND|wxALL, 4);

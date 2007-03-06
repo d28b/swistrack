@@ -1,23 +1,32 @@
 #include "ComponentBlobDetectionMinMax.h"
 #define THISCLASS ComponentBlobDetectionMinMax
 
+#include <sstream>
+
 THISCLASS::ComponentBlobDetectionMinMax(SwisTrackCore *stc):
-		Component(stc, "ParticleFilter"),
-		mMinArea(0), mMaxArea(1000000), mMaxNumber(10), mFirstDilate(1), mFirstErode(1), mSecondDilate(1) {
+		Component(stc, "BlobDetectionMinMax"),
+		mMinArea(0), mMaxArea(1000000), mMaxNumber(10), mFirstDilate(1), mFirstErode(1), mSecondDilate(1),
+		mDisplayImageOutput("Output", "Particles") {
 
 	// Data structure relations
 	mDisplayName="Blob detection with min/max particle size";
 	mCategory=&(mCore->mCategoryBlobDetection);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
+	AddDisplayImage(&mDisplayImageOutput);
 }
 
 THISCLASS::~ComponentBlobDetectionMinMax() {
 }
 
 void THISCLASS::OnStart() {
-	mMinArea=GetConfigurationDouble("MinArea", 0);
-	mMaxArea=GetConfigurationDouble("MaxArea", 1000000);
+	OnReloadConfiguration();
+	return;
+}
+
+void THISCLASS::OnReloadConfiguration() {
+	mMinArea=GetConfigurationDouble("MinArea", 1);
+	mMaxArea=GetConfigurationDouble("MaxArea", 1000);
 	mMaxNumber=GetConfigurationInt("MaxNumber", 10);
 	mFirstDilate=GetConfigurationInt("FirstDilate", 1);
 	mFirstErode=GetConfigurationInt("FirstErode", 1);
@@ -31,11 +40,6 @@ void THISCLASS::OnStart() {
 	if (mMinArea>mMaxArea) {
 		AddError("The min area must be smaller than the max area.");
 	}
-
-	return;
-}
-
-void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
@@ -43,7 +47,7 @@ void THISCLASS::OnStep() {
 
 	// We get the binary image from the segmenter, we make a copy because the image is modified during blobs extraction
 	IplImage* src_tmp = cvCloneImage(mCore->mDataStructureImageBinary.mImage);
-	
+
 	// Perform a morphological opening to reduce noise.
 	if (mFirstDilate>0) {
 		cvDilate(src_tmp, src_tmp, NULL, mFirstDilate);
@@ -148,6 +152,12 @@ void THISCLASS::OnStep() {
 
 	// Set these particles
 	mCore->mDataStructureParticles.mParticles=&mParticles;
+
+	// Let the DisplayImage know about our image
+	mDisplayImageOutput.mParticles=&mParticles;
+	std::ostringstream oss;
+	oss << "Grayscale image, " << mCore->mDataStructureImageBinary.mImage->width << "x" << mCore->mDataStructureImageBinary.mImage->height;
+	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 
 void THISCLASS::OnStepCleanup() {

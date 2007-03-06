@@ -26,7 +26,7 @@ public:
 	SwisTrack *mSwisTrack;			//!< The associated SwisTrack object.
 
 	//! Constructor.
-	CanvasPanel(SwisTrack *st);
+	CanvasPanel(wxWindow *parent, SwisTrack *st);
 	//! Destructor.
 	~CanvasPanel();
 

@@ -4,7 +4,7 @@
 #include <sstream>
 
 THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
-		Component(stc, "FileAVI"),
+		Component(stc, "InputFileAVI"),
 		mCapture(0), mCurrentImage(0),
 		mDisplayImageOutput("Output", "AVI File: Unprocessed Frame") {
 

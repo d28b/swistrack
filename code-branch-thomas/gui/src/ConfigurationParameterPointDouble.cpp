@@ -128,7 +128,7 @@ void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	}
 	mTextCtrlY->Refresh();
 
-	if (! CompareNewValue()) {return;}
+	if (CompareNewValue()) {return;}
 	if (event.GetId()==sID_X) {
 		SetNewValue(mTextCtrlX);
 	} else {

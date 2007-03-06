@@ -31,23 +31,33 @@ void THISCLASS::OnStep() {
 	
 	try {
 		// We convert the input image to black and white
-		switch (inputimage->nChannels) {
-		case 3:	// BGR case, we convert to gray
+		if (inputimage->nChannels==3) {
+			// BGR case, we convert to gray or select one channel
 			PrepareOutputImage(inputimage);
-			cvCvtColor(inputimage, mOutputImage, CV_BGR2GRAY);
+			int channel=GetConfigurationInt("Channel", 0);
+			if ((channel>0) && (channel<=3)) {
+				cvSetImageCOI(inputimage, channel);
+				cvCopy(inputimage, mOutputImage);
+			} else {
+				cvCvtColor(inputimage, mOutputImage, CV_BGR2GRAY);
+			}
 			mCore->mDataStructureImageGray.mImage=mOutputImage;
-			break;
-		case 1:	// Already in Gray
+		} else if (inputimage->nChannels==2) {
+			// Packed YUV422
+			PrepareOutputImage(inputimage);
+			CvtYUV422ToGray(inputimage, mOutputImage);
+			mCore->mDataStructureImageGray.mImage=mOutputImage;
+		} else if (inputimage->nChannels==1) {
+			// Already in Gray
 			mCore->mDataStructureImageGray.mImage=inputimage;
-			break;
-		default:	// Other cases, we take the first channel
+		} else {
+			// Other cases, we take the first channel
 			PrepareOutputImage(inputimage);
 			cvCvtPixToPlane(inputimage, mOutputImage, NULL, NULL, NULL);
 			mCore->mDataStructureImageGray.mImage=mOutputImage;
-			break;
 		}
 	} catch(...) {
-		AddError("Convertion to gray failed.");
+		AddError("Conversion to gray failed.");
 	}
 
 	// Let the DisplayImage know about our image
@@ -63,4 +73,24 @@ void THISCLASS::OnStepCleanup() {
 
 void THISCLASS::OnStop() {
 	if (mOutputImage) {cvReleaseImage(&mOutputImage);}
+}
+
+void THISCLASS::CvtYUV422ToGray(IplImage *inputimage, IplImage *outputimage) {
+	unsigned char *crl=(unsigned char *)inputimage->imageData;
+	unsigned char *cwl=(unsigned char *)outputimage->imageData;
+	for (int y=0; y<inputimage->height; y++) {
+		unsigned char *cr=crl;
+		unsigned char *cw=cwl;
+		for (int x=0; x<inputimage->width; x+=2) {
+			cr++;
+			int y1=(int)*cr; cr++;
+			cr++;
+			int y2=(int)*cr; cr++;
+
+			*cw=y1; cw++;
+			*cw=y2; cw++;
+		}
+		crl+=inputimage->widthStep;
+		cwl+=outputimage->widthStep;
+	}
 }

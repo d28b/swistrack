@@ -26,13 +26,16 @@ private:
 	IplImage *mOutputImage;						//!< The image created by this component.
 	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the output of this component.
 
-	// Prepares the output image (recreates the image if necessary).
+	//! Converts from packed YUV422 to BGR.
+	void CvtYUV422ToBGR(IplImage *inputimage, IplImage *outputimage);
+
+	//! Prepares the output image (recreates the image if necessary).
 	inline void PrepareOutputImage(IplImage *inputimage) {
 		if (mOutputImage) {
 			if ((mOutputImage->width==inputimage->width) && (mOutputImage->height==inputimage->height) && (mOutputImage->depth==inputimage->depth)) {return;}
 			cvReleaseImage(&mOutputImage);
 		}
-		mOutputImage = cvCreateImage(cvSize(inputimage->width, inputimage->height), inputimage->depth, 1);
+		mOutputImage = cvCreateImage(cvSize(inputimage->width, inputimage->height), inputimage->depth, 3);
 	}
 };
 

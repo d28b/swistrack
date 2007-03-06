@@ -7,6 +7,7 @@ class Random;
 
 //#include <stdlib.h>
 #include <cmath>
+#include <cassert>
 #include <iostream>
 #include <fstream>
 #include "RandomMersenneTwister.h"
@@ -27,12 +28,19 @@ protected:
 	//! The RandomPoisson object.
 	static RandomPoisson* smRandomPoisson;
 	
-	//! Initialization
-	void Initialize();
+	//! Reinitializes the distribution objects.
+	static void ReinitializeDistributions();
 
 public:
 	//! Constructor.
-	Random();
+	Random() {assert(smRandomMersenneTwister);}
+	//! Destructor.
+	~Random() {}
+
+	//! Initializes the random generator.
+	static void Initialize();
+	//! Uninitializes the random generator and frees all static objects.
+	static void Uninitialize();
 
 	//! Saves the current state of the RNG.
 	void SaveState(std::ofstream &in);

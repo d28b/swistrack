@@ -19,6 +19,8 @@
 #include <wx/msgdlg.h>
 #include <wx/image.h>
 #include <wx/valgen.h>
+#include <wx/textdlg.h>
+#include <wx/minifram.h>
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "bitmaps/gui.xpm"
@@ -40,7 +42,9 @@ BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 	EVT_MENU(sID_Control_ProductiveMode, THISCLASS::OnControlProductiveMode)
 	EVT_MENU(sID_Control_FreeRun, THISCLASS::OnControlFreeRun)
 	EVT_MENU(sID_Control_SingleStep, THISCLASS::OnControlSingleStep)
-	EVT_MENU(sID_Tools_Server, THISCLASS::OnToolsServer)
+	EVT_MENU(sID_View_ComponentList, THISCLASS::OnViewComponentList)
+	EVT_MENU(sID_View_NewDisplay, THISCLASS::OnViewNewDisplay)
+	EVT_MENU(sID_Tools_TCPServer, THISCLASS::OnToolsTCPServer)
 	EVT_COMMAND_SCROLL(sID_DisplaySpeed, THISCLASS::OnChangeDisplaySpeed)
 	EVT_MENU(sID_Help, THISCLASS::OnHelp)
 	EVT_MENU(sID_Test, THISCLASS::OnTest)
@@ -60,13 +64,13 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 #endif
 
 	// General initialization
-	SetIcon(wxICON(gui));
+	SetIcon(wxICON(icon_gui));
 	BuildMenuBar();
 	BuildToolBar();
 	BuildStatusBar();
 
 	// The canvas panel
-	mCanvasPanel=new CanvasPanel(this);
+	mCanvasPanel=new CanvasPanel(this, this);
 
 	// SwisTrackCore and TCPServer
 	mSwisTrackCore=new SwisTrackCore();
@@ -115,15 +119,8 @@ void THISCLASS::BuildMenuBar() {
 	SetMenuBar(new wxMenuBar());
 
 	// Create menus
-	wxMenu *menufile = new wxMenu;
+	wxMenu *menufile=new wxMenu;
 	GetMenuBar()->Append(menufile, _T("&File"));
-
-	wxMenu *menutools = new wxMenu;
-	GetMenuBar()->Append(menutools,_T("&Tools"));
-
-	wxMenu *menuhelp = new wxMenu;
-	GetMenuBar()->Append(menuhelp, _T("&Help"));
-
 	menufile->Append(sID_New, _T("&New\tCtrl-C"), _T("Creates a new file"));
 	menufile->Append(sID_Open, _T("&Open\tCtrl-O"), _T("Opens a file"));
 	menufile->Append(sID_Save, _T("&Save\tCtrl-S"), _T("Saves the current file"));
@@ -132,8 +129,19 @@ void THISCLASS::BuildMenuBar() {
 	menufile->Append(sID_Quit, _T("E&xit\tAlt-F4"), _T("Quit this program"));
 	menufile->Enable(sID_Save,FALSE);
 
-	menutools->Append(sID_Tools_Server, _T("TCP Server ..."), _T("TCP server settings"));
+	wxMenu *menuview=new wxMenu;
+	GetMenuBar()->Append(menuview,_T("&View"));
+	menuview->Append(sID_View_ComponentList, _T("Component list"), _T("Displays or hides the component list"), wxITEM_CHECK);
+	//menuview->AppendSeparator();
+	menuview->Append(sID_View_NewDisplay, _T("New display"), _T("Opens a display in a new window"));
+	menuview->Check(sID_View_ComponentList, true);
 
+	wxMenu *menuoutput=new wxMenu;
+	GetMenuBar()->Append(menuoutput,_T("&Output"));
+	menuoutput->Append(sID_Tools_TCPServer, _T("TCP Server ..."), _T("TCP server settings"));
+
+	wxMenu *menuhelp=new wxMenu;
+	GetMenuBar()->Append(menuhelp, _T("&Help"));
 	menuhelp->Append(sID_Help, _T("&Manual"), _T("Opens the manual"));
 	menuhelp->Append(sID_Test, _T("&Test"), _T("Test"));
 	menuhelp->Append(sID_About, _T("&About ...\tF1"), _T("Show about dialog"));
@@ -147,14 +155,14 @@ void THISCLASS::BuildToolBar() {
 
 	// Create toolbar
 	toolbar = CreateToolBar(wxTB_FLAT|wxTB_DOCKABLE|wxTB_TEXT);
-	toolbar->AddTool(sID_New, _T("New"), wxBITMAP(new), _T("New"));
-	toolbar->AddTool(sID_Open, _T("Open"), wxBITMAP(open), _T("Open"));
-	toolbar->AddTool(sID_Save, _T("Save"), wxBITMAP(save), _T("Save"));
+	toolbar->AddTool(sID_New, _T("New"), wxBITMAP(bitmap_new), _T("New"));
+	toolbar->AddTool(sID_Open, _T("Open"), wxBITMAP(bitmap_open), _T("Open"));
+	toolbar->AddTool(sID_Save, _T("Save"), wxBITMAP(bitmap_save), _T("Save"));
 	toolbar->AddSeparator();
-	toolbar->AddTool(sID_Control_ProductiveMode, _T("Productive"), wxBITMAP(play), _T("Productive"), wxITEM_CHECK);
+	toolbar->AddTool(sID_Control_ProductiveMode, _T("Productive"), wxBITMAP(bitmap_productive), _T("Productive"), wxITEM_CHECK);
 	toolbar->AddSeparator();
-	toolbar->AddTool(sID_Control_FreeRun, _T("Free-run"), wxBITMAP(play), _T("Free-run mode"), wxITEM_CHECK);
-	toolbar->AddTool(sID_Control_SingleStep, _T("Step"), wxBITMAP(singlestep), _T("One step"));
+	toolbar->AddTool(sID_Control_FreeRun, _T("Free-run"), wxBITMAP(bitmap_play), _T("Free-run mode"), wxITEM_CHECK);
+	toolbar->AddTool(sID_Control_SingleStep, _T("Step"), wxBITMAP(bitmap_singlestep), _T("One step"));
 	toolbar->AddSeparator();
 
 	int fps=30;
@@ -185,13 +193,19 @@ void THISCLASS::BuildStatusBar() {
 void THISCLASS::SetConfigurationPanel(Component *c) {
 	if (mConfigurationPanel->mComponent==c) {return;}
 
-	// Destroy the hold panel
+	// Destroy the old panel
 	mConfigurationPanel->Destroy();
 
 	// Create a new panel
 	mConfigurationPanel=new ConfigurationPanel(this, this, c);
 	mHorizontalSizer->Add(mConfigurationPanel, 0, wxEXPAND, 0);
 	GetSizer()->Layout();
+
+	// Switch to corresponding display
+	if (mConfigurationPanel->mDisplayImageName!="") {
+		DisplayImage *di=c->GetDisplayImageByName(mConfigurationPanel->mDisplayImageName.c_str());
+		mCanvasPanel->SetDisplayImage(di);
+	}
 
 	// Show errors
 	if (mConfigurationPanel->mErrorList.mList.empty()) {return;}
@@ -319,23 +333,8 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 		// return false;
 	}
 
-	// Split the filename
-	wxString path;
-	wxString name;
-	wxString extension;
-	wxFileName::SplitPath(mFileName, &path, &name, &extension);
-
-	// Change the CWD
-	wxFileName::SetCwd(path);
-
 	// Set the new file name
-	if (astemplate) {
-		mFileName="";
-		SetTitle("SwisTrack");
-	} else {
-		mFileName=filename;
-		SetTitle(mFileName+" - SwisTrack");
-	}
+	SetFileName(filename);
 
 	// Read the components
 	StopProductiveMode();
@@ -360,10 +359,36 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	mTCPServer->SetPort(cr.ReadInt("port", 3000));
 	SetStatusText(wxString::Format("%d", mTCPServer->GetPort()), sStatusField_ServerPort);
 
+	// Set the status text
+	SetStatusText(filename+" opened!", sStatusField_Messages);
+
 	// Show errors if there are any
 	if (cr.mErrorList.mList.empty()) {return;}
 	ErrorListDialog eld(this, &(cr.mErrorList), "Open File", wxString::Format("The following errors occurred while reading the file '%s':", filename));
 	eld.ShowModal();
+}
+
+void THISCLASS::SetFileName(const wxString &filename) {
+	mFileName=filename;
+	if (filename=="") {
+		// Set the frame title
+		SetTitle("SwisTrack");
+
+		// Change the CWD to the application folder
+		wxFileName::SetCwd(wxGetApp().mApplicationFolder);
+	} else {
+		// Split the filename
+		wxString path;
+		wxString name;
+		wxString extension;
+		wxFileName::SplitPath(mFileName, &path, &name, &extension);
+		
+		// Set the frame title
+		SetTitle(name+" - SwisTrack");
+
+		// Change the CWD
+		wxFileName::SetCwd(path);
+	}
 }
 
 void THISCLASS::OnFileSaveAs(wxCommandEvent& WXUNUSED(event)) {
@@ -418,6 +443,10 @@ void THISCLASS::SaveFile(const wxString &filename) {
 		return;
 	}
 
+	// Set the (new) filename
+	SetFileName(filename);
+
+	// Set the status text
 	SetStatusText(filename+" saved!", sStatusField_Messages);
 }
 
@@ -461,14 +490,36 @@ void THISCLASS::OnHelp(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void THISCLASS::OnTest(wxCommandEvent& WXUNUSED(event)) {
-	//mPanelInformation->Hide();
-	//mPanelInformation1->Show();
-	//GetSizer()->Layout();
+	wxString path=wxFileName::GetCwd();
 }
 
 void THISCLASS::OnIdle(wxIdleEvent& WXUNUSED(event)) {
 }
 
-void SwisTrack::OnToolsServer(wxCommandEvent& WXUNUSED(event)) {
-	
+void THISCLASS::OnToolsTCPServer(wxCommandEvent& WXUNUSED(event)) {
+	wxTextEntryDialog dlg(this, "TCP Port:", "TCP Server", "");
+	long port=(long)(mTCPServer->GetPort());
+	dlg.SetValue(wxString::Format("%d", port));
+	if (dlg.ShowModal() != wxID_OK) {return;}
+
+	wxString str=dlg.GetValue();
+	str.ToLong(&port);
+	mTCPServer->SetPort((int)port);
+}
+
+void THISCLASS::OnViewComponentList(wxCommandEvent& event) {
+	if (event.IsChecked()) {
+		mComponentListPanel->Show();
+		mConfigurationPanel->Show();
+	} else {
+		mComponentListPanel->Hide();
+		mConfigurationPanel->Hide();	
+	}
+	GetSizer()->Layout();
+}
+
+void THISCLASS::OnViewNewDisplay(wxCommandEvent& WXUNUSED(event)) {
+	wxMiniFrame *frame=new wxMiniFrame(this, -1,_("Display"), wxDefaultPosition, wxDefaultSize, wxCAPTION | wxRESIZE_BORDER | wxCLOSE_BOX | wxSYSTEM_MENU);
+	new CanvasPanel(frame, this);
+	frame->Show();
 }

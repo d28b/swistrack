@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>1394 Camera (FireWire)</friendlyname>
+	<description>Grabs an image from a Firewire camera (CMU 1394 driver).</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentInputCamera1394</url>
+	<display>Output</display>
+
+	<configuration>
+		<parameter type="dropdownlist">
+			<name>VideoFormat</name>
+			<label>Video format</label>
+			<items>
+				<item key="0">0</item>
+				<item key="1">1</item>
+				<item key="2">2</item>
+			</items>
+			<default>0</default>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="dropdownlist">
+			<name>VideoMode</name>
+			<label>Video mode</label>
+			<items>
+				<item key="0">0</item>
+				<item key="1">1</item>
+				<item key="2">2</item>
+				<item key="3">3</item>
+				<item key="4">4</item>
+				<item key="5">5</item>
+			</items>
+			<default>0</default>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>FrameRate</name>
+			<label>Frame rate</label>
+			<unit>FPS</unit>
+			<default>10</default>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>AutoGain</name>
+			<label>Automatic gain control</label>
+			<default>true</default>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>AutoExposure</name>
+			<label>Automatic exposure control</label>
+			<default>true</default>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>AutoWhiteBalance</name>
+			<label>Automatic white balance</label>
+			<default>false</default>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>Brightness</name>
+			<label>Brightness</label>
+			<min>0</min>
+			<max>255</max>
+			<default>128</default>
+			<slider>true</slider>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>Exposure</name>
+			<label>Exposure</label>
+			<min>0</min>
+			<max>255</max>
+			<default>128</default>
+			<slider>true</slider>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>Sharpness</name>
+			<label>Sharpness</label>
+			<min>0</min>
+			<max>255</max>
+			<default>128</default>
+			<slider>true</slider>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>Saturation</name>
+			<label>Saturation</label>
+			<min>0</min>
+			<max>255</max>
+			<default>128</default>
+			<slider>true</slider>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>WhiteBalance1</name>
+			<label>White balance 1</label>
+			<min>0</min>
+			<max>255</max>
+			<default>128</default>
+			<slider>true</slider>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>WhiteBalance2</name>
+			<label>White balance 2</label>
+			<min>0</min>
+			<max>255</max>
+			<default>128</default>
+			<slider>true</slider>
+			<display>Output</display>
+			<reloadable>false</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

@@ -79,6 +79,9 @@ public:
 	//! Returns true if the component writes that data structure.
 	bool HasDataStructureWrite(DataStructure *ds);
 
+	//! Returns a component by name.
+	DisplayImage *GetDisplayImageByName(const std::string &name);
+
 protected:
 	SwisTrackCore *mCore; 				//!< The associated SwisTrackCore object.
 	tConfigurationMap mConfiguration;	//!< The configuration values.

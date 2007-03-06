@@ -2,11 +2,11 @@
 #define THISCLASS ComponentBlobDetectionCircle
 
 THISCLASS::ComponentBlobDetectionCircle(SwisTrackCore *stc):
-		Component(stc, "ParticleFilter"),
+		Component(stc, "BlobDetectionCircle"),
 		mParticles(0) {
 
 	// Data structure relations
-	mDisplayName="Blob detection";
+	mDisplayName="Blob detection for circular blobs";
 	mCategory=&(mCore->mCategoryBlobDetection);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));

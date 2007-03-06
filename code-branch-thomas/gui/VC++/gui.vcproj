@@ -350,6 +350,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\ConfigurationParameterCheckBox.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\ConfigurationParameterDouble.cpp"
 				>
 			</File>
@@ -455,6 +459,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\ConfigurationParameterCheckBox.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\ConfigurationParameterDouble.h"
 				>
 			</File>
@@ -495,7 +503,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\resource.h"
+				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
@@ -516,28 +524,56 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath="..\ressources\gui.ico"
+				RelativePath="..\bitmaps\down.bmp"
 				>
 			</File>
 			<File
-				RelativePath="gui.rc"
+				RelativePath="..\bitmaps\finger.bmp"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCResourceCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCResourceCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\bitmaps\gui.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\bitmaps\minus.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\bitmaps\new.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\bitmaps\open.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\bitmaps\play.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\bitmaps\plus.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\bitmaps\productive.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\bitmaps\save.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\bitmaps\singlestep.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\SwisTrack-GUI.rc"
+				>
+			</File>
+			<File
+				RelativePath="..\bitmaps\up.bmp"
+				>
 			</File>
 		</Filter>
 	</Files>

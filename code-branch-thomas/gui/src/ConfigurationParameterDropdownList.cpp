@@ -99,6 +99,6 @@ void THISCLASS::OnItemSelected(wxCommandEvent& event) {
 	wxString *itemvalue=(wxString *)mComboBox->GetClientData(sel);
 	mNewValue=*itemvalue;
 	ValidateNewValue();
-	if (! CompareNewValue()) {return;}
+	if (CompareNewValue()) {return;}
 	SetNewValue(mComboBox);
 }

@@ -5,7 +5,7 @@
 #include <sstream>
 
 THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
-		Component(stc, "CameraGBit"),
+		Component(stc, "InputCameraGBit"),
 		mTransportLayer(0), mCamera(0), mStreamGrabber(0),
 		mCurrentImageIndex(-1), mFrameNumber(0),
 		mDisplayImageOutput("Output", "GBit Camera: Input Frame") {
@@ -21,6 +21,11 @@ THISCLASS::~ComponentInputCameraGBit() {
 }
 
 void THISCLASS::OnStart() {
+	mCameraNumber=GetConfigurationInt("DeviceNumber", 0);
+	mColor=GetConfigurationBool("Color", true);
+	mTriggerMode=(eTriggerMode)GetConfigurationInt("TriggerMode", 0);
+	mTriggerTimerFPS=GetConfigurationInt("TriggerTimerFPS", 10);
+
 	try {
 		// Enumerate GigE cameras
 		Pylon::CTlFactory& tlfactory=Pylon::CTlFactory::GetInstance();
@@ -32,7 +37,11 @@ void THISCLASS::OnStart() {
 		}
 
 		// Create a camera object and cast to the concrete camera class
-		mCamera=dynamic_cast<Pylon::CBaslerGigECamera*>(mTransportLayer->CreateDevice(devices[0]));
+		mCamera=dynamic_cast<Pylon::CBaslerGigECamera*>(mTransportLayer->CreateDevice(devices[mCameraNumber]));
+		if (! mCamera) {
+			AddError("Camera not found!");
+			return;
+		}
 
 		// Open the camera object
 		mCamera->Open();
@@ -43,8 +52,12 @@ void THISCLASS::OnStart() {
 		return;
 	}
 
-	// Mono8 pixel format
-	mCamera->PixelFormat.SetValue(Basler_GigECameraParams::PixelFormat_Mono8);
+	// Pixel format: color or mono
+	if (mColor) {
+		mCamera->PixelFormat.SetValue(Basler_GigECameraParams::PixelFormat_YUV422Packed);
+	} else {
+		mCamera->PixelFormat.SetValue(Basler_GigECameraParams::PixelFormat_Mono8);
+	}
 
 	// Maximized AOI
 	mCamera->OffsetX.SetValue(0);
@@ -52,15 +65,34 @@ void THISCLASS::OnStart() {
 	mCamera->Width.SetValue(mCamera->Width.GetMax());
 	mCamera->Height.SetValue(mCamera->Height.GetMax());
 
-	// Continuous mode, no external trigger used
-	mCamera->TriggerSelector.SetValue(Basler_GigECameraParams::TriggerSelector_AcquisitionStart);
-	mCamera->TriggerMode.SetValue(Basler_GigECameraParams::TriggerMode_On);
-	mCamera->TriggerSource.SetValue(Basler_GigECameraParams::TriggerSource_Software);
+	// Continuous mode
 	mCamera->AcquisitionMode.SetValue(Basler_GigECameraParams::AcquisitionMode_Continuous);
 
-	// Configure exposure time and mode
-	mCamera->ExposureMode.SetValue(Basler_GigECameraParams::ExposureMode_Timed);
-	mCamera->ExposureTimeRaw.SetValue(100);
+	// Trigger
+	if (mTriggerMode==sTrigger_Timer) {
+		mCamera->TriggerMode.SetValue(Basler_GigECameraParams::TriggerMode_Off);
+		mCamera->AcquisitionFrameRateEnable.SetValue(true);
+		mCamera->AcquisitionFrameRateAbs.SetValue(mTriggerTimerFPS);
+	} else {
+		mCamera->TriggerMode.SetValue(Basler_GigECameraParams::TriggerMode_On);
+		mCamera->AcquisitionFrameRateEnable.SetValue(false);
+		mCamera->TriggerSelector.SetValue(Basler_GigECameraParams::TriggerSelector_AcquisitionStart);
+		mCamera->TriggerActivation.SetValue(Basler_GigECameraParams::TriggerActivation_RisingEdge);
+		if (mTriggerMode==sTrigger_InputLine1) {
+			mCamera->TriggerSource.SetValue(Basler_GigECameraParams::TriggerSource_Line1);
+		} else if (mTriggerMode==sTrigger_InputLine2) {
+			mCamera->TriggerSource.SetValue(Basler_GigECameraParams::TriggerSource_Line2);
+		} else if (mTriggerMode==sTrigger_InputLine3) {
+			mCamera->TriggerSource.SetValue(Basler_GigECameraParams::TriggerSource_Line3);
+		} else if (mTriggerMode==sTrigger_InputLine4) {
+			mCamera->TriggerSource.SetValue(Basler_GigECameraParams::TriggerSource_Line4);
+		} else {
+			mCamera->TriggerSource.SetValue(Basler_GigECameraParams::TriggerSource_Software);
+		}
+	}
+
+	// Configure reloadable values
+	OnReloadConfiguration();
 
 	// Get and open a stream grabber
 	mStreamGrabber=dynamic_cast<Pylon::CBaslerGigEStreamGrabber*>(mCamera->GetStreamGrabber(0));
@@ -74,22 +106,34 @@ void THISCLASS::OnStart() {
 	mStreamGrabber->PrepareGrab();
 
 	// Allocate and register image buffers, put them into the grabber's input queue
+	int channels=(mColor ? 2 : 1);
 	for (int i=0; i<8; ++i) {
-		mInputBufferImages[i]=cvCreateImage(cvSize(mCamera->Width.GetMax(), mCamera->Height.GetMax()), 8, 1);
+		mInputBufferImages[i]=cvCreateImage(cvSize(mCamera->Width.GetMax(), mCamera->Height.GetMax()), 8, channels);
 		mInputBufferHandles[i]=mStreamGrabber->RegisterBuffer(mInputBufferImages[i]->imageData, mInputBufferImages[i]->imageSize);
 		mStreamGrabber->QueueBuffer(mInputBufferHandles[i], (void*)i);
 	}
+
+	// In color mode, we need an additional image for the conversion from YUV to BGR
+	//if (mColor) {
+	//	mOutputImage=cvCreateImage(cvSize(mCamera->Width.GetMax(), mCamera->Height.GetMax()), 8, 3);
+	//}
 
 	// Start image acquisition
 	mCamera->AcquisitionStart.Execute();
 }
 
 void THISCLASS::OnReloadConfiguration() {
+	// Configure exposure time and mode
+	mExposureTime=GetConfigurationInt("ExposureTime", 100);
+	mCamera->ExposureMode.SetValue(Basler_GigECameraParams::ExposureMode_Timed);
+	mCamera->ExposureTimeRaw.SetValue(mExposureTime);
 }
 
 void THISCLASS::OnStep() {
-    // Let the camera acquire one single image
-    mCamera->TriggerSoftware.Execute();
+    // Send the software trigger
+	if (mTriggerMode==sTrigger_Software) {
+		mCamera->TriggerSoftware.Execute();
+	}
 
 	// Wait for the grabbed image with a timeout of 3 seconds
 	if (! mStreamGrabber->GetWaitObject().Wait(3000)) {
@@ -117,14 +161,17 @@ void THISCLASS::OnStep() {
 	mFrameNumber++;
 	mCurrentImageIndex=(int)result.Context();
 
+	// This is the acquired image
+	IplImage *outputimage=mInputBufferImages[mCurrentImageIndex];
+
 	// Set this image in the DataStructureImage
-	mCore->mDataStructureInput.mImage=mInputBufferImages[mCurrentImageIndex];
+	mCore->mDataStructureInput.mImage=outputimage;
 	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
 
 	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mInputBufferImages[mCurrentImageIndex];
+	mDisplayImageOutput.mImage=outputimage;
 	std::ostringstream oss;
-	oss << "Frame " << mFrameNumber << ", " << mInputBufferImages[mCurrentImageIndex]->width << "x" << mInputBufferImages[mCurrentImageIndex]->height;
+	oss << "Frame " << mFrameNumber << ", " << outputimage->width << "x" << outputimage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 
@@ -143,6 +190,13 @@ void THISCLASS::OnStop() {
 	while (mStreamGrabber->GetWaitObject().Wait(0)) {
 		mStreamGrabber->RetrieveResult(result);
 	}
+
+	// Delete the image allocated for YUV to BGR conversion
+	//if (mColor) {
+	//	cvReleaseImage(&mOutputImage);
+	//} else {
+	//	mOutputImage=0;
+	//}
 
 	// Deregister and free buffers
 	for (int i=0; i<8; ++i) {

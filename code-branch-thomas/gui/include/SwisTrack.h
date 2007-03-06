@@ -49,24 +49,6 @@ public:
 	//! Sets the configuration panel on the right side.
 	void SetConfigurationPanel(Component *c);
 
-	// CommuncationCommandHandler methods
-	bool OnCommunicationCommand(CommunicationMessage *m);
-
-    // Event handlers
-	void OnFileNew(wxCommandEvent& WXUNUSED(event));
-	void OnFileOpen(wxCommandEvent& WXUNUSED(event));
-	void OnFileSave(wxCommandEvent& WXUNUSED(event));
-	void OnFileSaveAs(wxCommandEvent& WXUNUSED(event));
-	void OnFileQuit(wxCommandEvent& WXUNUSED(event));
-	void OnControlProductiveMode(wxCommandEvent& WXUNUSED(event));
-	void OnControlFreeRun(wxCommandEvent& WXUNUSED(event));
-	void OnControlSingleStep(wxCommandEvent& WXUNUSED(event));
-	void OnChangeDisplaySpeed(wxScrollEvent& WXUNUSED(event));
-	void OnToolsServer(wxCommandEvent& WXUNUSED(event));
-	void OnHelp(wxCommandEvent& WXUNUSED(event));
-	void OnTest(wxCommandEvent& WXUNUSED(event));
-	void OnHelpAbout(wxCommandEvent& WXUNUSED(event));
-
 	//! Starts the productive mode.
 	void StartProductiveMode();
 	//! Stops the productive mode.
@@ -79,11 +61,6 @@ public:
 	void SetTriggerFreeRun();
 	//! Sets the free run interval.
 	void SetTriggerManual();
-
-	//! The free run timer event.
-	void OnFreeRunTimer(wxTimerEvent& WXUNUSED(event));
-	//! The idle event.
-	void OnIdle(wxIdleEvent& event);
 
 #ifdef MULTITHREAD
 	// Critical section used to synchronize the main and auxiliary threads
@@ -106,7 +83,9 @@ protected:
 		sID_Control_ProductiveMode,
 		sID_Control_FreeRun,
 		sID_Control_SingleStep,
-		sID_Tools_Server,
+		sID_View_ComponentList,
+		sID_View_NewDisplay,
+		sID_Tools_TCPServer,
 		sID_DisplaySpeed,
 		sID_Help,
 		sID_Test,
@@ -126,6 +105,33 @@ protected:
 	void BuildToolBar();
 	//! Creates the status bar.
 	void BuildStatusBar();
+	//! Sets the filename, updates the window title and sets the CWD.
+	void SetFileName(const wxString &filename);
+
+	// CommuncationCommandHandler methods
+	bool OnCommunicationCommand(CommunicationMessage *m);
+
+	// Event handlers
+	void OnFileNew(wxCommandEvent& WXUNUSED(event));
+	void OnFileOpen(wxCommandEvent& WXUNUSED(event));
+	void OnFileSave(wxCommandEvent& WXUNUSED(event));
+	void OnFileSaveAs(wxCommandEvent& WXUNUSED(event));
+	void OnFileQuit(wxCommandEvent& WXUNUSED(event));
+	void OnControlProductiveMode(wxCommandEvent& WXUNUSED(event));
+	void OnControlFreeRun(wxCommandEvent& WXUNUSED(event));
+	void OnControlSingleStep(wxCommandEvent& WXUNUSED(event));
+	void OnChangeDisplaySpeed(wxScrollEvent& WXUNUSED(event));
+	void OnViewComponentList(wxCommandEvent& WXUNUSED(event));
+	void OnViewNewDisplay(wxCommandEvent& WXUNUSED(event));
+	void OnToolsTCPServer(wxCommandEvent& WXUNUSED(event));
+	void OnHelp(wxCommandEvent& WXUNUSED(event));
+	void OnTest(wxCommandEvent& WXUNUSED(event));
+	void OnHelpAbout(wxCommandEvent& WXUNUSED(event));
+
+	//! The free run timer event.
+	void OnFreeRunTimer(wxTimerEvent& WXUNUSED(event));
+	//! The idle event.
+	void OnIdle(wxIdleEvent& event);
 
     DECLARE_EVENT_TABLE()
 };

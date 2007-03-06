@@ -2,7 +2,7 @@
 <swistrackcomponent>
 	<friendlyname>Threshold a grayscale image</friendlyname>
 	<description>Thresholds a grayscale image and stores the result in a binary image.</description>
-	<display>Output</display>
+	<displayimage>Output</displayimage>
 
 	<configuration>
 		<parameter type="integer">
@@ -10,7 +10,7 @@
 			<label>Threshold</label>
 			<min>0</min>
 			<max>255</max>
-			<unit>tt</unit>
+			<slider>true</slider>
 			<display>Output</display>
 			<reloadable>true</reloadable>
 		</parameter>

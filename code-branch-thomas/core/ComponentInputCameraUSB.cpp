@@ -4,7 +4,7 @@
 #include <sstream>
 
 THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
-		Component(stc, "CameraUSB"),
+		Component(stc, "InputCameraUSB"),
 		mCapture(0), mCurrentImage(0),
 		mDisplayImageOutput("Output", "USB Camera: Input Frame") {
 

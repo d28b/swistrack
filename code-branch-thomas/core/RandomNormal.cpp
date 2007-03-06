@@ -50,7 +50,7 @@ double THISCLASS::nfix(long hz, unsigned long iz) {
 
 		hz=mRandomMersenneTwister->randInt();
 		iz=hz & 127;
-		if (abs(hz)<kn[iz]) {
+		if ((unsigned long)abs(hz)<kn[iz]) {
 			return (hz*wn[iz]);
 		}
 	}
