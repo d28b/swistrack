@@ -1,10 +1,9 @@
 #ifndef HEADER_ComponentBinaryMask
 #define HEADER_ComponentBinaryMask
 
-#include "cv.h"
+#include <cv.h>
 #include "Component.h"
-#include "DataStructureParticles.h"
-#include "DisplayImageParticles.h"
+#include "DisplayImageStandard.h"
 
 //! A component that detects blobs that have a certain size and stores them as particles in DataStructureParticle.
 class ComponentBinaryMask: public Component {
@@ -26,7 +25,7 @@ public:
 private:
 	IplImage *mMaskImage;	//!< The mask.
 
-	DisplayImageStandard mDisplayImageOutput;				//!< The DisplayImage showing the last processed image.
+	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last processed image.
 };
 
 #endif

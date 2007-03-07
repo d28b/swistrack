@@ -3,8 +3,7 @@
 
 #include "cv.h"
 #include "Component.h"
-#include "DataStructureParticles.h"
-#include "DisplayImageParticles.h"
+#include "DisplayImageStandard.h"
 
 //! A component that detects blobs that have a certain size and stores them as particles in DataStructureParticle.
 class ComponentBinaryErosion: public Component {
@@ -24,9 +23,9 @@ public:
 	Component *Create() {return new ComponentBinaryErosion(mCore);}
 
 private:
-	int mNumber;	//!< (configuration) The number of erosions to apply to the binary image.
+	int mIterations;	//!< (configuration) The number of erosions to apply to the binary image.
 
-	DisplayImageStandard mDisplayImageOutput;				//!< The DisplayImage showing the last processed image.
+	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last processed image.
 };
 
 #endif

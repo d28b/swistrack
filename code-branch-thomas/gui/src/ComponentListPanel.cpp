@@ -83,6 +83,9 @@ void THISCLASS::Update() {
 	// Empty the list
 	mList->DeleteAllItems();
 
+	// Needed to keep selection visible
+	int selecteditemid=0;
+
 	// Add all components
 	int row=0;
 	SwisTrackCore *stc=mSwisTrack->mSwisTrackCore;
@@ -100,6 +103,7 @@ void THISCLASS::Update() {
 		li.SetData((void*)(*it));
 		if (mSelectedComponent==(*it)) {
 			li.SetState(wxLIST_STATE_SELECTED);
+			selecteditemid=li.GetId();
 		}
 		mList->InsertItem(li);
 
@@ -134,6 +138,9 @@ void THISCLASS::Update() {
 	for (int i=1; i<cc-1; i++) {
 		mList->SetColumnWidth(i, wxLIST_AUTOSIZE);
 	}
+
+	// Make the selection visible
+	mList->EnsureVisible(selecteditemid);
 
 	// Update the status messages
 	UpdateStatus();

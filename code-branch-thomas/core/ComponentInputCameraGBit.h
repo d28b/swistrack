@@ -48,7 +48,6 @@ private:
 	Pylon::CBaslerGigECamera *mCamera;					//!< Camera object.
 	Pylon::CBaslerGigEStreamGrabber *mStreamGrabber;	//!< Stream grabber object.
 	IplImage *mInputBufferImages[8];					//!< The images for the input queue.
-	//IplImage *mOutputImage;								//!< The current output image. For B/W acquisition, this is just a point to the most recently acquired image. For color acquisition, this is the BGR image converted from the acquired YUV.
 	Pylon::StreamBufferHandle mInputBufferHandles[8];	//!< The corresponding buffer handles.
 
 	int mCurrentImageIndex;								//!< The index of the last acquired image.

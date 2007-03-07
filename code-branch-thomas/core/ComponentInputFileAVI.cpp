@@ -5,7 +5,7 @@
 
 THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
 		Component(stc, "InputFileAVI"),
-		mCapture(0), mCurrentImage(0),
+		mCapture(0), mOutputImage(0),
 		mDisplayImageOutput("Output", "AVI File: Unprocessed Frame") {
 
 	// Data structure relations
@@ -62,29 +62,29 @@ void THISCLASS::OnStep() {
 	// Read the next frame
 	int framenumber=(int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES);
 	int framecount=(int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_FRAME_COUNT);
-	mCurrentImage=cvQueryFrame(mCapture);
-	if (! mCurrentImage) {
+	mOutputImage=cvQueryFrame(mCapture);
+	if (! mOutputImage) {
 		AddError("Could not read frame from AVI file.");
 		return;
 	}
 
 	// AVI files are flipped
-	cvFlip(mCurrentImage, 0);
+	cvFlip(mOutputImage, 0);
 
 	// Set DataStructureImage
-	mCore->mDataStructureInput.mImage=mCurrentImage;
+	mCore->mDataStructureInput.mImage=mOutputImage;
 	mCore->mDataStructureInput.mFrameNumber=framenumber;
 
 	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mCurrentImage;
+	mDisplayImageOutput.mImage=mOutputImage;
 	std::ostringstream oss;
-	oss << "Frame " << framenumber << " / " << framecount << ", " << mCurrentImage->width << "x" << mCurrentImage->height;
+	oss << "Frame " << framenumber << " / " << framecount << ", " << mOutputImage->width << "x" << mOutputImage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 
 void THISCLASS::OnStepCleanup() {
 	mCore->mDataStructureInput.mImage=0;
-	//mCurrentImage should not be released here, as this is handled by the HighGUI library
+	//mOutputImage should not be released here, as this is handled by the HighGUI library
 }
 
 void THISCLASS::OnStop() {

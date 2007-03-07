@@ -28,9 +28,6 @@ void THISCLASS::OnReloadConfiguration() {
 	mMinArea=GetConfigurationDouble("MinArea", 1);
 	mMaxArea=GetConfigurationDouble("MaxArea", 1000);
 	mMaxNumber=GetConfigurationInt("MaxNumber", 10);
-	mFirstDilate=GetConfigurationInt("FirstDilate", 1);
-	mFirstErode=GetConfigurationInt("FirstErode", 1);
-	mSecondDilate=GetConfigurationInt("SecondDilate", 1);
 	
 	// Check for stupid configurations
 	if (mMaxNumber<1) {
@@ -45,19 +42,8 @@ void THISCLASS::OnReloadConfiguration() {
 void THISCLASS::OnStep() {
 	std::vector<Particle> rejectedparticles;
 
-	// We get the binary image from the segmenter, we make a copy because the image is modified during blobs extraction
-	IplImage* src_tmp = cvCloneImage(mCore->mDataStructureImageBinary.mImage);
-
-	// Perform a morphological opening to reduce noise.
-	if (mFirstDilate>0) {
-		cvDilate(src_tmp, src_tmp, NULL, mFirstDilate);
-	}
-	if (mFirstErode>0) {
-		cvErode(src_tmp, src_tmp, NULL, mFirstErode);
-	}
-	if (mSecondDilate>0) {
-		cvDilate(src_tmp, src_tmp, NULL, mSecondDilate);
-	}
+	// This is the image we want to treat
+	IplImage* src_tmp = mCore->mDataStructureImageBinary.mImage;
 
 	// We clear the ouput vector
 	mParticles.clear();
@@ -146,7 +132,6 @@ void THISCLASS::OnStep() {
 		}
 	} */
 
-	cvReleaseImage(&src_tmp);
 	cvRelease((void**)&contour);
 	cvReleaseMemStorage(&storage);
 
@@ -156,7 +141,7 @@ void THISCLASS::OnStep() {
 	// Let the DisplayImage know about our image
 	mDisplayImageOutput.mParticles=&mParticles;
 	std::ostringstream oss;
-	oss << "Grayscale image, " << mCore->mDataStructureImageBinary.mImage->width << "x" << mCore->mDataStructureImageBinary.mImage->height;
+	oss << "Detected particles, " << mCore->mDataStructureImageBinary.mImage->width << "x" << mCore->mDataStructureImageBinary.mImage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 

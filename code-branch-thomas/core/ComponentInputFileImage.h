@@ -1,5 +1,5 @@
-#ifndef HEADER_ComponentInputFileAVI
-#define HEADER_ComponentInputFileAVI
+#ifndef HEADER_ComponentInputFileImage
+#define HEADER_ComponentInputFileImage
 
 #include <vector>
 #include "cv.h"
@@ -8,13 +8,13 @@
 #include "DisplayImageStandard.h"
 
 //! An input component that reads an AVI file using the CV library.
-class ComponentInputFileAVI: public Component {
+class ComponentInputFileImage: public Component {
 
 public:
 	//! Constructor.
-	ComponentInputFileAVI(SwisTrackCore *stc);
+	ComponentInputFileImage(SwisTrackCore *stc);
 	//! Destructor.
-	~ComponentInputFileAVI();
+	~ComponentInputFileImage();
 
 	// Overwritten Component methods
 	void OnStart();
@@ -22,16 +22,10 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentInputFileAVI(mCore);}
-
-	double GetProgressPercent();
-	double GetProgressMSec();
-	int GetProgressFrameNumber();
-	double GetFPS();
+	Component *Create() {return new ComponentInputFileImage(mCore);}
 
 private:
-	CvCapture* mCapture;		//!< Pointer to AVI sequence.
-	IplImage* mOutputImage;		//!< The last acquired image.
+	IplImage* mOutputImage;		//!< The image.
 
 	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last acquired image.
 };

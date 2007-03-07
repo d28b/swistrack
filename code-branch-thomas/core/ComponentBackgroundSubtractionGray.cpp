@@ -22,27 +22,28 @@ THISCLASS::~ComponentBackgroundSubtractionGray() {
 
 void THISCLASS::OnStart() {
 	std::string filename=GetConfigurationString("BackgroundImage", "");
-	IplImage* bg=0;
 	if (filename!="") {
-		bg=cvLoadImage(filename.c_str(), -1);
+		mBackgroundImage=cvLoadImage(filename.c_str(), -1);
 	}
-	if (! bg) {
-		AddError("Cannot open background file.");
+	if (! mBackgroundImage) {
+		AddError("Cannot open background image.");
 		return;
 	}
 
-	mBackgroundImage=cvCreateImage(cvSize(bg->width, bg->height), bg->depth, 1);
-
-	switch (bg->nChannels) {
-	case 3:	// BGR case, we convert to gray
-		cvCvtColor(bg, mBackgroundImage, CV_BGR2GRAY);
-		break;
-	case 1:	// Already in gray
-		cvCopy(bg, mBackgroundImage);
-		break;
-	default: // Other cases, we take the first channel
-		cvCvtPixToPlane(bg, mBackgroundImage, NULL, NULL, NULL);
-		break;
+	if (mBackgroundImage->nChannels==3) {
+		// BGR case, we convert to gray
+		IplImage *img=cvCreateImage(cvSize(mBackgroundImage->width, mBackgroundImage->height), mBackgroundImage->depth, 1);
+		cvCvtColor(mBackgroundImage, img, CV_BGR2GRAY);
+		cvReleaseImage(&mBackgroundImage);
+		mBackgroundImage=img;
+	} else if (mBackgroundImage->nChannels==1) {
+		// Already in gray, do nothing
+	} else {
+		// Other cases, we take the first channel
+		IplImage *img=cvCreateImage(cvSize(mBackgroundImage->width, mBackgroundImage->height), mBackgroundImage->depth, 1);
+		cvCvtPixToPlane(mBackgroundImage, img, NULL, NULL, NULL);
+		cvReleaseImage(&mBackgroundImage);
+		mBackgroundImage=img;
 	}
 
 	// Whether to correct the mean or not
@@ -54,9 +55,6 @@ void THISCLASS::OnStart() {
 	} else {
 		mBackgroundImageMean=0;
 	}
-	
-	// Release the temporary image
-	cvReleaseImage(&bg);
 }
 
 void THISCLASS::OnReloadConfiguration() {

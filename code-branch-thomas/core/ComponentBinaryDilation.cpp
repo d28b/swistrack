@@ -5,7 +5,7 @@
 
 THISCLASS::ComponentBinaryDilation(SwisTrackCore *stc):
 		Component(stc, "BinaryDilation"),
-		mNumber(10),
+		mIterations(1),
 		mDisplayImageOutput("Output", "After dilation") {
 
 	// Data structure relations
@@ -25,10 +25,10 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mNumber=GetConfigurationInt("Number", 1);
+	mIterations=GetConfigurationInt("Iterations", 1);
 	
 	// Check for stupid configurations
-	if (mNumber<0) {
+	if (mIterations<0) {
 		AddError("The number of dilations must be greater or equal to 0.");
 	}
 }
@@ -39,8 +39,8 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
-	if (mNumber>0) {
-		cvDilate(mCore->mDataStructureImageBinary.mImage, mCore->mDataStructureImageBinary.mImage, NULL, mNumber);
+	if (mIterations>0) {
+		cvDilate(mCore->mDataStructureImageBinary.mImage, mCore->mDataStructureImageBinary.mImage, NULL, mIterations);
 	}
 
 	// Let the DisplayImage know about our image

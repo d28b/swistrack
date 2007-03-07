@@ -2,14 +2,15 @@
 #define THISCLASS ComponentBinaryMask
 
 #include <sstream>
+#include <highgui.h>
 
 THISCLASS::ComponentBinaryMask(SwisTrackCore *stc):
-		Component(stc, "BinaryDilation"),
-		mNumber(10),
-		mDisplayImageOutput("Output", "After dilation") {
+		Component(stc, "BinaryMask"),
+		mMaskImage(0),
+		mDisplayImageOutput("Output", "After applying mask") {
 
 	// Data structure relations
-	mDisplayName="Binary image dilation";
+	mDisplayName="Binary mask";
 	mCategory=&(mCore->mCategoryBinaryPreprocessing);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
@@ -36,18 +37,18 @@ void THISCLASS::OnReloadConfiguration() {
 
 	if (mMaskImage->nChannels==3) {
 		// BGR case, we convert to gray
-		IplImage *bg=cvCreateImage(cvSize(bg->width, bg->height), bg->depth, 1);
-		cvCvtColor(mMaskImage, bg, CV_BGR2GRAY);
+		IplImage *img=cvCreateImage(cvSize(mMaskImage->width, mMaskImage->height), mMaskImage->depth, 1);
+		cvCvtColor(mMaskImage, img, CV_BGR2GRAY);
 		cvReleaseImage(&mMaskImage);
-		mMaskImage=bg;
+		mMaskImage=img;
 	} else if (mMaskImage->nChannels==1) {
 		// Already in gray, do nothing
 	} else {
 		// Other cases, we take the first channel
-		IplImage *bg=cvCreateImage(cvSize(bg->width, bg->height), bg->depth, 1);
-		cvCvtPixToPlane(mMaskImage, bg, NULL, NULL, NULL);
+		IplImage *img=cvCreateImage(cvSize(mMaskImage->width, mMaskImage->height), mMaskImage->depth, 1);
+		cvCvtPixToPlane(mMaskImage, img, NULL, NULL, NULL);
 		cvReleaseImage(&mMaskImage);
-		mMaskImage=bg;
+		mMaskImage=img;
 	}
 }
 
@@ -57,7 +58,7 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
-	if (mNumber>0) {
+	if (mMaskImage) {
 		cvAnd(mCore->mDataStructureImageBinary.mImage, mMaskImage, mCore->mDataStructureImageBinary.mImage);
 	}
 

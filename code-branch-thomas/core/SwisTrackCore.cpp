@@ -7,10 +7,14 @@
 #include "ComponentInputCameraUSB.h"
 #include "ComponentInputCameraGBit.h"
 #include "ComponentInputFileAVI.h"
+#include "ComponentInputFileImage.h"
 #include "ComponentConvertToGray.h"
 #include "ComponentConvertToBGR.h"
 #include "ComponentBackgroundSubtractionGray.h"
 #include "ComponentThresholdGray.h"
+#include "ComponentBinaryDilation.h"
+#include "ComponentBinaryErosion.h"
+#include "ComponentBinaryMask.h"
 #include "ComponentBlobDetectionMinMax.h"
 #include "ComponentBlobDetectionCircle.h"
 #include "ComponentSimulationParticles.h"
@@ -27,7 +31,7 @@ THISCLASS::SwisTrackCore():
 		mCategoryInputConversion("Input conversion", 200, ComponentCategory::sTypeAuto),
 		mCategoryPreprocessing("Preprocessing", 300),
 		mCategoryThresholding("Thresholding", 400),
-		mCategoryPreprocessing("BinaryPreprocessing", 500),
+		mCategoryBinaryPreprocessing("BinaryPreprocessing", 500),
 		mCategoryBlobDetection("Blob detection", 600),
 		mCategoryCalibration("Calibration", 700),
 		mCategoryOutput("Output", 10000),
@@ -40,10 +44,14 @@ THISCLASS::SwisTrackCore():
 	mAvailableComponents.push_back(new ComponentInputCameraUSB(this));
 	mAvailableComponents.push_back(new ComponentInputCameraGBit(this));
 	mAvailableComponents.push_back(new ComponentInputFileAVI(this));
+	mAvailableComponents.push_back(new ComponentInputFileImage(this));
 	mAvailableComponents.push_back(new ComponentConvertToGray(this));
 	mAvailableComponents.push_back(new ComponentConvertToBGR(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentThresholdGray(this));
+	mAvailableComponents.push_back(new ComponentBinaryDilation(this));
+	mAvailableComponents.push_back(new ComponentBinaryErosion(this));
+	mAvailableComponents.push_back(new ComponentBinaryMask(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionMinMax(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionCircle(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));

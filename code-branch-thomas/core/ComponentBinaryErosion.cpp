@@ -4,8 +4,8 @@
 #include <sstream>
 
 THISCLASS::ComponentBinaryErosion(SwisTrackCore *stc):
-		Component(stc, "BlobDetectionMinMax"),
-		mNumber(10),
+		Component(stc, "BinaryErosion"),
+		mIterations(1),
 		mDisplayImageOutput("Output", "After erosion") {
 
 	// Data structure relations
@@ -25,11 +25,11 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mNumber=GetConfigurationInt("Number", 1);
+	mIterations=GetConfigurationInt("Iterations", 1);
 	
 	// Check for stupid configurations
-	if (mNumber<0) {
-		AddError("The number of dilations must be greater or equal to 0.");
+	if (mIterations<0) {
+		AddError("The number of erosions must be greater or equal to 0.");
 	}
 }
 
@@ -39,8 +39,8 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
-	if (mNumber>0) {
-		cvErode(mCore->mDataStructureImageBinary.mImage, mCore->mDataStructureImageBinary.mImage, NULL, mNumber);
+	if (mIterations>0) {
+		cvErode(mCore->mDataStructureImageBinary.mImage, mCore->mDataStructureImageBinary.mImage, NULL, mIterations);
 	}
 
 	// Let the DisplayImage know about our image
@@ -55,9 +55,4 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-}
-
-double THISCLASS::GetContourCompactness(const void* contour) {
-	double l = cvArcLength(contour, CV_WHOLE_SEQ, 1);
-	return fabs(12.56*cvContourArea(contour)/(l*l));	
 }

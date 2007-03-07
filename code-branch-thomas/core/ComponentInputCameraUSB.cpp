@@ -5,7 +5,7 @@
 
 THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
 		Component(stc, "InputCameraUSB"),
-		mCapture(0), mCurrentImage(0),
+		mCapture(0), mOutputImage(0),
 		mDisplayImageOutput("Output", "USB Camera: Input Frame") {
 
 	// Data structure relations
@@ -27,8 +27,8 @@ void THISCLASS::OnStart() {
 		return;
 	}
 
-	mCurrentImage = cvQueryFrame(mCapture);
-	if (! mCurrentImage) {
+	mOutputImage = cvQueryFrame(mCapture);
+	if (! mOutputImage) {
 		AddError("Could not retrieve image from USB camera.");
 		return;
 	}
@@ -42,26 +42,26 @@ void THISCLASS::OnStep() {
 
 	// Read from camera
 	int framenumber=(int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES);
-	mCurrentImage=cvQueryFrame(mCapture);
-	if (! mCurrentImage) {
+	mOutputImage=cvQueryFrame(mCapture);
+	if (! mOutputImage) {
 		AddError("Could not retrieve image from USB camera.");
 		return;
 	}
 
 	// Set DataStructureImage
-	mCore->mDataStructureInput.mImage=mCurrentImage;
+	mCore->mDataStructureInput.mImage=mOutputImage;
 	mCore->mDataStructureInput.mFrameNumber=framenumber;
 
 	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mCurrentImage;
+	mDisplayImageOutput.mImage=mOutputImage;
 	std::ostringstream oss;
-	oss << "Frame " << framenumber << ", " << mCurrentImage->width << "x" << mCurrentImage->height;
+	oss << "Frame " << framenumber << ", " << mOutputImage->width << "x" << mOutputImage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 
 void THISCLASS::OnStepCleanup() {
 	mCore->mDataStructureInput.mImage=0;
-	//mCurrentImage should not be released here, as this is handled by the HighGUI library
+	//mOutputImage should not be released here, as this is handled by the HighGUI library
 }
 
 void THISCLASS::OnStop() {

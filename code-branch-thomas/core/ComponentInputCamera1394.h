@@ -30,7 +30,7 @@ public:
 
 private:
 	C1394Camera mCamera;		//!< Camera handle.
-	IplImage* mCurrentImage;	//!< The last acquired image.
+	IplImage* mOutputImage;	//!< The last acquired image.
 	int mFrameNumber;			//!< The frame number since the component was started.
 
 	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last acquired image.

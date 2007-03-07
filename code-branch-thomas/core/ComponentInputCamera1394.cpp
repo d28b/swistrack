@@ -6,7 +6,7 @@
 
 THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):
 		Component(stc, "InputCamera1394"),
-		mCamera(), mCurrentImage(0), mFrameNumber(0),
+		mCamera(), mOutputImage(0), mFrameNumber(0),
 		mDisplayImageOutput("Output", "1394 Camera: Input Frame") {
 
 	// Data structure relations
@@ -59,7 +59,7 @@ void THISCLASS::OnStart() {
 	}
 
 	mFrameNumber=0;
-	mCurrentImage=cvCreateImage(cvSize(mCamera.m_width, mCamera.m_height), 8, 3);
+	mOutputImage=cvCreateImage(cvSize(mCamera.m_width, mCamera.m_height), 8, 3);
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -81,20 +81,20 @@ void THISCLASS::OnStep() {
 	}
 
 	// Point the input IplImage to the camera buffer
-	mCamera.getRGB((unsigned char *)mCurrentImage->imageData);
-	//mCurrentImage->imageData=(char*)mCamera.m_pData;  // doesn't work because the data doesn't have the same format
+	mCamera.getRGB((unsigned char *)mOutputImage->imageData);
+	//mOutputImage->imageData=(char*)mCamera.m_pData;  // doesn't work because the data doesn't have the same format
 
 	// Convert the input to the right format (RGB to BGR)
-	cvCvtColor(mCurrentImage, mCurrentImage, CV_RGB2BGR);
+	cvCvtColor(mOutputImage, mOutputImage, CV_RGB2BGR);
 
 	// Set this image in the DataStructureImage
-	mCore->mDataStructureInput.mImage=mCurrentImage;
+	mCore->mDataStructureInput.mImage=mOutputImage;
 	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
 
 	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mCurrentImage;
+	mDisplayImageOutput.mImage=mOutputImage;
 	std::ostringstream oss;
-	oss << "Frame " << mFrameNumber << ", " << mCurrentImage->width << "x" << mCurrentImage->height;
+	oss << "Frame " << mFrameNumber << ", " << mOutputImage->width << "x" << mOutputImage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 
