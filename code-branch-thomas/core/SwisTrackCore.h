@@ -36,6 +36,7 @@ public:
 	ComponentCategory mCategoryInputConversion;
 	ComponentCategory mCategoryPreprocessing;
 	ComponentCategory mCategoryThresholding;
+	ComponentCategory mCategoryBinaryPreprocessing;
 	ComponentCategory mCategoryBlobDetection;
 	ComponentCategory mCategoryCalibration;
 	ComponentCategory mCategoryOutput;
