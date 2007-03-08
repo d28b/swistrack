@@ -42,7 +42,6 @@ private:
 	bool mColor;										//!< (configuration) Whether to acquire color or mono images.
 	eTriggerMode mTriggerMode;							//!< (configuration) The trigger source.
 	double mTriggerTimerFPS;							//!< (configuration) The FPS of the trigger timer.
-	int mExposureTime;									//!< (configuration) Whether to acquire color or mono images.
 
 	Pylon::ITransportLayer *mTransportLayer;			//!< Transport layer object.
 	Pylon::CBaslerGigECamera *mCamera;					//!< Camera object.

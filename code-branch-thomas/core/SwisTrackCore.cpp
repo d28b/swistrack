@@ -17,6 +17,7 @@
 #include "ComponentBinaryMask.h"
 #include "ComponentBlobDetectionMinMax.h"
 #include "ComponentBlobDetectionCircle.h"
+#include "ComponentIDReaderRing.h"
 #include "ComponentSimulationParticles.h"
 #include "ComponentCalibrationLinear.h"
 #include "ComponentOutputParticles.h"
@@ -54,6 +55,7 @@ THISCLASS::SwisTrackCore():
 	mAvailableComponents.push_back(new ComponentBinaryMask(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionMinMax(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionCircle(this));
+	mAvailableComponents.push_back(new ComponentIDReaderRing(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<name>Binary mask</name>
+	<description>Adds a mask on the binary image. This can be useful to ignore areas which could otherwise be detected as particles (e.g. borders).</description>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="image">
+			<name>MaskImage</name>
+			<label>Mask image</label>
+			<reloadable>false</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

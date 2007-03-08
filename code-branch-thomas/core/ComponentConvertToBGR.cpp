@@ -55,9 +55,9 @@ void THISCLASS::OnStep() {
 	}
 
 	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mOutputImage;
+	mDisplayImageOutput.mImage=mCore->mDataStructureImageBGR.mImage;
 	std::ostringstream oss;
-	oss << "BGR image, " << mOutputImage->width << "x" << mOutputImage->height;
+	oss << "BGR image, " << mDisplayImageOutput.mImage->width << "x" << mDisplayImageOutput.mImage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();
 }
 

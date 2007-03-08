@@ -10,7 +10,6 @@
 			<name>File</name>
 			<label>Simulation file</label>
 			<filter>NMEA 0183 data file|*.*</filter>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="pointDouble">
@@ -21,7 +20,6 @@
 				<x>0</x>
 				<y>0</y>
 			</default>
-			<display>Output</display>
 		</parameter>
 		<parameter type="angle">
 			<name>CameraRotation</name>
@@ -29,14 +27,12 @@
 			<min>0</min>
 			<max>6.2831853</max>
 			<default>0</default>
-			<display>Output</display>
 		</parameter>
 		<parameter type="double">
 			<name>CameraPixelSize</name>
 			<label>Pixel size</label>
 			<unit>m</unit>
 			<default>1</default>
-			<display>Output</display>
 		</parameter>
 		<parameter type="pointDouble">
 			<name>CameraSize</name>
@@ -46,7 +42,6 @@
 				<x>1</x>
 				<y>1</y>
 			</default>
-			<display>Output</display>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

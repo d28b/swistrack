@@ -1,15 +1,16 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Threshold a grayscale image</friendlyname>
-	<description>Thresholds a grayscale image and stores the result in a binary image.</description>
+	<friendlyname>Erode a binary image</friendlyname>
+	<description>Applies a morphological erosion (3x3 kernel) on the image.</description>
 	<displayimage>Output</displayimage>
 
 	<configuration>
 		<parameter type="integer">
-			<name>Threshold</name>
-			<label>Threshold</label>
+			<name>Iterations</name>
+			<label>Iterations</label>
 			<min>0</min>
-			<max>255</max>
+			<max>10</max>
+			<default>1</default>
 			<slider>true</slider>
 			<reloadable>true</reloadable>
 		</parameter>

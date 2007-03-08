@@ -5,7 +5,7 @@
 
 THISCLASS::ComponentBlobDetectionMinMax(SwisTrackCore *stc):
 		Component(stc, "BlobDetectionMinMax"),
-		mMinArea(0), mMaxArea(1000000), mMaxNumber(10), mFirstDilate(1), mFirstErode(1), mSecondDilate(1),
+		mMinArea(0), mMaxArea(1000000), mMaxNumber(10),
 		mDisplayImageOutput("Output", "Particles") {
 
 	// Data structure relations
@@ -140,6 +140,8 @@ void THISCLASS::OnStep() {
 
 	// Let the DisplayImage know about our image
 	mDisplayImageOutput.mParticles=&mParticles;
+	mDisplayImageOutput.mTopLeft=cvPoint2D32f(0, 0);
+	mDisplayImageOutput.mBottomRight=cvPoint2D32f(mCore->mDataStructureImageBinary.mImage->width, mCore->mDataStructureImageBinary.mImage->height);
 	std::ostringstream oss;
 	oss << "Detected particles, " << mCore->mDataStructureImageBinary.mImage->width << "x" << mCore->mDataStructureImageBinary.mImage->height;
 	mDisplayImageOutput.mAnnotation1=oss.str();

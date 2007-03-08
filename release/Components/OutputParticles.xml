@@ -3,7 +3,7 @@
 	<name>Output particles</name>
 	<description>Sends the particles to all connected TCP clients.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentOutputParticles</url>
-	<display>Output</display>
+	<displayimage>Output</displayimage>
 
 	<configuration>
 		<label>This component does not require any configuration.</label>

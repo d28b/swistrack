@@ -28,10 +28,6 @@ private:
 	double mMaxArea;	//!< (configuration) The maximum area of a blob.
 	int mMaxNumber;		//!< (configuration) The maximum number of blobs that are to detect.
 
-	int mFirstDilate;	//!< (configuration) The number of dilation operations to apply to the binary image.
-	int mFirstErode;	//!< (configuration) The number of erode operations to apply to the binary image.
-	int mSecondDilate;	//!< (configuration) The number of second dilation operations to apply to the binary image.
-
 	DisplayImageParticles mDisplayImageOutput;				//!< The DisplayImage showing the last acquired image and the particles.
 	DataStructureParticles::tParticleVector mParticles;		//!< The list of detected particles. This is the list given to DataStructureParticles.
 

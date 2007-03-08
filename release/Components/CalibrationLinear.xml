@@ -14,7 +14,6 @@
 				<x>0</x>
 				<y>0</y>
 			</default>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="pointDouble">
@@ -24,7 +23,6 @@
 				<x>1</x>
 				<y>1</y>
 			</default>
-			<display>Output</display>
 		</parameter>
 		<line/>
 		<title>World coordinates</title>
@@ -36,7 +34,6 @@
 				<x>0</x>
 				<y>0</y>
 			</default>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="pointDouble">
@@ -46,7 +43,6 @@
 				<x>1</x>
 				<y>0</y>
 			</default>
-			<display>Output</display>
 		</parameter>
 		<parameter type="pointDouble">
 			<name>WorldBottomLeft</name>
@@ -55,7 +51,6 @@
 				<x>0</x>
 				<y>1</y>
 			</default>
-			<display>Output</display>
 		</parameter>
 		<parameter type="pointDouble">
 			<name>WorldBottomRight</name>
@@ -64,7 +59,6 @@
 				<x>1</x>
 				<y>1</y>
 			</default>
-			<display>Output</display>
 		</parameter>
 
 	</configuration>

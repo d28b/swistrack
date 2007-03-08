@@ -60,10 +60,23 @@ void THISCLASS::OnStart() {
 	}
 
 	// Maximized AOI
-	mCamera->OffsetX.SetValue(0);
-	mCamera->OffsetY.SetValue(0);
-	mCamera->Width.SetValue(mCamera->Width.GetMax());
-	mCamera->Height.SetValue(mCamera->Height.GetMax());
+	// TODO: check size, because this probably needs to be a multiple of 2 or 4 for Pylon
+	int cameraw=mCamera->Width.GetMax();
+	int camerah=mCamera->Height.GetMax();
+	int aoix=GetConfigurationInt("AOIOffset.x", 0);
+	int aoiy=GetConfigurationInt("AOIOffset.y", 0);
+	int aoiw=GetConfigurationInt("AOISize.x", 64);
+	int aoih=GetConfigurationInt("AOISize.y", 64);
+	if (aoix>cameraw-1) {aoix=cameraw-1;}
+	if (aoiy>camerah-1) {aoiy=camerah-1;}
+	if (aoiw>cameraw-aoix) {aoiw=cameraw-aoix;}
+	if (aoih>camerah-aoiy) {aoih=camerah-aoiy;}
+	if (aoiw<1) {aoiw=1;}
+	if (aoih<1) {aoih=1;}
+	mCamera->OffsetX.SetValue(aoix);
+	mCamera->OffsetY.SetValue(aoiy);
+	mCamera->Width.SetValue(aoiw);
+	mCamera->Height.SetValue(aoih);
 
 	// Continuous mode
 	mCamera->AcquisitionMode.SetValue(Basler_GigECameraParams::AcquisitionMode_Continuous);
@@ -108,7 +121,7 @@ void THISCLASS::OnStart() {
 	// Allocate and register image buffers, put them into the grabber's input queue
 	int channels=(mColor ? 2 : 1);
 	for (int i=0; i<8; ++i) {
-		mInputBufferImages[i]=cvCreateImage(cvSize(mCamera->Width.GetMax(), mCamera->Height.GetMax()), 8, channels);
+		mInputBufferImages[i]=cvCreateImage(cvSize(aoiw, aoih), 8, channels);
 		mInputBufferHandles[i]=mStreamGrabber->RegisterBuffer(mInputBufferImages[i]->imageData, mInputBufferImages[i]->imageSize);
 		mStreamGrabber->QueueBuffer(mInputBufferHandles[i], (void*)i);
 	}
@@ -123,10 +136,19 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	// Configure exposure time and mode
-	mExposureTime=GetConfigurationInt("ExposureTime", 100);
-	mCamera->ExposureMode.SetValue(Basler_GigECameraParams::ExposureMode_Timed);
-	mCamera->ExposureTimeRaw.SetValue(mExposureTime);
+	try {
+		// Configure exposure time and mode
+		int exposuretime=GetConfigurationInt("ExposureTime", 100);
+		mCamera->ExposureMode.SetValue(Basler_GigECameraParams::ExposureMode_Timed);
+		mCamera->ExposureTimeRaw.SetValue(exposuretime);
+
+		// Configure exposure time and mode
+		int analoggain=GetConfigurationInt("AnalogGain", 500);
+		mCamera->GainRaw.SetValue(analoggain);
+	} catch (GenICam::GenericException &e) {
+		AddError(e.GetDescription());
+		return;
+	}
 }
 
 void THISCLASS::OnStep() {

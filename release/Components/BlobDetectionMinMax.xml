@@ -14,7 +14,6 @@
 			<default>10</default>
 			<unit>blobs</unit>
 			<slider>true</slider>
-			<display>Output</display>
 		</parameter>
 		<parameter type="double">
 			<name>MinArea</name>
@@ -22,7 +21,6 @@
 			<min>0</min>
 			<default>10</default>
 			<unit>pixels</unit>
-			<display>Output</display>
 		</parameter>
 		<parameter type="double">
 			<name>MaxArea</name>
@@ -30,7 +28,6 @@
 			<min>0</min>
 			<default>100</default>
 			<unit>pixels</unit>
-			<display>Output</display>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

@@ -3,7 +3,7 @@
 	<friendlyname>1394 Camera (FireWire)</friendlyname>
 	<description>Grabs an image from a Firewire camera (CMU 1394 driver).</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentInputCamera1394</url>
-	<display>Output</display>
+	<displayimage>Output</displayimage>
 
 	<configuration>
 		<parameter type="dropdownlist">
@@ -15,7 +15,6 @@
 				<item key="2">2</item>
 			</items>
 			<default>0</default>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="dropdownlist">
@@ -30,7 +29,6 @@
 				<item key="5">5</item>
 			</items>
 			<default>0</default>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="integer">
@@ -38,28 +36,24 @@
 			<label>Frame rate</label>
 			<unit>FPS</unit>
 			<default>10</default>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="checkbox">
 			<name>AutoGain</name>
 			<label>Automatic gain control</label>
 			<default>true</default>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="checkbox">
 			<name>AutoExposure</name>
 			<label>Automatic exposure control</label>
 			<default>true</default>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="checkbox">
 			<name>AutoWhiteBalance</name>
 			<label>Automatic white balance</label>
 			<default>false</default>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="integer">
@@ -69,7 +63,6 @@
 			<max>255</max>
 			<default>128</default>
 			<slider>true</slider>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="integer">
@@ -79,7 +72,6 @@
 			<max>255</max>
 			<default>128</default>
 			<slider>true</slider>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="integer">
@@ -89,7 +81,6 @@
 			<max>255</max>
 			<default>128</default>
 			<slider>true</slider>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="integer">
@@ -99,7 +90,6 @@
 			<max>255</max>
 			<default>128</default>
 			<slider>true</slider>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="integer">
@@ -109,7 +99,6 @@
 			<max>255</max>
 			<default>128</default>
 			<slider>true</slider>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="integer">
@@ -119,7 +108,6 @@
 			<max>255</max>
 			<default>128</default>
 			<slider>true</slider>
-			<display>Output</display>
 			<reloadable>false</reloadable>
 		</parameter>
 	</configuration>

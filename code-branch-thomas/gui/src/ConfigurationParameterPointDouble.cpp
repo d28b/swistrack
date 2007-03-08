@@ -20,6 +20,8 @@ THISCLASS::ConfigurationParameterPointDouble(wxWindow* parent):
 }
 
 THISCLASS::~ConfigurationParameterPointDouble() {
+	mTextCtrlX->Disconnect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
+	mTextCtrlY->Disconnect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
 }
 
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {

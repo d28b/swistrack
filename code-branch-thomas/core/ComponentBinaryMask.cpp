@@ -59,6 +59,10 @@ void THISCLASS::OnStep() {
 	}
 
 	if (mMaskImage) {
+		if ((mCore->mDataStructureImageBinary.mImage->width!=mMaskImage->width) || (mCore->mDataStructureImageBinary.mImage->height!=mMaskImage->height)) {
+			AddError("Wrong mask size.");
+			return;
+		}
 		cvAnd(mCore->mDataStructureImageBinary.mImage, mMaskImage, mCore->mDataStructureImageBinary.mImage);
 	}
 

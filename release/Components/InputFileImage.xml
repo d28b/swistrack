@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Input from AVI File</friendlyname>
-	<description>Reads an AVI file.</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentInputFileAVI</url>
+	<friendlyname>Input from a file</friendlyname>
+	<description>Reads an image from a file.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentInputFileImage</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>
 		<parameter type="file">
 			<name>File</name>
-			<label>AVI File</label>
+			<label>Image file</label>
 			<reloadable>false</reloadable>
 		</parameter>
 	</configuration>

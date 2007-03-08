@@ -21,6 +21,8 @@ THISCLASS::ConfigurationParameterPointInteger(wxWindow* parent):
 }
 
 THISCLASS::~ConfigurationParameterPointInteger() {
+	mSpinCtrlX->Disconnect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
+	mSpinCtrlY->Disconnect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
 }
 
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
@@ -59,7 +61,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	hsx->Add(mSpinCtrlX, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsx->Add(unitx, 0, wxALIGN_CENTER_VERTICAL, 0);
 	wxBoxSizer *hsy=new wxBoxSizer(wxHORIZONTAL);
-	hsx->Add(dummyy, 0, wxALIGN_CENTER_VERTICAL, 0);
+	hsy->Add(dummyy, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsy->Add(labely, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsy->Add(mSpinCtrlY, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsy->Add(unity, 0, wxALIGN_CENTER_VERTICAL, 0);
@@ -75,7 +77,7 @@ void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 	double valuex=mComponent->GetConfigurationDouble((mName+".x").c_str(), mValueDefaultX);
 	double valuey=mComponent->GetConfigurationDouble((mName+".y").c_str(), mValueDefaultY);
 	if (updateprotection!=mSpinCtrlX) {mSpinCtrlX->SetValue(valuex);}
-	if (updateprotection!=mSpinCtrlX) {mSpinCtrlX->SetValue(valuey);}
+	if (updateprotection!=mSpinCtrlY) {mSpinCtrlY->SetValue(valuey);}
 }
 
 bool THISCLASS::ValidateNewValueX() {
