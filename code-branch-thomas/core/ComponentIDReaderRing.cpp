@@ -7,7 +7,8 @@
 
 THISCLASS::ComponentIDReaderRing(SwisTrackCore *stc):
 		Component(stc, "IDReaderRing"),
-		mRingRadiusInner(3), mRingRadiusOuter(5), mCodes(),
+		mRingRadiusInner(3), mRingRadiusOuter(5), mObjectList(0),
+		mRingValuesMax(0), mAngles(0), mValues(0),
 		mDisplayImageOutput("Output", "Particles") {
 
 	// Data structure relations
@@ -23,6 +24,15 @@ THISCLASS::~ComponentIDReaderRing() {
 }
 
 void THISCLASS::OnStart() {
+	// Read the object list
+	filename=GetConfigurationString("ObjectListFileName", "");
+	mObjectList=new ObjectList(filename);
+	if (mObjectList->mError!="") {
+		AddError(mObjectList->mError);
+		return;
+	}
+
+	// Reload the other settings
 	OnReloadConfiguration();
 	return;
 }
@@ -30,14 +40,18 @@ void THISCLASS::OnStart() {
 void THISCLASS::OnReloadConfiguration() {
 	mRingRadiusInner=GetConfigurationDouble("RingRadiusInner", 6);
 	mRingRadiusOuter=GetConfigurationDouble("RingRadiusOuter", 12);
-	
-	mChips=14;
-	mCodes.push_back(5323);
+	mRingRadiusInner2=mRingRadiusInner*mRingRadiusInner;
+	mRingRadiusOuter2=mRingRadiusOuter*mRingRadiusOuter;
 
 	// Check for stupid configurations
 	if (mRingRadiusInner>mRingRadiusOuter) {
 		AddError("The inner radius must be smaller than the outer radius.");
 	}
+
+	// Allocate enough space
+	mRingValuesMax=(2*mRingRadiusOuter+1)*(2*mRingRadiusOuter+1)-(2*mRingRadiusInner-1)*(2*mRingRadiusInner-1);
+	mAngles=new float[mRingValuesMax];
+	mValues=new int[mRingValuesMax];
 }
 
 void THISCLASS::OnStep() {
@@ -48,25 +62,26 @@ void THISCLASS::OnStep() {
 	float maxsum=0;
 	DataStructureParticles::tParticleVector::iterator it=mCore->mDataStructureParticles.mParticles->begin();
 	while (it!=mCore->mDataStructureParticles.mParticles->end()) {
-		float cx=it->mCenter.x+1;
-		float cy=it->mCenter.y+1;
+		// Determine the position of the ring
+		float cx=it->mCenter.x+1;  // FIXME
+		float cy=it->mCenter.y+1;  // FIXME
 		float x1=floor(cx-mRingRadiusOuter);
 		float y1=floor(cy-mRingRadiusOuter);
 		float x2=ceil(cx+mRingRadiusOuter);
 		float y2=ceil(cy+mRingRadiusOuter);
 
-		float sa[1000];
-		int sv[1000];
+		// Retrieve all pixels on the ring
 		int si=0;
 		unsigned char *data_linestart=(unsigned char *)img->imageData + img->widthStep*(int)y1 + (int)x1;
 		for (float y=y1+0.5; y<=y2; y+=1) {
 			unsigned char *data=data_linestart;
 			for (float x=x1+0.5; x<=x2; x+=1) {
-				float d=sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy));
-				if ((d<=mRingRadiusOuter) && (d>=mRingRadiusInner)) {
-					sa[si]=atan2f(y-cy, x-cx)/(2*PI)*mChips;
-					sv[si]=(int)*data;
+				float d2=(x-cx)*(x-cx)+(y-cy)*(y-cy);
+				if ((d2<=mRingRadiusOuter2) && (d2>=mRingRadiusInner2)) {
+					mAngles[si]=atan2f(y-cy, x-cx)/(2*PI);
+					mValues[si]=(int)*data;
 					si++;
+					assert(si<mRingValuesMax);
 				} else {
 					*data=255;
 				}
@@ -75,31 +90,34 @@ void THISCLASS::OnStep() {
 			data_linestart+=img->widthStep;
 		}
 
-		float chips[14];
-		//int code=3245;
-		int code=5323;
-		for (int i=0; i<mChips; i++) {
-			chips[i]=(code & 1 ? 1 : -1);
-			code=(code >> 1);
-		}
+		// Correlate with all barcodes
+		ObjectList::tObjectList::iterator ito=mObjectList.mObjects.begin()
+		while (ito!=mObjectList.mObjects.end()) {
+			int numchips=ito->chips.size();
 
-		float shift=0;
+			int maxsum=0;
+			float maxshift=0;
+			
+			float shift=0;
+			while (shift<1) {
+				int sum=0;
+				for (int i=0; i<si; i++) {
+					int bin=(int)floor((mAngles[i]-shift)*numchips);
+					while (bin<0) {bin+=1;}
+					while (bin>=1) {bin-=1;}
+					sum+=mValues[i]*ito->chips[bin];
+				}
 
-		while (shift<mChips) {
-			int sum=0;
-			for (int i=0; i<si; i++) {
-				int bin=(int)floor(sa[i]-shift);
-				while (bin<0) {bin+=mChips;}
-				while (bin>=mChips) {bin-=mChips;}
-				sum+=sv[i]*chips[bin];
+				if (sum>maxsum) {maxsum=sum; maxshift=shift;}
+				debugtext << ", " << sum;
+				if (sum>maxsum) {maxsum=sum;}
+				shift+=0.1;
 			}
-
 			it->mID=sum;
-			debugtext << ", " << sum;
-			if (sum>maxsum) {maxsum=sum;}
-			shift+=0.1;
+			
+			ito++;
 		}
-
+		
 		it++;
 	}
 

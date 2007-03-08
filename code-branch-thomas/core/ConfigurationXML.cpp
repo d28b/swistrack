@@ -35,39 +35,15 @@ wxXmlNode *THISCLASS::GetChildNode(const wxString &name) {
 	return newnode;
 }
 
-wxString THISCLASS::ReadString(const wxString &name, const wxString &defvalue) {
-	wxXmlNode *node=GetChildNode(name);
+wxString THISCLASS::ReadContent(const wxString &defvalue) {
+	if (! mSelectedNode) {return defvalue;}
+	return mSelectedNode->GetNodeContent();
+}
+
+wxString THISCLASS::ReadContent(const wxString &childname, const wxString &defvalue) {
+	wxXmlNode *node=GetChildNode(childname);
 	if (! node) {return defvalue;}
 	return node->GetNodeContent();
-}
-
-bool THISCLASS::ReadBool(const wxString &name, bool defvalue) {
-	wxString str=ReadString(name, "");
-	if (str=="") {return defvalue;}
-
-	str.MakeLower();
-	if (str=="true") {return true;}
-	if (str=="false") {return false;}
-	long value=(defvalue ? 1 : 0);
-	str.ToLong(&value);
-	return (value!=0);
-}
-
-int THISCLASS::ReadInt(const wxString &name, int defvalue) {
-	wxString str=ReadString(name, "");
-	if (str=="") {return defvalue;}
-
-	long value=(long)defvalue;
-	str.ToLong(&value);
-	return value;
-}
-
-double THISCLASS::ReadDouble(const wxString &name, double defvalue) {
-	wxString str=ReadString(name, "");
-	if (str=="") {return defvalue;}
-
-	str.ToDouble(&defvalue);
-	return defvalue;
 }
 
 wxString THISCLASS::ReadProperty(const wxString &name, const wxString &defvalue) {
@@ -91,10 +67,14 @@ wxString THISCLASS::ReadProperty(const wxString &childname, const wxString &name
 	return defvalue;
 }
 
-bool THISCLASS::Bool() {
+void THISCLASS::WriteContent(const wxString &value) {
+	if (mReadOnly) {return;}
+	if (! mSelectedNode) {return;}
+	wxXmlNode *newnode=new wxXmlNode(0, wxXML_TEXT_NODE, "", value);
+	mSelectedNode->AddChild(newnode);
 }
 
-void THISCLASS::WriteString(const wxString &name, const wxString &value) {
+void THISCLASS::WriteContent(const wxString &childname, const wxString &value) {
 	if (mReadOnly) {return;}
 	wxXmlNode *childnode=GetChildNode(name);
 	if (! childnode) {return;}
@@ -102,18 +82,58 @@ void THISCLASS::WriteString(const wxString &name, const wxString &value) {
 	childnode->AddChild(newnode);
 }
 
-void THISCLASS::WriteBool(const wxString &name, bool value) {
+void THISCLASS::WriteProperty(const wxString &name, const wxString &value) {
+	if (mReadOnly) {return;}
+	if (! mSelectedNode) {return;}
+	mSelectedNode->AddProperty(name, value);
+}
+
+void THISCLASS::WriteProperty(const wxString &childname, const wxString &name, const wxString &value) {
+	if (mReadOnly) {return;}
+	wxXmlNode *childnode=GetChildNode(name);
+	if (! childnode) {return;}
+	childnode->AddProperty(name, value);
+}
+
+bool THISCLASS::Bool(const wxString &str, bool defvalue) {
+	if (str=="") {return defvalue;}
+
+	str.MakeLower();
+	if (str=="true") {return true;}
+	if (str=="false") {return false;}
+	long value=(defvalue ? 1 : 0);
+	str.ToLong(&value);
+	return (value!=0);
+}
+
+int THISCLASS::Int(const wxString &str, int defvalue) {
+	if (str=="") {return defvalue;}
+
+	long value=(long)defvalue;
+	str.ToLong(&value);
+	return value;
+}
+
+bool THISCLASS::Double(const wxString &str, double defvalue) {
+	if (str=="") {return defvalue;}
+
+	str.ToDouble(&defvalue);
+	return defvalue;
+}
+
+wxString THISCLASS::Bool(bool value) {
 	if (value) {
-		WriteString(name, "true");
+		return "true";
 	} else {
-		WriteString(name, "false");
+		return "false";
 	}
 }
 
-void THISCLASS::WriteInt(const wxString &name, int value) {
-	WriteString(name, wxString::Format("%d", value));
+wxString THISCLASS::Int(int value) {
+	return wxString::Format("%d", value);
 }
 
-void THISCLASS::WriteDouble(const wxString &name, double value) {
-	WriteString(name, wxString::Format("%f", value));
+wxString THISCLASS::Double(double value) {
+	return wxString::Format("%f", value);
 }
+

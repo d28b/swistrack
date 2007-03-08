@@ -5,13 +5,12 @@
 #include "Component.h"
 #include "DataStructureParticles.h"
 #include "DisplayImageParticles.h"
+#include "ObjectList.h"
 
 //! A component that detects blobs that have a certain size and stores them as particles in DataStructureParticle.
 class ComponentIDReaderRing: public Component {
 
 public:
-	typedef std::list<int> tCodeList;
-
 	//! Constructor.
 	ComponentIDReaderRing(SwisTrackCore *stc);
 	//! Destructor.
@@ -26,10 +25,20 @@ public:
 	Component *Create() {return new ComponentIDReaderRing(mCore);}
 
 private:
-	double mRingRadiusInner;	//!< (configuration) The inner radius of the ring.
-	double mRingRadiusOuter;	//!< (configuration) The outer radius of the ring.
-	int mChips;					//!< (configuration) The number of chips.
-	tCodeList mCodes;			//!< (configuration) The maximum number of blobs that are to detect.
+	float mRingRadiusInner;	//!< (configuration) The squared inner radius of the ring.
+	float mRingRadiusOuter;	//!< (configuration) The squared outer radius of the ring.
+	ObjectList *mObjectList;	//!< The object list.
+
+	// Precalculated values
+	float mRingRadiusInner2;	//!< The squared inner radius of the ring.
+	float mRingRadiusOuter2;	//!< The squared outer radius of the ring.
+	int mRingValuesMax;			//!< The allocated number of values for the two arrays mAngles and mValues.
+	float *mAngles;				//!< The angles of all pixel on the ring.
+	int *mValues;				//!< The values of all pixel on the ring.
+
+	CvPoint mOffset;			//!< The offset from the blob center to the pattern origin.
+	CvSize mSize;				//!< The size of the pattern.
+	float *mDistances;			//!< The distances of each pixel.
 
 	DisplayImageParticles mDisplayImageOutput;				//!< The DisplayImage showing the last acquired image and the particles.
 
