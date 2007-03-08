@@ -1,18 +1,17 @@
-<particlelist>
-	<particles>
-		<particle id="1">
+<objectlist>
+	<objects>
+		<object id="1">
 			<ip>192.168.141.201</ip>
 			<barcode>
 				<chips direction="counter-clockwise">00010100101010</chips>
 				<angle>0</angle>
 			</barcode>
-		</particle>
-		<particle id="2">
+		</object>
+		<object id="2">
 			<barcode>
-				<length>14</length>
-				<id>5323</id>
+				<chips length="14" symbol="5323" />
 				<angle>0</angle>
 			</barcode>
-		</particle>
-	</particles>
-</particlelist>
+		</object>
+	</objects>
+</objectlist>
