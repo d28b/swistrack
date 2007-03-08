@@ -1,0 +1,18 @@
+<particlelist>
+	<particles>
+		<particle id="1">
+			<ip>192.168.141.201</ip>
+			<barcode>
+				<chips direction="counter-clockwise">00010100101010</chips>
+				<angle>0</angle>
+			</barcode>
+		</particle>
+		<particle id="2">
+			<barcode>
+				<length>14</length>
+				<id>5323</id>
+				<angle>0</angle>
+			</barcode>
+		</particle>
+	</particles>
+</particlelist>

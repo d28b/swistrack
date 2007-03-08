@@ -70,6 +70,30 @@ double THISCLASS::ReadDouble(const wxString &name, double defvalue) {
 	return defvalue;
 }
 
+wxString THISCLASS::ReadProperty(const wxString &name, const wxString &defvalue) {
+	if (! mSelectedNode) {return defvalue;}
+	wxXmlProperty *prop=mSelectedNode->GetProperties();
+	while (prop) {
+		if (prop->GetName()==name) {return prop->GetValue();}
+		prop=prop->GetNext();
+	}
+	return defvalue;
+}
+
+wxString THISCLASS::ReadProperty(const wxString &childname, const wxString &name, const wxString &defvalue) {
+	wxXmlNode *node=GetChildNode(childname);
+	if (! node) {return defvalue;}
+	wxXmlProperty *prop=node->GetProperties();
+	while (prop) {
+		if (prop->GetName()==name) {return prop->GetValue();}
+		prop=prop->GetNext();
+	}
+	return defvalue;
+}
+
+bool THISCLASS::Bool() {
+}
+
 void THISCLASS::WriteString(const wxString &name, const wxString &value) {
 	if (mReadOnly) {return;}
 	wxXmlNode *childnode=GetChildNode(name);
