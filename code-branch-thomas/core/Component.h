@@ -28,6 +28,7 @@ public:
 	//! Data structure list type.
 	typedef std::list<DataStructure*> tDataStructureList;
 
+	long mStepDuration;				//!< The duration of the last step in milliseconds. This information is filled in by SwisTrackCore.
 	tStatusItemList mStatus;		//!< The status item list (mostly list of errors).
 	bool mStatusHasError;			//!< Whether there is an error in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)
 	bool mStatusHasWarning;			//!< Whether there is a warning in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)

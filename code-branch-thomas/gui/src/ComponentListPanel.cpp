@@ -43,7 +43,9 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 
 	// Add column for error messages
 	mColumnMessages=col;
-	mList->InsertColumn(col++, "Messages", wxLIST_FORMAT_LEFT, 200);
+	mList->InsertColumn(col++, "Messages", wxLIST_FORMAT_LEFT, 400);
+	mColumnStepDuration=col;
+	mList->InsertColumn(col++, "Step duration", wxLIST_FORMAT_LEFT, 100);
 
 	// Create Buttons
 	wxStaticLine *line=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 2), wxLI_HORIZONTAL);
@@ -135,7 +137,7 @@ void THISCLASS::Update() {
 
 	// Set optimal column widths of all DataStructure columns
 	int cc=mList->GetColumnCount();
-	for (int i=1; i<cc-1; i++) {
+	for (int i=1; i<mColumnMessages-1; i++) {
 		mList->SetColumnWidth(i, wxLIST_AUTOSIZE);
 	}
 
@@ -193,6 +195,13 @@ void THISCLASS::UpdateStatus() {
 			li.SetText("");
 			mList->SetItem(li);
 		}
+
+		// Time
+		wxListItem li;
+		li.SetId(item);
+		li.SetColumn(mColumnStepDuration);
+		li.SetText(wxString::Format("%d ms", c->mStepDuration));
+		mList->SetItem(li);
 	}
 }
 

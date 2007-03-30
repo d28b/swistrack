@@ -3,15 +3,17 @@
 
 #include <fstream>
 #include <algorithm>
+#include <sstream>
+#include <wx/log.h>
 
 THISCLASS::ObjectList(const std::string &filename):
 		ConfigurationXML(0, true),
-		mIDs(), mLastRobotID(0) {
+		mObjects(), mError(""), mFileName(filename) {
 
 	// Read the file
 	wxLogNull log;
 	wxXmlDocument document;
-	isopen=document.Load(filename);
+	bool isopen=document.Load(filename);
 	if (! isopen) {
 		mError="Could not open or parse the XML file!";
 		return;
@@ -19,22 +21,22 @@ THISCLASS::ObjectList(const std::string &filename):
 
 	// Select the root element and check its name
 	SetRootNode(document.GetRoot());
-	if (GetRootNode()->GetName() != "particlelist") {
-		mError="The XML root node must be called 'particlelist'!";
+	if (GetRootNode()->GetName() != "objectlist") {
+		mError="The XML root node must be called 'objectlist'!";
 		return;
 	}
 
 	// Enumerate all robots in the list
-	SelectChildNode("particles");
+	SelectChildNode("objects");
 	if (! mSelectedNode) {
-		mError="No node 'particles' found!";
+		mError="No node 'objects' found!";
 		return;
 	}
 
 	wxXmlNode *node=mSelectedNode->GetChildren();
 	while (node) {
-		if (node->GetName()=="particle") {
-			ReadParticle(node);
+		if (node->GetName()=="object") {
+			ReadObject(node);
 			if (mError!="") {return;}
 		}
 		node=node->GetNext();
@@ -44,28 +46,29 @@ THISCLASS::ObjectList(const std::string &filename):
 THISCLASS::~ObjectList() {
 }
 
-void THISCLASS::ReadParticle(wxXmlNode *node) {
+void THISCLASS::ReadObject(wxXmlNode *node) {
 	mSelectedNode=node;
-	SelectChildNode("barcode");
-	if (! mSelectedNode) {return;}
 
 	// Create id
 	tObject object;
-	object.id=Int(ReadProperty("id"), 0);
-	object.angle=(float)Double(ReadContent("angle"), 0);
+	object.objectid=Int(ReadProperty("id"), 0);
+	SelectChildNode("barcode");
+	if (! mSelectedNode) {return;}
+	object.angle=(float)Double(ReadChildContent("angle"), 0);
 
 	// Read chips
-	std::string chips=ReadContent("chips", "").str();
-	std::string chipsdirection=ReadProperty("chips", "direction", "").str();
-	int length=Int(ReadProperty("chips", "length"), 0);
-	int symbol=Int(ReadProperty("chips", "symbol"), 0);
+	std::string chips=ReadChildContent("chips", "").c_str();
+	std::string chipsdirection=ReadChildProperty("chips", "direction", "").c_str();
+	int length=Int(ReadChildProperty("chips", "length"), 0);
+	int symbol=Int(ReadChildProperty("chips", "symbol"), 0);
 
 	// Add the chips given by length and symbol
 	while (length>0) {
-		object.chips.push_front((chips & 1 ? 1 : -1));
+		object.chips.push_back((symbol & 1 ? 1 : -1));
 		symbol=(symbol >> 1);
 		length--;
 	}
+	std::reverse(object.chips.begin(), object.chips.end());
 
 	// Add the chips given by the 01-string
 	std::string::iterator it=chips.begin();
@@ -79,16 +82,46 @@ void THISCLASS::ReadParticle(wxXmlNode *node) {
 	}
 
 	// If empty, return with error
-	if (object.chips.isempty()) {
+	if (object.chips.empty()) {
 		std::ostringstream oss;
-		oss << "Invalid barcode for object id " << object.id << "!";
+		oss << "Invalid barcode for object id " << object.objectid << "!";
 		mError=oss.str();
 		return;
 	}
 
 	// Reverse the chips if necessary
-	if (direction=="counter-clockwise") {
+	if (chipsdirection=="counter-clockwise") {
 		std::reverse(object.chips.begin(), object.chips.end());
+	}
+
+	// Center the chips around the mean
+	float sum=0;
+	tChipVector::iterator itc=object.chips.begin();
+	while (itc!=object.chips.end()) {
+		sum+=*itc;
+		itc++;
+	}
+	float mean=sum/(float)(object.chips.size());
+	itc=object.chips.begin();
+	while (itc!=object.chips.end()) {
+		*itc-=mean;
+		itc++;
+	}
+
+	// Normalize the variance
+	float varsum=0;
+	int varcc=-1;
+	itc=object.chips.begin();
+	while (itc!=object.chips.end()) {
+		varsum+=(*itc)*(*itc);
+		varcc++;
+		itc++;
+	}
+	float stddev=sqrt(varsum/varcc);
+	itc=object.chips.begin();
+	while (itc!=object.chips.end()) {
+		*itc/=stddev;
+		itc++;
 	}
 
 	// Add the object

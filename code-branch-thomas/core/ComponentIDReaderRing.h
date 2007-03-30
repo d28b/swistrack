@@ -33,8 +33,12 @@ private:
 	float mRingRadiusInner2;	//!< The squared inner radius of the ring.
 	float mRingRadiusOuter2;	//!< The squared outer radius of the ring.
 	int mRingValuesMax;			//!< The allocated number of values for the two arrays mAngles and mValues.
-	float *mAngles;				//!< The angles of all pixel on the ring.
-	int *mValues;				//!< The values of all pixel on the ring.
+	int mRingCount;				//!< Counts how many ring values have been filled in.
+	float *mRingAngles;			//!< The angles of all pixel on the ring.
+	int *mRingValues;			//!< The values of all pixel on the ring.
+	int mCodeLength;			//!< The length of the code.
+	float *mBinValues;			//!< A bin for each chip of the code.
+	int *mBinCounts;			//!< A counter for each bin.
 
 	CvPoint mOffset;			//!< The offset from the blob center to the pattern origin.
 	CvSize mSize;				//!< The size of the pattern.
@@ -42,6 +46,8 @@ private:
 
 	DisplayImageParticles mDisplayImageOutput;				//!< The DisplayImage showing the last acquired image and the particles.
 
+	// Adds all rings values to the corresponding bins.
+	void RingToBins(float shift);
 };
 
 #endif

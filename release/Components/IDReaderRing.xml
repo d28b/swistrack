@@ -16,7 +16,7 @@
 			<slider>true</slider>
 		</parameter>
 		<parameter type="double">
-			<name>RingRadiusInsser</name>
+			<name>RingRadiusInner</name>
 			<label>Inner radius</label>
 			<min>1</min>
 			<max>50</max>
@@ -24,8 +24,8 @@
 			<unit>pixels</unit>
 		</parameter>
 		<parameter type="file">
-			<name>CodeFile</name>
-			<label>Code</label>
+			<name>ObjectListFileName</name>
+			<label>Objects and codes</label>
 			<default></default>
 		</parameter>
 	</configuration>

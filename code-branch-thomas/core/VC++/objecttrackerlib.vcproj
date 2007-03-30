@@ -353,6 +353,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ObjectList.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ObjectList.h"
+					>
+				</File>
+				<File
 					RelativePath="..\SimulationParticles.cpp"
 					>
 				</File>
@@ -465,30 +473,6 @@
 		<Filter
 			Name="Main"
 			>
-			<File
-				RelativePath="..\ConfigurationReaderXML.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\ConfigurationReaderXML.h"
-				>
-			</File>
-			<File
-				RelativePath="..\ConfigurationWriterXML.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\ConfigurationWriterXML.h"
-				>
-			</File>
-			<File
-				RelativePath="..\ConfigurationXML.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\ConfigurationXML.h"
-				>
-			</File>
 			<File
 				RelativePath="..\ErrorList.cpp"
 				>
@@ -615,6 +599,34 @@
 			</File>
 			<File
 				RelativePath="..\DisplayImageSubscriberInterface.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Configuration"
+			>
+			<File
+				RelativePath="..\ConfigurationReaderXML.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ConfigurationReaderXML.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ConfigurationWriterXML.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ConfigurationWriterXML.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ConfigurationXML.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ConfigurationXML.h"
 				>
 			</File>
 		</Filter>

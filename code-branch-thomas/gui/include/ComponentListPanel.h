@@ -71,6 +71,7 @@ private:
 
 	wxListCtrl *mList;			//!< The corresponding GUI widget.
 	int mColumnMessages;		//!< The column number of the messages.
+	int mColumnStepDuration;		//!< The column number of the step duration.
 	wxBitmapButton *mButtonAdd;		//!< The corresponding GUI widget.
 	wxBitmapButton *mButtonRemove;	//!< The corresponding GUI widget.
 	wxBitmapButton *mButtonUp;		//!< The corresponding GUI widget.

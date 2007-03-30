@@ -3,15 +3,13 @@
 
 #include <string>
 #include <list>
-#include <fstream>
-#include "DataStructureParticles.h"
-#include "CommunicationNMEAInterface.h"
+#include "ConfigurationXML.h"
 
 //! Reads and holds a simulation of particles.
 class ObjectList: public ConfigurationXML {
 
 public:
-	typedef std::vector<int> tChipVector;
+	typedef std::vector<float> tChipVector;
 	//! Information about one object.
 	typedef struct {
 		int objectid;			//!< The object id.
@@ -21,7 +19,6 @@ public:
 	//! A list of objects type.
 	typedef std::list<tObject> tObjectList;
 
-	std::string mFileName;		//!< The name of the currently open file.
 	tObjectList mObjects;		//!< The objects.
 	std::string mError;			//!< The first error that occured.
 
@@ -32,9 +29,12 @@ public:
 
 	//! Returns the file name of the current simulation.
 	std::string GetFileName() {return mFileName;}
-	//! Returns true if the file could be opened.
-	bool IsOpen() {return mFile->is_open();}
 
+private:
+	std::string mFileName;		//!< The name of the currently open file.
+
+	//! Reads one object from the file.
+	void ReadObject(wxXmlNode *node);
 };
 
 #endif

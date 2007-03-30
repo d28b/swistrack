@@ -8,6 +8,7 @@ class Particle {
 
 public:
 	int mID;				//!< ID of the particle, or of its associated track.
+	float mIDCovariance;	//!< The covariance value of the ID detection algorithm.
 	CvPoint2D32f mCenter;	//!< Particle center.
 	float mOrientation;		//!< The orientation of the particle.
 	double mArea;			//!< Particle area.

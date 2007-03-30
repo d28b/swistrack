@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <algorithm>
+#include <wx/stopwatch.h>
 #include "ComponentInputCamera1394.h"
 #include "ComponentInputCameraUSB.h"
 #include "ComponentInputCameraGBit.h"
@@ -174,7 +175,9 @@ bool THISCLASS::Step() {
 	while (it!=mDeployedComponents.end()) {
 		if (! (*it)->mStarted) {break;}
 		(*it)->ClearStatus();
+		wxStopWatch sw;
 		(*it)->OnStep();
+		(*it)->mStepDuration=sw.Time();
 		if ((*it)->mStatusHasError) {break;}
 		Component::tDisplayImageList::iterator itdi=(*it)->mDisplayImages.begin();
 		while (itdi!=(*it)->mDisplayImages.end()) {

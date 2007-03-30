@@ -40,7 +40,7 @@ wxString THISCLASS::ReadContent(const wxString &defvalue) {
 	return mSelectedNode->GetNodeContent();
 }
 
-wxString THISCLASS::ReadContent(const wxString &childname, const wxString &defvalue) {
+wxString THISCLASS::ReadChildContent(const wxString &childname, const wxString &defvalue) {
 	wxXmlNode *node=GetChildNode(childname);
 	if (! node) {return defvalue;}
 	return node->GetNodeContent();
@@ -56,7 +56,7 @@ wxString THISCLASS::ReadProperty(const wxString &name, const wxString &defvalue)
 	return defvalue;
 }
 
-wxString THISCLASS::ReadProperty(const wxString &childname, const wxString &name, const wxString &defvalue) {
+wxString THISCLASS::ReadChildProperty(const wxString &childname, const wxString &name, const wxString &defvalue) {
 	wxXmlNode *node=GetChildNode(childname);
 	if (! node) {return defvalue;}
 	wxXmlProperty *prop=node->GetProperties();
@@ -74,9 +74,9 @@ void THISCLASS::WriteContent(const wxString &value) {
 	mSelectedNode->AddChild(newnode);
 }
 
-void THISCLASS::WriteContent(const wxString &childname, const wxString &value) {
+void THISCLASS::WriteChildContent(const wxString &childname, const wxString &value) {
 	if (mReadOnly) {return;}
-	wxXmlNode *childnode=GetChildNode(name);
+	wxXmlNode *childnode=GetChildNode(childname);
 	if (! childnode) {return;}
 	wxXmlNode *newnode=new wxXmlNode(0, wxXML_TEXT_NODE, "", value);
 	childnode->AddChild(newnode);
@@ -88,9 +88,9 @@ void THISCLASS::WriteProperty(const wxString &name, const wxString &value) {
 	mSelectedNode->AddProperty(name, value);
 }
 
-void THISCLASS::WriteProperty(const wxString &childname, const wxString &name, const wxString &value) {
+void THISCLASS::WriteChildProperty(const wxString &childname, const wxString &name, const wxString &value) {
 	if (mReadOnly) {return;}
-	wxXmlNode *childnode=GetChildNode(name);
+	wxXmlNode *childnode=GetChildNode(childname);
 	if (! childnode) {return;}
 	childnode->AddProperty(name, value);
 }
@@ -98,9 +98,9 @@ void THISCLASS::WriteProperty(const wxString &childname, const wxString &name, c
 bool THISCLASS::Bool(const wxString &str, bool defvalue) {
 	if (str=="") {return defvalue;}
 
-	str.MakeLower();
-	if (str=="true") {return true;}
-	if (str=="false") {return false;}
+	wxString strlc=str.Lower();
+	if (strlc=="true") {return true;}
+	if (strlc=="false") {return false;}
 	long value=(defvalue ? 1 : 0);
 	str.ToLong(&value);
 	return (value!=0);
@@ -114,7 +114,7 @@ int THISCLASS::Int(const wxString &str, int defvalue) {
 	return value;
 }
 
-bool THISCLASS::Double(const wxString &str, double defvalue) {
+double THISCLASS::Double(const wxString &str, double defvalue) {
 	if (str=="") {return defvalue;}
 
 	str.ToDouble(&defvalue);

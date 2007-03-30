@@ -5,6 +5,7 @@ class SwisTrackCoreInterface;
 
 #include <string>
 #include "DisplayImage.h"
+#include "Component.h"
 
 //! A class defining the events of SwisTrackCore.
 class SwisTrackCoreInterface {

@@ -3,6 +3,8 @@
 
 #include <sstream>
 #include <highgui.h>
+#include <cmath>
+#define PI (3.14159265358979)
 
 THISCLASS::DisplayImageParticles(const std::string &name, const std::string &displayname):
 		DisplayImage(name, displayname),
@@ -43,8 +45,12 @@ IplImage *THISCLASS::CreateImage(int maxwidth, int maxheight) {
 		int y=(int)floor(it->mCenter.y*scaling+0.5);
 		cvRectangle(img, cvPoint(x-2, y-2), cvPoint(x+2, y+2), cvScalar(192, 0, 0), 1);
 
+		float c=cosf(it->mOrientation)*20+(float)0.5;
+		float s=sinf(it->mOrientation)*20+(float)0.5;
+		cvLine(img, cvPoint(x, y), cvPoint(x+(int)floorf(c), y+(int)floorf(s)), cvScalar(192, 0, 0), 1);
+
 		std::ostringstream oss;
-		oss << "(" << it->mID << ")";
+		oss << it->mID << " (" << it->mOrientation/PI*180. << ") [" << it->mIDCovariance << "]";
 		cvPutText(img, oss.str().c_str(), cvPoint(x+12, y+10), &font, cvScalar(255, 0, 0));
 		it++;
 	}
