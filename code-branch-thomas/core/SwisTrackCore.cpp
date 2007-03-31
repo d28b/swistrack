@@ -3,7 +3,6 @@
 
 #include <sstream>
 #include <algorithm>
-#include <wx/stopwatch.h>
 #include "ComponentInputCamera1394.h"
 #include "ComponentInputCameraUSB.h"
 #include "ComponentInputCameraGBit.h"
@@ -170,20 +169,36 @@ bool THISCLASS::Step() {
 		iti++;
 	}
 
+	// Initialize performance measurements
+	LARGE_INTEGER performancestart;
+	LARGE_INTEGER performanceend;
+	LARGE_INTEGER performancefrequency;
+	QueryPerformanceCounter(&performancestart);
+	QueryPerformanceFrequency(&performancefrequency);
+
 	// Run until first error, or until the end (all started components)
 	tComponentList::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
 		if (! (*it)->mStarted) {break;}
+
+		// Execute the step
 		(*it)->ClearStatus();
-		wxStopWatch sw;
 		(*it)->OnStep();
-		(*it)->mStepDuration=sw.Time();
+
+		// Performance measurement
+		QueryPerformanceCounter(&performanceend);
+		unsigned long diff=performanceend.LowPart-performancestart.LowPart;
+		(*it)->mStepDuration=(double)(diff)/(double)performancefrequency.LowPart;
+		performancestart=performanceend;
+
+		// Error handling
 		if ((*it)->mStatusHasError) {break;}
 		Component::tDisplayImageList::iterator itdi=(*it)->mDisplayImages.begin();
 		while (itdi!=(*it)->mDisplayImages.end()) {
 			(*itdi)->OnChanged();
 			itdi++;
 		}
+
 		it++;
 	}
 

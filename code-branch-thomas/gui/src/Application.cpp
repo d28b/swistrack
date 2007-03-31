@@ -23,7 +23,7 @@ bool THISCLASS::OnInit() {
 	wxInitAllImageHandlers();
 
 	// Create the main application window
-	mSwisTrack = new SwisTrack(_T("SwisTrack"), wxPoint(-1, -1), wxSize(800, 600));
+	mSwisTrack = new SwisTrack(_T("SwisTrack"), wxPoint(-1, -1), wxSize(1024, 700));
 
 	// Open a file
 	if (argc>1) {

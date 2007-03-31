@@ -33,6 +33,12 @@ void THISCLASS::OnStep() {
 		// We convert the input image in black and white
 		if (inputimage->nChannels==3) {
 			// Already in BGR
+			//PrepareOutputImage(inputimage);
+			//cvSplit(inputimage, mOutputImage0, mOutputImage1, mOutputImage2, NULL);
+			//cvMerge(mOutputImage2, mOutputImage1, mOutputImage0, NULL, inputimage);
+			//mCore->mDataStructureImageBGR.mImage=inputimage;
+
+			cvFlip(inputimage, NULL, 0);
 			mCore->mDataStructureImageBGR.mImage=inputimage;
 		} else if (inputimage->nChannels==2) {
 			// Packed YUV422

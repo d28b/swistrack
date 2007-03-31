@@ -200,7 +200,7 @@ void THISCLASS::UpdateStatus() {
 		wxListItem li;
 		li.SetId(item);
 		li.SetColumn(mColumnStepDuration);
-		li.SetText(wxString::Format("%d ms", c->mStepDuration));
+		li.SetText(wxString::Format("%0.3f ms", c->mStepDuration*1000.));
 		mList->SetItem(li);
 	}
 }
