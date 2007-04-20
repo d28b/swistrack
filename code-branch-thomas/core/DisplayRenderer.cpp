@@ -14,33 +14,52 @@ THISCLASS::DisplayRenderer(Display *display): mDisplay(0) {
 THISCLASS::~DisplayRenderer() {
 }
 
-void THISCLASS::SetImage(IplImage *img) {
-	if (! mDisplay) {return;}
+CvSize THISCLASS::GetSize(double scalingfactor) {
+	double w=(double)(mImage->width)*scalingfactor;
+	double h=(double)(mImage->height)*scalingfactor;
+	return cvSize((int)floor(w+0.5), (int)floor(h+0.5));
+}
 
-	// Delete the old image
-	cvReleaseImage(&mImage);
-
-	// Set the empty image if necessary
-	if (! img) {
-		mImage=0;
-		return;
+IplImage *THISCLASS::GetImage(double scalingfactor) {
+	// Return the cached image if possible
+	if (mCachedViewScalingFactor==scalingfactor) {
+		return mCachedViewImage;
 	}
 
-	// Copy and convert the image
-	if (img->nChannels==3) {
-		mImage=cvCreateImage(cvSize(img->width, img->height), img->depth, 3);
-		cvCopy(img, mImage);
-	} else if (img->nChannels==1) {
-		mImage=cvCreateImage(cvSize(img->width, img->height), img->depth, 3);
-		cvCvtColor(mImage, mImage, CV_GRAY2BGR);
+	// Delete the old cached view image
+	cvReleaseImage(&mCachedViewImage);
+
+	// Create a resized copy of the image
+	CvSize size=CalculateSize(scalingfactor);
+	mCachedViewImage=cvCreateImage(size, IPL_DEPTH_8U, mImage->nChannels);
+	if (mImage) {
+		cvResize(mImage, mCachedViewImage);
 	} else {
-		mImageError="Cannot display image: wrong format.";
-		mImage=0;
+		memset(mCachedViewImage->imageData, 255, mCachedViewImage->imageSize);
 	}
-}
 
-void THISCLASS::SetMask(IplImage *img) {
-}
+	// Initialize font
+	if (mParticles) {
+		CvFont font;
+		cvInitFont(&font, CV_FONT_HERSHEY_SIMPLEX, 0.4, 0.4);
 
-void THISCLASS::SetParticles(DataStructureParticles::ParticleVector *pv) {
+		// Draw particles
+		DataStructureParticles::tParticleVector::iterator it=mParticles->begin();
+		while (it!=mParticles->end()) {
+			int x=(int)floor(it->mCenter.x*scalingfactor+0.5);
+			int y=(int)floor(it->mCenter.y*scalingfactor+0.5);
+			cvRectangle(mCachedViewImage, cvPoint(x-2, y-2), cvPoint(x+2, y+2), cvScalar(192, 0, 0), 1);
+
+			float c=cosf(it->mOrientation)*20+(float)0.5;
+			float s=sinf(it->mOrientation)*20+(float)0.5;
+			cvLine(mCachedViewImage, cvPoint(x, y), cvPoint(x+(int)floorf(c), y+(int)floorf(s)), cvScalar(192, 0, 0), 1);
+
+			std::ostringstream oss;
+			oss << it->mID << " (" << it->mOrientation/PI*180. << ") [" << it->mIDCovariance << "]";
+			cvPutText(mCachedViewImage, oss.str().c_str(), cvPoint(x+12, y+10), &font, cvScalar(255, 0, 0));
+			it++;
+		}
+	}
+
+	return mCachedViewImage;
 }

@@ -578,6 +578,22 @@
 				>
 			</File>
 			<File
+				RelativePath="..\DisplayEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\DisplayEditor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\DisplayRenderer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\DisplayRenderer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\DisplaySubscriberInterface.cpp"
 				>
 			</File>

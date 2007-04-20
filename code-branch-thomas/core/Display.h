@@ -64,8 +64,6 @@ public:
 	CvSize CalculateMaxSize(double ratio, int maxwidth, int maxheight);
 
 protected:
-	double mCachedViewScalingFactor;	//!< The scaling factor of the last created image.
-	IplImage *mCachedViewImage;			//!< The last created image.
 
 	//! This is called by SwisTrackCore when the subscribers shall be notified. These subscribers will call CreateImage() to fetch the image.
 	void OnChanged();
