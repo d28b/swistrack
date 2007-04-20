@@ -11,18 +11,26 @@ public:
 	Display mDisplay;
 
 	//! Constructor.
-	DisplayRenderer(Display *display=0);
+	DisplayRenderer(Display *display=0, double scalingfactor=1);
 	//! Destructor.
 	~DisplayRenderer();
 
+	//! Sets a new scaling factor. This will cause image repaining.
+	bool IsValid() {return (mDisplay!=null);}
+
+	//! Sets a new scaling factor. This will cause image repaining.
+	void SetScalingFactor(double scalingfactor);
+	//! Returns the scaling factor.
+	double GetScalingFactor() {return mScalingFactor;}
+
 	//! Creates (if necessary) and returns the image.
 	IplImage *GetImage();
-	//! Returns the size.
+	//! Returns the total size of the rendered image.
 	CvSize GetSize();
 
 private:
-	double mCachedViewScalingFactor;	//!< The scaling factor of the last created image.
-	IplImage *mCachedViewImage;			//!< The last created image.
+	double mScalingFactor;	//!< The scaling factor.
+	IplImage *mImage;		//!< The cached image.
 
 };
 

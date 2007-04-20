@@ -83,6 +83,9 @@ public:
 	//! Returns a component by name.
 	DisplayImage *GetDisplayImageByName(const std::string &name);
 
+	//! Returns the SwisTrackCore object.
+	SwisTrackCore *GetSwisTrackCore() {return mCore;}
+
 protected:
 	SwisTrackCore *mCore; 				//!< The associated SwisTrackCore object.
 	tConfigurationMap mConfiguration;	//!< The configuration values.

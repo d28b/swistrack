@@ -23,6 +23,11 @@ public:
 	//! Sets the particles.
 	void SetParticles(DataStructureParticles::ParticleVector *pv);
 
+	//! Sets the size of the display.
+	void SetSize(CvSize size);
+	//! Tries to determine the size automatically.
+	bool SetSizeAuto();
+
 };
 
 #endif
