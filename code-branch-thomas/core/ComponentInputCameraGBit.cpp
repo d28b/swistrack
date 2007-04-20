@@ -190,11 +190,11 @@ void THISCLASS::OnStep() {
 	mCore->mDataStructureInput.mImage=outputimage;
 	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=outputimage;
-	std::ostringstream oss;
-	oss << "Frame " << mFrameNumber << ", " << outputimage->width << "x" << outputimage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Let the Display know about our image
+	if (mDisplayOutput.HasSubscribers()) {
+		mDisplayOutput.SetImage(outputimage);
+		mDisplayOutput.SetFrameNumber(mFrameNumber);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

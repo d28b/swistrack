@@ -6,14 +6,14 @@
 THISCLASS::ComponentConvertToGray(SwisTrackCore *stc):
 		Component(stc, "ConvertToGray"),
 		mOutputImage(0),
-		mDisplayImageOutput("Output", "After conversion to grayscale") {
+		mDisplayOutput("Output", "After conversion to grayscale") {
 
 	// Data structure relations
 	mDisplayName="Conversion to Grayscale";
 	mCategory=&(mCore->mCategoryInputConversion);
 	AddDataStructureRead(&(mCore->mDataStructureInput));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentConvertToGray() {
@@ -61,10 +61,10 @@ void THISCLASS::OnStep() {
 	}
 
 	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mCore->mDataStructureImageGray.mImage;
-	std::ostringstream oss;
-	oss << "Grayscale image, " << mDisplayImageOutput.mImage->width << "x" << mDisplayImageOutput.mImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	if (mDisplayOutput.IsActive()) {
+		DisplayConstructor dc(&mDisplayOutput);
+		dc.SetImage(mCore->mDataStructureImageGray.mImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

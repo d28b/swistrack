@@ -23,8 +23,11 @@ class Canvas: public wxControl {
 
 public:
 	CanvasPanel* mCanvasPanel;	//! The associated CanvasPanel.
-	bool mFlipVertically;		//! Whether the image should be flipped vertically (TODO not implemented).
-	bool mFlipHorizontally;		//! Whether the image should be flipped horizontally (TODO not implemented).
+	bool mViewFlipVertically;	//! Whether the image should be flipped vertically (TODO not implemented).
+	bool mViewFlipHorizontally;	//! Whether the image should be flipped horizontally (TODO not implemented).
+	wxSize mViewSize;			//! The maximal size that the canvas should have.
+	float mViewScalingFactor;	//! The scaling factor.
+	wxPoint mViewOffset;		//! The offset.
 
 	// Constructor.
 	Canvas(CanvasPanel *cp);
@@ -38,15 +41,35 @@ public:
 
 private:
 	enum {
-		sID_SaveImageAs
+		sID_SaveViewImageAs,
+		sID_SaveOriginalImageAs,
+		sID_FlipVertically,
+		sID_FlipHorizontally,
+		sID_Zoom200,
+		sID_Zoom100,
+		sID_Zoom50,
+		sID_ZoomFit
 	};
 
 	IplImage *mImage;			//!< The current image.
-	wxString mDisplayError;	//!< The error displayed if no image can be drawn.
 	wxMenu mPopupMenu;			//!< The popup menu.
 
+	wxPoint mMoveStartPoint;	//!< The starting point when moving the image.
+
+	//! Paints the image in the canvas.
+	bool OnPaintImage(wxPaintDC &dc);
+	//! Updates the view.
+	void UpdateView();
+
 	//! The corresponding GUI event handler.
-	void OnMenuSaveImageAs(wxCommandEvent& event);
+	void OnMenuSaveViewImageAs(wxCommandEvent& event);
+	//! The corresponding GUI event handler.
+	void OnMenuSaveOriginalImageAs(wxCommandEvent& event);
+	//! The corresponding GUI event handler.
+	void OnMenuFlipVertically(wxCommandEvent& event);
+	//! The corresponding GUI event handler.
+	void OnMenuFlipHorizontally(wxCommandEvent& event);
+
 	//! Overwritten to avoid painting the background.
 	void OnEraseBackground(wxEraseEvent& event);
 	//! The corresponding GUI event handler.

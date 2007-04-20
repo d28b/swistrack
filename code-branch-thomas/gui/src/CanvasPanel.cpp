@@ -11,8 +11,8 @@ END_EVENT_TABLE()
 
 THISCLASS::CanvasPanel(wxWindow *parent, SwisTrack *st):
 		wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 100)),
-		DisplayImageSubscriberInterface(),
-		mSwisTrack(st), mUpdateRate(1), mUpdateCounter(0), mCurrentDisplayImage(0) {
+		DisplaySubscriberInterface(),
+		mSwisTrack(st), mUpdateRate(1), mUpdateCounter(0), mCurrentDisplay(0) {
 
 	SetBackgroundColour(st->GetBackgroundColour());
 
@@ -27,19 +27,19 @@ THISCLASS::CanvasPanel(wxWindow *parent, SwisTrack *st):
 	//vs->Add(mCanvas, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 0);
 	//SetSizer(vs);
 
-	SetDisplayImage(0);
+	SetDisplay(0);
 }
 
 THISCLASS::~CanvasPanel() {
-	SetDisplayImage(0);
+	SetDisplay(0);
 }
 
-void THISCLASS::SetDisplayImage(DisplayImage *di) {
+void THISCLASS::SetDisplay(Display *di) {
 	if (! di) {
-		if (mCurrentDisplayImage) {
-			mCurrentDisplayImage->Unsubscribe(this);
+		if (mCurrentDisplay) {
+			mCurrentDisplay->Unsubscribe(this);
 		}
-		mCurrentDisplayImage=0;
+		mCurrentDisplay=0;
 		mCanvasTitle->SetText("No display (maximum speed)", "");
 		mCanvasAnnotation->SetText("", "");
 		return;
@@ -48,19 +48,19 @@ void THISCLASS::SetDisplayImage(DisplayImage *di) {
 	di->Subscribe(this);
 }
 
-void THISCLASS::OnDisplayImageSubscribe(DisplayImage *di) {
-	if (mCurrentDisplayImage) {
-		mCurrentDisplayImage->Unsubscribe(this);
+void THISCLASS::OnDisplaySubscribe(Display *di) {
+	if (mCurrentDisplay) {
+		mCurrentDisplay->Unsubscribe(this);
 	}
 
 	mUpdateCounter=0;
-	mCurrentDisplayImage=di;
+	mCurrentDisplay=di;
 	mCanvasTitle->SetText(di->mDisplayName.c_str(), "");
 	mCanvasAnnotation->SetText("The image will be shown after the next step.", "");
 }
 
-void THISCLASS::OnDisplayImageChanged(DisplayImage *di) {
-	if (mCurrentDisplayImage!=di) {return;}
+void THISCLASS::OnDisplayChanged(Display *di) {
+	if (mCurrentDisplay!=di) {return;}
 
 	// Show only every mUpdateRate image
 	if (mUpdateRate==0) {return;}
@@ -70,6 +70,8 @@ void THISCLASS::OnDisplayImageChanged(DisplayImage *di) {
 
 	// Do nothing if the canvas is invisible
 	if (! mCanvas->IsShown()) {return;}
+
+	// Set the size of the canvas
 
 	// Get the new image
 	IplImage *img=di->CreateImage(mAvailableSpace.GetWidth(), mAvailableSpace.GetHeight());
@@ -83,10 +85,10 @@ void THISCLASS::OnDisplayImageChanged(DisplayImage *di) {
 	OnSize(wxSizeEvent());
 }
 
-void THISCLASS::OnDisplayImageUnsubscribe(DisplayImage *di) {
-	if (mCurrentDisplayImage!=di) {return;}
+void THISCLASS::OnDisplayUnsubscribe(Display *di) {
+	if (mCurrentDisplay!=di) {return;}
 
-	mCurrentDisplayImage=0;
+	mCurrentDisplay=0;
 	mCanvas->SetImage(0);
 	mCanvasTitle->SetText("No display (maximum speed)", "");
 	mCanvasAnnotation->SetText("", "");
@@ -102,7 +104,6 @@ void THISCLASS::OnSize(wxSizeEvent &event) {
 	titlesize.SetHeight(20);
 	wxSize annotationsize=mCanvasAnnotation->GetClientSize();
 	annotationsize.SetHeight(20);
-	IplImage *img=mCanvas->GetImage();
 
 	// Set the available space (for future images)
 	mAvailableSpace.SetWidth(size.GetWidth());
@@ -115,28 +116,18 @@ void THISCLASS::OnSize(wxSizeEvent &event) {
 		return;
 	}
 
-	// Determine the size of the image
-	int imagewidth=320;
-	int imageheight=180;
-	if (img) {
-		imagewidth=img->width;
-		imageheight=img->height;
-	}
-	if (imagewidth>mAvailableSpace.GetWidth()) {
-		imagewidth=mAvailableSpace.GetWidth();
-	}
-	if (imageheight>mAvailableSpace.GetHeight()) {
-		imageheight=mAvailableSpace.GetHeight();
-	}
+	// Get the maximal size of the canvas
+	wxSize canvassize=mCanvas->mViewSize;
+	canvassize.DecTo(mAvailableSpace);
 
 	// Layout the children
-	int x=(size.GetWidth()-imagewidth)/2;
-	int y=(size.GetHeight()-imageheight-titlesize.GetHeight()-annotationsize.GetHeight())/2;
-	mCanvasTitle->SetSize(x, y, imagewidth, titlesize.GetHeight());
+	int x=(size.GetWidth()-canvassize.GetWidth())/2;
+	int y=(size.GetHeight()-canvassize.GetHeight()-titlesize.GetHeight()-annotationsize.GetHeight())/2;
+	mCanvasTitle->SetSize(x, y, canvassize.GetWidth(), titlesize.GetHeight());
 	y+=titlesize.GetHeight();
-	mCanvas->SetSize(x, y, imagewidth, imageheight);
-	y+=imageheight;
-	mCanvasAnnotation->SetSize(x, y, imagewidth, annotationsize.GetHeight());
+	mCanvas->SetSize(x, y, canvassize.GetWidth(), canvassize.GetHeight());
+	y+=canvassize.GetHeight();
+	mCanvasAnnotation->SetSize(x, y, canvassize.GetWidth(), annotationsize.GetHeight());
 
 	mCanvasTitle->Show();
 	mCanvas->Show();

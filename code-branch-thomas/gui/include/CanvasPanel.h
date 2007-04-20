@@ -15,34 +15,34 @@ class CanvasPanel;
 #include "Canvas.h"
 #include "CanvasTitle.h"
 #include "CanvasAnnotation.h"
-#include "DisplayImageSubscriberInterface.h"
+#include "DisplaySubscriberInterface.h"
 
 /** \class CanvasPanel
 * \brief The panel containing the canvas and the annotations.
 */
-class CanvasPanel: public wxPanel, public DisplayImageSubscriberInterface {
+class CanvasPanel: public wxPanel, public DisplaySubscriberInterface {
 
 public:
 	SwisTrack *mSwisTrack;			//!< The associated SwisTrack object.
+	Display *mCurrentDisplay;				//!< The Display currently subscribed to.
 
 	//! Constructor.
 	CanvasPanel(wxWindow *parent, SwisTrack *st);
 	//! Destructor.
 	~CanvasPanel();
 
-	//! Sets a new DisplayImage object.
-	void SetDisplayImage(DisplayImage *di);
+	//! Sets a new Display object.
+	void SetDisplay(Display *di);
 
-	// DisplayImageSubscriberInterface methods
-	void OnDisplayImageSubscribe(DisplayImage *di);
-	void OnDisplayImageChanged(DisplayImage *di);
-	void OnDisplayImageUnsubscribe(DisplayImage *di);
+	// DisplaySubscriberInterface methods
+	void OnDisplaySubscribe(Display *di);
+	void OnDisplayChanged(Display *di);
+	void OnDisplayUnsubscribe(Display *di);
 
 private:
 	Canvas *mCanvas;						//!< The canvas.
 	CanvasTitle *mCanvasTitle;				//!< The title box.
 	CanvasAnnotation *mCanvasAnnotation;	//!< The annotation box.
-	DisplayImage *mCurrentDisplayImage;		//!< The DisplayImage currently subscribed to.
 
 	int mUpdateRate;				//!< The update rate (only each mUpdateRate image is displayed). If mUpdateRate==0, visualization is disabled.
 	int mUpdateCounter;				//!< The update rate counter.

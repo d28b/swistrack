@@ -9,7 +9,7 @@
 #include <pylon/TlFactory.h>
 #include <pylon/Result.h>
 #include <pylon/gige/BaslerGigECamera.h>
-#include "DisplayImageStandard.h"
+#include "Display.h"
 
 //! An input component for GBit cameras.
 class ComponentInputCameraGBit: public Component {
@@ -52,7 +52,7 @@ private:
 	int mCurrentImageIndex;								//!< The index of the last acquired image.
 	int mFrameNumber;									//!< The frame number since the component was started.
 
-	DisplayImageStandard mDisplayImageOutput;		//!< The DisplayImage showing the last acquired image.
+	Display mDisplayOutput;		//!< The Display showing the last acquired image.
 
 };
 

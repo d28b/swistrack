@@ -6,7 +6,7 @@ class DisplayImage;
 #include <string>
 #include <list>
 #include "cv.h"
-#include "DisplayImageSubscriberInterface.h"
+#include "DisplaySubscriberInterface.h"
 
 //! The base class for images that are shown in the GUI or stored as videos.
 class DisplayImage {
@@ -14,7 +14,7 @@ friend class SwisTrackCore;
 
 public:
 	//! The list type of subscribers.
-	typedef std::list<DisplayImageSubscriberInterface *> tSubscriberList;
+	typedef std::list<DisplaySubscriberInterface *> tSubscriberList;
 
 	std::string mName;			//!< The internal name.
 	std::string mDisplayName;	//!< The name displayed to the user.
@@ -28,9 +28,9 @@ public:
 	~DisplayImage();
 
 	//! Adds a subscriber.
-	void Subscribe(DisplayImageSubscriberInterface *disi);
+	void Subscribe(DisplaySubscriberInterface *disi);
 	//! Removes a subscriber.
-	void Unsubscribe(DisplayImageSubscriberInterface *disi);
+	void Unsubscribe(DisplaySubscriberInterface *disi);
 
 	//! Called to draw the display image. This function is called once for each subscriber, with the desired width/height. The returned IplImage must be released using ReleaseImage.
 	virtual IplImage *CreateImage(int maxwidth, int maxheight) = 0;

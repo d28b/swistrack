@@ -570,35 +570,19 @@
 			Name="Display"
 			>
 			<File
-				RelativePath="..\DisplayImage.cpp"
+				RelativePath="..\Display.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplayImage.h"
+				RelativePath="..\Display.h"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplayImageParticles.cpp"
+				RelativePath="..\DisplaySubscriberInterface.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplayImageParticles.h"
-				>
-			</File>
-			<File
-				RelativePath="..\DisplayImageStandard.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\DisplayImageStandard.h"
-				>
-			</File>
-			<File
-				RelativePath="..\DisplayImageSubscriberInterface.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\DisplayImageSubscriberInterface.h"
+				RelativePath="..\DisplaySubscriberInterface.h"
 				>
 			</File>
 		</Filter>
