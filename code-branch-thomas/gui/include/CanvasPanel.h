@@ -24,7 +24,7 @@ class CanvasPanel: public wxPanel, public DisplaySubscriberInterface {
 
 public:
 	SwisTrack *mSwisTrack;			//!< The associated SwisTrack object.
-	Display *mCurrentDisplay;				//!< The Display currently subscribed to.
+	Display *mCurrentDisplay;		//!< The Display currently subscribed to.
 
 	//! Constructor.
 	CanvasPanel(wxWindow *parent, SwisTrack *st);

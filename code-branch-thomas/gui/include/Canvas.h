@@ -34,10 +34,8 @@ public:
 	// Destructor.
 	~Canvas();
 
-	//! This sets a new image. Note that this class cleans up and frees old image automatically.
-	void SetImage(IplImage *img);
-	//! This returns the current image.
-	IplImage *GetImage() {return mImage;}
+	//! Paints the image in the canvas.
+	bool SetDisplay(Display *di);
 
 private:
 	enum {
@@ -53,6 +51,7 @@ private:
 
 	IplImage *mImage;			//!< The current image.
 	wxMenu mPopupMenu;			//!< The popup menu.
+	DisplayRenderer *mDisplayRenderer;	//!< The display renderer.
 
 	wxPoint mMoveStartPoint;	//!< The starting point when moving the image.
 

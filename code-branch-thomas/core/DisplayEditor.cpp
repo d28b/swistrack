@@ -103,7 +103,13 @@ void THISCLASS::SetMask(IplImage *img) {
 }
 
 void THISCLASS::SetParticles(DataStructureParticles::ParticleVector *pv) {
-	// Delete the old particles
-	delete mDisplay->mParticles;
+	// Clear the particle list
+	mDisplay->mParticles.clear();
+
+	// Return unless there are particles
+	if (! pv) {return;}
+
+	// Add a copy of all particles
+	mDisplay->mParticles.insert(pv->begin(), pv->end());
 }
 

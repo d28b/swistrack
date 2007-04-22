@@ -7,9 +7,6 @@ class DisplayRenderer;
 class DisplayRenderer {
 
 public:
-	//! The attached Display.
-	Display mDisplay;
-
 	//! Constructor.
 	DisplayRenderer(Display *display=0, double scalingfactor=1);
 	//! Destructor.
@@ -29,6 +26,7 @@ public:
 	CvSize GetSize();
 
 private:
+	Display mDisplay;		//! The attached Display.
 	double mScalingFactor;	//!< The scaling factor.
 	IplImage *mImage;		//!< The cached image.
 

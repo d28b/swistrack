@@ -25,44 +25,41 @@ void SetScalingFactor(double scalingfactor) {
 }
 
 CvSize THISCLASS::GetSize() {
-	double w=(double)(mImage->width)*scalingfactor;
-	double h=(double)(mImage->height)*scalingfactor;
+	double w=(double)(Display->mSize->width)*scalingfactor;
+	double h=(double)(Display->mSize->height)*scalingfactor;
 	return cvSize((int)floor(w+0.5), (int)floor(h+0.5));
-}
-
-CvSize THISCLASS::CalculateSize() {
-	// If we have an image, use this as reference
-	if (mDisplay->mImage) {
-		return cvSize(mDisplay->mImage->width, mDisplay->mImage->height);
-	}
-
-	// Otherwise, use the size that was fixed by
-	
 }
 
 IplImage *THISCLASS::GetImage() {
 	// Return the cached image if possible
 	if (mImage) {return mImage;}
-
-	// Calculate the dimensions of our area
-	CvSize 
 	
-	// Create a resized copy of the image
-	CvSize size=CalculateSize(scalingfactor);
-	mImage=cvCreateImage(size, IPL_DEPTH_8U, mImage->nChannels);
-	if (mImage) {
-		cvResize(mImage, mImage);
+	// Create an empty image
+	CvSize size=GetSize();
+	mImage=cvCreateImage(size, IPL_DEPTH_8U, 3);
+
+	// Add the main image
+	if (mDisplay->mImage) {
+		cvResize(mDisplay->mImage, mImage);
 	} else {
 		memset(mImage->imageData, 255, mImage->imageSize);
 	}
 
-	// Initialize font
-	if (mParticles) {
+	// Add the mask
+	if (mDisplay->mMaskImage) {
+		IplImage resizedmask=cvCreateImage(size, IPL_DEPTH_8U, 1);
+		cvResize(mDisplay->mMaskImage, resizedmask);
+		cvCopy(resizedmask, mImage, some_combination);
+	}
+	
+	// Draw the particles
+	if (mDisplay->mParticles) {
+		// Initialize font
 		CvFont font;
 		cvInitFont(&font, CV_FONT_HERSHEY_SIMPLEX, 0.4, 0.4);
 
 		// Draw particles
-		DataStructureParticles::tParticleVector::iterator it=mParticles->begin();
+		DataStructureParticles::tParticleVector::iterator it=mDisplay->mParticles->begin();
 		while (it!=mParticles->end()) {
 			int x=(int)floor(it->mCenter.x*scalingfactor+0.5);
 			int y=(int)floor(it->mCenter.y*scalingfactor+0.5);

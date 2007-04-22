@@ -37,6 +37,10 @@ THISCLASS::Canvas(CanvasPanel *cp):
 THISCLASS::~Canvas() {
 }
 
+void THISCLASS::SetDisplay(Display *di) {
+	mDisplayRenderer.SetDisplay(di);
+}
+
 void THISCLASS::OnEraseBackground(wxEraseEvent& event) {
 	// Overwrite this method to avoid drawing the background
 }
