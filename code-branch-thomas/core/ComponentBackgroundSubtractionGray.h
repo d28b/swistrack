@@ -24,7 +24,7 @@ public:
 
 private:
 	IplImage *mBackgroundImage;		//!< The background image.
-	double mBackgroundImageMean;	//!< The mean of the background image.
+	CvScalar mBackgroundImageMean;	//!< The mean of the background image.
 	bool mCorrectMean;				//!< (configuration) Whether to correct for the mean or not.
 
 	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last processed image.

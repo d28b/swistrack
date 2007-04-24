@@ -11,6 +11,7 @@
 #include "ComponentConvertToGray.h"
 #include "ComponentConvertToBGR.h"
 #include "ComponentBackgroundSubtractionGray.h"
+#include "ComponentBackgroundSubtractionColor.h"
 #include "ComponentThresholdGray.h"
 #include "ComponentBinaryDilation.h"
 #include "ComponentBinaryErosion.h"
@@ -49,6 +50,7 @@ THISCLASS::SwisTrackCore():
 	mAvailableComponents.push_back(new ComponentConvertToGray(this));
 	mAvailableComponents.push_back(new ComponentConvertToBGR(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
+	mAvailableComponents.push_back(new ComponentBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentThresholdGray(this));
 	mAvailableComponents.push_back(new ComponentBinaryDilation(this));
 	mAvailableComponents.push_back(new ComponentBinaryErosion(this));
