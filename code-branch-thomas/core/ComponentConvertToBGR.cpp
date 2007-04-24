@@ -38,7 +38,7 @@ void THISCLASS::OnStep() {
 			//cvMerge(mOutputImage2, mOutputImage1, mOutputImage0, NULL, inputimage);
 			//mCore->mDataStructureImageBGR.mImage=inputimage;
 
-			cvFlip(inputimage, NULL, 0);
+			//cvFlip(inputimage, NULL, 0);
 			mCore->mDataStructureImageBGR.mImage=inputimage;
 		} else if (inputimage->nChannels==2) {
 			// Packed YUV422
@@ -51,9 +51,10 @@ void THISCLASS::OnStep() {
 			cvCvtColor(inputimage, mOutputImage, CV_GRAY2BGR);
 			mCore->mDataStructureImageBGR.mImage=mOutputImage;
 		} else {
-			// Other cases, we take the first channel
+			// Other cases, we take the first channel and transform it in BGR
 			PrepareOutputImage(inputimage);
 			cvCvtPixToPlane(inputimage, mOutputImage, NULL, NULL, NULL);
+			cvCvtColor(mOutputImage, mOutputImage, CV_GRAY2BGR);
 			mCore->mDataStructureImageBGR.mImage=mOutputImage;
 		}
 	} catch(...) {
