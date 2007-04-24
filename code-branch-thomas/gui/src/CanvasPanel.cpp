@@ -117,7 +117,7 @@ void THISCLASS::OnSize(wxSizeEvent &event) {
 	}
 
 	// Get the maximal size of the canvas
-	wxSize canvassize=mCanvas->mViewSize;
+	wxSize canvassize=mCanvas->GetMaximumSize();
 	canvassize.DecTo(mAvailableSpace);
 
 	// Layout the children

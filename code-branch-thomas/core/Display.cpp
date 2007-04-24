@@ -45,37 +45,3 @@ void THISCLASS::OnChanged() {
 		it++;
 	}
 }
-
-
-
-// OLD
-CvSize THISCLASS::CalculateMaxSize(int srcwidth, int srcheight, int maxwidth, int maxheight) {
-	// Find out the smallest ratio such that the image fits into [maxwidth, maxheight]
-	double rw=(double)(maxwidth)/(double)(srcwidth);
-	double rh=(double)(maxheight)/(double)(srcheight);
-	double r=1;
-	if (r>rw) {r=rw;}
-	if (r>rh) {r=rh;}
-
-	// Make width a multiple of 4 (because of byte alignment)
-	double w=floor((double)srcwidth*r/4)*4;
-	double h=floor((double)srcheight/(double)srcwidth*w+0.5);
-	return cvSize((int)w, (int)h);
-}
-
-// OLD
-CvSize THISCLASS::CalculateMaxSize(double ratio, int maxwidth, int maxheight) {
-	// Find out the largest width we can use
-	double w=(double)(maxheight)*ratio;
-	if (w>maxwidth) {w=maxwidth;}
-
-	// Make width a multiple of 4 (because of byte alignment)
-	w=floor(w/4)*4;
-	double h=floor(w/ratio+0.5);
-	return cvSize((int)w, (int)h);
-}
-
-// OLD
-void THISCLASS::ReleaseImage(IplImage *image) {
-	cvReleaseImage(&image);
-}

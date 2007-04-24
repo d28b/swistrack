@@ -17,6 +17,8 @@ friend class SwisTrackCore;
 public:
 	//! The list type of subscribers.
 	typedef std::list<DisplaySubscriberInterface *> tSubscriberList;
+	//! The list type of subscribers.
+	typedef std::list<std::string> tErrorList;
 
 	// Internal display information
 	Component *mComponent;			//!< The associated component
@@ -28,7 +30,7 @@ public:
 	int mFrameNumber;				//!< The frame number.
 	std::string mAnnotation1;		//!< Annotation 1, usually displayed below the image.
 	std::string mAnnotation2;		//!< Annotation 2, usually displayed below the image.
-	std::list<std::string> mErrors;	//!< This holds more information display errors (e.g. wrong image format, ...).
+	tErrorList mErrors;				//!< This holds more information display errors (e.g. wrong image format, ...).
 
 	// Display window
 	CvPoint *mOffset;				//!< The offset at which the display starts.
@@ -36,7 +38,7 @@ public:
 
 	// Images
 	double mImagePixelSize;			//!< The size of a pixel in the image.
-	IplImage *mImage;				//!< The main image. This is always assumed to be at position (0, 0);
+	IplImage *mMainImage;			//!< The main image. This is always assumed to be at position (0, 0);
 	IplImage *mMaskImage;			//!< The mask image, if any.
 	
 	// Particles

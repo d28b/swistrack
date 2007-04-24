@@ -11,18 +11,28 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
     EVT_LEFT_DOWN(THISCLASS::OnMouseLeftDown)
 	EVT_RIGHT_DOWN(THISCLASS::OnMouseRightDown)
 	EVT_MOTION(THISCLASS::OnMouseMove)
+	EVT_MENU(sID_Zoom200, THISCLASS::OnMenuZoom)
+	EVT_MENU(sID_Zoom100, THISCLASS::OnMenuZoom)
+	EVT_MENU(sID_Zoom50, THISCLASS::OnMenuZoom)
+	EVT_MENU(sID_Zoom25, THISCLASS::OnMenuZoom)
+	EVT_MENU(sID_Zoom10, THISCLASS::OnMenuZoom)
+	EVT_MENU(sID_ZoomFit, THISCLASS::OnMenuZoom)
 	EVT_MENU(sID_SaveViewImageAs, THISCLASS::OnMenuSaveViewImageAs)
 	EVT_MENU(sID_SaveOriginalImageAs, THISCLASS::OnMenuSaveOriginalImageAs)
 END_EVENT_TABLE()
 
 THISCLASS::Canvas(CanvasPanel *cp):
-		wxControl(cp, -1), mCanvasPanel(cp), mImage(0), mPopupMenu() {
+		wxControl(cp, -1), mCanvasPanel(cp), mDisplayRenderer(0), mPopupMenu() {
 
 	SetWindowStyle(wxNO_BORDER);
 
+	// Create the popup menu
 	mPopupMenu.Append(sID_Zoom200, "Zoom: 200 %");
 	mPopupMenu.Append(sID_Zoom100, "Zoom: 100 %");
 	mPopupMenu.Append(sID_Zoom50, "Zoom: 50 %");
+	mPopupMenu.Append(sID_Zoom25, "Zoom: 25 %");
+	mPopupMenu.Append(sID_Zoom10, "Zoom: 10 %");
+	mPopupMenu.Append(sID_ZoomFit, "Fit zoom");
 	mPopupMenu.AppendSeparator();
 	mPopupMenu.AppendCheckItem(sID_FlipVertically, "Flip vertically");
 	mPopupMenu.AppendCheckItem(sID_FlipHorizontally, "Flip horizontally");
@@ -30,15 +40,29 @@ THISCLASS::Canvas(CanvasPanel *cp):
 	mPopupMenu.Append(sID_SaveViewImageAs, "Save displayed image as ...");
 	mPopupMenu.Append(sID_SaveOriginalImageAs, "Save original image as ...");
 
+	// Set non-bold font
 	wxFont f=GetFont();
 	f.SetWeight(wxNORMAL);
+	
+	// Create a DisplayRenderer with an empty display
+	mDisplayRenderer=new DisplayRenderer(0);
 }
 
 THISCLASS::~Canvas() {
 }
 
-void THISCLASS::SetDisplay(Display *di) {
-	mDisplayRenderer.SetDisplay(di);
+void THISCLASS::SetDisplay(Display *display) {
+	mDisplayRenderer.SetDisplay(display);
+	UpdateView();
+}
+
+void THISCLASS::UpdateView() {
+	mCanvas->OnSize();
+}
+
+wxSize THISCLASS::GetMaximumSize() {
+	CvSize size=mDisplayRenderer->GetSize();
+	return wxSize(size.width, size.height);
 }
 
 void THISCLASS::OnEraseBackground(wxEraseEvent& event) {
@@ -61,16 +85,12 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 }
 
 bool THISCLASS::OnPaintImage(wxPaintDC &dc) {
-	Display *di=mCanvasPanel->mCurrentDisplay;
-	if (! di) {return false;}
-	IplImage *img=di->CreateImage(mViewScalingFactor);
+	IplImage *img=mDisplayRenderer->GetImage();
 	if (! img) {return false;}
 
 	// Create an image that has the size of the DC
 	wxSize dcsize=dc.GetSize();
 	wxImage wximg(dcsize.GetWidth(), dcsize.GetHeight(), false);
-
-	// TODO: flip vertically/horizontally if requested
 
 	// Prepare the area of interest
 	int sx=mViewOffset.x;
@@ -105,25 +125,15 @@ bool THISCLASS::OnPaintImage(wxPaintDC &dc) {
 	dc.DrawBitmap(bmp, 0, 0, false);
 }
 
-void THISCLASS::UpdateView() {
-	Display *di=mCanvasPanel->mCurrentDisplay;
-	if (! di) {
-		mViewSize=wxSize(320, 180);
-	}
-
-	// Determine the size of the image at the current scaling factor
-	CvSize viewsize=di->GetSize(mScaleFactor);
-	mViewSize.SetWidth(viewsize.width);
-	mViewSize.SetHeight(viewsize.height);
-}
-
 void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 	mMoveStartPoint=event.GetPosition();
 }
 
 void THISCLASS::OnMouseRightDown(wxMouseEvent &event) {
-	mPopupMenu->Check(sID_FlipVertically, mViewFlipVertically);
-	mPopupMenu->Check(sID_FlipHorizontally, mViewFlipHorizontally);
+	mPopupMenu->Check(sID_FlipVertically, mDisplayRenderer->GetFlipVertically());
+	mPopupMenu->Check(sID_FlipHorizontally, mDisplayRenderer->GetFlipHorizontally());
+
+	mPopupMenu->Check(sID_FlipHorizontally, mDisplayRenderer->Get());
 
 	PopupMenu(&mPopupMenu);
 }
@@ -176,9 +186,26 @@ void THISCLASS::OnMenuSaveViewImageAs(wxCommandEvent& event) {
 }
 
 void THISCLASS::OnMenuFlipVertically(wxCommandEvent& event) {
-	mFlipVertically=event.GetChecked();
+	mDisplayRenderer.SetFlipVertical(event.GetChecked());
 }
 
 void THISCLASS::OnMenuFlipHorizontally(wxCommandEvent& event) {
-	mFlipHorizontally=event.GetChecked();
+	mDisplayRenderer.SetFlipHorizontal(event.GetChecked());
+}
+
+void THISCLASS::OnMenuZoom(wxCommandEvent& event) {
+	if (event.GetId()==sID_Zoom200) {
+		mDisplayRenderer.SetScalingFactor(2);
+	} else if (event.GetId()==sID_Zoom100) {
+		mDisplayRenderer.SetScalingFactor(1);
+	} else if (event.GetId()==sID_Zoom50) {
+		mDisplayRenderer.SetScalingFactor(0.5);
+	} else if (event.GetId()==sID_Zoom25) {
+		mDisplayRenderer.SetScalingFactor(0.25);
+	} else if (event.GetId()==sID_Zoom10) {
+		mDisplayRenderer.SetScalingFactor(0.1);
+	} else {
+		mDisplayRenderer.SetMaxSize(mCanvasPanel->mAvailableSpace);
+	}
+	UpdateView();
 }
