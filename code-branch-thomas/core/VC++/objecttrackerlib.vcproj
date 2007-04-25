@@ -16,8 +16,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="C:\temp"
-			IntermediateDirectory="C:\temp"
+			OutputDirectory="I:\temp"
+			IntermediateDirectory="I:\temp"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -50,10 +50,8 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
-				PrecompiledHeaderFile="I:\temp/objecttrackerlib.pch"
-				AssemblerListingLocation="C:\temp/"
-				ObjectFile="C:\temp/"
-				ProgramDataBaseFileName="C:\temp/"
+				PrecompiledHeaderFile="$(IntDir)\objecttrackerlib.pch"
+				AssemblerListingLocation="$(IntDir)\"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
@@ -83,7 +81,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile="I:\temp/objecttrackerlib.bsc"
+				OutputFile="$(IntDir)\objecttrackerlib.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -94,8 +92,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="c:\temp"
-			IntermediateDirectory="c:\temp"
+			OutputDirectory="I:\temp"
+			IntermediateDirectory="I:\temp"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -128,10 +126,10 @@
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile="c:\temp/objecttrackerlib.pch"
-				AssemblerListingLocation="c:\temp/"
-				ObjectFile="c:\temp/"
-				ProgramDataBaseFileName="c:\temp/"
+				PrecompiledHeaderFile="$(IntDir)\objecttrackerlib.pch"
+				AssemblerListingLocation="$(IntDir)\"
+				ObjectFile="$(IntDir)\"
+				ProgramDataBaseFileName="$(IntDir)\"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -161,7 +159,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile="I:\temp/objecttrackerlib.bsc"
+				OutputFile="$(IntDir)\objecttrackerlib.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -413,11 +411,35 @@
 				Name="2 Color Processing"
 				>
 				<File
+					RelativePath="..\ComponentBackgroundSubtractionColor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentBackgroundSubtractionColor.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentConvertToBGR.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\ComponentConvertToBGR.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentThresholdColorCommon.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentThresholdColorCommon.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentThresholdColorIndependant.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentThresholdColorIndependant.h"
 					>
 				</File>
 			</Filter>
