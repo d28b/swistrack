@@ -69,7 +69,7 @@ void THISCLASS::OnStep() {
 	}
 	if (inputImage->nChannels !=3)
 	{
-		AddError("Input image is not grayscale.");
+		AddError("Input image has not 3 channels.");
 		return;
 	}
 	if (! mBackgroundImage) 

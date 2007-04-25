@@ -291,6 +291,14 @@
 				Name="2 Grayscale Processing"
 				>
 				<File
+					RelativePath="..\ComponentAdaptiveBackgroundSubtractionGray.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentAdaptiveBackgroundSubtractionGray.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentBackgroundSubtractionGray.cpp"
 					>
 				</File>
@@ -410,6 +418,14 @@
 			<Filter
 				Name="2 Color Processing"
 				>
+				<File
+					RelativePath="..\ComponentAdaptiveBackgroundSubtractionColor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentAdaptiveBackgroundSubtractionColor.h"
+					>
+				</File>
 				<File
 					RelativePath="..\ComponentBackgroundSubtractionColor.cpp"
 					>
@@ -592,35 +608,35 @@
 			Name="Display"
 			>
 			<File
-				RelativePath="..\Display.cpp"
+				RelativePath="..\DisplayImage.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Display.h"
+				RelativePath="..\DisplayImage.h"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplayEditor.cpp"
+				RelativePath="..\DisplayImageParticles.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplayEditor.h"
+				RelativePath="..\DisplayImageParticles.h"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplayRenderer.cpp"
+				RelativePath="..\DisplayImageStandard.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplayRenderer.h"
+				RelativePath="..\DisplayImageStandard.h"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplaySubscriberInterface.cpp"
+				RelativePath="..\DisplayImageSubscriberInterface.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplaySubscriberInterface.h"
+				RelativePath="..\DisplayImageSubscriberInterface.h"
 				>
 			</File>
 		</Filter>
