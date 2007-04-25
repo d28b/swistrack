@@ -12,6 +12,7 @@
 #include "ComponentConvertToBGR.h"
 #include "ComponentBackgroundSubtractionGray.h"
 #include "ComponentBackgroundSubtractionColor.h"
+#include "ComponentHSVBackgroundSubtractionColor.h"
 #include "ComponentAdaptiveBackgroundSubtractionGray.h"
 #include "ComponentAdaptiveBackgroundSubtractionColor.h"
 #include "ComponentThresholdGray.h"
@@ -55,6 +56,7 @@ THISCLASS::SwisTrackCore():
 	mAvailableComponents.push_back(new ComponentConvertToBGR(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionColor(this));
+	mAvailableComponents.push_back(new ComponentHSVBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentThresholdGray(this));

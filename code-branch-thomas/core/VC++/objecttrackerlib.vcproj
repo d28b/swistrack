@@ -443,6 +443,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentHSVBackgroundSubtractionColor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentHSVBackgroundSubtractionColor.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentThresholdColorCommon.cpp"
 					>
 				</File>
