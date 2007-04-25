@@ -410,12 +410,12 @@ void THISCLASS::OnFileSave(wxCommandEvent& event) {
 
 void THISCLASS::SaveFile(const wxString &filename) {
 	// Check if can write to that file
-	wxFileName fn(filename);
+	/*wxFileName fn(filename);
 	if (! fn.IsFileWritable()) {
 		wxMessageDialog dlg(this, "Unable to write \n\n"+filename, "Save File", wxOK);
 		dlg.ShowModal();
 		return;
-	}
+	}*/
 
 	// Save the file
 	ConfigurationWriterXML cw;
