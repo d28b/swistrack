@@ -12,8 +12,8 @@ THISCLASS::ComponentBackgroundSubtractionColor(SwisTrackCore *stc):
 	// Data structure relations
 	mDisplayName="Background Subtraction (Color)";
 	mCategory=&(mCore->mCategoryPreprocessing);
-	AddDataStructureRead(&(mCore->mDataStructureImageGray));
-	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
+	AddDataStructureRead(&(mCore->mDataStructureImageBGR));
+	AddDataStructureWrite(&(mCore->mDataStructureImageBGR));
 	AddDisplayImage(&mDisplayImageOutput);
 }
 
@@ -47,7 +47,16 @@ void THISCLASS::OnStart() {
 	}
 }
 
-void THISCLASS::OnReloadConfiguration() {
+void THISCLASS::OnReloadConfiguration() 
+{
+	// Whether to correct the mean or not
+	mCorrectMean=GetConfigurationBool("CorrectMean", true);
+	// We always calculate the background average, so we can select if we use the moving threshold during the segmentation
+	if (mCorrectMean) {
+		mBackgroundImageMean=cvAvg(mBackgroundImage);
+	} else {
+		mBackgroundImageMean=cvScalarAll(0);
+	}
 }
 
 void THISCLASS::OnStep() {

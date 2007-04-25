@@ -47,7 +47,16 @@ void THISCLASS::OnStart() {
 	}
 }
 
-void THISCLASS::OnReloadConfiguration() {
+void THISCLASS::OnReloadConfiguration() 
+{
+	// Whether to correct the mean or not
+	mCorrectMean=GetConfigurationBool("CorrectMean", true);
+	// We always calculate the background average, so we can select if we use the moving threshold during the segmentation
+	if (mCorrectMean) {
+		mBackgroundImageMean=cvAvg(mBackgroundImage);
+	} else {
+		mBackgroundImageMean=cvScalar(0);
+	}
 }
 
 void THISCLASS::OnStep() {

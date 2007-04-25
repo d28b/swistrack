@@ -13,6 +13,8 @@
 #include "ComponentBackgroundSubtractionGray.h"
 #include "ComponentBackgroundSubtractionColor.h"
 #include "ComponentThresholdGray.h"
+#include "ComponentThresholdColorCommon.h"
+#include "ComponentThresholdColorIndependant.h"
 #include "ComponentBinaryDilation.h"
 #include "ComponentBinaryErosion.h"
 #include "ComponentBinaryMask.h"
@@ -52,6 +54,8 @@ THISCLASS::SwisTrackCore():
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentThresholdGray(this));
+	mAvailableComponents.push_back(new ComponentThresholdColorCommon(this));
+	mAvailableComponents.push_back(new ComponentThresholdColorIndependant(this));
 	mAvailableComponents.push_back(new ComponentBinaryDilation(this));
 	mAvailableComponents.push_back(new ComponentBinaryErosion(this));
 	mAvailableComponents.push_back(new ComponentBinaryMask(this));
