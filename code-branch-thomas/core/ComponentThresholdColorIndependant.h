@@ -29,6 +29,7 @@ private:
 	int mGreenThreshold;						//!< (configuration) Threshold value.
 	int mRedThreshold;							//!< (configuration) Threshold value.
 	bool mOrBool;								//!< (configuration) Whether to apply a "OR" function instead of a "AND" between the channels
+	bool mInvertThreshold;						//!< (configuration) Whether the threshold is inverted or not
 	IplImage* tmpImage[3];						//!< Temporary Ipl images to makes the computation.
 	
 	// Prepares the output image (recreates the image if necessary).

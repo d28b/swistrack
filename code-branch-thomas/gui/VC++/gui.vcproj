@@ -17,7 +17,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\..\release"
-			IntermediateDirectory="I:\temp\release"
+			IntermediateDirectory="T:\"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -121,7 +121,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\..\release"
-			IntermediateDirectory="I:\temp"
+			IntermediateDirectory="T:\"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"

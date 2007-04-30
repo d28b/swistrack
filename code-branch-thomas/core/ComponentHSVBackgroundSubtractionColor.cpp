@@ -60,12 +60,12 @@ void THISCLASS::OnStep() {
 		AddError("Input image has not 3 channels.");
 		return;
 	}
-	if (! mCore->mDataStructureImageGray.mImage) 
+	if (!outputImage) 
 	{
 		//If the input image was not yet created
-		mCore->mDataStructureImageGray.mImage=cvCreateImage(cvGetSize(inputImage),8,1);		
+		outputImage=cvCreateImage(cvGetSize(inputImage),8,1);		
 	}
-	IplImage *outputImage=mCore->mDataStructureImageGray.mImage;
+	mCore->mDataStructureImageGray.mImage=outputImage;
 	if (! mBackgroundImage) 
 	{
 		AddError("Background image not accessible");
@@ -132,5 +132,5 @@ void THISCLASS::OnStop()
 	if (mBackgroundImage) {cvReleaseImage(&mBackgroundImage);}
 	if (tmpHSVImage) {cvReleaseImage(&tmpHSVImage);}
 	if (tmpBinaryImage) {cvReleaseImage(&tmpBinaryImage);}
-	if (mCore->mDataStructureImageGray.mImage) {cvReleaseImage(&(mCore->mDataStructureImageGray.mImage));}	
+	if (outputImage) {cvReleaseImage(&(outputImage));}	
 }

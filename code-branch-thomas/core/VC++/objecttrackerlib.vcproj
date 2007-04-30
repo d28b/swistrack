@@ -16,8 +16,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="I:\temp"
-			IntermediateDirectory="I:\temp"
+			OutputDirectory="T:\"
+			IntermediateDirectory="T:\"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -92,8 +92,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="I:\temp"
-			IntermediateDirectory="I:\temp"
+			OutputDirectory="T:\"
+			IntermediateDirectory="T:\"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -448,6 +448,14 @@
 				</File>
 				<File
 					RelativePath="..\ComponentHSVBackgroundSubtractionColor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentSpecificColorSubtraction.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentSpecificColorSubtraction.h"
 					>
 				</File>
 				<File

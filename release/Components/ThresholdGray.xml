@@ -13,5 +13,10 @@
 			<slider>true</slider>
 			<reloadable>true</reloadable>
 		</parameter>
+		<parameter type="checkbox">
+			<name>InvertThreshold</name>
+			<label>Invert Threshold</label>
+			<default>0</default>
+		</parameter>
 	</configuration>
 </swistrackcomponent>

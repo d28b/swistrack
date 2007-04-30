@@ -30,6 +30,7 @@ void THISCLASS::OnStart()
 void THISCLASS::OnReloadConfiguration() {
 	mThreshold=GetConfigurationInt("Threshold", 128);
 	mAverageBool=GetConfigurationBool("AverageBool", true);
+	mInvertThreshold=GetConfigurationBool("InvertThreshold", true);
 }
 
 void THISCLASS::OnStep() {
@@ -59,8 +60,11 @@ void THISCLASS::OnStep() {
 			PrepareOutputImage(inputImage);
 			cvSplit(inputImage,tmpImage[0],tmpImage[1],tmpImage[2],NULL);						
 			cvAdd(tmpImage[0],tmpImage[1],tmpImage[0]);
-			cvAdd(tmpImage[0],tmpImage[2],tmpImage[0]);			
-			cvThreshold(tmpImage[0], mOutputImage, 3*mThreshold, 255, CV_THRESH_BINARY);			
+			cvAdd(tmpImage[0],tmpImage[2],tmpImage[0]);	
+			if (mInvertThreshold)
+				cvThreshold(tmpImage[0], mOutputImage, 3*mThreshold, 255, CV_THRESH_BINARY_INV);		
+			else
+				cvThreshold(tmpImage[0], mOutputImage, 3*mThreshold, 255, CV_THRESH_BINARY);
 			mCore->mDataStructureImageBinary.mImage=mOutputImage;
 		} catch (...) 
 		{

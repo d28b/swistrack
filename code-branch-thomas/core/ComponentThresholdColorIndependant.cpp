@@ -32,6 +32,7 @@ void THISCLASS::OnReloadConfiguration() {
 	mGreenThreshold=GetConfigurationInt("GreenThreshold", 128);
 	mRedThreshold=GetConfigurationInt("RedThreshold", 128);
 	mOrBool=GetConfigurationBool("OrBool", true);
+	mInvertThreshold=GetConfigurationBool("InvertThreshold", true);
 }
 
 void THISCLASS::OnStep() {
@@ -63,13 +64,23 @@ void THISCLASS::OnStep() {
 			switch(inputImage->channelSeq[i])
 			{
 			case 'B':
-				cvThreshold(tmpImage[i], tmpImage[i],mBlueThreshold, 255, CV_THRESH_BINARY);
+				if (mInvertThreshold)
+					cvThreshold(tmpImage[i], tmpImage[i],mBlueThreshold, 255, CV_THRESH_BINARY_INV);
+				else
+					cvThreshold(tmpImage[i], tmpImage[i],mBlueThreshold, 255, CV_THRESH_BINARY);
+
 				break;
 			case 'G':
-				cvThreshold(tmpImage[i], tmpImage[i],mGreenThreshold, 255, CV_THRESH_BINARY);
+				if (mInvertThreshold)
+					cvThreshold(tmpImage[i], tmpImage[i],mGreenThreshold, 255, CV_THRESH_BINARY_INV);
+				else
+					cvThreshold(tmpImage[i], tmpImage[i],mGreenThreshold, 255, CV_THRESH_BINARY);
 				break;
 			case 'R':
-				cvThreshold(tmpImage[i], tmpImage[i],mRedThreshold, 255, CV_THRESH_BINARY);
+				if (mInvertThreshold)
+					cvThreshold(tmpImage[i], tmpImage[i],mRedThreshold, 255, CV_THRESH_BINARY_INV);
+				else
+					cvThreshold(tmpImage[i], tmpImage[i],mRedThreshold, 255, CV_THRESH_BINARY);
 				break;
 			default:
 				AddError("Only Blue, Green and Red channels are accepted for this thresholding method.");

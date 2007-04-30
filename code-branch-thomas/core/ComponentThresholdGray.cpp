@@ -25,6 +25,7 @@ void THISCLASS::OnStart() {
 
 void THISCLASS::OnReloadConfiguration() {
 	mThreshold=GetConfigurationInt("Threshold", 128);
+	mInvertThreshold=GetConfigurationBool("InvertThreshold", true);
 }
 
 void THISCLASS::OnStep() {
@@ -33,7 +34,10 @@ void THISCLASS::OnStep() {
 
 	try {
 		PrepareOutputImage(inputimage);
-		cvThreshold(inputimage, mOutputImage, mThreshold, 255, CV_THRESH_BINARY);
+		if (mInvertThreshold)
+			cvThreshold(inputimage, mOutputImage, mThreshold, 255, CV_THRESH_BINARY_INV);
+		else
+			cvThreshold(inputimage, mOutputImage, mThreshold, 255, CV_THRESH_BINARY);
 		mCore->mDataStructureImageBinary.mImage=mOutputImage;
 	} catch (...) {
 		AddError("Thresholding failed.");

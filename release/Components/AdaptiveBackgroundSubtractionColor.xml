@@ -17,6 +17,7 @@
 			<slider>true</slider>
 			<reloadable>true</reloadable>
 			<default>0.1</default>
+			<sliderstep>0.01</sliderstep>
 		</parameter>
 	</configuration>
 </swistrackcomponent>
