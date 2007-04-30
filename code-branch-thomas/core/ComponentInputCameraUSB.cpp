@@ -2,17 +2,18 @@
 #define THISCLASS ComponentInputCameraUSB
 
 #include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
 		Component(stc, "InputCameraUSB"),
 		mCapture(0), mOutputImage(0),
-		mDisplayImageOutput("Output", "USB Camera: Input Frame") {
+		mDisplayOutput("Output", "USB Camera: Input Frame") {
 
 	// Data structure relations
 	mDisplayName="USB Camera";
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentInputCameraUSB() {
@@ -52,11 +53,11 @@ void THISCLASS::OnStep() {
 	mCore->mDataStructureInput.mImage=mOutputImage;
 	mCore->mDataStructureInput.mFrameNumber=framenumber;
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mOutputImage;
-	std::ostringstream oss;
-	oss << "Frame " << framenumber << ", " << mOutputImage->width << "x" << mOutputImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(mOutputImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

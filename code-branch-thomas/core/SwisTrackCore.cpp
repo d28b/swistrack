@@ -176,11 +176,22 @@ bool THISCLASS::Stop() {
 bool THISCLASS::Step() {
 	if (! mStarted) {return false;}
 
-	// Notify the interfaces
+	// Notify the interfaces (OnBeforeStep)
 	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
 	while (iti!=mSwisTrackCoreInterfaces.end()) {
 		(*iti)->OnBeforeStep();
 		iti++;
+	}
+
+	// Notify the displays (OnBeforeStep)
+	tComponentList::iterator it=mDeployedComponents.begin();
+	while (it!=mDeployedComponents.end()) {
+		Component::tDisplayList::iterator itdi=(*it)->mDisplays.begin();
+		while (itdi!=(*it)->mDisplays.end()) {
+			(*itdi)->OnBeforeStep();
+			itdi++;
+		}
+		it++;
 	}
 
 	// Initialize performance measurements
@@ -191,7 +202,7 @@ bool THISCLASS::Step() {
 	QueryPerformanceFrequency(&performancefrequency);
 
 	// Run until first error, or until the end (all started components)
-	tComponentList::iterator it=mDeployedComponents.begin();
+	it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
 		if (! (*it)->mStarted) {break;}
 
@@ -207,16 +218,11 @@ bool THISCLASS::Step() {
 
 		// Error handling
 		if ((*it)->mStatusHasError) {break;}
-		Component::tDisplayImageList::iterator itdi=(*it)->mDisplayImages.begin();
-		while (itdi!=(*it)->mDisplayImages.end()) {
-			(*itdi)->OnChanged();
-			itdi++;
-		}
 
 		it++;
 	}
 
-	// Notify the interfaces
+	// Notify the interfaces (OnStepReady)
 	iti=mSwisTrackCoreInterfaces.begin();
 	while (iti!=mSwisTrackCoreInterfaces.end()) {
 		(*iti)->OnStepReady();
@@ -229,7 +235,18 @@ bool THISCLASS::Step() {
 		(*it)->OnStepCleanup();
 	}
 
-	// Notify the interfaces
+	// Notify the displays (OnAfterStep)
+	it=mDeployedComponents.begin();
+	while (it!=mDeployedComponents.end()) {
+		Component::tDisplayList::iterator itdi=(*it)->mDisplays.begin();
+		while (itdi!=(*it)->mDisplays.end()) {
+			(*itdi)->OnAfterStep();
+			itdi++;
+		}
+		it++;
+	}
+
+	// Notify the interfaces (OnAfterStep)
 	iti=mSwisTrackCoreInterfaces.begin();
 	while (iti!=mSwisTrackCoreInterfaces.end()) {
 		(*iti)->OnAfterStep();

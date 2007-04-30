@@ -38,8 +38,8 @@ void THISCLASS::AddDataStructureWrite(DataStructure *ds) {
 	mDataStructureWrite.push_back(ds);
 }
 
-void THISCLASS::AddDisplayImage(DisplayImage *di) {
-	mDisplayImages.push_back(di);
+void THISCLASS::AddDisplay(Display *di) {
+	mDisplays.push_back(di);
 }
 
 bool THISCLASS::HasDataStructureRead(DataStructure *ds) {
@@ -52,9 +52,9 @@ bool THISCLASS::HasDataStructureWrite(DataStructure *ds) {
 	return (it != mDataStructureWrite.end());
 }
 
-DisplayImage *THISCLASS::GetDisplayImageByName(const std::string &name) {
-	tDisplayImageList::iterator it=mDisplayImages.begin();
-	while (it!=mDisplayImages.end()) {
+Display *THISCLASS::GetDisplayByName(const std::string &name) {
+	tDisplayList::iterator it=mDisplays.begin();
+	while (it!=mDisplays.end()) {
 		if ((*it)->mName==name) {return (*it);}
 		it++;
 	}

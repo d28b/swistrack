@@ -2,18 +2,19 @@
 #define THISCLASS ComponentThresholdGray
 
 #include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentThresholdGray(SwisTrackCore *stc):
 		Component(stc, "ThresholdGray"),
 		mOutputImage(0), mThreshold(128),
-		mDisplayImageOutput("Output", "After thresholding") {
+		mDisplayOutput("Output", "After thresholding") {
 
 	// Data structure relations
 	mDisplayName="Thresholding (grayscale)";
 	mCategory=&(mCore->mCategoryThresholding);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentThresholdGray() {
@@ -43,11 +44,11 @@ void THISCLASS::OnStep() {
 		AddError("Thresholding failed.");
 	}
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mOutputImage;
-	std::ostringstream oss;
-	oss << "Binary image, " << mOutputImage->width << "x" << mOutputImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(mOutputImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

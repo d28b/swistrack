@@ -5,14 +5,13 @@
 #include <sstream>
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
-	EVT_LEFT_DOWN(THISCLASS::OnMouseLeftDown)
 	EVT_SIZE(THISCLASS::OnSize)
 END_EVENT_TABLE()
 
 THISCLASS::CanvasPanel(wxWindow *parent, SwisTrack *st):
 		wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 100)),
 		DisplaySubscriberInterface(),
-		mSwisTrack(st), mUpdateRate(1), mUpdateCounter(0), mCurrentDisplay(0) {
+		mSwisTrack(st), mUpdateRate(1), mUpdateStepCounter(0), mCurrentDisplay(0) {
 
 	SetBackgroundColour(st->GetBackgroundColour());
 
@@ -34,67 +33,77 @@ THISCLASS::~CanvasPanel() {
 	SetDisplay(0);
 }
 
-void THISCLASS::SetDisplay(Display *di) {
-	if (! di) {
+void THISCLASS::SetDisplay(Display *display) {
+	if (! display) {
 		if (mCurrentDisplay) {
 			mCurrentDisplay->Unsubscribe(this);
 		}
 		mCurrentDisplay=0;
+		mCanvas->SetDisplay(display);
 		mCanvasTitle->SetText("No display (maximum speed)", "");
 		mCanvasAnnotation->SetText("", "");
 		return;
 	}
 
-	di->Subscribe(this);
+	display->Subscribe(this);
 }
 
-void THISCLASS::OnDisplaySubscribe(Display *di) {
+void THISCLASS::OnDisplaySubscribe(Display *display) {
 	if (mCurrentDisplay) {
 		mCurrentDisplay->Unsubscribe(this);
 	}
 
-	mUpdateCounter=0;
-	mCurrentDisplay=di;
-	mCanvasTitle->SetText(di->mDisplayName.c_str(), "");
+	mUpdateStepCounter=0;
+	mCurrentDisplay=display;
+	mCanvas->SetDisplay(display);
+	mCanvasTitle->SetText(display->mDisplayName.c_str(), "");
 	mCanvasAnnotation->SetText("The image will be shown after the next step.", "");
 }
 
-void THISCLASS::OnDisplayChanged(Display *di) {
-	if (mCurrentDisplay!=di) {return;}
-
-	// Show only every mUpdateRate image
-	if (mUpdateRate==0) {return;}
-	mUpdateCounter--;
-	if (mUpdateCounter>0) {return;}
-	mUpdateCounter=mUpdateRate;
-
-	// Do nothing if the canvas is invisible
-	if (! mCanvas->IsShown()) {return;}
-
-	// Set the size of the canvas
-
-	// Get the new image
-	IplImage *img=di->CreateImage(mAvailableSpace.GetWidth(), mAvailableSpace.GetHeight());
-	mCanvas->SetImage(img);
-
-	// Set title and annotation
-	mCanvasTitle->SetText(di->mDisplayName.c_str(), "");
-	mCanvasAnnotation->SetText(di->mAnnotation1.c_str(), di->mAnnotation2.c_str());
-
-	// Move the children
-	OnSize(wxSizeEvent());
-}
-
-void THISCLASS::OnDisplayUnsubscribe(Display *di) {
-	if (mCurrentDisplay!=di) {return;}
+void THISCLASS::OnDisplayUnsubscribe(Display *display) {
+	if (mCurrentDisplay!=display) {return;}
 
 	mCurrentDisplay=0;
-	mCanvas->SetImage(0);
+	mCanvas->SetDisplay(0);
 	mCanvasTitle->SetText("No display (maximum speed)", "");
 	mCanvasAnnotation->SetText("", "");
 }
 
-void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
+void THISCLASS::OnDisplayBeforeStep(Display *display) {
+	if (mCurrentDisplay!=display) {return;}
+
+	// If the display is disabled, return
+	if (mUpdateRate<=0) {return;}
+
+	// Count to mUpdateRate from the last displayed image (the counter is reset in OnDisplayChanged)
+	mUpdateStepCounter++;
+	if (mUpdateStepCounter<mUpdateRate) {return;}
+
+	// Do nothing if the canvas is invisible
+	if (! mCanvas->IsShown()) {return;}
+
+	// Activate the display
+	display->SetActive();
+}
+
+void THISCLASS::OnDisplayChanged(Display *display) {
+	if (mCurrentDisplay!=display) {return;}
+
+	// Reset the counter
+	mUpdateStepCounter=0;
+
+	// Do nothing if the canvas is invisible
+	if (! mCanvas->IsShown()) {return;}
+
+	// Update the canvas
+	mCanvas->OnDisplayChanged();
+
+	// Update title and annotation
+	mCanvasTitle->SetText(display->mDisplayName.c_str(), "");
+	mCanvasAnnotation->SetText(display->mAnnotation1.c_str(), display->mAnnotation2.c_str());
+
+	// Move the children
+	OnSize(wxSizeEvent());
 }
 
 void THISCLASS::OnSize(wxSizeEvent &event) {

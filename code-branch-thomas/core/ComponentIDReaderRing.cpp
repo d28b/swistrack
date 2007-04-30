@@ -4,15 +4,15 @@
 #include <sstream>
 #include <fstream>
 #include <cmath>
-#include <wx/stopwatch.h>
 #define PI (3.14159265358979)
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentIDReaderRing(SwisTrackCore *stc):
 		Component(stc, "IDReaderRing"),
 		mRingRadiusInner(3), mRingRadiusOuter(5), mObjectList(0),
 		mRingValuesMax(0), mRingCount(0), mRingAngles(0), mRingValues(0),
 		mCodeLength(0), mBinValues(0), mBinCounts(0),
-		mDisplayImageOutput("Output", "Particles") {
+		mDisplayOutput("Output", "Particles") {
 
 	// Data structure relations
 	mDisplayName="ID reader";
@@ -20,7 +20,7 @@ THISCLASS::ComponentIDReaderRing(SwisTrackCore *stc):
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureRead(&(mCore->mDataStructureParticles));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentIDReaderRing() {
@@ -184,14 +184,12 @@ void THISCLASS::OnStep() {
 		it++;
 	}
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mParticles=mCore->mDataStructureParticles.mParticles;
-	mDisplayImageOutput.mTopLeft=cvPoint2D32f(0, 0);
-	mDisplayImageOutput.mBottomRight=cvPoint2D32f(img->width, img->height);
-	mDisplayImageOutput.mImage=img;
-	std::ostringstream oss;
-	oss << "Detected particles, " << mCore->mDataStructureImageBinary.mImage->width << "x" << mCore->mDataStructureImageBinary.mImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Let the Display know about our image
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetParticles(mCore->mDataStructureParticles.mParticles);
+		de.SetMainImage(img);
+	}
 }
 
 void THISCLASS::RingToBins(float shift) {

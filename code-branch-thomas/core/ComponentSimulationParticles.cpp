@@ -2,6 +2,7 @@
 #define THISCLASS ComponentSimulationParticles
 
 #include <sstream>
+#include "DisplayEditor.h"
 #include "Random.h"
 
 THISCLASS::ComponentSimulationParticles(SwisTrackCore *stc):
@@ -9,14 +10,14 @@ THISCLASS::ComponentSimulationParticles(SwisTrackCore *stc):
 		mCameraOrigin(cvPoint2D32f(0, 0)), mCameraRotation(0), mCameraPixelSize(1), mCameraSize(cvSize2D32f(640, 480)),
 		mPositionNoiseStdDev(0), mAngleNoiseStdDev(1),
 		mSimulationParticles(0), mParticles(),
-		mDisplayImageOutput("Output", "Particle Simulation: Output") {
+		mDisplayOutput("Output", "Particle Simulation: Output") {
 
 	// Data structure relations
 	mDisplayName="Particle simulation";
 	mCategory=&(mCore->mCategoryBlobDetection);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentSimulationParticles() {
@@ -112,14 +113,13 @@ void THISCLASS::OnStep() {
 	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
 	mCore->mDataStructureParticles.mParticles=&mParticles;
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=0;
-	mDisplayImageOutput.mTopLeft=cvPoint2D32f(0, 0);
-	mDisplayImageOutput.mBottomRight=cvPoint2D32f(mCameraSize.width, mCameraSize.height);
-	mDisplayImageOutput.mParticles=&mParticles;
-	std::ostringstream oss;
-	oss << "Frame " << mFrameNumber << ", " << mCameraSize.width << "x" << mCameraSize.height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		//de.SetMode(DisplayEditor::sModeWorldCoordinates);
+		de.SetArea(0, 0, mCameraSize.width, mCameraSize.height);
+		de.SetParticles(&mParticles);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

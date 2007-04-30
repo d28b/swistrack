@@ -66,6 +66,7 @@ void THISCLASS::ConfigurationReadXMLElement(wxXmlNode* node, ErrorList *xmlerr) 
 		std::ostringstream oss;
 		oss << "A component was ignored because it does not have a 'type' attribute.";
 		xmlerr->Add(oss.str(), 0);
+		return;
 	}
 
 	// Search for the component
@@ -74,6 +75,7 @@ void THISCLASS::ConfigurationReadXMLElement(wxXmlNode* node, ErrorList *xmlerr) 
 		std::ostringstream oss;
 		oss << "The component '" << type << "' was ignored because there is no component with this name.";
 		xmlerr->Add(oss.str(), 0);
+		return;
 	}
 
 	// Add it to the list

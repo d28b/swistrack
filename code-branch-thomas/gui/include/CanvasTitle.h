@@ -51,8 +51,8 @@ private:
 	//! The corresponding GUI event handler.
 	void OnMenu(wxCommandEvent& event);
 
-	//! Returns the DisplayImage associated with the index.
-	DisplayImage *GetDisplayImage(int selid);
+	//! Returns the Display associated with the index.
+	Display *GetDisplay(int selid);
 
 	DECLARE_EVENT_TABLE()
 };

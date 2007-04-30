@@ -23,8 +23,8 @@ public:
 	Component *Create() {return new ComponentConvertToGray(mCore);}
 
 private:
-	IplImage *mOutputImage;			//!< The image created by this component.
-	Display mDisplayOutput;			//!< The Display showing the last acquired image.
+	IplImage *mOutputImage;				//!< The image created by this component.
+	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 
 	//! Converts from packed YUV422 to grayscale.
 	void CvtYUV422ToGray(IplImage *inputimage, IplImage *outputimage);

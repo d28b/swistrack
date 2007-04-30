@@ -1,10 +1,14 @@
 #include "DisplayRenderer.h"
 #define THISCLASS DisplayRenderer
 
+#include <sstream>
+#include <cmath>
+#define PI 3.14159265358979
+
 THISCLASS::DisplayRenderer(Display *display):
 		mDisplay(0), mImage(0),
-		mScalingFactor(1), mCropRectangle(cvRect(0, 0, 0, 0)), mViewFlipVertically(false), mViewFlipHorizontally(false),
-		mDrawImage(true), mDrawMask(true), mDrawParticles(true) {
+		mScalingFactor(1), mCropRectangle(cvRect(0, 0, 0, 0)), mFlipVertical(false), mFlipHorizontal(false),
+		mDrawImage(true), mDrawParticles(true), mDrawErrors(true), mUseMask(true) {
 
 	SetDisplay(display);
 
@@ -26,13 +30,13 @@ void THISCLASS::SetScalingFactor(double scalingfactor) {
 	DeleteCache();
 }
 
-void THISCLASS::SetScalingFactorMax(int maxwidth, int maxheight) {
+void THISCLASS::SetScalingFactorMax(CvSize maxsize) {
 	// Get the size of the image
 	CvSize srcsize=GetSize();
 
 	// Find out the smallest ratio such that the image fits into [maxwidth, maxheight]
-	double rw=(double)(maxwidth)/(double)(srcsize.width);
-	double rh=(double)(maxheight)/(double)(srcsize.height);
+	double rw=(double)(maxsize.width)/(double)(srcsize.width);
+	double rh=(double)(maxsize.height)/(double)(srcsize.height);
 	double mScalingFactor=1;
 	if (mScalingFactor>rw) {mScalingFactor=rw;}
 	if (mScalingFactor>rh) {mScalingFactor=rh;}
@@ -60,9 +64,9 @@ void THISCLASS::DeleteCache() {
 }
 
 CvSize THISCLASS::GetSize() {
-	if (! mDisplay) {return cvSize(100, 100);}
-	double w=(double)(mDisplay->mSize->width)*scalingfactor;
-	double h=(double)(mDisplay->mSize->height)*scalingfactor;
+	if (! mDisplay) {return cvSize(300, 200);}
+	double w=(double)(mDisplay->mSize.width)*mScalingFactor;
+	double h=(double)(mDisplay->mSize.height)*mScalingFactor;
 	return cvSize((int)floor(w+0.5), (int)floor(h+0.5));
 }
 
@@ -78,49 +82,53 @@ IplImage *THISCLASS::GetImage() {
 	// If the display is null, just display an error message
 	if (! mDisplay) {
 		cvRectangle(mImage, cvPoint(0, 0), cvPoint(size.width-1, size.height-1), cvScalar(0, 0, 0), 1);
-		cvPutText(mImage, "No display selected.", cvPoint(4, 4), &mFontMain, cvScalar(255, 0, 0));
+		CvSize textsize;
+		int ymin;
+		std::string str="No display selected.";
+		cvGetTextSize(str.c_str(), &mFontMain, &textsize, &ymin);
+		cvPutText(mImage, str.c_str(), cvPoint((size.width-textsize.width)/2, (size.height+textsize.height)/2), &mFontMain, cvScalar(255, 0, 0));
 		return mImage;
 	}
 
 	// Draw the image
-	DrawImage()
-	DrawMask();
+	DrawMainImage();
 	DrawParticles();
 	DrawErrors();
 
 	return mImage;
 }
 
-bool THISCLASS::DrawImage() {
+bool THISCLASS::DrawMainImage() {
 	if (! mDrawImage) {return false;}
 	if (! mDisplay) {return false;}
 	if (! mDisplay->mMainImage) {return false;}
 
-	cvResize(mDisplay->mMainImage, mImage);
-	return true;
-}
+	// Resize main image
+	IplImage *resizedmainimage=cvCreateImage(cvSize(mImage->width, mImage->height), IPL_DEPTH_8U, 3);
+	cvResize(mDisplay->mMainImage, resizedmainimage, CV_INTER_LINEAR);
 
-bool THISCLASS::DrawMask() {
-	if (! mDrawMask) {return false;}
-	if (! mDisplay) {return false;}
-	if (! mDisplay->mMaskImage) {return false;}
+	// Draw this main image
+	if ((mUseMask) && (mDisplay->mMaskImage)) {
+		// Resize mask image
+		IplImage *resizedmaskimage=cvCreateImage(cvSize(mImage->width, mImage->height), IPL_DEPTH_8U, 3);
+		cvResize(mDisplay->mMaskImage, resizedmaskimage, CV_INTER_LINEAR);
+		cvCopy(resizedmainimage, mImage, resizedmaskimage);
+	} else {
+		cvCopy(resizedmainimage, mImage);
+	}
 
-	IplImage resizedmask=cvCreateImage(size, IPL_DEPTH_8U, 1);
-	cvResize(mDisplay->mMaskImage, resizedmask);
-	cvCopy(resizedmask, mImage, some_combination);
 	return true;
 }
 
 bool THISCLASS::DrawParticles() {
 	if (! mDrawParticles) {return false;}
 	if (! mDisplay) {return false;}
-	if (! mDisplay->mParticles) {return false;}
 
 	// Draw particles
-	DataStructureParticles::tParticleVector::iterator it=mDisplay->mParticles->begin();
-	while (it!=mParticles->end()) {
-		int x=(int)floor(it->mCenter.x*scalingfactor+0.5);
-		int y=(int)floor(it->mCenter.y*scalingfactor+0.5);
+	DataStructureParticles::tParticleVector::iterator it=mDisplay->mParticles.begin();
+	while (it!=mDisplay->mParticles.end()) {
+		int x=(int)floor(it->mCenter.x*mScalingFactor+0.5);
+		int y=(int)floor(it->mCenter.y*mScalingFactor+0.5);
 		cvRectangle(mImage, cvPoint(x-2, y-2), cvPoint(x+2, y+2), cvScalar(192, 0, 0), 1);
 
 		float c=cosf(it->mOrientation)*20+(float)0.5;
@@ -142,10 +150,12 @@ bool THISCLASS::DrawErrors() {
 
 	// Draw all error messages
 	int y=4;
-	Display::tErrorList::iterator it=mDisplay.mErrors.begin();
-	while (it!=mDisplay.mErrors.end()) {
-		cvPutText(mImage, (*it), cvPoint(4, y), &mFontMain, cvScalar(0, 0, 255));
+	Display::tErrorList::iterator it=mDisplay->mErrors.begin();
+	while (it!=mDisplay->mErrors.end()) {
+		cvPutText(mImage, (*it).c_str(), cvPoint(4, y), &mFontMain, cvScalar(0, 0, 255));
 		y+=20;
 	}
+
+	return true;
 }
 

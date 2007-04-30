@@ -3,18 +3,19 @@
 
 #ifdef USE_CAMERA_PYLON_GBIT
 #include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
 		Component(stc, "InputCameraGBit"),
 		mTransportLayer(0), mCamera(0), mStreamGrabber(0),
 		mCurrentImageIndex(-1), mFrameNumber(0),
-		mDisplayImageOutput("Output", "GBit Camera: Input Frame") {
+		mDisplayOutput("Output", "GBit Camera: Input Frame") {
 
 	// Data structure relations
 	mDisplayName="GBit Camera";
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentInputCameraGBit() {
@@ -190,10 +191,10 @@ void THISCLASS::OnStep() {
 	mCore->mDataStructureInput.mImage=outputimage;
 	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
 
-	// Let the Display know about our image
-	if (mDisplayOutput.HasSubscribers()) {
-		mDisplayOutput.SetImage(outputimage);
-		mDisplayOutput.SetFrameNumber(mFrameNumber);
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(outputimage);
 	}
 }
 

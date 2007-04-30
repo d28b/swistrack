@@ -33,6 +33,7 @@ private:
 	CvPoint2D32f mCameraTopLeft;		//!< (configuration) The coordinates of the corresponding corner on the camera image.
 	CvPoint2D32f mCameraBottomRight;	//!< (configuration) The coordinates of the corresponding corner on the camera image.
 
+	Display mDisplayOutput;				//!< The Display showing the particles.
 };
 
 #endif

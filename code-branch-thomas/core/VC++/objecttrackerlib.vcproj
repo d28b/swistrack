@@ -624,35 +624,35 @@
 			Name="Display"
 			>
 			<File
-				RelativePath="..\DisplayImage.cpp"
+				RelativePath="..\Display.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplayImage.h"
+				RelativePath="..\Display.h"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplayImageParticles.cpp"
+				RelativePath="..\DisplayEditor.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplayImageParticles.h"
+				RelativePath="..\DisplayEditor.h"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplayImageStandard.cpp"
+				RelativePath="..\DisplayRenderer.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplayImageStandard.h"
+				RelativePath="..\DisplayRenderer.h"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplayImageSubscriberInterface.cpp"
+				RelativePath="..\DisplaySubscriberInterface.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\DisplayImageSubscriberInterface.h"
+				RelativePath="..\DisplaySubscriberInterface.h"
 				>
 			</File>
 		</Filter>
@@ -681,6 +681,34 @@
 			</File>
 			<File
 				RelativePath="..\ConfigurationXML.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="DisplayImage (old)"
+			>
+			<File
+				RelativePath="..\DisplayImage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\DisplayImage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\DisplayImageParticles.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\DisplayImageParticles.h"
+				>
+			</File>
+			<File
+				RelativePath="..\DisplayImageStandard.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\DisplayImageStandard.h"
 				>
 			</File>
 		</Filter>

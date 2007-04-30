@@ -2,18 +2,19 @@
 #define THISCLASS ComponentBinaryDilation
 
 #include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentBinaryDilation(SwisTrackCore *stc):
 		Component(stc, "BinaryDilation"),
 		mIterations(1),
-		mDisplayImageOutput("Output", "After dilation") {
+		mDisplayOutput("Output", "After dilation") {
 
 	// Data structure relations
 	mDisplayName="Binary image dilation";
 	mCategory=&(mCore->mCategoryBinaryPreprocessing);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentBinaryDilation() {
@@ -43,11 +44,11 @@ void THISCLASS::OnStep() {
 		cvDilate(mCore->mDataStructureImageBinary.mImage, mCore->mDataStructureImageBinary.mImage, NULL, mIterations);
 	}
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mCore->mDataStructureImageBinary.mImage;
-	std::ostringstream oss;
-	oss << "Binary image, " << mCore->mDataStructureImageBinary.mImage->width << "x" << mCore->mDataStructureImageBinary.mImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(mCore->mDataStructureImageBinary.mImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

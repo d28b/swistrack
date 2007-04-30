@@ -26,10 +26,10 @@ public:
 	double GetFPS();
 
 private:
-	CvCapture* mCapture;		//!< Pointer to the capture object.
-	IplImage* mOutputImage;	//!< The last acquired image.
+	CvCapture* mCapture;				//!< Pointer to the capture object.
+	IplImage* mOutputImage;				//!< The last acquired image.
 
-	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last acquired image.
+	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 };
 
 #endif

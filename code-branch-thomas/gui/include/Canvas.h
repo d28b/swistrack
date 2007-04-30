@@ -11,6 +11,7 @@ class Canvas;
 
 #include <wx/dcbuffer.h>
 #include "SwisTrack.h"
+#include "DisplayRenderer.h"
 #include <cv.h>
 
 /** \class Canvas
@@ -32,7 +33,11 @@ public:
 	~Canvas();
 
 	//! Sets the display object.
-	bool SetDisplay(Display *display);
+	void SetDisplay(Display *display);
+	//! Updates the display.
+	void OnDisplayChanged();
+	//! Returns the maximal size the image would take.
+	wxSize GetMaximumSize();
 
 private:
 	enum {
@@ -55,8 +60,6 @@ private:
 
 	//! Paints the image in the canvas.
 	bool OnPaintImage(wxPaintDC &dc);
-	//! Returns the maximal size the image would take.
-	wxSize THISCLASS::GetMaximumSize();
 	//! Updates the view.
 	void UpdateView();
 

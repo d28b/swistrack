@@ -2,17 +2,18 @@
 #define THISCLASS ComponentInputFileImage
 
 #include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentInputFileImage(SwisTrackCore *stc):
 		Component(stc, "InputFileImage"),
 		mOutputImage(0),
-		mDisplayImageOutput("Output", "Input image") {
+		mDisplayOutput("Output", "Input image") {
 
 	// Data structure relations
 	mDisplayName="Input from image file";
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentInputFileImage() {
@@ -39,11 +40,11 @@ void THISCLASS::OnStep() {
 	mCore->mDataStructureInput.mImage=mOutputImage;
 	mCore->mDataStructureInput.mFrameNumber=0;
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mOutputImage;
-	std::ostringstream oss;
-	oss << "Image from file, " << mOutputImage->width << "x" << mOutputImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(mOutputImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

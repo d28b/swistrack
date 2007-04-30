@@ -23,9 +23,9 @@ public:
 	Component *Create() {return new ComponentBinaryMask(mCore);}
 
 private:
-	IplImage *mMaskImage;	//!< The mask.
+	IplImage *mMaskImage;				//!< The mask.
 
-	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last processed image.
+	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 };
 
 #endif

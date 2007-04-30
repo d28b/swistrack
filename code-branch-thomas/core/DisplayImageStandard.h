@@ -18,7 +18,7 @@ public:
 	~DisplayImageStandard() {}
 
 	// DisplayImage methods
-	IplImage *CreateImage(int maxwidth, int maxheight);
+	IplImage *CreateImage(int maxwidth, int maxheight) {return 0;}
 };
 
 #endif

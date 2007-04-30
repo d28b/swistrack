@@ -16,11 +16,13 @@ public:
 	~DisplaySubscriberInterface() {}
 
 	//! Called when subscribing to a Display.
-	virtual void OnDisplaySubscribe(Display *di) = 0;
-	//! Called when a display changes.
-	virtual void OnDisplayChanged(Display *di) = 0;
+	virtual void OnDisplaySubscribe(Display *display) = 0;
 	//! Called when unsubscribing from a Display.
-	virtual void OnDisplayUnsubscribe(Display *di) = 0;
+	virtual void OnDisplayUnsubscribe(Display *display) = 0;
+	//! Called to ask whether the display is active and data should be collected to draw it.
+	virtual void OnDisplayBeforeStep(Display *display) = 0;
+	//! Called when a display changes.
+	virtual void OnDisplayChanged(Display *display) = 0;
 };
 
 #endif

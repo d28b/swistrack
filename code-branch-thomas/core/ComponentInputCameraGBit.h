@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentInputCameraGBit
 #define HEADER_ComponentInputCameraGBit
 
-#define USE_CAMERA_PYLON_GBIT
+//#define USE_CAMERA_PYLON_GBIT
 
 #include "Component.h"
 
@@ -52,7 +52,7 @@ private:
 	int mCurrentImageIndex;								//!< The index of the last acquired image.
 	int mFrameNumber;									//!< The frame number since the component was started.
 
-	Display mDisplayOutput;		//!< The Display showing the last acquired image.
+	Display mDisplayOutput;								//!< The DisplayImage showing the output of this component.
 
 };
 

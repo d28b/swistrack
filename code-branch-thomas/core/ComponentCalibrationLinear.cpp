@@ -1,20 +1,22 @@
 #include "ComponentCalibrationLinear.h"
 #define THISCLASS ComponentCalibrationLinear
 
-#include <sstream>
+#include "DisplayEditor.h"
 #include "DataStructureParticles.h"
 
 THISCLASS::ComponentCalibrationLinear(SwisTrackCore *stc):
 		Component(stc, "CalibrationLinear"),
 		mWorldTopLeft(cvPoint2D32f(0, 0)), mWorldTopRight(cvPoint2D32f(1, 0)), 
 		mWorldBottomLeft(cvPoint2D32f(0, 1)), mWorldBottomRight(cvPoint2D32f(1, 1)),
-		mCameraTopLeft(cvPoint2D32f(0, 0)), mCameraBottomRight(cvPoint2D32f(1, 1)) {
+		mCameraTopLeft(cvPoint2D32f(0, 0)), mCameraBottomRight(cvPoint2D32f(1, 1)),
+		mDisplayOutput("Output", "Linear Calibration: Output") {
 
 	// Data structure relations
 	mDisplayName="Calibration with a linear model";
 	mCategory=&(mCore->mCategoryCalibration);
 	AddDataStructureRead(&(mCore->mDataStructureParticles));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentCalibrationLinear() {
@@ -49,6 +51,14 @@ void THISCLASS::OnStep() {
 	while (it!=particles->end()) {
 		Transform(&*it);
 		it++;
+	}
+
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		//de.SetMode(DisplayEditor::sModeWorldCoordinates);
+		de.SetArea(mWorldTopLeft, mWorldBottomRight);
+		de.SetParticles(particles);
 	}
 }
 

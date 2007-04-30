@@ -87,7 +87,7 @@ void THISCLASS::Read(const wxFileName &filename) {
 
 	// Read other properties
 	mHelpURL=config.ReadString("url", "");
-	mDisplayImageName=config.ReadString("displayimage", "");
+	mDisplayName=config.ReadString("displayimage", ""); // TODO rename this
 
 	// Add a help button (if available)
 	if (mHelpURL!="") {

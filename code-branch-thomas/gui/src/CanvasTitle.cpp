@@ -72,12 +72,12 @@ void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 	while (it!=cl->end()) {
 		Component *c=(*it);
 
-		Component::tDisplayImageList::iterator itdi=c->mDisplayImages.begin();
-		while (itdi!=c->mDisplayImages.end()) {
-			DisplayImage *di=(*itdi);
+		Component::tDisplayList::iterator itdi=c->mDisplays.begin();
+		while (itdi!=c->mDisplays.end()) {
+			Display *display=(*itdi);
 
 			std::ostringstream oss;
-			oss << di->mDisplayName;
+			oss << display->mDisplayName;
 			mMenu->Append(id++, oss.str().c_str());
 
 			itdi++;
@@ -105,8 +105,8 @@ void THISCLASS::OnMouseLeave(wxMouseEvent &event) {
 }
 
 void THISCLASS::OnMenu(wxCommandEvent& event) {
-	DisplayImage *di=GetDisplayImage(event.GetId());
-	mCanvasPanel->SetDisplayImage(di);
+	Display *display=GetDisplay(event.GetId());
+	mCanvasPanel->SetDisplay(display);
 }
 
 void THISCLASS::SetText(const wxString &title, const wxString &textright) {
@@ -115,7 +115,7 @@ void THISCLASS::SetText(const wxString &title, const wxString &textright) {
 	Refresh(true);
 }
 
-DisplayImage *THISCLASS::GetDisplayImage(int selid) {
+Display *THISCLASS::GetDisplay(int selid) {
 	if (selid<1) {return 0;}
 
 	int id=1;
@@ -125,8 +125,8 @@ DisplayImage *THISCLASS::GetDisplayImage(int selid) {
 	while (it!=cl->end()) {
 		Component *c=(*it);
 
-		Component::tDisplayImageList::iterator itdi=c->mDisplayImages.begin();
-		while (itdi!=c->mDisplayImages.end()) {
+		Component::tDisplayList::iterator itdi=c->mDisplays.begin();
+		while (itdi!=c->mDisplays.end()) {
 			if (id==selid) {
 				return (*itdi);
 			}

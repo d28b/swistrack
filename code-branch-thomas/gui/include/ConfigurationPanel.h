@@ -24,7 +24,7 @@ public:
 	Component *mComponent;					//!< The associated component.
 	ErrorList mErrorList;					//!< The list of errors.
 	wxString mHelpURL;						//!< The URL to open when to user asks for help.
-	wxString mDisplayImageName;				//!< The name of the default display image to show.
+	wxString mDisplayName;					//!< The name of the default display to show.
 
 	//! Constructor.
 	ConfigurationPanel(wxWindow *parent, SwisTrack *st, Component *c);

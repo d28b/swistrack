@@ -2,18 +2,19 @@
 #define THISCLASS ComponentBinaryErosion
 
 #include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentBinaryErosion(SwisTrackCore *stc):
 		Component(stc, "BinaryErosion"),
 		mIterations(1),
-		mDisplayImageOutput("Output", "After erosion") {
+		mDisplayOutput("Output", "After erosion") {
 
 	// Data structure relations
 	mDisplayName="Binary image erosion";
 	mCategory=&(mCore->mCategoryBinaryPreprocessing);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentBinaryErosion() {
@@ -43,11 +44,11 @@ void THISCLASS::OnStep() {
 		cvErode(mCore->mDataStructureImageBinary.mImage, mCore->mDataStructureImageBinary.mImage, NULL, mIterations);
 	}
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mCore->mDataStructureImageBinary.mImage;
-	std::ostringstream oss;
-	oss << "Binary image, " << mCore->mDataStructureImageBinary.mImage->width << "x" << mCore->mDataStructureImageBinary.mImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(mCore->mDataStructureImageBinary.mImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

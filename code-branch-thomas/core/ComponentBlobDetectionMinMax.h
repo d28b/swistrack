@@ -28,7 +28,7 @@ private:
 	double mMaxArea;	//!< (configuration) The maximum area of a blob.
 	int mMaxNumber;		//!< (configuration) The maximum number of blobs that are to detect.
 
-	DisplayImageParticles mDisplayImageOutput;				//!< The DisplayImage showing the last acquired image and the particles.
+	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 	DataStructureParticles::tParticleVector mParticles;		//!< The list of detected particles. This is the list given to DataStructureParticles.
 
 	//! Returns the compactness of a contour. Used by the blob detection algorithm.

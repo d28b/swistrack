@@ -25,6 +25,7 @@ class CanvasPanel: public wxPanel, public DisplaySubscriberInterface {
 public:
 	SwisTrack *mSwisTrack;			//!< The associated SwisTrack object.
 	Display *mCurrentDisplay;		//!< The Display currently subscribed to.
+	wxSize mAvailableSpace;			//!< The available space for the image.
 
 	//! Constructor.
 	CanvasPanel(wxWindow *parent, SwisTrack *st);
@@ -36,8 +37,9 @@ public:
 
 	// DisplaySubscriberInterface methods
 	void OnDisplaySubscribe(Display *di);
-	void OnDisplayChanged(Display *di);
 	void OnDisplayUnsubscribe(Display *di);
+	void OnDisplayBeforeStep(Display *di);
+	void OnDisplayChanged(Display *di);
 
 private:
 	Canvas *mCanvas;						//!< The canvas.
@@ -45,11 +47,8 @@ private:
 	CanvasAnnotation *mCanvasAnnotation;	//!< The annotation box.
 
 	int mUpdateRate;				//!< The update rate (only each mUpdateRate image is displayed). If mUpdateRate==0, visualization is disabled.
-	int mUpdateCounter;				//!< The update rate counter.
-	wxSize mAvailableSpace;			//!< The available space for the image.
+	int mUpdateStepCounter;			//!< The update rate counter in number of steps.
 
-	//! The corresponding GUI event handler.
-	void OnMouseLeftDown(wxMouseEvent &event);
 	//! The corresponding GUI event handler.
 	void OnSize(wxSizeEvent &event);
 

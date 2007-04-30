@@ -202,9 +202,9 @@ void THISCLASS::SetConfigurationPanel(Component *c) {
 	GetSizer()->Layout();
 
 	// Switch to corresponding display
-	if (mConfigurationPanel->mDisplayImageName!="") {
-		DisplayImage *di=c->GetDisplayImageByName(mConfigurationPanel->mDisplayImageName.c_str());
-		mCanvasPanel->SetDisplayImage(di);
+	if (mConfigurationPanel->mDisplayName!="") {
+		Display *di=c->GetDisplayByName(mConfigurationPanel->mDisplayName.c_str());
+		mCanvasPanel->SetDisplay(di);
 	}
 
 	// Show errors

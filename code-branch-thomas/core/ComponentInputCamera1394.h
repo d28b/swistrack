@@ -29,11 +29,11 @@ public:
 	Component *Create() {return new ComponentInputCamera1394(mCore);}
 
 private:
-	C1394Camera mCamera;		//!< Camera handle.
-	IplImage* mOutputImage;	//!< The last acquired image.
-	int mFrameNumber;			//!< The frame number since the component was started.
+	C1394Camera mCamera;				//!< Camera handle.
+	IplImage* mOutputImage;				//!< The last acquired image.
+	int mFrameNumber;					//!< The frame number since the component was started.
 
-	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last acquired image.
+	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 };
 
 #else

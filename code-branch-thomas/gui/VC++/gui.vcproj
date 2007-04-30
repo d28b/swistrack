@@ -41,7 +41,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName="I:\temp\release/gui.tlb"
+				TypeLibraryName="C:\temp\release/gui.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -148,7 +148,7 @@
 				MkTypLibCompatible="true"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName="I:\temp\debug/gui.tlb"
+				TypeLibraryName="C:\temp\debug/gui.tlb"
 				HeaderFileName=""
 			/>
 			<Tool

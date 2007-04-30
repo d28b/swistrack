@@ -2,6 +2,7 @@
 #define THISCLASS ComponentConvertToGray
 
 #include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentConvertToGray(SwisTrackCore *stc):
 		Component(stc, "ConvertToGray"),
@@ -60,10 +61,10 @@ void THISCLASS::OnStep() {
 		AddError("Conversion to gray failed.");
 	}
 
-	// Let the DisplayImage know about our image
-	if (mDisplayOutput.IsActive()) {
-		DisplayConstructor dc(&mDisplayOutput);
-		dc.SetImage(mCore->mDataStructureImageGray.mImage);
+	// Let the Display know about our image
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(mCore->mDataStructureImageGray.mImage);
 	}
 }
 

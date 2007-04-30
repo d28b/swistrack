@@ -3,18 +3,19 @@
 
 #include <highgui.h>
 #include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore *stc):
 		Component(stc, "BackgroundSubtractionGray"),
 		mBackgroundImageMean(cvScalarAll(0)), mBackgroundImage(0), mCorrectMean(true),
-		mDisplayImageOutput("Output", "After background subtraction") {
+		mDisplayOutput("Output", "After background subtraction") {
 
 	// Data structure relations
 	mDisplayName="Background Subtraction (grayscale)";
 	mCategory=&(mCore->mCategoryPreprocessing);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentBackgroundSubtractionGray() {
@@ -91,11 +92,11 @@ void THISCLASS::OnStep() {
 		AddError("Background subtraction failed.");
 	}
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=inputImage;
-	std::ostringstream oss;
-	oss << "After background subtraction, " << inputImage->width << "x" << inputImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(inputImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

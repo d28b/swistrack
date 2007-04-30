@@ -23,9 +23,9 @@ public:
 	Component *Create() {return new ComponentBinaryErosion(mCore);}
 
 private:
-	int mIterations;	//!< (configuration) The number of erosions to apply to the binary image.
+	int mIterations;					//!< (configuration) The number of erosions to apply to the binary image.
 
-	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last processed image.
+	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 };
 
 #endif

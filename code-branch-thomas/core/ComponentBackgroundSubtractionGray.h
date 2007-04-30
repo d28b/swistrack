@@ -23,11 +23,11 @@ public:
 	Component *Create() {return new ComponentBackgroundSubtractionGray(mCore);}
 
 private:
-	IplImage *mBackgroundImage;		//!< The background image.
-	CvScalar mBackgroundImageMean;	//!< The mean of the background image.
-	bool mCorrectMean;				//!< (configuration) Whether to correct for the mean or not.
+	IplImage *mBackgroundImage;			//!< The background image.
+	CvScalar mBackgroundImageMean;		//!< The mean of the background image.
+	bool mCorrectMean;					//!< (configuration) Whether to correct for the mean or not.
 
-	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last processed image.
+	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 };
 
 #endif

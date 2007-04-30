@@ -3,17 +3,18 @@
 
 #ifdef USE_CAMERA_CMU_1394
 #include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):
 		Component(stc, "InputCamera1394"),
 		mCamera(), mOutputImage(0), mFrameNumber(0),
-		mDisplayImageOutput("Output", "1394 Camera: Input Frame") {
+		mDisplayOutput("Output", "1394 Camera: Input Frame") {
 
 	// Data structure relations
 	mDisplayName="1394 Camera";
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentInputCamera1394() {
@@ -91,11 +92,11 @@ void THISCLASS::OnStep() {
 	mCore->mDataStructureInput.mImage=mOutputImage;
 	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mOutputImage;
-	std::ostringstream oss;
-	oss << "Frame " << mFrameNumber << ", " << mOutputImage->width << "x" << mOutputImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(mOutputImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

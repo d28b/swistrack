@@ -25,9 +25,9 @@ public:
 	Component *Create() {return new ComponentInputFileImage(mCore);}
 
 private:
-	IplImage* mOutputImage;		//!< The image.
+	IplImage* mOutputImage;				//!< The image.
 
-	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last acquired image.
+	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 };
 
 #endif

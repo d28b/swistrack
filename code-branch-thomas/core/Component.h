@@ -12,6 +12,7 @@ class Component;
 #include "DataStructure.h"
 #include "ComponentCategory.h"
 #include "ErrorList.h"
+#include "Display.h"
 #include "DisplayImage.h"
 
 // The base class for all components.
@@ -23,8 +24,8 @@ public:
 	typedef std::list<StatusItem> tStatusItemList;
 	//! The type for configuration values.
 	typedef std::map<std::string, std::string> tConfigurationMap;
-	//! DisplayImage list type.
-	typedef std::list<DisplayImage*> tDisplayImageList;
+	//! Display list type.
+	typedef std::list<Display*> tDisplayList;
 	//! Data structure list type.
 	typedef std::list<DataStructure*> tDataStructureList;
 
@@ -40,7 +41,7 @@ public:
 
 	tDataStructureList mDataStructureRead;		//! The data structures that are read by this component.
 	tDataStructureList mDataStructureWrite;		//! The data structures that are written by this component.
-	tDisplayImageList mDisplayImages;			//! The DisplayImage objects that this component provides.
+	tDisplayList mDisplays;						//! The Display objects that this component provides.
 
 	//! Constructor.
 	Component(SwisTrackCore *stc, const std::string &name);
@@ -81,7 +82,7 @@ public:
 	bool HasDataStructureWrite(DataStructure *ds);
 
 	//! Returns a component by name.
-	DisplayImage *GetDisplayImageByName(const std::string &name);
+	Display *GetDisplayByName(const std::string &name);
 
 	//! Returns the SwisTrackCore object.
 	SwisTrackCore *GetSwisTrackCore() {return mCore;}
@@ -104,7 +105,9 @@ protected:
 	void AddDataStructureWrite(DataStructure *ds);
 
 	//! Registers a display image.
-	void AddDisplayImage(DisplayImage *di);
+	void AddDisplay(Display *di);
+	//! (deprecated) Registers a display image.
+	void AddDisplayImage(DisplayImage *di) {}
 
 	//! Increments the edit locks.
 	bool IncrementEditLocks();

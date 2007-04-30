@@ -2,17 +2,18 @@
 #define THISCLASS ComponentInputFileAVI
 
 #include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
 		Component(stc, "InputFileAVI"),
 		mCapture(0), mOutputImage(0),
-		mDisplayImageOutput("Output", "AVI File: Unprocessed Frame") {
+		mDisplayOutput("Output", "AVI File: Unprocessed Frame") {
 
 	// Data structure relations
 	mDisplayName="AVI File";
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentInputFileAVI() {
@@ -74,12 +75,13 @@ void THISCLASS::OnStep() {
 	// Set DataStructureImage
 	mCore->mDataStructureInput.mImage=mOutputImage;
 	mCore->mDataStructureInput.mFrameNumber=framenumber;
+	mCore->mDataStructureInput.mFrameCount=framecount;
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mOutputImage;
-	std::ostringstream oss;
-	oss << "Frame " << framenumber << " / " << framecount << ", " << mOutputImage->width << "x" << mOutputImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(mOutputImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

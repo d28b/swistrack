@@ -1,20 +1,21 @@
 #include "ComponentBinaryMask.h"
 #define THISCLASS ComponentBinaryMask
 
-#include <sstream>
 #include <highgui.h>
+#include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentBinaryMask(SwisTrackCore *stc):
 		Component(stc, "BinaryMask"),
 		mMaskImage(0),
-		mDisplayImageOutput("Output", "After applying mask") {
+		mDisplayOutput("Output", "After applying mask") {
 
 	// Data structure relations
 	mDisplayName="Binary mask";
 	mCategory=&(mCore->mCategoryBinaryPreprocessing);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentBinaryMask() {
@@ -66,11 +67,11 @@ void THISCLASS::OnStep() {
 		cvAnd(mCore->mDataStructureImageBinary.mImage, mMaskImage, mCore->mDataStructureImageBinary.mImage);
 	}
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mCore->mDataStructureImageBinary.mImage;
-	std::ostringstream oss;
-	oss << "Binary image, " << mCore->mDataStructureImageBinary.mImage->width << "x" << mCore->mDataStructureImageBinary.mImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(mCore->mDataStructureImageBinary.mImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

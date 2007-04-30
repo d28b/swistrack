@@ -17,12 +17,12 @@ public:
 	DataStructureParticles::tParticleVector *mParticles;	//!< The particles to display.
 
 	//! Constructor.
-	DisplayImageParticles(const std::string &name, const std::string &displayname);
+	DisplayImageParticles(const std::string &name, const std::string &displayname): DisplayImage(name, displayname) {}
 	//! Destructor.
-	~DisplayImageParticles();
+	~DisplayImageParticles() {}
 
 	// DisplayImage methods
-	IplImage *CreateImage(int maxwidth, int maxheight);
+	IplImage *CreateImage(int maxwidth, int maxheight) {return 0;}
 };
 
 #endif

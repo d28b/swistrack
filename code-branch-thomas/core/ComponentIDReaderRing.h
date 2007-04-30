@@ -44,7 +44,7 @@ private:
 	CvSize mSize;				//!< The size of the pattern.
 	float *mDistances;			//!< The distances of each pixel.
 
-	DisplayImageParticles mDisplayImageOutput;				//!< The DisplayImage showing the last acquired image and the particles.
+	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 
 	// Adds all rings values to the corresponding bins.
 	void RingToBins(float shift);

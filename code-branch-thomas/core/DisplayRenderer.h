@@ -3,6 +3,8 @@
 
 class DisplayRenderer;
 
+#include "Display.h"
+
 //! This class renders a display image.
 class DisplayRenderer {
 
@@ -13,9 +15,11 @@ public:
 	~DisplayRenderer();
 
 	//! Sets the display.
-	void SetDisplay(Display *display) {
-	//! Sets a new scaling factor. This will cause image repaining.
+	void SetDisplay(Display *display);
+	//! Sets a new scaling factor.
 	void SetScalingFactor(double scalingfactor);
+	//! Sets the scaling factor to the maximal possible value to fit the image within maxwidth/maxheight.
+	void SetScalingFactorMax(CvSize maxsize);
 	//! Sets the horizontal flip flag.
 	void SetFlipHorizontal(bool flip);
 	//! Sets the vertical flip flag.
@@ -24,7 +28,7 @@ public:
 	void SetCropRectangle(CvRect rect);
 
 	//! Returns the display.
-	double GetDisplay() {return mDisplay;}
+	Display *GetDisplay() {return mDisplay;}
 	//! Returns the scaling factor.
 	double GetScalingFactor() {return mScalingFactor;}
 	//! Returns the horizontal flip flag.
@@ -32,15 +36,17 @@ public:
 	//! Returns the vertical flip flag.
 	bool GetFlipVertical() {return mFlipVertical;}
 	//! Returns the crop rectangle.
-	CvRect GetCropRect() {return mCropRect;}
+	CvRect GetCropRectangle() {return mCropRectangle;}
 
+	//! Deletes the cached image. This forces the image to be recreated on the next request.
+	void DeleteCache();
 	//! Creates (if necessary) and returns the image.
 	IplImage *GetImage();
 	//! Returns the total size of the rendered image.
 	CvSize GetSize();
 
 private:
-	Display mDisplay;		//!< The attached Display.
+	Display *mDisplay;		//!< The attached Display.
 	IplImage *mImage;		//!< The cached image.
 
 	CvFont mFontMain;		//!< The main font used to annotate the image.
@@ -48,21 +54,17 @@ private:
 	// View properties
 	double mScalingFactor;		//!< The scaling factor.
 	CvRect mCropRectangle;		//!< The rectangle selecting the area to draw (TODO not implemented).
-	bool mViewFlipVertically;	//!< Whether the image should be flipped vertically.
-	bool mViewFlipHorizontally;	//!< Whether the image should be flipped horizontally.
+	bool mFlipVertical;			//!< Whether the image should be flipped vertically.
+	bool mFlipHorizontal;		//!< Whether the image should be flipped horizontally.
 
 	// Drawing layer properties
 	bool mDrawImage;		//!< Whether to draw the main image.
-	bool mDrawMask;			//!< Whether to draw the mask.
 	bool mDrawParticles;	//!< Whether to draw the particles.
-
-	//! Deletes the cached image. This forces the image to be recreated on the next request.
-	void DeleteCache();
+	bool mDrawErrors;		//!< Whether to draw the error messages.
+	bool mUseMask;			//!< Whether to use the mask.
 
 	//! Draws the main image layer.
 	bool DrawMainImage();
-	//! Draws the mask image layer.
-	bool DrawMaskImage();
 	//! Draws the particle layer.
 	bool DrawParticles();
 	//! Draws the errors.

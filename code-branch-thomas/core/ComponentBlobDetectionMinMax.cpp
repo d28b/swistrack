@@ -2,18 +2,19 @@
 #define THISCLASS ComponentBlobDetectionMinMax
 
 #include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentBlobDetectionMinMax(SwisTrackCore *stc):
 		Component(stc, "BlobDetectionMinMax"),
 		mMinArea(0), mMaxArea(1000000), mMaxNumber(10),
-		mDisplayImageOutput("Output", "Particles") {
+		mDisplayOutput("Output", "Particles") {
 
 	// Data structure relations
 	mDisplayName="Blob detection with min/max particle size";
 	mCategory=&(mCore->mCategoryBlobDetection);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentBlobDetectionMinMax() {
@@ -139,12 +140,11 @@ void THISCLASS::OnStep() {
 	mCore->mDataStructureParticles.mParticles=&mParticles;
 
 	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mParticles=&mParticles;
-	mDisplayImageOutput.mTopLeft=cvPoint2D32f(0, 0);
-	mDisplayImageOutput.mBottomRight=cvPoint2D32f(mCore->mDataStructureImageBinary.mImage->width, mCore->mDataStructureImageBinary.mImage->height);
-	std::ostringstream oss;
-	oss << "Detected particles, " << mCore->mDataStructureImageBinary.mImage->width << "x" << mCore->mDataStructureImageBinary.mImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetParticles(&mParticles);
+		de.SetMainImage(mCore->mDataStructureImageBinary.mImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {
