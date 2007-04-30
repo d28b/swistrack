@@ -3,6 +3,8 @@
 
 #include <highgui.h>
 #include <sstream>
+#include "DisplayEditor.h"
+
 /*
 //Function to get the position of the mouse on the image
 int cmx, cmy, cmevent;
@@ -19,14 +21,14 @@ void UpdateMouse(int event, int x, int y, int flags,void* param)
 THISCLASS::ComponentSpecificColorSubtraction(SwisTrackCore *stc):
 		Component(stc, "SpecificColorSubtraction"),
 		mSpecifiedImageAverage(cvScalarAll(0)), mSpecifyColorBool(true), mCorrectMean(true), mTrackedColor(cvScalar(0)),
-		mDisplayImageOutput("Output", "After background subtraction") {
+		mDisplayOutput("Output", "After background subtraction") {
 
 	// Data structure relations
 	mDisplayName="Specific color subtraction";
 	mCategory=&(mCore->mCategoryPreprocessing);
 	AddDataStructureRead(&(mCore->mDataStructureImageBGR));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBGR));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentSpecificColorSubtraction() {
@@ -114,11 +116,11 @@ void THISCLASS::OnStep() {
 		AddError("Substracting specifique color failed");
 	}
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=inputImage;
-	std::ostringstream oss;
-	oss << "After background subtraction, " << inputImage->width << "x" << inputImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(inputImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

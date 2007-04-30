@@ -23,13 +23,13 @@ public:
 	Component *Create() {return new ComponentHSVBackgroundSubtractionColor(mCore);}
 
 private:
-	IplImage *mBackgroundImage;		//!< The background image.
-	IplImage *mBackgroundImageHSV;	//!< The background image in HSV.
-	IplImage* tmpHSVImage;			//!< Temporary image used for computation.
-	IplImage* tmpBinaryImage;		//!< Temporary image used for computation.
-	IplImage *outputImage;			//!< Image used for the output
-	bool mCorrectMean;				//!< (configuration) Whether to correct for the mean or not.
-	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last processed image.
+	IplImage *mBackgroundImage;			//!< The background image.
+	IplImage *mBackgroundImageHSV;		//!< The background image in HSV.
+	IplImage* tmpHSVImage;				//!< Temporary image used for computation.
+	IplImage* tmpBinaryImage;			//!< Temporary image used for computation.
+	IplImage *outputImage;				//!< Image used for the output
+	bool mCorrectMean;					//!< (configuration) Whether to correct for the mean or not.
+	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 };
 
 #endif

@@ -3,18 +3,19 @@
 
 #include <highgui.h>
 #include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentHSVBackgroundSubtractionColor(SwisTrackCore *stc):
 		Component(stc, "HSVBackgroundSubtractionColor"),
 		mBackgroundImage(0), mCorrectMean(true),
-		mDisplayImageOutput("Output", "After background subtraction") {
+		mDisplayOutput("Output", "After background subtraction") {
 
 	// Data structure relations
 	mDisplayName="Color Background Subtraction in the Hue Band";
 	mCategory=&(mCore->mCategoryPreprocessing);
 	AddDataStructureRead(&(mCore->mDataStructureImageBGR));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentHSVBackgroundSubtractionColor() {
@@ -117,11 +118,11 @@ void THISCLASS::OnStep() {
 		AddError("Background subtraction failed.");
 	}
 	
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=outputImage;
-	std::ostringstream oss;
-	oss << "After background subtraction, " << inputImage->width << "x" << inputImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(outputImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

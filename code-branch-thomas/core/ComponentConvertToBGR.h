@@ -23,11 +23,11 @@ public:
 	Component *Create() {return new ComponentConvertToBGR(mCore);}
 
 private:
-	IplImage *mOutputImage;						//!< The image created by this component.
-	IplImage *mOutputImage0;						//!< The image created by this component.
-	IplImage *mOutputImage1;						//!< The image created by this component.
-	IplImage *mOutputImage2;						//!< The image created by this component.
-	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the output of this component.
+	IplImage *mOutputImage;				//!< The image created by this component.
+	IplImage *mOutputImage0;			//!< The image created by this component.
+	IplImage *mOutputImage1;			//!< The image created by this component.
+	IplImage *mOutputImage2;			//!< The image created by this component.
+	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 
 	//! Converts from packed YUV422 to BGR.
 	void CvtYUV422ToBGR(IplImage *inputimage, IplImage *outputimage);

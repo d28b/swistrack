@@ -2,18 +2,19 @@
 #define THISCLASS ComponentConvertToBGR
 
 #include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentConvertToBGR(SwisTrackCore *stc):
 		Component(stc, "ConvertToBGR"),
 		mOutputImage(0),
-		mDisplayImageOutput("Output", "After conversion to color (BGR)") {
+		mDisplayOutput("Output", "After conversion to color (BGR)") {
 
 	// Data structure relations
 	mDisplayName="Conversion to Color (BGR)";
 	mCategory=&(mCore->mCategoryInputConversion);
 	AddDataStructureRead(&(mCore->mDataStructureInput));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBGR));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentConvertToBGR() {
@@ -61,11 +62,11 @@ void THISCLASS::OnStep() {
 		AddError("Conversion to gray failed.");
 	}
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mCore->mDataStructureImageBGR.mImage;
-	std::ostringstream oss;
-	oss << "BGR image, " << mDisplayImageOutput.mImage->width << "x" << mDisplayImageOutput.mImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(mCore->mDataStructureImageBGR.mImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

@@ -2,18 +2,19 @@
 #define THISCLASS ComponentThresholdColorIndependant
 
 #include <sstream>
+#include "DisplayEditor.h"
 
 THISCLASS::ComponentThresholdColorIndependant(SwisTrackCore *stc):
 		Component(stc, "ThresholdColorIndependant"),
 		mOutputImage(0), mBlueThreshold(128), mGreenThreshold(128), mRedThreshold(128), mOrBool(true),
-		mDisplayImageOutput("Output", "After thresholding") {
+		mDisplayOutput("Output", "After thresholding") {
 
 	// Data structure relations
 	mDisplayName="Thresholding (Color independant)";
 	mCategory=&(mCore->mCategoryThresholding);
 	AddDataStructureRead(&(mCore->mDataStructureImageBGR));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
-	AddDisplayImage(&mDisplayImageOutput);
+	AddDisplay(&mDisplayOutput);
 }
 
 THISCLASS::~ComponentThresholdColorIndependant() {
@@ -104,11 +105,11 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
-	// Let the DisplayImage know about our image
-	mDisplayImageOutput.mImage=mOutputImage;
-	std::ostringstream oss;
-	oss << "Binary image, " << mOutputImage->width << "x" << mOutputImage->height;
-	mDisplayImageOutput.mAnnotation1=oss.str();
+	// Set the display
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(mOutputImage);
+	}
 }
 
 void THISCLASS::OnStepCleanup() {

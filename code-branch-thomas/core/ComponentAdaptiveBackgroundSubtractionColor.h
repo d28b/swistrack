@@ -28,7 +28,7 @@ private:
 	bool mCorrectMean;				//!< (configuration) Whether to correct for the mean or not.
 	float mUpdateProportion;		//!< (configuration) Proportion of the input image added to the background
 
-	DisplayImageStandard mDisplayImageOutput;	//!< The DisplayImage showing the last processed image.
+	Display mDisplayOutput;			//!< The DisplayImage showing the output of this component.
 };
 
 #endif
