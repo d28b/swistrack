@@ -20,47 +20,106 @@ THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):
 THISCLASS::~ComponentInputCamera1394() {
 }
 
-void THISCLASS::OnStart() {
-	if (mCamera.CheckLink() != CAM_SUCCESS) {
+void THISCLASS::OnStart() 
+{
+	if (mCamera.CheckLink() != CAM_SUCCESS) 
+	{
 		AddError("Cannot access 1394 Camera. Make sure the CMU driver is installed.");
 		return;
 	}
-
-	int res=mCamera.InitCamera();
-	if (res != CAM_SUCCESS) {
-		std::ostringstream oss;
-		oss << "Cannot initialize the camera (Error " << res << ").";
-		AddError(oss.str());
+	int num_cameras = mCamera.GetNumberCameras();
+	if (mCamera.GetNumberCameras() == 0)
+	{
+		AddError("No camera detected");		
 		return;
 	}
-
-	mCamera.StatusControlRegisters();
-
-	int videoformat=GetConfigurationInt("VideoFormat", 1);
-	if ((videoformat<0) || (videoformat>2)) {AddError("VideoFormat must be 0, 1 or 2."); return;}
-	mCamera.SetVideoFormat(videoformat);
-
-	int videomode=GetConfigurationInt("VideoMode", 4);
-	if ((videomode<0) || (videomode>5)) {AddError("VideoMode must be in [0, 5]."); return;}
-	mCamera.SetVideoMode(videomode);
-
-	mCamera.SetVideoFrameRate(GetConfigurationInt("FrameRate", 2)); 
-	mCamera.m_controlGain.SetAutoMode(GetConfigurationInt("AutoGain", 1)); 
-	mCamera.m_controlAutoExposure.TurnOn(GetConfigurationInt("AutoExposure", 1)); 
-	mCamera.m_controlWhiteBalance.SetAutoMode(GetConfigurationInt("AutoWhiteBalance", 0));
-	mCamera.SetBrightness(GetConfigurationInt("Brightness", 0));
-	mCamera.SetAutoExposure(GetConfigurationInt("Exposure", 0));
-	mCamera.SetSharpness(GetConfigurationInt("Sharpness", 0));
-	mCamera.SetWhiteBalance(GetConfigurationInt("WhileBalance1", 0), GetConfigurationInt("WhileBalance2", 0));
-	mCamera.SetSaturation(GetConfigurationInt("Saturation", 0));
-	
+	if (mCamera.SelectCamera(GetConfigurationInt("CameraNumber",0) != CAM_SUCCESS))
+	{
+		AddError("The specified camera is not available");
+		return;
+	}
+	if (mCamera.InitCamera()!= CAM_SUCCESS)
+	{
+		AddError("The specified camera cannot be initialized");
+		return;
+	}
+	if (mCamera.SetVideoFormat(GetConfigurationInt("VideoFormat", 0))!= CAM_SUCCESS)
+	{
+		AddError("The specified format is not available");
+		return;
+	}
+	if (mCamera.SetVideoMode(GetConfigurationInt("VideoMode", 5))!= CAM_SUCCESS)
+	{
+		AddError("The specified mode is not available");
+		return;
+	}
+	int toto = GetConfigurationInt("FrameRate", 2);
+	if (mCamera.SetVideoFrameRate(GetConfigurationInt("FrameRate", 4))!=CAM_SUCCESS)
+	{
+		AddError("The specified frame rate is not available");
+		return;
+	}	
 	if (mCamera.StartImageAcquisition() != 0) {
 		AddError("Could not start image acquisition.");
 		return;
 	}
+	
+	
 
+	//Getting loaded parameters
+	int videoFormat = mCamera.GetVideoFormat();
+	int videoMode = mCamera.GetVideoMode();
+	int videoFrameRate = mCamera.GetVideoFrameRate();
+	int nbChannels;
+	int dataDepth;
+
+
+
+	//Getting nbChannels
+	if((videoFormat==0 && videoMode==5) ||	// 8bits
+		(videoFormat==1 && videoMode==2) ||(videoFormat==1 && videoMode==5) ||
+		(videoFormat==2 && videoMode==2) ||(videoFormat==2 && videoMode==5) ||
+		(videoFormat==0 && videoMode==6) ||	// 16bits
+		(videoFormat==1 && videoMode==6) ||(videoFormat==1 && videoMode==7) ||
+		(videoFormat==2 && videoMode==6) ||(videoFormat==2 && videoMode==7)
+		)
+		nbChannels = 1;
+	else
+		nbChannels = 3;
+	//Getting dataDepth (in byte)
+	if((videoFormat==0 && videoMode==6) ||	// 16bits
+		(videoFormat==1 && videoMode==6) ||(videoFormat==1 && videoMode==7) ||
+		(videoFormat==2 && videoMode==6) ||(videoFormat==2 && videoMode==7)
+		)
+		dataDepth = 2;
+	else
+		dataDepth = 1;
+
+	
+	//Drop first frame (usually blurred) and test about timeout problem
+    if(mCamera.AcquireImage() == CAM_ERROR_FRAME_TIMEOUT)
+    {
+		AddError("Timeout Problem during Acquisition of First Image -> Restart Init");
+		return;
+    }
+
+	unsigned long imageWidth,imageHeight;
+	mCamera.GetVideoFrameDimensions(&imageWidth,&imageHeight);
+
+	if(dataDepth == 1)
+		mOutputImage = cvCreateImage(cvSize((int)imageWidth,(int)imageHeight), IPL_DEPTH_8U, nbChannels);
+	else if(dataDepth == 2)
+		mOutputImage = cvCreateImage(cvSize((int)imageWidth,(int)imageHeight), IPL_DEPTH_16U, nbChannels);
+	else
+	{
+		AddError("Illegal depth");
+		return;
+	}
+	if (nbChannels==3)
+	{
+		strcpy(mOutputImage->channelSeq,"RGB");
+	}
 	mFrameNumber=0;
-	mOutputImage=cvCreateImage(cvSize(mCamera.m_width, mCamera.m_height), 8, 3);
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -81,16 +140,29 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
-	// Point the input IplImage to the camera buffer
-	mCamera.getRGB((unsigned char *)mOutputImage->imageData);
-	//mOutputImage->imageData=(char*)mCamera.m_pData;  // doesn't work because the data doesn't have the same format
 
-	// Convert the input to the right format (RGB to BGR)
-	cvCvtColor(mOutputImage, mOutputImage, CV_RGB2BGR);
+	if(mOutputImage->nChannels==1)
+	{
+		//Gray or Bayer color image !
+		unsigned long rawDataLength;
+		unsigned char *rawDataPtr;
+
+		rawDataPtr = mCamera.GetRawData(&rawDataLength);
+		memcpy(mOutputImage->imageData,rawDataPtr,rawDataLength);
+	}
+	else
+	{
+		// Point the input IplImage to the camera buffer
+		mCamera.getRGB((unsigned char *)mOutputImage->imageData,mOutputImage->nChannels*mOutputImage->depth/8*mOutputImage->height*mOutputImage->width);
+	}
 
 	// Set this image in the DataStructureImage
 	mCore->mDataStructureInput.mImage=mOutputImage;
 	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
+
+
+
+
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
@@ -108,6 +180,7 @@ void THISCLASS::OnStop() {
 		AddError("Could not stop image acquisition.");
 		return;
 	}
+	if (mOutputImage) {cvReleaseImage(&mOutputImage);}
 }
 
 #endif

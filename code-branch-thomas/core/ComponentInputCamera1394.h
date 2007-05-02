@@ -3,7 +3,6 @@
 
 #include "Component.h"
 
-//#define USE_CAMERA_CMU_1394
 
 #ifdef USE_CAMERA_CMU_1394
 #include <cv.h>
@@ -32,6 +31,7 @@ private:
 	C1394Camera mCamera;				//!< Camera handle.
 	IplImage* mOutputImage;				//!< The last acquired image.
 	int mFrameNumber;					//!< The frame number since the component was started.
+	unsigned char *grabbedImageBuffer;	//!< Memory buffer were the grabbed image is put
 
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 };
