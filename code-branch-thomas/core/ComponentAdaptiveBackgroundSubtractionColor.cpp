@@ -33,7 +33,7 @@ void THISCLASS::OnReloadConfiguration()
 {
 	// Whether to correct the mean or not
 	mCorrectMean=GetConfigurationBool("CorrectMean", true);
-	mUpdateProportion=GetConfigurationDouble("UpdateProportion", true);
+	mUpdateProportion=GetConfigurationDouble("UpdateProportion",0.1);
 	//Force reinitialization of the background image
 	if (mBackgroundImage) 
 	{

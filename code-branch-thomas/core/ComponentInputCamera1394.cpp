@@ -122,7 +122,10 @@ void THISCLASS::OnStart()
 	mFrameNumber=0;
 }
 
-void THISCLASS::OnReloadConfiguration() {
+void THISCLASS::OnReloadConfiguration() 
+{
+	if(GetConfigurationBool("ConfigurationWindow", false))
+		CameraControlDialog(NULL,&mCamera,true);
 }
 
 void THISCLASS::OnStep() {

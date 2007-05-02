@@ -63,5 +63,10 @@
 			<default>4</default>
 			<reloadable>false</reloadable>
 		</parameter>
+		<parameter type="checkbox">
+			<name>ConfigurationWindow</name>
+			<label>Configuration Window</label>
+			<default>0</default>
+		</parameter>
 	</configuration>
 </swistrackcomponent>

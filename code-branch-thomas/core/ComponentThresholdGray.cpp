@@ -26,7 +26,7 @@ void THISCLASS::OnStart() {
 
 void THISCLASS::OnReloadConfiguration() {
 	mThreshold=GetConfigurationInt("Threshold", 128);
-	mInvertThreshold=GetConfigurationBool("InvertThreshold", true);
+	mInvertThreshold=GetConfigurationBool("InvertThreshold", false);
 }
 
 void THISCLASS::OnStep() {
