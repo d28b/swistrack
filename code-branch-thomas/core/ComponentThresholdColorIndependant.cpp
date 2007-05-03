@@ -33,7 +33,7 @@ void THISCLASS::OnReloadConfiguration() {
 	mGreenThreshold=GetConfigurationInt("GreenThreshold", 128);
 	mRedThreshold=GetConfigurationInt("RedThreshold", 128);
 	mOrBool=GetConfigurationBool("OrBool", true);
-	mInvertThreshold=GetConfigurationBool("InvertThreshold", true);
+	mInvertThreshold=GetConfigurationBool("InvertThreshold", false);
 }
 
 void THISCLASS::OnStep() {

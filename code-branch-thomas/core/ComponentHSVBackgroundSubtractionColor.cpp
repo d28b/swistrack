@@ -42,6 +42,7 @@ void THISCLASS::OnStart() {
 	//Convert image in HSV
 	cvCvtColor(mBackgroundImage,tmpHSVImage,CV_BGR2HSV);
 	cvSplit(tmpHSVImage,mBackgroundImageHSV,NULL,NULL,NULL);
+	outputImage=NULL;
 }
 
 void THISCLASS::OnReloadConfiguration() 

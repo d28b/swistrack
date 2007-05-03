@@ -24,7 +24,7 @@ THISCLASS::~ComponentAdaptiveBackgroundSubtractionGray() {
 void THISCLASS::OnStart() {
 	// Whether to correct the mean or not
 	mCorrectMean=GetConfigurationBool("CorrectMean", true);
-	mUpdateProportion=GetConfigurationDouble("UpdateProportion", true);
+	mUpdateProportion=GetConfigurationDouble("UpdateProportion", 0.1);
 	//Force the copy of the input in the background in the first step
 	mBackgroundImage=NULL;
 }

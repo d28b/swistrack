@@ -78,7 +78,11 @@ void THISCLASS::OnStep() {
 		AddError("Background image not accessible");
 		return;
 	}
-
+	if ((cvGetSize(inputImage).height!=cvGetSize(mBackgroundImage).height)||(cvGetSize(inputImage).width!=cvGetSize(mBackgroundImage).width))
+	{
+		AddError("Input and background images have not the same dimension");
+		return;
+	}
 	try {
 		// Correct the tmpImage with the difference in image mean
 		if (mCorrectMean) 

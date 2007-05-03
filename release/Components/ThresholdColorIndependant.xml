@@ -31,7 +31,7 @@
 		</parameter>
 		<parameter type="checkbox">
 			<name>OrBool</name>
-			<label>Using a "OR" insted of "AND"</label>
+			<label>Using "OR" instead of "AND"</label>
 			<default>1</default>
 		</parameter>
 		<parameter type="checkbox">

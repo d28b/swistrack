@@ -31,7 +31,7 @@ void THISCLASS::OnStart()
 void THISCLASS::OnReloadConfiguration() {
 	mThreshold=GetConfigurationInt("Threshold", 128);
 	mAverageBool=GetConfigurationBool("AverageBool", true);
-	mInvertThreshold=GetConfigurationBool("InvertThreshold", true);
+	mInvertThreshold=GetConfigurationBool("InvertThreshold", false);
 }
 
 void THISCLASS::OnStep() {
