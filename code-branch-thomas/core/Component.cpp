@@ -132,3 +132,11 @@ void THISCLASS::DecrementEditLocks() {
 		it++;
 	}
 }
+
+void ReadConfiguration() {
+	// Read the configuration and create the parameter panels
+	//wxFileName filename(wxGetApp().mApplicationFolder, mName.c_str(), "xml");
+	//filename.AppendDir("Components");
+	
+	//TODO continue here
+}

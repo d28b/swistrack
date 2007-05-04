@@ -88,9 +88,10 @@ public:
 	SwisTrackCore *GetSwisTrackCore() {return mCore;}
 
 protected:
-	SwisTrackCore *mCore; 				//!< The associated SwisTrackCore object.
-	tConfigurationMap mConfiguration;	//!< The configuration values.
-	int mEditLocks;						//!< The number of edit locks.
+	SwisTrackCore *mCore; 						//!< The associated SwisTrackCore object.
+	tConfigurationMap mConfiguration;			//!< The configuration values.
+	tConfigurationMap mConfigurationDefault;	//!< The default configuration values.
+	int mEditLocks;								//!< The number of edit locks.
 
 	//! Adds an error message to the status list.
 	void AddError(const std::string &msg);
@@ -98,6 +99,9 @@ protected:
 	void AddWarning(const std::string &msg);
 	//! Adds an informational message to the status list.
 	void AddInfo(const std::string &msg);
+
+	//! Reads the XML file that belongs to the component.
+	void ReadConfiguration();
 
 	//! Registers a data structure that the component uses.
 	void AddDataStructureRead(DataStructure *ds);

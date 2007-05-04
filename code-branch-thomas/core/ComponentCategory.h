@@ -16,6 +16,7 @@ public:
 		sTypeAuto
 	};
 
+	std::string mName;			//!< The internal name of the category.
 	std::string mDisplayName;	//!< The name that is displayed to the user.
 	int mOrder;					//!< The order (0 if any ordering is fine).
 	eCategoryType mType;		//!< The type.
