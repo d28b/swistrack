@@ -2,6 +2,8 @@
 #include <sstream>
 #include <cctype>
 #include <algorithm>
+#include <wx/log.h>
+#include "ConfigurationXML.h"
 #define THISCLASS Component
 
 THISCLASS::Component(SwisTrackCore *stc, const std::string &name):
@@ -133,17 +135,16 @@ void THISCLASS::DecrementEditLocks() {
 	}
 }
 
-void Initialize() {
+void THISCLASS::Initialize() {
 	// Read the configuration and create the parameter panels
-	wxFileName filename(wxGetApp().mApplicationFolder, mName.c_str(), "xml");
-	filename.AppendDir("Components");
+	std::string filename=mCore->mComponentConfigurationFolder+mName+".xml";
 
 	// Open the file
 	wxLogNull log;
 	wxXmlDocument document;
-	if (! document.Load(filename.GetFullPath())) {
+	if (! document.Load(filename)) {
 		std::ostringstream oss;
-		oss << "Unable to open or parse the file '" << filename.GetFullPath() << "'.";
+		oss << "Unable to open or parse the file '" << filename << "'.";
 		mInitializationErrors.Add(oss.str());
 		return;
 	}
@@ -167,7 +168,7 @@ void Initialize() {
 
 void THISCLASS::InitializeReadConfiguration(wxXmlNode *configurationnode) {
 	if (! configurationnode) {
-		mErrorList.Add("The node 'configuration' is missing.");
+		mInitializationErrors.Add("The node 'configuration' is missing.");
 		return;
 	}
 
@@ -190,7 +191,7 @@ void THISCLASS::InitializeReadConfigurationNode(wxXmlNode *node) {
 	} else {
 		std::ostringstream oss;
 		oss << "Invalid node '" << nodename << "' in 'configuration'. Allowed types are 'line', 'label', 'title' and 'parameter'.";
-		mErrorList.Add(oss.str());
+		mInitializationErrors.Add(oss.str());
 	}
 }
 
@@ -199,8 +200,7 @@ void THISCLASS::InitializeReadParameter(wxXmlNode *node) {
 
 	// Read name and default value
 	ConfigurationXML config(node);
-	wxString name=config.ReadString("name", "");
-	wxString defaultvalue=config.ReadString("default", "");
-
+	std::string name=config.ReadString("name", "").c_str();
+	std::string defaultvalue=config.ReadString("default", "").c_str();
 	mConfigurationDefault[name]=defaultvalue;
 }

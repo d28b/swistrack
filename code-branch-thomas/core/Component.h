@@ -120,6 +120,15 @@ protected:
 	bool IncrementEditLocks();
 	//! Decrements the edit locks.
 	void DecrementEditLocks();
+
+private:
+	//! Reads the configuration section of the XML file belonging to the component.
+	void InitializeReadConfiguration(wxXmlNode *configurationnode);
+	//! Reads a node within the configuration section of the XML file.
+	void InitializeReadConfigurationNode(wxXmlNode *node);
+	//! Reads a parameter node within the configuration section of the XML file.
+	void InitializeReadParameter(wxXmlNode *node);
+
 };
 
 #endif

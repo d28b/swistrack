@@ -30,6 +30,7 @@ public:
 	tComponentList mAvailableComponents;					//!< The list of all available components.
 	tDataStructureList mDataStructures;						//!< The list of all available data structures.
 	tSwisTrackCoreInterfaceList mSwisTrackCoreInterfaces;	//!< The list of SwisTrackCoreInterface objects.
+	std::string mComponentConfigurationFolder;				//!< The path to the component configuration files, including the trailing slash.
 
 	// Component categories
 	ComponentCategory mCategoryInput;

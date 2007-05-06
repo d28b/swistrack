@@ -72,8 +72,13 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	// The canvas panel
 	mCanvasPanel=new CanvasPanel(this, this);
 
-	// SwisTrackCore and TCPServer
+	// SwisTrackCore
 	mSwisTrackCore=new SwisTrackCore();
+	wxFileName filename(wxGetApp().mApplicationFolder);
+	filename.AppendDir("Components");
+	mSwisTrackCore->mComponentConfigurationFolder=filename.GetFullPath();
+
+	// TCP server
 	mTCPServer=new TCPServer(this);
 	mSwisTrackCore->mCommunicationInterface=mTCPServer;	
 	mTCPServer->AddCommandHandler(this);
