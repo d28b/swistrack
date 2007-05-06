@@ -5,10 +5,12 @@ THISCLASS::ComponentOutputParticles(SwisTrackCore *stc):
 		Component(stc, "OutputParticles") {
 
 	// Data structure relations
-	mDisplayName="Output particles";
 	mCategory=&(mCore->mCategoryOutput);
 	AddDataStructureRead(&(mCore->mDataStructureInput));
 	AddDataStructureRead(&(mCore->mDataStructureParticles));
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentOutputParticles() {

@@ -10,11 +10,13 @@ THISCLASS::ComponentThresholdGray(SwisTrackCore *stc):
 		mDisplayOutput("Output", "After thresholding") {
 
 	// Data structure relations
-	mDisplayName="Thresholding (grayscale)";
 	mCategory=&(mCore->mCategoryThresholding);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentThresholdGray() {

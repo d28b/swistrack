@@ -10,11 +10,13 @@ THISCLASS::ComponentBinaryDilation(SwisTrackCore *stc):
 		mDisplayOutput("Output", "After dilation") {
 
 	// Data structure relations
-	mDisplayName="Binary image dilation";
 	mCategory=&(mCore->mCategoryBinaryPreprocessing);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentBinaryDilation() {

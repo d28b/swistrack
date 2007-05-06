@@ -14,6 +14,9 @@ THISCLASS::ComponentInputFileImage(SwisTrackCore *stc):
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentInputFileImage() {

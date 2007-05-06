@@ -77,7 +77,12 @@ void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmler
 
 bool THISCLASS::GetConfigurationBool(const std::string &key, bool defvalue) {
 	std::string str=mConfiguration[key];
-	if (str=="") {return defvalue;}
+	if (str=="") {
+		str=mConfigurationDefault[key];
+		if (str=="") {
+			return defvalue;
+		}
+	}
 
 	std::transform(str.begin(), str.end(), str.begin(), std::tolower);
 	if (str=="true") {return true;}
@@ -89,12 +94,16 @@ bool THISCLASS::GetConfigurationBool(const std::string &key, bool defvalue) {
 }
 
 int THISCLASS::GetConfigurationInt(const std::string &key, int defvalue) {
+	std::istringstream istrdefault(mConfigurationDefault[key]);
+	istrdefault >> defvalue;
 	std::istringstream istr(mConfiguration[key]);
 	istr >> defvalue;
 	return defvalue;
 }
 
 double THISCLASS::GetConfigurationDouble(const std::string &key, double defvalue) {
+	std::istringstream istrdefault(mConfigurationDefault[key]);
+	istrdefault >> defvalue;
 	std::istringstream istr(mConfiguration[key]);
 	istr >> defvalue;
 	return defvalue;
@@ -102,7 +111,10 @@ double THISCLASS::GetConfigurationDouble(const std::string &key, double defvalue
 
 std::string THISCLASS::GetConfigurationString(const std::string &key, const std::string &defvalue) {
 	tConfigurationMap::const_iterator it=mConfiguration.find(key);
-	if (it==mConfiguration.end()) {return defvalue;}
+	if (it==mConfiguration.end()) {
+		it=mConfigurationDefault.find(key);
+		if (it==mConfiguration.end()) {return defvalue;}
+	}
 	return mConfiguration[key];
 }
 

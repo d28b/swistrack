@@ -26,11 +26,14 @@ public:
 	typedef std::list<DataStructure*> tDataStructureList;
 	//! A list of SwisTrackCoreInterface objects.
 	typedef std::list<SwisTrackCoreInterface*> tSwisTrackCoreInterfaceList;
+	//! A map of ComponentCategory objects.
+	typedef std::map<std::string, ComponentCategory> tComponentCategoryMap;
 
 	tComponentList mAvailableComponents;					//!< The list of all available components.
 	tDataStructureList mDataStructures;						//!< The list of all available data structures.
 	tSwisTrackCoreInterfaceList mSwisTrackCoreInterfaces;	//!< The list of SwisTrackCoreInterface objects.
 	std::string mComponentConfigurationFolder;				//!< The path to the component configuration files, including the trailing slash.
+	tComponentCategoryMap mComponentCategories;				//!< The component categories. (not used, TODO: read categories from XML file and put them here, then modify components to read categoryID from their XML file)
 
 	// Component categories
 	ComponentCategory mCategoryInput;
@@ -52,7 +55,7 @@ public:
 	CommunicationInterface *mCommunicationInterface;	//!< The associated communication interface.
 
 	//! Constructor.
-	SwisTrackCore();
+	SwisTrackCore(std::string componentconfigurationfolder);
 	//! Destructor.
 	~SwisTrackCore();
 

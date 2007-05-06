@@ -10,11 +10,13 @@ THISCLASS::ComponentBinaryErosion(SwisTrackCore *stc):
 		mDisplayOutput("Output", "After erosion") {
 
 	// Data structure relations
-	mDisplayName="Binary image erosion";
 	mCategory=&(mCore->mCategoryBinaryPreprocessing);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentBinaryErosion() {

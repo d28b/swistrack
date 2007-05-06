@@ -10,11 +10,13 @@ THISCLASS::ComponentConvertToBGR(SwisTrackCore *stc):
 		mDisplayOutput("Output", "After conversion to color (BGR)") {
 
 	// Data structure relations
-	mDisplayName="Conversion to Color (BGR)";
 	mCategory=&(mCore->mCategoryInputConversion);
 	AddDataStructureRead(&(mCore->mDataStructureInput));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBGR));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentConvertToBGR() {

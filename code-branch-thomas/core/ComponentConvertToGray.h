@@ -3,7 +3,6 @@
 
 #include "cv.h"
 #include "Component.h"
-#include "DisplayImageStandard.h"
 
 //! A component that converts the input image (any type) to a grayscale image.
 class ComponentConvertToGray: public Component {

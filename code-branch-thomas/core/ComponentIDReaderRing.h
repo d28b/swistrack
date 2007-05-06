@@ -4,7 +4,6 @@
 #include "cv.h"
 #include "Component.h"
 #include "DataStructureParticles.h"
-#include "DisplayImageParticles.h"
 #include "ObjectList.h"
 
 //! A component that detects blobs that have a certain size and stores them as particles in DataStructureParticle.

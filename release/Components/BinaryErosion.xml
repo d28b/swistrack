@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Erode a binary image</friendlyname>
+	<friendlyname>Binary image erosion</friendlyname>
 	<description>Applies a morphological erosion (3x3 kernel) on the image.</description>
 	<displayimage>Output</displayimage>
+	<category>BinaryProcessing</category>
 
 	<configuration>
 		<parameter type="integer">

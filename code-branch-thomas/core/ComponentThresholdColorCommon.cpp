@@ -10,11 +10,13 @@ THISCLASS::ComponentThresholdColorCommon(SwisTrackCore *stc):
 		mDisplayOutput("Output", "After thresholding") {
 
 	// Data structure relations
-	mDisplayName="Thresholding (Color common)";
 	mCategory=&(mCore->mCategoryThresholding);
 	AddDataStructureRead(&(mCore->mDataStructureImageBGR));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentThresholdColorCommon() {

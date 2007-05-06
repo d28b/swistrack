@@ -13,7 +13,6 @@ class Component;
 #include "ComponentCategory.h"
 #include "ErrorList.h"
 #include "Display.h"
-#include "DisplayImage.h"
 
 // The base class for all components.
 class Component {
@@ -113,8 +112,6 @@ protected:
 
 	//! Registers a display image.
 	void AddDisplay(Display *di);
-	//! (deprecated) Registers a display image.
-	void AddDisplayImage(DisplayImage *di) {}
 
 	//! Increments the edit locks.
 	bool IncrementEditLocks();

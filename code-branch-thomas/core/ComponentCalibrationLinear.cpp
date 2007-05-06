@@ -12,11 +12,13 @@ THISCLASS::ComponentCalibrationLinear(SwisTrackCore *stc):
 		mDisplayOutput("Output", "Linear Calibration: Output") {
 
 	// Data structure relations
-	mDisplayName="Calibration with a linear model";
 	mCategory=&(mCore->mCategoryCalibration);
 	AddDataStructureRead(&(mCore->mDataStructureParticles));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentCalibrationLinear() {

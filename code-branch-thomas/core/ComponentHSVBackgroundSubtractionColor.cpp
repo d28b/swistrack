@@ -11,11 +11,13 @@ THISCLASS::ComponentHSVBackgroundSubtractionColor(SwisTrackCore *stc):
 		mDisplayOutput("Output", "After background subtraction") {
 
 	// Data structure relations
-	mDisplayName="Color Background Subtraction in the Hue Band";
 	mCategory=&(mCore->mCategoryPreprocessing);
 	AddDataStructureRead(&(mCore->mDataStructureImageBGR));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentHSVBackgroundSubtractionColor() {

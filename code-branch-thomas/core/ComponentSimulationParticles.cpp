@@ -13,11 +13,13 @@ THISCLASS::ComponentSimulationParticles(SwisTrackCore *stc):
 		mDisplayOutput("Output", "Particle Simulation: Output") {
 
 	// Data structure relations
-	mDisplayName="Particle simulation";
 	mCategory=&(mCore->mCategoryBlobDetection);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentSimulationParticles() {

@@ -11,11 +11,13 @@ THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore *stc):
 		mDisplayOutput("Output", "After background subtraction") {
 
 	// Data structure relations
-	mDisplayName="Background Subtraction (grayscale)";
 	mCategory=&(mCore->mCategoryPreprocessing);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentBackgroundSubtractionGray() {

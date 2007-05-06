@@ -30,7 +30,8 @@
 #include "ComponentCalibrationLinear.h"
 #include "ComponentOutputParticles.h"
 
-THISCLASS::SwisTrackCore():
+THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
+		mComponentConfigurationFolder(componentconfigurationfolder),
 		mDataStructureInput(),
 		mDataStructureImageBGR("ImageBGR", "Color image (BGR)"),
 		mDataStructureImageGray("ImageGray", "Grayscale image"),

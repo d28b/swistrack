@@ -12,10 +12,12 @@ THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
 		mDisplayOutput("Output", "GBit Camera: Input Frame") {
 
 	// Data structure relations
-	mDisplayName="GBit Camera";
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentInputCameraGBit() {

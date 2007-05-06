@@ -4,7 +4,6 @@
 #include "cv.h"
 #include "highgui.h"
 #include "Component.h"
-#include "DisplayImageStandard.h"
 
 //! An input component that interfaces a USB camera using the CV library.
 class ComponentInputCameraUSB: public Component {

@@ -11,11 +11,13 @@ THISCLASS::ComponentBinaryMask(SwisTrackCore *stc):
 		mDisplayOutput("Output", "After applying mask") {
 
 	// Data structure relations
-	mDisplayName="Binary mask";
 	mCategory=&(mCore->mCategoryBinaryPreprocessing);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentBinaryMask() {

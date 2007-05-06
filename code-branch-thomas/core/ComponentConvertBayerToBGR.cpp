@@ -10,11 +10,13 @@ THISCLASS::ComponentConvertBayerToBGR(SwisTrackCore *stc):
 		mDisplayOutput("Output", "After conversion from Bayer to BGR") {
 
 	// Data structure relations
-	mDisplayName="Conversion from Bayer to BGR";
 	mCategory=&(mCore->mCategoryInputConversion);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBGR));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentConvertBayerToBGR() {

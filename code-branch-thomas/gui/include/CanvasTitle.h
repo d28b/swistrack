@@ -12,7 +12,7 @@ class CanvasTitle;
 #include <wx/dcbuffer.h>
 #include "SwisTrack.h"
 #include "CanvasPanel.h"
-#include "DisplayImage.h"
+#include "Display.h"
 
 //! The control above the main canvas, showing the title of the image.
 class CanvasTitle: public wxControl {

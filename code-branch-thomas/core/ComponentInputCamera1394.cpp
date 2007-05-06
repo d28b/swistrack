@@ -11,10 +11,12 @@ THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):
 		mDisplayOutput("Output", "1394 Camera: Input Frame") {
 
 	// Data structure relations
-	mDisplayName="1394 Camera";
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentInputCamera1394() {

@@ -10,11 +10,13 @@ THISCLASS::ComponentConvertToGray(SwisTrackCore *stc):
 		mDisplayOutput("Output", "After conversion to grayscale") {
 
 	// Data structure relations
-	mDisplayName="Conversion to Grayscale";
 	mCategory=&(mCore->mCategoryInputConversion);
 	AddDataStructureRead(&(mCore->mDataStructureInput));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentConvertToGray() {

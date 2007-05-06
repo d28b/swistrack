@@ -10,10 +10,12 @@ THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
 		mDisplayOutput("Output", "AVI File: Unprocessed Frame") {
 
 	// Data structure relations
-	mDisplayName="AVI File";
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentInputFileAVI() {

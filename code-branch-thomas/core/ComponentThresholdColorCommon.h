@@ -3,7 +3,6 @@
 
 #include "cv.h"
 #include "Component.h"
-#include "DisplayImageStandard.h"
 
 //! A component that applies a constant threshold to a color image, there is only one threshold for all channels.  The output is a binary image.
 class ComponentThresholdColorCommon: public Component {

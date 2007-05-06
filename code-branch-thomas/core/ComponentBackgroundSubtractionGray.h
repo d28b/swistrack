@@ -3,7 +3,6 @@
 
 #include "cv.h"
 #include "Component.h"
-#include "DisplayImageStandard.h"
 
 //! A component subtracting a fixed background from a grayscale image.
 class ComponentBackgroundSubtractionGray: public Component {

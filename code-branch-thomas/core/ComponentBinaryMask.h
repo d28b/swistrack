@@ -3,7 +3,6 @@
 
 #include <cv.h>
 #include "Component.h"
-#include "DisplayImageStandard.h"
 
 //! A component that detects blobs that have a certain size and stores them as particles in DataStructureParticle.
 class ComponentBinaryMask: public Component {

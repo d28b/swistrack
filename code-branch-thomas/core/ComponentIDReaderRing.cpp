@@ -15,12 +15,14 @@ THISCLASS::ComponentIDReaderRing(SwisTrackCore *stc):
 		mDisplayOutput("Output", "Particles") {
 
 	// Data structure relations
-	mDisplayName="ID reader";
 	mCategory=&(mCore->mCategoryBlobDetection);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureRead(&(mCore->mDataStructureParticles));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 	AddDisplay(&mDisplayOutput);
+
+	// Read the XML configuration file
+	Initialize();
 }
 
 THISCLASS::~ComponentIDReaderRing() {
