@@ -29,15 +29,18 @@ public:
 	//! Data structure list type.
 	typedef std::list<DataStructure*> tDataStructureList;
 
-	double mStepDuration;			//!< The duration of the last step in milliseconds. This information is filled in by SwisTrackCore.
-	tStatusItemList mStatus;		//!< The status item list (mostly list of errors).
-	bool mStatusHasError;			//!< Whether there is an error in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)
-	bool mStatusHasWarning;			//!< Whether there is a warning in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)
-	bool mStarted;					//!< Tells whether the component is started. This flag is set and reset by the SwisTrackCore class and should not be used by the components.
-	std::string mName;				//!< The internal name of the component (used to save configuration).
-	std::string mDisplayName;		//!< The name that is displayed to the user.
-	ComponentCategory *mCategory;	//!< The category which this component belongs to.
-	std::string mDefaultView;		//!< The default view (not used).
+	double mStepDuration;				//!< The duration of the last step in milliseconds. This information is filled in by SwisTrackCore.
+	tStatusItemList mStatus;			//!< The status item list (mostly list of errors).
+	bool mStatusHasError;				//!< Whether there is an error in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)
+	bool mStatusHasWarning;				//!< Whether there is a warning in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)
+	bool mStarted;						//!< Tells whether the component is started. This flag is set and reset by the SwisTrackCore class and should not be used by the components.
+	std::string mName;					//!< The internal name of the component (used to save configuration).
+	std::string mDisplayName;			//!< The name that is displayed to the user.
+	std::string mDescription;			//!< The description.
+	std::string mHelpURL;				//!< The url pointing to the website with more information about the component.
+	ComponentCategory *mCategory;		//!< The category which this component belongs to.
+	std::string mDefaultDisplay;		//!< The default view (not used).
+	ErrorList mInitializationErrors;	//!< Error messages (during component initialization) are added here.
 
 	tDataStructureList mDataStructureRead;		//! The data structures that are read by this component.
 	tDataStructureList mDataStructureWrite;		//! The data structures that are written by this component.
@@ -101,7 +104,7 @@ protected:
 	void AddInfo(const std::string &msg);
 
 	//! Reads the XML file that belongs to the component.
-	void ReadConfiguration();
+	void Initialize();
 
 	//! Registers a data structure that the component uses.
 	void AddDataStructureRead(DataStructure *ds);

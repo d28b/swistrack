@@ -133,10 +133,74 @@ void THISCLASS::DecrementEditLocks() {
 	}
 }
 
-void ReadConfiguration() {
+void Initialize() {
 	// Read the configuration and create the parameter panels
-	//wxFileName filename(wxGetApp().mApplicationFolder, mName.c_str(), "xml");
-	//filename.AppendDir("Components");
-	
-	//TODO continue here
+	wxFileName filename(wxGetApp().mApplicationFolder, mName.c_str(), "xml");
+	filename.AppendDir("Components");
+
+	// Open the file
+	wxLogNull log;
+	wxXmlDocument document;
+	if (! document.Load(filename.GetFullPath())) {
+		std::ostringstream oss;
+		oss << "Unable to open or parse the file '" << filename.GetFullPath() << "'.";
+		mInitializationErrors.Add(oss.str());
+		return;
+	}
+
+	// Prepare
+	ConfigurationXML config(document.GetRoot());
+
+	// Set title and basic information
+	wxString friendlyname=config.ReadString("friendlyname", "");
+	if (friendlyname!="") {
+		mDisplayName=friendlyname.c_str();
+	}
+	mDescription=config.ReadString("description", "");
+	mHelpURL=config.ReadString("url", "");
+	mDefaultDisplay=config.ReadString("defaultdisplay", "");
+
+	// Read the list of settings
+	wxXmlNode *configurationnode=config.GetChildNode("configuration");
+	InitializeReadConfiguration(configurationnode);
+}
+
+void THISCLASS::InitializeReadConfiguration(wxXmlNode *configurationnode) {
+	if (! configurationnode) {
+		mErrorList.Add("The node 'configuration' is missing.");
+		return;
+	}
+
+	wxXmlNode *node=configurationnode->GetChildren();
+	while (node) {
+		InitializeReadConfigurationNode(node);
+		node=node->GetNext();
+	}
+
+	return;
+}
+
+void THISCLASS::InitializeReadConfigurationNode(wxXmlNode *node) {
+	wxString nodename=node->GetName();
+	if (nodename=="parameter") {
+		InitializeReadParameter(node);
+	} else if (nodename=="label") {
+	} else if (nodename=="title") {
+	} else if (nodename=="line") {
+	} else {
+		std::ostringstream oss;
+		oss << "Invalid node '" << nodename << "' in 'configuration'. Allowed types are 'line', 'label', 'title' and 'parameter'.";
+		mErrorList.Add(oss.str());
+	}
+}
+
+void THISCLASS::InitializeReadParameter(wxXmlNode *node) {
+	if (! node) {return;}
+
+	// Read name and default value
+	ConfigurationXML config(node);
+	wxString name=config.ReadString("name", "");
+	wxString defaultvalue=config.ReadString("default", "");
+
+	mConfigurationDefault[name]=defaultvalue;
 }
