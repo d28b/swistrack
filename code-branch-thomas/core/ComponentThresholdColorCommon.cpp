@@ -11,7 +11,7 @@ THISCLASS::ComponentThresholdColorCommon(SwisTrackCore *stc):
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryThresholding);
-	AddDataStructureRead(&(mCore->mDataStructureImageBGR));
+	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);
 
@@ -37,7 +37,7 @@ void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputImage=mCore->mDataStructureImageBGR.mImage;	
+	IplImage *inputImage=mCore->mDataStructureImageColor.mImage;	
 	if (! inputImage) 
 	{
 		AddError("Cannot access Input image");

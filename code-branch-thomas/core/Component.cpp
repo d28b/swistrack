@@ -7,9 +7,12 @@
 #define THISCLASS Component
 
 THISCLASS::Component(SwisTrackCore *stc, const std::string &name):
-		mCore(stc), mName(name), mDisplayName(name), mCategory(0), mStatus(), mStatusHasError(false), mStatusHasWarning(false), mStarted(false), mDataStructureRead(), mDataStructureWrite() {
+		mStatus(), mStatusHasError(false), mStatusHasWarning(false), mStarted(false),
+		mName(name), mDisplayName(name), mDescription(), mHelpURL(), mCategory(0), mDefaultDisplay(),
+		mInitializationErrors(), mStepDuration(-1),
+		mDataStructureRead(), mDataStructureWrite(), mDisplays(),
+		mCore(stc), mConfiguration(), mConfigurationDefault(), mEditLocks(0) {
 
-	//mConfigurationRoot=dynamic_cast<const wxXmlNode*>(mCore->mConfigurationRoot->find(mName)).begin());
 }
 
 void THISCLASS::ClearStatus() {
@@ -41,6 +44,7 @@ void THISCLASS::AddDataStructureWrite(DataStructure *ds) {
 }
 
 void THISCLASS::AddDisplay(Display *di) {
+	di->mComponent=this;
 	mDisplays.push_back(di);
 }
 

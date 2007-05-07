@@ -443,11 +443,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\ComponentConvertToBGR.cpp"
+					RelativePath="..\ComponentConvertToColor.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\ComponentConvertToBGR.h"
+					RelativePath="..\ComponentConvertToColor.h"
 					>
 				</File>
 				<File

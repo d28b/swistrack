@@ -1,17 +1,17 @@
-#ifndef HEADER_ComponentConvertToBGR
-#define HEADER_ComponentConvertToBGR
+#ifndef HEADER_ComponentConvertToColor
+#define HEADER_ComponentConvertToColor
 
 #include "cv.h"
 #include "Component.h"
 
 //! A component that converts the input image (any format) to BGR.
-class ComponentConvertToBGR: public Component {
+class ComponentConvertToColor: public Component {
 
 public:
 	//! Constructor.
-	ComponentConvertToBGR(SwisTrackCore *stc);
+	ComponentConvertToColor(SwisTrackCore *stc);
 	//! Destructor.
-	~ComponentConvertToBGR();
+	~ComponentConvertToColor();
 
 	// Overwritten Component methods
 	void OnStart();
@@ -19,7 +19,7 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentConvertToBGR(mCore);}
+	Component *Create() {return new ComponentConvertToColor(mCore);}
 
 private:
 	IplImage *mOutputImage;				//!< The image created by this component.

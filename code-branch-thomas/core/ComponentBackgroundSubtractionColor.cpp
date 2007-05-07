@@ -12,8 +12,8 @@ THISCLASS::ComponentBackgroundSubtractionColor(SwisTrackCore *stc):
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryPreprocessing);
-	AddDataStructureRead(&(mCore->mDataStructureImageBGR));
-	AddDataStructureWrite(&(mCore->mDataStructureImageBGR));
+	AddDataStructureRead(&(mCore->mDataStructureImageColor));
+	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);
 
 	// Read the XML configuration file
@@ -63,7 +63,7 @@ void THISCLASS::OnReloadConfiguration()
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputImage=mCore->mDataStructureImageBGR.mImage;	
+	IplImage *inputImage=mCore->mDataStructureImageColor.mImage;	
 	//Check the images
 	if (! inputImage) 
 	{
@@ -87,7 +87,7 @@ void THISCLASS::OnStep() {
 	}
 
 	//Check for the color system of the input image (The loaded image is BGR, OpenCV default) and convert the background respectively
-	if (strncmp(mCore->mDataStructureImageBGR.mImage->channelSeq,mBackgroundImage->channelSeq,3))
+	if (strncmp(mCore->mDataStructureImageColor.mImage->channelSeq, mBackgroundImage->channelSeq, 3))
 	{	
 		//Make a temporary clone of the image in 3 seperate channels
 		IplImage* tmpImage[3];

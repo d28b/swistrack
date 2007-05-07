@@ -47,7 +47,7 @@ public:
 
 	// Data structures
 	DataStructureInput mDataStructureInput;
-	DataStructureImage mDataStructureImageBGR;
+	DataStructureImage mDataStructureImageColor;
 	DataStructureImage mDataStructureImageGray;
 	DataStructureImage mDataStructureImageBinary;
 	DataStructureParticles mDataStructureParticles;

@@ -9,7 +9,7 @@
 #include "ComponentInputFileAVI.h"
 #include "ComponentInputFileImage.h"
 #include "ComponentConvertToGray.h"
-#include "ComponentConvertToBGR.h"
+#include "ComponentConvertToColor.h"
 #include "ComponentConvertBayerToBGR.h"
 #include "ComponentBackgroundSubtractionGray.h"
 #include "ComponentBackgroundSubtractionColor.h"
@@ -33,7 +33,7 @@
 THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 		mComponentConfigurationFolder(componentconfigurationfolder),
 		mDataStructureInput(),
-		mDataStructureImageBGR("ImageBGR", "Color image (BGR)"),
+		mDataStructureImageColor("ImageColor", "Color image"),
 		mDataStructureImageGray("ImageGray", "Grayscale image"),
 		mDataStructureImageBinary("ImageBinary", "Binary image"),
 		mDataStructureParticles(),
@@ -56,7 +56,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentInputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentInputFileImage(this));
 	mAvailableComponents.push_back(new ComponentConvertToGray(this));
-	mAvailableComponents.push_back(new ComponentConvertToBGR(this));
+	mAvailableComponents.push_back(new ComponentConvertToColor(this));
 	mAvailableComponents.push_back(new ComponentConvertBayerToBGR(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionColor(this));
@@ -79,7 +79,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 
 	// Initialize the list of available data structures
 	mDataStructures.push_back(&mDataStructureInput);
-	mDataStructures.push_back(&mDataStructureImageBGR);
+	mDataStructures.push_back(&mDataStructureImageColor);
 	mDataStructures.push_back(&mDataStructureImageGray);
 	mDataStructures.push_back(&mDataStructureImageBinary);
 	mDataStructures.push_back(&mDataStructureParticles);
@@ -194,6 +194,13 @@ bool THISCLASS::Step() {
 			(*itdi)->OnBeforeStep();
 			itdi++;
 		}
+		it++;
+	}
+
+	// Reset the step durations
+	it=mDeployedComponents.begin();
+	while (it!=mDeployedComponents.end()) {
+		(*it)->mStepDuration=-1;
 		it++;
 	}
 

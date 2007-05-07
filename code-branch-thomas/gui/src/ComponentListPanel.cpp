@@ -196,11 +196,15 @@ void THISCLASS::UpdateStatus() {
 			mList->SetItem(li);
 		}
 
-		// Time
+		// Step duration
 		wxListItem li;
 		li.SetId(item);
 		li.SetColumn(mColumnStepDuration);
-		li.SetText(wxString::Format("%0.3f ms", c->mStepDuration*1000.));
+		if (c->mStepDuration<0) {
+			li.SetText("");
+		} else {
+			li.SetText(wxString::Format("%0.3f ms", c->mStepDuration*1000.));
+		}
 		mList->SetItem(li);
 	}
 }

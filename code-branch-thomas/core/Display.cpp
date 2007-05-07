@@ -4,11 +4,11 @@
 #include <algorithm>
 
 THISCLASS::Display(const std::string &name, const std::string &displayname):
-		mName(name), mDisplayName(displayname),
-		mMainImage(0), mMaskImage(0), mFrameNumber(-1), mFramesCount(-1),
-		mParticles(), mParticlesWorld(),
+		mComponent(0), mName(name), mDisplayName(displayname), mSubscribers(),
+		mFrameNumber(-1), mFramesCount(-1), mAnnotation1(), mAnnotation2(), mErrors(),
 		mTopLeft(cvPoint(0, 0)), mSize(cvSize(0, 0)),
-		mAnnotation1(), mAnnotation2(), mErrors() {
+		mMainImage(0), mMaskImage(0), mParticles(), mParticlesWorld(),
+		mActive(false), mChanged(false) {
 
 }
 

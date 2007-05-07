@@ -67,7 +67,9 @@ CvSize THISCLASS::GetSize() {
 	if (! mDisplay) {return cvSize(300, 200);}
 	double w=(double)(mDisplay->mSize.width)*mScalingFactor;
 	double h=(double)(mDisplay->mSize.height)*mScalingFactor;
-	return cvSize((int)floor(w+0.5), (int)floor(h+0.5));
+	CvSize size=cvSize((int)floor(w+0.5), (int)floor(h+0.5));
+	if ((size.width<=0) || (size.height<=0)) {return cvSize(300, 200);}
+	return size;
 }
 
 IplImage *THISCLASS::GetImage() {
@@ -81,46 +83,60 @@ IplImage *THISCLASS::GetImage() {
 
 	// If the display is null, just display an error message
 	if (! mDisplay) {
-		cvRectangle(mImage, cvPoint(0, 0), cvPoint(size.width-1, size.height-1), cvScalar(0, 0, 0), 1);
-		CvSize textsize;
-		int ymin;
-		std::string str="No display selected.";
-		cvGetTextSize(str.c_str(), &mFontMain, &textsize, &ymin);
-		cvPutText(mImage, str.c_str(), cvPoint((size.width-textsize.width)/2, (size.height+textsize.height)/2), &mFontMain, cvScalar(255, 0, 0));
+		DrawMessagePanel("No display selected.");
 		return mImage;
 	}
 
+	// Prepare the error list
+	ErrorList errors;
+
+	// If the display size is too small, show an error message
+	if ((mDisplay->mSize.width<10) || (mDisplay->mSize.height<10)) {
+		errors.Add("No image or too small image.");
+	}
+
 	// Draw the image
-	DrawMainImage();
-	DrawParticles();
-	DrawErrors();
+	DrawMainImage(&errors);
+	DrawParticles(&errors);
+	DrawErrors(&errors);
 
 	return mImage;
 }
 
-bool THISCLASS::DrawMainImage() {
+bool THISCLASS::DrawMainImage(ErrorList *errors) {
 	if (! mDrawImage) {return false;}
 	if (! mDisplay) {return false;}
 	if (! mDisplay->mMainImage) {return false;}
 
-	// Resize main image
-	IplImage *resizedmainimage=cvCreateImage(cvSize(mImage->width, mImage->height), IPL_DEPTH_8U, 3);
-	cvResize(mDisplay->mMainImage, resizedmainimage, CV_INTER_LINEAR);
+	// Resize and convert the image
+	IplImage *mainimage=cvCreateImage(cvSize(mImage->width, mImage->height), IPL_DEPTH_8U, 3);
+	if (mDisplay->mMainImage->nChannels==3) {
+		cvResize(mDisplay->mMainImage, mainimage, CV_INTER_LINEAR);
+	} else if (mDisplay->mMainImage->nChannels==1) {
+		IplImage *resizedmainimage=cvCreateImage(cvSize(mImage->width, mImage->height), IPL_DEPTH_8U, 1);
+		cvResize(mDisplay->mMainImage, resizedmainimage, CV_INTER_LINEAR);
+		cvCvtColor(resizedmainimage, mainimage, CV_GRAY2BGR);
+		cvReleaseImage(&resizedmainimage);
+	} else {
+		errors->Add("Cannot display image: wrong format.");
+	}
 
 	// Draw this main image
 	if ((mUseMask) && (mDisplay->mMaskImage)) {
 		// Resize mask image
-		IplImage *resizedmaskimage=cvCreateImage(cvSize(mImage->width, mImage->height), IPL_DEPTH_8U, 3);
+		IplImage *resizedmaskimage=cvCreateImage(cvSize(mImage->width, mImage->height), IPL_DEPTH_8U, 1);
 		cvResize(mDisplay->mMaskImage, resizedmaskimage, CV_INTER_LINEAR);
-		cvCopy(resizedmainimage, mImage, resizedmaskimage);
+		cvCopy(mainimage, mImage, resizedmaskimage);
+		cvReleaseImage(&resizedmaskimage);
 	} else {
-		cvCopy(resizedmainimage, mImage);
+		cvCopy(mainimage, mImage);
 	}
 
+	cvReleaseImage(&mainimage);
 	return true;
 }
 
-bool THISCLASS::DrawParticles() {
+bool THISCLASS::DrawParticles(ErrorList *errors) {
 	if (! mDrawParticles) {return false;}
 	if (! mDisplay) {return false;}
 
@@ -144,18 +160,38 @@ bool THISCLASS::DrawParticles() {
 	return true;
 }
 
-bool THISCLASS::DrawErrors() {
+bool THISCLASS::DrawErrors(ErrorList *errors) {
 	if (! mDrawErrors) {return false;}
 	if (! mDisplay) {return false;}
 
+	// The first line starts at the bottom
+	int y=mImage->height-6;
+
 	// Draw all error messages
-	int y=4;
-	Display::tErrorList::iterator it=mDisplay->mErrors.begin();
-	while (it!=mDisplay->mErrors.end()) {
-		cvPutText(mImage, (*it).c_str(), cvPoint(4, y), &mFontMain, cvScalar(0, 0, 255));
+	ErrorList::tList::iterator it=errors->mList.begin();
+	while (it!=errors->mList.end()) {
+		cvPutText(mImage, (*it).mMessage.c_str(), cvPoint(4, y), &mFontMain, cvScalar(0, 0, 255));
 		y+=20;
+		it++;
+	}
+
+	// Draw all error messages
+	it=mDisplay->mErrors.mList.begin();
+	while (it!=mDisplay->mErrors.mList.end()) {
+		cvPutText(mImage, (*it).mMessage.c_str(), cvPoint(4, y), &mFontMain, cvScalar(0, 0, 255));
+		y+=20;
+		it++;
 	}
 
 	return true;
 }
 
+bool THISCLASS::DrawMessagePanel(std::string errstr) {
+	cvRectangle(mImage, cvPoint(0, 0), cvPoint(mImage->width-1, mImage->height-1), cvScalar(0, 0, 0), 1);
+	if (errstr.length()==0) {return true;}
+	CvSize textsize;
+	int ymin;
+	cvGetTextSize(errstr.c_str(), &mFontMain, &textsize, &ymin);
+	cvPutText(mImage, errstr.c_str(), cvPoint((mImage->width-textsize.width)/2, (mImage->height+textsize.height)/2), &mFontMain, cvScalar(255, 0, 0));
+	return true;
+}

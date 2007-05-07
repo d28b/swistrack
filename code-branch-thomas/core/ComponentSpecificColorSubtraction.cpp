@@ -25,8 +25,8 @@ THISCLASS::ComponentSpecificColorSubtraction(SwisTrackCore *stc):
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryPreprocessing);
-	AddDataStructureRead(&(mCore->mDataStructureImageBGR));
-	AddDataStructureWrite(&(mCore->mDataStructureImageBGR));
+	AddDataStructureRead(&(mCore->mDataStructureImageColor));
+	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);
 
 	// Read the XML configuration file
@@ -64,7 +64,7 @@ void THISCLASS::OnReloadConfiguration()
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputImage=mCore->mDataStructureImageBGR.mImage;	
+	IplImage *inputImage=mCore->mDataStructureImageColor.mImage;	
 	//Check the images
 	if (! inputImage) 
 	{
@@ -102,7 +102,7 @@ void THISCLASS::OnStep() {
 	*/
 	try {
 		// Correct the tmpImage with the difference in image mean
-		if (!strncmp(mCore->mDataStructureImageBGR.mImage->channelSeq,"BGR",3))
+		if (!strncmp(mCore->mDataStructureImageColor.mImage->channelSeq,"BGR",3))
 		{
 			if (mCorrectMean)
 			{			

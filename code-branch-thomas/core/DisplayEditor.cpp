@@ -42,18 +42,9 @@ void THISCLASS::SetMainImage(IplImage *img) {
 		return;
 	}
 
-	// Copy and convert the image
-	// TODO: put this in the renderer
-	if (img->nChannels==3) {
-		mDisplay->mMainImage=cvCreateImage(cvSize(img->width, img->height), img->depth, 3);
-		cvCopy(img, mDisplay->mMainImage);
-	} else if (img->nChannels==1) {
-		mDisplay->mMainImage=cvCreateImage(cvSize(img->width, img->height), img->depth, 3);
-		cvCvtColor(img, mDisplay->mMainImage, CV_GRAY2BGR);
-	} else {
-		AddError("Cannot display image: wrong format.");
-		mDisplay->mMainImage=0;
-	}
+	// Take a copy the image
+	mDisplay->mMainImage=cvCreateImage(cvSize(img->width, img->height), img->depth, img->nChannels);
+	cvCopy(img, mDisplay->mMainImage);
 }
 
 void THISCLASS::SetMaskImage(IplImage *img) {
@@ -69,11 +60,8 @@ void THISCLASS::SetMaskImage(IplImage *img) {
 	}
 
 	// Copy and convert the image
-	if (img->nChannels==3) {
-		mDisplay->mMaskImage=cvCreateImage(cvSize(img->width, img->height), img->depth, 3);
-		cvCvtColor(img, mDisplay->mMaskImage, CV_BGR2GRAY);
-	} else if (img->nChannels==1) {
-		mDisplay->mMaskImage=cvCreateImage(cvSize(img->width, img->height), img->depth, 3);
+	if (img->nChannels==1) {
+		mDisplay->mMaskImage=cvCreateImage(cvSize(img->width, img->height), img->depth, 1);
 		cvCopy(img, mDisplay->mMaskImage);
 	} else {
 		AddError("Cannot display mask: wrong format.");
@@ -130,5 +118,5 @@ bool THISCLASS::SetSizeAuto() {
 
 void THISCLASS::AddError(const std::string &message) {
 	if (! mDisplay) {return;}
-	mDisplay->mErrors.push_back(message);
+	mDisplay->mErrors.Add(message);
 }

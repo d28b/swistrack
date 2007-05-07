@@ -12,7 +12,7 @@ THISCLASS::ComponentConvertBayerToBGR(SwisTrackCore *stc):
 	// Data structure relations
 	mCategory=&(mCore->mCategoryInputConversion);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
-	AddDataStructureWrite(&(mCore->mDataStructureImageBGR));
+	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);
 
 	// Read the XML configuration file
@@ -66,12 +66,12 @@ void THISCLASS::OnStep()
 	} catch(...) {
 		AddError("Conversion from Bayer to BGR failed.");
 	}
-	mCore->mDataStructureImageBGR.mImage=mOutputImage;
+	mCore->mDataStructureImageColor.mImage=mOutputImage;
 
 	// Let the Display know about our image
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
-		de.SetMainImage(mCore->mDataStructureImageBGR.mImage);
+		de.SetMainImage(mCore->mDataStructureImageColor.mImage);
 	}
 }
 

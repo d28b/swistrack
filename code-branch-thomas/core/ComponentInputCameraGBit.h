@@ -61,7 +61,7 @@ private:
 class ComponentInputCameraGBit: public Component {
 
 public:
-	ComponentInputCameraGBit(SwisTrackCore *stc): Component(stc, "CameraGBit") {}
+	ComponentInputCameraGBit(SwisTrackCore *stc): Component(stc, "InputCameraGBit") {Initialize();}
 	~ComponentInputCameraGBit() {}
 
 	// Overwritten Component methods

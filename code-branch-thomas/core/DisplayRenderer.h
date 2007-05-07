@@ -4,6 +4,7 @@
 class DisplayRenderer;
 
 #include "Display.h"
+#include "ErrorList.h"
 
 //! This class renders a display image.
 class DisplayRenderer {
@@ -52,10 +53,10 @@ private:
 	CvFont mFontMain;		//!< The main font used to annotate the image.
 
 	// View properties
-	double mScalingFactor;		//!< The scaling factor.
-	CvRect mCropRectangle;		//!< The rectangle selecting the area to draw (TODO not implemented).
-	bool mFlipVertical;			//!< Whether the image should be flipped vertically.
-	bool mFlipHorizontal;		//!< Whether the image should be flipped horizontally.
+	double mScalingFactor;	//!< The scaling factor.
+	CvRect mCropRectangle;	//!< The rectangle selecting the area to draw (TODO not implemented).
+	bool mFlipVertical;		//!< Whether the image should be flipped vertically.
+	bool mFlipHorizontal;	//!< Whether the image should be flipped horizontally.
 
 	// Drawing layer properties
 	bool mDrawImage;		//!< Whether to draw the main image.
@@ -64,11 +65,13 @@ private:
 	bool mUseMask;			//!< Whether to use the mask.
 
 	//! Draws the main image layer.
-	bool DrawMainImage();
+	bool DrawMainImage(ErrorList *errors);
 	//! Draws the particle layer.
-	bool DrawParticles();
+	bool DrawParticles(ErrorList *errors);
 	//! Draws the errors.
-	bool DrawErrors();
+	bool DrawErrors(ErrorList *errors);
+	//! Draws an image with a message in the center.
+	bool DrawMessagePanel(std::string errstr="");
 
 };
 

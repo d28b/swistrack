@@ -1,25 +1,25 @@
-#include "ComponentConvertToBGR.h"
-#define THISCLASS ComponentConvertToBGR
+#include "ComponentConvertToColor.h"
+#define THISCLASS ComponentConvertToColor
 
 #include <sstream>
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentConvertToBGR(SwisTrackCore *stc):
-		Component(stc, "ConvertToBGR"),
+THISCLASS::ComponentConvertToColor(SwisTrackCore *stc):
+		Component(stc, "ConvertToColor"),
 		mOutputImage(0),
-		mDisplayOutput("Output", "After conversion to color (BGR)") {
+		mDisplayOutput("Output", "After conversion to color") {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryInputConversion);
 	AddDataStructureRead(&(mCore->mDataStructureInput));
-	AddDataStructureWrite(&(mCore->mDataStructureImageBGR));
+	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);
 
 	// Read the XML configuration file
 	Initialize();
 }
 
-THISCLASS::~ComponentConvertToBGR() {
+THISCLASS::~ComponentConvertToColor() {
 }
 
 void THISCLASS::OnStart() {
@@ -42,23 +42,23 @@ void THISCLASS::OnStep() {
 			//mCore->mDataStructureImageBGR.mImage=inputimage;
 
 			//cvFlip(inputimage, NULL, 0);
-			mCore->mDataStructureImageBGR.mImage=inputimage;
+			mCore->mDataStructureImageColor.mImage=inputimage;
 		} else if (inputimage->nChannels==2) {
 			// Packed YUV422
 			PrepareOutputImage(inputimage);
 			CvtYUV422ToBGR(inputimage, mOutputImage);
-			mCore->mDataStructureImageBGR.mImage=mOutputImage;
+			mCore->mDataStructureImageColor.mImage=mOutputImage;
 		} else if (inputimage->nChannels==1) {
 			// Gray, convert to BGR
 			PrepareOutputImage(inputimage);
 			cvCvtColor(inputimage, mOutputImage, CV_GRAY2BGR);
-			mCore->mDataStructureImageBGR.mImage=mOutputImage;
+			mCore->mDataStructureImageColor.mImage=mOutputImage;
 		} else {
 			// Other cases, we take the first channel and transform it in BGR
 			PrepareOutputImage(inputimage);
 			cvCvtPixToPlane(inputimage, mOutputImage, NULL, NULL, NULL);
 			cvCvtColor(mOutputImage, mOutputImage, CV_GRAY2BGR);
-			mCore->mDataStructureImageBGR.mImage=mOutputImage;
+			mCore->mDataStructureImageColor.mImage=mOutputImage;
 		}
 	} catch(...) {
 		AddError("Conversion to gray failed.");
@@ -67,12 +67,12 @@ void THISCLASS::OnStep() {
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
-		de.SetMainImage(mCore->mDataStructureImageBGR.mImage);
+		de.SetMainImage(mCore->mDataStructureImageColor.mImage);
 	}
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureImageBGR.mImage=0;
+	mCore->mDataStructureImageColor.mImage=0;
 }
 
 void THISCLASS::OnStop() {

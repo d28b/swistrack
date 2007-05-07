@@ -41,7 +41,7 @@ private:
 class ComponentInputCamera1394: public Component {
 
 public:
-	ComponentInputCamera1394(SwisTrackCore *stc): Component(stc, "Camera1394") {}
+	ComponentInputCamera1394(SwisTrackCore *stc): Component(stc, "InputCamera1394") {Initialize();}
 	~ComponentInputCamera1394() {}
 
 	// Overwritten Component methods

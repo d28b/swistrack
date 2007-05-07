@@ -58,6 +58,9 @@ void THISCLASS::OnDisplaySubscribe(Display *display) {
 	mCanvas->SetDisplay(display);
 	mCanvasTitle->SetText(display->mDisplayName.c_str(), "");
 	mCanvasAnnotation->SetText("The image will be shown after the next step.", "");
+
+	// Move the children
+	OnSize(wxSizeEvent());
 }
 
 void THISCLASS::OnDisplayUnsubscribe(Display *display) {
