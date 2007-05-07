@@ -134,6 +134,7 @@ void THISCLASS::OnSize(wxSizeEvent &event) {
 	int y=(size.GetHeight()-canvassize.GetHeight()-titlesize.GetHeight()-annotationsize.GetHeight())/2;
 	mCanvasTitle->SetSize(x, y, canvassize.GetWidth(), titlesize.GetHeight());
 	y+=titlesize.GetHeight();
+	if (canvassize.GetWidth()*canvassize.GetHeight()==0) {wxTrap();}
 	mCanvas->SetSize(x, y, canvassize.GetWidth(), canvassize.GetHeight());
 	y+=canvassize.GetHeight();
 	mCanvasAnnotation->SetSize(x, y, canvassize.GetWidth(), annotationsize.GetHeight());

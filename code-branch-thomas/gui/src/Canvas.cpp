@@ -65,6 +65,7 @@ void THISCLASS::UpdateView() {
 
 wxSize THISCLASS::GetMaximumSize() {
 	CvSize size=mDisplayRenderer.GetSize();
+	if (size.width*size.height==0) {wxTrap();}
 	return wxSize(size.width, size.height);
 }
 
@@ -96,6 +97,7 @@ bool THISCLASS::OnPaintImage(wxPaintDC &dc) {
 
 	// Create an image that has the size of the DC
 	wxSize dcsize=dc.GetSize();
+	if (dcsize.GetWidth()*dcsize.GetHeight()==0) {wxTrap(); return false;}
 	wxImage wximg(dcsize.GetWidth(), dcsize.GetHeight(), false);
 
 	// Prepare the area of interest
