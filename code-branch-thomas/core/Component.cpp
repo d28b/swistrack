@@ -117,7 +117,7 @@ std::string THISCLASS::GetConfigurationString(const std::string &key, const std:
 	tConfigurationMap::const_iterator it=mConfiguration.find(key);
 	if (it==mConfiguration.end()) {
 		it=mConfigurationDefault.find(key);
-		if (it==mConfiguration.end()) {return defvalue;}
+		if (it==mConfigurationDefault.end()) {return defvalue;}
 	}
 	return mConfiguration[key];
 }
