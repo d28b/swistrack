@@ -2,6 +2,7 @@
 <swistrackcomponent>
 	<friendlyname>Conversion from Bayer pattern to BGR</friendlyname>
 	<description>This module is used to convert a Gray image from a camera using a Bayer pattern to a color image (BGR)</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/ConvertBayerToBGR</url>
 	<displayimage>Output</displayimage>
 	<configuration>
 	<parameter type="dropdownlist">

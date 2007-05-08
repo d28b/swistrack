@@ -2,6 +2,7 @@
 <swistrackcomponent>
 	<name>Adaptive Background subtraction (Gray)</name>
 	<description>Substract a background based on the prior images</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/AdaptiveBackgroundSubtractionColor</url>
 	<displayimage>Output</displayimage>
 	<configuration>
 		<parameter type="checkbox">

@@ -2,7 +2,7 @@
 <swistrackcomponent>
 	<name>Particle Simulation</name>
 	<description>Reads particles from a file. The file must contain NMEA 0183 records.</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentSimulationParticles</url>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/SimulationParticles</url>
 	<display>Output</display>
 
 	<configuration>

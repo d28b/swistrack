@@ -2,8 +2,8 @@
 <swistrackcomponent>
 	<name>Background subtraction (Color)</name>
 	<description>Subtracts a background image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/BackgroundSubtractionColor</url>
 	<displayimage>Output</displayimage>
-
 	<configuration>
 		<parameter type="image">
 			<name>BackgroundImage</name>

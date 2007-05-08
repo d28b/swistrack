@@ -2,7 +2,7 @@
 <swistrackcomponent>
 	<friendlyname>Input from AVI File</friendlyname>
 	<description>Reads an AVI file.</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentInputFileAVI</url>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/InputFileAvi</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>

@@ -2,6 +2,7 @@
 <swistrackcomponent>
 	<friendlyname>Threshold a grayscale image</friendlyname>
 	<description>Thresholds a grayscale image and stores the result in a binary image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/ThresholdGray</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>

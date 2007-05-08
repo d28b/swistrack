@@ -2,6 +2,7 @@
 <swistrackcomponent>
 	<friendlyname>Specific color subtraction</friendlyname>
 	<description>Subtract a specific color value to the input image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/SpecificColorSubtraction</url>
 	<displayimage>Output</displayimage>
 	<configuration>
 		<parameter type="integer">

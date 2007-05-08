@@ -2,6 +2,7 @@
 <swistrackcomponent>
 	<name>Background subtraction (Color) in the Hue band</name>
 	<description>Subtracts a background image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/HSVBackgroundSubtraction</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>

@@ -2,7 +2,7 @@
 <swistrackcomponent>
 	<friendlyname>GBit Camera</friendlyname>
 	<description>Grabs an image from a GBit camera (Basler Pylon driver).</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentInputCameraGBit</url>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/InputCameraGBit</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>
