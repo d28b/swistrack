@@ -1,11 +1,11 @@
-#include "ComponentConvertBayerToBGR.h"
-#define THISCLASS ComponentConvertBayerToBGR
+#include "ComponentConvertBayerToColor.h"
+#define THISCLASS ComponentConvertBayerToColor
 
 #include <sstream>
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentConvertBayerToBGR(SwisTrackCore *stc):
-		Component(stc, "ConvertBayerToBGR"),
+THISCLASS::ComponentConvertBayerToColor(SwisTrackCore *stc):
+		Component(stc, "ConvertBayerToColor"),
 		mOutputImage(0), mBayerType(0),
 		mDisplayOutput("Output", "After conversion from Bayer to BGR") {
 
@@ -19,7 +19,7 @@ THISCLASS::ComponentConvertBayerToBGR(SwisTrackCore *stc):
 	Initialize();
 }
 
-THISCLASS::~ComponentConvertBayerToBGR() {
+THISCLASS::~ComponentConvertBayerToColor() {
 }
 
 void THISCLASS::OnStart() 

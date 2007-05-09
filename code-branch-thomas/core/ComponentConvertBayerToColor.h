@@ -1,17 +1,17 @@
-#ifndef HEADER_ComponentConvertBayerToBGR
-#define HEADER_ComponentConvertBayerToBGR
+#ifndef HEADER_ComponentConvertBayerToColor
+#define HEADER_ComponentConvertBayerToColor
 
 #include "cv.h"
 #include "Component.h"
 
 //! A component that converts the input image (any type) to a grayscale image.
-class ComponentConvertBayerToBGR: public Component {
+class ComponentConvertBayerToColor: public Component {
 
 public:
 	//! Constructor.
-	ComponentConvertBayerToBGR(SwisTrackCore *stc);
+	ComponentConvertBayerToColor(SwisTrackCore *stc);
 	//! Destructor.
-	~ComponentConvertBayerToBGR();
+	~ComponentConvertBayerToColor();
 
 	// Overwritten Component methods
 	void OnStart();
@@ -19,7 +19,7 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentConvertBayerToBGR(mCore);}
+	Component *Create() {return new ComponentConvertBayerToColor(mCore);}
 
 private:
 	int mBayerType;						//!< (configuration) The Bayer Type of the camera

@@ -81,7 +81,12 @@ void THISCLASS::OnStep() {
 			PrepareOutputImage(inputImage);
 			cvSplit(inputImage,tmpImage[0],tmpImage[1],tmpImage[2],NULL);			
 			for (int i=0;i<3;i++)
-				cvThreshold(tmpImage[i], tmpImage[i], mThreshold, 255, CV_THRESH_BINARY);
+			{
+				if (mInvertThreshold)
+					cvThreshold(tmpImage[i], tmpImage[i], mThreshold, 255, CV_THRESH_BINARY);
+				else
+					cvThreshold(tmpImage[i], tmpImage[i], mThreshold, 255, CV_THRESH_BINARY_INV);
+			}
 			cvOr(tmpImage[0],tmpImage[1],tmpImage[0]);
 			cvOr(tmpImage[0],tmpImage[2],mOutputImage);			
 			mCore->mDataStructureImageBinary.mImage=mOutputImage;

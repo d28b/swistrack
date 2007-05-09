@@ -307,11 +307,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\ComponentConvertBayerToBGR.cpp"
+					RelativePath="..\ComponentConvertBayerToColor.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\ComponentConvertBayerToBGR.h"
+					RelativePath="..\ComponentConvertBayerToColor.h"
 					>
 				</File>
 				<File

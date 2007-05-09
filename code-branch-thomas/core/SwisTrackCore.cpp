@@ -10,7 +10,7 @@
 #include "ComponentInputFileImage.h"
 #include "ComponentConvertToGray.h"
 #include "ComponentConvertToColor.h"
-#include "ComponentConvertBayerToBGR.h"
+#include "ComponentConvertBayerToColor.h"
 #include "ComponentBackgroundSubtractionGray.h"
 #include "ComponentBackgroundSubtractionColor.h"
 #include "ComponentHSVBackgroundSubtractionColor.h"
@@ -57,7 +57,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentInputFileImage(this));
 	mAvailableComponents.push_back(new ComponentConvertToGray(this));
 	mAvailableComponents.push_back(new ComponentConvertToColor(this));
-	mAvailableComponents.push_back(new ComponentConvertBayerToBGR(this));
+	mAvailableComponents.push_back(new ComponentConvertBayerToColor(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentHSVBackgroundSubtractionColor(this));
