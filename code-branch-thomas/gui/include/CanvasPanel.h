@@ -41,6 +41,9 @@ public:
 	void OnDisplayBeforeStep(Display *di);
 	void OnDisplayChanged(Display *di);
 
+	//! Recalculates and sets the size.
+	void UpdateSize();
+
 private:
 	Canvas *mCanvas;						//!< The canvas.
 	CanvasTitle *mCanvasTitle;				//!< The title box.

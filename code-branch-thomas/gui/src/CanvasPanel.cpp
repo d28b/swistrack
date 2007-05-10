@@ -106,10 +106,14 @@ void THISCLASS::OnDisplayChanged(Display *display) {
 	mCanvasAnnotation->SetText(display->mAnnotation1.c_str(), display->mAnnotation2.c_str());
 
 	// Move the children
-	OnSize(wxSizeEvent());
+	UpdateSize();
 }
 
 void THISCLASS::OnSize(wxSizeEvent &event) {
+	UpdateSize();
+}
+
+void THISCLASS::UpdateSize() {
 	// Get the sizes
 	wxSize size=GetClientSize();
 	wxSize titlesize=mCanvasTitle->GetClientSize();

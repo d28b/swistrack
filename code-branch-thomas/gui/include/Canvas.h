@@ -56,7 +56,8 @@ private:
 	wxMenu mPopupMenu;					//!< The popup menu.
 	DisplayRenderer mDisplayRenderer;	//!< The display renderer. This renderer also handles scaling and flipping.
 
-	wxPoint mMoveStartPoint;	//!< The starting point when moving the image.
+	bool mMoveStarted;					//!< True while we are in move mode.
+	wxPoint mMoveStartPoint;			//!< The starting point when moving the image.
 
 	//! Paints the image in the canvas.
 	bool OnPaintImage(wxPaintDC &dc);
@@ -78,6 +79,8 @@ private:
 	void OnEraseBackground(wxEraseEvent& event);
 	//! The corresponding GUI event handler.
 	void OnMouseLeftDown(wxMouseEvent &event);
+	//! The corresponding GUI event handler.
+	void OnMouseLeftUp(wxMouseEvent &event);
 	//! The corresponding GUI event handler.
 	void OnMouseRightDown(wxMouseEvent &event);
 	//! The corresponding GUI event handler.
