@@ -103,7 +103,13 @@ void THISCLASS::OnDisplayChanged(Display *display) {
 
 	// Update title and annotation
 	mCanvasTitle->SetText(display->mDisplayName.c_str(), "");
-	mCanvasAnnotation->SetText(display->mAnnotation1.c_str(), display->mAnnotation2.c_str());
+	std::ostringstream oss;
+	oss << "Frame " << display->mFrameNumber;
+	if (display->mFramesCount>=0) {
+		oss << " / " << display->mFramesCount;
+	}
+	oss << ", " << display->mSize.width << "x" << display->mSize.height;
+	mCanvasAnnotation->SetText(oss.str().c_str(), display->mAnnotation.c_str());
 
 	// Move the children
 	UpdateSize();

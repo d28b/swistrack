@@ -1,6 +1,7 @@
 #include "DisplayRenderer.h"
 #define THISCLASS DisplayRenderer
 
+#include "ImageConversion.h"
 #include <sstream>
 #include <cmath>
 #define PI 3.14159265358979
@@ -110,16 +111,9 @@ bool THISCLASS::DrawMainImage(ErrorList *errors) {
 
 	// Resize and convert the image
 	IplImage *mainimage=cvCreateImage(cvSize(mImage->width, mImage->height), IPL_DEPTH_8U, 3);
-	if (mDisplay->mMainImage->nChannels==3) {
-		cvResize(mDisplay->mMainImage, mainimage, CV_INTER_LINEAR);
-	} else if (mDisplay->mMainImage->nChannels==1) {
-		IplImage *resizedmainimage=cvCreateImage(cvSize(mImage->width, mImage->height), IPL_DEPTH_8U, 1);
-		cvResize(mDisplay->mMainImage, resizedmainimage, CV_INTER_LINEAR);
-		cvCvtColor(resizedmainimage, mainimage, CV_GRAY2BGR);
-		cvReleaseImage(&resizedmainimage);
-	} else {
-		errors->Add("Cannot display image: wrong format.");
-	}
+	IplImage *imagergb=ImageConversion::ToRGB(mDisplay->mMainImage);
+	cvResize(imagergb, mainimage, CV_INTER_LINEAR);
+	if (mDisplay->mMainImage!=imagergb) {cvReleaseImage(&imagergb);}
 
 	// Draw this main image
 	if ((mUseMask) && (mDisplay->mMaskImage)) {

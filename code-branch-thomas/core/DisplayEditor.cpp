@@ -28,6 +28,11 @@ THISCLASS::~DisplayEditor() {
 			AddError("Unable to determine display size.");
 		}
 	}
+
+	// Set frame number
+	SwisTrackCore *core=mDisplay->mComponent->GetSwisTrackCore();
+	mDisplay->mFrameNumber=core->mDataStructureInput.mFrameNumber;
+	mDisplay->mFramesCount=core->mDataStructureInput.mFramesCount;
 }
 
 void THISCLASS::SetMainImage(IplImage *img) {
@@ -41,6 +46,7 @@ void THISCLASS::SetMainImage(IplImage *img) {
 		mDisplay->mMainImage=0;
 		return;
 	}
+
 
 	// Take a copy the image
 	mDisplay->mMainImage=cvCreateImage(cvSize(img->width, img->height), img->depth, img->nChannels);

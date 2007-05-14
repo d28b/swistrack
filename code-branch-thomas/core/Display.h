@@ -5,7 +5,7 @@ class Display;
 
 #include <string>
 #include <list>
-#include "cv.h"
+#include <cv.h>
 #include "DisplaySubscriberInterface.h"
 #include "DataStructureParticles.h"
 #include "Component.h"
@@ -28,8 +28,7 @@ public:
 	// General information
 	int mFrameNumber;				//!< The frame number.
 	int mFramesCount;				//!< The number of frames.
-	std::string mAnnotation1;		//!< Annotation 1, usually displayed below the image.
-	std::string mAnnotation2;		//!< Annotation 2, usually displayed below the image.
+	std::string mAnnotation;		//!< Annotation, usually displayed below the image.
 	ErrorList mErrors;				//!< This holds more information display errors (e.g. wrong image format, ...).
 
 	// Display window

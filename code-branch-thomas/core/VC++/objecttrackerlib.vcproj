@@ -692,6 +692,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Utility Functions"
+			>
+			<File
+				RelativePath="..\ImageConversion.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ImageConversion.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

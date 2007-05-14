@@ -3,6 +3,7 @@
 
 #include <wx/image.h>
 #include <highgui.h>
+#include "ImageConversion.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxControl)
     EVT_PAINT(THISCLASS::OnPaint)
@@ -220,12 +221,17 @@ void THISCLASS::OnSize(wxSizeEvent &event) {
 }
 
 void THISCLASS::OnMenuSaveOriginalImageAs(wxCommandEvent& event) {
-	// Copy the current image (since the file dialog will allow other threads to run)
+	// Get the current image
 	Display *display=mCanvasPanel->mCurrentDisplay;
 	if (display==0) {return;}
 	IplImage *img=display->mMainImage;
 	if (img==0) {return;}
-	IplImage *imgcopy=cvCloneImage(img);
+
+	// Convert and make sure we have a *copy* the current image (since the file dialog will allow other threads to run)
+	IplImage *imgcopy=ImageConversion::ToRGB(img);
+	if (imgcopy==img) {
+		imgcopy=cvCloneImage(img);
+	}
 
 	// Show the file save dialog
 	wxFileDialog *dlg = new wxFileDialog(this, "Save original image", "", "", "Bitmap (*.bmp)|*.bmp", wxSAVE, wxDefaultPosition);

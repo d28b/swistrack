@@ -5,7 +5,7 @@
 
 THISCLASS::Display(const std::string &name, const std::string &displayname):
 		mComponent(0), mName(name), mDisplayName(displayname), mSubscribers(),
-		mFrameNumber(-1), mFramesCount(-1), mAnnotation1(), mAnnotation2(), mErrors(),
+		mFrameNumber(-1), mFramesCount(-1), mAnnotation(), mErrors(),
 		mTopLeft(cvPoint(0, 0)), mSize(cvSize(0, 0)),
 		mMainImage(0), mMaskImage(0), mParticles(), mParticlesWorld(),
 		mActive(false), mChanged(false) {

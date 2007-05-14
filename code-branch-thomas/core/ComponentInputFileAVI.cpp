@@ -64,7 +64,7 @@ void THISCLASS::OnStep() {
 
 	// Read the next frame
 	int framenumber=(int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES);
-	int framecount=(int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_FRAME_COUNT);
+	int framescount=(int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_FRAME_COUNT);
 	mOutputImage=cvQueryFrame(mCapture);
 	if (! mOutputImage) {
 		AddError("Could not read frame from AVI file.");
@@ -77,7 +77,7 @@ void THISCLASS::OnStep() {
 	// Set DataStructureImage
 	mCore->mDataStructureInput.mImage=mOutputImage;
 	mCore->mDataStructureInput.mFrameNumber=framenumber;
-	mCore->mDataStructureInput.mFrameCount=framecount;
+	mCore->mDataStructureInput.mFramesCount=framescount;
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
