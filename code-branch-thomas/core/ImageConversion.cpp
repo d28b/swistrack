@@ -42,29 +42,29 @@ IplImage *THISCLASS::ToBGR(IplImage *src) {
 		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_GRAY2BGR);
 		return dest;
-	} else if (memcmp(src->channelSeq, "BGR", 3)) {
+	} else if (memcmp(src->channelSeq, "BGR", 3)==0) {
 		return src;
-	} else if (memcmp(src->channelSeq, "RGB", 3)) {
+	} else if (memcmp(src->channelSeq, "RGB", 3)==0) {
 		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_RGB2BGR);
 		return dest;
-	} else if (memcmp(src->channelSeq, "HSV", 3)) {
+	} else if (memcmp(src->channelSeq, "HSV", 3)==0) {
 		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_HSV2BGR);
 		return dest;
-	} else if (memcmp(src->channelSeq, "HLS", 3)) {
+	} else if (memcmp(src->channelSeq, "HLS", 3)==0) {
 		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_HLS2BGR);
 		return dest;
-	} else if (memcmp(src->channelSeq, "YCC", 3)) {
+	} else if (memcmp(src->channelSeq, "YCC", 3)==0) {
 		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_YCrCb2BGR);
 		return dest;
-	} else if (memcmp(src->channelSeq, "XYZ", 3)) {
+	} else if (memcmp(src->channelSeq, "XYZ", 3)==0) {
 		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_XYZ2BGR);
 		return dest;
-	} else if (memcmp(src->channelSeq, "Lab", 3)) {
+	} else if (memcmp(src->channelSeq, "Lab", 3)==0) {
 		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_Lab2BGR);
 		return dest;

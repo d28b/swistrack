@@ -228,7 +228,7 @@ void THISCLASS::OnMenuSaveOriginalImageAs(wxCommandEvent& event) {
 	if (img==0) {return;}
 
 	// Convert and make sure we have a *copy* the current image (since the file dialog will allow other threads to run)
-	IplImage *imgcopy=ImageConversion::ToRGB(img);
+	IplImage *imgcopy=ImageConversion::ToBGR(img);
 	if (imgcopy==img) {
 		imgcopy=cvCloneImage(img);
 	}
@@ -249,8 +249,14 @@ void THISCLASS::OnMenuSaveOriginalImageAs(wxCommandEvent& event) {
 void THISCLASS::OnMenuSaveViewImageAs(wxCommandEvent& event) {
 	// Copy the current image (since the file dialog will allow other threads to run)
 	IplImage *img=mDisplayRenderer.GetImage();
+	
 	if (img==0) {return;}
-	IplImage *imgcopy=cvCloneImage(img);
+
+	// Convert and make sure we have a *copy* the current image (since the file dialog will allow other threads to run)
+	IplImage *imgcopy=ImageConversion::ToBGR(img);
+	if (imgcopy==img) {
+		imgcopy=cvCloneImage(img);
+	}
 
 	// Show the file save dialog
 	wxFileDialog *dlg = new wxFileDialog(this, "Save displayed image", "", "", "Bitmap (*.bmp)|*.bmp", wxSAVE, wxDefaultPosition);

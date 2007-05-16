@@ -80,6 +80,7 @@ IplImage *THISCLASS::GetImage() {
 	// Create an empty image
 	CvSize size=GetSize();
 	mImage=cvCreateImage(size, IPL_DEPTH_8U, 3);
+	strcpy(mImage->channelSeq,"RGB");
 	memset(mImage->imageData, 255, mImage->imageSize);
 
 	// If the display is null, just display an error message
