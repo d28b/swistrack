@@ -6,6 +6,7 @@ class Display;
 #include <string>
 #include <list>
 #include <cv.h>
+#include <wx/datetime.h>
 #include "DisplaySubscriberInterface.h"
 #include "DataStructureParticles.h"
 #include "Component.h"
@@ -28,6 +29,7 @@ public:
 	// General information
 	int mFrameNumber;				//!< The frame number.
 	int mFramesCount;				//!< The number of frames.
+	wxDateTime mTime;				//!< The time when the displayed image was updated.
 	std::string mAnnotation;		//!< Annotation, usually displayed below the image.
 	ErrorList mErrors;				//!< This holds more information display errors (e.g. wrong image format, ...).
 

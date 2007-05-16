@@ -26,7 +26,8 @@ THISCLASS::CanvasPanel(wxWindow *parent, SwisTrack *st):
 	//vs->Add(mCanvas, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 0);
 	//SetSizer(vs);
 
-	SetDisplay(0);
+	// Set the title
+	mCanvasTitle->SetText("No display (maximum speed)", "");
 }
 
 THISCLASS::~CanvasPanel() {
@@ -34,38 +35,35 @@ THISCLASS::~CanvasPanel() {
 }
 
 void THISCLASS::SetDisplay(Display *display) {
-	if (! display) {
-		if (mCurrentDisplay) {
-			mCurrentDisplay->Unsubscribe(this);
-		}
-		mCurrentDisplay=0;
-		mCanvas->SetDisplay(display);
-		mCanvasTitle->SetText("No display (maximum speed)", "");
-		mCanvasAnnotation->SetText("", "");
-		return;
-	}
+	if (mCurrentDisplay==display) {return;}
 
-	display->Subscribe(this);
+	if (display) {
+		// Subscribe to the new display
+		display->Subscribe(this);
+	} else if (mCurrentDisplay) {
+		// Unsubscribe from the current display
+		mCurrentDisplay->Unsubscribe(this);
+	}
 }
 
 void THISCLASS::OnDisplaySubscribe(Display *display) {
-	if (mCurrentDisplay) {
-		mCurrentDisplay->Unsubscribe(this);
+	Display *olddisplay=mCurrentDisplay;
+	mCurrentDisplay=display;
+
+	// Unsubscribe from the current display
+	if (olddisplay) {
+		olddisplay->Unsubscribe(this);
 	}
 
-	mUpdateStepCounter=0;
-	mCurrentDisplay=display;
+	// Update the GUI
 	mCanvas->SetDisplay(display);
-	mCanvasTitle->SetText(display->mDisplayName.c_str(), "");
-	mCanvasAnnotation->SetText("The image will be shown after the next step.", "");
-
-	// Move the children
-	OnSize(wxSizeEvent());
+	OnDisplayChanged(display);
 }
 
 void THISCLASS::OnDisplayUnsubscribe(Display *display) {
 	if (mCurrentDisplay!=display) {return;}
 
+	// Set everything to empty
 	mCurrentDisplay=0;
 	mCanvas->SetDisplay(0);
 	mCanvasTitle->SetText("No display (maximum speed)", "");
@@ -109,6 +107,7 @@ void THISCLASS::OnDisplayChanged(Display *display) {
 		oss << " / " << display->mFramesCount;
 	}
 	oss << ", " << display->mSize.width << "x" << display->mSize.height;
+	oss << ", " << display->mTime.FormatTime().c_str();
 	mCanvasAnnotation->SetText(oss.str().c_str(), display->mAnnotation.c_str());
 
 	// Move the children

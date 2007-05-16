@@ -8,13 +8,11 @@
 THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
 		Component(stc, "InputCameraGBit"),
 		mTransportLayer(0), mCamera(0), mStreamGrabber(0),
-		mCurrentImageIndex(-1), mFrameNumber(0),
-		mDisplayOutput("Output", "GBit Camera: Input Frame") {
+		mCurrentImageIndex(-1), mFrameNumber(0) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
-	AddDisplay(&mDisplayOutput);
 
 	// Read the XML configuration file
 	Initialize();
@@ -192,12 +190,6 @@ void THISCLASS::OnStep() {
 	// Set this image in the DataStructureImage
 	mCore->mDataStructureInput.mImage=outputimage;
 	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
-
-	// Set the display
-	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(outputimage);
-	}
 }
 
 void THISCLASS::OnStepCleanup() {
@@ -215,13 +207,6 @@ void THISCLASS::OnStop() {
 	while (mStreamGrabber->GetWaitObject().Wait(0)) {
 		mStreamGrabber->RetrieveResult(result);
 	}
-
-	// Delete the image allocated for YUV to BGR conversion
-	//if (mColor) {
-	//	cvReleaseImage(&mOutputImage);
-	//} else {
-	//	mOutputImage=0;
-	//}
 
 	// Deregister and free buffers
 	for (int i=0; i<8; ++i) {

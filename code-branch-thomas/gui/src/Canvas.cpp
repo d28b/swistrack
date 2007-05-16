@@ -90,9 +90,6 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 		dc.SetFont(GetFont());
 		dc.DrawText("No image.", 4, 4);
 	}
-
-	wxDateTime now = wxDateTime::Now();
-	dc.DrawText(now.FormatTime(), 4, 4);
 }
 
 bool THISCLASS::OnPaintImage(wxPaintDC &dc) {
@@ -227,7 +224,7 @@ void THISCLASS::OnMenuSaveOriginalImageAs(wxCommandEvent& event) {
 	IplImage *img=display->mMainImage;
 	if (img==0) {return;}
 
-	// Convert and make sure we have a *copy* the current image (since the file dialog will allow other threads to run)
+	// Convert and make sure we have a *copy* the current image (since the file dialog will allow other threads to run, which may modify the image)
 	IplImage *imgcopy=ImageConversion::ToBGR(img);
 	if (imgcopy==img) {
 		imgcopy=cvCloneImage(img);
@@ -252,7 +249,7 @@ void THISCLASS::OnMenuSaveViewImageAs(wxCommandEvent& event) {
 	
 	if (img==0) {return;}
 
-	// Convert and make sure we have a *copy* the current image (since the file dialog will allow other threads to run)
+	// Convert and make sure we have a *copy* the current image (since the file dialog will allow other threads to run, which may modify the image)
 	IplImage *imgcopy=ImageConversion::ToBGR(img);
 	if (imgcopy==img) {
 		imgcopy=cvCloneImage(img);

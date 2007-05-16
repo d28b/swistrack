@@ -6,7 +6,7 @@
 
 THISCLASS::ComponentInputFileImage(SwisTrackCore *stc):
 		Component(stc, "InputFileImage"),
-		mOutputImage(0),
+		mOutputImage(0), mFrameNumber(0),
 		mDisplayOutput("Output", "Input image") {
 
 	// Data structure relations
@@ -23,6 +23,7 @@ THISCLASS::~ComponentInputFileImage() {
 }
 
 void THISCLASS::OnStart() {
+	// Load the image
 	std::string filename=GetConfigurationString("File", "");
 	if (filename!="") {
 		mOutputImage=cvLoadImage(filename.c_str(), -1);
@@ -31,6 +32,9 @@ void THISCLASS::OnStart() {
 		AddError("Cannot open image file.");
 		return;
 	}
+
+	// Set the frame number to 0
+	mFrameNumber=0;
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -39,9 +43,11 @@ void THISCLASS::OnReloadConfiguration() {
 void THISCLASS::OnStep() {
 	if (! mOutputImage) {return;}
 
+	mFrameNumber++;
+
 	// Set DataStructureImage
 	mCore->mDataStructureInput.mImage=mOutputImage;
-	mCore->mDataStructureInput.mFrameNumber=0;
+	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
