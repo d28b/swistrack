@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentThresholdColorIndependant
 #define HEADER_ComponentThresholdColorIndependant
 
-#include "cv.h"
+#include <cv.h>
 #include "Component.h"
 
 //! A component that applies a constant threshold to a color image, there is an independant threshold for each channels. An "OR" function is then applied between the different channels. The output is a binary image. 

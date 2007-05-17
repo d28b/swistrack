@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentConvertToGray
 #define HEADER_ComponentConvertToGray
 
-#include "cv.h"
+#include <cv.h>
 #include "Component.h"
 
 //! A component that converts the input image (any type) to a grayscale image.

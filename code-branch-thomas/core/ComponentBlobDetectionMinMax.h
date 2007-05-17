@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentBlobDetectionMinMax
 #define HEADER_ComponentBlobDetectionMinMax
 
-#include "cv.h"
+#include <cv.h>
 #include "Component.h"
 #include "DataStructureParticles.h"
 

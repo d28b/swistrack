@@ -2,8 +2,8 @@
 #define HEADER_ComponentInputFileImage
 
 #include <vector>
-#include "cv.h"
-#include "highgui.h"
+#include <cv.h>
+#include <highgui.h>
 #include "Component.h"
 
 //! An input component that reads an AVI file using the CV library.

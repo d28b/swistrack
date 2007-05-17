@@ -32,6 +32,7 @@ public:
 	// Overwritten Component methods
 	void OnStart();
 	void OnReloadConfiguration();
+	bool OnWaitForNextStep();
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();

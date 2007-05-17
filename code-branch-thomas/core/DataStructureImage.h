@@ -3,7 +3,7 @@
 
 #include "DataStructure.h"
 #include <string>
-#include "cv.h"
+#include <cv.h>
 
 //! A DataStructure holding an image.
 class DataStructureImage: public DataStructure {

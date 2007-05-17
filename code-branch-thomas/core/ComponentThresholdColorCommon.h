@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentThresholdColorCommon
 #define HEADER_ComponentThresholdColorCommon
 
-#include "cv.h"
+#include <cv.h>
 #include "Component.h"
 
 //! A component that applies a constant threshold to a color image, there is only one threshold for all channels.  The output is a binary image.

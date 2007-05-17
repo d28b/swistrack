@@ -52,6 +52,8 @@ public:
 	
 	//! This event is called to initialize the component before OnStep() is called.
 	virtual void OnStart() = 0;
+	//! This event is called to wait for the trigger.
+	virtual bool OnWaitForNextStep() {return true;}
 	//! This event is called to perform one step.
 	virtual void OnStep() = 0;
 	//! This event is called to cleanup a previously performed step.

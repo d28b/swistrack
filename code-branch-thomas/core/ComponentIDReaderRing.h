@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentIDReaderRing
 #define HEADER_ComponentIDReaderRing
 
-#include "cv.h"
+#include <cv.h>
 #include "Component.h"
 #include "DataStructureParticles.h"
 #include "ObjectList.h"

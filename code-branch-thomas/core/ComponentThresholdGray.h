@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentThresholdGray
 #define HEADER_ComponentThresholdGray
 
-#include "cv.h"
+#include <cv.h>
 #include "Component.h"
 
 //! A component that applies a constant threshold to a grayscale image. The output is a binary image.

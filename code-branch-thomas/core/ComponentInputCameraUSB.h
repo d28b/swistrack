@@ -1,8 +1,8 @@
 #ifndef HEADER_ComponentInputCameraUSB
 #define HEADER_ComponentInputCameraUSB
 
-#include "cv.h"
-#include "highgui.h"
+#include <cv.h>
+#include <highgui.h>
 #include "Component.h"
 
 //! An input component that interfaces a USB camera using the CV library.

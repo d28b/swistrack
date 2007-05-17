@@ -704,6 +704,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Execution"
+			>
+			<File
+				RelativePath="..\ExecutionWaitForNextStep.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ExecutionWaitForNextStep.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

@@ -152,6 +152,23 @@ void THISCLASS::OnReloadConfiguration() {
 	}
 }
 
+bool THISCLASS::OnWaitForNextStep() {
+	//new ComponentInputCameraGBitThread(this);
+
+    // Send the software trigger
+	if (mTriggerMode==sTrigger_Software) {
+		mCamera->TriggerSoftware.Execute();
+	}
+
+	// Wait for the grabbed image with a timeout of 3 seconds
+	if (! mStreamGrabber->GetWaitObject().Wait(3000)) {
+		AddError("Failed to retrieve an image: the camera did not send any image.");
+		return false;
+	}
+
+	return false;
+}
+
 void THISCLASS::OnStep() {
     // Send the software trigger
 	if (mTriggerMode==sTrigger_Software) {

@@ -2,7 +2,7 @@
 #define HEADER_DataStructureParticles
 
 #include <vector>
-#include "cv.h"
+#include <cv.h>
 #include "DataStructure.h"
 #include "Particle.h"
 

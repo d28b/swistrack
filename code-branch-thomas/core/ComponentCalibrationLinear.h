@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentCalibrationLinear
 #define HEADER_ComponentCalibrationLinear
 
-#include "cv.h"
+#include <cv.h>
 #include "Component.h"
 #include "DataStructureParticles.h"
 #include <vector>

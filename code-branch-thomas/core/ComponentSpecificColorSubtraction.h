@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentSpecificColorSubtraction
 #define HEADER_ComponentSpecificColorSubtraction
 
-#include "cv.h"
+#include <cv.h>
 #include "Component.h"
 
 //! A component subtracting a fixed background from a color image.

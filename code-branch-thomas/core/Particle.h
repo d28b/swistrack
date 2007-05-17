@@ -1,7 +1,7 @@
 #ifndef HEADER_Particle
 #define HEADER_Particle
 
-#include "cv.h"
+#include <cv.h>
 
 //! A particle.
 class Particle {

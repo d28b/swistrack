@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentConvertToColor
 #define HEADER_ComponentConvertToColor
 
-#include "cv.h"
+#include <cv.h>
 #include "Component.h"
 
 //! A component that converts the input image (any format) to BGR.

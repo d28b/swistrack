@@ -493,8 +493,11 @@ void THISCLASS::OnHelp(wxCommandEvent& WXUNUSED(event)) {
 	wxLaunchDefaultBrowser("http://en.wikibooks.org/wiki/Swistrack");
 }
 
+#include "ExecutionWaitForNextStep.h"
+
 void THISCLASS::OnTest(wxCommandEvent& WXUNUSED(event)) {
-	wxString path=wxFileName::GetCwd();
+	ExecutionWaitForNextStep *ewfnt = new ExecutionWaitForNextStep(mSwisTrackCore);
+	ewfnt->Execute();
 }
 
 void THISCLASS::OnIdle(wxIdleEvent& WXUNUSED(event)) {

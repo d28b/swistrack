@@ -18,6 +18,7 @@ class SwisTrackCoreEditor;
 //! The main class of the core part of SwisTrack. This class holds everything together.
 class SwisTrackCore {
 friend class SwisTrackCoreEditor;
+friend class ExecutionWaitForNextStep;
 
 public:
 	//! A list of components type.
@@ -90,6 +91,7 @@ protected:
 	bool mStarted;			//!< Whether the components have been started or not.
 	bool mProductiveMode;	//!< Whether the components are running in productive mode or not. Note that this is only valid if mStarted=true.
 	int mEditLocks;			//!< The number of edit locks.
+	//Execution *mCurrentExecution;	//!< The current execution.
 
 	tComponentList mDeployedComponents;						//!< The list of deployed components.
 

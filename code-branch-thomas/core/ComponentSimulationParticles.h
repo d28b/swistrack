@@ -1,10 +1,10 @@
 #ifndef HEADER_ComponentSimulationParticles
 #define HEADER_ComponentSimulationParticles
 
-#include "cv.h"
 #include "Component.h"
 #include "DataStructureParticles.h"
 #include "SimulationParticles.h"
+#include <cv.h>
 #include <vector>
 
 //! A component that simulates moving particles. The particle movements are read from a file with NMEA records. Only particles within a certain rectangular area (virtual camera) will be injected.
