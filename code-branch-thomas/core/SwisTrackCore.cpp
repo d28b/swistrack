@@ -290,11 +290,41 @@ bool THISCLASS::ReloadConfiguration() {
 }
 
 void THISCLASS::StartTrigger() {
+	// Notify the interfaces
+	tSwisTrackCoreInterfaceList::iterator it=mSwisTrackCoreInterfaces.begin();
+	while (it!=mSwisTrackCoreInterfaces.end()) {
+		(*it)->OnBeforeTriggerStart();
+		it++;
+	}
+
+	// Activate the trigger
 	mTrigger->SetActive(true);
+
+	// Notify the interfaces
+	it=mSwisTrackCoreInterfaces.begin();
+	while (it!=mSwisTrackCoreInterfaces.end()) {
+		(*it)->OnAfterTriggerStart();
+		it++;
+	}
 }
 
 void THISCLASS::StopTrigger() {
+	// Notify the interfaces
+	tSwisTrackCoreInterfaceList::iterator it=mSwisTrackCoreInterfaces.begin();
+	while (it!=mSwisTrackCoreInterfaces.end()) {
+		(*it)->OnBeforeTriggerStop();
+		it++;
+	}
+
+	// Deactivate the trigger
 	mTrigger->SetActive(false);
+
+	// Notify the interfaces
+	it=mSwisTrackCoreInterfaces.begin();
+	while (it!=mSwisTrackCoreInterfaces.end()) {
+		(*it)->OnAfterTriggerStop();
+		it++;
+	}
 }
 
 void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmlerr) {

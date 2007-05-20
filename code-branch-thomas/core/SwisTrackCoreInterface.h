@@ -41,6 +41,17 @@ public:
 	virtual void OnBeforeEditComponent(Component *c) {};
 	//! Called after a component has been modified.
 	virtual void OnAfterEditComponent(Component *c) {};
+
+	//! Called before the trigger is started.
+	virtual void OnBeforeTriggerStart() {};
+	//! Called after the trigger has been started.
+	virtual void OnAfterTriggerStart() {};
+
+	//! Called before the trigger is stopped.
+	virtual void OnBeforeTriggerStop() {}
+	//! Called after the trigger has been stopped.
+	virtual void OnAfterTriggerStop() {};
+
 };
 
 #endif

@@ -87,6 +87,9 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	// Configuration panel
 	mConfigurationPanel=new ConfigurationPanel(this, this, 0);
 
+	// Timeline panel
+	//mTimelinePanel=new TimelinePanel(this, this);
+
 	// Setup frame contents
 	mHorizontalSizer=new wxBoxSizer(wxHORIZONTAL);
 	mHorizontalSizer->Add(mCanvasPanel, 1, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 10);
