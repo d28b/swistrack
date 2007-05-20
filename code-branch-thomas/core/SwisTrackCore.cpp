@@ -324,6 +324,20 @@ bool THISCLASS::IsTriggerActive() {
 	return mTrigger->GetActive();
 }
 
+void THISCLASS::AddInterface(SwisTrackCoreInterface *stc) {
+	mSwisTrackCoreInterfaces.push_back(stc);
+}
+
+void THISCLASS::RemoveInterface(SwisTrackCoreInterface *stc) {
+	tSwisTrackCoreInterfaceList::iterator it=find(mSwisTrackCoreInterfaces.begin(), mSwisTrackCoreInterfaces.end(), stc);
+	if (it==mSwisTrackCoreInterfaces.end()) {return;}
+	mSwisTrackCoreInterfaces.erase(it);
+}
+
+void THISCLASS::OnIdle() {
+	mTrigger->OnIdle();
+}
+
 bool THISCLASS::IncrementEditLocks() {
 	if (mEditLocks>0) {mEditLocks++; return true;}
 
@@ -358,14 +372,3 @@ void THISCLASS::DecrementEditLocks() {
 		it++;
 	}
 }
-
-void THISCLASS::AddInterface(SwisTrackCoreInterface *stc) {
-	mSwisTrackCoreInterfaces.push_back(stc);
-}
-
-void THISCLASS::RemoveInterface(SwisTrackCoreInterface *stc) {
-	tSwisTrackCoreInterfaceList::iterator it=find(mSwisTrackCoreInterfaces.begin(), mSwisTrackCoreInterfaces.end(), stc);
-	if (it==mSwisTrackCoreInterfaces.end()) {return;}
-	mSwisTrackCoreInterfaces.erase(it);
-}
-

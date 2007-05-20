@@ -246,6 +246,7 @@ void THISCLASS::Control_StartRunMode() {
 	GetToolBar()->ToggleTool(sID_Control_Run, true);
 	GetToolBar()->EnableTool(sID_Control_Step, false);
 	mSwisTrackCore->StartTrigger();
+	mSwisTrackCore->Start(false);
 }
 
 void THISCLASS::Control_StopRunMode() {
@@ -466,7 +467,8 @@ void THISCLASS::OnHelp(wxCommandEvent& WXUNUSED(event)) {
 void THISCLASS::OnTest(wxCommandEvent& WXUNUSED(event)) {
 }
 
-void THISCLASS::OnIdle(wxIdleEvent& WXUNUSED(event)) {
+void THISCLASS::OnIdle(wxIdleEvent& event) {
+	mSwisTrackCore->OnIdle();
 }
 
 void THISCLASS::OnToolsTCPServer(wxCommandEvent& WXUNUSED(event)) {

@@ -1,21 +1,26 @@
 #include "SwisTrackCoreTrigger.h"
 #define THISCLASS SwisTrackCoreTrigger
 
+#include "SwisTrackCore.h"
+
 DEFINE_EVENT_TYPE(wxEVT_SWISTRACKCORE_TRIGGER)
 DEFINE_EVENT_TYPE(wxEVT_SWISTRACKCORE_TRIGGER_CLEAR)
 
 THISCLASS::SwisTrackCoreTrigger(SwisTrackCore *stc):
+		wxEvtHandler(), SwisTrackCoreInterface(),
 		mSwisTrackCore(stc), mActive(false), mStepPerformed(false) {
 
-	Connect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER, wxCommandEventHandler(THISCLASS::OnSwisTrackCoreTrigger));
-	Connect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER_CLEAR, wxCommandEventHandler(THISCLASS::OnSwisTrackCoreTriggerClear));
+	mSwisTrackCore->AddInterface(this);
+	Connect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER, wxCommandEventHandler(THISCLASS::OnTrigger));
+	Connect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER_CLEAR, wxCommandEventHandler(THISCLASS::OnTriggerClear));
 }
 
 THISCLASS::~SwisTrackCoreTrigger() {
 }
 
-void THISCLASS::OnSwisTrackCoreTrigger(wxCommandEvent &event) {
+void THISCLASS::OnTrigger(wxCommandEvent &event) {
 	if (mStepPerformed) {return;}
+	if (! mActive) {return;}
 
 	// Return if at least one trigger component isn't ready
 	const SwisTrackCore::tComponentList *deployedcomponents=mSwisTrackCore->GetDeployedComponents();
@@ -45,13 +50,20 @@ void THISCLASS::OnSwisTrackCoreTrigger(wxCommandEvent &event) {
 	wxCommandEvent newevent(wxEVT_SWISTRACKCORE_TRIGGER_CLEAR);
 	AddPendingEvent(newevent);
 
-	// If the automatic trigger is disabled, we return here
-	if (! mActive) {return;}
-
 	// Do a step
 	mSwisTrackCore->Step();
 }
 
-void THISCLASS::OnSwisTrackCoreTriggerClear(wxCommandEvent &event) {
+void THISCLASS::OnTriggerClear(wxCommandEvent &event) {
+	mStepPerformed=false;
+}
+
+void THISCLASS::OnIdle() {
+	// In case there is no trigger, we execute the steps as fast as possible.
+	// Hence try to launch the next step.
+	OnTrigger(wxCommandEvent());
+}
+
+void THISCLASS::OnAfterStart(bool productivemode) {
 	mStepPerformed=false;
 }

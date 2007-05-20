@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <wx/log.h>
 #include "ConfigurationXML.h"
+#include "SwisTrackCoreInterface.h"
 #define THISCLASS Component
 
 THISCLASS::Component(SwisTrackCore *stc, const std::string &name):

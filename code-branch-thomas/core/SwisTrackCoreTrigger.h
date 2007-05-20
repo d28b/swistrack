@@ -2,11 +2,11 @@
 #define HEADER_SwisTrackCoreTrigger
 
 class SwisTrackCoreTrigger;
-
-#include "SwisTrackCore.h"
+class SwisTrackCore;
+#include "SwisTrackCoreInterface.h"
 #include <wx/event.h>
 
-class SwisTrackCoreTrigger: public wxEvtHandler {
+class SwisTrackCoreTrigger: public wxEvtHandler, public SwisTrackCoreInterface {
 
 public:
 	SwisTrackCore *mSwisTrackCore;		//!< The associated SwisTrackCore object.
@@ -17,14 +17,19 @@ public:
 	~SwisTrackCoreTrigger();
 
 	//! Executes a step if all trigger components are ready.
-	void OnSwisTrackCoreTrigger(wxCommandEvent &event);
+	void OnTrigger(wxCommandEvent &event);
 	//! Clears the StepPerformed flag so that the a new step can be executed.
-	void OnSwisTrackCoreTriggerClear(wxCommandEvent &event);
+	void OnTriggerClear(wxCommandEvent &event);
+	// Idle event handler.
+	void OnIdle();
 
 	//! Actives or deactivates the trigger.
 	void SetActive(bool active) {mActive=active;}
 	//! Actives or deactivates the trigger.
 	bool GetActive() const {return mActive;}
+
+	// SwisTrackCoreInterface methods
+	void OnAfterStart(bool productivemode);
 
 private:
 	bool mActive;				//!< Whether the automatic trigger is activated or not.

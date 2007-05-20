@@ -10,6 +10,7 @@
 class ComponentListPanel;
 
 #include "SwisTrack.h"
+#include "SwisTrackCoreInterface.h"
 #include "ComponentsDialog.h"
 #include <wx/panel.h>
 #include <wx/listctrl.h>
@@ -47,17 +48,10 @@ public:
 	void OnListLeftDoubleClick(wxMouseEvent& event);
 
 	// SwisTrackCoreInterface methods
-	void OnBeforeStart(bool productivemode) {};
 	void OnAfterStart(bool productivemode);
-	void OnBeforeStop() {};
 	void OnAfterStop();
-	void OnBeforeStep() {};
-	void OnStepReady() {};
 	void OnAfterStep();
-	void OnBeforeEdit() {};
 	void OnAfterEdit();
-	void OnBeforeEditComponent(Component *c) {};
-	void OnAfterEditComponent(Component *c) {};
 
 private:
 	//! GUI constants.

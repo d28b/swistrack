@@ -8,7 +8,8 @@
 	<configuration>
 		<parameter type="double">
 			<name>Interval</name>
-			<label>Interval (s)</label>
+			<label>Interval</label>
+			<unit>s</unit>
 			<default>0.1</default>
 			<min>0.01</min>
 			<max>1</max>

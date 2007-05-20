@@ -1,6 +1,8 @@
 #include "ComponentTrigger.h"
 #define THISCLASS ComponentTrigger
 
+#include <wx/event.h>
+
 THISCLASS::ComponentTrigger(Component *c):
 		mComponent(c), mIsReady(false) {
 

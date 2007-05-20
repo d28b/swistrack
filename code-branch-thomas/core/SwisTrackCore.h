@@ -14,7 +14,9 @@ class SwisTrackCore;
 #include "ErrorList.h"
 #include "SwisTrackCoreInterface.h"
 #include "SwisTrackCoreTrigger.h"
+//class SwisTrackCoreTrigger;
 class SwisTrackCoreEditor;
+//class SwisTrackCoreInterface;
 
 //! The main class of the core part of SwisTrack. This class holds everything together.
 class SwisTrackCore {
@@ -94,6 +96,9 @@ public:
 	void AddInterface(SwisTrackCoreInterface *stc);
 	//! Removes an object from the list of interfaces.
 	void RemoveInterface(SwisTrackCoreInterface *stc);
+
+	//! This method should be called whenever the system becomes idle. (Since wxWidgets 2.8 sends these events only to frames, we need to relay them from SwisTrack to SwisTrackCore.)
+	void OnIdle();
 
 protected:
 	bool mStarted;			//!< Whether the components have been started or not.
