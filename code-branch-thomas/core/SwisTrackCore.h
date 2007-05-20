@@ -13,6 +13,7 @@ class SwisTrackCore;
 #include "DataStructureParticles.h"
 #include "ErrorList.h"
 #include "SwisTrackCoreInterface.h"
+#include "SwisTrackCoreTrigger.h"
 class SwisTrackCoreEditor;
 
 //! The main class of the core part of SwisTrack. This class holds everything together.
@@ -34,8 +35,8 @@ public:
 	tSwisTrackCoreInterfaceList mSwisTrackCoreInterfaces;	//!< The list of SwisTrackCoreInterface objects.
 	std::string mComponentConfigurationFolder;				//!< The path to the component configuration files, including the trailing slash.
 	tComponentCategoryMap mComponentCategories;				//!< The component categories. (not used, TODO: read categories from XML file and put them here, then modify components to read categoryID from their XML file)
-	CommunicationInterface *mCommunicationInterface;	//!< The associated communication interface.
-	SwisTrackCoreEventHandler mEventHandler;
+	CommunicationInterface *mCommunicationInterface;		//!< The associated communication interface.
+	SwisTrackCoreTrigger *mTrigger;							//!< The associated trigger.
 
 	// Component categories
 	ComponentCategory mCategoryTrigger;
@@ -69,6 +70,11 @@ public:
 	//! Reloads the configuration while a session is runnning. This may only be called if IsStarted()==false. Note that not all configuration parameters may be reloaded. This function may also be called in productive mode.
 	bool ReloadConfiguration();
 
+	//! Starts the automatic trigger.
+	void StartTrigger();
+	//! Stops the automatic trigger.
+	void StopTrigger();
+
 	//! Writes the configuration to a XML document.
 	void ConfigurationWriteXML(wxXmlNode* configuration, ErrorList *xmlerr);
 
@@ -81,6 +87,8 @@ public:
 	bool IsStarted() {return mStarted;}
 	//! Returns whether the components have been started in productive mode.
 	bool IsStartedInProductiveMode() {return (mStarted && mProductiveMode);}
+	//! Returns whether the automatic trigger is active.
+	bool IsTriggerActive();
 
 	//! Adds an object to the list of interfaces. Objects on this list will be informed upon changes.
 	void AddInterface(SwisTrackCoreInterface *stc);

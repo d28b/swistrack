@@ -5,18 +5,22 @@ DEFINE_EVENT_TYPE(wxEVT_SWISTRACKCORE_TRIGGER)
 DEFINE_EVENT_TYPE(wxEVT_SWISTRACKCORE_TRIGGER_CLEAR)
 
 THISCLASS::SwisTrackCoreTrigger(SwisTrackCore *stc):
-		mSwisTrackCore(stc), mStepPerformed(false) {
+		mSwisTrackCore(stc), mActive(false), mStepPerformed(false) {
 
 	Connect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER, wxCommandEventHandler(THISCLASS::OnSwisTrackCoreTrigger));
 	Connect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER_CLEAR, wxCommandEventHandler(THISCLASS::OnSwisTrackCoreTriggerClear));
+}
+
+THISCLASS::~SwisTrackCoreTrigger() {
 }
 
 void THISCLASS::OnSwisTrackCoreTrigger(wxCommandEvent &event) {
 	if (mStepPerformed) {return;}
 
 	// Return if at least one trigger component isn't ready
-	tComponentList::iterator it=mSwisTrackCore->mDeployedComponents.begin();
-	while (it!=mSwisTrackCore->mDeployedComponents.end()) {
+	const SwisTrackCore::tComponentList *deployedcomponents=mSwisTrackCore->GetDeployedComponents();
+	SwisTrackCore::tComponentList::const_iterator it=deployedcomponents->begin();
+	while (it!=deployedcomponents->end()) {
 		ComponentTrigger *ct=(*it)->mTrigger;
 		if (ct) {
 			if (! ct->IsReady()) {
@@ -27,8 +31,8 @@ void THISCLASS::OnSwisTrackCoreTrigger(wxCommandEvent &event) {
 	}
 
 	// Clear the component trigger flags
-	tComponentList::iterator it=mSwisTrackCore->mDeployedComponents.begin();
-	while (it!=mSwisTrackCore->mDeployedComponents.end()) {
+	it=deployedcomponents->begin();
+	while (it!=deployedcomponents->end()) {
 		ComponentTrigger *ct=(*it)->mTrigger;
 		if (ct) {
 			ct->ClearReady();

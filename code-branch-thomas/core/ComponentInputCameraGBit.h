@@ -9,6 +9,8 @@
 #include <pylon/TlFactory.h>
 #include <pylon/Result.h>
 #include <pylon/gige/BaslerGigECamera.h>
+#include <wx/thread.h>
+#include <wx/event.h>
 #include "Display.h"
 
 //! An input component for GBit cameras.
@@ -32,8 +34,6 @@ public:
 	// Overwritten Component methods
 	void OnStart();
 	void OnReloadConfiguration();
-	Execution::Result OnWaitForStep();
-	Execution::Result OnWaitForStep_Continue();
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
@@ -56,8 +56,9 @@ private:
 
 	//! The thread waiting for new images (in case of external trigger).
 	class Thread: public wxThread {
+	public:
 		ComponentInputCameraGBit *mComponent;		//!< The associated component.
-		wxCriticalSection *mCriticalSection; 		//!< The critical section object (for synchronization).
+		wxCriticalSection mCriticalSection; 		//!< The critical section object (for synchronization).
 		IplImage *mImage;							//!< (synchronized) The last image that the thread acquired.
 
 		//! Constructor.
@@ -67,18 +68,18 @@ private:
 
 		// wxThread methods
 		ExitCode Entry();
-	}
+	};
 
 	//! The event listener that is waiting for events from the TriggerThread.
 	class EventHandler: public wxEvtHandler {
+	public:
 		ComponentInputCameraGBit *mComponent;			//!< The associated component.
 
 		//! Constructor.
-		EventHandler(ComponentInputCameraGBit *c): wxEvtListener(), mComponent(c) {}
+		EventHandler(ComponentInputCameraGBit *c): wxEvtHandler(), mComponent(c) {}
 		//! Destructor.
 		~EventHandler() {}
-
-	}
+	};
 
 	Thread *mThread;				//!< The thread waiting for new images (in case of external trigger).
 	EventHandler *mEventHandler;	//!< The event listener that is waiting for events from the TriggerThread.

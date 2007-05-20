@@ -22,6 +22,7 @@ THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
 }
 
 THISCLASS::~ComponentInputCameraGBit() {
+	delete mTrigger;
 }
 
 void THISCLASS::OnStart() {
@@ -136,7 +137,7 @@ void THISCLASS::OnStart() {
 
 	// In case of an external trigger, start a thread waiting for the images
 	if (mTriggerMode!=sTrigger_Software) {
-		ComponentThread *ct=new ComponentInputCameraGBit::Thread(this);
+		ComponentInputCameraGBit::Thread *ct=new ComponentInputCameraGBit::Thread(this);
 		ct->Create();
 		ct->Run();
 	}
@@ -159,6 +160,8 @@ void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
+	Pylon::GrabResult result;
+
     // Get the image
 	if (mTriggerMode==sTrigger_Software) {
 		// Send the software trigger
@@ -171,7 +174,6 @@ void THISCLASS::OnStep() {
 		}
 
 		// Get an item from the grabber's output queue
-		Pylon::GrabResult result;
 		mStreamGrabber->RetrieveResult(result);
 		if (! result.Succeeded()) {
 			std::ostringstream oss;
@@ -235,6 +237,10 @@ void THISCLASS::OnStop() {
 	tlfactory.DestroyTl(mTransportLayer);
 	mCamera=0;
 	mTransportLayer=0;
+}
+
+wxThread::ExitCode THISCLASS::Thread::Entry() {
+	return 0;
 }
 
 #endif

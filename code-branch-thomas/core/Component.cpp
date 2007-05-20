@@ -11,7 +11,7 @@ THISCLASS::Component(SwisTrackCore *stc, const std::string &name):
 		mName(name), mDisplayName(name), mDescription(), mHelpURL(), mCategory(0), mDefaultDisplay(), mTrigger(0),
 		mInitializationErrors(), mStepDuration(-1),
 		mDataStructureRead(), mDataStructureWrite(), mDisplays(),
-		mCore(stc), mConfiguration(), mConfigurationDefault(), mEditLocks(0), {
+		mCore(stc), mConfiguration(), mConfigurationDefault(), mEditLocks(0) {
 
 }
 

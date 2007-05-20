@@ -26,3 +26,5 @@ private:
 	int mTodo;				//!< The number of steps performed.
 
 };
+
+#endif

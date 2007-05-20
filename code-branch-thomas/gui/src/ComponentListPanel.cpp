@@ -114,7 +114,7 @@ void THISCLASS::Update() {
 
 		// Trigger flag
 		li.SetColumn(col++);
-		if ((*it)->mIsTrigger) {
+		if ((*it)->mTrigger) {
 			li.SetText("T");
 			mList->SetItem(li);
 		}
@@ -286,9 +286,9 @@ void THISCLASS::OnButtonUpClick(wxCommandEvent& event) {
 	SwisTrackCore::tComponentList *cl=stce.GetDeployedComponents();
 	SwisTrackCore::tComponentList::iterator it=find(cl->begin(), cl->end(), mSelectedComponent);
 	if (it==cl->end()) {return;}
+	if (it==cl->begin()) {return;}
 	SwisTrackCore::tComponentList::iterator it2=it;
 	it2--;
-	if (it2==cl->end()) {return;}
 	cl->erase(it);
 	cl->insert(it2, mSelectedComponent);
 }

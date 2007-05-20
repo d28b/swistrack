@@ -41,7 +41,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 	EVT_MENU(sID_Quit,  THISCLASS::OnFileQuit)
 	EVT_MENU(sID_Control_ProductiveMode, THISCLASS::OnControlProductiveMode)
 	EVT_MENU(sID_Control_Run, THISCLASS::OnControlRun)
-	EVT_MENU(sID_Control_Control_SingleStep, THISCLASS::OnControlControl_SingleStep)
+	EVT_MENU(sID_Control_Step, THISCLASS::OnControlStep)
 	EVT_MENU(sID_Control_Reset, THISCLASS::OnControlReset)
 	EVT_MENU(sID_View_ComponentList, THISCLASS::OnViewComponentList)
 	EVT_MENU(sID_View_NewDisplay, THISCLASS::OnViewNewDisplay)
@@ -49,14 +49,13 @@ BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 	EVT_MENU(sID_Help, THISCLASS::OnHelp)
 	EVT_MENU(sID_Test, THISCLASS::OnTest)
 	EVT_MENU(sID_About, THISCLASS::OnHelpAbout)
-	EVT_TIMER(wxID_ANY, THISCLASS::OnRunTimer)
 	EVT_IDLE(THISCLASS::OnIdle)
 END_EVENT_TABLE()
 
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
 		wxFrame(NULL, -1, title, pos, size, style),
 		CommunicationCommandHandler(),
-		mSwisTrackCore(0), mTCPServer(0), mFileName(""), mTriggerRunInterval(1000),
+		mSwisTrackCore(0), mTCPServer(0), mFileName(""),
 		mHorizontalSizer(0), mCanvasPanel(0), mComponentListPanel(0), mConfigurationPanel(0) {
 
 #ifdef MULTITHREAD
@@ -97,17 +96,11 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	vs->Add(mHorizontalSizer, 3, wxEXPAND, 0);
 	vs->Add(mComponentListPanel, 1, wxEXPAND, 0);
 	SetSizer(vs);
-
-	// The timer used for the free run mode
-	mTriggerRunTimer=new wxTimer(this);
 }
 
 SwisTrack::~SwisTrack(){
-	SetTriggerManual();
+	Control_StopRunMode();
 	Control_StopProductiveMode();
-
-	// Delete the trigger timer
-	delete mTriggerRunTimer;
 
 	// Delete the components that rely on SwisTrackCore
 	mComponentListPanel->Destroy();
@@ -166,7 +159,7 @@ void THISCLASS::BuildToolBar() {
 	toolbar->AddTool(sID_Control_ProductiveMode, _T("Productive"), wxBITMAP(bitmap_productive), _T("Run in productive mode"), wxITEM_CHECK);
 	toolbar->AddTool(sID_Control_Run, _T("Run"), wxBITMAP(bitmap_play), _T("Run automatically"), wxITEM_CHECK);
 	toolbar->AddSeparator();
-	toolbar->AddTool(sID_Control_SingleStep, _T("Step"), wxBITMAP(bitmap_singlestep), _T("Processes one image"));
+	toolbar->AddTool(sID_Control_Step, _T("Step"), wxBITMAP(bitmap_singlestep), _T("Processes one image"));
 	toolbar->AddTool(sID_Control_Reset, _T("Reset"), wxBITMAP(bitmap_singlestep), _T("Stops the execution. It will be started upon the next step."));
 	toolbar->AddSeparator();
 
@@ -212,8 +205,9 @@ void THISCLASS::SetConfigurationPanel(Component *c) {
 	eld.ShowModal();
 }
 
-void THISCLASS::Control_SingleStep() {
-	// Start (if necessary) and perform a step
+void THISCLASS::Control_Step() {
+	// Start (if necessary) and perform a step, unless the automatic trigger is active
+	if (mSwisTrackCore->IsTriggerActive()) {return;}
 	mSwisTrackCore->Start(false);
 	mSwisTrackCore->Step();
 }
@@ -225,10 +219,12 @@ void THISCLASS::Control_ReloadConfiguration() {
 		mSwisTrackCore->ReloadConfiguration();
 	} else {
 		mSwisTrackCore->Stop();
+		mSwisTrackCore->Start(false);
 	}
 }
 
 void THISCLASS::Control_StartProductiveMode() {
+	// Stop and start in productive mode, unless we are in productive mode already
 	if (mSwisTrackCore->IsStartedInProductiveMode()) {return;}
 	mSwisTrackCore->Stop();
 	GetToolBar()->ToggleTool(sID_Control_ProductiveMode, true);
@@ -237,55 +233,57 @@ void THISCLASS::Control_StartProductiveMode() {
 }
 
 void THISCLASS::Control_StopProductiveMode() {
+	// Stop productive mode (if we are running in productive mode) and start in normal mode
 	if (! mSwisTrackCore->IsStartedInProductiveMode()) {return;}
 	mSwisTrackCore->Stop();
 	GetToolBar()->ToggleTool(sID_Control_ProductiveMode, false);
 	GetToolBar()->EnableTool(sID_Control_Reset, true);
+	mSwisTrackCore->Start(false);
 }
 
-void THISCLASS::SetTriggerManual() {
-	GetToolBar()->ToggleTool(sID_Control_Run, false);
-	SetStatusText("Manual", sStatusField_Trigger);
-	mTriggerRunTimer->Stop();
-}
-
-void THISCLASS::SetTriggerRun() {
+void THISCLASS::Control_StartRunMode() {
+	// Activate the automatic trigger
 	GetToolBar()->ToggleTool(sID_Control_Run, true);
-	if (! mTriggerRunTimer->IsRunning()) {
-		mTriggerRunTimer->Start(mTriggerRunInterval);
-	}
+	GetToolBar()->EnableTool(sID_Control_Step, false);
+	mSwisTrackCore->StartTrigger();
 }
 
-void THISCLASS::OnRunTimer(wxTimerEvent& WXUNUSED(event)) {
-	Control_SingleStep();
-	if (mTriggerRunTimer->GetInterval()!=mTriggerRunInterval) {
-		mTriggerRunTimer->Stop();
-		mTriggerRunTimer->Start(mTriggerRunInterval);
-		SetStatusText(wxString::Format("%d ms / %.1f FPS", mTriggerRunInterval, 1/(double)mTriggerRunInterval), sStatusField_Trigger);
-	}
+void THISCLASS::Control_StopRunMode() {
+	// Deactivate the automatic trigger
+	GetToolBar()->ToggleTool(sID_Control_Run, false);
+	GetToolBar()->EnableTool(sID_Control_Step, true);
+	mSwisTrackCore->StopTrigger();
 }
 
 bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 	if (m->mCommand=="START") {
+		// DEPRECATED: use RUN true
 		Control_StartProductiveMode();
 		return true;
 	} else if (m->mCommand=="STOP") {
+		// DEPRECATED: use RUN false
 		Control_StopProductiveMode();
 		return true;
 	} else if (m->mCommand=="STEP") {
-		Control_SingleStep();
+		Control_Step();
 		return true;
 	} else if (m->mCommand=="RELOADCONFIGURATION") {
 		Control_ReloadConfiguration();
 		return true;
-	} else if (m->mCommand=="TRIGGER") {
-		std::string type=m->GetString("MANUAL");
-		std::transform(type.begin(), type.end(), type.begin(), std::toupper);
-		if (type=="FREERUN") {
-			mTriggerRunInterval=m->GetDouble(1);
-			SetTriggerRun();
+	} else if (m->mCommand=="RUN") {
+		bool state=m->GetBool(false);
+		if (state) {
+			Control_StartRunMode();
 		} else {
-			SetTriggerManual();
+			Control_StopRunMode();
+		}
+		return true;
+	} else if (m->mCommand=="PRODUCTIVE") {
+		bool state=m->GetBool(false);
+		if (state) {
+			Control_StartProductiveMode();
+		} else {
+			Control_StopProductiveMode();
 		}
 		return true;
 	}
@@ -328,6 +326,8 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	// At this point, we consider the SwisTrack configuration to be valid. The next few lines close the current configuration and read the configuration.
 
 	// Close the current configuration
+	Control_StopProductiveMode();
+	Control_StopRunMode();
 	if (mChanged) {
 		// TODO if necessary, ask the user whether he'd like to save the changes
 		// return false;
@@ -337,21 +337,7 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	SetFileName(filename);
 
 	// Read the components
-	Control_StopProductiveMode();
 	cr.ReadComponents(mSwisTrackCore);
-
-	// Read the trigger settings
-	cr.SelectRootNode();
-	cr.SelectChildNode("trigger");
-	wxString type=cr.ReadString("mode", "manual");
-	cr.SelectChildNode("freerun");
-	mTriggerRunInterval=cr.ReadInt("interval", 1000);
-	type.MakeLower();
-	if (type=="freerun") {
-		SetTriggerRun();
-	} else {
-		SetTriggerManual();
-	}
 
 	// Read the server settings
 	cr.SelectRootNode();
@@ -421,17 +407,6 @@ void THISCLASS::SaveFile(const wxString &filename) {
 	ConfigurationWriterXML cw;
 	cw.WriteComponents(mSwisTrackCore);
 
-	// Save the trigger settings
-	cw.SelectRootNode();
-	cw.SelectChildNode("trigger");
-	if (mTriggerRunTimer->IsRunning()) {
-		cw.WriteString("mode", "freerun");
-	} else {
-		cw.WriteString("mode", "manual");
-	}
-	cw.SelectChildNode("freerun");
-	cw.WriteInt("interval", mTriggerRunInterval);
-
 	// Save other settings
 	cw.SelectRootNode();
 	cw.SelectChildNode("server");
@@ -464,15 +439,15 @@ void THISCLASS::OnControlProductiveMode(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void THISCLASS::OnControlRun(wxCommandEvent& WXUNUSED(event)) {
-	if (mTriggerRunTimer->IsRunning()) {
-		SetTriggerManual();
+	if (mSwisTrackCore->IsTriggerActive()) {
+		Control_StopRunMode();
 	} else {
-		SetTriggerRun();
+		Control_StartRunMode();
 	}
 }
 
-void THISCLASS::OnControlSingleStep(wxCommandEvent& WXUNUSED(event)) {
-	Control_SingleStep();
+void THISCLASS::OnControlStep(wxCommandEvent& WXUNUSED(event)) {
+	Control_Step();
 }
 
 void THISCLASS::OnControlReset(wxCommandEvent& WXUNUSED(event)) {
@@ -488,11 +463,7 @@ void THISCLASS::OnHelp(wxCommandEvent& WXUNUSED(event)) {
 	wxLaunchDefaultBrowser("http://en.wikibooks.org/wiki/Swistrack");
 }
 
-#include "ExecutionWaitForNextStep.h"
-
 void THISCLASS::OnTest(wxCommandEvent& WXUNUSED(event)) {
-	ExecutionWaitForNextStep *ewfnt = new ExecutionWaitForNextStep(mSwisTrackCore);
-	ewfnt->Execute();
 }
 
 void THISCLASS::OnIdle(wxIdleEvent& WXUNUSED(event)) {

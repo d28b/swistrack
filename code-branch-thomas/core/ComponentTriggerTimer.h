@@ -25,6 +25,7 @@ public:
 private:
 	//! An overwritten wxTimer.
 	class Timer: public wxTimer {
+	public:
 		ComponentTriggerTimer *mComponentTriggerTimer;		//!< The associated component.
 		
 		//! Constructor.
@@ -34,8 +35,10 @@ private:
 
 		// wxTimer methods
 		void Notify() {mComponentTriggerTimer->mTrigger->SetReady();}
-	}
+	};
 
 	Timer *mTimer;		//!< The associated timer.
 
 };
+
+#endif

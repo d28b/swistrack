@@ -13,7 +13,7 @@ class Component;
 #include "ComponentCategory.h"
 #include "ErrorList.h"
 #include "Display.h"
-#include "Execution.h"
+#include "ComponentTrigger.h"
 
 //! The base class for all components.
 class Component {

@@ -3,6 +3,8 @@
 
 #include <sstream>
 #include <algorithm>
+#include "ComponentTriggerTimer.h"
+#include "ComponentTriggerCounter.h"
 #include "ComponentInputCamera1394.h"
 #include "ComponentInputCameraUSB.h"
 #include "ComponentInputCameraGBit.h"
@@ -31,12 +33,8 @@
 #include "ComponentOutputParticles.h"
 
 THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
-		mComponentConfigurationFolder(componentconfigurationfolder),
-		mDataStructureInput(),
-		mDataStructureImageColor("ImageColor", "Color image"),
-		mDataStructureImageGray("ImageGray", "Grayscale image"),
-		mDataStructureImageBinary("ImageBinary", "Binary image"),
-		mDataStructureParticles(),
+		mAvailableComponents(), mDataStructures(), mSwisTrackCoreInterfaces(), mComponentConfigurationFolder(componentconfigurationfolder),
+		mComponentCategories(), mCommunicationInterface(0), mTrigger(new SwisTrackCoreTrigger(this)),
 		mCategoryTrigger("Trigger", 0),
 		mCategoryInput("Input", 100, ComponentCategory::sTypeOne),
 		mCategoryInputConversion("Input conversion", 200, ComponentCategory::sTypeAuto),
@@ -46,11 +44,16 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 		mCategoryBlobDetection("Blob detection", 600),
 		mCategoryCalibration("Calibration", 700),
 		mCategoryOutput("Output", 10000),
-		mAvailableComponents(), mDeployedComponents(), mDataStructures(), mSwisTrackCoreInterfaces(),
-		mStarted(false), mProductiveMode(false), mEditLocks(0)
-		{
+		mDataStructureInput(),
+		mDataStructureImageColor("ImageColor", "Color image"),
+		mDataStructureImageGray("ImageGray", "Grayscale image"),
+		mDataStructureImageBinary("ImageBinary", "Binary image"),
+		mDataStructureParticles(), 
+		mStarted(false), mProductiveMode(false), mEditLocks(0), mDeployedComponents() {
 
 	// Initialize the list of available components
+	mAvailableComponents.push_back(new ComponentTriggerTimer(this));
+	mAvailableComponents.push_back(new ComponentTriggerCounter(this));
 	mAvailableComponents.push_back(new ComponentInputCamera1394(this));
 	mAvailableComponents.push_back(new ComponentInputCameraUSB(this));
 	mAvailableComponents.push_back(new ComponentInputCameraGBit(this));
@@ -96,6 +99,8 @@ THISCLASS::~SwisTrackCore() {
 		itd++;
 	}
 
+	mDeployedComponents.clear();
+
 	// Delete available components
 	tComponentList::iterator ita=mAvailableComponents.begin();
 	while (ita!=mAvailableComponents.end()) {
@@ -104,7 +109,9 @@ THISCLASS::~SwisTrackCore() {
 	}
 
 	mAvailableComponents.clear();
-	mDeployedComponents.clear();
+
+	// Delete the trigger
+	delete mTrigger;
 }
 
 bool THISCLASS::Start(bool productivemode) {
@@ -282,6 +289,14 @@ bool THISCLASS::ReloadConfiguration() {
 	return true;
 }
 
+void THISCLASS::StartTrigger() {
+	mTrigger->SetActive(true);
+}
+
+void THISCLASS::StopTrigger() {
+	mTrigger->SetActive(false);
+}
+
 void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmlerr) {
 	// Add an element for each component
 	tComponentList::iterator it=mDeployedComponents.begin();
@@ -303,6 +318,10 @@ Component *THISCLASS::GetComponentByName(const std::string &name) {
 	}
 
 	return 0;
+}
+
+bool THISCLASS::IsTriggerActive() {
+	return mTrigger->GetActive();
 }
 
 bool THISCLASS::IncrementEditLocks() {

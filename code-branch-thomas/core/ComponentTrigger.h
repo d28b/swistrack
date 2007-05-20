@@ -19,6 +19,8 @@ public:
 	virtual bool IsReady() {return mIsReady;}
 	//! Sets the ready flag.
 	void SetReady(bool ready=true);
+	//! Clears the ready flag.
+	void ClearReady();
 
 };
 

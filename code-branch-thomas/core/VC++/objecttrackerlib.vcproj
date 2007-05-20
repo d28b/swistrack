@@ -243,8 +243,16 @@
 				RelativePath="..\ComponentEditor.h"
 				>
 			</File>
+			<File
+				RelativePath="..\ComponentTrigger.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ComponentTrigger.h"
+				>
+			</File>
 			<Filter
-				Name="1 Input"
+				Name="2 Input"
 				>
 				<File
 					RelativePath="..\ComponentInputCamera1394.cpp"
@@ -288,7 +296,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="2 Grayscale Processing"
+				Name="3 Grayscale Processing"
 				>
 				<File
 					RelativePath="..\ComponentAdaptiveBackgroundSubtractionGray.cpp"
@@ -332,7 +340,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="4 Particle detection"
+				Name="5 Particle detection"
 				>
 				<File
 					RelativePath="..\ComponentBlobDetectionCircle.cpp"
@@ -384,7 +392,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="5 Calibration"
+				Name="6 Calibration"
 				>
 				<File
 					RelativePath="..\ComponentCalibrationLinear.cpp"
@@ -396,7 +404,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="3 Binary Processing"
+				Name="4 Binary Processing"
 				>
 				<File
 					RelativePath="..\ComponentBinaryDilation.cpp"
@@ -424,7 +432,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="2 Color Processing"
+				Name="3 Color Processing"
 				>
 				<File
 					RelativePath="..\ComponentAdaptiveBackgroundSubtractionColor.cpp"
@@ -484,7 +492,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="6 Output"
+				Name="7 Output"
 				>
 				<File
 					RelativePath="..\ComponentOutputParticles.cpp"
@@ -492,6 +500,26 @@
 				</File>
 				<File
 					RelativePath="..\ComponentOutputParticles.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="1 Trigger"
+				>
+				<File
+					RelativePath="..\ComponentTriggerCounter.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentTriggerCounter.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentTriggerTimer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentTriggerTimer.h"
 					>
 				</File>
 			</Filter>
@@ -581,6 +609,14 @@
 			</File>
 			<File
 				RelativePath="..\SwisTrackCoreInterface.h"
+				>
+			</File>
+			<File
+				RelativePath="..\SwisTrackCoreTrigger.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\SwisTrackCoreTrigger.h"
 				>
 			</File>
 		</Filter>
@@ -701,18 +737,6 @@
 			</File>
 			<File
 				RelativePath="..\ImageConversion.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Execution"
-			>
-			<File
-				RelativePath="..\ExecutionWaitForNextStep.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\ExecutionWaitForNextStep.h"
 				>
 			</File>
 		</Filter>

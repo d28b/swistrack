@@ -5,7 +5,7 @@
 
 THISCLASS::ComponentTriggerCounter(SwisTrackCore *stc):
 		Component(stc, "TriggerCounter"),
-		mCount(1), mDone(0) {
+		mCount(1), mTodo(0) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryTrigger);
@@ -18,6 +18,7 @@ THISCLASS::ComponentTriggerCounter(SwisTrackCore *stc):
 }
 
 THISCLASS::~ComponentTriggerCounter() {
+	delete mTrigger;
 }
 
 void THISCLASS::OnStart() {
@@ -32,7 +33,7 @@ void THISCLASS::OnReloadConfiguration() {
 
 	bool start=GetConfigurationBool("Start", false);
 	if (start) {
-		SetConfigurationBool("Start", false);
+		// SetConfigurationBool("Start", false); TODO
 		mTodo=mCount;
 		mTrigger->SetReady();
 	}
@@ -51,5 +52,3 @@ void THISCLASS::OnStepCleanup() {
 void THISCLASS::OnStop() {
 	mTodo=0;
 }
-
-#endif

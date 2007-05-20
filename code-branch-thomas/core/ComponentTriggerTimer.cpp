@@ -18,20 +18,25 @@ THISCLASS::ComponentTriggerTimer(SwisTrackCore *stc):
 }
 
 THISCLASS::~ComponentTriggerTimer() {
+	delete mTrigger;
+	delete mTimer;
 }
 
 void THISCLASS::OnStart() {
+	OnReloadConfiguration();
+}
+
+void THISCLASS::OnReloadConfiguration() {
 	if (! mTimer) {
 		mTimer=new Timer(this);
 	}
 
 	double interval=GetConfigurationDouble("Interval", 1);
-	if (interval<0.001) {interval=0.001;}
+	int interval_ms=(int)(interval*1000);
+	if (interval_ms<1) {interval_ms=1;}
 
-	mTimer.Start(interval, false);
-}
-
-void THISCLASS::OnReloadConfiguration() {
+	if (mTimer->IsRunning()) {mTimer->Stop();}
+	mTimer->Start(interval_ms, false);
 }
 
 void THISCLASS::OnStep() {
@@ -41,5 +46,6 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-	mTimer.Stop();
+	if (! mTimer) {return;}
+	mTimer->Stop();
 }
