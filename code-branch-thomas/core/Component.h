@@ -13,8 +13,9 @@ class Component;
 #include "ComponentCategory.h"
 #include "ErrorList.h"
 #include "Display.h"
+#include "Execution.h"
 
-// The base class for all components.
+//! The base class for all components.
 class Component {
 friend class ComponentEditor;
 
@@ -38,6 +39,7 @@ public:
 	std::string mHelpURL;				//!< The url pointing to the website with more information about the component.
 	ComponentCategory *mCategory;		//!< The category which this component belongs to.
 	std::string mDefaultDisplay;		//!< The default view (not used).
+	ComponentTrigger *mTrigger;			//!< The trigger of this component (if any).
 	ErrorList mInitializationErrors;	//!< Error messages (during component initialization) are added here.
 	double mStepDuration;				//!< The duration of the last step in milliseconds. This information is filled in by SwisTrackCore.
 
@@ -52,8 +54,6 @@ public:
 	
 	//! This event is called to initialize the component before OnStep() is called.
 	virtual void OnStart() = 0;
-	//! This event is called to wait for the trigger.
-	virtual bool OnWaitForNextStep() {return true;}
 	//! This event is called to perform one step.
 	virtual void OnStep() = 0;
 	//! This event is called to cleanup a previously performed step.
@@ -120,6 +120,7 @@ protected:
 	//! Decrements the edit locks.
 	void DecrementEditLocks();
 
+	
 private:
 	//! Reads the configuration section of the XML file belonging to the component.
 	void InitializeReadConfiguration(wxXmlNode *configurationnode);
@@ -127,7 +128,7 @@ private:
 	void InitializeReadConfigurationNode(wxXmlNode *node);
 	//! Reads a parameter node within the configuration section of the XML file.
 	void InitializeReadParameter(wxXmlNode *node);
-
+	
 };
 
 #endif

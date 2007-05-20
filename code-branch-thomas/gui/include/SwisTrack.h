@@ -34,8 +34,6 @@ public:
 	wxString mFileName;				//!< The current configuration file.
 	bool mChanged;					//!< Whether the file has been modified. This flag is currently ignored.
 
-	int mDisplaySpeed;
-
 	//! Constructor.
 	SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style = wxDEFAULT_FRAME_STYLE);
 	//! Destructor.
@@ -49,14 +47,14 @@ public:
 	//! Sets the configuration panel on the right side.
 	void SetConfigurationPanel(Component *c);
 
-	//! Starts the productive mode.
-	void StartProductiveMode();
-	//! Stops the productive mode.
-	void StopProductiveMode();
+	//! Starts in productive mode.
+	void Control_StartProductiveMode();
+	//! Stops productive mode.
+	void Control_StopProductiveMode();
 	//! Performs a single step. If necessary, the core is started (in non-productive mode).
-	void SingleStep();
-	//! Reloads the configuration. If the core is started in productive mode, this only reloads a subset of the parameters. Otherwise, a complete core stop/start is done.
-	void ReloadConfiguration();
+	void Control_SingleStep();
+	//! Reloads the configuration. If the core is started in productive mode, this only reloads a subset of the parameters. Otherwise, a complete core stop/start is performed.
+	void Control_ReloadConfiguration();
 	//! Sets the free run interval.
 	void SetTriggerFreeRun();
 	//! Sets the free run interval.
@@ -83,10 +81,10 @@ protected:
 		sID_Control_ProductiveMode,
 		sID_Control_FreeRun,
 		sID_Control_SingleStep,
+		sID_Control_Reset,
 		sID_View_ComponentList,
 		sID_View_NewDisplay,
 		sID_Tools_TCPServer,
-		sID_DisplaySpeed,
 		sID_Help,
 		sID_Test,
 		sID_About = wxID_ABOUT   // this must be wxID_ABOUT to put it in the Mac OS X "Apple" menu
@@ -120,7 +118,7 @@ protected:
 	void OnControlProductiveMode(wxCommandEvent& WXUNUSED(event));
 	void OnControlFreeRun(wxCommandEvent& WXUNUSED(event));
 	void OnControlSingleStep(wxCommandEvent& WXUNUSED(event));
-	void OnChangeDisplaySpeed(wxScrollEvent& WXUNUSED(event));
+	void OnControlReset(wxCommandEvent& WXUNUSED(event));
 	void OnViewComponentList(wxCommandEvent& WXUNUSED(event));
 	void OnViewNewDisplay(wxCommandEvent& WXUNUSED(event));
 	void OnToolsTCPServer(wxCommandEvent& WXUNUSED(event));

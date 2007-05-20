@@ -40,23 +40,23 @@ BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 	EVT_MENU(sID_SaveAs, THISCLASS::OnFileSaveAs)
 	EVT_MENU(sID_Quit,  THISCLASS::OnFileQuit)
 	EVT_MENU(sID_Control_ProductiveMode, THISCLASS::OnControlProductiveMode)
-	EVT_MENU(sID_Control_FreeRun, THISCLASS::OnControlFreeRun)
-	EVT_MENU(sID_Control_SingleStep, THISCLASS::OnControlSingleStep)
+	EVT_MENU(sID_Control_Run, THISCLASS::OnControlRun)
+	EVT_MENU(sID_Control_Control_SingleStep, THISCLASS::OnControlControl_SingleStep)
+	EVT_MENU(sID_Control_Reset, THISCLASS::OnControlReset)
 	EVT_MENU(sID_View_ComponentList, THISCLASS::OnViewComponentList)
 	EVT_MENU(sID_View_NewDisplay, THISCLASS::OnViewNewDisplay)
 	EVT_MENU(sID_Tools_TCPServer, THISCLASS::OnToolsTCPServer)
-	EVT_COMMAND_SCROLL(sID_DisplaySpeed, THISCLASS::OnChangeDisplaySpeed)
 	EVT_MENU(sID_Help, THISCLASS::OnHelp)
 	EVT_MENU(sID_Test, THISCLASS::OnTest)
 	EVT_MENU(sID_About, THISCLASS::OnHelpAbout)
-	EVT_TIMER(wxID_ANY, THISCLASS::OnFreeRunTimer)
+	EVT_TIMER(wxID_ANY, THISCLASS::OnRunTimer)
 	EVT_IDLE(THISCLASS::OnIdle)
 END_EVENT_TABLE()
 
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
 		wxFrame(NULL, -1, title, pos, size, style),
 		CommunicationCommandHandler(),
-		mSwisTrackCore(0), mTCPServer(0), mFileName(""), mTriggerFreeRunInterval(1000),
+		mSwisTrackCore(0), mTCPServer(0), mFileName(""), mTriggerRunInterval(1000),
 		mHorizontalSizer(0), mCanvasPanel(0), mComponentListPanel(0), mConfigurationPanel(0) {
 
 #ifdef MULTITHREAD
@@ -99,15 +99,15 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	SetSizer(vs);
 
 	// The timer used for the free run mode
-	mTriggerFreeRunTimer=new wxTimer(this);
+	mTriggerRunTimer=new wxTimer(this);
 }
 
 SwisTrack::~SwisTrack(){
 	SetTriggerManual();
-	StopProductiveMode();
+	Control_StopProductiveMode();
 
 	// Delete the trigger timer
-	delete mTriggerFreeRunTimer;
+	delete mTriggerRunTimer;
 
 	// Delete the components that rely on SwisTrackCore
 	mComponentListPanel->Destroy();
@@ -163,18 +163,12 @@ void THISCLASS::BuildToolBar() {
 	toolbar->AddTool(sID_Open, _T("Open"), wxBITMAP(bitmap_open), _T("Open"));
 	toolbar->AddTool(sID_Save, _T("Save"), wxBITMAP(bitmap_save), _T("Save"));
 	toolbar->AddSeparator();
-	toolbar->AddTool(sID_Control_ProductiveMode, _T("Productive"), wxBITMAP(bitmap_productive), _T("Productive"), wxITEM_CHECK);
+	toolbar->AddTool(sID_Control_ProductiveMode, _T("Productive"), wxBITMAP(bitmap_productive), _T("Run in productive mode"), wxITEM_CHECK);
+	toolbar->AddTool(sID_Control_Run, _T("Run"), wxBITMAP(bitmap_play), _T("Run automatically"), wxITEM_CHECK);
 	toolbar->AddSeparator();
-	toolbar->AddTool(sID_Control_FreeRun, _T("Free-run"), wxBITMAP(bitmap_play), _T("Free-run mode"), wxITEM_CHECK);
-	toolbar->AddTool(sID_Control_SingleStep, _T("Step"), wxBITMAP(bitmap_singlestep), _T("One step"));
+	toolbar->AddTool(sID_Control_SingleStep, _T("Step"), wxBITMAP(bitmap_singlestep), _T("Processes one image"));
+	toolbar->AddTool(sID_Control_Reset, _T("Reset"), wxBITMAP(bitmap_singlestep), _T("Stops the execution. It will be started upon the next step."));
 	toolbar->AddSeparator();
-
-	int fps=30;
-	wxSlider *slider = new wxSlider(toolbar, sID_DisplaySpeed, 0, 0,(int) fps, wxDefaultPosition, wxSize(155,-1), wxSL_AUTOTICKS|wxSL_LABELS, wxGenericValidator(&mDisplaySpeed));
-	slider->SetTickFreq(5, 0);
-	slider->SetToolTip(_T("Display refresh (Hz)"));
-	slider->SetValue(mDisplaySpeed);
-	toolbar->AddControl(slider);
 
 	toolbar->Realize();
 	toolbar->SetRows(1 ? 1 : 10 / 1);
@@ -218,14 +212,14 @@ void THISCLASS::SetConfigurationPanel(Component *c) {
 	eld.ShowModal();
 }
 
-void THISCLASS::SingleStep() {
+void THISCLASS::Control_SingleStep() {
 	// Start (if necessary) and perform a step
 	mSwisTrackCore->Start(false);
 	mSwisTrackCore->Step();
 }
 
-void THISCLASS::ReloadConfiguration() {
-	// In productive mode, we just call ReloadConfiguration which may not update all configuration parameters.
+void THISCLASS::Control_ReloadConfiguration() {
+	// In productive mode, we just call Control_ReloadConfiguration which may not update all configuration parameters.
 	// Otherwise, we stop the simulation (it is automatically restarted upon the next step).
 	if (mSwisTrackCore->IsStartedInProductiveMode()) {
 		mSwisTrackCore->ReloadConfiguration();
@@ -234,60 +228,62 @@ void THISCLASS::ReloadConfiguration() {
 	}
 }
 
-void THISCLASS::StartProductiveMode() {
+void THISCLASS::Control_StartProductiveMode() {
 	if (mSwisTrackCore->IsStartedInProductiveMode()) {return;}
 	mSwisTrackCore->Stop();
 	GetToolBar()->ToggleTool(sID_Control_ProductiveMode, true);
+	GetToolBar()->EnableTool(sID_Control_Reset, false);
 	mSwisTrackCore->Start(true);
 }
 
-void THISCLASS::StopProductiveMode() {
+void THISCLASS::Control_StopProductiveMode() {
 	if (! mSwisTrackCore->IsStartedInProductiveMode()) {return;}
 	mSwisTrackCore->Stop();
 	GetToolBar()->ToggleTool(sID_Control_ProductiveMode, false);
+	GetToolBar()->EnableTool(sID_Control_Reset, true);
 }
 
 void THISCLASS::SetTriggerManual() {
-	GetToolBar()->ToggleTool(sID_Control_FreeRun, false);
+	GetToolBar()->ToggleTool(sID_Control_Run, false);
 	SetStatusText("Manual", sStatusField_Trigger);
-	mTriggerFreeRunTimer->Stop();
+	mTriggerRunTimer->Stop();
 }
 
-void THISCLASS::SetTriggerFreeRun() {
-	GetToolBar()->ToggleTool(sID_Control_FreeRun, true);
-	if (! mTriggerFreeRunTimer->IsRunning()) {
-		mTriggerFreeRunTimer->Start(mTriggerFreeRunInterval);
+void THISCLASS::SetTriggerRun() {
+	GetToolBar()->ToggleTool(sID_Control_Run, true);
+	if (! mTriggerRunTimer->IsRunning()) {
+		mTriggerRunTimer->Start(mTriggerRunInterval);
 	}
 }
 
-void THISCLASS::OnFreeRunTimer(wxTimerEvent& WXUNUSED(event)) {
-	SingleStep();
-	if (mTriggerFreeRunTimer->GetInterval()!=mTriggerFreeRunInterval) {
-		mTriggerFreeRunTimer->Stop();
-		mTriggerFreeRunTimer->Start(mTriggerFreeRunInterval);
-		SetStatusText(wxString::Format("%d ms / %.1f FPS", mTriggerFreeRunInterval, 1/(double)mTriggerFreeRunInterval), sStatusField_Trigger);
+void THISCLASS::OnRunTimer(wxTimerEvent& WXUNUSED(event)) {
+	Control_SingleStep();
+	if (mTriggerRunTimer->GetInterval()!=mTriggerRunInterval) {
+		mTriggerRunTimer->Stop();
+		mTriggerRunTimer->Start(mTriggerRunInterval);
+		SetStatusText(wxString::Format("%d ms / %.1f FPS", mTriggerRunInterval, 1/(double)mTriggerRunInterval), sStatusField_Trigger);
 	}
 }
 
 bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 	if (m->mCommand=="START") {
-		StartProductiveMode();
+		Control_StartProductiveMode();
 		return true;
 	} else if (m->mCommand=="STOP") {
-		StopProductiveMode();
+		Control_StopProductiveMode();
 		return true;
 	} else if (m->mCommand=="STEP") {
-		SingleStep();
+		Control_SingleStep();
 		return true;
 	} else if (m->mCommand=="RELOADCONFIGURATION") {
-		ReloadConfiguration();
+		Control_ReloadConfiguration();
 		return true;
 	} else if (m->mCommand=="TRIGGER") {
 		std::string type=m->GetString("MANUAL");
 		std::transform(type.begin(), type.end(), type.begin(), std::toupper);
 		if (type=="FREERUN") {
-			mTriggerFreeRunInterval=m->GetDouble(1);
-			SetTriggerFreeRun();
+			mTriggerRunInterval=m->GetDouble(1);
+			SetTriggerRun();
 		} else {
 			SetTriggerManual();
 		}
@@ -341,7 +337,7 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	SetFileName(filename);
 
 	// Read the components
-	StopProductiveMode();
+	Control_StopProductiveMode();
 	cr.ReadComponents(mSwisTrackCore);
 
 	// Read the trigger settings
@@ -349,10 +345,10 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	cr.SelectChildNode("trigger");
 	wxString type=cr.ReadString("mode", "manual");
 	cr.SelectChildNode("freerun");
-	mTriggerFreeRunInterval=cr.ReadInt("interval", 1000);
+	mTriggerRunInterval=cr.ReadInt("interval", 1000);
 	type.MakeLower();
 	if (type=="freerun") {
-		SetTriggerFreeRun();
+		SetTriggerRun();
 	} else {
 		SetTriggerManual();
 	}
@@ -428,13 +424,13 @@ void THISCLASS::SaveFile(const wxString &filename) {
 	// Save the trigger settings
 	cw.SelectRootNode();
 	cw.SelectChildNode("trigger");
-	if (mTriggerFreeRunTimer->IsRunning()) {
+	if (mTriggerRunTimer->IsRunning()) {
 		cw.WriteString("mode", "freerun");
 	} else {
 		cw.WriteString("mode", "manual");
 	}
 	cw.SelectChildNode("freerun");
-	cw.WriteInt("interval", mTriggerFreeRunInterval);
+	cw.WriteInt("interval", mTriggerRunInterval);
 
 	// Save other settings
 	cw.SelectRootNode();
@@ -461,27 +457,26 @@ void SwisTrack::OnFileQuit(wxCommandEvent& WXUNUSED(event)) {
 
 void THISCLASS::OnControlProductiveMode(wxCommandEvent& WXUNUSED(event)) {
 	if (mSwisTrackCore->IsStartedInProductiveMode()) {
-		StopProductiveMode();
+		Control_StopProductiveMode();
 	} else {
-		StartProductiveMode();
+		Control_StartProductiveMode();
 	}
 }
 
-void THISCLASS::OnControlFreeRun(wxCommandEvent& WXUNUSED(event)) {
-	if (mTriggerFreeRunTimer->IsRunning()) {
+void THISCLASS::OnControlRun(wxCommandEvent& WXUNUSED(event)) {
+	if (mTriggerRunTimer->IsRunning()) {
 		SetTriggerManual();
 	} else {
-		SetTriggerFreeRun();
+		SetTriggerRun();
 	}
 }
 
 void THISCLASS::OnControlSingleStep(wxCommandEvent& WXUNUSED(event)) {
-	SingleStep();
+	Control_SingleStep();
 }
 
-void THISCLASS::OnChangeDisplaySpeed(wxScrollEvent& WXUNUSED(event)) {
-	GetToolBar()->TransferDataFromWindow();
-	// TODO
+void THISCLASS::OnControlReset(wxCommandEvent& WXUNUSED(event)) {
+	Control_ReloadConfiguration();
 }
 
 void SwisTrack::OnHelpAbout(wxCommandEvent& WXUNUSED(event)) {

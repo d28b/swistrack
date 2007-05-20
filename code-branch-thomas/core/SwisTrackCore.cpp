@@ -37,6 +37,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 		mDataStructureImageGray("ImageGray", "Grayscale image"),
 		mDataStructureImageBinary("ImageBinary", "Binary image"),
 		mDataStructureParticles(),
+		mCategoryTrigger("Trigger", 0),
 		mCategoryInput("Input", 100, ComponentCategory::sTypeOne),
 		mCategoryInputConversion("Input conversion", 200, ComponentCategory::sTypeAuto),
 		mCategoryPreprocessing("Preprocessing", 300),

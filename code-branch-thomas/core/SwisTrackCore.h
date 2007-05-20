@@ -18,7 +18,6 @@ class SwisTrackCoreEditor;
 //! The main class of the core part of SwisTrack. This class holds everything together.
 class SwisTrackCore {
 friend class SwisTrackCoreEditor;
-friend class ExecutionWaitForNextStep;
 
 public:
 	//! A list of components type.
@@ -35,8 +34,11 @@ public:
 	tSwisTrackCoreInterfaceList mSwisTrackCoreInterfaces;	//!< The list of SwisTrackCoreInterface objects.
 	std::string mComponentConfigurationFolder;				//!< The path to the component configuration files, including the trailing slash.
 	tComponentCategoryMap mComponentCategories;				//!< The component categories. (not used, TODO: read categories from XML file and put them here, then modify components to read categoryID from their XML file)
+	CommunicationInterface *mCommunicationInterface;	//!< The associated communication interface.
+	SwisTrackCoreEventHandler mEventHandler;
 
 	// Component categories
+	ComponentCategory mCategoryTrigger;
 	ComponentCategory mCategoryInput;
 	ComponentCategory mCategoryInputConversion;
 	ComponentCategory mCategoryPreprocessing;
@@ -52,8 +54,6 @@ public:
 	DataStructureImage mDataStructureImageGray;
 	DataStructureImage mDataStructureImageBinary;
 	DataStructureParticles mDataStructureParticles;
-
-	CommunicationInterface *mCommunicationInterface;	//!< The associated communication interface.
 
 	//! Constructor.
 	SwisTrackCore(std::string componentconfigurationfolder);
@@ -91,7 +91,6 @@ protected:
 	bool mStarted;			//!< Whether the components have been started or not.
 	bool mProductiveMode;	//!< Whether the components are running in productive mode or not. Note that this is only valid if mStarted=true.
 	int mEditLocks;			//!< The number of edit locks.
-	//Execution *mCurrentExecution;	//!< The current execution.
 
 	tComponentList mDeployedComponents;						//!< The list of deployed components.
 

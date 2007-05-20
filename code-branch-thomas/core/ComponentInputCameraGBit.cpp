@@ -14,6 +14,9 @@ THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 
+	// Trigger
+	mTrigger=new ComponentTrigger(this);
+	
 	// Read the XML configuration file
 	Initialize();
 }
@@ -101,6 +104,7 @@ void THISCLASS::OnStart() {
 		} else if (mTriggerMode==sTrigger_InputLine4) {
 			mCamera->TriggerSource.SetValue(Basler_GigECameraParams::TriggerSource_Line4);
 		} else {
+			mTriggerMode=sTrigger_Software;
 			mCamera->TriggerSource.SetValue(Basler_GigECameraParams::TriggerSource_Software);
 		}
 	}
@@ -121,19 +125,21 @@ void THISCLASS::OnStart() {
 
 	// Allocate and register image buffers, put them into the grabber's input queue
 	int channels=(mColor ? 2 : 1);
-	for (int i=0; i<8; ++i) {
+	for (int i=0; i<numbuffers; ++i) {
 		mInputBufferImages[i]=cvCreateImage(cvSize(aoiw, aoih), 8, channels);
 		mInputBufferHandles[i]=mStreamGrabber->RegisterBuffer(mInputBufferImages[i]->imageData, mInputBufferImages[i]->imageSize);
 		mStreamGrabber->QueueBuffer(mInputBufferHandles[i], (void*)i);
 	}
 
-	// In color mode, we need an additional image for the conversion from YUV to BGR
-	//if (mColor) {
-	//	mOutputImage=cvCreateImage(cvSize(mCamera->Width.GetMax(), mCamera->Height.GetMax()), 8, 3);
-	//}
-
 	// Start image acquisition
 	mCamera->AcquisitionStart.Execute();
+
+	// In case of an external trigger, start a thread waiting for the images
+	if (mTriggerMode!=sTrigger_Software) {
+		ComponentThread *ct=new ComponentInputCameraGBit::Thread(this);
+		ct->Create();
+		ct->Run();
+	}
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -143,7 +149,7 @@ void THISCLASS::OnReloadConfiguration() {
 		mCamera->ExposureMode.SetValue(Basler_GigECameraParams::ExposureMode_Timed);
 		mCamera->ExposureTimeRaw.SetValue(exposuretime);
 
-		// Configure exposure time and mode
+		// Configure analog gain
 		int analoggain=GetConfigurationInt("AnalogGain", 500);
 		mCamera->GainRaw.SetValue(analoggain);
 	} catch (GenICam::GenericException &e) {
@@ -152,50 +158,32 @@ void THISCLASS::OnReloadConfiguration() {
 	}
 }
 
-bool THISCLASS::OnWaitForNextStep() {
-	//new ComponentInputCameraGBitThread(this);
-
-    // Send the software trigger
-	if (mTriggerMode==sTrigger_Software) {
-		mCamera->TriggerSoftware.Execute();
-	}
-
-	// Wait for the grabbed image with a timeout of 3 seconds
-	if (! mStreamGrabber->GetWaitObject().Wait(3000)) {
-		AddError("Failed to retrieve an image: the camera did not send any image.");
-		return false;
-	}
-
-	return false;
-}
-
 void THISCLASS::OnStep() {
-    // Send the software trigger
+    // Get the image
 	if (mTriggerMode==sTrigger_Software) {
+		// Send the software trigger
 		mCamera->TriggerSoftware.Execute();
+
+		// Wait for the grabbed image with a timeout of 3 seconds
+		if (! mStreamGrabber->GetWaitObject().Wait(3000)) {
+			AddError("Failed to retrieve an image: the camera did not send any image.");
+			return;
+		}
+
+		// Get an item from the grabber's output queue
+		Pylon::GrabResult result;
+		mStreamGrabber->RetrieveResult(result);
+		if (! result.Succeeded()) {
+			std::ostringstream oss;
+			oss << "Failed to retrieve an item from the output queue: " << result.GetErrorDescription();
+			AddError(oss.str());
+			return;
+		}
+	} else {
+		wxCriticalSectionLocker csl(mThread->mCriticalSection);
+		// TODO
 	}
 
-	// Wait for the grabbed image with a timeout of 3 seconds
-	if (! mStreamGrabber->GetWaitObject().Wait(3000)) {
-		AddError("Failed to retrieve an image: the camera did not send any image.");
-		return;
-	}
-
-	// Requeue the previous image
-	if (mCurrentImageIndex>-1) {
-		mStreamGrabber->QueueBuffer(mInputBufferHandles[mCurrentImageIndex], (void*)mCurrentImageIndex);
-		mCurrentImageIndex=-1;
-	}
-
-	// Get an item from the grabber's output queue
-	Pylon::GrabResult result;
-	mStreamGrabber->RetrieveResult(result);
-	if (! result.Succeeded()) {
-		std::ostringstream oss;
-		oss << "Failed to retrieve an item from the output queue: " << result.GetErrorDescription();
-		AddError(oss.str());
-		return;
-	}
 
 	// Set the current image
 	mFrameNumber++;
@@ -210,6 +198,11 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
+	// Requeue the used image
+	if (mCurrentImageIndex>-1) {
+		mStreamGrabber->QueueBuffer(mInputBufferHandles[mCurrentImageIndex], (void*)mCurrentImageIndex);
+		mCurrentImageIndex=-1;
+	}
 }
 
 void THISCLASS::OnStop() {

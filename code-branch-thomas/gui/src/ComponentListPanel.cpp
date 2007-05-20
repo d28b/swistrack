@@ -34,6 +34,9 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 	int col=0;
 	mList->InsertColumn(col++, "Component", wxLIST_FORMAT_LEFT, 200);
 
+	// Add column for the trigger flag
+	mList->InsertColumn(col++, "Trigger", wxLIST_FORMAT_CENTER, 50);
+
 	// Add columns for data structures
 	SwisTrackCore::tDataStructureList::iterator it=stc->mDataStructures.begin();
 	while (it!=stc->mDataStructures.end()) {
@@ -108,6 +111,13 @@ void THISCLASS::Update() {
 			selecteditemid=li.GetId();
 		}
 		mList->InsertItem(li);
+
+		// Trigger flag
+		li.SetColumn(col++);
+		if ((*it)->mIsTrigger) {
+			li.SetText("T");
+			mList->SetItem(li);
+		}
 
 		// Data structures
 		SwisTrackCore::tDataStructureList::iterator itds=stc->mDataStructures.begin();

@@ -32,7 +32,8 @@ public:
 	// Overwritten Component methods
 	void OnStart();
 	void OnReloadConfiguration();
-	bool OnWaitForNextStep();
+	Execution::Result OnWaitForStep();
+	Execution::Result OnWaitForStep_Continue();
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
@@ -52,6 +53,36 @@ private:
 
 	int mCurrentImageIndex;								//!< The index of the last acquired image.
 	int mFrameNumber;									//!< The frame number since the component was started.
+
+	//! The thread waiting for new images (in case of external trigger).
+	class Thread: public wxThread {
+		ComponentInputCameraGBit *mComponent;		//!< The associated component.
+		wxCriticalSection *mCriticalSection; 		//!< The critical section object (for synchronization).
+		IplImage *mImage;							//!< (synchronized) The last image that the thread acquired.
+
+		//! Constructor.
+		Thread(ComponentInputCameraGBit *c): wxThread(), mComponent(c) {}
+		//! Destructor.
+		~Thread() {}
+
+		// wxThread methods
+		ExitCode Entry();
+	}
+
+	//! The event listener that is waiting for events from the TriggerThread.
+	class EventHandler: public wxEvtHandler {
+		ComponentInputCameraGBit *mComponent;			//!< The associated component.
+
+		//! Constructor.
+		EventHandler(ComponentInputCameraGBit *c): wxEvtListener(), mComponent(c) {}
+		//! Destructor.
+		~EventHandler() {}
+
+	}
+
+	Thread *mThread;				//!< The thread waiting for new images (in case of external trigger).
+	EventHandler *mEventHandler;	//!< The event listener that is waiting for events from the TriggerThread.
+
 };
 
 #else
