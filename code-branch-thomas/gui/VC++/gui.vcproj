@@ -506,6 +506,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\ConfigurationParameterButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ConfigurationParameterButton.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\ConfigurationParameterCheckBox.cpp"
 				>
 			</File>

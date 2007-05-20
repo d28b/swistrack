@@ -52,12 +52,12 @@ void THISCLASS::SetNewValue(wxWindow *updateprotection) {
 	if (mReloadable) {
 		mSwisTrack->mSwisTrackCore->ReloadConfiguration();
 		if (mSwisTrack->mSwisTrackCore->IsStartedInProductiveMode()) {return;}
-		mSwisTrack->mSwisTrackCore->Step();
+		mSwisTrack->Control_Step();
 	} else {
 		if (mSwisTrack->mSwisTrackCore->IsStartedInProductiveMode()) {return;}
 		mSwisTrack->mSwisTrackCore->Stop();
 		mSwisTrack->mSwisTrackCore->Start(false);
-		mSwisTrack->mSwisTrackCore->Step();
+		mSwisTrack->Control_Step();
 	}
 }
 

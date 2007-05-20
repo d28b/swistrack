@@ -5,6 +5,7 @@
 #include "ConfigurationParameterDouble.h"
 #include "ConfigurationParameterString.h"
 #include "ConfigurationParameterCheckBox.h"
+#include "ConfigurationParameterButton.h"
 #include "ConfigurationParameterDropdownList.h"
 #include "ConfigurationParameterFile.h"
 #include "ConfigurationParameterImage.h"
@@ -20,6 +21,7 @@ ConfigurationParameter *THISCLASS::Create(const wxString &type, wxWindow* parent
 	if (typelc=="double") {return new ConfigurationParameterDouble(parent);}
 	if (typelc=="string") {return new ConfigurationParameterString(parent);}
 	if (typelc=="checkbox") {return new ConfigurationParameterCheckBox(parent);}
+	if (typelc=="button") {return new ConfigurationParameterButton(parent);}
 	if (typelc=="dropdownlist") {return new ConfigurationParameterDropdownList(parent);}
 
 	// Files

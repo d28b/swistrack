@@ -33,7 +33,7 @@ void THISCLASS::OnReloadConfiguration() {
 
 	bool start=GetConfigurationBool("Start", false);
 	if (start) {
-		// SetConfigurationBool("Start", false); TODO
+		mConfiguration["Start"]="false"; // SetConfigurationBool("Start", false); TODO
 		mTodo=mCount;
 		mTrigger->SetReady();
 	}
