@@ -1,13 +1,13 @@
-#include "ComponentCalibrationLinear.h"
-#define THISCLASS ComponentCalibrationLinear
+#include "ComponentCalibrationTSAI.h"
+#define THISCLASS ComponentCalibrationTSAI
 
 #include "DisplayEditor.h"
 #include "DataStructureParticles.h"
 #include <wx/log.h>
 
-THISCLASS::ComponentCalibrationLinear(SwisTrackCore *stc):
-		Component(stc, "CalibrationLinear"),
-		mDisplayOutput("Output", "Linear Calibration: Output") {
+THISCLASS::ComponentCalibrationTSAI(SwisTrackCore *stc):
+		Component(stc, "CalibrationTSAI"),
+		mDisplayOutput("Output", "TSAI Calibration: Output") {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryCalibration);
@@ -19,7 +19,7 @@ THISCLASS::ComponentCalibrationLinear(SwisTrackCore *stc):
 	Initialize();
 }
 
-THISCLASS::~ComponentCalibrationLinear() {
+THISCLASS::~ComponentCalibrationTSAI() {
 }
 
 void THISCLASS::OnStart() 
@@ -59,6 +59,8 @@ void THISCLASS::OnStart()
 
 
 	//Compute the calibration matrix
+
+
 }
 
 void THISCLASS::OnReloadConfiguration() 

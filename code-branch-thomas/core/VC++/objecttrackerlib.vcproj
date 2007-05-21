@@ -554,6 +554,14 @@
 					RelativePath="..\ComponentCalibrationLinear.h"
 					>
 				</File>
+				<File
+					RelativePath="..\ComponentCalibrationTSAI.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentCalibrationTSAI.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="4 Binary Processing"

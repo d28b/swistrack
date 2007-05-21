@@ -1,5 +1,5 @@
-#ifndef HEADER_ComponentCalibrationLinear
-#define HEADER_ComponentCalibrationLinear
+#ifndef HEADER_ComponentCalibrationTSAI
+#define HEADER_ComponentCalibrationTSAI
 
 #include <cv.h>
 #include "Component.h"
@@ -10,15 +10,15 @@
 
 
 //! A component that calculates world coordinates of the particles with a linear model. Basically, each corner of the camera is mapped to world coordinates and all points inside the image are linearly interpolated.
-class ComponentCalibrationLinear: public Component , public ConfigurationXML{
+class ComponentCalibrationTSAI: public Component , public ConfigurationXML{
 
 
 
 public:
 	//! Constructor.
-	ComponentCalibrationLinear(SwisTrackCore *stc);
+	ComponentCalibrationTSAI(SwisTrackCore *stc);
 	//! Destructor.
-	~ComponentCalibrationLinear();
+	~ComponentCalibrationTSAI();
 
 	// Overwritten Component methods
 	void OnStart();
@@ -26,7 +26,7 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentCalibrationLinear(mCore);}
+	Component *Create() {return new ComponentCalibrationTSAI(mCore);}
 
 	void Transform(Particle *p);
 
