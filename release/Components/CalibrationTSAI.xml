@@ -13,7 +13,7 @@
 		<parameter type="double">
 			<name>Ncx</name>
 			<label>Number of sensor's elements in camera's x direction</label>
-			<default>480</default>
+			<default>640</default>
 		</parameter>
 		<parameter type="double">
 			<name>Ncy</name>
@@ -31,10 +31,16 @@
 			<default>0.0065</default>
 		</parameter>
 		<parameter type="double">
-			<name>dy</name>
-			<label>X dimension of camera's sensor element (in mm)</label>
+			<name>dpx</name>
+			<label>Effective X dimension of pixel in frame grabber</label>
 			<default>0.0065</default>
 		</parameter>
+		<parameter type="double">
+			<name>dpy</name>
+			<label>Effective Y dimension of pixel in frame grabber</label>
+			<default>0.0065</default>
+		</parameter>
+
 
 	</configuration>
 </swistrackcomponent>
