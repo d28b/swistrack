@@ -30,6 +30,7 @@
 #include "ComponentIDReaderRing.h"
 #include "ComponentSimulationParticles.h"
 #include "ComponentCalibrationLinear.h"
+#include "ComponentCalibrationTSAI.h"
 #include "ComponentOutputParticles.h"
 
 THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
@@ -79,6 +80,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentIDReaderRing(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
+	mAvailableComponents.push_back(new ComponentCalibrationTSAI(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 
 	// Initialize the list of available data structures

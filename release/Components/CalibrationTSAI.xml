@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
 	<name>Calibration with a linear model</name>
-	<description>This component applies a linear transformation to the particles to transform their pixel coordinates to a world coordinates. Basically, a camera rectangle is mapped onto a tetragon.</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/CalibrationLinear</url>
+	<description>This method uses the TSAI coplanar calibration method to transform the image coordinates in world coordinates.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/CalibrationTSAI</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>
@@ -10,5 +10,31 @@
 			<name>CalibrationPoints</name>
 			<label>Calibration Points</label>
 		</parameter>
+		<parameter type="double">
+			<name>Ncx</name>
+			<label>Number of sensor's elements in camera's x direction</label>
+			<default>480</default>
+		</parameter>
+		<parameter type="double">
+			<name>Ncy</name>
+			<label>Number of sensor's elements in camera's y direction</label>
+			<default>640</default>
+		</parameter>
+		<parameter type="double">
+			<name>dx</name>
+			<label>X dimension of camera's sensor element (in mm)</label>
+			<default>0.0065</default>
+		</parameter>
+		<parameter type="double">
+			<name>dy</name>
+			<label>Y dimension of camera's sensor element (in mm)</label>
+			<default>0.0065</default>
+		</parameter>
+		<parameter type="double">
+			<name>dy</name>
+			<label>X dimension of camera's sensor element (in mm)</label>
+			<default>0.0065</default>
+		</parameter>
+
 	</configuration>
 </swistrackcomponent>
