@@ -1,7 +1,6 @@
 #ifndef HEADER_ComponentInputCameraGBit
 #define HEADER_ComponentInputCameraGBit
 
-#define USE_CAMERA_PYLON_GBIT
 
 #include "Component.h"
 

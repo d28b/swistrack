@@ -8,7 +8,7 @@
 #include <cv.h>
 #include <highgui.h>  // 1394camera.h requires this to be included before
 #include <1394camera.h>
-#include "DisplayImageStandard.h"
+#include "Display.h"
 
 //! An input component that interfaces a Firewire 1394 camera.
 class ComponentInputCamera1394: public Component {
