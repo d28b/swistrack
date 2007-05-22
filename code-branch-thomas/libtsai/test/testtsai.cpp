@@ -21,7 +21,8 @@ static char *id="@(#) $Id: testtsai.cpp,v 1.1.1.1 2003/12/01 16:11:19 yuri Exp $
 
 /******************************** inclusions *****************************************************/
 /*************************************************************************************************/
-#include "testtsai.h" 
+#include "testtsai.h"
+#include<iostream>
 
 /*************************************************************************************************/
 /************ private types, variables, classes and function prototypes **************************/
@@ -146,7 +147,7 @@ int main(void)
 	printf("dx  = %e \n",tt_cp.dx);
 	printf("dy  = %e \n",tt_cp.dy);
 	printf("dpx = %e \n",tt_cp.dpx);
-	printf("dpx = %e \n",tt_cp.dpy);
+	printf("dpy = %e \n",tt_cp.dpy);
 	printf("Cx = %e \n",tt_cp.Cx);
 	printf("Cy = %e \n",tt_cp.Cy);
 	printf("sx = %e \n",tt_cp.sx);
@@ -171,6 +172,8 @@ int main(void)
 	printf("xw = %e \n",tx);
 	printf("yw  = %e \n",ty);
 	printf("zw  = 0\n");
+	int i;
+	std::cin>>i;
 
 
 	return true;

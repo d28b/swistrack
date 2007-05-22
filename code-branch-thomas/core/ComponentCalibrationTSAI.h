@@ -5,6 +5,7 @@
 #include "Component.h"
 #include "DataStructureParticles.h"
 #include "ConfigurationXML.h"
+#include "libtsai.h"
 #include <vector>
 
 
@@ -42,6 +43,9 @@ private:
 	std::vector<CalibrationPoint>	calibrationPointList;		//!< List containing the calibration points.
 	Display mDisplayOutput;									//!< The Display showing the particles.
 	void ReadPoint(wxXmlNode *node);
+	calibration_data calibrationData;
+	calibration_constants calibrationConstants;
+	camera_parameters cameraParameters;
 
 
 };

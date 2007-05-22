@@ -4,6 +4,7 @@
 #include "DisplayEditor.h"
 #include "DataStructureParticles.h"
 #include <wx/log.h>
+#include "libtsai.h"
 
 THISCLASS::ComponentCalibrationTSAI(SwisTrackCore *stc):
 		Component(stc, "CalibrationTSAI"),
@@ -47,7 +48,9 @@ void THISCLASS::OnStart()
 		AddError("No node 'points' found!");
 		return;
 	}
-
+	//Empty the vector
+	calibrationPointList.clear();
+	//Fill the vector with the readen points
 	wxXmlNode *node=mSelectedNode->GetChildren();
 	while (node) {
 		if (node->GetName()=="point") 
@@ -57,10 +60,30 @@ void THISCLASS::OnStart()
 		node=node->GetNext();
 	}
 
-
-	//Compute the calibration matrix
-
-
+	//Getting camera parametrs from configuration file
+	cameraParameters.Ncx=GetConfigurationDouble("Ncx",480);
+	cameraParameters.Nfx=GetConfigurationDouble("Nfx",480);
+	cameraParameters.dx=GetConfigurationDouble("dx",0.0065);
+	cameraParameters.dpx=cameraParameters.dx*cameraParameters.Ncx/cameraParameters.Nfx;
+	cameraParameters.dy=GetConfigurationDouble("dy",0.0065);
+	cameraParameters.dpy=cameraParameters.dy;
+	cameraParameters.Cx=GetConfigurationDouble("Cx",240);
+	cameraParameters.Cy=GetConfigurationDouble("Cy",320);
+	cameraParameters.sx=GetConfigurationDouble("sx",1.0);
+	//Put the points into the matrix
+	if (calibrationPointList.size()>TSAI_MAX_POINTS)
+		AddError("There are more calibration points than accepted by the Tsai calibration library");
+	calibrationData.point_count=calibrationPointList.size();
+	for (int i=0;i<calibrationData.point_count;i++)
+	{
+		calibrationData.zw[i]=0;
+		calibrationData.xw[i]=(calibrationPointList.at(i)).xWorld;
+		calibrationData.yw[i]=(calibrationPointList.at(i)).yWorld;
+		calibrationData.Xf[i]=(calibrationPointList.at(i)).xImage;
+		calibrationData.Yf[i]=(calibrationPointList.at(i)).yImage;
+	}
+	//Do the calibration
+	coplanar_calibration_with_full_optimization(&calibrationData,&calibrationConstants,&cameraParameters);
 }
 
 void THISCLASS::OnReloadConfiguration() 
@@ -93,7 +116,8 @@ void THISCLASS::OnStep() {
 void THISCLASS::OnStepCleanup() {
 }
 
-void THISCLASS::OnStop() {
+void THISCLASS::OnStop() 
+{
 }
 
 void THISCLASS::Transform(Particle *p) {
@@ -116,7 +140,6 @@ void THISCLASS::Transform(Particle *p) {
 }
 void THISCLASS::ReadPoint(wxXmlNode *node) {
 	mSelectedNode=node;
-
 	CalibrationPoint calibrationPoint;
 	calibrationPoint.xImage=Double(ReadChildContent("ximage"),0);
 	calibrationPoint.yImage=Double(ReadChildContent("yimage"),0);

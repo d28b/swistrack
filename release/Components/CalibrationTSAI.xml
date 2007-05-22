@@ -13,12 +13,12 @@
 		<parameter type="double">
 			<name>Ncx</name>
 			<label>Number of sensor's elements in camera's x direction</label>
-			<default>640</default>
+			<default>480</default>
 		</parameter>
 		<parameter type="double">
-			<name>Ncy</name>
-			<label>Number of sensor's elements in camera's y direction</label>
-			<default>640</default>
+			<name>Nfx</name>
+			<label>Number of pixels in frame grabber's x direction</label>
+			<default>480</default>
 		</parameter>
 		<parameter type="double">
 			<name>dx</name>
@@ -31,16 +31,19 @@
 			<default>0.0065</default>
 		</parameter>
 		<parameter type="double">
-			<name>dpx</name>
-			<label>Effective X dimension of pixel in frame grabber</label>
-			<default>0.0065</default>
+			<name>Cx</name>
+			<label>Z axis intercept of camera coordinate system</label>
+			<default>240</default>
 		</parameter>
 		<parameter type="double">
-			<name>dpy</name>
-			<label>Effective Y dimension of pixel in frame grabber</label>
-			<default>0.0065</default>
+			<name>Cy</name>
+			<label>Z axis intercept of camera coordinate system</label>
+			<default>320</default>
 		</parameter>
-
-
+		<parameter type="double">
+			<name>sx</name>
+			<label>Scale factor to compensate for any error in dx</label>
+			<default>1.0</default>
+		</parameter>
 	</configuration>
 </swistrackcomponent>
