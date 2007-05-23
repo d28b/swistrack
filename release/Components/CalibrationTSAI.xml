@@ -12,14 +12,25 @@
 		</parameter>
 		<parameter type="double">
 			<name>Ncx</name>
-			<label>Number of sensor's elements in camera's x direction</label>
-			<default>480</default>
+			<label>Ncx</label>
+			<default>640</default>
 		</parameter>
 		<parameter type="double">
 			<name>Nfx</name>
-			<label>Number of pixels in frame grabber's x direction</label>
+			<label>Nfx</label>
+			<default>640</default>
+		</parameter>
+		<parameter type="double">
+			<name>Ncy</name>
+			<label>Nfy</label>
 			<default>480</default>
 		</parameter>
+		<parameter type="double">
+			<name>Nfy</name>
+			<label>Nfy</label>
+			<default>480</default>
+		</parameter>
+
 		<parameter type="double">
 			<name>dx</name>
 			<label>X dimension of camera's sensor element (in mm)</label>
@@ -29,16 +40,6 @@
 			<name>dy</name>
 			<label>Y dimension of camera's sensor element (in mm)</label>
 			<default>0.0065</default>
-		</parameter>
-		<parameter type="double">
-			<name>Cx</name>
-			<label>Z axis intercept of camera coordinate system</label>
-			<default>240</default>
-		</parameter>
-		<parameter type="double">
-			<name>Cy</name>
-			<label>Z axis intercept of camera coordinate system</label>
-			<default>320</default>
 		</parameter>
 		<parameter type="double">
 			<name>sx</name>

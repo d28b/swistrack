@@ -29,8 +29,6 @@ public:
 	void OnStop();
 	Component *Create() {return new ComponentCalibrationTSAI(mCore);}
 
-	void Transform(Particle *p);
-
 private:
 	//! A structure containing the position values of the calibration points
 	struct CalibrationPoint
@@ -43,6 +41,8 @@ private:
 	std::vector<CalibrationPoint>	calibrationPointList;		//!< List containing the calibration points.
 	Display mDisplayOutput;									//!< The Display showing the particles.
 	void ReadPoint(wxXmlNode *node);
+	CvPoint2D32f Image2World(CvPoint2D32f imageCoordinates);
+	CvPoint2D32f World2Image(CvPoint2D32f worldCoordinates);
 	calibration_data calibrationData;
 	calibration_constants calibrationConstants;
 	camera_parameters cameraParameters;

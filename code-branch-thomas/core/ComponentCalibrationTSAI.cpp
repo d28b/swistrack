@@ -61,14 +61,14 @@ void THISCLASS::OnStart()
 	}
 
 	//Getting camera parametrs from configuration file
-	cameraParameters.Ncx=GetConfigurationDouble("Ncx",480);
-	cameraParameters.Nfx=GetConfigurationDouble("Nfx",480);
+	cameraParameters.Ncx=GetConfigurationDouble("Ncx",640);
+	cameraParameters.Nfx=GetConfigurationDouble("Nfx",640);
 	cameraParameters.dx=GetConfigurationDouble("dx",0.0065);
 	cameraParameters.dpx=cameraParameters.dx*cameraParameters.Ncx/cameraParameters.Nfx;
 	cameraParameters.dy=GetConfigurationDouble("dy",0.0065);
-	cameraParameters.dpy=cameraParameters.dy;
-	cameraParameters.Cx=GetConfigurationDouble("Cx",240);
-	cameraParameters.Cy=GetConfigurationDouble("Cy",320);
+	cameraParameters.dpy=cameraParameters.dy*GetConfigurationDouble("Ncy",480)/GetConfigurationDouble("Nfy",480);
+	cameraParameters.Cx=cameraParameters.Ncx/2;
+	cameraParameters.Cy=GetConfigurationDouble("Ncy",480)/2;
 	cameraParameters.sx=GetConfigurationDouble("sx",1.0);
 	//Put the points into the matrix
 	if (calibrationPointList.size()>TSAI_MAX_POINTS)
@@ -83,34 +83,34 @@ void THISCLASS::OnStart()
 		calibrationData.Yf[i]=(calibrationPointList.at(i)).yImage;
 	}
 	//Do the calibration
-	coplanar_calibration_with_full_optimization(&calibrationData,&calibrationConstants,&cameraParameters);
+	try
+	{
+		coplanar_calibration_with_full_optimization(&calibrationData,&calibrationConstants,&cameraParameters);
+	} 
+	catch(...) 
+	{
+		AddError("Calibration using libtsai failed.");
+	}
 }
 
 void THISCLASS::OnReloadConfiguration() 
 {
 }
 
-void THISCLASS::OnStep() {
-	/*
+void THISCLASS::OnStep() 
+{
+	
 	// These are the particles to transform
 	DataStructureParticles::tParticleVector *particles=mCore->mDataStructureParticles.mParticles;
 	if (! particles) {return;}
 
 	// Transform all particle positions
 	DataStructureParticles::tParticleVector::iterator it=particles->begin();
-	while (it!=particles->end()) {
-		Transform(&*it);
+	while (it!=particles->end()) 
+	{
+		it->mCenter=Image2World(it->mCenter);
 		it++;
 	}
-
-	// Set the display
-	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		//de.SetMode(DisplayEditor::sModeWorldCoordinates);
-		de.SetArea(mWorldTopLeft, mWorldBottomRight);
-		de.SetParticles(particles);
-	}
-	*/
 }
 
 void THISCLASS::OnStepCleanup() {
@@ -118,25 +118,6 @@ void THISCLASS::OnStepCleanup() {
 
 void THISCLASS::OnStop() 
 {
-}
-
-void THISCLASS::Transform(Particle *p) {
-	/*
-	CvPoint2D32f ratio;
-	ratio.x=(p->mCenter.x-mCameraTopLeft.x)/(mCameraBottomRight.x-mCameraTopLeft.x);
-	ratio.y=(p->mCenter.y-mCameraTopLeft.y)/(mCameraBottomRight.y-mCameraTopLeft.y);
-
-	CvPoint2D32f ptop;
-	ptop.x=ratio.x*(mWorldTopRight.x-mWorldTopLeft.x)+mWorldTopLeft.x;
-	ptop.y=ratio.x*(mWorldTopRight.y-mWorldTopLeft.y)+mWorldTopLeft.y;
-
-	CvPoint2D32f pbottom;
-	pbottom.x=ratio.x*(mWorldBottomRight.x-mWorldBottomLeft.x)+mWorldBottomLeft.x;
-	pbottom.y=ratio.x*(mWorldBottomRight.y-mWorldBottomLeft.y)+mWorldBottomLeft.y;
-
-	p->mCenter.x=ratio.y*(pbottom.x-ptop.x)+ptop.x;
-	p->mCenter.y=ratio.y*(pbottom.y-ptop.y)+ptop.y;
-	*/
 }
 void THISCLASS::ReadPoint(wxXmlNode *node) {
 	mSelectedNode=node;
@@ -146,4 +127,20 @@ void THISCLASS::ReadPoint(wxXmlNode *node) {
 	calibrationPoint.xWorld=Double(ReadChildContent("xworld"),0);
 	calibrationPoint.yWorld=Double(ReadChildContent("yworld"),0);
 	calibrationPointList.push_back(calibrationPoint);
+}
+CvPoint2D32f THISCLASS::Image2World(CvPoint2D32f imageCoordinates)
+{
+	double wx,wy;
+	CvPoint2D32f worldCoordinates;
+	image_coord_to_world_coord(calibrationConstants,cameraParameters,(double)imageCoordinates.x,(double)imageCoordinates.y,0,&wx,&wy);
+	worldCoordinates=cvPoint2D32f(wx,wy);
+	return worldCoordinates;
+}
+CvPoint2D32f THISCLASS::World2Image(CvPoint2D32f worldCoordinates)
+{
+	double ix,iy;
+	CvPoint2D32f imageCoordinates;
+	image_coord_to_world_coord(calibrationConstants,cameraParameters,(double)worldCoordinates.x,(double)worldCoordinates.y,0,&ix,&iy);
+	imageCoordinates=cvPoint2D32f(ix,iy);
+	return imageCoordinates;
 }
