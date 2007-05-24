@@ -8,7 +8,7 @@
 	<configuration>
 		<parameter type="file">
 			<name>CalibrationPoints</name>
-			<label>Calibration Points</label>
+			<label>Calib. Points</label>
 		</parameter>
 		<parameter type="double">
 			<name>Ncx</name>
@@ -22,7 +22,7 @@
 		</parameter>
 		<parameter type="double">
 			<name>Ncy</name>
-			<label>Nfy</label>
+			<label>Ncy</label>
 			<default>480</default>
 		</parameter>
 		<parameter type="double">
@@ -33,17 +33,17 @@
 
 		<parameter type="double">
 			<name>dx</name>
-			<label>X dimension of camera's sensor element (in mm)</label>
+			<label>dx</label>
 			<default>0.0065</default>
 		</parameter>
 		<parameter type="double">
 			<name>dy</name>
-			<label>Y dimension of camera's sensor element (in mm)</label>
+			<label>dy</label>
 			<default>0.0065</default>
 		</parameter>
 		<parameter type="double">
 			<name>sx</name>
-			<label>Scale factor to compensate for any error in dx</label>
+			<label>sx</label>
 			<default>1.0</default>
 		</parameter>
 	</configuration>
