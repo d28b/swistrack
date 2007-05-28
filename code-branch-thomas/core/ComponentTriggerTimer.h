@@ -37,8 +37,8 @@ private:
 		void Notify() {mComponentTriggerTimer->mTrigger->SetReady();}
 	};
 
-	Timer *mTimer;		//!< The associated timer.
-
+	//Timer *mTimer;		//!< The associated timer.
+	void *mTimer;
 };
 
 #endif

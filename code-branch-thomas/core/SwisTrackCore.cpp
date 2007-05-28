@@ -35,7 +35,7 @@
 
 THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 		mAvailableComponents(), mDataStructures(), mSwisTrackCoreInterfaces(), mComponentConfigurationFolder(componentconfigurationfolder),
-		mComponentCategories(), mCommunicationInterface(0), mTrigger(new SwisTrackCoreTrigger(this)),
+		mComponentCategories(), mCommunicationInterface(0), mTrigger(new SwisTrackCoreTrigger(this)), mEventRecorder(new SwisTrackCoreEventRecorder(this)),
 		mCategoryTrigger("Trigger", 0),
 		mCategoryInput("Input", 100, ComponentCategory::sTypeOne),
 		mCategoryInputConversion("Input conversion", 200, ComponentCategory::sTypeAuto),
@@ -112,8 +112,9 @@ THISCLASS::~SwisTrackCore() {
 
 	mAvailableComponents.clear();
 
-	// Delete the trigger
+	// Delete associated objects
 	delete mTrigger;
+	delete mEventRecorder;
 }
 
 bool THISCLASS::Start(bool productivemode) {

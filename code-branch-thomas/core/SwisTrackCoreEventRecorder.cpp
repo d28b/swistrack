@@ -31,6 +31,8 @@ THISCLASS::SwisTrackCoreEventRecorder(SwisTrackCore *stc):
 }
 
 THISCLASS::~SwisTrackCoreEventRecorder() {
+	delete mCurrentTimeline;
+	delete mLastTimeline;
 }
 
 void THISCLASS::StartRecording() {
