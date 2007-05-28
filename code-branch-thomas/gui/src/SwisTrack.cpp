@@ -88,7 +88,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	mConfigurationPanel=new ConfigurationPanel(this, this, 0);
 
 	// Timeline panel
-	//mTimelinePanel=new TimelinePanel(this, this);
+	mTimelinePanel=new TimelinePanel(this, this);
 
 	// Setup frame contents
 	mHorizontalSizer=new wxBoxSizer(wxHORIZONTAL);
@@ -98,6 +98,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
 	vs->Add(mHorizontalSizer, 3, wxEXPAND, 0);
 	vs->Add(mComponentListPanel, 1, wxEXPAND, 0);
+	vs->Add(mTimelinePanel, 0, 0, 0);
 	SetSizer(vs);
 }
 

@@ -16,6 +16,9 @@ THISCLASS::SwisTrackCoreTrigger(SwisTrackCore *stc):
 }
 
 THISCLASS::~SwisTrackCoreTrigger() {
+	mSwisTrackCore->RemoveInterface(this);
+	Disconnect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER, wxCommandEventHandler(THISCLASS::OnTrigger));
+	Disconnect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER_CLEAR, wxCommandEventHandler(THISCLASS::OnTriggerClear));
 }
 
 void THISCLASS::OnTrigger(wxCommandEvent &event) {

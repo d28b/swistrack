@@ -6,6 +6,7 @@ class SwisTrackCore;
 #include "SwisTrackCoreInterface.h"
 #include <wx/event.h>
 
+//! The trigger. An object of this class is directly attached to the SwisTrackCore object and handles the automatic triggering of steps.
 class SwisTrackCoreTrigger: public wxEvtHandler, public SwisTrackCoreInterface {
 
 public:

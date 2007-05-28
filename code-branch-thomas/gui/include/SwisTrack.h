@@ -69,7 +69,7 @@ protected:
 	ConfigurationPanel *mConfigurationPanel;	//!< The component configuration panel shown on the right.
 
 	//! IDs for the controls and the menu commands
-	enum eIDs {
+	enum eID {
 		sID_New,
 		sID_Open,
 		sID_Save,
@@ -88,7 +88,7 @@ protected:
 	};
 
 	//! Status field IDs
-	enum eStatusFields {
+	enum eStatusField {
 		sStatusField_Messages=0,
 		sStatusField_ServerPort=1,
 		sStatusField_Trigger=2,

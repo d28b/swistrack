@@ -14,9 +14,7 @@ class SwisTrackCore;
 #include "ErrorList.h"
 #include "SwisTrackCoreInterface.h"
 #include "SwisTrackCoreTrigger.h"
-//class SwisTrackCoreTrigger;
 class SwisTrackCoreEditor;
-//class SwisTrackCoreInterface;
 
 //! The main class of the core part of SwisTrack. This class holds everything together.
 class SwisTrackCore {
@@ -39,6 +37,7 @@ public:
 	tComponentCategoryMap mComponentCategories;				//!< The component categories. (not used, TODO: read categories from XML file and put them here, then modify components to read categoryID from their XML file)
 	CommunicationInterface *mCommunicationInterface;		//!< The associated communication interface.
 	SwisTrackCoreTrigger *mTrigger;							//!< The associated trigger.
+	SwisTrackCoreTimeline *mTimeline;						//!< The associated timeline.
 
 	// Component categories
 	ComponentCategory mCategoryTrigger;
@@ -90,7 +89,7 @@ public:
 	//! Returns whether the components have been started in productive mode.
 	bool IsStartedInProductiveMode() {return (mStarted && mProductiveMode);}
 	//! Returns whether the automatic trigger is active.
-	bool IsTriggerActive();
+	bool IsTriggerStarted() {return mTrigger->GetActive();}
 
 	//! Adds an object to the list of interfaces. Objects on this list will be informed upon changes.
 	void AddInterface(SwisTrackCoreInterface *stc);

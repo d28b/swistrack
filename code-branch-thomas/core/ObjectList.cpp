@@ -50,7 +50,7 @@ void THISCLASS::ReadObject(wxXmlNode *node) {
 	mSelectedNode=node;
 
 	// Create id
-	tObject object;
+	Object object;
 	object.objectid=Int(ReadProperty("id"), 0);
 	SelectChildNode("barcode");
 	if (! mSelectedNode) {return;}

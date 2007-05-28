@@ -49,7 +49,7 @@ void THISCLASS::OnStart() {
 	OnReloadConfiguration();
 
 	// Start the simulation at the first frame that is available in the file
-	SimulationParticles::tFrame *frame=mSimulationParticles->FirstFrame();
+	SimulationParticles::Frame *frame=mSimulationParticles->FirstFrame();
 	if (frame) {
 		mFrameNumber=frame->number-1;
 	} else {
@@ -85,7 +85,7 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	mFrameNumber++;
-	SimulationParticles::tFrame *frame=mSimulationParticles->GetFutureFrameByNumber(mFrameNumber);
+	SimulationParticles::Frame *frame=mSimulationParticles->GetFutureFrameByNumber(mFrameNumber);
 
 	// Clear the particles
 	mParticles.clear();

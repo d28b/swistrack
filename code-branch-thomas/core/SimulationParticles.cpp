@@ -63,7 +63,7 @@ bool THISCLASS::ReadBlock() {
 	return true;
 }
 
-THISCLASS::tFrame *THISCLASS::FirstFrame() {
+THISCLASS::Frame *THISCLASS::FirstFrame() {
 	while (1) {
 		// Move to the first frame
 		mCurrentFrame=mFrames.begin();
@@ -80,7 +80,7 @@ THISCLASS::tFrame *THISCLASS::FirstFrame() {
 	}
 }
 
-THISCLASS::tFrame *THISCLASS::NextFrame() {
+THISCLASS::Frame *THISCLASS::NextFrame() {
 	while (1) {
 		// Try incrementing
 		tFrameList::iterator nextframe=mCurrentFrame;
@@ -100,12 +100,12 @@ THISCLASS::tFrame *THISCLASS::NextFrame() {
 	}
 }
 
-THISCLASS::tFrame *THISCLASS::GetCurrentFrame() {
+THISCLASS::Frame *THISCLASS::GetCurrentFrame() {
 	if (mCurrentFrame==mFrames.end()) {return 0;}
 	return &*mCurrentFrame;
 }
 
-THISCLASS::tFrame *THISCLASS::GetFutureFrameByNumber(int number) {
+THISCLASS::Frame *THISCLASS::GetFutureFrameByNumber(int number) {
 	while (mCurrentFrame!=mFrames.end()) {
 		if (mCurrentFrame->number == number) {return &*mCurrentFrame;}
 		if (mCurrentFrame->number > number) {break;}

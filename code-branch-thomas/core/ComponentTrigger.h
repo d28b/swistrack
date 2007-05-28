@@ -5,7 +5,7 @@ class ComponentTrigger;
 
 #include "Component.h"
 
-// The base class for all components.
+//! The component trigger class. All components that provide a trigger should use this class.
 class ComponentTrigger {
 
 public:

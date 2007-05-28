@@ -9,15 +9,18 @@
 class ObjectList: public ConfigurationXML {
 
 public:
-	typedef std::vector<float> tChipVector;
 	//! Information about one object.
-	typedef struct {
+	class Object {
+	public:
 		int objectid;			//!< The object id.
 		tChipVector chips;		//!< The corresponding chips. Note that chips are stored in clockwise order, starting at 12 o'clock (if angle=0).
 		float angle;			//!< Correction angle, if the blob is rotated.
-	} tObject;
+	};
+
+	//! A chip sequence type.
+	typedef std::vector<float> tChipVector;
 	//! A list of objects type.
-	typedef std::list<tObject> tObjectList;
+	typedef std::list<Object> tObjectList;
 
 	tObjectList mObjects;		//!< The objects.
 	std::string mError;			//!< The first error that occured.

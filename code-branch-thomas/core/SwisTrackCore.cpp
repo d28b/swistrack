@@ -120,13 +120,21 @@ bool THISCLASS::Start(bool productivemode) {
 	if (mStarted) {return false;}
 	if (mEditLocks>0) {return false;}
 
+	// Timeline
+	if (productivemode) {
+		mTimeline->Add(SwisTrackCoreTimeLine::sType_SetModeProductive);
+	} else {
+		mTimeline->Add(SwisTrackCoreTimeLine::sType_SetModeNormal);
+	}
+	mTimeline->Add(SwisTrackCoreTimeLine::sType_BeforeStart);
+
 	// Notify the interfaces
 	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
 	while (iti!=mSwisTrackCoreInterfaces.end()) {
 		(*iti)->OnBeforeStart(productivemode);
 		iti++;
 	}
-	
+
 	// Update the flags
 	mStarted=true;
 	mProductiveMode=productivemode;
@@ -148,11 +156,17 @@ bool THISCLASS::Start(bool productivemode) {
 		iti++;
 	}
 
+	// Timeline
+	mTimeline->Add(SwisTrackCoreTimeLine::sType_AfterStart);
+
 	return true;
 }
 
 bool THISCLASS::Stop() {
 	if (! mStarted) {return false;}
+
+	// Timeline
+	mTimeline->Add(SwisTrackCoreTimeLine::sType_BeforeStop);
 
 	// Notify the interfaces
 	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
@@ -183,11 +197,17 @@ bool THISCLASS::Stop() {
 		iti++;
 	}
 
+	// Timeline
+	mTimeline->Add(SwisTrackCoreTimeLine::sType_AfterStop);
+
 	return true;
 }
 
 bool THISCLASS::Step() {
 	if (! mStarted) {return false;}
+
+	// Timeline
+	mTimeline->Add(SwisTrackCoreTimeLine::sType_StepStart);
 
 	// Notify the interfaces (OnBeforeStep)
 	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
@@ -214,27 +234,25 @@ bool THISCLASS::Step() {
 		it++;
 	}
 
-	// Initialize performance measurements
-	LARGE_INTEGER performancestart;
-	LARGE_INTEGER performanceend;
-	LARGE_INTEGER performancefrequency;
-	QueryPerformanceCounter(&performancestart);
-	QueryPerformanceFrequency(&performancefrequency);
-
 	// Run until first error, or until the end (all started components)
 	it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
 		if (! (*it)->mStarted) {break;}
 
+		// Timeline
+		SwisTrackCoreTimeLine::Event starttime;
+		mTimeline->LeapTime(&starttime, sType_StepStart, (*it));
+		mTimeline->Add(&starttime);
+
 		// Execute the step
 		(*it)->ClearStatus();
 		(*it)->OnStep();
 
-		// Performance measurement
-		QueryPerformanceCounter(&performanceend);
-		unsigned long diff=performanceend.LowPart-performancestart.LowPart;
-		(*it)->mStepDuration=(double)(diff)/(double)performancefrequency.LowPart;
-		performancestart=performanceend;
+		// Timeline
+		SwisTrackCoreTimeLine::Event endtime;
+		mTimeline->LeapTime(&endtime, sType_StepStop, (*it));
+		mTimeline->Add(&endtime);
+		(*it)->mStepDuration=SwisTrackCoreTimeLine::CalculateDuration(&starttime, &endtime);
 
 		// Error handling
 		if ((*it)->mStatusHasError) {break;}
@@ -273,11 +291,17 @@ bool THISCLASS::Step() {
 		iti++;
 	}
 
+	// Timeline
+	mTimeline->Add(SwisTrackCoreTimeLine::sType_StepStart);
+
 	return true;
 }
 
 bool THISCLASS::ReloadConfiguration() {
 	if (! mStarted) {return false;}
+
+	// Timeline
+	mTimeline->Add(SwisTrackCoreTimeLine::sType_BeforeReloadConfiguration);
 
 	// Start all components (until first error)
 	tComponentList::iterator it=mDeployedComponents.begin();
@@ -288,10 +312,16 @@ bool THISCLASS::ReloadConfiguration() {
 		it++;
 	}
 
+	// Timeline
+	mTimeline->Add(SwisTrackCoreTimeLine::sType_AfterReloadConfiguration);
+
 	return true;
 }
 
 void THISCLASS::StartTrigger() {
+	// Timeline
+	mTimeline->Add(SwisTrackCoreTimeLine::sType_BeforeStartTrigger);
+
 	// Notify the interfaces
 	tSwisTrackCoreInterfaceList::iterator it=mSwisTrackCoreInterfaces.begin();
 	while (it!=mSwisTrackCoreInterfaces.end()) {
@@ -308,9 +338,15 @@ void THISCLASS::StartTrigger() {
 		(*it)->OnAfterTriggerStart();
 		it++;
 	}
+
+	// Timeline
+	mTimeline->Add(SwisTrackCoreTimeLine::sType_AfterStartTrigger);
 }
 
 void THISCLASS::StopTrigger() {
+	// Timeline
+	mTimeline->Add(SwisTrackCoreTimeLine::sType_BeforeStopTrigger);
+
 	// Notify the interfaces
 	tSwisTrackCoreInterfaceList::iterator it=mSwisTrackCoreInterfaces.begin();
 	while (it!=mSwisTrackCoreInterfaces.end()) {
@@ -327,6 +363,9 @@ void THISCLASS::StopTrigger() {
 		(*it)->OnAfterTriggerStop();
 		it++;
 	}
+
+	// Timeline
+	mTimeline->Add(SwisTrackCoreTimeLine::sType_AfterStopTrigger);
 }
 
 void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmlerr) {
@@ -350,10 +389,6 @@ Component *THISCLASS::GetComponentByName(const std::string &name) {
 	}
 
 	return 0;
-}
-
-bool THISCLASS::IsTriggerActive() {
-	return mTrigger->GetActive();
 }
 
 void THISCLASS::AddInterface(SwisTrackCoreInterface *stc) {
