@@ -1,9 +1,10 @@
 #ifndef HEADER_SwisTrackCoreEventRecorder
 #define HEADER_SwisTrackCoreEventRecorder
 
+#include <windows.h>
 class SwisTrackCoreEventRecorder;
 class SwisTrackCore;
-#include "Component.h";
+#include "Component.h"
 
 //! Records event timings. An object of this class is directly attached to the SwisTrackCore object. This class uses the QueryPerformaceCounter function of the Windows API and is therefore not portable.
 class SwisTrackCoreEventRecorder {
@@ -25,14 +26,19 @@ public:
 		sType_AfterStart,
 		sType_BeforeStop,
 		sType_AfterStop,
-		sType_TriggerStart,
-		sType_TriggerStop,
+		sType_BeforeReloadConfiguration,
+		sType_AfterReloadConfiguration,
+		sType_BeforeTriggerStart,
+		sType_AfterTriggerStart,
+		sType_BeforeTriggerStop,
+		sType_AfterTriggerStop,
 		sType_StepStart,
 		sType_StepStop,
 		sType_StepLapTime,
 	};
 
-	static std::map<eType, std::tring> mTypeNames;		//!< String names of the event types.
+	//! A map type to map event types to names.
+	typedef std::map<eType, std::string> tTypeNameMap;
 
 	//! A timeline item.
 	class Event {
@@ -48,7 +54,7 @@ public:
 		bool mStartedInProductiveMode;		//!< Whether started in productive mode.
 		bool mStarted;						//!< Whether started at all.
 		bool mTriggerActive;				//!< Whether the automatic trigger is active.
-	}
+	};
 
 	//! A timeline of finite length (the mEvents vector will not grow over a certain length).
 	class Timeline {
@@ -56,14 +62,15 @@ public:
 		//! An event list type.
 		typedef std::vector<Event> tEventList;
 
-		static const mNumberOfEvents = 1000;	//!< The number of events stored per timeline.
-		Event mBegin;							//!< Holds the time at which the timeline begins.
-		Event mEnd;								//!< Holds the time at which the timeline end.
-		State mStartState;						//!< The state of the SwisTrackCore object at time of starting.
-		tEventList mEvents;						//!< The recorded events. This vector is initialized to a certain size 
-	}
+		static const int mNumberOfEvents = 1000;	//!< The number of events stored per timeline.
+		Event mBegin;								//!< Holds the time at which the timeline begins.
+		Event mEnd;									//!< Holds the time at which the timeline end.
+		State mBeginState;							//!< The state of the SwisTrackCore object at time of starting.
+		tEventList mEvents;							//!< The recorded events. This vector is initialized to a certain size 
+	};
 
 	SwisTrackCore *mSwisTrackCore;				//!< The associated SwisTrackCore object.
+	tTypeNameMap mTypeNames;					//!< String names of the event types.
 
 	//! Constructor.
 	SwisTrackCoreEventRecorder(SwisTrackCore *stc);
@@ -73,21 +80,21 @@ public:
 	//! Starts a new recording and makes the old recording available through GetLastTimeline().
 	void StartRecording();
 	//! Adds a new event to the current timeline.
-	Item Add(const eType type, Component *c=0);
+	void Add(const eType type, Component *component=0);
 	//! Adds a new event to the current timeline.
-	void Add(Item *it);
+	void Add(const Event *it);
 	//! Stores an event in an Item object.
-	static void LapTime(Item *it, const eType type, Component *c) const;
+	static void LapTime(Event *it, const eType type, Component *component=0);
 	//! Returns the duration (in seconds) between two timeline items.
-	static double CalculateDuration(Item *it1, Item *it2) const;
+	double CalculateDuration(const Event *it1, const Event *it2) const;
 
 	//! Returns the last timeline.
-	const TimeLine *GetLastTimeline() const {return mLastTimeLine;}
+	const Timeline *GetLastTimeline() const {return mLastTimeline;}
 
 private:
 	double mFrequency;				//!< The frequency of the performance counter.
-	TimeLine *mCurrentTimeLine;		//!< The timeline which currently records events.
-	TimeLine *mLastTimeLine;		//!< The previously recorded timeline.
+	Timeline *mCurrentTimeline;		//!< The timeline which currently records events.
+	Timeline *mLastTimeline;		//!< The previously recorded timeline.
 
 };
 

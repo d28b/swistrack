@@ -95,7 +95,7 @@ void THISCLASS::CleanupConnections() {
 	}
 }
 
-bool THISCLASS::SendMessage(CommunicationMessage *m) {
+bool THISCLASS::Send(CommunicationMessage *m) {
 	bool sent=false;
 	tConnections::iterator it=mConnections.begin();
 	while (it!=mConnections.end()) {

@@ -764,6 +764,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\SwisTrackCoreEventRecorder.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\SwisTrackCoreEventRecorder.h"
+				>
+			</File>
+			<File
 				RelativePath="..\SwisTrackCoreInterface.cpp"
 				>
 			</File>

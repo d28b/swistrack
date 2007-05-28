@@ -9,6 +9,9 @@
 class ObjectList: public ConfigurationXML {
 
 public:
+	//! A chip sequence type.
+	typedef std::vector<float> tChipVector;
+
 	//! Information about one object.
 	class Object {
 	public:
@@ -17,8 +20,6 @@ public:
 		float angle;			//!< Correction angle, if the blob is rotated.
 	};
 
-	//! A chip sequence type.
-	typedef std::vector<float> tChipVector;
 	//! A list of objects type.
 	typedef std::list<Object> tObjectList;
 

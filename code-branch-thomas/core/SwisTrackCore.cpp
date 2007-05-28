@@ -120,13 +120,13 @@ bool THISCLASS::Start(bool productivemode) {
 	if (mStarted) {return false;}
 	if (mEditLocks>0) {return false;}
 
-	// Timeline
+	// Event recorder
 	if (productivemode) {
-		mTimeline->Add(SwisTrackCoreTimeLine::sType_SetModeProductive);
+		mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_SetModeProductive);
 	} else {
-		mTimeline->Add(SwisTrackCoreTimeLine::sType_SetModeNormal);
+		mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_SetModeNormal);
 	}
-	mTimeline->Add(SwisTrackCoreTimeLine::sType_BeforeStart);
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeStart);
 
 	// Notify the interfaces
 	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
@@ -156,8 +156,8 @@ bool THISCLASS::Start(bool productivemode) {
 		iti++;
 	}
 
-	// Timeline
-	mTimeline->Add(SwisTrackCoreTimeLine::sType_AfterStart);
+	// Event recorder
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterStart);
 
 	return true;
 }
@@ -165,8 +165,8 @@ bool THISCLASS::Start(bool productivemode) {
 bool THISCLASS::Stop() {
 	if (! mStarted) {return false;}
 
-	// Timeline
-	mTimeline->Add(SwisTrackCoreTimeLine::sType_BeforeStop);
+	// Event recorder
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeStop);
 
 	// Notify the interfaces
 	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
@@ -197,8 +197,8 @@ bool THISCLASS::Stop() {
 		iti++;
 	}
 
-	// Timeline
-	mTimeline->Add(SwisTrackCoreTimeLine::sType_AfterStop);
+	// Event recorder
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterStop);
 
 	return true;
 }
@@ -206,8 +206,8 @@ bool THISCLASS::Stop() {
 bool THISCLASS::Step() {
 	if (! mStarted) {return false;}
 
-	// Timeline
-	mTimeline->Add(SwisTrackCoreTimeLine::sType_StepStart);
+	// Event recorder
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepStart);
 
 	// Notify the interfaces (OnBeforeStep)
 	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
@@ -239,20 +239,20 @@ bool THISCLASS::Step() {
 	while (it!=mDeployedComponents.end()) {
 		if (! (*it)->mStarted) {break;}
 
-		// Timeline
-		SwisTrackCoreTimeLine::Event starttime;
-		mTimeline->LeapTime(&starttime, sType_StepStart, (*it));
-		mTimeline->Add(&starttime);
+		// Event recorder
+		SwisTrackCoreEventRecorder::Event starttime;
+		mEventRecorder->LapTime(&starttime, SwisTrackCoreEventRecorder::sType_StepStart, (*it));
+		mEventRecorder->Add(&starttime);
 
 		// Execute the step
 		(*it)->ClearStatus();
 		(*it)->OnStep();
 
-		// Timeline
-		SwisTrackCoreTimeLine::Event endtime;
-		mTimeline->LeapTime(&endtime, sType_StepStop, (*it));
-		mTimeline->Add(&endtime);
-		(*it)->mStepDuration=SwisTrackCoreTimeLine::CalculateDuration(&starttime, &endtime);
+		// Event recorder
+		SwisTrackCoreEventRecorder::Event endtime;
+		mEventRecorder->LapTime(&endtime, SwisTrackCoreEventRecorder::sType_StepStop, (*it));
+		mEventRecorder->Add(&endtime);
+		(*it)->mStepDuration=mEventRecorder->CalculateDuration(&starttime, &endtime);
 
 		// Error handling
 		if ((*it)->mStatusHasError) {break;}
@@ -291,8 +291,8 @@ bool THISCLASS::Step() {
 		iti++;
 	}
 
-	// Timeline
-	mTimeline->Add(SwisTrackCoreTimeLine::sType_StepStart);
+	// Event recorder
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepStart);
 
 	return true;
 }
@@ -300,8 +300,8 @@ bool THISCLASS::Step() {
 bool THISCLASS::ReloadConfiguration() {
 	if (! mStarted) {return false;}
 
-	// Timeline
-	mTimeline->Add(SwisTrackCoreTimeLine::sType_BeforeReloadConfiguration);
+	// Event recorder
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeReloadConfiguration);
 
 	// Start all components (until first error)
 	tComponentList::iterator it=mDeployedComponents.begin();
@@ -312,15 +312,15 @@ bool THISCLASS::ReloadConfiguration() {
 		it++;
 	}
 
-	// Timeline
-	mTimeline->Add(SwisTrackCoreTimeLine::sType_AfterReloadConfiguration);
+	// Event recorder
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterReloadConfiguration);
 
 	return true;
 }
 
-void THISCLASS::StartTrigger() {
-	// Timeline
-	mTimeline->Add(SwisTrackCoreTimeLine::sType_BeforeStartTrigger);
+void THISCLASS::TriggerStart() {
+	// Event recorder
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeTriggerStart);
 
 	// Notify the interfaces
 	tSwisTrackCoreInterfaceList::iterator it=mSwisTrackCoreInterfaces.begin();
@@ -339,13 +339,13 @@ void THISCLASS::StartTrigger() {
 		it++;
 	}
 
-	// Timeline
-	mTimeline->Add(SwisTrackCoreTimeLine::sType_AfterStartTrigger);
+	// Event recorder
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterTriggerStart);
 }
 
-void THISCLASS::StopTrigger() {
-	// Timeline
-	mTimeline->Add(SwisTrackCoreTimeLine::sType_BeforeStopTrigger);
+void THISCLASS::TriggerStop() {
+	// Event recorder
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeTriggerStop);
 
 	// Notify the interfaces
 	tSwisTrackCoreInterfaceList::iterator it=mSwisTrackCoreInterfaces.begin();
@@ -364,8 +364,8 @@ void THISCLASS::StopTrigger() {
 		it++;
 	}
 
-	// Timeline
-	mTimeline->Add(SwisTrackCoreTimeLine::sType_AfterStopTrigger);
+	// Event recorder
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterTriggerStop);
 }
 
 void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmlerr) {

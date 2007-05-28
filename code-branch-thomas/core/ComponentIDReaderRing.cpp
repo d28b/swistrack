@@ -138,7 +138,7 @@ void THISCLASS::OnStep() {
 		float max_sum=0;
 		float max_shift=0;
 		int max_rotation=0;
-		ObjectList::tObject *max_object=0;
+		ObjectList::Object *max_object=0;
 
 		// Correlate with all barcodes
 		float shift=1/(float)mCodeLength;

@@ -16,6 +16,7 @@ class SwisTrack;
 #include "CanvasPanel.h"
 #include "ComponentListPanel.h"
 #include "ConfigurationPanel.h"
+#include "TimelinePanel.h"
 #include <wx/timer.h>
 
 //! Main application window.
@@ -67,6 +68,7 @@ protected:
 	CanvasPanel *mCanvasPanel;					//!< The panel in the center displaying the current image.
 	ComponentListPanel *mComponentListPanel;	//!< The list of components in the bottom of the window.
 	ConfigurationPanel *mConfigurationPanel;	//!< The component configuration panel shown on the right.
+	TimelinePanel *mTimelinePanel;				//!< The timeline panel shown on the bottom.
 
 	//! IDs for the controls and the menu commands
 	enum eID {

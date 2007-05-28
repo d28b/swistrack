@@ -56,7 +56,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 		wxFrame(NULL, -1, title, pos, size, style),
 		CommunicationCommandHandler(),
 		mSwisTrackCore(0), mTCPServer(0), mFileName(""),
-		mHorizontalSizer(0), mCanvasPanel(0), mComponentListPanel(0), mConfigurationPanel(0) {
+		mHorizontalSizer(0), mCanvasPanel(0), mComponentListPanel(0), mConfigurationPanel(0), mTimelinePanel(0) {
 
 #ifdef MULTITHREAD
 	criticalSection = new wxCriticalSection();
@@ -249,7 +249,7 @@ void THISCLASS::Control_StartRunMode() {
 	// Activate the automatic trigger
 	GetToolBar()->ToggleTool(sID_Control_Run, true);
 	GetToolBar()->EnableTool(sID_Control_Step, false);
-	mSwisTrackCore->StartTrigger();
+	mSwisTrackCore->TriggerStart();
 	mSwisTrackCore->Start(false);
 }
 
@@ -257,7 +257,7 @@ void THISCLASS::Control_StopRunMode() {
 	// Deactivate the automatic trigger
 	GetToolBar()->ToggleTool(sID_Control_Run, false);
 	GetToolBar()->EnableTool(sID_Control_Step, true);
-	mSwisTrackCore->StopTrigger();
+	mSwisTrackCore->TriggerStop();
 }
 
 bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {

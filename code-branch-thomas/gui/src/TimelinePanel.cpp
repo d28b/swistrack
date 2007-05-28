@@ -3,6 +3,7 @@
 
 #include <wx/image.h>
 #include <highgui.h>
+#include <fstream>
 #include "ImageConversion.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxControl)
@@ -17,18 +18,18 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 	EVT_MENU(sID_TriggerAuto1, THISCLASS::OnMenuTrigger)
 	EVT_MENU(sID_TriggerManual, THISCLASS::OnMenuTrigger)
 	EVT_MENU(sID_ViewReset, THISCLASS::OnMenuViewReset)
-	EVT_MENU(sID_SaveTimeline, THISCLASS::OnSaveTimeline)
+	EVT_MENU(sID_SaveTimeline, THISCLASS::OnMenuSaveTimeline)
 END_EVENT_TABLE()
 
-THISCLASS::TimelinePanel(wxWindow *parent, TimelinePanelPanel *cp):
-		wxControl(parent, -1), mSwisTrack(0), mSelectedComponent(0), mPopupMenu(), mTimer(),
+THISCLASS::TimelinePanel(wxWindow *parent, SwisTrack *st):
+		wxControl(parent, -1), mSwisTrack(st), mSelectedComponent(0), mPopupMenu(), mTimer(),
 		mViewOffset(0), mViewScale(0), mMoveStarted(false), mMoveStartPoint(0) {
 
 	SetWindowStyle(wxNO_BORDER);
 
 	// Create the popup menu
-	mPopupMenu.AppendCheckItem(sID_Trigger10, "Update every 10 seconds");
-	mPopupMenu.AppendCheckItem(sID_Trigger1, "Update every second");
+	mPopupMenu.AppendCheckItem(sID_TriggerAuto10, "Update every 10 seconds");
+	mPopupMenu.AppendCheckItem(sID_TriggerAuto1, "Update every second");
 	mPopupMenu.AppendCheckItem(sID_TriggerManual, "Update manually (double click)");
 	mPopupMenu.AppendSeparator();
 	mPopupMenu.AppendCheckItem(sID_ViewReset, "Reset view");
@@ -40,10 +41,10 @@ THISCLASS::TimelinePanel(wxWindow *parent, TimelinePanelPanel *cp):
 	f.SetWeight(wxNORMAL);
 
 	// Set white background
-	SetBackground(wxColour(0x00, 0x00, 0x00));
+	//SetBackground(wxColour(0x00, 0x00, 0x00)); TODO draw white background in paint
 
 	// Start the timer
-	mTimer.start(1000, false);
+	mTimer.Start(1000, false);
 }
 
 THISCLASS::~TimelinePanel() {
@@ -51,11 +52,11 @@ THISCLASS::~TimelinePanel() {
 
 void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	wxPaintDC dc(this);
-	bool ok=OnPaintImage(dc);
+	bool ok=Paint(dc);
 
 	// Display an error if no image can be displayed
 	if (! ok) {
-		dc.clear();
+		dc.Clear();
 		dc.SetFont(GetFont());
 		dc.DrawText("No timeline.", 4, 4);
 	}
@@ -63,14 +64,14 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 
 bool THISCLASS::Paint(wxPaintDC &dc) {
 	// Get timeline
-	SwisTrackCoreEventRecorder::Timeline *timeline=mSwisTrack->mSwisTrackCore->mTimeline->GetLastTimeline();
+	const SwisTrackCoreEventRecorder::Timeline *timeline=mSwisTrack->mSwisTrackCore->mEventRecorder->GetLastTimeline();
 	if (timeline==0) {return false;}
 
 	// Draw
 	DrawTrigger(dc, timeline);
 	DrawTicks(dc, timeline);
 	DrawComponentSteps(dc, timeline);
-	DrawStepLapTime(dc, timeline);
+	DrawStepLapTimes(dc, timeline);
 	DrawSteps(dc, timeline);
 	DrawStartStop(dc, timeline);
 	DrawBeginEnd(dc, timeline);
@@ -78,23 +79,23 @@ bool THISCLASS::Paint(wxPaintDC &dc) {
 	return true;
 }
 
-void THISCLASS::DrawTrigger(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timeline *timeline) {
+void THISCLASS::DrawTrigger(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
 	// Prepare
 	wxSize dcsize=dc.GetSize();
 	int dw=dcsize.GetWidth();
 	int dh=dcsize.GetHeight();
 	dc.SetBrush(wxBrush(wxColour(0xee, 0xee, 0xee)));
-	dc.SetPen(wxBrush(wxColour(0xee, 0xee, 0xee)));
+	dc.SetPen(wxPen(wxColour(0xee, 0xee, 0xee)));
 
 	// Draw
 	double starttime=-1;
-	SwisTrackCoreEventRecorder::Timeline::Eventlist::iterator it=timeline->mEvents.begin();
+	SwisTrackCoreEventRecorder::Timeline::tEventList::const_iterator it=timeline->mEvents.begin();
 	while (it!=timeline->mEvents.end()) {
-		if (it->mType == SwisTrackCoreEventRecorder::sType_TriggerStart) {
-			starttime=SwisTrackCoreEventRecorder::CalculateDuration(&(timeline->mBegin), &(*it));;
-		} else if (it->mType == SwisTrackCoreEventRecorder::sType_TriggerStop) {
-			double time=SwisTrackCoreEventRecorder::CalculateDuration(&(timeline->mBegin), &(*it));
-			DrawTrigger(dc, dw, dh, starttime, time)
+		if (it->mType == SwisTrackCoreEventRecorder::sType_BeforeTriggerStart) {
+			starttime=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(*it));;
+		} else if (it->mType == SwisTrackCoreEventRecorder::sType_AfterTriggerStop) {
+			double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(*it));
+			DrawTrigger(dc, dw, dh, starttime, time);
 			starttime=time;
 		}
 
@@ -103,7 +104,7 @@ void THISCLASS::DrawTrigger(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timeline 
 
 	// Draw last event
 	if ((starttime>=0) || (timeline->mBeginState.mTriggerActive)) {
-		double time=SwisTrackCoreEventRecorder::CalculateDuration(&(timeline->mBegin), &(timeline->mEnd));
+		double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(timeline->mEnd));
 		DrawTrigger(dc, dw, dh, starttime, time);
 	}
 }
@@ -114,7 +115,7 @@ void THISCLASS::DrawTrigger(wxPaintDC &dc, int dw, int dh, double starttime, dou
 	dc.DrawRectangle(startx, 0, stopx, dh);
 }
 
-void THISCLASS::DrawTicks(wxPaintDC &dc) {
+void THISCLASS::DrawTicks(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
 	wxSize dcsize=dc.GetSize();
 	int dw=dcsize.GetWidth();
 	int dh=dcsize.GetHeight();
@@ -123,9 +124,9 @@ void THISCLASS::DrawTicks(wxPaintDC &dc) {
 
 	double mintickdistance=5;
 	double mintickdistancetime=mintickdistance/mViewScale;
-	double tickdistancetime=pow(10, ceil(log(mintickdistancetime)/log(10)));
+	double tickdistancetime=pow(10, ceil(log(mintickdistancetime)/log((double)10)));
 
-	double endtime=SwisTrackCoreEventRecorder::CalculateDuration(&(timeline->mBegin), &(timeline->mEnd));
+	double endtime=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(timeline->mEnd));
 	double xtime=ceil(-mViewOffset/mViewScale/tickdistancetime)*tickdistancetime;
 	while (true) {
 		xtime+=tickdistancetime;
@@ -137,7 +138,7 @@ void THISCLASS::DrawTicks(wxPaintDC &dc) {
 	}
 }
 
-void THISCLASS::DrawComponentStep(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timeline *timeline) {
+void THISCLASS::DrawComponentSteps(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
 	// Prepare
 	wxSize dcsize=dc.GetSize();
 	int dw=dcsize.GetWidth();
@@ -145,14 +146,13 @@ void THISCLASS::DrawComponentStep(wxPaintDC &dc, SwisTrackCoreEventRecorder::Tim
 
 	// Draw
 	double starttime=-1;
-	double productive=timeline->mBeginState->mIsStartedInProductiveMode;
-	SwisTrackCoreEventRecorder::Timeline::Eventlist::iterator it=timeline->mEvents.begin();
+	SwisTrackCoreEventRecorder::Timeline::tEventList::const_iterator it=timeline->mEvents.begin();
 	while (it!=timeline->mEvents.end()) {
 		if ((it->mType == SwisTrackCoreEventRecorder::sType_StepStart) && (it->mComponent)) {
-			starttime=time;
+			starttime=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(*it));
 		} else if ((it->mType == SwisTrackCoreEventRecorder::sType_StepStop) && (it->mComponent)) {
-			double time=SwisTrackCoreEventRecorder::CalculateDuration(&(timeline->mBegin), &(*it));
-			DrawComponentStep(dc, dw, dh, starttime, time, productive);
+			double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(*it));
+			DrawComponentStep(dc, dw, dh, starttime, time, false);
 			starttime=time;
 		}
 
@@ -160,35 +160,34 @@ void THISCLASS::DrawComponentStep(wxPaintDC &dc, SwisTrackCoreEventRecorder::Tim
 	}
 }
 
-void THISCLASS::DrawComponentStep(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool productive) {
+void THISCLASS::DrawComponentStep(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool selected) {
 	if (selected) {
 		dc.SetBrush(wxBrush(wxColour(0x33, 0x33, 0xcc)));
-		dc.SetPen(wxBrush(wxColour(0x22, 0x22, 0x88)));
+		dc.SetPen(wxPen(wxColour(0x22, 0x22, 0x88)));
 	} else {
 		dc.SetBrush(wxBrush(wxColour(0x99, 0xcc, 0x00)));
-		dc.SetPen(wxBrush(wxColour(0x66, 0x88, 0x00)));
+		dc.SetPen(wxPen(wxColour(0x66, 0x88, 0x00)));
 	}
 	int startx=((starttime<0) ? -5 : (int)floor(starttime*mViewScale+mViewOffset+0.5));
 	int stopx=((stoptime<0) ? dw+5 : (int)floor(stoptime*mViewScale+mViewOffset+0.5));
 	dc.DrawRoundedRectangle(startx, dh-15, stopx, dh+5, 5);
 }
 
-void THISCLASS::DrawStepLapTime(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timeline *timeline) {
+void THISCLASS::DrawStepLapTimes(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
 	// Prepare
 	wxSize dcsize=dc.GetSize();
 	int dw=dcsize.GetWidth();
 	int dh=dcsize.GetHeight();
 	dc.SetBrush(wxBrush(wxColour(0x00, 0x00, 0x00)));
-	dc.SetPen(wxBrush(wxColour(0x00, 0x00, 0x00)));
+	dc.SetPen(wxPen(wxColour(0x00, 0x00, 0x00)));
 
 	// Draw
 	double starttime=-1;
-	double productive=timeline->mBeginState->mIsStartedInProductiveMode;
-	SwisTrackCoreEventRecorder::Timeline::Eventlist::iterator it=timeline->mEvents.begin();
+	SwisTrackCoreEventRecorder::Timeline::tEventList::const_iterator it=timeline->mEvents.begin();
 	while (it!=timeline->mEvents.end()) {
 		if (it->mType == SwisTrackCoreEventRecorder::sType_StepLapTime) {
-			double time=SwisTrackCoreEventRecorder::CalculateDuration(&(timeline->mBegin), &(*it));
-			DrawStartStop(dc, dw, dh, starttime, time, productive);
+			double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(*it));
+			DrawStepLapTime(dc, dw, dh, time);
 		}
 
 		it++;
@@ -196,28 +195,27 @@ void THISCLASS::DrawStepLapTime(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timel
 }
 
 void THISCLASS::DrawStepLapTime(wxPaintDC &dc, int dw, int dh, double time) {
-	int x=((starttime<0) ? -5 : (int)floor(time*mViewScale+mViewOffset+0.5));
+	int x=((time<0) ? -5 : (int)floor(time*mViewScale+mViewOffset+0.5));
 	dc.DrawLine(x, dh-13, x, dh);
 }
 
-void THISCLASS::DrawStep(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timeline *timeline) {
+void THISCLASS::DrawSteps(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
 	// Prepare
 	wxSize dcsize=dc.GetSize();
 	int dw=dcsize.GetWidth();
 	int dh=dcsize.GetHeight();
 	dc.SetBrush(wxBrush(wxColour(0x00, 0xcc, 0x00)));
-	dc.SetPen(wxBrush(wxColour(0x00, 0x88, 0x00)));
+	dc.SetPen(wxPen(wxColour(0x00, 0x88, 0x00)));
 
 	// Draw
 	double starttime=-1;
-	double productive=timeline->mBeginState->mIsStartedInProductiveMode;
-	SwisTrackCoreEventRecorder::Timeline::Eventlist::iterator it=timeline->mEvents.begin();
+	SwisTrackCoreEventRecorder::Timeline::tEventList::const_iterator it=timeline->mEvents.begin();
 	while (it!=timeline->mEvents.end()) {
 		if ((it->mType == SwisTrackCoreEventRecorder::sType_StepStart) && (it->mComponent==0)) {
-			starttime=time;
+			starttime=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(*it));
 		} else if ((it->mType == SwisTrackCoreEventRecorder::sType_StepStop) && (it->mComponent==0)) {
-			double time=SwisTrackCoreEventRecorder::CalculateDuration(&(timeline->mBegin), &(*it));
-			DrawStep(dc, dw, dh, starttime, time, productive);
+			double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(*it));
+			DrawStep(dc, dw, dh, starttime, time);
 			starttime=time;
 		}
 
@@ -225,13 +223,13 @@ void THISCLASS::DrawStep(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timeline *ti
 	}
 }
 
-void THISCLASS::DrawStep(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool productive) {
+void THISCLASS::DrawStep(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime) {
 	int startx=((starttime<0) ? -5 : (int)floor(starttime*mViewScale+mViewOffset+0.5));
 	int stopx=((stoptime<0) ? dw+5 : (int)floor(stoptime*mViewScale+mViewOffset+0.5));
 	dc.DrawRoundedRectangle(startx, dh-10, stopx, dh+5, 5);
 }
 
-void THISCLASS::DrawStartStop(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timeline *timeline) {
+void THISCLASS::DrawStartStop(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
 	// Prepare
 	wxSize dcsize=dc.GetSize();
 	int dw=dcsize.GetWidth();
@@ -239,17 +237,17 @@ void THISCLASS::DrawStartStop(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timelin
 
 	// Draw
 	double starttime=-1;
-	double productive=timeline->mBeginState->mIsStartedInProductiveMode;
-	SwisTrackCoreEventRecorder::Timeline::Eventlist::iterator it=timeline->mEvents.begin();
+	bool productive=timeline->mBeginState.mStartedInProductiveMode;
+	SwisTrackCoreEventRecorder::Timeline::tEventList::const_iterator it=timeline->mEvents.begin();
 	while (it!=timeline->mEvents.end()) {
 		if (it->mType == SwisTrackCoreEventRecorder::sType_SetModeProductive) {
 			productive=true;
 		} else if (it->mType == SwisTrackCoreEventRecorder::sType_SetModeNormal) {
 			productive=false;
 		} else if (it->mType == SwisTrackCoreEventRecorder::sType_BeforeStart) {
-			starttime=SwisTrackCoreEventRecorder::CalculateDuration(&(timeline->mBegin), &(*it));
+			starttime=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(*it));
 		} else if (it->mType == SwisTrackCoreEventRecorder::sType_AfterStop) {
-			double time=SwisTrackCoreEventRecorder::CalculateDuration(&(timeline->mBegin), &(*it));
+			double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(*it));
 			DrawStartStop(dc, dw, dh, starttime, time, productive);
 			starttime=time;
 		}
@@ -259,7 +257,7 @@ void THISCLASS::DrawStartStop(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timelin
 
 	// Draw last event
 	if ((starttime>=0) || (timeline->mBeginState.mStarted)) {
-		double time=SwisTrackCoreEventRecorder::CalculateDuration(&(timeline->mBegin), &(timeline->mEnd));
+		double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(timeline->mEnd));
 		DrawTrigger(dc, dw, dh, starttime, time);
 	}
 }
@@ -267,28 +265,28 @@ void THISCLASS::DrawStartStop(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timelin
 void THISCLASS::DrawStartStop(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool productive) {
 	if (productive) {
 		dc.SetBrush(wxBrush(wxColour(0x00, 0xcc, 0x00)));
-		dc.SetPen(wxBrush(wxColour(0x00, 0x88, 0x00)));
+		dc.SetPen(wxPen(wxColour(0x00, 0x88, 0x00)));
 	} else {
 		dc.SetBrush(wxBrush(wxColour(0xcc, 0xcc, 0xcc)));
-		dc.SetPen(wxBrush(wxColour(0x88, 0x88, 0x88)));
+		dc.SetPen(wxPen(wxColour(0x88, 0x88, 0x88)));
 	}
 	int startx=((starttime<0) ? -5 : (int)floor(starttime*mViewScale+mViewOffset+0.5));
 	int stopx=((stoptime<0) ? dw+5 : (int)floor(stoptime*mViewScale+mViewOffset+0.5));
 	dc.DrawRoundedRectangle(startx, dh-10, stopx, dh+5, 5);
 }
 
-void THISCLASS::DrawBeginEnd(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timeline *timeline) {
+void THISCLASS::DrawBeginEnd(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
 	// Prepare
 	wxSize dcsize=dc.GetSize();
 	int dw=dcsize.GetWidth();
 	int dh=dcsize.GetHeight();
 	dc.SetBrush(wxBrush(wxColour(0x33, 0x33, 0x33)));
-	dc.SetPen(wxBrush(wxColour(0x00, 0x00, 0x00)));
+	dc.SetPen(wxPen(wxColour(0x00, 0x00, 0x00)));
 
 	// Calculate
-	double totaltime=SwisTrackCoreEventRecorder::CalculateDuration(&(timeline->mBegin), &(timeline->mEnd));
-	int beginx=(int)floor(mViewOffset+0.5));
-	int endx=(int)floor(totaltime*mViewScale+mViewOffset+0.5));
+	double totaltime=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(timeline->mEnd));
+	int beginx=(int)floor(mViewOffset+0.5);
+	int endx=(int)floor(totaltime*mViewScale+mViewOffset+0.5);
 
 	// Draw
 	if (beginx>0) {
@@ -314,15 +312,15 @@ void THISCLASS::OnMouseMove(wxMouseEvent &event) {
 	int nowpoint=event.GetX();
 
 	// Move
-	wxPoint oldviewoffset=mViewOffset;
+	int oldviewoffset=mViewOffset;
 	mViewOffset+=nowpoint-mMoveStartPoint;
 	mMoveStartPoint=nowpoint;
 
 	// Check bounds
-	wxSize dcsize=this->GetSize();
-	double time=SwisTrackCoreEventRecorder::CalculateDuration(&(timeline->mBegin), &(timeline->mEnd));
-	int timelinewidth=(int)floor(time*mViewScale+mViewOffset+0.5);
-	if (mViewOffset<dcsize.GetWidth()-timelinewidth) {mViewOffset=dcsize.GetWidth()-timelinewidth;}
+	//wxSize dcsize=this->GetSize();
+	//double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(timeline->mEnd));
+	//int timelinewidth=(int)floor(time*mViewScale+mViewOffset+0.5);
+	//if (mViewOffset<dcsize.GetWidth()-timelinewidth) {mViewOffset=dcsize.GetWidth()-timelinewidth;}
 	if (mViewOffset>0) {mViewOffset=0;}
 
 	// Redraw if necessary
@@ -331,9 +329,9 @@ void THISCLASS::OnMouseMove(wxMouseEvent &event) {
 }
 
 void THISCLASS::OnMouseRightDown(wxMouseEvent &event) {
-	mPopupMenu.Check(sID_Trigger10, (mTimer->IsRunning() && (mTimer->GetInterval()==10000)));
-	mPopupMenu.Check(sID_Trigger1, (mTimer->IsRunning() && (mTimer->GetInterval()==1000)));
-	mPopupMenu.Check(sID_TriggerManual, (mTimer->IsRunning()==false));
+	mPopupMenu.Check(sID_TriggerAuto10, (mTimer.IsRunning() && (mTimer.GetInterval()==10000)));
+	mPopupMenu.Check(sID_TriggerAuto1, (mTimer.IsRunning() && (mTimer.GetInterval()==1000)));
+	mPopupMenu.Check(sID_TriggerManual, (mTimer.IsRunning()==false));
 
 	PopupMenu(&mPopupMenu);
 }
@@ -347,11 +345,11 @@ void THISCLASS::OnMenuViewReset(wxCommandEvent& event) {
 }
 
 void THISCLASS::OnMenuTrigger(wxCommandEvent& event) {
-	if (mTimer.IsRunning()) {mTimer.stop();}
-	if (event.GetId()==sID_Trigger10) {
-		mTimer.start(10000, false);
-	} else if (event.GetId()==sID_Trigger1) {
-		mTimer.start(1000, false);
+	if (mTimer.IsRunning()) {mTimer.Stop();}
+	if (event.GetId()==sID_TriggerAuto10) {
+		mTimer.Start(10000, false);
+	} else if (event.GetId()==sID_TriggerAuto1) {
+		mTimer.Start(1000, false);
 	} else {
 		// Manual mode, do nothing
 	}
@@ -360,7 +358,7 @@ void THISCLASS::OnMenuTrigger(wxCommandEvent& event) {
 
 void THISCLASS::OnMenuSaveTimeline(wxCommandEvent& event) {
 	// Get the timeline
-	SwisTrackCoreEventRecorder::Timeline *timeline=mSwisTrack->mSwisTrackCore->mTimeline->GetLastTimeline();
+	const SwisTrackCoreEventRecorder::Timeline *timeline=mSwisTrack->mSwisTrackCore->mEventRecorder->GetLastTimeline();
 	if (timeline==0) {return;}
 
 	// Copy the current timeline (since the file dialog will allow other threads to run)
@@ -380,12 +378,12 @@ void THISCLASS::OnMenuSaveTimeline(wxCommandEvent& event) {
 	}
 
 	// Write each event
-	SwisTrackCoreEventRecorder::Timeline::Eventlist::iterator it=timelinecopy.mEvents.begin();
+	SwisTrackCoreEventRecorder::Timeline::tEventList::iterator it=timelinecopy.mEvents.begin();
 	while (it!=timelinecopy.mEvents.end()) {
-		double time=SwisTrackCoreEventRecorder::CalculateDuration(&(timelinecopy.mStart), &(*it));
+		double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timelinecopy.mBegin), &(*it));
 		ofs << time;
 
-		std::string type=SwisTrackCoreEventRecorder::mTypeNames[it->mType];
+		std::string type=mSwisTrack->mSwisTrackCore->mEventRecorder->mTypeNames[it->mType];
 		if (type=="") {
 			ofs << "\t" << "(unknown)";
 		} else {

@@ -4,15 +4,13 @@
 #include "SwisTrackCore.h"
 
 THISCLASS::SwisTrackCoreEventRecorder(SwisTrackCore *stc):
-		mSwisTrackCore(stc), mList(), mCurrentTimeline(0), mLastTimeline(0) {
+		mSwisTrackCore(stc), mFrequency(0), mCurrentTimeline(0), mLastTimeline(0) {
 
 	// Store the frequency of the counter
 #ifdef __WXMSW__
 	LARGE_INTEGER frequency;
 	QueryPerformanceFrequency(&frequency);
-	mFrequency=(double)frequency;
-#else
-	mFrequency=0;
+	mFrequency=(double)frequency.LowPart;
 #endif
 
 	// Type names
@@ -23,8 +21,10 @@ THISCLASS::SwisTrackCoreEventRecorder(SwisTrackCore *stc):
 	mTypeNames[sType_AfterStart]="AfterStart";
 	mTypeNames[sType_BeforeStop]="BeforeStop";
 	mTypeNames[sType_AfterStop]="AfterStop";
-	mTypeNames[sType_TriggerStart]="TriggerStart";
-	mTypeNames[sType_TriggerStop]="TriggerStop";
+	mTypeNames[sType_BeforeTriggerStart]="BeforeTriggerStart";
+	mTypeNames[sType_AfterTriggerStart]="AfterTriggerStart";
+	mTypeNames[sType_BeforeTriggerStop]="BeforeTriggerStop";
+	mTypeNames[sType_AfterTriggerStop]="AfterTriggerStop";
 	mTypeNames[sType_StepStart]="StepStart";
 	mTypeNames[sType_StepStop]="StepStop";
 	mTypeNames[sType_StepLapTime]="StepLapTime";
@@ -40,11 +40,11 @@ void THISCLASS::StartRecording() {
 			mCurrentTimeline->mEvents.back().mType=sType_TimelineOverflow;
 			mCurrentTimeline->mEvents.back().mComponent=0;
 		}
-		LapTime(&(mCurrentTimeline->mEnd), sNone, 0);
+		LapTime(&(mCurrentTimeline->mEnd), sType_None, 0);
 	}
 
 	// Swap current and old timeline
-	Timeline temp=mLastTimeline;
+	Timeline *temp=mLastTimeline;
 	mLastTimeline=mCurrentTimeline;
 	mCurrentTimeline=temp;
 
@@ -56,41 +56,41 @@ void THISCLASS::StartRecording() {
 	mCurrentTimeline->mEvents.reserve(Timeline::mNumberOfEvents);
 
 	// Set the start state
-	mCurrentTimeline->mStartState.mStarted.mIsStartedInProductiveMode=mSwisTrackCore->IsStartedInProductiveMode();
-	mCurrentTimeline->mStartState.mStarted.mIsStarted=mSwisTrackCore->IsStarted();
-	mCurrentTimeline->mStartState.mStarted.mIsTriggerActive=mSwisTrackCore->IsTriggerActive();
+	mCurrentTimeline->mBeginState.mStartedInProductiveMode=mSwisTrackCore->IsStartedInProductiveMode();
+	mCurrentTimeline->mBeginState.mStarted=mSwisTrackCore->IsStarted();
+	mCurrentTimeline->mBeginState.mTriggerActive=mSwisTrackCore->IsTriggerActive();
 	
 	// Set the start time of the new timeline
-	LapTime(&(mCurrentTimeline->mBegin), sNone, 0);
+	LapTime(&(mCurrentTimeline->mBegin), sType_None, 0);
 }
 
-void THISCLASS::LapTime(Item *it, eType type, Component *c) {
+void THISCLASS::LapTime(Event *it, eType type, Component *c) {
 #ifdef __WXMSW__
-	QueryPerformanceCounter(&(it.mTime));
+	QueryPerformanceCounter(&(it->mTime));
 #else
 	it.mTime=0;
 #endif
-	it.mType=type;
-	it.mComponent=c;
+	it->mType=type;
+	it->mComponent=c;
 }
 
-void THISCLASS::Add(Item *it) {
+void THISCLASS::Add(const Event *it) {
 	if (! mCurrentTimeline) {return;}
 	if (mCurrentTimeline->mEvents.size() >= Timeline::mNumberOfEvents) {return;}
-	mEvents.push_back(*it);
+	mCurrentTimeline->mEvents.push_back(*it);
 }
 
-void THISCLASS::Add(eType type, Component *c) {
+void THISCLASS::Add(eType type, Component *component) {
 	if (! mCurrentTimeline) {return;}
 	if (mCurrentTimeline->mEvents.size() >= Timeline::mNumberOfEvents) {return;}
 
-	Item it;
-	LapTime(&it);
+	Event it;
+	LapTime(&it, type, component);
 	Add(&it);
 }
 
-double THISCLASS::CalculateDuration(Item *it1, Item *it2) {
+double THISCLASS::CalculateDuration(const Event *it1, const Event *it2) const {
 	double diff=(double)(it2->mTime.QuadPart-it1->mTime.QuadPart);
-	return diff/frequency;
+	return diff/mFrequency;
 }
 

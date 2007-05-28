@@ -28,7 +28,7 @@ void THISCLASS::OnStep() {
 
 	CommunicationMessage mbegin("BEGINFRAME");
 	mbegin.AddInt(mCore->mDataStructureInput.mFrameNumber);
-	mCore->mCommunicationInterface->SendMessage(&mbegin);
+	mCore->mCommunicationInterface->Send(&mbegin);
 
 	DataStructureParticles::tParticleVector *p=mCore->mDataStructureParticles.mParticles;
 	if (!p) {return;}
@@ -39,12 +39,12 @@ void THISCLASS::OnStep() {
 		m.AddDouble(it->mCenter.x);
 		m.AddDouble(it->mCenter.y);
 		m.AddDouble(it->mOrientation);
-		mCore->mCommunicationInterface->SendMessage(&m);
+		mCore->mCommunicationInterface->Send(&m);
 		it++;
 	}
 
 	CommunicationMessage mend("ENDFRAME");
-	mCore->mCommunicationInterface->SendMessage(&mend);
+	mCore->mCommunicationInterface->Send(&mend);
 }
 
 void THISCLASS::OnReloadConfiguration() {

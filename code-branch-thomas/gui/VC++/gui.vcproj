@@ -860,6 +860,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Timeline"
+			>
+			<File
+				RelativePath="..\src\TimelinePanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\include\TimelinePanel.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

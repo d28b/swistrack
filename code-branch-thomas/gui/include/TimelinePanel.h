@@ -33,6 +33,7 @@ private:
 		sID_TriggerAuto1,
 		sID_TriggerManual,
 		sID_ViewReset,
+		sID_SaveTimeline
 	};
 
 	Component *mSelectedComponent;	//!< The selected component.
@@ -47,34 +48,36 @@ private:
 	//! Paints the timeline in the canvas.
 	bool Paint(wxPaintDC &dc);
 	//! Draws trigger activity.
-	void DrawTrigger(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timeline *timeline);
+	void DrawTrigger(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline);
 	//! Draws one trigger.
 	void DrawTrigger(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime);
 	//! Draws the ticks.
-	void DrawTicks(wxPaintDC &dc);
+	void DrawTicks(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline);
 	//! Draws the component steps.
-	void DrawComponentStep(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timeline *timeline);
+	void DrawComponentSteps(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline);
 	//! Draws one component step.
-	void DrawComponentStep(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool productive);
+	void DrawComponentStep(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool selected);
 	//! Draws step lap times.
-	void DrawStepLeap(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timeline *timeline);
+	void DrawStepLapTimes(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline);
 	//! Draws one step lap time.
-	void DrawStepLeap(wxPaintDC &dc, int dw, int dh, double time);
+	void DrawStepLapTime(wxPaintDC &dc, int dw, int dh, double time);
 	//! Draws steps.
-	void DrawStep(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timeline *timeline);
+	void DrawSteps(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline);
 	//! Draws one step.
-	void DrawStep(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool productive);
+	void DrawStep(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime);
 	//! Draws executions (from start to stop).
-	void DrawStartStop(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timeline *timeline);
+	void DrawStartStop(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline);
 	//! Draws one execution.
-	void DrawStartStopEvent(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool productive);
+	void DrawStartStop(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool productive);
 	//! Draws the beginning and the end of the timeline.
-	void DrawBeginEnd(wxPaintDC &dc, SwisTrackCoreEventRecorder::Timeline *timeline);
+	void DrawBeginEnd(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline);
 
 	//! The corresponding GUI event handler.
 	void OnMouseLeftDown(wxMouseEvent &event);
 	//! The corresponding GUI event handler.
 	void OnMouseLeftUp(wxMouseEvent &event);
+	//! The corresponding GUI event handler.
+	void OnMouseMove(wxMouseEvent &event);
 	//! The corresponding GUI event handler.
 	void OnMouseRightDown(wxMouseEvent &event);
 	//! The corresponding GUI event handler.

@@ -32,7 +32,7 @@ public:
 	void OnServerEvent(wxSocketEvent& event);
 
 	// CommuncationInterface methods.
-	bool SendMessage(CommunicationMessage *m);
+	bool Send(CommunicationMessage *m);
 
 protected:
 	enum {
