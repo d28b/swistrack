@@ -91,6 +91,21 @@ void THISCLASS::OnStart()
 	{
 		AddError("Calibration using libtsai failed.");
 	}
+	
+#ifdef _DEBUG
+	//For Debug Purpose, just compute the transformation of the 
+	for (unsigned int i=0;i<calibrationPointList.size();i++)
+	{
+		CvPoint2D32f originalImage,originalWorld,finalImage,finalWorld;
+		originalImage.x=(float)(calibrationPointList.at(i)).xImage;
+		originalImage.y=(float)(calibrationPointList.at(i)).yImage;
+		originalWorld.x=(float)(calibrationPointList.at(i)).xWorld;
+		originalWorld.y=(float)(calibrationPointList.at(i)).yWorld;
+		finalWorld=THISCLASS::Image2World(originalImage);
+		finalImage=THISCLASS::World2Image(originalWorld);
+		int justToBeAbleToStopTheDebugger=0;
+	}
+#endif
 }
 
 void THISCLASS::OnReloadConfiguration() 
@@ -140,7 +155,7 @@ CvPoint2D32f THISCLASS::World2Image(CvPoint2D32f worldCoordinates)
 {
 	double ix,iy;
 	CvPoint2D32f imageCoordinates;
-	image_coord_to_world_coord(calibrationConstants,cameraParameters,(double)worldCoordinates.x,(double)worldCoordinates.y,0,&ix,&iy);
+	world_coord_to_image_coord(calibrationConstants,cameraParameters,(double)worldCoordinates.x,(double)worldCoordinates.y,0,&ix,&iy);
 	imageCoordinates=cvPoint2D32f(ix,iy);
 	return imageCoordinates;
 }

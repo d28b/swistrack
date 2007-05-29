@@ -43,10 +43,7 @@ private:
 	Display mDisplayOutput;										//!< The Display showing the particles.
 	void ReadPoint(wxXmlNode *node);
 	CvPoint2D32f Image2World(CvPoint2D32f p);
-	CvPoint2D32f World2Image(CvPoint2D32f p);
-	CvMat* cameraMatrix32f;										//!< matrix for the coordinate transformation
-	CvPoint2D32f meani,meano,stdi,stdo; // mean and standard deviation of training data
-
+	float cameraMatrix[12];										//!< matrix for the coordinate transformation
 };
 #endif
 
