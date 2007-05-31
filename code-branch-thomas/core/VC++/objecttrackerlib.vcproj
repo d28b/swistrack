@@ -590,6 +590,14 @@
 					RelativePath="..\ComponentBinaryMask.h"
 					>
 				</File>
+				<File
+					RelativePath="..\ComponentBlobSelection.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentBlobSelection.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="3 Color Processing"

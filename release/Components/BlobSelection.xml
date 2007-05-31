@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Blob Selection</friendlyname>
+	<description>Select the blobs on the binary image based on given criteria</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/BlobSelection</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="checkbox">
+			<name>AreaBool</name>
+			<label>Area selection</label>
+			<default>0</default>
+		</parameter>
+		<parameter type="integer">
+			<name>MinArea</name>
+			<label>Min. blob size</label>
+			<min>0</min>
+			<default>10</default>
+			<unit>pixels</unit>
+		</parameter>
+		<parameter type="integer">
+			<name>MaxArea</name>
+			<label>Max. blob size</label>
+			<min>0</min>
+			<default>100</default>
+			<unit>pixels</unit>
+		</parameter>
+		<parameter type="checkbox">
+			<name>CompactnessBool</name>
+			<label>Compactness Selection</label>
+			<default>0</default>
+		</parameter>
+		<parameter type="double">
+			<name>MinCompactness</name>
+			<label>Min. compactness</label>
+			<min>0</min>
+			<default>0</default>
+			<max>1</max>
+		</parameter>
+		<parameter type="double">
+			<name>MaxCompactness</name>
+			<label>Max. compactness</label>
+			<min>0</min>
+			<default>1</default>
+			<max>1</max>
+		</parameter>
+	</configuration>
+</swistrackcomponent>
