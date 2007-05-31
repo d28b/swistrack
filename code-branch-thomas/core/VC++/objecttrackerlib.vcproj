@@ -657,6 +657,14 @@
 				<File
 					RelativePath="..\ComponentOutputParticles.cpp"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							GeneratePreprocessedFile="0"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\ComponentOutputParticles.h"
@@ -677,6 +685,14 @@
 				<File
 					RelativePath="..\ComponentTriggerTimer.cpp"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							GeneratePreprocessedFile="0"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\ComponentTriggerTimer.h"

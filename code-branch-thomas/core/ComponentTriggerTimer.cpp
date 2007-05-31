@@ -28,15 +28,15 @@ void THISCLASS::OnStart() {
 
 void THISCLASS::OnReloadConfiguration() {
 	if (! mTimer) {
-		//mTimer=new Timer(this);
+		mTimer=new Timer(this);
 	}
 
 	double interval=GetConfigurationDouble("Interval", 1);
 	int interval_ms=(int)(interval*1000);
 	if (interval_ms<1) {interval_ms=1;}
 
-	//if (mTimer->IsRunning()) {mTimer->Stop();}
-	//mTimer->Start(interval_ms, false);
+	if (mTimer->IsRunning()) {mTimer->Stop();}
+	mTimer->Start(interval_ms, false);
 }
 
 void THISCLASS::OnStep() {
@@ -46,6 +46,6 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-	//if (! mTimer) {return;}
-	//mTimer->Stop();
+	if (! mTimer) {return;}
+	mTimer->Stop();
 }

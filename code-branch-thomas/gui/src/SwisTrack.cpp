@@ -70,7 +70,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 
 	// The canvas panel
 	mCanvasPanel=new CanvasPanel(this, this);
-
+ 
 	// SwisTrackCore
 	wxFileName filename(wxGetApp().mApplicationFolder, "", "");
 	filename.AppendDir("Components");

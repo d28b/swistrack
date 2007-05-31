@@ -1,7 +1,9 @@
 #ifndef HEADER_SwisTrackCoreEventRecorder
 #define HEADER_SwisTrackCoreEventRecorder
 
-#include <windows.h>
+// We need to include wx.h here, although LARGE_INTEGER is defined in windows.h. First of all, this automatically works on all platforms, but second, windows.h defines an ugly marco #define GetClassInfo GetClassInfoA (and doesn undef it) which causes troubles all over the place - a nice jest of the skilled programmers in Redmond.
+#include <wx/wx.h>
+
 class SwisTrackCoreEventRecorder;
 class SwisTrackCore;
 #include "Component.h"
