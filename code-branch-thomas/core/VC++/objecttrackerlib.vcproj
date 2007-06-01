@@ -663,6 +663,14 @@
 				Name="7 Output"
 				>
 				<File
+					RelativePath="..\ComponentOutputFileAVI.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOutputFileAVI.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentOutputParticles.cpp"
 					>
 					<FileConfiguration

@@ -33,6 +33,7 @@
 #include "ComponentCalibrationLinear.h"
 #include "ComponentCalibrationTSAI.h"
 #include "ComponentOutputParticles.h"
+#include "ComponentOutputFileAVI.h"
 
 THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 		mAvailableComponents(), mDataStructures(), mSwisTrackCoreInterfaces(), mComponentConfigurationFolder(componentconfigurationfolder),
@@ -84,6 +85,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
 	mAvailableComponents.push_back(new ComponentCalibrationTSAI(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
+	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
 
 	// Initialize the list of available data structures
 	mDataStructures.push_back(&mDataStructureInput);
