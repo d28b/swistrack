@@ -28,23 +28,42 @@ public:
 	~TimelinePanel();
 
 private:
+	//! An overwritten wxTimer.
+	class EventRecorderResetTimer: public wxTimer {
+	public:
+		TimelinePanel *mTimelinePanel;		//!< The associated timeline panel.
+		
+		//! Constructor.
+		EventRecorderResetTimer(TimelinePanel *tp): wxTimer(), mTimelinePanel(tp) {}
+		//! Destructor.
+		~EventRecorderResetTimer() {}
+
+		// wxTimer methods
+		void Notify() {mTimelinePanel->StartRecording();}
+	};
+
+	//! Component IDs.
 	enum eID {
 		sID_TriggerAuto10,
 		sID_TriggerAuto1,
 		sID_TriggerManual,
 		sID_ViewReset,
+		sID_ViewZoomIn,
+		sID_ViewZoomOut,
 		sID_SaveTimeline
 	};
 
 	Component *mSelectedComponent;	//!< The selected component.
 	wxMenu mPopupMenu;				//!< The popup menu.
-	wxTimer mTimer;					//!< The timer.
+	EventRecorderResetTimer mTimer;	//!< The timer.
 
 	int mViewOffset;				//!< Offset of the view, in pixels.
 	double mViewScale;				//!< Scale of the view, in pixels/s.
 	bool mMoveStarted;				//!< True while we are in move mode.
 	int mMoveStartPoint;			//!< The starting point when moving the image.
 
+	//! Starts a new timeline recording.
+	void StartRecording();
 	//! Paints the timeline in the canvas.
 	bool Paint(wxPaintDC &dc);
 	//! Draws trigger activity.
@@ -73,6 +92,8 @@ private:
 	void DrawBeginEnd(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline);
 
 	//! The corresponding GUI event handler.
+	void OnMouseLeftDoubleClick(wxMouseEvent &event);
+	//! The corresponding GUI event handler.
 	void OnMouseLeftDown(wxMouseEvent &event);
 	//! The corresponding GUI event handler.
 	void OnMouseLeftUp(wxMouseEvent &event);
@@ -86,7 +107,7 @@ private:
 	void OnSize(wxSizeEvent &event);
 
 	//! The corresponding GUI event handler.
-	void OnMenuViewReset(wxCommandEvent& event);
+	void OnMenuView(wxCommandEvent& event);
 	//! The corresponding GUI event handler.
 	void OnMenuTrigger(wxCommandEvent& event);
 	//! The corresponding GUI event handler.

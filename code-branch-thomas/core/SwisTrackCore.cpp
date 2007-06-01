@@ -297,7 +297,7 @@ bool THISCLASS::Step() {
 	}
 
 	// Event recorder
-	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepStart);
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepStop);
 
 	return true;
 }

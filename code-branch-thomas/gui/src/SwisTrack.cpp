@@ -98,7 +98,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
 	vs->Add(mHorizontalSizer, 3, wxEXPAND, 0);
 	vs->Add(mComponentListPanel, 1, wxEXPAND, 0);
-	//vs->Add(mTimelinePanel, 0, 0, 0);
+	vs->Add(mTimelinePanel, 0, wxEXPAND, 0);
 	SetSizer(vs);
 }
 
