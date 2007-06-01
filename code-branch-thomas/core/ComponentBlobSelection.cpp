@@ -33,6 +33,9 @@ void THISCLASS::OnReloadConfiguration() {
 	mMinCompactness=GetConfigurationDouble("MinCompactness", 1);
 	mMaxCompactness=GetConfigurationDouble("MaxCompactness", 1000);
 	mCompactnessSelection=GetConfigurationBool("CompactnessBool",false);
+	mMinOrientation=GetConfigurationDouble("MinOrientation", -90);
+	mMaxOrientation=GetConfigurationDouble("MaxOrientation", 90);
+	mOrientationSelection=GetConfigurationBool("OrientationBool",false);
 }
 
 void THISCLASS::OnStep() 
@@ -51,7 +54,7 @@ void THISCLASS::OnStep()
 	cvCopy(inputImage,outputImage);
 	
 	//If no computation is needed
-	if ((mAreaSelection==false)&&(mCompactnessSelection==false))
+	if ((mAreaSelection==false)&&(mCompactnessSelection==false)&&(mOrientationSelection==false))
 	{
 			// Let the DisplayImage know about our image
 			DisplayEditor de(&mDisplayOutput);
@@ -64,6 +67,7 @@ void THISCLASS::OnStep()
 	CvMoments moments; // Used to calculate the moments
 	double contourArea;		//Used to select contour based on area
 	double contourCompactness; //Used to select contour based on compactness
+	double contourOrientation; //Used to select contour based on orientation
 	bool removeBlobBool;		//Used to remove the blob from the image
 
 	// We allocate memory to extract the contours from the binary image
@@ -110,6 +114,18 @@ void THISCLASS::OnStep()
 				removeBlobBool=true;
 			}
 		}
+		if (mOrientationSelection)
+		{
+			double tempValue=cvGetCentralMoment(&moments,2,0)-cvGetCentralMoment(&moments,0,2);
+			contourOrientation=atan(2*cvGetCentralMoment(&moments,1,1)/(tempValue+sqrt(tempValue*tempValue+4*cvGetCentralMoment(&moments,1,1)*cvGetCentralMoment(&moments,1,1))));
+			//Transforming in degrees (between -90 and 90
+			contourOrientation=contourOrientation*57.29577951;
+			if (!(((contourOrientation>mMinOrientation)&&(contourOrientation<mMaxOrientation))||((contourOrientation>mMinOrientation+180)&&(contourOrientation<mMaxOrientation+180))||((contourOrientation>mMinOrientation-180)&&(contourOrientation<mMaxOrientation-180))))
+			{
+				removeBlobBool=true;
+			}
+		}
+			
 		//If we need to remove the blob, we paint it in black
 		if (removeBlobBool)
 		{

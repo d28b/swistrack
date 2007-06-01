@@ -36,6 +36,8 @@
 			<min>0</min>
 			<default>0</default>
 			<max>1</max>
+			<slider>true</slider>
+			<sliderstep>0.01</sliderstep>
 		</parameter>
 		<parameter type="double">
 			<name>MaxCompactness</name>
@@ -43,6 +45,31 @@
 			<min>0</min>
 			<default>1</default>
 			<max>1</max>
+			<slider>true</slider>
+			<sliderstep>0.01</sliderstep>
+		</parameter>
+		<parameter type="checkbox">
+			<name>OrientationBool</name>
+			<label>Orientation Selection</label>
+			<default>0</default>
+		</parameter>
+		<parameter type="double">
+			<name>MinOrientation</name>
+			<label>Min. orientation</label>
+			<min>-90</min>
+			<default>-90</default>
+			<max>180</max>
+			<slider>true</slider>
+			<sliderstep>0.1</sliderstep>
+		</parameter>
+		<parameter type="double">
+			<name>MaxOrientation</name>
+			<label>Max. orientation</label>
+			<min>-90</min>
+			<default>90</default>
+			<max>180</max>
+			<slider>true</slider>
+			<sliderstep>0.1</sliderstep>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

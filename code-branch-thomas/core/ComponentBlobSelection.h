@@ -28,6 +28,9 @@ private:
 	double mMinCompactness;	//!< (configuration) The minimum Compactness of a blob.
 	double mMaxCompactness;	//!< (configuration) The maximum Compactness of a blob.
 	bool mCompactnessSelection; //!< (configuration) If the selection is based on the blob Compactness
+	double mMinOrientation;	//!< (configuration) The minimum Compactness of a blob.
+	double mMaxOrientation;	//!< (configuration) The maximum Compactness of a blob.
+	bool mOrientationSelection; //!< (configuration) If the selection is based on the blob Compactness
 	IplImage* outputImage; //!< Output image
 
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
