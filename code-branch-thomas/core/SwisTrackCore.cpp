@@ -324,6 +324,8 @@ bool THISCLASS::ReloadConfiguration() {
 }
 
 void THISCLASS::TriggerStart() {
+	if (mTrigger->GetActive()) {return;}
+
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeTriggerStart);
 
@@ -349,6 +351,8 @@ void THISCLASS::TriggerStart() {
 }
 
 void THISCLASS::TriggerStop() {
+	if (! mTrigger->GetActive()) {return;}
+
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeTriggerStop);
 

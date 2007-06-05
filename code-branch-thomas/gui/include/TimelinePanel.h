@@ -27,6 +27,9 @@ public:
 	// Destructor.
 	~TimelinePanel();
 
+	// Selects a component and highlights its step.
+	void SelectComponent(Component *component);
+
 private:
 	//! An overwritten wxTimer.
 	class EventRecorderResetTimer: public wxTimer {
@@ -90,6 +93,8 @@ private:
 	void DrawStartStop(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool productive);
 	//! Draws the beginning and the end of the timeline.
 	void DrawBeginEnd(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline);
+	//! Draws a red line at the point where the timeline run out of memory.
+	void DrawTimelineOverflow(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline);
 
 	//! The corresponding GUI event handler.
 	void OnMouseLeftDoubleClick(wxMouseEvent &event);
@@ -102,6 +107,8 @@ private:
 	//! The corresponding GUI event handler.
 	void OnMouseRightDown(wxMouseEvent &event);
 	//! The corresponding GUI event handler.
+	void OnMouseWheel(wxMouseEvent &event);
+	//! The corresponding GUI event handler.
 	void OnPaint(wxPaintEvent& WXUNUSED(event));
 	//! The corresponding GUI event handler.
 	void OnSize(wxSizeEvent &event);
@@ -112,6 +119,9 @@ private:
 	void OnMenuTrigger(wxCommandEvent& event);
 	//! The corresponding GUI event handler.
 	void OnMenuSaveTimeline(wxCommandEvent& event);
+
+	//! Sets a new view scale while keeping one point fixed.
+	void SetViewScale(double newscale, int fixpoint);
 
 	DECLARE_EVENT_TABLE()
 };

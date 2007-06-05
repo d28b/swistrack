@@ -14,6 +14,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
     EVT_LEFT_DOWN(THISCLASS::OnMouseLeftDown)
 	EVT_LEFT_UP(THISCLASS::OnMouseLeftUp)
 	EVT_RIGHT_DOWN(THISCLASS::OnMouseRightDown)
+	EVT_MOUSEWHEEL(THISCLASS::OnMouseWheel)
 	EVT_MOTION(THISCLASS::OnMouseMove)
 	EVT_MENU(sID_TriggerAuto10, THISCLASS::OnMenuTrigger)
 	EVT_MENU(sID_TriggerAuto1, THISCLASS::OnMenuTrigger)
@@ -55,6 +56,11 @@ THISCLASS::TimelinePanel(wxWindow *parent, SwisTrack *st):
 THISCLASS::~TimelinePanel() {
 }
 
+void THISCLASS::SelectComponent(Component *component) {
+	mSelectedComponent=component;
+	Refresh(true);
+}
+
 void THISCLASS::StartRecording() {
 	mSwisTrack->mSwisTrackCore->mEventRecorder->StartRecording();
 	Refresh(true);
@@ -91,6 +97,7 @@ bool THISCLASS::Paint(wxPaintDC &dc) {
 	DrawSteps(dc, timeline);
 	DrawStartStop(dc, timeline);
 	DrawBeginEnd(dc, timeline);
+	DrawTimelineOverflow(dc, timeline);
 
 	return true;
 }
@@ -195,11 +202,11 @@ void THISCLASS::DrawComponentSteps(wxPaintDC &dc, const SwisTrackCoreEventRecord
 
 void THISCLASS::DrawComponentStep(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool selected) {
 	if (selected) {
-		dc.SetBrush(wxBrush(wxColour(0x33, 0x33, 0xcc)));
-		dc.SetPen(wxPen(wxColour(0x22, 0x22, 0x88)));
+		dc.SetBrush(wxBrush(wxColour(0xcc, 0x33, 0xcc)));
+		dc.SetPen(wxPen(wxColour(0x88, 0x22, 0x88)));
 	} else {
-		dc.SetBrush(wxBrush(wxColour(0x99, 0xcc, 0x00)));
-		dc.SetPen(wxPen(wxColour(0x66, 0x88, 0x00)));
+		dc.SetBrush(wxBrush(wxColour(0x99, 0x99, 0xcc)));
+		dc.SetPen(wxPen(wxColour(0x66, 0x66, 0x88)));
 	}
 	int startx=((starttime<0) ? -5 : (int)floor(starttime*mViewScale+mViewOffset+0.5));
 	int stopx=((stoptime<0) ? dw+5 : (int)floor(stoptime*mViewScale+mViewOffset+0.5));
@@ -333,6 +340,30 @@ void THISCLASS::DrawBeginEnd(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Ti
 	}
 }
 
+void THISCLASS::DrawTimelineOverflow(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
+	// Get last event
+	if (timeline->mEvents.size()==0) {return;}
+	SwisTrackCoreEventRecorder::Event ev=timeline->mEvents.back();
+	if (ev.mType != SwisTrackCoreEventRecorder::sType_TimelineOverflow) {return;}
+
+	// Prepare
+	wxSize dcsize=dc.GetSize();
+	int dw=dcsize.GetWidth();
+	int dh=dcsize.GetHeight();
+	dc.SetBrush(wxBrush(wxColour(0x33, 0x33, 0x33)));
+	dc.SetPen(wxPen(wxColour(0x00, 0x00, 0x00)));
+
+	// Calculate
+	double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(ev));
+	int x=(int)floor(time*mViewScale+mViewOffset+0.5);
+
+	// Draw
+	dc.SetPen(wxPen(wxColour(255, 0, 0)));
+	dc.SetTextForeground(wxColour(255, 0, 0));
+	dc.DrawLine(x, -1, x, dh);
+	dc.DrawText("Timeline memory exhausted.", x, 4);
+}
+
 void THISCLASS::OnMouseLeftDoubleClick(wxMouseEvent &event) {
 	if (mTimer.IsRunning()) {return;}
 	StartRecording();
@@ -352,16 +383,20 @@ void THISCLASS::OnMouseMove(wxMouseEvent &event) {
 	if (! event.LeftIsDown()) {mMoveStarted=false; return;}
 	int nowpoint=event.GetX();
 
+	// Get timeline
+	const SwisTrackCoreEventRecorder::Timeline *timeline=mSwisTrack->mSwisTrackCore->mEventRecorder->GetLastTimeline();
+	if (timeline==0) {mMoveStarted=false; return;}
+
 	// Move
 	int oldviewoffset=mViewOffset;
 	mViewOffset+=nowpoint-mMoveStartPoint;
 	mMoveStartPoint=nowpoint;
 
 	// Check bounds
-	//wxSize dcsize=this->GetSize();
-	//double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(timeline->mEnd));
-	//int timelinewidth=(int)floor(time*mViewScale+mViewOffset+0.5);
-	//if (mViewOffset<dcsize.GetWidth()-timelinewidth) {mViewOffset=dcsize.GetWidth()-timelinewidth;}
+	wxSize dcsize=this->GetSize();
+	double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(timeline->mEnd));
+	int timelinewidth=(int)floor(time*mViewScale+0.5);
+	if (mViewOffset<dcsize.GetWidth()-timelinewidth) {mViewOffset=dcsize.GetWidth()-timelinewidth;}
 	if (mViewOffset>0) {mViewOffset=0;}
 
 	// Redraw if necessary
@@ -382,23 +417,34 @@ void THISCLASS::OnMouseRightDown(wxMouseEvent &event) {
 	PopupMenu(&mPopupMenu);
 }
 
+void THISCLASS::OnMouseWheel(wxMouseEvent &event) {
+	// For some reason (probably focus), this is never called.
+	int rotation=event.GetWheelRotation();
+	//SetViewScale(pow(1.01, rotation)*mViewScale, event.GetX());
+	SetViewScale((rotation>0 ? mViewScale*2 : mViewScale/2), event.GetX());
+}
+
 void THISCLASS::OnSize(wxSizeEvent &event) {
 	Refresh(true);
 }
 
 void THISCLASS::OnMenuView(wxCommandEvent& event) {
 	if (event.GetId()==sID_ViewZoomOut) {
-		mViewOffset=0;
-		mViewScale/=10;
+		SetViewScale(mViewScale/2, mMoveStartPoint);
 	} else if (event.GetId()==sID_ViewZoomIn) {
-		mViewOffset=0;
-		mViewScale*=10;
+		SetViewScale(mViewScale*2, mMoveStartPoint);
 	} else {
 		// Reset
 		mViewOffset=0;
 		mViewScale=1000;
 	}
 	Refresh(true);
+}
+
+void THISCLASS::SetViewScale(double newscale, int fixpoint) {
+	double xreal=((double)fixpoint-mViewOffset)/mViewScale;
+	mViewScale=newscale;
+	mViewOffset=fixpoint-(int)floor(xreal*mViewScale+0.5);
 }
 
 void THISCLASS::OnMenuTrigger(wxCommandEvent& event) {
@@ -422,11 +468,11 @@ void THISCLASS::OnMenuSaveTimeline(wxCommandEvent& event) {
 	SwisTrackCoreEventRecorder::Timeline timelinecopy=*timeline;
 
 	// Show the file save dialog
-	wxFileDialog *dlg = new wxFileDialog(this, "Save timeline", "", "", "Text (*.txt)|*.txt", wxSAVE, wxDefaultPosition);
-	if (dlg->ShowModal() != wxID_OK) {return;}
+	wxFileDialog dlg(this, "Save timeline", "", "", "Text (*.txt)|*.txt", wxSAVE, wxDefaultPosition);
+	if (dlg.ShowModal() != wxID_OK) {return;}
 
 	// Save the timeline
-	wxString filename=dlg->GetPath();
+	wxString filename=dlg.GetPath();
 	std::ofstream ofs(filename.c_str());
 	if(! ofs.is_open()) {
 		wxMessageDialog dlg(this, "The file could not be saved!", "Save timeline", wxOK);

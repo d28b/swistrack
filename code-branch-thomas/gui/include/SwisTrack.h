@@ -32,6 +32,11 @@ public:
 	wxString mFileName;				//!< The current configuration file.
 	bool mChanged;					//!< Whether the file has been modified. This flag is currently ignored.
 
+	CanvasPanel *mCanvasPanel;					//!< The panel in the center displaying the current image.
+	ComponentListPanel *mComponentListPanel;	//!< The list of components in the bottom of the window.
+	ConfigurationPanel *mConfigurationPanel;	//!< The component configuration panel shown on the right.
+	TimelinePanel *mTimelinePanel;				//!< The timeline panel shown on the bottom.
+
 	//! Constructor.
 	SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style = wxDEFAULT_FRAME_STYLE);
 	//! Destructor.
@@ -65,10 +70,6 @@ public:
 
 protected:
 	wxBoxSizer *mHorizontalSizer;				//!< The horizonal sizer containing the canvas panel and the component configuration panel.
-	CanvasPanel *mCanvasPanel;					//!< The panel in the center displaying the current image.
-	ComponentListPanel *mComponentListPanel;	//!< The list of components in the bottom of the window.
-	ConfigurationPanel *mConfigurationPanel;	//!< The component configuration panel shown on the right.
-	TimelinePanel *mTimelinePanel;				//!< The timeline panel shown on the bottom.
 
 	//! IDs for the controls and the menu commands
 	enum eID {
