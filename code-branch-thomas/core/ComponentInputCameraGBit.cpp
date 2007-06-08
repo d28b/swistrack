@@ -7,8 +7,8 @@
 
 THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
 		Component(stc, "InputCameraGBit"),
-		mTransportLayer(0), mCamera(0), mStreamGrabber(0),
-		mCurrentImageIndex(-1), mFrameNumber(0) {
+		mCamera(0), mStreamGrabber(0),
+		mCurrentResult(), mFrameNumber(0) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryInput);
@@ -26,26 +26,31 @@ THISCLASS::~ComponentInputCameraGBit() {
 }
 
 void THISCLASS::OnStart() {
-	mCameraNumber=GetConfigurationInt("DeviceNumber", 0);
+	mCameraFullName=GetConfigurationString("CameraFullName", "");
 	mColor=GetConfigurationBool("Color", true);
 	mTriggerMode=(eTriggerMode)GetConfigurationInt("TriggerMode", 0);
 	mTriggerTimerFPS=GetConfigurationInt("TriggerTimerFPS", 10);
 
-	try {
-		// Enumerate GigE cameras
-		Pylon::CTlFactory& tlfactory=Pylon::CTlFactory::GetInstance();
-		mTransportLayer=tlfactory.CreateTl(Pylon::CBaslerGigECamera::DeviceClass());
-		Pylon::DeviceInfoList_t devices;
-		if (mTransportLayer->EnumerateDevices(devices)==0) {
-			AddError("No GBit cameras found!");
-			return;
-		}
+	// Get the transport layer
+	Pylon::CTlFactory& tlfactory=Pylon::CTlFactory::GetInstance();
 
-		// Create a camera object and cast to the concrete camera class
-		mCamera=dynamic_cast<Pylon::CBaslerGigECamera*>(mTransportLayer->CreateDevice(devices[mCameraNumber]));
-		if (! mCamera) {
-			AddError("Camera not found!");
-			return;
+	try {
+		if (mCameraFullName=="") {
+			Pylon::DeviceInfoList_t devices;
+			if (tlfactory.EnumerateDevices(devices)==0) {
+				AddError("No GBit cameras found!");
+				return;
+			}
+			mCore->mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepLapTime, this);
+			mCamera=dynamic_cast<Pylon::CBaslerGigECamera*>(tlfactory.CreateDevice(devices[0]));
+			mCore->mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepLapTime, this);
+		} else {
+			// Create a camera object and cast to the camera class
+			mCamera=dynamic_cast<Pylon::CBaslerGigECamera*>(tlfactory.CreateDevice(mCameraFullName.c_str()));
+			if (! mCamera) {
+				AddError("Camera not found!");
+				return;
+			}
 		}
 
 		// Open the camera object
@@ -53,7 +58,6 @@ void THISCLASS::OnStart() {
 	} catch (GenICam::GenericException &e) {
 		AddError(e.GetDescription());
 		mCamera=0;
-		mTransportLayer=0;
 		return;
 	}
 
@@ -118,18 +122,27 @@ void THISCLASS::OnStart() {
 	mStreamGrabber->Open();
 
 	// Parameterize the stream grabber
-	const int buffersize=(int)mCamera->PayloadSize();
-	const int numbuffers=10;
+	const int buffersize=mCamera->PayloadSize.GetValue();
 	mStreamGrabber->MaxBufferSize=buffersize;
-	mStreamGrabber->MaxNumBuffer=numbuffers;
+	mStreamGrabber->MaxNumBuffer=mInputBufferCount;
 	mStreamGrabber->PrepareGrab();
 
-	// Allocate and register image buffers, put them into the grabber's input queue
-	int channels=(mColor ? 2 : 1);
-	for (int i=0; i<numbuffers; ++i) {
-		mInputBufferImages[i]=cvCreateImage(cvSize(aoiw, aoih), 8, channels);
-		mInputBufferHandles[i]=mStreamGrabber->RegisterBuffer(mInputBufferImages[i]->imageData, mInputBufferImages[i]->imageSize);
-		mStreamGrabber->QueueBuffer(mInputBufferHandles[i], (void*)i);
+	try {
+		// Allocate and register image buffers, put them into the grabber's input queue
+		int channels=(mColor ? 2 : 1);
+		for (int i=0; i<mInputBufferCount; ++i) {
+			mInputBufferImages[i]=cvCreateImage(cvSize(aoiw, aoih), 8, channels);
+			mInputBufferHandles[i]=mStreamGrabber->RegisterBuffer(mInputBufferImages[i]->imageData, mInputBufferImages[i]->imageSize);
+			mStreamGrabber->QueueBuffer(mInputBufferHandles[i], mInputBufferImages[i]);
+		}
+	} catch (GenICam::GenericException &e) {
+		printf("%s\n", e.GetDescription());
+		AddError(e.GetDescription());
+		mStreamGrabber->Close();
+		mStreamGrabber=0;
+		mCamera->Close();
+		mCamera=0;
+		return;
 	}
 
 	// Start image acquisition
@@ -160,8 +173,6 @@ void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
-	Pylon::GrabResult result;
-
     // Get the image
 	if (mTriggerMode==sTrigger_Software) {
 		// Send the software trigger
@@ -174,10 +185,10 @@ void THISCLASS::OnStep() {
 		}
 
 		// Get an item from the grabber's output queue
-		mStreamGrabber->RetrieveResult(result);
-		if (! result.Succeeded()) {
+		mStreamGrabber->RetrieveResult(mCurrentResult);
+		if (! mCurrentResult.Succeeded()) {
 			std::ostringstream oss;
-			oss << "Failed to retrieve an item from the output queue: " << result.GetErrorDescription();
+			oss << "Failed to retrieve an item from the output queue: " << mCurrentResult.GetErrorDescription();
 			AddError(oss.str());
 			return;
 		}
@@ -186,13 +197,11 @@ void THISCLASS::OnStep() {
 		// TODO
 	}
 
-
 	// Set the current image
 	mFrameNumber++;
-	mCurrentImageIndex=(int)result.Context();
 
 	// This is the acquired image
-	IplImage *outputimage=mInputBufferImages[mCurrentImageIndex];
+	IplImage *outputimage=(IplImage*)(mCurrentResult.Context());
 
 	// Set this image in the DataStructureImage
 	mCore->mDataStructureInput.mImage=outputimage;
@@ -201,9 +210,17 @@ void THISCLASS::OnStep() {
 
 void THISCLASS::OnStepCleanup() {
 	// Requeue the used image
-	if (mCurrentImageIndex>-1) {
-		mStreamGrabber->QueueBuffer(mInputBufferHandles[mCurrentImageIndex], (void*)mCurrentImageIndex);
-		mCurrentImageIndex=-1;
+	try {
+		mStreamGrabber->QueueBuffer(mCurrentResult.Handle(), mCurrentResult.Context());
+	} catch (GenICam::GenericException &e) {
+		std::ostringstream oss;
+		oss << "Failed to requeue buffer: " << e.GetDescription();
+		AddError(oss.str());
+	}
+
+	// When using the software trigger, we are immediately ready to read the next image
+	if (mTriggerMode==sTrigger_Software) {
+		mTrigger->SetReady();
 	}
 }
 
@@ -221,26 +238,24 @@ void THISCLASS::OnStop() {
 	}
 
 	// Deregister and free buffers
-	for (int i=0; i<8; ++i) {
+	for (int i=0; i<mInputBufferCount; ++i) {
 		mStreamGrabber->DeregisterBuffer(mInputBufferHandles[i]);
 		cvReleaseImage(&mInputBufferImages[i]);
 	}
-	mCurrentImageIndex=-1;
+	//mCurrentImageIndex=-1;
 
 	// Clean up
 	mStreamGrabber->FinishGrab();
 	mStreamGrabber->Close();
 	mStreamGrabber=0;
 	mCamera->Close();
-	mTransportLayer->DestroyDevice(mCamera);
 	Pylon::CTlFactory& tlfactory=Pylon::CTlFactory::GetInstance();
-	tlfactory.DestroyTl(mTransportLayer);
+	tlfactory.DestroyDevice(mCamera);
 	mCamera=0;
-	mTransportLayer=0;
 }
 
 wxThread::ExitCode THISCLASS::Thread::Entry() {
 	return 0;
 }
 
-#endif
+#endif // USE_CAMERA_PYLON_GBIT

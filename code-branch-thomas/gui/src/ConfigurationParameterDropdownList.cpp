@@ -41,21 +41,33 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	hs->Add(mComboBox, 0, wxALIGN_CENTER_VERTICAL, 0);
 	SetSizer(hs);
 
-	// Fill the list
+	// Fill in the list
+	FillList(config, errorlist);
+}
+
+void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
 	wxXmlNode *items=config->GetChildNode("items");
 	wxXmlNode *node=items->GetChildren();
 	while (node) {
+		// Create one list item per "item" node
 		if (node->GetName()=="item") {
-			wxString *itemvalue=new wxString("");
+			wxString key("");
 			wxXmlProperty *prop=node->GetProperties();
 			while (prop) {
-				if (prop->GetName()=="key") {*itemvalue=prop->GetValue();}
+				if (prop->GetName()=="key") {key=prop->GetValue();}
 				prop=prop->GetNext();
 			}
-			mComboBox->Append(node->GetNodeContent(), itemvalue);
+			AddItem(key, node->GetNodeContent());
 		}
+
+		// Next node
 		node=node->GetNext();
 	}
+}
+
+void THISCLASS::AddItem(const wxString &key, const wxString &label) {
+	wxString *itemvalue=new wxString(key);
+	mComboBox->Append(label, itemvalue);
 }
 
 void THISCLASS::OnUpdate(wxWindow *updateprotection) {

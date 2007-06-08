@@ -212,7 +212,7 @@ bool THISCLASS::Step() {
 	if (! mStarted) {return false;}
 
 	// Event recorder
-	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepStart);
+	mEventRecorder->AddStepStart();
 
 	// Notify the interfaces (OnBeforeStep)
 	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();

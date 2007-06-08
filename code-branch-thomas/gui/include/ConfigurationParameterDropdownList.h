@@ -22,7 +22,7 @@ public:
 	//! Handles the corresponding GUI event.
 	void OnItemSelected(wxCommandEvent& event);
 
-private:
+protected:
 	wxComboBox *mComboBox;		//!< The corresponding GUI widget.
 	wxString mValueDefault;		//!< The default value.
 	wxString mNewValue;			//!< The new value.
@@ -31,6 +31,11 @@ private:
 	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
 	virtual void OnUpdate(wxWindow *updateprotection);
 	virtual void OnSetNewValue();
+
+	// Fills in the list. This method can be overwritten to create list with specific entries. It should use the AddItem() method to add items to the list.
+	virtual void FillList(ConfigurationXML *config, ErrorList *errorlist);
+	// Adds an item to the list.
+	void AddItem(const wxString &key, const wxString &label);
 
 	// Validates the new value.
 	bool ValidateNewValue();

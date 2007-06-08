@@ -120,8 +120,10 @@ private:
 	//! The corresponding GUI event handler.
 	void OnMenuSaveTimeline(wxCommandEvent& event);
 
-	//! Sets a new view scale while keeping one point fixed.
+	//! Sets a new view scale while keeping one point fixed and redraws.
 	void SetViewScale(double newscale, int fixpoint);
+	//! Sets a new view offset and redraws if necessary.
+	void SetViewOffset(int newoffset);
 
 	DECLARE_EVENT_TABLE()
 };

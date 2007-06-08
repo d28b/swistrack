@@ -26,6 +26,13 @@ class SwisTrack;
 class SwisTrack: public wxFrame, public CommunicationCommandHandler {
 
 public:
+	//! Status field IDs
+	enum eStatusField {
+		sStatusField_Messages=0,
+		sStatusField_ServerPort=1,
+		sStatusField_Timeline=2,
+	};
+
 	SwisTrackCore *mSwisTrackCore;	//!< The SwisTrackCore object.
 	TCPServer *mTCPServer;			//!< The TCPServer object.
 
@@ -88,13 +95,6 @@ protected:
 		sID_Help,
 		sID_Test,
 		sID_About = wxID_ABOUT   // this must be wxID_ABOUT to put it in the Mac OS X "Apple" menu
-	};
-
-	//! Status field IDs
-	enum eStatusField {
-		sStatusField_Messages=0,
-		sStatusField_ServerPort=1,
-		sStatusField_Trigger=2,
 	};
 
 	//! Creates the menu.

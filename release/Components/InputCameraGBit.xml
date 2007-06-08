@@ -6,15 +6,9 @@
 	<displayimage>Output</displayimage>
 
 	<configuration>
-		<parameter type="dropdownlist">
-			<name>DeviceNumber</name>
+		<parameter type="gbitcameralist">
+			<name>CameraFullName</name>
 			<label>Camera</label>
-			<items>
-				<item key="0">Camera 1</item>
-				<item key="1">Camera 2</item>
-				<item key="2">Camera 3</item>
-				<item key="3">Camera 4</item>
-			</items>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="dropdownlist">

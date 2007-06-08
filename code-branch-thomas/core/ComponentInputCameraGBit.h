@@ -1,7 +1,6 @@
 #ifndef HEADER_ComponentInputCameraGBit
 #define HEADER_ComponentInputCameraGBit
 
-
 #include "Component.h"
 
 #ifdef USE_CAMERA_PYLON_GBIT
@@ -39,18 +38,20 @@ public:
 	Component *Create() {return new ComponentInputCameraGBit(mCore);}
 
 private:
-	int mCameraNumber;									//!< (configuration) Camera number (in case there is more than one camera attached).
+	std::string mCameraFullName;						//!< (configuration) Full name of the camera (as returned by Pylon::DeviceInfo::GetFullName()).
 	bool mColor;										//!< (configuration) Whether to acquire color or mono images.
 	eTriggerMode mTriggerMode;							//!< (configuration) The trigger source.
 	double mTriggerTimerFPS;							//!< (configuration) The FPS of the trigger timer.
 
-	Pylon::ITransportLayer *mTransportLayer;			//!< Transport layer object.
 	Pylon::CBaslerGigECamera *mCamera;					//!< Camera object.
 	Pylon::CBaslerGigEStreamGrabber *mStreamGrabber;	//!< Stream grabber object.
-	IplImage *mInputBufferImages[8];					//!< The images for the input queue.
-	Pylon::StreamBufferHandle mInputBufferHandles[8];	//!< The corresponding buffer handles.
 
-	int mCurrentImageIndex;								//!< The index of the last acquired image.
+	static const int mInputBufferCount = 8;								//!< The number of input buffers.
+	IplImage *mInputBufferImages[mInputBufferCount];					//!< The input buffer images.
+	Pylon::StreamBufferHandle mInputBufferHandles[mInputBufferCount];	//!< The corresponding buffer handles.
+	Pylon::GrabResult mCurrentResult;									//!< The current result.
+
+	//int mCurrentImageIndex;								//!< The index of the last acquired image.
 	int mFrameNumber;									//!< The frame number since the component was started.
 
 	//! The thread waiting for new images (in case of external trigger).

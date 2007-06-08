@@ -85,6 +85,8 @@ public:
 	void Add(const eType type, Component *component=0);
 	//! Adds a new event to the current timeline.
 	void Add(const Event *it);
+	//! Adds a sType_StepStart event and keeps track of the FPS.
+	void AddStepStart();
 	//! Stores an event in an Item object.
 	static void LapTime(Event *it, const eType type, Component *component=0);
 	//! Returns the duration (in seconds) between two timeline items.
@@ -92,11 +94,17 @@ public:
 
 	//! Returns the last timeline.
 	const Timeline *GetLastTimeline() const {return mLastTimeline;}
+	//! Returns the frames per seconds.
+	double GetFramesPerSecond() const {return 1/mStepDistance;}
+	//! Returns the average distance between steps.
+	double GetStepDistance() const {return mStepDistance;}
 
 private:
 	double mFrequency;				//!< The frequency of the performance counter.
 	Timeline *mCurrentTimeline;		//!< The timeline which currently records events.
 	Timeline *mLastTimeline;		//!< The previously recorded timeline.
+	Event mPreviousStep;			//!< Timestamp of the previous step.
+	double mStepDistance;			//!< The distance (time) between two steps.
 
 };
 

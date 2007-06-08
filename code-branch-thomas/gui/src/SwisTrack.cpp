@@ -181,7 +181,7 @@ void THISCLASS::BuildStatusBar() {
 
 	SetStatusText(_T("Welcome to SwisTrack!"), sStatusField_Messages);
 	SetStatusText(_T("Closed"), sStatusField_ServerPort);
-	SetStatusText(_T("Manual"), sStatusField_Trigger);
+	SetStatusText(_T(""), sStatusField_Timeline);
 #endif // wxUSE_STATUSBAR
 }
 
@@ -348,7 +348,7 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	cr.SelectRootNode();
 	cr.SelectChildNode("server");
 	mTCPServer->SetPort(cr.ReadInt("port", 3000));
-	SetStatusText(wxString::Format("%d", mTCPServer->GetPort()), sStatusField_ServerPort);
+	SetStatusText(wxString::Format("TCP: %d", mTCPServer->GetPort()), sStatusField_ServerPort);
 
 	// Set the status text
 	SetStatusText(filename+" opened!", sStatusField_Messages);

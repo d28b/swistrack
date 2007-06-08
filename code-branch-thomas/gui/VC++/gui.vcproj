@@ -241,8 +241,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug - GigaBit Camera|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="..\..\..\release"
+			IntermediateDirectory="T:\"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -273,8 +273,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;../../core/include;../../core;../../calibration/include;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include"
-				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1"
+				AdditionalIncludeDirectories="../include;../../core/include;../../core;../../calibration/include;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 0.9\genicam\library\cpp\include&quot;;&quot;L:\Basler\Pylon 0.9\pylon\include&quot;"
+				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1;USE_CAMERA_PYLON_GBIT"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="2"
@@ -347,8 +347,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug - FireWire Camera|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="..\..\..\release"
+			IntermediateDirectory="T:\"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -817,6 +817,14 @@
 			</File>
 			<File
 				RelativePath="..\include\ConfigurationParameterFile.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\ConfigurationParameterGBitCameraList.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ConfigurationParameterGBitCameraList.h"
 				>
 			</File>
 			<File
