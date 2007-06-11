@@ -12,76 +12,72 @@ THISCLASS::ComponentOutputFileAVI(SwisTrackCore *stc):
 	// Data structure relations
 	mCategory=&(mCore->mCategoryOutput);
 	AddDisplay(&mDisplayOutput);
+	AddDataStructureRead(&(mCore->mDataStructureImageGray));
+	AddDataStructureRead(&(mCore->mDataStructureImageColor));
+	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 
 	// Read the XML configuration file
 	Initialize();
 }
 
-THISCLASS::~ComponentOutputFileAVI() 
-{
+THISCLASS::~ComponentOutputFileAVI() {
 }
 
 void THISCLASS::OnStart() {
-	// Open file
-	filename=GetConfigurationString("File", "");
-	mFrameRate=GetConfigurationInt("FrameRate",15);
+	mFilename=GetConfigurationString("File", "");
+	mFrameRate=GetConfigurationInt("FrameRate", 15);
 	OnReloadConfiguration();
 }
 
-void THISCLASS::OnReloadConfiguration() 
-{
-	mInputSelection=GetConfigurationInt("InputImage",0);
+void THISCLASS::OnReloadConfiguration() {
+	mInputSelection=GetConfigurationInt("InputImage", 0);
 }
 
-void THISCLASS::OnStep() 
-{
-	IplImage* inputImage;
-	switch (mInputSelection)
-	{
+void THISCLASS::OnStep() {
+	// Get the input image
+	IplImage* inputimage;
+	switch (mInputSelection) {
 	case 0:
-		//Gray image
-		inputImage=mCore->mDataStructureImageGray.mImage;
+		// Gray image
+		inputimage=mCore->mDataStructureImageGray.mImage;
 		break;
 	case 1:
-		//Color image
-		inputImage=mCore->mDataStructureImageColor.mImage;
+		// Color image
+		inputimage=mCore->mDataStructureImageColor.mImage;
 		break;
 	case 2:
-		//Binary image
-		inputImage=mCore->mDataStructureImageBinary.mImage;
+		// Binary image
+		inputimage=mCore->mDataStructureImageBinary.mImage;
 		break;
 	default:
 		AddError("Invalid input image");
 		return;
 	}
-	if (!inputImage)
-	{
-		AddError("Selected input is invalid");
+
+	if (! inputimage) {
+		AddError("No image on selected input.");
 		return;
 	}
-	if (!mOutputImage)
-	{
-		mOutputImage=cvCreateImage(cvGetSize(inputImage),8,inputImage->nChannels);
-	}
-	else if (inputImage->nChannels!=mOutputImage->nChannels)
-	{
+
+	// Prepare the output image
+	if (! mOutputImage) {
+		mOutputImage=cvCreateImage(cvGetSize(inputimage), 8, inputimage->nChannels);
+	} else if (inputimage->nChannels != mOutputImage->nChannels) {
 		cvReleaseImage(&mOutputImage);
-		mOutputImage=cvCreateImage(cvGetSize(inputImage),8,inputImage->nChannels);
+		mOutputImage=cvCreateImage(cvGetSize(inputimage), 8, inputimage->nChannels);
 	}
 
-	//Create the Writer
-	if (!mWriter)
-	{
-		mWriter = cvCreateVideoWriter(filename.c_str(),-1,mFrameRate,cvGetSize(inputImage));
-		if (!mWriter)
-		{
-			AddError("Error when creating the avi file");
+	// Create the Writer
+	if (! mWriter) {
+		mWriter = cvCreateVideoWriter(mFilename.c_str(), -1, mFrameRate, cvGetSize(inputimage));
+		if (! mWriter) {
+			AddError("Error while creating the AVI file.");
 			return;
 		}
 	}
 
 	// AVI files are flipped
-	cvFlip(inputImage,mOutputImage);
+	cvFlip(inputimage, mOutputImage);
 
 	//Write the frame to the avi
 	cvWriteFrame(mWriter,mOutputImage);
@@ -97,9 +93,7 @@ void THISCLASS::OnStepCleanup()
 {
 }
 
-void THISCLASS::OnStop() 
-{
-	if (mOutputImage)
-		cvReleaseImage(&mOutputImage);
+void THISCLASS::OnStop() {
+	if (mOutputImage) {cvReleaseImage(&mOutputImage);}
 	if (mWriter) {cvReleaseVideoWriter(&mWriter);}
 }

@@ -33,7 +33,7 @@ private:
 	IplImage* mOutputImage;				//!< The last acquired image.
 	int mFrameRate;						//!< The frame rate of the output AVI
 	int mInputSelection;				//!< Select the input
-	std::string filename;				//!< Name of the saved AVI
+	std::string mFilename;				//!< Name of the saved AVI
 
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 };

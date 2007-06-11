@@ -333,6 +333,7 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	// Close the current configuration
 	Control_StopProductiveMode();
 	Control_StopRunMode();
+	SetConfigurationPanel(0);
 	if (mChanged) {
 		// TODO if necessary, ask the user whether he'd like to save the changes
 		// return false;
