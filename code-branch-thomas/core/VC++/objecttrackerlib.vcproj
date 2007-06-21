@@ -544,7 +544,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="6 Calibration"
+				Name="7 Calibration"
 				>
 				<File
 					RelativePath="..\ComponentCalibrationLinear.cpp"
@@ -660,7 +660,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="7 Output"
+				Name="8 Output"
 				>
 				<File
 					RelativePath="..\ComponentOutputFileAVI.cpp"
@@ -712,6 +712,18 @@
 				</File>
 				<File
 					RelativePath="..\ComponentTriggerTimer.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="6 Tracking"
+				>
+				<File
+					RelativePath="..\ComponentTracking.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentTracking.h"
 					>
 				</File>
 			</Filter>
@@ -856,11 +868,27 @@
 				>
 			</File>
 			<File
+				RelativePath="..\DataStructureTracks.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\DataStructureTracks.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Particle.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\Particle.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Track.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Track.h"
 				>
 			</File>
 		</Filter>

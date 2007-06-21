@@ -64,20 +64,20 @@ void THISCLASS::OnReloadConfiguration()
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputImage=mCore->mDataStructureImageColor.mImage;	
+	IplImage *inputimage=mCore->mDataStructureImageColor.mImage;	
 	//Check the images
-	if (! inputImage) 
+	if (! inputimage) 
 	{
 		AddError("No input Image");
 		return;
 	}
-	if (inputImage->nChannels !=3)
+	if (inputimage->nChannels !=3)
 	{
 		AddError("Input image has not 3 channels.");
 		return;
 	}
 	if ((mCorrectMean)&&(mSpecifiedImageAverage.val[0]==-1))
-		mSpecifiedImageAverage=cvAvg(inputImage);
+		mSpecifiedImageAverage=cvAvg(inputimage);
 	
 	/*
 	//If we want to specify the color on the input image and it has not been done at this time
@@ -85,7 +85,7 @@ void THISCLASS::OnStep() {
 	{
 		
 		cvNamedWindow("Click on the desired color in the image");
-		cvShowImage("Click on the desired color in the image",inputImage);
+		cvShowImage("Click on the desired color in the image",inputimage);
 		cmx=-1;
 		cvSetMouseCallback("Click on the desired color in the image", UpdateMouse);
 		while(cmx<0)
@@ -93,11 +93,11 @@ void THISCLASS::OnStep() {
 			cvWaitKey();
 		}
 		cvDestroyWindow("Click on the desired color in the image");
-		mTrackedColor=cvGet2D(inputImage,cmy,cmx);//matrix reading, we define first the row (height/y) and then the column (width/x)
-		mSpecifiedImageAverage=cvAvg(inputImage);
+		mTrackedColor=cvGet2D(inputimage,cmy,cmx);//matrix reading, we define first the row (height/y) and then the column (width/x)
+		mSpecifiedImageAverage=cvAvg(inputimage);
 		
 		mTrackedColor=cvScalar(100,100,100);
-		mSpecifiedImageAverage=cvAvg(inputImage);
+		mSpecifiedImageAverage=cvAvg(inputimage);
 	}
 	*/
 	try {
@@ -106,12 +106,12 @@ void THISCLASS::OnStep() {
 		{
 			if (mCorrectMean)
 			{			
-				CvScalar tmpScalar=cvAvg(inputImage);
-				cvAbsDiffS(inputImage,inputImage,cvScalar(mTrackedColor.val[0]+mSpecifiedImageAverage.val[0]-tmpScalar.val[0],mTrackedColor.val[1]+mSpecifiedImageAverage.val[1]-tmpScalar.val[1],mTrackedColor.val[2]+mSpecifiedImageAverage.val[2]-tmpScalar.val[2]));
+				CvScalar tmpScalar=cvAvg(inputimage);
+				cvAbsDiffS(inputimage,inputimage,cvScalar(mTrackedColor.val[0]+mSpecifiedImageAverage.val[0]-tmpScalar.val[0],mTrackedColor.val[1]+mSpecifiedImageAverage.val[1]-tmpScalar.val[1],mTrackedColor.val[2]+mSpecifiedImageAverage.val[2]-tmpScalar.val[2]));
 			}
 			else
 			{
-				cvAbsDiffS(inputImage,inputImage,mTrackedColor);
+				cvAbsDiffS(inputimage,inputimage,mTrackedColor);
 			}
 		}
 	} catch(...) {
@@ -121,7 +121,7 @@ void THISCLASS::OnStep() {
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
-		de.SetMainImage(inputImage);
+		de.SetMainImage(inputimage);
 	}
 }
 

@@ -41,17 +41,17 @@ void THISCLASS::OnReloadConfiguration() {
 void THISCLASS::OnStep() 
 {
 	// This is the image we want to treat
-	IplImage* inputImage = mCore->mDataStructureImageBinary.mImage;
-	if (!inputImage)
+	IplImage* inputimage = mCore->mDataStructureImageBinary.mImage;
+	if (!inputimage)
 	{
 		AddError("There is no input image");
 	}
 
 	//Prepare outputImage
 	if (!outputImage)
-		outputImage=cvCreateImage(cvSize(inputImage->width,inputImage->height),inputImage->depth,1);
+		outputImage=cvCreateImage(cvSize(inputimage->width,inputimage->height),inputimage->depth,1);
 	//copy the 
-	cvCopy(inputImage,outputImage);
+	cvCopy(inputimage,outputImage);
 	
 	//If no computation is needed
 	if ((mAreaSelection==false)&&(mCompactnessSelection==false)&&(mOrientationSelection==false))
@@ -75,12 +75,12 @@ void THISCLASS::OnStep()
 	CvSeq* contour = 0;
 
 	// Init blob extraxtion
-	CvContourScanner blobs = cvStartFindContours(inputImage,storage,sizeof(CvContour),CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
+	CvContourScanner blobs = cvStartFindContours(inputimage,storage,sizeof(CvContour),CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
 
 	// This is used to correct the position in case of ROI
 	CvRect rectROI;
-	if(inputImage->roi != NULL) {
-		rectROI = cvGetImageROI(inputImage);
+	if(inputimage->roi != NULL) {
+		rectROI = cvGetImageROI(inputimage);
 	} else {
 		rectROI.x = 0;
 		rectROI.y = 0;

@@ -39,13 +39,13 @@ void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputImage=mCore->mDataStructureImageColor.mImage;	
-	if (! inputImage) 
+	IplImage *inputimage=mCore->mDataStructureImageColor.mImage;	
+	if (! inputimage) 
 	{
 		AddError("Cannot access Input image");
 		return;
 	}
-	if (inputImage->nChannels!=3)
+	if (inputimage->nChannels!=3)
 	{
 		AddError("Input must be a color image (3 channels)");
 	}
@@ -53,18 +53,18 @@ void THISCLASS::OnStep() {
 	for (int i=0;i<3;i++)
 	{
 		if(!tmpImage[i])
-			tmpImage[i]=cvCreateImage(cvGetSize(inputImage),8,1);
+			tmpImage[i]=cvCreateImage(cvGetSize(inputimage),8,1);
 	}
 	
 	//Do the thresholding
 	//We compute the average value on the three channels
 	try 
 	{
-		PrepareOutputImage(inputImage);
-		cvSplit(inputImage,tmpImage[0],tmpImage[1],tmpImage[2],NULL);
+		PrepareOutputImage(inputimage);
+		cvSplit(inputimage,tmpImage[0],tmpImage[1],tmpImage[2],NULL);
 		for (int i=0;i<3;i++)
 		{
-			switch(inputImage->channelSeq[i])
+			switch(inputimage->channelSeq[i])
 			{
 			case 'B':
 				if (mInvertThreshold)

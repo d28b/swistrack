@@ -11,6 +11,7 @@ class SwisTrackCore;
 #include "DataStructureInput.h"
 #include "DataStructureImage.h"
 #include "DataStructureParticles.h"
+#include "DataStructureTracks.h"
 #include "ErrorList.h"
 #include "SwisTrackCoreInterface.h"
 #include "SwisTrackCoreTrigger.h"
@@ -57,6 +58,7 @@ public:
 	DataStructureImage mDataStructureImageGray;
 	DataStructureImage mDataStructureImageBinary;
 	DataStructureParticles mDataStructureParticles;
+	DataStructureTracks mDataStructureTracks;
 
 	//! Constructor.
 	SwisTrackCore(std::string componentconfigurationfolder);

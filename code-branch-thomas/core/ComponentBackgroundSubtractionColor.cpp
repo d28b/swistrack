@@ -63,14 +63,14 @@ void THISCLASS::OnReloadConfiguration()
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputImage=mCore->mDataStructureImageColor.mImage;	
+	IplImage *inputimage=mCore->mDataStructureImageColor.mImage;	
 	//Check the images
-	if (! inputImage) 
+	if (! inputimage) 
 	{
 		AddError("No input Image");
 		return;
 	}
-	if (inputImage->nChannels !=3)
+	if (inputimage->nChannels !=3)
 	{
 		AddError("Input image has not 3 channels.");
 		return;
@@ -80,7 +80,7 @@ void THISCLASS::OnStep() {
 		AddError("Background image not accessible");
 		return;
 	}
-	if ((cvGetSize(inputImage).height!=cvGetSize(mBackgroundImage).height)||(cvGetSize(inputImage).width!=cvGetSize(mBackgroundImage).width))
+	if ((cvGetSize(inputimage).height!=cvGetSize(mBackgroundImage).height)||(cvGetSize(inputimage).width!=cvGetSize(mBackgroundImage).width))
 	{
 		AddError("Input and background images have not the same dimension");
 		return;
@@ -98,9 +98,9 @@ void THISCLASS::OnStep() {
 		//Modify the sequence of the channels in the background		
 		for (int i=0;i<3;i++)
 			//If the channel is not the same, search for the corresponding channel to copy, else copy the channel directly
-			if (inputImage->channelSeq[i]!=mBackgroundImage->channelSeq[i])
+			if (inputimage->channelSeq[i]!=mBackgroundImage->channelSeq[i])
 				for (int j=0;j<3;j++)
-					if (inputImage->channelSeq[i]==mBackgroundImage->channelSeq[j])
+					if (inputimage->channelSeq[i]==mBackgroundImage->channelSeq[j])
 					{						
 						cvSetImageCOI(mBackgroundImage,i+1);						
 						cvCopy(tmpImage[j],mBackgroundImage);
@@ -108,7 +108,7 @@ void THISCLASS::OnStep() {
 						cvSetImageCOI(mBackgroundImage,0);												
 						mBackgroundImageMean.val[i]=tmpBackgroundMean.val[j];
 					}
-		strcpy(mBackgroundImage->channelSeq,inputImage->channelSeq);
+		strcpy(mBackgroundImage->channelSeq,inputimage->channelSeq);
 		for (int i=0; i<3;i++)
 			cvReleaseImage(&(tmpImage[i]));
 	}
@@ -117,12 +117,12 @@ void THISCLASS::OnStep() {
 		// Correct the tmpImage with the difference in image mean		
 		if (mCorrectMean) 
 		{			
-			CvScalar tmpScalar=cvAvg(inputImage);			
-			cvAddS(inputImage, cvScalar(mBackgroundImageMean.val[0]-tmpScalar.val[0],mBackgroundImageMean.val[1]-tmpScalar.val[1],mBackgroundImageMean.val[2]-tmpScalar.val[2]),inputImage);
+			CvScalar tmpScalar=cvAvg(inputimage);			
+			cvAddS(inputimage, cvScalar(mBackgroundImageMean.val[0]-tmpScalar.val[0],mBackgroundImageMean.val[1]-tmpScalar.val[1],mBackgroundImageMean.val[2]-tmpScalar.val[2]),inputimage);
 		}
 
 		// Background Substraction
-		cvAbsDiff(inputImage, mBackgroundImage, inputImage);
+		cvAbsDiff(inputimage, mBackgroundImage, inputimage);
 	} catch(...) {
 		AddError("Background subtraction failed.");
 	}
@@ -130,7 +130,7 @@ void THISCLASS::OnStep() {
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
-		de.SetMainImage(inputImage);
+		de.SetMainImage(inputimage);
 	}
 }
 

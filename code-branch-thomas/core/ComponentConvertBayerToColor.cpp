@@ -35,11 +35,11 @@ void THISCLASS::OnReloadConfiguration()
 
 void THISCLASS::OnStep() 
 {
-	IplImage *inputImage=mCore->mDataStructureInput.mImage;
-	if (! inputImage) {return;}
+	IplImage *inputimage=mCore->mDataStructureInput.mImage;
+	if (! inputimage) {return;}
 	if (!mOutputImage)
-		mOutputImage=cvCreateImage(cvSize(inputImage->width,inputImage->height),inputImage->depth,3);
-	if (inputImage->nChannels!=1)
+		mOutputImage=cvCreateImage(cvSize(inputimage->width,inputimage->height),inputimage->depth,3);
+	if (inputimage->nChannels!=1)
 	{
 		AddError("This function require a Gray input Image");
 	}
@@ -48,16 +48,16 @@ void THISCLASS::OnStep()
 		switch (mBayerType)
 		{
 		case 0 :
-			cvCvtColor(inputImage,mOutputImage,CV_BayerBG2BGR);
+			cvCvtColor(inputimage,mOutputImage,CV_BayerBG2BGR);
 			break;
 		case 1 :
-			cvCvtColor(inputImage,mOutputImage,CV_BayerGB2BGR);
+			cvCvtColor(inputimage,mOutputImage,CV_BayerGB2BGR);
 			break;
 		case 2 :
-			cvCvtColor(inputImage,mOutputImage,CV_BayerRG2BGR);
+			cvCvtColor(inputimage,mOutputImage,CV_BayerRG2BGR);
 			break;
 		case 3 :
-			cvCvtColor(inputImage,mOutputImage,CV_BayerGR2BGR);
+			cvCvtColor(inputimage,mOutputImage,CV_BayerGR2BGR);
 			break;
 		default :
 			AddError("Invalid Bayer Pattern Type");

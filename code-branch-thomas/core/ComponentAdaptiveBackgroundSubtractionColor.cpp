@@ -47,14 +47,14 @@ void THISCLASS::OnReloadConfiguration()
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputImage=mCore->mDataStructureImageColor.mImage;	
+	IplImage *inputimage=mCore->mDataStructureImageColor.mImage;	
 	//Check the images
-	if (! inputImage) 
+	if (! inputimage) 
 	{
 		AddError("No input Image");
 		return;
 	}
-	if (inputImage->nChannels !=3)
+	if (inputimage->nChannels !=3)
 	{
 		AddError("Input image has not 3 channels.");
 		return;
@@ -62,14 +62,14 @@ void THISCLASS::OnStep() {
 	if (! mBackgroundImage) 
 	{
 		//Create the background with the current image
-		mBackgroundImage=cvCloneImage(inputImage);
+		mBackgroundImage=cvCloneImage(inputimage);
 	}
 	else
 	{
 		//Update the background
-		cvAddWeighted(inputImage,mUpdateProportion,mBackgroundImage,1.0-mUpdateProportion,0,mBackgroundImage);
+		cvAddWeighted(inputimage,mUpdateProportion,mBackgroundImage,1.0-mUpdateProportion,0,mBackgroundImage);
 	}
-	if ((cvGetSize(inputImage).height!=cvGetSize(mBackgroundImage).height)||(cvGetSize(inputImage).width!=cvGetSize(mBackgroundImage).width))
+	if ((cvGetSize(inputimage).height!=cvGetSize(mBackgroundImage).height)||(cvGetSize(inputimage).width!=cvGetSize(mBackgroundImage).width))
 	{
 		AddError("Input and background images have not the same dimension");
 		return;
@@ -80,12 +80,12 @@ void THISCLASS::OnStep() {
 		if (mCorrectMean) 
 		{					
 			mBackgroundImageMean=cvAvg(mBackgroundImage);			
-			CvScalar tmpScalar=cvAvg(inputImage);			
-			cvAddS(inputImage, cvScalar(mBackgroundImageMean.val[0]-tmpScalar.val[0],mBackgroundImageMean.val[1]-tmpScalar.val[1],mBackgroundImageMean.val[2]-tmpScalar.val[2]),inputImage);
+			CvScalar tmpScalar=cvAvg(inputimage);			
+			cvAddS(inputimage, cvScalar(mBackgroundImageMean.val[0]-tmpScalar.val[0],mBackgroundImageMean.val[1]-tmpScalar.val[1],mBackgroundImageMean.val[2]-tmpScalar.val[2]),inputimage);
 		}
 
 		// Background Substraction
-		cvAbsDiff(inputImage, mBackgroundImage, inputImage);
+		cvAbsDiff(inputimage, mBackgroundImage, inputimage);
 	} catch(...) {
 		AddError("Background subtraction failed.");
 	}
@@ -93,7 +93,7 @@ void THISCLASS::OnStep() {
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
-		de.SetMainImage(inputImage);
+		de.SetMainImage(inputimage);
 	}
 }
 

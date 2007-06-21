@@ -52,14 +52,14 @@ void THISCLASS::OnReloadConfiguration()
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputImage=mCore->mDataStructureImageColor.mImage;
+	IplImage *inputimage=mCore->mDataStructureImageColor.mImage;
 	//Check the images
-	if (! inputImage) 
+	if (! inputimage) 
 	{
 		AddError("No input Image");
 		return;
 	}
-	if (inputImage->nChannels !=3)
+	if (inputimage->nChannels !=3)
 	{
 		AddError("Input image has not 3 channels.");
 		return;
@@ -67,7 +67,7 @@ void THISCLASS::OnStep() {
 	if (!outputImage) 
 	{
 		//If the input image was not yet created
-		outputImage=cvCreateImage(cvGetSize(inputImage),8,1);		
+		outputImage=cvCreateImage(cvGetSize(inputimage),8,1);		
 	}
 	mCore->mDataStructureImageGray.mImage=outputImage;
 	if (! mBackgroundImage) 
@@ -75,7 +75,7 @@ void THISCLASS::OnStep() {
 		AddError("Background image not accessible");
 		return;
 	}
-	if ((cvGetSize(inputImage).height!=cvGetSize(mBackgroundImage).height)||(cvGetSize(inputImage).width!=cvGetSize(mBackgroundImage).width))
+	if ((cvGetSize(inputimage).height!=cvGetSize(mBackgroundImage).height)||(cvGetSize(inputimage).width!=cvGetSize(mBackgroundImage).width))
 	{
 		AddError("Input and background images have not the same dimension");
 		return;
@@ -92,16 +92,16 @@ void THISCLASS::OnStep() {
 		//Modify the sequence of the channels in the background		
 		for (int i=0;i<3;i++)
 			//If the channel is not the same, search for the corresponding channel to copy, else copy the channel directly
-			if (inputImage->channelSeq[i]!=mBackgroundImage->channelSeq[i])
+			if (inputimage->channelSeq[i]!=mBackgroundImage->channelSeq[i])
 				for (int j=0;j<3;j++)
-					if (inputImage->channelSeq[i]==mBackgroundImage->channelSeq[j])
+					if (inputimage->channelSeq[i]==mBackgroundImage->channelSeq[j])
 					{						
 						cvSetImageCOI(mBackgroundImage,i+1);						
 						cvCopy(tmpImage[j],mBackgroundImage);
 						//Remove the COI						
 						cvSetImageCOI(mBackgroundImage,0);												
 					}
-		strcpy(mBackgroundImage->channelSeq,inputImage->channelSeq);
+		strcpy(mBackgroundImage->channelSeq,inputimage->channelSeq);
 		for (int i=0; i<3;i++)
 			cvReleaseImage(&(tmpImage[i]));
 		//Convert image in HSV
@@ -110,7 +110,7 @@ void THISCLASS::OnStep() {
 	}
 	
 	try {
-		cvCvtColor(inputImage,tmpHSVImage,CV_BGR2HSV);
+		cvCvtColor(inputimage,tmpHSVImage,CV_BGR2HSV);
 		cvSplit(tmpHSVImage,outputImage,NULL,NULL,NULL);
 		// Background Substraction
 		cvAbsDiff(outputImage, mBackgroundImageHSV, outputImage);
