@@ -9,10 +9,28 @@
 			<name>BackgroundImage</name>
 			<label>Background image</label>
 		</parameter>
+		<parameter type="dropdownlist">
+			<name>Mode</name>
+			<label>Mode</label>
+			<items>
+				<item key="AbsDiff">Abs(I - B)</item>
+				<item key="SubImageBackground">Truncate(I - B, 0..255)</item>
+				<item key="SubBackgroundImage">Truncate(B - I, 0..255)</item>
+			</items>
+			<reloadable>true</reloadable>
+		</parameter>
 		<parameter type="checkbox">
 			<name>CorrectMean</name>
 			<label>Correct Mean</label>
 			<default>1</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<line />
+		<label>The following button will set the background image to the next input image. Note that this image is not stored anywhere - when restarting SwisTrack, you must take an image again.</label>
+		<parameter type="button">
+			<name>NextImageAsBackgroundImage</name>
+			<label>Take current image as background</label>
+			<reloadable>true</reloadable>
 		</parameter>
 	</configuration>
 </swistrackcomponent>
