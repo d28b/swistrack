@@ -20,5 +20,22 @@
 			<default>0.1</default>
 			<sliderstep>0.01</sliderstep>
 		</parameter>
+		<parameter type="dropdownlist">
+			<name>Mode</name>
+			<label>Mode</label>
+			<items>
+				<item key="AbsDiff">Abs(I - B)</item>
+				<item key="SubImageBackground">Truncate(I - B, 0..255)</item>
+				<item key="SubBackgroundImage">Truncate(B - I, 0..255)</item>
+			</items>
+			<reloadable>true</reloadable>
+		</parameter>
+		<line />
+		<label>The following button resets the background image at the next step.</label>
+		<parameter type="button">
+			<name>ResetBackgroundImage</name>
+			<label>Reset background image</label>
+			<reloadable>true</reloadable>
+		</parameter>
 	</configuration>
 </swistrackcomponent>

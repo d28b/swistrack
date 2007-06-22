@@ -467,14 +467,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\ComponentConvertBayerToColor.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentConvertBayerToColor.h"
-					>
-				</File>
-				<File
 					RelativePath="..\ComponentConvertToGray.cpp"
 					>
 				</File>
@@ -616,6 +608,14 @@
 				</File>
 				<File
 					RelativePath="..\ComponentBackgroundSubtractionColor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentConvertBayerToColor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentConvertBayerToColor.h"
 					>
 				</File>
 				<File

@@ -45,8 +45,16 @@ void THISCLASS::OnReloadConfiguration() {
 void THISCLASS::OnStep() {
 	std::vector<Particle> rejectedparticles;
 
-	// This is the image we want to treat
-	IplImage* src_tmp = mCore->mDataStructureImageBinary.mImage;
+	// Get and check input image
+	IplImage *inputimage = mCore->mDataStructureImageBinary.mImage;
+	if (! inputimage) {
+		AddError("No input image.");
+		return;
+	}
+	if (inputimage->nChannels != 1) {
+		AddError("The input image is not a grayscale image.");
+		return;
+	}
 
 	// We clear the ouput vector
 	mParticles.clear();
@@ -61,12 +69,12 @@ void THISCLASS::OnStep() {
 	CvSeq* contour = 0;
 
 	// Init blob extraxtion
-	CvContourScanner blobs = cvStartFindContours(src_tmp,storage,sizeof(CvContour),CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
+	CvContourScanner blobs = cvStartFindContours(inputimage,storage,sizeof(CvContour),CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
 
 	// This is used to correct the position in case of ROI
 	CvRect rectROI;
-	if(src_tmp->roi != NULL) {
-		rectROI = cvGetImageROI(src_tmp);
+	if(inputimage->roi != NULL) {
+		rectROI = cvGetImageROI(inputimage);
 	} else {
 		rectROI.x = 0;
 		rectROI.y = 0;

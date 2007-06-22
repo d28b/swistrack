@@ -7,11 +7,11 @@
 
 THISCLASS::ComponentAdaptiveBackgroundSubtractionGray(SwisTrackCore *stc):
 		Component(stc, "AdaptiveBackgroundSubtractionGray"),
-		mBackgroundImageMean(cvScalarAll(0)), mUpdateProportion(0), mCorrectMean(true),
+		mBackgroundImageMean(cvScalarAll(0)), mCorrectMean(true), mUpdateProportion(0), mMode(sMode_AbsDiff),
 		mDisplayOutput("Output", "After background subtraction") {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryPreprocessing);
+	mCategory=&(mCore->mCategoryPreprocessingGray);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 	AddDisplay(&mDisplayOutput);
@@ -24,61 +24,52 @@ THISCLASS::~ComponentAdaptiveBackgroundSubtractionGray() {
 }
 
 void THISCLASS::OnStart() {
-	// Whether to correct the mean or not
-	mCorrectMean=GetConfigurationBool("CorrectMean", true);
-	mUpdateProportion=GetConfigurationDouble("UpdateProportion", 0.1);
-	//Force the copy of the input in the background in the first step
+	OnReloadConfiguration();
+
+	// Force the copy of the input in the background in the first step
 	mBackgroundImage=NULL;
 }
 
-void THISCLASS::OnReloadConfiguration() 
-{
+void THISCLASS::OnReloadConfiguration() {
 	// Whether to correct the mean or not
 	mCorrectMean=GetConfigurationBool("CorrectMean", true);
-	mUpdateProportion=GetConfigurationDouble("UpdateProportion", true);
-	//Force reinitialization of the background image
-	if (mBackgroundImage) 
-	{
+	mUpdateProportion=GetConfigurationDouble("UpdateProportion", 0.1);
+
+	// Whether to take the next image as background image
+	if (GetConfigurationBool("mResetBackgroundImage", false)) {
 		cvReleaseImage(&mBackgroundImage);
 		mBackgroundImage=NULL;
+		mConfiguration["mResetBackgroundImage"]="false";
 	}
-
-	
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputimage=mCore->mDataStructureImageGray.mImage;	
-	//Check the images
-	if (! inputimage) 
-	{
-		AddError("No input Image");
+	// Get and check input image
+	IplImage *inputimage=mCore->mDataStructureImageGray.mImage;
+	if (! inputimage) {
+		AddError("No input image.");
 		return;
 	}
-	if (inputimage->nChannels !=1)
-	{
-		AddError("Input image has not 1 channel.");
+	if (inputimage->nChannels != 1) {
+		AddError("The input image is not a grayscale image.");
 		return;
 	}
-	if (! mBackgroundImage) 
-	{
-		//Create the background with the current image
+
+	// Check and update the background
+	if (! mBackgroundImage) {
 		mBackgroundImage=cvCloneImage(inputimage);
+	} else {
+		if ((cvGetSize(inputimage).height != cvGetSize(mBackgroundImage).height) || (cvGetSize(inputimage).width != cvGetSize(mBackgroundImage).width)) {
+			AddError("Input and background images do not have the same size.");
+			return;
+		}
+
+		cvAddWeighted(inputimage, mUpdateProportion, mBackgroundImage, 1.0-mUpdateProportion, 0, mBackgroundImage);
 	}
-	else
-	{
-		//Update the background
-		cvAddWeighted(inputimage,mUpdateProportion,mBackgroundImage,1.0-mUpdateProportion,0,mBackgroundImage);
-	}
-	if ((cvGetSize(inputimage).height!=cvGetSize(mBackgroundImage).height)||(cvGetSize(inputimage).width!=cvGetSize(mBackgroundImage).width))
-	{
-		AddError("Input and background images have not the same dimension");
-		return;
-	}	
 
 	try {
 		// Correct the tmpImage with the difference in image mean		
-		if (mCorrectMean) 
-		{					
+		if (mCorrectMean) {					
 			mBackgroundImageMean=cvAvg(mBackgroundImage);			
 			CvScalar tmpScalar=cvAvg(inputimage);			
 			cvAddS(inputimage, cvScalar(mBackgroundImageMean.val[0]-tmpScalar.val[0]),inputimage);
@@ -86,7 +77,7 @@ void THISCLASS::OnStep() {
 
 		// Background Substraction
 		cvAbsDiff(inputimage, mBackgroundImage, inputimage);
-	} catch(...) {
+	} catch (...) {
 		AddError("Background subtraction failed.");
 	}
 

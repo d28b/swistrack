@@ -31,7 +31,6 @@ private:
 	IplImage *mBackgroundImage;			//!< The background image.
 	CvScalar mBackgroundImageMean;		//!< The mean of the background image.
 	bool mCorrectMean;					//!< (configuration) Whether to correct for the mean or not.
-	bool mNextImageAsBackgroundImage;	//!< (configuration) Whether to take the next image as background image.
 	eMode mMode;						//!< (configuration) The subtraction mode.
 
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.

@@ -25,12 +25,5 @@
 			<default>1</default>
 			<reloadable>true</reloadable>
 		</parameter>
-		<line />
-		<label>The following button will set the background image to the next input image. Note that this image is not stored anywhere - when restarting SwisTrack, you must take an image again.</label>
-		<parameter type="button">
-			<name>NextImageAsBackgroundImage</name>
-			<label>Take current image as background</label>
-			<reloadable>true</reloadable>
-		</parameter>
 	</configuration>
 </swistrackcomponent>

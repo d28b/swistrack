@@ -37,10 +37,14 @@ public:
 	//! Called after the component list has been modified.
 	virtual void OnAfterEdit() {};
 
+	//! Called after a component has been added to the list.
+	virtual void OnAfterAddComponent(Component *c) {};
 	//! Called before a component is modified.
 	virtual void OnBeforeEditComponent(Component *c) {};
 	//! Called after a component has been modified.
 	virtual void OnAfterEditComponent(Component *c) {};
+	//! Called before a component is removed from the list.
+	virtual void OnBeforeRemoveComponent(Component *c) {};
 
 	//! Called before the trigger is started.
 	virtual void OnBeforeTriggerStart() {};

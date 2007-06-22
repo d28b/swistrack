@@ -7,11 +7,11 @@
 
 THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore *stc):
 		Component(stc, "BackgroundSubtractionGray"),
-		mBackgroundImageMean(cvScalarAll(0)), mBackgroundImage(0), mCorrectMean(true),
+		mBackgroundImageMean(cvScalarAll(0)), mBackgroundImage(0), mCorrectMean(true), mMode(sMode_AbsDiff),
 		mDisplayOutput("Output", "After background subtraction") {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryPreprocessing);
+	mCategory=&(mCore->mCategoryPreprocessingGray);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 	AddDisplay(&mDisplayOutput);
@@ -24,6 +24,7 @@ THISCLASS::~ComponentBackgroundSubtractionGray() {
 }
 
 void THISCLASS::OnStart() {
+	// Load the background image
 	std::string filename=GetConfigurationString("BackgroundImage", "");
 	if (filename!="") {
 		mBackgroundImage=cvLoadImage(filename.c_str(),CV_LOAD_IMAGE_UNCHANGED);
@@ -33,9 +34,10 @@ void THISCLASS::OnStart() {
 		return;
 	}
 
-	if (mBackgroundImage->nChannels!=1) {
-		// Throw an error because background image is not gray
-		AddError("Background image has more than 1 channel.");
+	// Check the background image
+	// We explicitely do not convert image to grayscale automatically, as this is likely to be a configuration error of the user (e.g. wrong background selected). In addition, the user can easily convert a file to grayscale.
+	if (mBackgroundImage->nChannels != 1) {
+		AddError("Background image is not grayscale.");
 		return;
 	}
 
@@ -44,10 +46,6 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	// Whether to take the next image as background image
-	mNextImageAsBackgroundImage=GetConfigurationBool("NextImageAsBackgroundImage", false);
-	mConfiguration["NextImageAsBackgroundImage"]="false";
-
 	// Whether to correct the mean or not
 	mCorrectMean=GetConfigurationBool("CorrectMean", true);
 
@@ -60,30 +58,23 @@ void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
-	// Get input image
+	// Get and check input image
 	IplImage *inputimage=mCore->mDataStructureImageGray.mImage;
 	if (! inputimage) {
-		AddError("No input Image");
+		AddError("No input image.");
 		return;
 	}
 	if (inputimage->nChannels != 1) {
-		AddError("Input image is not grayscale.");
+		AddError("The input image is not a grayscale image.");
 		return;
 	}
 
-	// Create a new background image if necessary
-	if (mNextImageAsBackgroundImage) {
-		cvReleaseImage(&mBackgroundImage);
-		mBackgroundImage=cvCloneImage(inputimage);
-		mNextImageAsBackgroundImage=false;
-	}
-
-	// Check background image
+	// Check the background image
 	if (! mBackgroundImage) {
-		AddError("Background image not accessible");
+		AddError("No background image loaded.");
 		return;
 	}
-	if ((cvGetSize(inputimage).height!=cvGetSize(mBackgroundImage).height) || (cvGetSize(inputimage).width!=cvGetSize(mBackgroundImage).width)) {
+	if ((cvGetSize(inputimage).height != cvGetSize(mBackgroundImage).height) || (cvGetSize(inputimage).width != cvGetSize(mBackgroundImage).width)) {
 		AddError("Input and background images don't have the same size.");
 		return;
 	}

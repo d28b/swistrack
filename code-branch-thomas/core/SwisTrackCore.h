@@ -45,7 +45,8 @@ public:
 	ComponentCategory mCategoryTrigger;
 	ComponentCategory mCategoryInput;
 	ComponentCategory mCategoryInputConversion;
-	ComponentCategory mCategoryPreprocessing;
+	ComponentCategory mCategoryPreprocessingColor;
+	ComponentCategory mCategoryPreprocessingGray;
 	ComponentCategory mCategoryThresholding;
 	ComponentCategory mCategoryBinaryPreprocessing;
 	ComponentCategory mCategoryBlobDetection;

@@ -11,7 +11,7 @@ THISCLASS::ComponentHSVBackgroundSubtractionColor(SwisTrackCore *stc):
 		mDisplayOutput("Output", "After background subtraction") {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryPreprocessing);
+	mCategory=&(mCore->mCategoryPreprocessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 	AddDisplay(&mDisplayOutput);
