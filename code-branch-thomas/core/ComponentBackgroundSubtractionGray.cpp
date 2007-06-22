@@ -49,6 +49,16 @@ void THISCLASS::OnReloadConfiguration() {
 	// Whether to correct the mean or not
 	mCorrectMean=GetConfigurationBool("CorrectMean", true);
 
+	// Mode
+	std::string modestr=GetConfigurationString("Mode", "AbsDiff");
+	if (modestr=="SubImageBackground") {
+		mMode=sMode_SubImageBackground;
+	} else if (modestr=="SubBackgroundImage") {
+		mMode=sMode_SubBackgroundImage;
+	} else {
+		mMode=sMode_AbsDiff;
+	}
+
 	// We always calculate the background average, so we can select if we use the moving threshold during the segmentation
 	if (mCorrectMean) {
 		mBackgroundImageMean=cvAvg(mBackgroundImage);

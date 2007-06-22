@@ -35,11 +35,21 @@ void THISCLASS::OnReloadConfiguration() {
 	mCorrectMean=GetConfigurationBool("CorrectMean", true);
 	mUpdateProportion=GetConfigurationDouble("UpdateProportion", 0.1);
 
+	// Mode
+	std::string modestr=GetConfigurationString("Mode", "AbsDiff");
+	if (modestr=="SubImageBackground") {
+		mMode=sMode_SubImageBackground;
+	} else if (modestr=="SubBackgroundImage") {
+		mMode=sMode_SubBackgroundImage;
+	} else {
+		mMode=sMode_AbsDiff;
+	}
+
 	// Whether to take the next image as background image
-	if (GetConfigurationBool("mResetBackgroundImage", false)) {
+	if (GetConfigurationBool("ResetBackgroundImage", false)) {
 		cvReleaseImage(&mBackgroundImage);
 		mBackgroundImage=NULL;
-		mConfiguration["mResetBackgroundImage"]="false";
+		mConfiguration["ResetBackgroundImage"]="false";
 	}
 }
 
@@ -75,8 +85,14 @@ void THISCLASS::OnStep() {
 			cvAddS(inputimage, cvScalar(mBackgroundImageMean.val[0]-tmpScalar.val[0]),inputimage);
 		}
 
-		// Background Substraction
-		cvAbsDiff(inputimage, mBackgroundImage, inputimage);
+		// Background subtraction
+		if (mMode==sMode_SubImageBackground) {
+			cvSub(inputimage, mBackgroundImage, inputimage);
+		} else if (mMode==sMode_SubBackgroundImage) {
+			cvSub(mBackgroundImage, inputimage, inputimage);
+		} else {
+			cvAbsDiff(inputimage, mBackgroundImage, inputimage);
+		}
 	} catch (...) {
 		AddError("Background subtraction failed.");
 	}
