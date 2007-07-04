@@ -14,7 +14,7 @@ private:
 
 public:
 	void SetCritPoint(CvPoint2D32f* p);
-	int id;					/*< Holds ID number of track */
+	int mID;					/*< Holds ID number of track */
 	std::vector<CvPoint2D32f> trajectory; /*< Info about objects being tracked */
 	/** Critical point */
 	CvPoint2D32f critpoint;		
