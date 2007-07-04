@@ -16,6 +16,7 @@ THISCLASS::DisplayEditor(Display *display): mDisplay(0) {
 	SetMainImage(0);
 	SetMaskImage(0);
 	SetParticles(0);
+	SetTrajectories(false);
 }
 
 THISCLASS::~DisplayEditor() {
@@ -90,6 +91,13 @@ void THISCLASS::SetParticles(DataStructureParticles::tParticleVector *pv) {
 		mDisplay->mParticles.push_back((*it));
 		it++;
 	}
+}
+
+void THISCLASS::SetTrajectories(bool trajectories) {
+	if (! mDisplay) {return;}
+
+	// Set the trajectory draw flag
+	mDisplay->mTrajectories=trajectories;
 }
 
 void THISCLASS::SetSize(CvSize size) {

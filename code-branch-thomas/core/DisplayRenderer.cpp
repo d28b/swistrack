@@ -9,7 +9,7 @@
 THISCLASS::DisplayRenderer(Display *display):
 		mDisplay(0), mImage(0),
 		mScalingFactor(1), mCropRectangle(cvRect(0, 0, 0, 0)), mFlipVertical(false), mFlipHorizontal(false),
-		mDrawImage(true), mDrawParticles(true), mDrawErrors(true), mUseMask(true) {
+		mDrawImage(true), mDrawParticles(true), mDrawTrajectories(true), mDrawErrors(true), mUseMask(true) {
 
 	SetDisplay(display);
 
@@ -100,6 +100,7 @@ IplImage *THISCLASS::GetImage() {
 	// Draw the image
 	DrawMainImage(&errors);
 	DrawParticles(&errors);
+	DrawTrajectories(&errors);
 	DrawErrors(&errors);
 
 	return mImage;
@@ -155,6 +156,29 @@ bool THISCLASS::DrawParticles(ErrorList *errors) {
 	return true;
 }
 
+bool THISCLASS::DrawTrajectories(ErrorList *errors) {
+	if (! mDrawTrajectories) {return false;}
+	if (! mDisplay) {return false;}
+	if (! mDisplay->mTrajectories) {return false;}
+
+	// Draw trajectories
+	DataStructureTracks::tTrackVector *tracks=mDisplay->mComponent->GetSwisTrackCore()->mDataStructureTracks.mTracks;
+	DataStructureTracks::tTrackVector::iterator it=tracks->begin();
+	while (it!=tracks->end()) {
+		int x=(int)floor(it->trajectory.back().x*mScalingFactor+0.5);
+		int y=(int)floor(it->trajectory.back().y*mScalingFactor+0.5);
+		
+		// draw every single point
+		std::vector<CvPoint2D32f>::iterator p;
+		for( p = it->trajectory.begin()+1; p != it->trajectory.end(); p++ ){
+			cvLine(mImage,cvPoint((*p).x*mScalingFactor,(*p).y*mScalingFactor),cvPoint((*(p-1)).x*mScalingFactor,(*(p-1)).y*mScalingFactor),cvScalar((it->mID*50)%255,(it->mID*50)%255,(it->mID*50)%255));
+		}
+		cvRectangle(mImage, cvPoint(x-2, y-2), cvPoint(x+2, y+2), cvScalar(192, 0, 0), 1);
+		it++;
+	}
+
+	return true;
+}
 bool THISCLASS::DrawErrors(ErrorList *errors) {
 	if (! mDrawErrors) {return false;}
 	if (! mDisplay) {return false;}

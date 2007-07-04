@@ -46,7 +46,7 @@ void THISCLASS::OnStep() {
 	std::vector<Particle> rejectedparticles;
 
 	// Get and check input image
-	IplImage *inputimage = mCore->mDataStructureImageBinary.mImage;
+	IplImage *inputimage = cvCloneImage(mCore->mDataStructureImageBinary.mImage);
 	if (! inputimage) {
 		AddError("No input image.");
 		return;
@@ -67,7 +67,8 @@ void THISCLASS::OnStep() {
 	// We allocate memory to extract the contours from the binary image
 	CvMemStorage* storage = cvCreateMemStorage(0);
 	CvSeq* contour = 0;
-
+	
+	
 	// Init blob extraxtion
 	CvContourScanner blobs = cvStartFindContours(inputimage,storage,sizeof(CvContour),CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
 
@@ -143,6 +144,7 @@ void THISCLASS::OnStep() {
 		}
 	} */
 
+	cvReleaseImage(&inputimage);
 	cvRelease((void**)&contour);
 	cvReleaseMemStorage(&storage);
 

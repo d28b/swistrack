@@ -61,6 +61,7 @@ private:
 	// Drawing layer properties
 	bool mDrawImage;		//!< Whether to draw the main image.
 	bool mDrawParticles;	//!< Whether to draw the particles.
+	bool mDrawTrajectories; //!< Whether to draw the trajectories.
 	bool mDrawErrors;		//!< Whether to draw the error messages.
 	bool mUseMask;			//!< Whether to use the mask.
 
@@ -68,6 +69,8 @@ private:
 	bool DrawMainImage(ErrorList *errors);
 	//! Draws the particle layer.
 	bool DrawParticles(ErrorList *errors);
+	//! Draws the trajectory layer.
+	bool DrawTrajectories(ErrorList *errors);
 	//! Draws the errors.
 	bool DrawErrors(ErrorList *errors);
 	//! Draws an image with a message in the center.

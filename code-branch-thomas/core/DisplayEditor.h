@@ -28,6 +28,8 @@ public:
 
 	//! Sets the particles.
 	void SetParticles(DataStructureParticles::tParticleVector *pv);
+	//! Sets whether to draw the trajectories.
+	void SetTrajectories(bool trajectories);
 
 	//! Sets the size of the display.
 	void SetSize(CvSize size);

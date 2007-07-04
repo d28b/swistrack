@@ -7,7 +7,7 @@ THISCLASS::Display(const std::string &name, const std::string &displayname):
 		mComponent(0), mName(name), mDisplayName(displayname), mSubscribers(),
 		mFrameNumber(-1), mFramesCount(-1), mTime(wxDateTime::UNow()), mAnnotation(), mErrors(),
 		mTopLeft(cvPoint(0, 0)), mSize(cvSize(0, 0)),
-		mMainImage(0), mMaskImage(0), mParticles(), mParticlesWorld(),
+		mMainImage(0), mMaskImage(0), mParticles(), mParticlesWorld(), mTrajectories(false),
 		mActive(false), mChanged(false) {
 
 }

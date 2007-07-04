@@ -40,8 +40,6 @@ private:
 
 	/** Vector containing the id number of objects competing for tracks */
 	std::vector<int> competitors;
-	/** Info about objects being tracked */
-	DataStructureTracks::tTrackVector targets;
 	/** Potential trajectories */
 	DataStructureTracks::tTrackVector ptargets;
 
