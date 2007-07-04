@@ -18,15 +18,6 @@ mDisplayOutput("Output", "Tracking") {
 	// Read the XML configuration file
 	Initialize();
 
-	for (int i=0;i<mMaxNumber;i++)          // initiate mMaxNumber Track classes
-	{
-		sharedage.push_back(0);
-		oldshared.push_back(0);
-		restingtraj.push_back(0);
-		mTracks.push_back(Track(i,					// id number
-			mMaxNumber));
-		mTracks.at(i).AddPoint(cvPoint2D32f(320,240));
-	}
 }
 
 THISCLASS::~ComponentTracking() {
@@ -45,6 +36,17 @@ void THISCLASS::OnStart() {
 
 	if (mDistanceGate<0) {
 		AddError("The minimal distance (DistanceGate) cannot be smaller than zero");
+	}
+
+	
+	for (int i=0;i<mMaxNumber;i++)          // initiate mMaxNumber Track classes
+	{
+		sharedage.push_back(0);
+		oldshared.push_back(0);
+		restingtraj.push_back(0);
+		mTracks.push_back(Track(i,					// id number
+			mMaxNumber));
+		mTracks.at(i).AddPoint(cvPoint2D32f(320,240));
 	}
 }
 
