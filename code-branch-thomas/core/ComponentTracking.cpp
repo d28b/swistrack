@@ -17,9 +17,19 @@ THISCLASS::ComponentTracking(SwisTrackCore *stc):
 
 	// Read the XML configuration file
 	Initialize();
+
+	for (int i=0;i<mMaxNumber;i++)          // initiate nr_objects Track classes
+	{
+	 sharedage.push_back(0);
+	 oldshared.push_back(0);
+	 restingtraj.push_back(0);
+	 mTracks.push_back(Track(i,					// id number
+	 mMaxNumber));
+	}
 }
 
 THISCLASS::~ComponentTracking() {
+		if(mTracks.size()) mTracks.clear();
 }
 
 void THISCLASS::OnStart() {
@@ -42,6 +52,11 @@ void THISCLASS::OnReloadConfiguration() {
 void THISCLASS::OnStep() {
 	// Particles we want to associate
 	DataStructureParticles::tParticleVector *particles = mCore->mDataStructureParticles.mParticles;
+
+
+
+
+
 
 	// Set these particles
 	mCore->mDataStructureTracks.mTracks=&mTracks;
