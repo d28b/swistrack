@@ -19,7 +19,7 @@ Track::Track(int idnumber,int n_objects)
 
 	maxlength=50; // maximum length of trajectory to store
 	//printf("%f %f\n",trajectory.at(0).x,trajectory.at(0).y);
-	id=idnumber;
+	mID=idnumber;
 	critpoint.x=-1; critpoint.y=-1;
 };
 
