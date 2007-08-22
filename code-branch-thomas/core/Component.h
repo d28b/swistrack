@@ -51,7 +51,12 @@ public:
 	Component(SwisTrackCore *stc, const std::string &name);
 	//! Destructor.
 	virtual ~Component() {}
-	
+
+	//! This event is called to initialize the environment for the component at the time the program is loaded. It is called exactly once at program runtime.
+	virtual void OnInitializeStatic() {}
+	//! This event is called to terminate the environment for the the component at the time the program quits. It is called exactly once at program runtime.
+	virtual void OnTerminateStatic() {}
+
 	//! This event is called to initialize the component before OnStep() is called.
 	virtual void OnStart() = 0;
 	//! This event is called to perform one step.

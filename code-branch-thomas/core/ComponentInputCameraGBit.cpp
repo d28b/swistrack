@@ -25,6 +25,14 @@ THISCLASS::~ComponentInputCameraGBit() {
 	delete mTrigger;
 }
 
+void THISCLASS::OnInitializeStatic() {
+	Pylon::PylonInitialize();
+}
+
+void THISCLASS::OnTerminateStatic() {
+	Pylon::PylonTerminate();
+}
+
 void THISCLASS::OnStart() {
 	mCameraFullName=GetConfigurationString("CameraFullName", "");
 	mColor=GetConfigurationBool("Color", true);

@@ -90,7 +90,13 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentCalibrationTSAI(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
-	
+
+	// Initialize the available components
+	tComponentList::iterator ita=mAvailableComponents.begin();
+	while (ita!=mAvailableComponents.end()) {
+		(*ita)->OnInitializeStatic();
+		ita++;
+	}
 
 	// Initialize the list of available data structures
 	mDataStructures.push_back(&mDataStructureInput);
@@ -112,9 +118,10 @@ THISCLASS::~SwisTrackCore() {
 
 	mDeployedComponents.clear();
 
-	// Delete available components
+	// Terminate and delete available components
 	tComponentList::iterator ita=mAvailableComponents.begin();
 	while (ita!=mAvailableComponents.end()) {
+		(*ita)->OnTerminateStatic();
 		delete (*ita);
 		ita++;
 	}

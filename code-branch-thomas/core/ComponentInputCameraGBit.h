@@ -30,6 +30,8 @@ public:
 	~ComponentInputCameraGBit();
 
 	// Overwritten Component methods
+	void OnInitializeStatic();
+	void OnTerminateStatic();
 	void OnStart();
 	void OnReloadConfiguration();
 	void OnStep();
