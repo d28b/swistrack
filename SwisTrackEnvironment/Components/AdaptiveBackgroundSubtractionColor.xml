@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<name>Adaptive Background subtraction (Color)</name>
+	<description>Substract a background based on the prior images</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/AdaptiveBackgroundSubtractionColor</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+		<parameter type="checkbox">
+			<name>CorrectMean</name>
+			<label>Correct Mean</label>
+			<default>1</default>
+		</parameter>
+		<parameter type="double">
+			<name>UpdateProportion</name>
+			<label>Update Proportion</label>
+			<min>0</min>
+			<max>1</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+			<default>0.1</default>
+			<sliderstep>0.01</sliderstep>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

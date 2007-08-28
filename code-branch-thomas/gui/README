@@ -1,5 +1,0 @@
-This folder contains the SWISTrack GUI. These classes provide a graphical interface for the core classes.
-
-The implementation is based on wxWidgets 2.6.3.
-
-For more information, please refer to the code documentation created with Doxygen.

@@ -170,7 +170,6 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -220,7 +219,6 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile=".\lib\libtsai.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool

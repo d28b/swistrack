@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Blob detection Circle</friendlyname>
+	<description>To be implemented</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/BlobDetectionCircle</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+	</configuration>
+</swistrackcomponent>
