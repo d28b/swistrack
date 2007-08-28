@@ -68,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile=".\lib\libtsai.lib"
+				OutputFile="$(IntDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -144,7 +144,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile=".\lib\libtsai.lib"
+				OutputFile="$(IntDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool

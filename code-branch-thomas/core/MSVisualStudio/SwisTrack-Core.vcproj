@@ -70,7 +70,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../lib/objecttrackerd.lib"
+				OutputFile="$(IntDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -148,7 +148,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				LinkLibraryDependencies="true"
-				OutputFile="../lib/objecttracker.lib"
+				OutputFile="$(IntDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -223,6 +223,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				OutputFile="$(IntDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -299,7 +300,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="../lib/objecttrackerd.lib"
+				OutputFile="$(IntDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -377,7 +378,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				LinkLibraryDependencies="true"
-				OutputFile="../lib/objecttracker.lib"
+				OutputFile="$(IntDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -455,7 +456,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				LinkLibraryDependencies="true"
-				OutputFile="../lib/objecttracker.lib"
+				OutputFile="$(IntDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
