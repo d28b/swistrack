@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<swistrack>
+  <components>
+    <component type="SimulationParticles">
+      <parameter name="AngleNoiseStdDev" value="0"/>
+      <parameter name="CameraOrigin.x" value="-1000"/>
+      <parameter name="CameraOrigin.y" value="-250"/>
+      <parameter name="CameraPixelSize" value="10"/>
+      <parameter name="CameraRotation" value="0"/>
+      <parameter name="CameraSize.h" value="640"/>
+      <parameter name="CameraSize.w" value="480"/>
+      <parameter name="File" value="Particles.txt"/>
+      <parameter name="PositionNoiseStdDev" value="0.01"/>
+    </component>
+    <component type="CalibrationLinear">
+      <parameter name="CameraBottomRight.x" value="480"/>
+      <parameter name="CameraBottomRight.y" value="640"/>
+      <parameter name="CameraTopLeft.x" value="0"/>
+      <parameter name="CameraTopLeft.y" value="0"/>
+      <parameter name="WorldBottomLeft.x" value="0"/>
+      <parameter name="WorldBottomLeft.y" value="6.4"/>
+      <parameter name="WorldBottomRight.x" value="4.8"/>
+      <parameter name="WorldBottomRight.y" value="6.4"/>
+      <parameter name="WorldTopLeft.x" value="0"/>
+      <parameter name="WorldTopLeft.y" value="0"/>
+      <parameter name="WorldTopRight.x" value="4.8"/>
+      <parameter name="WorldTopRight.y" value="0"/>
+    </component>
+    <component type="OutputParticles"/>
+  </components>
+  <trigger>
+    <mode>manual</mode>
+    <freerun>
+      <interval>200</interval>
+    </freerun>
+  </trigger>
+  <server>
+    <port>3001</port>
+  </server>
+</swistrack>
