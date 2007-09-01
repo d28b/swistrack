@@ -47,8 +47,10 @@ BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 	EVT_MENU(sID_View_NewDisplay, THISCLASS::OnViewNewDisplay)
 	EVT_MENU(sID_Tools_TCPServer, THISCLASS::OnToolsTCPServer)
 	EVT_MENU(sID_Help, THISCLASS::OnHelp)
-	EVT_MENU(sID_Test, THISCLASS::OnTest)
 	EVT_MENU(sID_About, THISCLASS::OnHelpAbout)
+	EVT_MENU(sID_DeveloperUtilityTest, THISCLASS::OnDeveloperUtilityTest)
+	EVT_MENU(sID_DeveloperUtilityExportComponentTable, THISCLASS::OnDeveloperUtilityExportComponentTable)
+	
 	EVT_IDLE(THISCLASS::OnIdle)
 END_EVENT_TABLE()
 
@@ -141,11 +143,16 @@ void THISCLASS::BuildMenuBar() {
 	GetMenuBar()->Append(menuoutput,_T("&Output"));
 	menuoutput->Append(sID_Tools_TCPServer, _T("TCP Server ..."), _T("TCP server settings"));
 
+	wxMenu *menudeveloperutilities=new wxMenu;
+	menuhelp->Append(sID_DevloperUtilityTest, _T("&Test"), _T("A free menu item for developers to do quick tests while developing"));
+	menuhelp->Append(sID_DevloperUtilityExportComponentsTable, _T("&Export components table"), _T("Exports the components in wiki format"));
+
 	wxMenu *menuhelp=new wxMenu;
 	GetMenuBar()->Append(menuhelp, _T("&Help"));
-	menuhelp->Append(sID_Help, _T("&Manual"), _T("Opens the manual"));
-	menuhelp->Append(sID_Test, _T("&Test"), _T("Test"));
-	menuhelp->Append(sID_About, _T("&About ...\tF1"), _T("Show about dialog"));
+	menuhelp->Append(sID_Help, _T("&Manual"), _T("Opens the online manual"));
+	menuhelp->Append(sID_About, _T("&About ...\tF1"), _T("Shows the about dialog"));
+	menufile->AppendSeparator();
+	menuhelp->Append(menudeveloperutilities, _T("&Developer utilities"));
 }
 
 void THISCLASS::BuildToolBar() {
@@ -460,18 +467,6 @@ void THISCLASS::OnControlReset(wxCommandEvent& WXUNUSED(event)) {
 	Control_ReloadConfiguration();
 }
 
-void SwisTrack::OnHelpAbout(wxCommandEvent& WXUNUSED(event)) {
-	AboutDialog *dlg = new AboutDialog(this);
-	dlg->ShowModal();
-}
-
-void THISCLASS::OnHelp(wxCommandEvent& WXUNUSED(event)) {
-	wxLaunchDefaultBrowser("http://en.wikibooks.org/wiki/Swistrack");
-}
-
-void THISCLASS::OnTest(wxCommandEvent& WXUNUSED(event)) {
-}
-
 void THISCLASS::OnIdle(wxIdleEvent& event) {
 	mSwisTrackCore->OnIdle();
 }
@@ -502,4 +497,95 @@ void THISCLASS::OnViewNewDisplay(wxCommandEvent& WXUNUSED(event)) {
 	wxMiniFrame *frame=new wxMiniFrame(this, -1,_("Display"), wxDefaultPosition, wxDefaultSize, wxCAPTION | wxRESIZE_BORDER | wxCLOSE_BOX | wxSYSTEM_MENU);
 	new CanvasPanel(frame, this);
 	frame->Show();
+}
+
+void THISCLASS::OnHelp(wxCommandEvent& WXUNUSED(event)) {
+	wxLaunchDefaultBrowser("http://en.wikibooks.org/wiki/Swistrack");
+}
+
+void SwisTrack::OnHelpAbout(wxCommandEvent& WXUNUSED(event)) {
+	AboutDialog *dlg = new AboutDialog(this);
+	dlg->ShowModal();
+}
+
+void THISCLASS::OnDeveloperUtilityTest(wxCommandEvent& WXUNUSED(event)) {
+}
+
+void THISCLASS::OnDeveloperUtilityExportComponentsTable(wxCommandEvent& WXUNUSED(event)) {
+	// Show the file save dialog
+	wxFileDialog dlg(this, "Export components table", "", "", "Text (*.txt)|*.txt", wxSAVE, wxDefaultPosition);
+	if (dlg.ShowModal() != wxID_OK) {return;}
+
+	// Open the file
+	wxString filename=dlg.GetPath();
+	std::ofstream ofs(filename.c_str());
+	if(! ofs.is_open()) {
+		wxMessageDialog dlg(this, "Unable to open the file!", "Export components table", wxOK);
+		dlg.ShowModal();
+		return;
+	}
+
+	// Write header
+	ofs << "{| border=\"1\" cellspacing=\"0\" cellpadding=\"5\"" << std::endl;
+	ofs << "! rowspan=2 align=\"left\" | Component name" << std::endl;
+	ofs << "! rowspan=2 align=\"left\" | Category" << std::endl;
+	ofs << "! rowspan=2 | Trigger?" << std::endl;
+	ofs << "! colspan=" << mSwisTrackCore->mDataStructures.size() << " | Processing channels (data structures)" << std::endl;
+	ofs << "|-" << std::endl;
+
+	// Data structures
+	SwisTrackCore::tDataStructureList::iterator itds=mSwisTrackCore->mDataStructures.begin();
+	while (itds!=mSwisTrackCore->mDataStructures.end()) {
+		ofs << "! " << (*it)->mDisplayName << std::endl;
+		itds++;
+	}
+
+	// Add each component
+	bool category_shaded=true;
+	SwisTrackCore::tComponentList::iterator it=mSwisTrackCore->mAvailableComponents.begin();
+	wxTreeItemId curcategoryitem;
+	ComponentCategory *curcategory=0;
+	while (it!=mSwisTrackCore->mAvailableComponents.end()) {
+		ComponentCategory *category=(*it)->mCategory;
+		if (category) {
+			if ((! curcategoryitem) || (category!=curcategory)) {
+				category_shaded=!category_shaded;
+				curcategory=category;
+			}
+
+			// Name, category and trigger
+			ofs << "|- style=\"background-color:" << (category_shaded ? "#eeeeee" : "#ffffff") << "\" |" << std::endl;
+			ofs << "| [[SwisTrack/Components/" << (*it)->mName << "|" << (*it)->mDisplayName << "]]" << std::endl;
+			ofs << "| [[SwisTrack/ComponentCategories/" << curcategoryitem->mName  << "|" << curcategoryitem->mDisplayName << "]]" << std::endl;
+			ofs << "| align=\"center\" | " << ( ? "T" : "&nbsp;") << std::endl;
+			
+			// Data structures
+			SwisTrackCore::tDataStructureList::iterator itds=stc->mDataStructures.begin();
+			while (itds!=stc->mDataStructures.end()) {
+				li.SetColumn(col++);
+				
+				bool read=(*it)->HasDataStructureRead(*itds);
+				bool write=(*it)->HasDataStructureWrite(*itds);
+				if (read && write) {
+					ofs << "| align=\"center\" | E" << std::endl;
+				} else if (read) {
+					ofs << "| align=\"center\" | R" << std::endl;
+				} else if (write) {
+					ofs << "| align=\"center\" | W" << std::endl;
+				} else {
+					ofs << "| align=\"center\" | &nbsp;" << std::endl;
+				}
+	
+				itds++;
+			}
+
+		}
+		it++;
+	}
+
+	// Footer
+	ofs << "|}" << std::endl;
+
+	// Close
+	ofs.close();
 }

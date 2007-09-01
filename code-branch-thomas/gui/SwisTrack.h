@@ -93,7 +93,8 @@ protected:
 		sID_View_NewDisplay,
 		sID_Tools_TCPServer,
 		sID_Help,
-		sID_Test,
+		sID_DeveloperUtilityTest,
+		sID_DeveloperUtilityExportComponentsTable,
 		sID_About = wxID_ABOUT   // this must be wxID_ABOUT to put it in the Mac OS X "Apple" menu
 	};
 
@@ -123,8 +124,9 @@ protected:
 	void OnViewNewDisplay(wxCommandEvent& WXUNUSED(event));
 	void OnToolsTCPServer(wxCommandEvent& WXUNUSED(event));
 	void OnHelp(wxCommandEvent& WXUNUSED(event));
-	void OnTest(wxCommandEvent& WXUNUSED(event));
 	void OnHelpAbout(wxCommandEvent& WXUNUSED(event));
+	void OnDeveloperUtilityTest(wxCommandEvent& WXUNUSED(event));
+	void OnDeveloperUtilityExportComponentsTable(wxCommandEvent& WXUNUSED(event));
 
 	//! The idle event.
 	void OnIdle(wxIdleEvent& event);

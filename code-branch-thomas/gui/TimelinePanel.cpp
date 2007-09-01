@@ -510,7 +510,7 @@ void THISCLASS::OnMenuSaveTimeline(wxCommandEvent& event) {
 		ofs << std::endl;
 		it++;
 	}
-	
+
 	// Close
 	ofs.close();
 }
