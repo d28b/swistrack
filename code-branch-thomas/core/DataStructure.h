@@ -11,7 +11,7 @@ public:
 	std::string mDisplayName;	//!< The name that is displayed to the user.
 
 	//! Constructor.
-	DataStructure(const std::string &name=""): mName(name) {}
+	DataStructure(const std::string &name="", const std::string &displayname=""): mName(name), mDisplayName(displayname) {}
 	//! Destructor.
 	virtual ~DataStructure() {}
 };

@@ -6,7 +6,7 @@ THISCLASS::ComponentBlobDetectionCircle(SwisTrackCore *stc):
 		mParticles(0) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryBlobDetection);
+	mCategory=&(mCore->mCategoryParticleDetection);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 

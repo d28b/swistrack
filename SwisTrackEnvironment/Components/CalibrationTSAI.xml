@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Calibration with a linear model</friendlyname>
+	<friendlyname>Calibration with TSAI</friendlyname>
 	<description>This method uses the TSAI coplanar calibration method to transform the image coordinates in world coordinates.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/CalibrationTSAI</url>
 	<displayimage>Output</displayimage>

@@ -605,7 +605,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="3 Grayscale Processing"
+				Name="4b Grayscale Processing"
 				>
 				<File
 					RelativePath="..\ComponentAdaptiveBackgroundSubtractionGray.cpp"
@@ -623,25 +623,9 @@
 					RelativePath="..\ComponentBackgroundSubtractionGray.h"
 					>
 				</File>
-				<File
-					RelativePath="..\ComponentConvertToGray.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentConvertToGray.h"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentThresholdGray.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentThresholdGray.h"
-					>
-				</File>
 			</Filter>
 			<Filter
-				Name="5 Particle detection"
+				Name="7 Particle detection"
 				>
 				<File
 					RelativePath="..\ComponentBlobDetectionCircle.cpp"
@@ -693,7 +677,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="7 Calibration"
+				Name="8 Calibration"
 				>
 				<File
 					RelativePath="..\ComponentCalibrationLinear.cpp"
@@ -713,7 +697,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="4 Binary Processing"
+				Name="6 Binary Processing"
 				>
 				<File
 					RelativePath="..\ComponentBinaryDilation.cpp"
@@ -749,7 +733,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="3 Color Processing"
+				Name="4a Color Processing"
 				>
 				<File
 					RelativePath="..\ComponentAdaptiveBackgroundSubtractionColor.cpp"
@@ -768,22 +752,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\ComponentConvertBayerToColor.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentConvertBayerToColor.h"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentConvertToColor.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentConvertToColor.h"
-					>
-				</File>
-				<File
 					RelativePath="..\ComponentHSVBackgroundSubtractionColor.cpp"
 					>
 				</File>
@@ -799,25 +767,9 @@
 					RelativePath="..\ComponentSpecificColorSubtraction.h"
 					>
 				</File>
-				<File
-					RelativePath="..\ComponentThresholdColorCommon.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentThresholdColorCommon.h"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentThresholdColorIndependant.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentThresholdColorIndependant.h"
-					>
-				</File>
 			</Filter>
 			<Filter
-				Name="8 Output"
+				Name="10 Output"
 				>
 				<File
 					RelativePath="..\ComponentOutputFileAVI.cpp"
@@ -873,7 +825,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="6 Tracking"
+				Name="9 Tracking"
 				>
 				<File
 					RelativePath="..\ComponentTracking.cpp"
@@ -881,6 +833,62 @@
 				</File>
 				<File
 					RelativePath="..\ComponentTracking.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="5 Thresholding"
+				>
+				<File
+					RelativePath="..\ComponentThresholdColorCommon.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentThresholdColorCommon.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentThresholdColorIndependent.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentThresholdColorIndependent.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentThresholdGray.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentThresholdGray.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="3 InputConversion"
+				>
+				<File
+					RelativePath="..\ComponentConvertBayerToColor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentConvertBayerToColor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentConvertToColor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentConvertToColor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentConvertToGray.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentConvertToGray.h"
 					>
 				</File>
 			</Filter>

@@ -11,7 +11,7 @@ THISCLASS::ComponentBinaryMask(SwisTrackCore *stc):
 		mDisplayOutput("Output", "After applying mask") {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryBinaryPreprocessing);
+	mCategory=&(mCore->mCategoryPreprocessingBinary);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);

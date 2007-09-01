@@ -17,7 +17,7 @@ public:
 	tTrackVector *mTracks;	//!< Vector of tracks.
 
 	//! Constructor.
-	DataStructureTracks(): DataStructure("Tracks"), mTracks(0) {}
+	DataStructureTracks(): DataStructure("Tracks", "Tracks"), mTracks(0) {}
 	//! Destructor.
 	~DataStructureTracks() {}
 };

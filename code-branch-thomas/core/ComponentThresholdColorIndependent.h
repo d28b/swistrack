@@ -1,17 +1,17 @@
-#ifndef HEADER_ComponentThresholdColorIndependant
-#define HEADER_ComponentThresholdColorIndependant
+#ifndef HEADER_ComponentThresholdColorIndependent
+#define HEADER_ComponentThresholdColorIndependent
 
 #include <cv.h>
 #include "Component.h"
 
-//! A component that applies a constant threshold to a color image, there is an independant threshold for each channels. An "OR" function is then applied between the different channels. The output is a binary image. 
-class ComponentThresholdColorIndependant: public Component {
+//! A component that applies a constant threshold to a color image, there is an independent threshold for each channels. An "OR" function is then applied between the different channels. The output is a binary image. 
+class ComponentThresholdColorIndependent: public Component {
 
 public:
 	//! Constructor.
-	ComponentThresholdColorIndependant(SwisTrackCore *stc);
+	ComponentThresholdColorIndependent(SwisTrackCore *stc);
 	//! Destructor.
-	~ComponentThresholdColorIndependant();
+	~ComponentThresholdColorIndependent();
 
 	// Overwritten Component methods
 	void OnStart();
@@ -19,7 +19,7 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentThresholdColorIndependant(mCore);}
+	Component *Create() {return new ComponentThresholdColorIndependent(mCore);}
 
 private:
 	IplImage *mOutputImage;				//!< The image created by this component.

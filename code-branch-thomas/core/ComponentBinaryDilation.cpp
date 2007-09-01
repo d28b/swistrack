@@ -10,7 +10,7 @@ THISCLASS::ComponentBinaryDilation(SwisTrackCore *stc):
 		mDisplayOutput("Output", "After dilation") {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryBinaryPreprocessing);
+	mCategory=&(mCore->mCategoryPreprocessingBinary);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);

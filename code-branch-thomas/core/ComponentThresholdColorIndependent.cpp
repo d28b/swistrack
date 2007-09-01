@@ -1,11 +1,11 @@
-#include "ComponentThresholdColorIndependant.h"
-#define THISCLASS ComponentThresholdColorIndependant
+#include "ComponentThresholdColorIndependent.h"
+#define THISCLASS ComponentThresholdColorIndependent
 
 #include <sstream>
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentThresholdColorIndependant(SwisTrackCore *stc):
-		Component(stc, "ThresholdColorIndependant"),
+THISCLASS::ComponentThresholdColorIndependent(SwisTrackCore *stc):
+		Component(stc, "ThresholdColorIndependent"),
 		mOutputImage(0), mBlueThreshold(128), mGreenThreshold(128), mRedThreshold(128), mOrBool(true),
 		mDisplayOutput("Output", "After thresholding") {
 
@@ -19,7 +19,7 @@ THISCLASS::ComponentThresholdColorIndependant(SwisTrackCore *stc):
 	Initialize();
 }
 
-THISCLASS::~ComponentThresholdColorIndependant() {
+THISCLASS::~ComponentThresholdColorIndependent() {
 }
 
 void THISCLASS::OnStart() 

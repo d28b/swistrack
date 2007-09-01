@@ -10,14 +10,13 @@ mMaxNumber(10), mDistanceGate(0.1), mShareTrajectories(1),
 mDisplayOutput("Output", "Tracking") {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryBlobDetection);
+	mCategory=&(mCore->mCategoryTracking);
 	AddDataStructureRead(&(mCore->mDataStructureParticles));
 	AddDataStructureWrite(&(mCore->mDataStructureTracks));
 	AddDisplay(&mDisplayOutput);
 
 	// Read the XML configuration file
 	Initialize();
-
 }
 
 THISCLASS::~ComponentTracking() {

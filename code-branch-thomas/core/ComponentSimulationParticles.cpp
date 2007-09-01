@@ -13,7 +13,7 @@ THISCLASS::ComponentSimulationParticles(SwisTrackCore *stc):
 		mDisplayOutput("Output", "Particle Simulation: Output") {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryBlobDetection);
+	mCategory=&(mCore->mCategoryParticleDetection);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 	AddDisplay(&mDisplayOutput);

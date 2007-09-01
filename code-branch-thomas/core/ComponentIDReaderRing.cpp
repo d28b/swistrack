@@ -15,7 +15,7 @@ THISCLASS::ComponentIDReaderRing(SwisTrackCore *stc):
 		mDisplayOutput("Output", "Particles") {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryBlobDetection);
+	mCategory=&(mCore->mCategoryParticleDetection);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureRead(&(mCore->mDataStructureParticles));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));

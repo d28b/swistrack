@@ -21,7 +21,7 @@
 #include "ComponentSpecificColorSubtraction.h"
 #include "ComponentThresholdGray.h"
 #include "ComponentThresholdColorCommon.h"
-#include "ComponentThresholdColorIndependant.h"
+#include "ComponentThresholdColorIndependent.h"
 #include "ComponentBinaryDilation.h"
 #include "ComponentBinaryErosion.h"
 #include "ComponentBinaryMask.h"
@@ -39,16 +39,17 @@
 THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 		mAvailableComponents(), mDataStructures(), mSwisTrackCoreInterfaces(), mComponentConfigurationFolder(componentconfigurationfolder),
 		mComponentCategories(), mCommunicationInterface(0), mTrigger(new SwisTrackCoreTrigger(this)), mEventRecorder(new SwisTrackCoreEventRecorder(this)),
-		mCategoryTrigger("Trigger", 0),
-		mCategoryInput("Input", 100, ComponentCategory::sTypeOne),
-		mCategoryInputConversion("Input conversion", 200, ComponentCategory::sTypeAuto),
-		mCategoryPreprocessingColor("Preprocessing (color)", 300),
-		mCategoryPreprocessingGray("Preprocessing (grayscale)", 350),
-		mCategoryThresholding("Thresholding", 400),
-		mCategoryBinaryPreprocessing("BinaryPreprocessing", 500),
-		mCategoryBlobDetection("Blob detection", 600),
-		mCategoryCalibration("Calibration", 700),
-		mCategoryOutput("Output", 10000),
+		mCategoryTrigger("Trigger", "Trigger", 0),
+		mCategoryInput("Input", "Input", 100, ComponentCategory::sTypeOne),
+		mCategoryInputConversion("InputConversion", "Input conversion", 200, ComponentCategory::sTypeAuto),
+		mCategoryPreprocessingColor("PreprocessingColor", "Preprocessing (color)", 300),
+		mCategoryPreprocessingGray("PreprocessingGray", "Preprocessing (grayscale)", 350),
+		mCategoryThresholding("Thresholding", "Thresholding", 400),
+		mCategoryPreprocessingBinary("PreprocessingBinary", "Preprocessing (binary)", 500),
+		mCategoryParticleDetection("ParticleDetection", "Particle detection", 600),
+		mCategoryCalibration("Calibration", "Calibration", 700),
+		mCategoryTracking("Tracking", "Tracking", 800),
+		mCategoryOutput("Output", "Output", 10000),
 		mDataStructureInput(),
 		mDataStructureImageColor("ImageColor", "Color image"),
 		mDataStructureImageGray("ImageGray", "Grayscale image"),
@@ -68,26 +69,26 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentConvertToGray(this));
 	mAvailableComponents.push_back(new ComponentConvertToColor(this));
 	mAvailableComponents.push_back(new ComponentConvertBayerToColor(this));
-	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentHSVBackgroundSubtractionColor(this));
-	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentSpecificColorSubtraction(this));
+	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
+	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentThresholdGray(this));
 	mAvailableComponents.push_back(new ComponentThresholdColorCommon(this));
-	mAvailableComponents.push_back(new ComponentThresholdColorIndependant(this));
+	mAvailableComponents.push_back(new ComponentThresholdColorIndependent(this));
 	mAvailableComponents.push_back(new ComponentBinaryDilation(this));
 	mAvailableComponents.push_back(new ComponentBinaryErosion(this));
 	mAvailableComponents.push_back(new ComponentBinaryMask(this));
 	mAvailableComponents.push_back(new ComponentBlobSelection(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionMinMax(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionCircle(this));
-	mAvailableComponents.push_back(new ComponentTracking(this));
 	mAvailableComponents.push_back(new ComponentIDReaderRing(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
 	mAvailableComponents.push_back(new ComponentCalibrationTSAI(this));
+	mAvailableComponents.push_back(new ComponentTracking(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
 
@@ -104,6 +105,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mDataStructures.push_back(&mDataStructureImageGray);
 	mDataStructures.push_back(&mDataStructureImageBinary);
 	mDataStructures.push_back(&mDataStructureParticles);
+	mDataStructures.push_back(&mDataStructureTracks);
 }
 
 THISCLASS::~SwisTrackCore() {

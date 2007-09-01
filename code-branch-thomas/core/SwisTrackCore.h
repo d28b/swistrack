@@ -48,9 +48,10 @@ public:
 	ComponentCategory mCategoryPreprocessingColor;
 	ComponentCategory mCategoryPreprocessingGray;
 	ComponentCategory mCategoryThresholding;
-	ComponentCategory mCategoryBinaryPreprocessing;
-	ComponentCategory mCategoryBlobDetection;
+	ComponentCategory mCategoryPreprocessingBinary;
+	ComponentCategory mCategoryParticleDetection;
 	ComponentCategory mCategoryCalibration;
+	ComponentCategory mCategoryTracking;
 	ComponentCategory mCategoryOutput;
 
 	// Data structures

@@ -10,6 +10,7 @@
 #include "ConfigurationWriterXML.h"
 
 #include <algorithm>
+#include <fstream>
 #include <cctype>
 #include <cmath>
 #include <highgui.h>
@@ -49,7 +50,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 	EVT_MENU(sID_Help, THISCLASS::OnHelp)
 	EVT_MENU(sID_About, THISCLASS::OnHelpAbout)
 	EVT_MENU(sID_DeveloperUtilityTest, THISCLASS::OnDeveloperUtilityTest)
-	EVT_MENU(sID_DeveloperUtilityExportComponentTable, THISCLASS::OnDeveloperUtilityExportComponentTable)
+	EVT_MENU(sID_DeveloperUtilityExportComponentsTable, THISCLASS::OnDeveloperUtilityExportComponentsTable)
 	
 	EVT_IDLE(THISCLASS::OnIdle)
 END_EVENT_TABLE()
@@ -144,15 +145,15 @@ void THISCLASS::BuildMenuBar() {
 	menuoutput->Append(sID_Tools_TCPServer, _T("TCP Server ..."), _T("TCP server settings"));
 
 	wxMenu *menudeveloperutilities=new wxMenu;
-	menuhelp->Append(sID_DevloperUtilityTest, _T("&Test"), _T("A free menu item for developers to do quick tests while developing"));
-	menuhelp->Append(sID_DevloperUtilityExportComponentsTable, _T("&Export components table"), _T("Exports the components in wiki format"));
+	menudeveloperutilities->Append(sID_DeveloperUtilityTest, _T("&Test"), _T("A free menu item for developers to do quick tests while developing"));
+	menudeveloperutilities->Append(sID_DeveloperUtilityExportComponentsTable, _T("&Export components table"), _T("Exports the components in wiki format"));
 
 	wxMenu *menuhelp=new wxMenu;
 	GetMenuBar()->Append(menuhelp, _T("&Help"));
 	menuhelp->Append(sID_Help, _T("&Manual"), _T("Opens the online manual"));
 	menuhelp->Append(sID_About, _T("&About ...\tF1"), _T("Shows the about dialog"));
-	menufile->AppendSeparator();
-	menuhelp->Append(menudeveloperutilities, _T("&Developer utilities"));
+	menuhelp->AppendSeparator();
+	menuhelp->Append(new wxMenuItem(menuhelp, wxID_ANY, _T("&Developer utilities"), _T("Developer utilities"), wxITEM_NORMAL, menudeveloperutilities));
 }
 
 void THISCLASS::BuildToolBar() {
@@ -536,19 +537,18 @@ void THISCLASS::OnDeveloperUtilityExportComponentsTable(wxCommandEvent& WXUNUSED
 	// Data structures
 	SwisTrackCore::tDataStructureList::iterator itds=mSwisTrackCore->mDataStructures.begin();
 	while (itds!=mSwisTrackCore->mDataStructures.end()) {
-		ofs << "! " << (*it)->mDisplayName << std::endl;
+		ofs << "! " << (*itds)->mDisplayName << std::endl;
 		itds++;
 	}
 
 	// Add each component
 	bool category_shaded=true;
 	SwisTrackCore::tComponentList::iterator it=mSwisTrackCore->mAvailableComponents.begin();
-	wxTreeItemId curcategoryitem;
 	ComponentCategory *curcategory=0;
 	while (it!=mSwisTrackCore->mAvailableComponents.end()) {
 		ComponentCategory *category=(*it)->mCategory;
 		if (category) {
-			if ((! curcategoryitem) || (category!=curcategory)) {
+			if ((! curcategory) || (category!=curcategory)) {
 				category_shaded=!category_shaded;
 				curcategory=category;
 			}
@@ -556,14 +556,12 @@ void THISCLASS::OnDeveloperUtilityExportComponentsTable(wxCommandEvent& WXUNUSED
 			// Name, category and trigger
 			ofs << "|- style=\"background-color:" << (category_shaded ? "#eeeeee" : "#ffffff") << "\" |" << std::endl;
 			ofs << "| [[SwisTrack/Components/" << (*it)->mName << "|" << (*it)->mDisplayName << "]]" << std::endl;
-			ofs << "| [[SwisTrack/ComponentCategories/" << curcategoryitem->mName  << "|" << curcategoryitem->mDisplayName << "]]" << std::endl;
-			ofs << "| align=\"center\" | " << ( ? "T" : "&nbsp;") << std::endl;
+			ofs << "| [[SwisTrack/ComponentCategories/" << curcategory->mName  << "|" << curcategory->mDisplayName << "]]" << std::endl;
+			ofs << "| align=\"center\" | " << ((*it)->mTrigger ? "T" : "&nbsp;") << std::endl;
 			
 			// Data structures
-			SwisTrackCore::tDataStructureList::iterator itds=stc->mDataStructures.begin();
-			while (itds!=stc->mDataStructures.end()) {
-				li.SetColumn(col++);
-				
+			SwisTrackCore::tDataStructureList::iterator itds=mSwisTrackCore->mDataStructures.begin();
+			while (itds!=mSwisTrackCore->mDataStructures.end()) {
 				bool read=(*it)->HasDataStructureRead(*itds);
 				bool write=(*it)->HasDataStructureWrite(*itds);
 				if (read && write) {

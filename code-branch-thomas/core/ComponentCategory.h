@@ -22,7 +22,7 @@ public:
 	eCategoryType mType;		//!< The type.
 
 	//! Constructor.
-	ComponentCategory(const std::string &name, int order, eCategoryType type=sTypeAny): mDisplayName(name), mOrder(order), mType(type) {}
+	ComponentCategory(const std::string &name, const std::string &displayname, int order, eCategoryType type=sTypeAny): mName(name), mDisplayName(displayname), mOrder(order), mType(type) {}
 	//! Destructor.
 	~ComponentCategory() {}
 };
