@@ -2,7 +2,7 @@
 <swistrackcomponent>
 	<friendlyname>Output to AVI File</friendlyname>
 	<description>Write an AVI file.</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/OutputFileAvi</url>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputFileAvi</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>

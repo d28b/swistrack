@@ -2,7 +2,7 @@
 <swistrackcomponent>
 	<friendlyname>Input from a file</friendlyname>
 	<description>Reads an image from a file.</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/InputFileImage</url>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/InputFileImage</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>

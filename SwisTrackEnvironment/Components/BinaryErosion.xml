@@ -2,7 +2,7 @@
 <swistrackcomponent>
 	<friendlyname>Binary image erosion</friendlyname>
 	<description>Applies a morphological erosion (3x3 kernel) on the image.</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/BinaryErosion</url>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BinaryErosion</url>
 	<displayimage>Output</displayimage>
 	<category>BinaryProcessing</category>
 	<configuration>

@@ -2,7 +2,7 @@
 <swistrackcomponent>
 	<friendlyname>Dilate a binary image</friendlyname>
 	<description>Applies a morphological dilation (3x3 kernel) on the image.</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/BinaryDilation</url>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BinaryDilation</url>
 	<displayimage>Output</displayimage>
 	<configuration>
 		<parameter type="integer">

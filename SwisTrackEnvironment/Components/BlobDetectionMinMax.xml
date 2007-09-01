@@ -2,7 +2,7 @@
 <swistrackcomponent>
 	<friendlyname>Blob detection</friendlyname>
 	<description>Applies blob detection on a binary image. Only blobs of a certain size are considered.</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/BlobDetectionMinMax</url>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BlobDetectionMinMax</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>

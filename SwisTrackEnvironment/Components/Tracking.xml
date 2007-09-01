@@ -2,7 +2,7 @@
 <swistrackcomponent>
 	<friendlyname>Nearest neighbor tracking</friendlyname>
 	<description>To be implemented</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/Tracking</url>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/Tracking</url>
 	<displayimage>Output</displayimage>
 	<configuration>
 	    <parameter type="integer">

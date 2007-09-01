@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Threshold a color image (independant)</friendlyname>
-	<description>Thresholds a color image, using a independant threshold value for each channel, and stores the result in a binary image.</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/ThresholdColorIndependant</url>
+	<friendlyname>Threshold a color image (independent)</friendlyname>
+	<description>Thresholds a color image, using a independent threshold value for each channel, and stores the result in a binary image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ThresholdColorIndependent</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>

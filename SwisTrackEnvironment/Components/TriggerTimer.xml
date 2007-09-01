@@ -2,7 +2,7 @@
 <swistrackcomponent>
 	<friendlyname>Timer Trigger</friendlyname>
 	<description>Invokes steps in regular intervals.</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/TriggerTimer</url>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/TriggerTimer</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>

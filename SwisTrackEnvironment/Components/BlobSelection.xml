@@ -2,7 +2,7 @@
 <swistrackcomponent>
 	<friendlyname>Blob Selection</friendlyname>
 	<description>Select the blobs on the binary image based on given criteria</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/BlobSelection</url>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BlobSelection</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>

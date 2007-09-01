@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<name>Calibration with a linear model</name>
+	<friendlyname>Calibration with a linear model</friendlyname>
 	<description>This component applies a linear transformation to the particles to transform their pixel coordinates to a world coordinates. Basically, a camera rectangle is mapped onto a tetragon.</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/CalibrationLinear</url>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/CalibrationLinear</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>
