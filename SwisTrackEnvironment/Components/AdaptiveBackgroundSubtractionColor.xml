@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Adaptive Background subtraction (Color)</friendlyname>
+	<friendlyname>Adaptive Background Subtraction (Color)</friendlyname>
 	<description>Substract a background based on the prior images</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/AdaptiveBackgroundSubtractionColor</url>
 	<displayimage>Output</displayimage>
 	<configuration>
 		<parameter type="checkbox">
 			<name>CorrectMean</name>
-			<label>Correct Mean</label>
+			<label>Correct mean</label>
 			<default>1</default>
 		</parameter>
 		<parameter type="double">
 			<name>UpdateProportion</name>
-			<label>Update Proportion</label>
+			<label>Update rate</label>
 			<min>0</min>
 			<max>1</max>
 			<slider>true</slider>
