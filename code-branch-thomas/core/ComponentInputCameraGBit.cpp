@@ -156,8 +156,12 @@ void THISCLASS::OnStart() {
 	// Start image acquisition
 	mCamera->AcquisitionStart.Execute();
 
-	// In case of an external trigger, start a thread waiting for the images
-	if (mTriggerMode!=sTrigger_Software) {
+	// Prepare the trigger for the next frame
+	if (mTriggerMode==sTrigger_Software) {
+		// When using the software trigger, we are immediately ready to read the next image
+		mTrigger->SetReady();
+	} else {
+		// Otherwise, restart a thread waiting for the next image
 		ComponentInputCameraGBit::Thread *ct=new ComponentInputCameraGBit::Thread(this);
 		ct->Create();
 		ct->Run();
@@ -191,18 +195,18 @@ void THISCLASS::OnStep() {
 			AddError("Failed to retrieve an image: the camera did not send any image.");
 			return;
 		}
-
-		// Get an item from the grabber's output queue
-		mStreamGrabber->RetrieveResult(mCurrentResult);
-		if (! mCurrentResult.Succeeded()) {
-			std::ostringstream oss;
-			oss << "Failed to retrieve an item from the output queue: " << mCurrentResult.GetErrorDescription();
-			AddError(oss.str());
-			return;
-		}
 	} else {
-		wxCriticalSectionLocker csl(mThread->mCriticalSection);
-		// TODO
+		// Wait for the thread to terminate (this should return immediately, as the thread should have terminated already)
+		wxCriticalSectionLocker csl(mThreadCriticalSection);
+	}
+
+	// Get an item from the grabber's output queue
+	mStreamGrabber->RetrieveResult(mCurrentResult);
+	if (! mCurrentResult.Succeeded()) {
+		std::ostringstream oss;
+		oss << "Failed to retrieve an item from the output queue: " << mCurrentResult.GetErrorDescription();
+		AddError(oss.str());
+		return;
 	}
 
 	// Set the current image
@@ -226,9 +230,15 @@ void THISCLASS::OnStepCleanup() {
 		AddError(oss.str());
 	}
 
-	// When using the software trigger, we are immediately ready to read the next image
+	// Prepare the trigger for the next frame
 	if (mTriggerMode==sTrigger_Software) {
+		// When using the software trigger, we are immediately ready to read the next image
 		mTrigger->SetReady();
+	} else {
+		// Otherwise, restart a thread waiting for the next image
+		ComponentInputCameraGBit::Thread *ct=new ComponentInputCameraGBit::Thread(this);
+		ct->Create();
+		ct->Run();
 	}
 }
 
@@ -263,6 +273,12 @@ void THISCLASS::OnStop() {
 }
 
 wxThread::ExitCode THISCLASS::Thread::Entry() {
+	wxCriticalSectionLocker csl(mComponent->mThreadCriticalSection);
+	
+	// Wait for the grabbed image
+	mStreamGrabber->GetWaitObject().Wait();
+
+	mTrigger->SetReady();
 	return 0;
 }
 

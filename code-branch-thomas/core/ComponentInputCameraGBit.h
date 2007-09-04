@@ -60,8 +60,6 @@ private:
 	class Thread: public wxThread {
 	public:
 		ComponentInputCameraGBit *mComponent;		//!< The associated component.
-		wxCriticalSection mCriticalSection; 		//!< The critical section object (for synchronization).
-		IplImage *mImage;							//!< (synchronized) The last image that the thread acquired.
 
 		//! Constructor.
 		Thread(ComponentInputCameraGBit *c): wxThread(), mComponent(c) {}
@@ -72,19 +70,8 @@ private:
 		ExitCode Entry();
 	};
 
-	//! The event listener that is waiting for events from the TriggerThread.
-	class EventHandler: public wxEvtHandler {
-	public:
-		ComponentInputCameraGBit *mComponent;			//!< The associated component.
-
-		//! Constructor.
-		EventHandler(ComponentInputCameraGBit *c): wxEvtHandler(), mComponent(c) {}
-		//! Destructor.
-		~EventHandler() {}
-	};
-
-	Thread *mThread;				//!< The thread waiting for new images (in case of external trigger).
-	EventHandler *mEventHandler;	//!< The event listener that is waiting for events from the TriggerThread.
+	//Thread *mThread;							//!< The thread waiting for new images (in case of external trigger).
+	wxCriticalSection mThreadCriticalSection; 	//!< The critical section object to synchronize with the thread.
 
 };
 
