@@ -34,11 +34,12 @@
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="integer">
-			<name>TriggerTimer</name>
+			<name>TriggerTimerFPS</name>
 			<label>Timer</label>
 			<unit>FPS</unit>
 			<min>1</min>
 			<max>50</max>
+			<default>10</default>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="integer">
@@ -46,6 +47,7 @@
 			<label>Exposure time</label>
 			<min>1</min>
 			<max>1000</max>
+			<default>400</default>
 			<slider>true</slider>
 		</parameter>
 		<parameter type="integer">
