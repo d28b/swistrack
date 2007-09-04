@@ -76,8 +76,7 @@ void THISCLASS::OnStart() {
 		mCamera->PixelFormat.SetValue(Basler_GigECameraParams::PixelFormat_Mono8);
 	}
 
-	// Maximized AOI
-	// TODO: check size, because this probably needs to be a multiple of 2 or 4 for Pylon
+	// Area of interest
 	int cameraw=mCamera->Width.GetMax();
 	int camerah=mCamera->Height.GetMax();
 	int aoix=GetConfigurationInt("AOIOffset.x", 0);
@@ -88,7 +87,8 @@ void THISCLASS::OnStart() {
 	if (aoiy>camerah-1) {aoiy=camerah-1;}
 	if (aoiw>cameraw-aoix) {aoiw=cameraw-aoix;}
 	if (aoih>camerah-aoiy) {aoih=camerah-aoiy;}
-	if (aoiw<1) {aoiw=1;}
+	aoiw=(aoiw>>2)<<2;	// The image width must currently be a multiple of 4, for alignment reasons.
+	if (aoiw<4) {aoiw=4;}
 	if (aoih<1) {aoih=1;}
 	mCamera->OffsetX.SetValue(aoix);
 	mCamera->OffsetY.SetValue(aoiy);
@@ -249,6 +249,9 @@ void THISCLASS::OnStop() {
 	// Flush the input queue, grabbing may have failed
 	mStreamGrabber->CancelGrab();
 
+	// Wait for the thread to quit
+	wxCriticalSectionLocker csl(mThreadCriticalSection);
+
 	// Consume all items from the output queue
 	Pylon::GrabResult result;
 	while (mStreamGrabber->GetWaitObject().Wait(0)) {
@@ -276,9 +279,10 @@ wxThread::ExitCode THISCLASS::Thread::Entry() {
 	wxCriticalSectionLocker csl(mComponent->mThreadCriticalSection);
 	
 	// Wait for the grabbed image
-	mStreamGrabber->GetWaitObject().Wait();
+	while (! mComponent->mStreamGrabber->GetWaitObject().Wait(3000)) {
+	}
 
-	mTrigger->SetReady();
+	mComponent->mTrigger->SetReady();
 	return 0;
 }
 
