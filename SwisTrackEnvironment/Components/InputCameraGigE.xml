@@ -6,7 +6,7 @@
 	<displayimage>Output</displayimage>
 
 	<configuration>
-		<parameter type="gbitcameralist">
+		<parameter type="gigecameralist">
 			<name>CameraFullName</name>
 			<label>Camera</label>
 			<reloadable>false</reloadable>

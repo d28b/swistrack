@@ -7,6 +7,6 @@
 
 	<configuration>
 		<label>This component does not require any configuration.</label>
-		<label>The listening port can be configured in the "Server" -> "Port" menu (NOT YET IMPLEMENTED).</label>
+		<label>The listening port can be configured in the "Output" -> "TCP Server ..." menu.</label>
 	</configuration>
 </swistrackcomponent>
