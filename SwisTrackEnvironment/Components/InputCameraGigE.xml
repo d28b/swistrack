@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>GBit Camera</friendlyname>
-	<description>Grabs an image from a GBit camera (Basler Pylon driver).</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/InputCameraGBit</url>
+	<friendlyname>GigE Camera</friendlyname>
+	<description>Grabs an image from a gigabit ethernet (GigE) camera using the Basler Pylon driver.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/InputCameraGigE</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>

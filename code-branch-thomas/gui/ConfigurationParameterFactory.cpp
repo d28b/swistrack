@@ -12,7 +12,7 @@
 #include "ConfigurationParameterPointInteger.h"
 #include "ConfigurationParameterPointDouble.h"
 #include "ConfigurationParameterAngle.h"
-#include "ConfigurationParameterGBitCameraList.h"
+#include "ConfigurationParameterGigECameraList.h"
 
 ConfigurationParameter *THISCLASS::Create(const wxString &type, wxWindow* parent) {
 	wxString typelc=type.Lower();
@@ -35,7 +35,7 @@ ConfigurationParameter *THISCLASS::Create(const wxString &type, wxWindow* parent
 
 	// Special types
 	if (typelc=="angle") {return new ConfigurationParameterAngle(parent);}
-	if (typelc=="gbitcameralist") {return new ConfigurationParameterGBitCameraList(parent);}
+	if (typelc=="gigecameralist") {return new ConfigurationParameterGigECameraList(parent);}
 
 	return 0;
 }

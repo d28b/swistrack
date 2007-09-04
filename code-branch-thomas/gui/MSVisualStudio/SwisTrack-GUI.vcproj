@@ -274,7 +274,7 @@
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../core;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;"
-				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1;USE_CAMERA_PYLON_GBIT"
+				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1;USE_CAMERA_PYLON_GIGE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="2"
@@ -486,7 +486,7 @@
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="../../core;../../calibration/include;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WINDOWS__;__WXMSW__;__WIN95__;__WIN32__;USE_CAMERA_PYLON_GBIT"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WINDOWS__;__WXMSW__;__WIN95__;__WIN32__;USE_CAMERA_PYLON_GIGE"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -1079,11 +1079,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\ConfigurationParameterGBitCameraList.cpp"
+				RelativePath="..\ConfigurationParameterGigECameraList.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\ConfigurationParameterGBitCameraList.h"
+				RelativePath="..\ConfigurationParameterGigECameraList.h"
 				>
 			</File>
 			<File

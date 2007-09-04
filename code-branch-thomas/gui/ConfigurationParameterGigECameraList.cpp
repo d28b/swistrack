@@ -1,7 +1,7 @@
-#include "ConfigurationParameterGBitCameraList.h"
-#define THISCLASS ConfigurationParameterGBitCameraList
+#include "ConfigurationParameterGigECameraList.h"
+#define THISCLASS ConfigurationParameterGigECameraList
 
-#ifdef USE_CAMERA_PYLON_GBIT
+#ifdef USE_CAMERA_PYLON_GIGE
 #include <pylon/TlFactory.h>
 #include <pylon/gige/BaslerGigECamera.h>
 
@@ -11,7 +11,7 @@ void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
 		Pylon::CTlFactory& tlfactory=Pylon::CTlFactory::GetInstance();
 		Pylon::DeviceInfoList_t devices;
 		if (tlfactory.EnumerateDevices(devices)==0) {
-			AddItem("error", "No GBit cameras found!");
+			AddItem("error", "No GigE cameras found!");
 			return;
 		}
 
@@ -33,7 +33,7 @@ void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
 #else
 
 void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
-	AddItem("error", "No GBit support.");
+	AddItem("error", "No GigE support.");
 }
 
-#endif // USE_CAMERA_PYLON_GBIT
+#endif // USE_CAMERA_PYLON_GIGE

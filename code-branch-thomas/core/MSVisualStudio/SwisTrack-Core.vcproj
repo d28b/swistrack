@@ -198,7 +198,7 @@
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
 				AdditionalIncludeDirectories="../include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;USE_CAMERA_PYLON_GBIT"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;USE_CAMERA_PYLON_GIGE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -353,7 +353,7 @@
 				InlineFunctionExpansion="0"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="../include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;USE_CAMERA_PYLON_GBIT"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;USE_CAMERA_PYLON_GIGE"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -572,11 +572,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\ComponentInputCameraGBit.cpp"
+					RelativePath="..\ComponentInputCameraGigE.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\ComponentInputCameraGBit.h"
+					RelativePath="..\ComponentInputCameraGigE.h"
 					>
 				</File>
 				<File

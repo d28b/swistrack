@@ -3,7 +3,7 @@
 
 #include "Component.h"
 
-//! An input component for GBit cameras.
+//! A trigger component which generates only a certain amount of triggers.
 class ComponentTriggerCounter: public Component {
 
 public:

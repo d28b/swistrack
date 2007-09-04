@@ -1,12 +1,12 @@
-#include "ComponentInputCameraGBit.h"
-#define THISCLASS ComponentInputCameraGBit
+#include "ComponentInputCameraGigE.h"
+#define THISCLASS ComponentInputCameraGigE
 
-#ifdef USE_CAMERA_PYLON_GBIT
+#ifdef USE_CAMERA_PYLON_GIGE
 #include <sstream>
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
-		Component(stc, "InputCameraGBit"),
+THISCLASS::ComponentInputCameraGigE(SwisTrackCore *stc):
+		Component(stc, "InputCameraGigE"),
 		mCamera(0), mStreamGrabber(0),
 		mCurrentResult(), mFrameNumber(0) {
 
@@ -21,7 +21,7 @@ THISCLASS::ComponentInputCameraGBit(SwisTrackCore *stc):
 	Initialize();
 }
 
-THISCLASS::~ComponentInputCameraGBit() {
+THISCLASS::~ComponentInputCameraGigE() {
 	delete mTrigger;
 }
 
@@ -46,7 +46,7 @@ void THISCLASS::OnStart() {
 		if (mCameraFullName=="") {
 			Pylon::DeviceInfoList_t devices;
 			if (tlfactory.EnumerateDevices(devices)==0) {
-				AddError("No GBit cameras found!");
+				AddError("No GigE cameras found!");
 				return;
 			}
 			mCore->mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepLapTime, this);
@@ -162,7 +162,7 @@ void THISCLASS::OnStart() {
 		mTrigger->SetReady();
 	} else {
 		// Otherwise, restart a thread waiting for the next image
-		ComponentInputCameraGBit::Thread *ct=new ComponentInputCameraGBit::Thread(this);
+		ComponentInputCameraGigE::Thread *ct=new ComponentInputCameraGigE::Thread(this);
 		ct->Create();
 		ct->Run();
 	}
@@ -236,7 +236,7 @@ void THISCLASS::OnStepCleanup() {
 		mTrigger->SetReady();
 	} else {
 		// Otherwise, restart a thread waiting for the next image
-		ComponentInputCameraGBit::Thread *ct=new ComponentInputCameraGBit::Thread(this);
+		ComponentInputCameraGigE::Thread *ct=new ComponentInputCameraGigE::Thread(this);
 		ct->Create();
 		ct->Run();
 	}
@@ -286,4 +286,4 @@ wxThread::ExitCode THISCLASS::Thread::Entry() {
 	return 0;
 }
 
-#endif // USE_CAMERA_PYLON_GBIT
+#endif // USE_CAMERA_PYLON_GIGE

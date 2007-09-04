@@ -7,7 +7,7 @@
 #include "ComponentTriggerCounter.h"
 #include "ComponentInputCamera1394.h"
 #include "ComponentInputCameraUSB.h"
-#include "ComponentInputCameraGBit.h"
+#include "ComponentInputCameraGigE.h"
 #include "ComponentInputFileAVI.h"
 #include "ComponentInputFileImage.h"
 #include "ComponentConvertToGray.h"
@@ -63,7 +63,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentTriggerCounter(this));
 	mAvailableComponents.push_back(new ComponentInputCamera1394(this));
 	mAvailableComponents.push_back(new ComponentInputCameraUSB(this));
-	mAvailableComponents.push_back(new ComponentInputCameraGBit(this));
+	mAvailableComponents.push_back(new ComponentInputCameraGigE(this));
 	mAvailableComponents.push_back(new ComponentInputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentInputFileImage(this));
 	mAvailableComponents.push_back(new ComponentConvertToGray(this));

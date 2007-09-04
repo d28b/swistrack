@@ -1,9 +1,9 @@
-#ifndef HEADER_ComponentInputCameraGBit
-#define HEADER_ComponentInputCameraGBit
+#ifndef HEADER_ComponentInputCameraGigE
+#define HEADER_ComponentInputCameraGigE
 
 #include "Component.h"
 
-#ifdef USE_CAMERA_PYLON_GBIT
+#ifdef USE_CAMERA_PYLON_GIGE
 #include <pylon/TlFactory.h>
 #include <pylon/Result.h>
 #include <pylon/gige/BaslerGigECamera.h>
@@ -11,8 +11,8 @@
 #include <wx/event.h>
 #include "Display.h"
 
-//! An input component for GBit cameras.
-class ComponentInputCameraGBit: public Component {
+//! An input component for GigE cameras.
+class ComponentInputCameraGigE: public Component {
 
 public:
 	enum eTriggerMode {
@@ -25,9 +25,9 @@ public:
 	};
 
 	//! Constructor.
-	ComponentInputCameraGBit(SwisTrackCore *stc);
+	ComponentInputCameraGigE(SwisTrackCore *stc);
 	//! Destructor.
-	~ComponentInputCameraGBit();
+	~ComponentInputCameraGigE();
 
 	// Overwritten Component methods
 	void OnInitializeStatic();
@@ -37,7 +37,7 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentInputCameraGBit(mCore);}
+	Component *Create() {return new ComponentInputCameraGigE(mCore);}
 
 private:
 	std::string mCameraFullName;						//!< (configuration) Full name of the camera (as returned by Pylon::DeviceInfo::GetFullName()).
@@ -59,10 +59,10 @@ private:
 	//! The thread waiting for new images (in case of external trigger).
 	class Thread: public wxThread {
 	public:
-		ComponentInputCameraGBit *mComponent;		//!< The associated component.
+		ComponentInputCameraGigE *mComponent;		//!< The associated component.
 
 		//! Constructor.
-		Thread(ComponentInputCameraGBit *c): wxThread(), mComponent(c) {}
+		Thread(ComponentInputCameraGigE *c): wxThread(), mComponent(c) {}
 		//! Destructor.
 		~Thread() {}
 
@@ -75,24 +75,24 @@ private:
 
 };
 
-#else
+#else // USE_CAMERA_PYLON_GIGE
 
-class ComponentInputCameraGBit: public Component {
+class ComponentInputCameraGigE: public Component {
 
 public:
-	ComponentInputCameraGBit(SwisTrackCore *stc): Component(stc, "InputCameraGBit") {Initialize();}
-	~ComponentInputCameraGBit() {}
+	ComponentInputCameraGigE(SwisTrackCore *stc): Component(stc, "InputCameraGigE") {Initialize();}
+	~ComponentInputCameraGigE() {}
 
 	// Overwritten Component methods
-	void OnStart() {AddError("GBit support was not compiled into this executable.");}
-	void OnReloadConfiguration() {AddError("GBit support was not compiled into this executable.");}
-	void OnStep() {AddError("GBit support was not compiled into this executable.");}
+	void OnStart() {AddError("GigE support was not compiled into this executable.");}
+	void OnReloadConfiguration() {AddError("GigE support was not compiled into this executable.");}
+	void OnStep() {AddError("GigE support was not compiled into this executable.");}
 	void OnStepCleanup() {}
-	void OnStop() {AddError("GBit support was not compiled into this executable.");}
-	Component *Create() {return new ComponentInputCameraGBit(mCore);}
+	void OnStop() {AddError("GigE support was not compiled into this executable.");}
+	Component *Create() {return new ComponentInputCameraGigE(mCore);}
 };
 
-#endif
+#endif // USE_CAMERA_PYLON_GIGE
 
 #endif
 
