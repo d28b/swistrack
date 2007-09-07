@@ -2,12 +2,10 @@
 #define THISCLASS ComponentOutputMarkFrameManual
 
 THISCLASS::ComponentOutputMarkFrameManual(SwisTrackCore *stc):
-		Component(stc, "OutputMarkFrameManual"), mMarkerName(""), mMark("") {
+		Component(stc, "OutputMarkFrameManual"), mMarkerName("") {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryOutput);
-	AddDataStructureRead(&(mCore->mDataStructureInput));
-	AddDataStructureRead(&(mCore->mDataStructureMarkFrameManual));
 
 	// Read the XML configuration file
 	Initialize();
@@ -26,7 +24,7 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mMarkerName=GetConfigurationBool("MarkerName", false);
+	mMarkerName=GetConfigurationString("MarkerName", "");
 }
 
 void THISCLASS::OnStep() {
@@ -40,7 +38,7 @@ void THISCLASS::OnStep() {
 	// Write a marker
 	CommunicationMessage m("MARK");
 	m.AddString(mMarkerName);
-	m.AddString(mMark);
+	m.AddString(mark);
 	mCore->mCommunicationInterface->Send(&m);
 }
 

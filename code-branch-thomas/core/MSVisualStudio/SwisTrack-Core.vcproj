@@ -780,6 +780,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentOutputMarkFrameManual.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOutputMarkFrameManual.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentOutputParticles.cpp"
 					>
 					<FileConfiguration

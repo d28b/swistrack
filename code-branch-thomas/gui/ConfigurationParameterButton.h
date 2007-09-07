@@ -25,7 +25,7 @@ public:
 
 private:
 	wxButton *mButton;			//!< The corresponding GUI widget.
-	wxString *mValue;			//!< The value to set when the user clicks the button.
+	wxString mValue;			//!< The value to set when the user clicks the button.
 
 	// ConfigurationParameter methods
 	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);

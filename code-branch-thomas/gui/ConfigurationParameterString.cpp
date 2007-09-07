@@ -28,7 +28,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 
 	// Create the controls
 	wxStaticText *label=new wxStaticText(this, wxID_ANY, config->ReadString("label", ""), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
-	mTextCtrl=new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxSize(scTextBoxWidth+scUnitWidth, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
+	mTextCtrl=new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxSize(scTextBoxWidth+scUnitWidth, -1), wxTE_PROCESS_ENTER);
 	mTextCtrl->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
 
 	// Layout the controls
