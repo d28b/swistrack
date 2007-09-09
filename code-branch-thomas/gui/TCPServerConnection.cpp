@@ -49,10 +49,11 @@ void THISCLASS::OnSocketEvent(wxSocketEvent& event) {
 void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum) {
 	if (! mSocket) {return;}
 
-	// If the user wants to subscribe, we process the message by ourselves.
+	// Treat special messages
 	if (m->mCommand=="SUBSCRIBE") {
+		// The user wants to subscribe to a subset of the messages
 		mSubscriptions.clear();
-		
+
 		int cc=0;
 		CommunicationMessage::tParameters::iterator it=m->mParameters.begin();
 		while (it!=m->mParameters.end()) {
@@ -62,6 +63,11 @@ void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum)
 			it++;
 		}
 
+		return;
+	} else if (m->mCommand=="BROADCAST") {
+		// Broadcast the content of this message to all clients
+		m->mCommand=m->GetString();
+		mTCPServer->Send(m);
 		return;
 	}
 	
