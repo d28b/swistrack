@@ -54,6 +54,7 @@ void THISCLASS::OnReloadConfiguration()
 	mTrackedColor.val[0]=GetConfigurationInt("BlueChannel",true);
 	mTrackedColor.val[1]=GetConfigurationInt("GreenChannel",true);
 	mTrackedColor.val[2]=GetConfigurationInt("RedChannel",true);
+	strcpy(trackedColorSeq,"BGR");
 
 	if (mCorrectMean)
 		mSpecifiedImageAverage=cvScalarAll(-1);
@@ -78,7 +79,6 @@ void THISCLASS::OnStep() {
 	}
 	if ((mCorrectMean)&&(mSpecifiedImageAverage.val[0]==-1))
 		mSpecifiedImageAverage=cvAvg(inputimage);
-	
 	/*
 	//If we want to specify the color on the input image and it has not been done at this time
 	if ((mSpecifyColorBool)&&(mTrackedColor.val[0]==-1))
@@ -101,19 +101,32 @@ void THISCLASS::OnStep() {
 	}
 	*/
 	try {
-		// Correct the tmpImage with the difference in image mean
-		if (!strncmp(mCore->mDataStructureImageColor.mImage->channelSeq,"BGR",3))
+		// Correct the channel sequence
+		if (strncmp(mCore->mDataStructureImageColor.mImage->channelSeq,trackedColorSeq,3))		
 		{
-			if (mCorrectMean)
-			{			
-				CvScalar tmpScalar=cvAvg(inputimage);
-				cvAbsDiffS(inputimage,inputimage,cvScalar(mTrackedColor.val[0]+mSpecifiedImageAverage.val[0]-tmpScalar.val[0],mTrackedColor.val[1]+mSpecifiedImageAverage.val[1]-tmpScalar.val[1],mTrackedColor.val[2]+mSpecifiedImageAverage.val[2]-tmpScalar.val[2]));
-			}
-			else
-			{
-				cvAbsDiffS(inputimage,inputimage,mTrackedColor);
-			}
+			CvScalar tmpColor;
+			for (int i=0;i<3;i++)				
+					for (int j=0;j<3;j++)
+						if (inputimage->channelSeq[i]==trackedColorSeq[j])
+						{	
+							tmpColor.val[i]=mTrackedColor.val[j];							
+						}
+			strcpy(trackedColorSeq,inputimage->channelSeq);
+			for (int i=0;i<3;i++)
+				mTrackedColor.val[i]=tmpColor.val[i];
 		}
+
+		// Correct the tmpImage with the difference in image mean
+		if (mCorrectMean)
+		{			
+			CvScalar tmpScalar=cvAvg(inputimage);
+			cvAbsDiffS(inputimage,inputimage,cvScalar(mTrackedColor.val[0]+mSpecifiedImageAverage.val[0]-tmpScalar.val[0],mTrackedColor.val[1]+mSpecifiedImageAverage.val[1]-tmpScalar.val[1],mTrackedColor.val[2]+mSpecifiedImageAverage.val[2]-tmpScalar.val[2]));
+		}
+		else
+		{
+			cvAbsDiffS(inputimage,inputimage,mTrackedColor);
+		}
+
 	} catch(...) {
 		AddError("Substracting specifique color failed");
 	}
