@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Threshold a color image (independant)</friendlyname>
+	<description>Thresholds a color image, using a independant threshold value for each channel, and stores the result in a binary image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/ComponentList/ThresholdColorIndependant</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="integer">
+			<name>BlueThreshold</name>
+			<label>Blue Threshold</label>
+			<min>0</min>
+			<max>255</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>GreenThreshold</name>
+			<label>Green Threshold</label>
+			<min>0</min>
+			<max>255</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>RedThreshold</name>
+			<label>Red Threshold</label>
+			<min>0</min>
+			<max>255</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>OrBool</name>
+			<label>Using "OR" instead of "AND"</label>
+			<default>1</default>
+		</parameter>
+		<parameter type="checkbox">
+			<name>InvertThreshold</name>
+			<label>Invert Threshold</label>
+			<default>0</default>
+		</parameter>
+	</configuration>
+</swistrackcomponent>
