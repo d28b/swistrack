@@ -52,6 +52,7 @@ void THISCLASS::SetMainImage(IplImage *img) {
 	// Take a copy the image
 	mDisplay->mMainImage=cvCreateImage(cvSize(img->width, img->height), img->depth, img->nChannels);
 	cvCopy(img, mDisplay->mMainImage);
+	strcpy((mDisplay->mMainImage)->channelSeq,img->channelSeq);
 }
 
 void THISCLASS::SetMaskImage(IplImage *img) {
