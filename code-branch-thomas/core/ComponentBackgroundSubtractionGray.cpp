@@ -7,8 +7,8 @@
 
 THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore *stc):
 		Component(stc, "BackgroundSubtractionGray"),
-		mBackgroundImage(0), mBackgroundImageMean(cvScalarAll(0)), 
-        mCorrectMean(true), mMode(sMode_AbsDiff),
+		mBackgroundImage(0), mBackgroundImageMean(cvScalarAll(0)),
+		mCorrectMean(true), mMode(sMode_AbsDiff),
 		mDisplayOutput("Output", "After background subtraction") {
 
 	// Data structure relations

@@ -77,8 +77,7 @@ void THISCLASS::OnReloadConfiguration() {
 	}
 
 	// Allocate enough space
-	mRingValuesMax = (int)( (2*mRingRadiusOuter+1)*(2*mRingRadiusOuter+1)
-                    -(2*mRingRadiusInner-1)*(2*mRingRadiusInner-1) );
+	mRingValuesMax=(int)((2*mRingRadiusOuter+1)*(2*mRingRadiusOuter+1)-(2*mRingRadiusInner-1)*(2*mRingRadiusInner-1));
 	delete mRingAngles; mRingAngles=new float[mRingValuesMax];
 	delete mRingValues; mRingValues=new int[mRingValuesMax];
 }

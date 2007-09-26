@@ -185,7 +185,7 @@ void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
-    // Get the image
+	// Get the image
 	if (mTriggerMode==sTrigger_Software) {
 		// Send the software trigger
 		mCamera->TriggerSoftware.Execute();

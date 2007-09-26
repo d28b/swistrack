@@ -30,8 +30,8 @@ void THISCLASS::OnStart() {
 	
 	// Error? Check whether the file exists or not, to give an appropriate error message to the user
 	if (mCapture == NULL) {
-        std::fstream f;
-        f.open(filename.c_str());
+		std::fstream f;
+		f.open(filename.c_str());
 		if (f.is_open()) {
 			f.close();
 			AddError("Cannot open AVI file: codec problem, VFW codec required, not DirectShow.");

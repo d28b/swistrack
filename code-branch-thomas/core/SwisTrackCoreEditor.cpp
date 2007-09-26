@@ -40,7 +40,7 @@ void THISCLASS::ConfigurationReadXML(wxXmlNode* configuration, ErrorList *xmlerr
 
 	// Clear the current list of components
 	Clear();
- 
+
 	// Traverse the list and create a Component object for each "component" tag
 	if (! configuration) {return;}
 	wxXmlNode *node=configuration->GetChildren();

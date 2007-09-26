@@ -21,7 +21,7 @@ void UpdateMouse(int event, int x, int y, int flags,void* param)
 THISCLASS::ComponentSpecificColorSubtraction(SwisTrackCore *stc):
 		Component(stc, "SpecificColorSubtraction"),
 		mCorrectMean(true), mSpecifyColorBool(true), 
-        mTrackedColor(cvScalar(0)), mSpecifiedImageAverage(cvScalarAll(0)),
+		mTrackedColor(cvScalar(0)), mSpecifiedImageAverage(cvScalarAll(0)),
 		mDisplayOutput("Output", "After background subtraction") {
 
 	// Data structure relations
