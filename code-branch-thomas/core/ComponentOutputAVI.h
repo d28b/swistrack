@@ -1,9 +1,9 @@
 #ifndef HEADER_ComponentOutputAVI
 #define HEADER_ComponentOutputAVI
 
-#ifdef WIN32 // mask as quick&dirty hack!!!
-
 #include "Component.h"
+
+#ifdef __WXMSW__
 
 //! A component that generates an AVI movie.
 /*!
@@ -39,7 +39,23 @@ private:
 	DisplayImage *mCurrentDisplayImage;
 };
 
-#endif
+#else // __WXMSW__
+
+class ComponentOutputAVI: public Component {
+
+public:
+	ComponentOutputAVI(SwisTrackCore *stc): Component(stc, "OutputAVI") {Initialize();}
+	~ComponentOutputAVI() {}
+
+	// Overwritten Component methods
+	void OnStart() {AddError("Output to AVI is only supported on Microsoft Windows.");}
+	void OnReloadConfiguration() {AddError("Output to AVI is only supported on Microsoft Windows.");}
+	void OnStep() {AddError("Output to AVI is only supported on Microsoft Windows.");}
+	void OnStepCleanup() {}
+	void OnStop() {AddError("Output to AVI is only supported on Microsoft Windows.");}
+	Component *Create() {return new ComponentOutputAVI(mCore);}
+};
+
+#endif // __WXMSW__
 
 #endif
-

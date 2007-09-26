@@ -1,7 +1,7 @@
-#ifdef WIN32
-
 #include "ComponentOutputAVI.h"
 #define THISCLASS ComponentOutputAVI
+
+#ifdef __WXMSW__
 
 THISCLASS::ComponentOutputAVI(SwisTrackCore *stc):
 		Component(stc, "OutputAVI"),
@@ -114,4 +114,4 @@ void THISCLASS::OnDisplayImageUnsubscribe(DisplayImage *di) {
 	mCurrentDisplayImage=0;
 }
 
-#endif
+#endif // __WXMSW__
