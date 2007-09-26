@@ -1,5 +1,5 @@
 /* XPM */
-static char *bitmap_plus[] = {
+static char *bitmap_plus_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "8 8 16 1",
 "  c black",
