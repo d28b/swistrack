@@ -124,7 +124,7 @@ void THISCLASS::OnStep()
 		//If we need to remove the blob, we paint it in black
 		if (removeBlobBool) {
 			//Paint the bad contour in black
-			cvDrawContours(outputImage,contour,cvScalarAll(0),cvScalarAll(0),0,CV_FILLED);
+			cvDrawContours(mOutputImage,contour,cvScalarAll(0),cvScalarAll(0),0,CV_FILLED);
 		}
 
 		cvRelease((void**)&contour);
@@ -133,7 +133,7 @@ void THISCLASS::OnStep()
 
 	cvRelease((void**)&contour);
 	cvReleaseMemStorage(&storage);
-	mCore->mDataStructureImageBinary.mImage=outputImage;
+	mCore->mDataStructureImageBinary.mImage=mOutputImage;
 
 	// Let the DisplayImage know about our image
 	DisplayEditor de(&mDisplayOutput);
