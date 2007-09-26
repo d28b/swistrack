@@ -4,6 +4,7 @@
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/button.h>
+#include "bitmaps/icon_gui.xpm"
 
 THISCLASS::AboutDialog(wxWindow *parent):
 		wxDialog(parent, -1, "About SwisTrack", wxDefaultPosition, wxSize(400, 200), wxDEFAULT_DIALOG_STYLE)	{

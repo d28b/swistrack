@@ -24,14 +24,15 @@
 #include <wx/minifram.h>
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
-#include "bitmaps/gui.xpm"
-#include "bitmaps/new.xpm"
-#include "bitmaps/open.xpm"
-#include "bitmaps/save.xpm"
-#include "bitmaps/finger.xpm"
-#include "bitmaps/play.xpm"
-#include "bitmaps/pause.xpm"
-#include "bitmaps/singlestep.xpm"
+#include "bitmaps/icon_gui.xpm"
+#include "bitmaps/bitmap_new.xpm"
+#include "bitmaps/bitmap_open.xpm"
+#include "bitmaps/bitmap_save.xpm"
+#include "bitmaps/bitmap_play.xpm"
+//#include "bitmaps/bitmap_finger.xpm"
+//#include "bitmaps/bitmap_pause.xpm"
+#include "bitmaps/bitmap_singlestep.xpm"
+#include "bitmaps/bitmap_production.xpm"
 #endif
 
 BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
@@ -59,7 +60,8 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 		wxFrame(NULL, -1, title, pos, size, style),
 		CommunicationCommandHandler(),
 		mSwisTrackCore(0), mTCPServer(0), mFileName(""),
-		mHorizontalSizer(0), mCanvasPanel(0), mComponentListPanel(0), mConfigurationPanel(0), mTimelinePanel(0) {
+		mCanvasPanel(0), mComponentListPanel(0), 
+        mConfigurationPanel(0), mTimelinePanel(0), mHorizontalSizer(0) {
 
 #ifdef MULTITHREAD
 	criticalSection = new wxCriticalSection();
@@ -168,7 +170,7 @@ void THISCLASS::BuildToolBar() {
 	toolbar->AddTool(sID_Open, _T("Open"), wxBITMAP(bitmap_open), _T("Open"));
 	toolbar->AddTool(sID_Save, _T("Save"), wxBITMAP(bitmap_save), _T("Save"));
 	toolbar->AddSeparator();
-	toolbar->AddTool(sID_Control_ProductiveMode, _T("Productive"), wxBITMAP(bitmap_productive), _T("Run in productive mode"), wxITEM_CHECK);
+	toolbar->AddTool(sID_Control_ProductiveMode, _T("Productive"), wxBITMAP(bitmap_production), _T("Run in productive mode"), wxITEM_CHECK);
 	toolbar->AddTool(sID_Control_Run, _T("Run"), wxBITMAP(bitmap_play), _T("Run automatically"), wxITEM_CHECK);
 	toolbar->AddSeparator();
 	toolbar->AddTool(sID_Control_Step, _T("Step"), wxBITMAP(bitmap_singlestep), _T("Processes one image"));
@@ -364,7 +366,7 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 
 	// Show errors if there are any
 	if (cr.mErrorList.mList.empty()) {return;}
-	ErrorListDialog eld(this, &(cr.mErrorList), "Open File", wxString::Format("The following errors occurred while reading the file '%s':", filename));
+	ErrorListDialog eld(this, &(cr.mErrorList), "Open File", wxString::Format("The following errors occurred while reading the file '%s':", filename.c_str()));
 	eld.ShowModal();
 }
 
@@ -475,7 +477,7 @@ void THISCLASS::OnIdle(wxIdleEvent& event) {
 void THISCLASS::OnToolsTCPServer(wxCommandEvent& WXUNUSED(event)) {
 	wxTextEntryDialog dlg(this, "TCP Port:", "TCP Server", "");
 	long port=(long)(mTCPServer->GetPort());
-	dlg.SetValue(wxString::Format("%d", port));
+	dlg.SetValue(wxString::Format("%ld", port));
 	if (dlg.ShowModal() != wxID_OK) {return;}
 
 	wxString str=dlg.GetValue();

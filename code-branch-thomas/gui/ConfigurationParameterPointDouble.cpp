@@ -14,8 +14,9 @@ END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterPointDouble(wxWindow* parent):
 		ConfigurationParameter(parent),
-		mValueMinX(0), mValueMaxX(1), mValueDefaultX(0),
-		mValueMinY(0), mValueMaxY(1), mValueDefaultY(0) {
+		mValueMinX(0), mValueMinY(0), 
+        mValueMaxX(1), mValueMaxY(1), 
+        mValueDefaultX(0), mValueDefaultY(0) {
 
 }
 
@@ -151,5 +152,6 @@ void THISCLASS::OnTextEnter(wxCommandEvent& event) {
 }
 
 void THISCLASS::OnKillFocus(wxFocusEvent& event) {
-	OnTextEnter(wxCommandEvent());
+    wxCommandEvent e;
+	OnTextEnter(e);
 }

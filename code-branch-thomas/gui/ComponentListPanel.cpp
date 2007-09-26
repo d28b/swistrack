@@ -5,6 +5,10 @@
 #include <wx/statline.h>
 #include <wx/minifram.h>
 #include <algorithm>
+#include "bitmaps/bitmap_plus.xpm"
+#include "bitmaps/bitmap_minus.xpm"
+#include "bitmaps/bitmap_up.xpm"
+#include "bitmaps/bitmap_down.xpm"
 #include "SwisTrackCoreEditor.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)

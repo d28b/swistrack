@@ -15,8 +15,9 @@ END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterPointInteger(wxWindow* parent):
 		ConfigurationParameter(parent),
-		mValueMinX(0), mValueMaxX(640), mValueDefaultX(0),
-		mValueMinY(0), mValueMaxY(480), mValueDefaultY(0) {
+		mValueMinX(0), mValueMinY(0), 
+        mValueMaxX(640), mValueMaxY(480), 
+        mValueDefaultX(0), mValueDefaultY(0) {
 
 }
 
@@ -158,5 +159,6 @@ void THISCLASS::OnSpin(wxSpinEvent& event) {
 }
 
 void THISCLASS::OnKillFocus(wxFocusEvent& event) {
-	OnTextEnter(wxCommandEvent());
+    wxCommandEvent e;
+	OnTextEnter(e);
 }

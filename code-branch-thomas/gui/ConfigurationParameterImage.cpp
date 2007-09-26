@@ -79,5 +79,6 @@ void THISCLASS::OnTextEnter(wxCommandEvent& event) {
 }
 
 void THISCLASS::OnKillFocus(wxFocusEvent& event) {
-	OnTextEnter(wxCommandEvent());
+    wxCommandEvent e;
+	OnTextEnter(e);
 }

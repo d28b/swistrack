@@ -5,7 +5,8 @@ BEGIN_EVENT_TABLE(TCPServerConnection, wxEvtHandler)
 	EVT_SOCKET(SOCKET_ID, TCPServerConnection::OnSocketEvent)
 END_EVENT_TABLE()
 
-THISCLASS::TCPServerConnection(TCPServer* ss, wxSocketBase *sb): mTCPServer(ss), mSocket(sb), mCurrentRequest(0), mSubscriptions() {
+THISCLASS::TCPServerConnection(TCPServer* ss, wxSocketBase *sb): 
+        mSocket(sb), mTCPServer(ss), mCurrentRequest(0), mSubscriptions() {
 	// Configure the socket to be non-blocking
 	mSocket->SetFlags(wxSOCKET_NOWAIT);
 	
@@ -43,6 +44,9 @@ void THISCLASS::OnSocketEvent(wxSocketEvent& event) {
 		mSocket->Destroy();
 		mSocket=0;
 		break;
+
+    default:
+        break;
 	}
 }
 
@@ -66,7 +70,7 @@ void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum)
 		return;
 	} else if (m->mCommand=="BROADCAST") {
 		// Broadcast the content of this message to all clients
-		m->mCommand=m->GetString();
+		m->mCommand=m->GetString("");
 		mTCPServer->Send(m);
 		return;
 	}

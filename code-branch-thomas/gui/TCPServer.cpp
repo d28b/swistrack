@@ -8,7 +8,8 @@ BEGIN_EVENT_TABLE(TCPServer, wxEvtHandler)
 	EVT_SOCKET(SERVER_ID, TCPServer::OnServerEvent)
 END_EVENT_TABLE()
 
-THISCLASS::TCPServer(SwisTrack* swistrack): mSwisTrack(swistrack), mServer(0), mPort(0), mConnections() {
+THISCLASS::TCPServer(SwisTrack* swistrack): 
+        mServer(0), mPort(0), mSwisTrack(swistrack), mConnections() {
 }
 
 THISCLASS::~TCPServer() {

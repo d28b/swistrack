@@ -24,7 +24,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 END_EVENT_TABLE()
 
 THISCLASS::Canvas(CanvasPanel *cp):
-		wxControl(cp, -1), mCanvasPanel(cp), mDisplayRenderer(), mPopupMenu(),
+		wxControl(cp, -1), mCanvasPanel(cp), mPopupMenu(), mDisplayRenderer(),
 		mMoveStarted(false), mMoveStartPoint() {
 
 	SetWindowStyle(wxNO_BORDER);
