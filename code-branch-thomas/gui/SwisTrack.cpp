@@ -61,7 +61,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 		CommunicationCommandHandler(),
 		mSwisTrackCore(0), mTCPServer(0), mFileName(""),
 		mCanvasPanel(0), mComponentListPanel(0), 
-        mConfigurationPanel(0), mTimelinePanel(0), mHorizontalSizer(0) {
+		mConfigurationPanel(0), mTimelinePanel(0), mHorizontalSizer(0) {
 
 #ifdef MULTITHREAD
 	criticalSection = new wxCriticalSection();
@@ -75,7 +75,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 
 	// The canvas panel
 	mCanvasPanel=new CanvasPanel(this, this);
- 
+
 	// SwisTrackCore
 	wxFileName filename(wxGetApp().mApplicationFolder, "", "");
 	filename.AppendDir("Components");

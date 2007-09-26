@@ -108,8 +108,8 @@ void THISCLASS::OnSpin(wxSpinEvent& event) {
 }
 
 void THISCLASS::OnKillFocus(wxFocusEvent& event) {
-    wxCommandEvent e;
-	OnTextEnter(e);
+	wxCommandEvent ev;
+	OnTextEnter(ev);
 }
 
 void THISCLASS::OnScrollChanged(wxScrollEvent& event) {

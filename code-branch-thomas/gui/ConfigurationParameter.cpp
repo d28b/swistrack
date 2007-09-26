@@ -10,7 +10,6 @@ THISCLASS::ConfigurationParameter(wxWindow* parent):
 		mLabel(""), mDisplay(""), mReloadable(true),
 		mUpdating(true), mUpdateProtection(0) {
 
-
 }
 
 THISCLASS::~ConfigurationParameter() {

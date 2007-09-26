@@ -8,8 +8,8 @@
 #include "ComponentEditor.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
-  EVT_TEXT (wxID_ANY, THISCLASS::OnTextUpdated)
-  EVT_TEXT_ENTER (wxID_ANY, THISCLASS::OnTextEnter)
+	EVT_TEXT (wxID_ANY, THISCLASS::OnTextUpdated)
+	EVT_TEXT_ENTER (wxID_ANY, THISCLASS::OnTextEnter)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterString(wxWindow* parent):
@@ -72,6 +72,6 @@ void THISCLASS::OnTextEnter(wxCommandEvent& event) {
 }
 
 void THISCLASS::OnKillFocus(wxFocusEvent& event) {
-    wxCommandEvent e;
-	OnTextEnter(e);
+	wxCommandEvent ev;
+	OnTextEnter(ev);
 }

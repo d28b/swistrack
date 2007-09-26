@@ -5,7 +5,7 @@
 #include "ErrorList.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxDialog)
-  EVT_BUTTON  (eID_ButtonOK, THISCLASS::OnButtonOK)
+	EVT_BUTTON  (eID_ButtonOK, THISCLASS::OnButtonOK)
 END_EVENT_TABLE()
 
 THISCLASS::ErrorListDialog(wxWindow *parent, ErrorList *el, const wxString &title, const wxString &text):

@@ -6,7 +6,8 @@ BEGIN_EVENT_TABLE(TCPServerConnection, wxEvtHandler)
 END_EVENT_TABLE()
 
 THISCLASS::TCPServerConnection(TCPServer* ss, wxSocketBase *sb): 
-        mSocket(sb), mTCPServer(ss), mCurrentRequest(0), mSubscriptions() {
+		mSocket(sb), mTCPServer(ss), mCurrentRequest(0), mSubscriptions() {
+
 	// Configure the socket to be non-blocking
 	mSocket->SetFlags(wxSOCKET_NOWAIT);
 	
@@ -45,8 +46,9 @@ void THISCLASS::OnSocketEvent(wxSocketEvent& event) {
 		mSocket=0;
 		break;
 
-    default:
-        break;
+	// Something else
+	default:
+		break;
 	}
 }
 

@@ -8,16 +8,16 @@
 #include "ComponentEditor.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
-  EVT_TEXT (wxID_ANY, THISCLASS::OnTextUpdated)
-  EVT_TEXT_ENTER (wxID_ANY, THISCLASS::OnTextEnter)
-  EVT_SPINCTRL (wxID_ANY, THISCLASS::OnSpin)
+	EVT_TEXT (wxID_ANY, THISCLASS::OnTextUpdated)
+	EVT_TEXT_ENTER (wxID_ANY, THISCLASS::OnTextEnter)
+	EVT_SPINCTRL (wxID_ANY, THISCLASS::OnSpin)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterPointInteger(wxWindow* parent):
 		ConfigurationParameter(parent),
 		mValueMinX(0), mValueMinY(0), 
-        mValueMaxX(640), mValueMaxY(480), 
-        mValueDefaultX(0), mValueDefaultY(0) {
+		mValueMaxX(640), mValueMaxY(480), 
+		mValueDefaultX(0), mValueDefaultY(0) {
 
 }
 
@@ -159,6 +159,6 @@ void THISCLASS::OnSpin(wxSpinEvent& event) {
 }
 
 void THISCLASS::OnKillFocus(wxFocusEvent& event) {
-    wxCommandEvent e;
-	OnTextEnter(e);
+	wxCommandEvent ev;
+	OnTextEnter(ev);
 }

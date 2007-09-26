@@ -39,9 +39,9 @@ bool THISCLASS::OnInit() {
 #endif
 
 	// Show
-    mSwisTrack->Show(TRUE);
+	mSwisTrack->Show(TRUE);
 	SetTopWindow(mSwisTrack);
-    return TRUE;
+	return TRUE;
 }
 
 int THISCLASS::OnExit() {

@@ -11,7 +11,7 @@ END_EVENT_TABLE()
 THISCLASS::CanvasPanel(wxWindow *parent, SwisTrack *st):
 		wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 100)),
 		DisplaySubscriberInterface(), mSwisTrack(st), 
-        mCurrentDisplay(0), mUpdateRate(1), mUpdateStepCounter(0) {
+		mCurrentDisplay(0), mUpdateRate(1), mUpdateStepCounter(0) {
 
 	SetBackgroundColour(st->GetBackgroundColour());
 

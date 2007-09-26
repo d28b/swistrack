@@ -5,8 +5,8 @@
 #include "ComponentTreeItem.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxDialog)
-  EVT_BUTTON  (eID_ButtonAdd, THISCLASS::OnButtonAdd)
-  EVT_BUTTON  (eID_ButtonCancel, THISCLASS::OnButtonCancel)
+	EVT_BUTTON (eID_ButtonAdd, THISCLASS::OnButtonAdd)
+	EVT_BUTTON (eID_ButtonCancel, THISCLASS::OnButtonCancel)
 END_EVENT_TABLE()
 
 THISCLASS::ComponentsDialog(wxWindow* parent, SwisTrackCore *stc):

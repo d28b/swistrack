@@ -6,7 +6,7 @@
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
-  #include <wx/wx.h>
+	#include <wx/wx.h>
 #endif
 
 class SwisTrack;
@@ -131,7 +131,7 @@ protected:
 	//! The idle event.
 	void OnIdle(wxIdleEvent& event);
 
-    DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 };
 
 #endif

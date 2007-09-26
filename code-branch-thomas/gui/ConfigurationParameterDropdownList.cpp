@@ -8,7 +8,7 @@
 #include "ComponentEditor.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
-  EVT_COMBOBOX (wxID_ANY, THISCLASS::OnItemSelected)
+	EVT_COMBOBOX (wxID_ANY, THISCLASS::OnItemSelected)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterDropdownList(wxWindow* parent):
