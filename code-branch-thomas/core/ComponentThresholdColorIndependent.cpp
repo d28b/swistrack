@@ -6,8 +6,9 @@
 
 THISCLASS::ComponentThresholdColorIndependent(SwisTrackCore *stc):
 		Component(stc, "ThresholdColorIndependent"),
-		mOutputImage(0), mBlueThreshold(128), mGreenThreshold(128), mRedThreshold(128), mOrBool(true),
-		mDisplayOutput("Output", "After thresholding") {
+		mOutputImage(0), mDisplayOutput("Output", "After thresholding"), 
+        mBlueThreshold(128), mGreenThreshold(128), mRedThreshold(128), 
+        mOrBool(true) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryThresholding);
