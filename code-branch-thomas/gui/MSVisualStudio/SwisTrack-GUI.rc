@@ -26,17 +26,17 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 // Bitmap
 //
 
-BITMAP_NEW              BITMAP                  "../bitmaps/new.bmp"
-BITMAP_OPEN             BITMAP                  "../bitmaps/open.bmp"
-BITMAP_SAVE             BITMAP                  "../bitmaps/save.bmp"
-BITMAP_FINGER           BITMAP                  "../bitmaps/finger.bmp"
-BITMAP_PRODUCTIVE       BITMAP                  "../bitmaps/productive.bmp"
-BITMAP_PLAY             BITMAP                  "../bitmaps/play.bmp"
-BITMAP_SINGLESTEP       BITMAP                  "../bitmaps/singlestep.bmp"
-BITMAP_UP               BITMAP                  "../bitmaps/up.bmp"
-BITMAP_DOWN             BITMAP                  "../bitmaps/down.bmp"
-BITMAP_PLUS             BITMAP                  "../bitmaps/plus.bmp"
-BITMAP_MINUS            BITMAP                  "../bitmaps/minus.bmp"
+BITMAP_NEW              BITMAP                  "../bitmaps/bitmap_new.bmp"
+BITMAP_OPEN             BITMAP                  "../bitmaps/bitmap_open.bmp"
+BITMAP_SAVE             BITMAP                  "../bitmaps/bitmap_save.bmp"
+BITMAP_FINGER           BITMAP                  "../bitmaps/bitmap_finger.bmp"
+BITMAP_PRODUCTIVE       BITMAP                  "../bitmaps/bitmap_productive.bmp"
+BITMAP_PLAY             BITMAP                  "../bitmaps/bitmap_play.bmp"
+BITMAP_SINGLESTEP       BITMAP                  "../bitmaps/bitmap_singlestep.bmp"
+BITMAP_UP               BITMAP                  "../bitmaps/bitmap_up.bmp"
+BITMAP_DOWN             BITMAP                  "../bitmaps/bitmap_down.bmp"
+BITMAP_PLUS             BITMAP                  "../bitmaps/bitmap_plus.bmp"
+BITMAP_MINUS            BITMAP                  "../bitmaps/bitmap_minus.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

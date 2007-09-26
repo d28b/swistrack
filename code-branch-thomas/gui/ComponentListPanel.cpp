@@ -148,7 +148,6 @@ void THISCLASS::Update() {
 	}
 
 	// Set optimal column widths of all DataStructure columns
-	int cc=mList->GetColumnCount();
 	for (int i=1; i<mColumnMessages-1; i++) {
 		mList->SetColumnWidth(i, wxLIST_AUTOSIZE);
 	}
