@@ -36,7 +36,7 @@ private:
 	int mFrameCounter;				//!< Counts the number of frames until mFrameRate.
 	bool mErrorAVIFile;				//!< The video file could not be opened.
 	int mWrittenFramesCount;		//!< The number of written frames.
-	DisplayImage *mCurrentDisplayImage;
+	DisplayImage *mCurrentDisplayImage; //!< The DisplayImage we are currently subscribed to.
 };
 
 #else // __WXMSW__

@@ -10,9 +10,7 @@
 
 
 //! A component that calculates world coordinates of the particles with a linear model. Basically, each corner of the camera is mapped to world coordinates and all points inside the image are linearly interpolated.
-class ComponentCalibrationLinear: public Component , public ConfigurationXML{
-
-
+class ComponentCalibrationLinear: public Component, public ConfigurationXML {
 
 public:
 	//! Constructor.
@@ -32,18 +30,19 @@ public:
 
 private:
 	//! A structure containing the position values of the calibration points
-	struct CalibrationPoint
-	{
+	struct CalibrationPoint {
 		double xWorld;
 		double yWorld;
 		double xImage;
 		double yImage;
 	};
-	std::vector<CalibrationPoint>	calibrationPointList;		//!< List containing the calibration points.
+
+	std::vector<CalibrationPoint> calibrationPointList;			//!< List containing the calibration points.
+	float cameraMatrix[12];										//!< Matrix for the coordinate transformation.
 	Display mDisplayOutput;										//!< The Display showing the particles.
+
 	void ReadPoint(wxXmlNode *node);
 	CvPoint2D32f Image2World(CvPoint2D32f p);
-	float cameraMatrix[12];										//!< matrix for the coordinate transformation
 };
 #endif
 

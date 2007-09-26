@@ -23,13 +23,13 @@ public:
 
 private:
 	IplImage *mOutputImage;				//!< The image created by this component.
-	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 	int mBlueThreshold;					//!< (configuration) Threshold value.
 	int mGreenThreshold;				//!< (configuration) Threshold value.
 	int mRedThreshold;					//!< (configuration) Threshold value.
 	bool mOrBool;						//!< (configuration) Whether to apply a "OR" function instead of a "AND" between the channels
 	bool mInvertThreshold;				//!< (configuration) Whether the threshold is inverted or not
 	IplImage* tmpImage[3];				//!< Temporary Ipl images to makes the computation.
+	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 	
 	// Prepares the output image (recreates the image if necessary).
 	inline void PrepareOutputImage(IplImage *inputimage) {

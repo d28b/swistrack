@@ -6,8 +6,8 @@
 
 THISCLASS::ComponentThresholdColorCommon(SwisTrackCore *stc):
 		Component(stc, "ThresholdColorCommon"),
-		mOutputImage(0), mDisplayOutput("Output", "After thresholding"),
-		mThreshold(128) {
+		mOutputImage(0), mThreshold(128), mAverageBool(false), mInvertThreshold(false),
+		mDisplayOutput("Output", "After thresholding") {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryThresholding);

@@ -6,7 +6,7 @@
 
 THISCLASS::ComponentBlobSelection(SwisTrackCore *stc):
 		Component(stc, "BlobSelection"),
-		mMinArea(0), mMaxArea(1000000),outputImage(0),
+		mMinArea(0), mMaxArea(1000000), mOutputImage(0),
 		mDisplayOutput("Output", "After dilation") {
 
 	// Data structure relations
@@ -47,22 +47,24 @@ void THISCLASS::OnStep()
 		AddError("There is no input image");
 	}
 
-	//Prepare outputImage
-	if (!outputImage)
-		outputImage=cvCreateImage(cvSize(inputimage->width,inputimage->height),inputimage->depth,1);
-	//copy the 
-	cvCopy(inputimage,outputImage);
-	
-	//If no computation is needed
-	if ((mAreaSelection==false)&&(mCompactnessSelection==false)&&(mOrientationSelection==false))
-	{
-			// Let the DisplayImage know about our image
-			DisplayEditor de(&mDisplayOutput);
-			if (de.IsActive()) {
-				de.SetMainImage(mCore->mDataStructureImageBinary.mImage);
+	// Prepare mOutputImage
+	if (! mOutputImage) {
+		mOutputImage=cvCreateImage(cvSize(inputimage->width,inputimage->height),inputimage->depth,1);
 	}
+
+	// Take a copy of the input image
+	cvCopy(inputimage, mOutputImage);
+	
+	// If no computation is needed
+	if ((mAreaSelection==false)&&(mCompactnessSelection==false)&&(mOrientationSelection==false)) {
+		// Let the DisplayImage know about our image
+		DisplayEditor de(&mDisplayOutput);
+		if (de.IsActive()) {
+				de.SetMainImage(mCore->mDataStructureImageBinary.mImage);
+		}
 		return;
 	}
+
 	// Initialization
 	CvMoments moments; // Used to calculate the moments
 	double contourArea;		//Used to select contour based on area
@@ -79,15 +81,14 @@ void THISCLASS::OnStep()
 
 	// This is used to correct the position in case of ROI
 	CvRect rectROI;
-	if(inputimage->roi != NULL) {
+	if (inputimage->roi != NULL) {
 		rectROI = cvGetImageROI(inputimage);
 	} else {
 		rectROI.x = 0;
 		rectROI.y = 0;
 	}
 
-	while ((contour=cvFindNextContour(blobs))!=NULL) 
-	{
+	while ((contour=cvFindNextContour(blobs))!=NULL) {
 		//A priori, we don't want to remove the blob
 		removeBlobBool=false;
 		// Calculating the moments
@@ -97,38 +98,31 @@ void THISCLASS::OnStep()
 		contourArea=moments.m00;
 
 		// Selection based on area
-		if (mAreaSelection)
-		{
-			if ((contourArea<mMinArea) || (contourArea>mMaxArea))
-			{
+		if (mAreaSelection) {
+			if ((contourArea<mMinArea) || (contourArea>mMaxArea)) {
 				removeBlobBool=true;
 			}
 		}
 		// Selection based on compactness
-		if (mCompactnessSelection)
-		{
+		if (mCompactnessSelection) {
 			double l = cvArcLength(contour, CV_WHOLE_SEQ, 1);
 			contourCompactness=fabs(12.56*contourArea/(l*l));
-			if ((contourCompactness<mMinCompactness) || (contourCompactness>mMaxCompactness))
-			{
+			if ((contourCompactness<mMinCompactness) || (contourCompactness>mMaxCompactness)) {
 				removeBlobBool=true;
 			}
 		}
-		if (mOrientationSelection)
-		{
+		if (mOrientationSelection) {
 			double tempValue=cvGetCentralMoment(&moments,2,0)-cvGetCentralMoment(&moments,0,2);
 			contourOrientation=atan(2*cvGetCentralMoment(&moments,1,1)/(tempValue+sqrt(tempValue*tempValue+4*cvGetCentralMoment(&moments,1,1)*cvGetCentralMoment(&moments,1,1))));
 			//Transforming in degrees (between -90 and 90
 			contourOrientation=contourOrientation*57.29577951;
-			if (!(((contourOrientation>mMinOrientation)&&(contourOrientation<mMaxOrientation))||((contourOrientation>mMinOrientation+180)&&(contourOrientation<mMaxOrientation+180))||((contourOrientation>mMinOrientation-180)&&(contourOrientation<mMaxOrientation-180))))
-			{
+			if (!(((contourOrientation>mMinOrientation)&&(contourOrientation<mMaxOrientation))||((contourOrientation>mMinOrientation+180)&&(contourOrientation<mMaxOrientation+180))||((contourOrientation>mMinOrientation-180)&&(contourOrientation<mMaxOrientation-180)))) {
 				removeBlobBool=true;
 			}
 		}
 			
 		//If we need to remove the blob, we paint it in black
-		if (removeBlobBool)
-		{
+		if (removeBlobBool) {
 			//Paint the bad contour in black
 			cvDrawContours(outputImage,contour,cvScalarAll(0),cvScalarAll(0),0,CV_FILLED);
 		}

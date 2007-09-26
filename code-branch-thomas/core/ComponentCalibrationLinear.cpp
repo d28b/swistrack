@@ -22,8 +22,7 @@ THISCLASS::ComponentCalibrationLinear(SwisTrackCore *stc):
 THISCLASS::~ComponentCalibrationLinear() {
 }
 
-void THISCLASS::OnStart() 
-{
+void THISCLASS::OnStart() {
 	// Read the file containing the calibration points
 	std::string filename=GetConfigurationString("CalibrationPoints", "");
 	wxLogNull log;
@@ -47,27 +46,27 @@ void THISCLASS::OnStart()
 		AddError("No node 'points' found!");
 		return;
 	}
-	//Empty the vector
+
+	// Empty the vector
 	calibrationPointList.clear();
-	//Fill the vector with the readen points
+
+	// Fill the vector with the readen points
 	wxXmlNode *node=mSelectedNode->GetChildren();
 	while (node) {
-		if (node->GetName()=="point") 
-		{
+		if (node->GetName()=="point") {
 			ReadPoint(node);
 		}
 		node=node->GetNext();
 	}
-	//Create the matrices
+
+	// Create the matrices
 	CvMat* pseudoinverse32f   = cvCreateMat(12,calibrationPointList.size()*2,CV_32F);	// matrix to hold the pseudoinverse
 	CvMat* imagematrix32f     = cvCreateMat(calibrationPointList.size()*2,12,CV_32F);	// matrix containing points in image space
 	CvMat* objectmatrix32f    = cvCreateMat(calibrationPointList.size()*2,1,CV_32F);	// matrix containing points in world space
 	CvMat* cameratransform32f = cvCreateMat(12,1,CV_32F);								// matrix containing camera matrix (nonlinear model)
 
-	// build up matrices
-	for(unsigned int i=0; i<calibrationPointList.size(); i++)
-	{
-
+	// Build up matrices
+	for (unsigned int i=0; i<calibrationPointList.size(); i++) {
 		CvPoint2D32f p;
 
 		p.x=(calibrationPointList.at(i)).xImage;
@@ -103,7 +102,6 @@ void THISCLASS::OnStart()
 		objectmatrix32f->data.fl[i+calibrationPointList.size()]=(calibrationPointList.at(i)).yWorld;
 	}
 
-
 	CvMat* multransposed    = cvCreateMat(12,12,CV_32F);
 	CvMat* invmultransposed = cvCreateMat(12,12,CV_32F);
 	CvMat* transposed       = cvCreateMat(12,calibrationPointList.size()*2,CV_32F);
@@ -113,21 +111,21 @@ void THISCLASS::OnStart()
 	cvTranspose(imagematrix32f,transposed);
 	cvMatMul(invmultransposed,transposed,pseudoinverse32f);
 	cvMatMul(pseudoinverse32f, objectmatrix32f, cameratransform32f);
-	// copy cameratransformation to appropriate format
-	for(int i=0;i<12;i++)
-	{
+
+	// Copy cameratransformation to appropriate format
+	for (int i=0; i<12; i++) {
 		cameraMatrix[i]=cameratransform32f->data.fl[i];
 	}
-	//Release unused matrix
+
+	// Release unused matrix
 	cvReleaseMat(&pseudoinverse32f); 
 	cvReleaseMat(&imagematrix32f);
 	cvReleaseMat(&objectmatrix32f);
 	cvReleaseMat(&cameratransform32f);
 
 #ifdef _DEBUG
-	//For Debug Purpose, just compute the transformation of the 
-	for (unsigned int i=0;i<calibrationPointList.size();i++)
-	{
+	// For Debug Purpose, just compute the transformation of the 
+	for (unsigned int i=0; i<calibrationPointList.size(); i++) {
 		CvPoint2D32f originalImage,originalWorld,finalWorld;
 		originalImage.x=(float)(calibrationPointList.at(i)).xImage;
 		originalImage.y=(float)(calibrationPointList.at(i)).yImage;
@@ -140,21 +138,17 @@ void THISCLASS::OnStart()
 
 }
 
-void THISCLASS::OnReloadConfiguration() 
-{
+void THISCLASS::OnReloadConfiguration() {
 }
 
-void THISCLASS::OnStep() 
-{
-	
+void THISCLASS::OnStep() {
 	// These are the particles to transform
 	DataStructureParticles::tParticleVector *particles=mCore->mDataStructureParticles.mParticles;
 	if (! particles) {return;}
 
 	// Transform all particle positions
 	DataStructureParticles::tParticleVector::iterator it=particles->begin();
-	while (it!=particles->end()) 
-	{
+	while (it!=particles->end()) {
 		it->mCenter=Image2World(it->mCenter);
 		it++;
 	}
@@ -163,8 +157,7 @@ void THISCLASS::OnStep()
 void THISCLASS::OnStepCleanup() {
 }
 
-void THISCLASS::OnStop() 
-{
+void THISCLASS::OnStop() {
 }
 
 void THISCLASS::ReadPoint(wxXmlNode *node) {
@@ -178,8 +171,7 @@ void THISCLASS::ReadPoint(wxXmlNode *node) {
 	calibrationPointList.push_back(calibrationPoint);
 }
 
-CvPoint2D32f THISCLASS::Image2World(CvPoint2D32f p)
-{
+CvPoint2D32f THISCLASS::Image2World(CvPoint2D32f p) {
 	CvPoint2D32f w;
 	float pxx,pxy,pyy;
 	pxx=p.x*p.x;
@@ -189,4 +181,3 @@ CvPoint2D32f THISCLASS::Image2World(CvPoint2D32f p)
 	w.y=cameraMatrix[6]*p.x+cameraMatrix[7]*p.y+cameraMatrix[8]+cameraMatrix[9]*pxx+cameraMatrix[10]*pyy+cameraMatrix[11]*pxy;
 	return(w);
 }
-

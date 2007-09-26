@@ -6,8 +6,8 @@
 
 THISCLASS::ComponentThresholdGray(SwisTrackCore *stc):
 		Component(stc, "ThresholdGray"),
-		mOutputImage(0), mDisplayOutput("Output", "After thresholding"),
-		mThreshold(128) {
+		mOutputImage(0), mThreshold(128), mInvertThreshold(false),
+		mDisplayOutput("Output", "After thresholding") {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryThresholding);

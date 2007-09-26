@@ -32,7 +32,7 @@ private:
 	CvCapture* mCapture;				//!< Pointer to AVI sequence.
 	IplImage* mOutputImage;				//!< The last acquired image.
 
-	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
+	Display mDisplayOutput;				//!< The Display showing the output of this component.
 };
 
 #endif

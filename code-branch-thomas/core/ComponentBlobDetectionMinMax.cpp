@@ -6,7 +6,7 @@
 
 THISCLASS::ComponentBlobDetectionMinMax(SwisTrackCore *stc):
 		Component(stc, "BlobDetectionMinMax"),
-		mMinArea(0), mMaxArea(1000000), mMaxNumber(10),
+		mMinArea(0), mMaxArea(1000000), mMaxNumber(10), mParticles(),
 		mDisplayOutput("Output", "Particles") {
 
 	// Data structure relations

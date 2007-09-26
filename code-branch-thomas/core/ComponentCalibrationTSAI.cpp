@@ -23,8 +23,7 @@ THISCLASS::ComponentCalibrationTSAI(SwisTrackCore *stc):
 THISCLASS::~ComponentCalibrationTSAI() {
 }
 
-void THISCLASS::OnStart() 
-{
+void THISCLASS::OnStart() {
 	// Read the file containing the calibration points
 	std::string filename=GetConfigurationString("CalibrationPoints", "");
 	wxLogNull log;
@@ -48,13 +47,14 @@ void THISCLASS::OnStart()
 		AddError("No node 'points' found!");
 		return;
 	}
-	//Empty the vector
+
+	// Empty the vector
 	calibrationPointList.clear();
-	//Fill the vector with the readen points
+
+	// Fill the vector with the readen points
 	wxXmlNode *node=mSelectedNode->GetChildren();
 	while (node) {
-		if (node->GetName()=="point") 
-		{
+		if (node->GetName()=="point") {
 			ReadPoint(node);
 		}
 		node=node->GetNext();
@@ -70,32 +70,29 @@ void THISCLASS::OnStart()
 	cameraParameters.Cx=cameraParameters.Ncx/2;
 	cameraParameters.Cy=GetConfigurationDouble("Ncy",480)/2;
 	cameraParameters.sx=GetConfigurationDouble("sx",1.0);
-	//Put the points into the matrix
-	if (calibrationPointList.size()>TSAI_MAX_POINTS)
+	// Put the points into the matrix
+	if (calibrationPointList.size()>TSAI_MAX_POINTS) {
 		AddError("There are more calibration points than accepted by the Tsai calibration library");
+	}
 	calibrationData.point_count=calibrationPointList.size();
-	for (int i=0;i<calibrationData.point_count;i++)
-	{
+	for (int i=0; i<calibrationData.point_count; i++) {
 		calibrationData.zw[i]=0;
 		calibrationData.xw[i]=(calibrationPointList.at(i)).xWorld;
 		calibrationData.yw[i]=(calibrationPointList.at(i)).yWorld;
 		calibrationData.Xf[i]=(calibrationPointList.at(i)).xImage;
 		calibrationData.Yf[i]=(calibrationPointList.at(i)).yImage;
 	}
-	//Do the calibration
-	try
-	{
+	// Do the calibration
+	try {
 		coplanar_calibration_with_full_optimization(&calibrationData,&calibrationConstants,&cameraParameters);
 	} 
-	catch(...) 
-	{
+	catch (...) {
 		AddError("Calibration using libtsai failed.");
 	}
 	
 #ifdef _DEBUG
 	//For Debug Purpose, just compute the transformation of the 
-	for (unsigned int i=0;i<calibrationPointList.size();i++)
-	{
+	for (unsigned int i=0; i<calibrationPointList.size(); i++) {
 		CvPoint2D32f originalImage,originalWorld,finalImage,finalWorld;
 		originalImage.x=(float)(calibrationPointList.at(i)).xImage;
 		originalImage.y=(float)(calibrationPointList.at(i)).yImage;
@@ -108,13 +105,10 @@ void THISCLASS::OnStart()
 #endif
 }
 
-void THISCLASS::OnReloadConfiguration() 
-{
+void THISCLASS::OnReloadConfiguration() {
 }
 
-void THISCLASS::OnStep() 
-{
-	
+void THISCLASS::OnStep() {
 	// These are the particles to transform
 	DataStructureParticles::tParticleVector *particles=mCore->mDataStructureParticles.mParticles;
 	if (! particles) {return;}
@@ -131,9 +125,9 @@ void THISCLASS::OnStep()
 void THISCLASS::OnStepCleanup() {
 }
 
-void THISCLASS::OnStop() 
-{
+void THISCLASS::OnStop() {
 }
+
 void THISCLASS::ReadPoint(wxXmlNode *node) {
 	mSelectedNode=node;
 	CalibrationPoint calibrationPoint;
@@ -143,16 +137,16 @@ void THISCLASS::ReadPoint(wxXmlNode *node) {
 	calibrationPoint.yWorld=Double(ReadChildContent("yworld"),0);
 	calibrationPointList.push_back(calibrationPoint);
 }
-CvPoint2D32f THISCLASS::Image2World(CvPoint2D32f imageCoordinates)
-{
+
+CvPoint2D32f THISCLASS::Image2World(CvPoint2D32f imageCoordinates) {
 	double wx,wy;
 	CvPoint2D32f worldCoordinates;
 	image_coord_to_world_coord(calibrationConstants,cameraParameters,(double)imageCoordinates.x,(double)imageCoordinates.y,0,&wx,&wy);
 	worldCoordinates=cvPoint2D32f(wx,wy);
 	return worldCoordinates;
 }
-CvPoint2D32f THISCLASS::World2Image(CvPoint2D32f worldCoordinates)
-{
+
+CvPoint2D32f THISCLASS::World2Image(CvPoint2D32f worldCoordinates) {
 	double ix,iy;
 	CvPoint2D32f imageCoordinates;
 	world_coord_to_image_coord(calibrationConstants,cameraParameters,(double)worldCoordinates.x,(double)worldCoordinates.y,0,&ix,&iy);

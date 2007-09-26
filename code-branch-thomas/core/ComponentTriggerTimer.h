@@ -38,7 +38,6 @@ private:
 	};
 
 	Timer *mTimer;		//!< The associated timer.
-	//void *mTimer;
 };
 
 #endif

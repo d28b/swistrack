@@ -23,9 +23,9 @@ public:
 
 private:
 	IplImage *mOutputImage;				//!< The image created by this component.
-	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 	int mThreshold;						//!< (configuration) Threshold value.
-	bool mInvertThreshold;						//!< (configuration) Whether the threshold is inverted or not
+	bool mInvertThreshold;				//!< (configuration) Whether the threshold is inverted or not
+	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 
 	// Prepares the output image (recreates the image if necessary).
 	inline void PrepareOutputImage(IplImage *inputimage) {

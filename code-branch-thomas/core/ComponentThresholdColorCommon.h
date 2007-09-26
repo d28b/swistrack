@@ -23,11 +23,11 @@ public:
 
 private:
 	IplImage *mOutputImage;				//!< The image created by this component.
-	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 	int mThreshold;						//!< (configuration) Threshold value.
 	bool mAverageBool;					//!< (configuration) Whether to apply a threshold average of the 3 channels or on each channel individually and making a "or" between the channels
 	bool mInvertThreshold;				//!< (configuration) Whether the threshold is inverted or not
 	IplImage* tmpImage[3];				//!< Temporary Ipl images to makes the computation.
+	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 	
 	// Prepares the output image (recreates the image if necessary).
 	inline void PrepareOutputImage(IplImage *inputimage) {

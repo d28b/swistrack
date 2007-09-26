@@ -21,8 +21,7 @@ public:
 	void OnStop();
 	Component *Create() {return new ComponentSpecificColorSubtraction(mCore);}
 
-private:
-	
+private:	
 	bool mCorrectMean;					//!< (configuration) Whether to correct for the mean or not.
 	bool mSpecifyColorBool;				//!< Specify the color on the input image.
 	CvScalar mTrackedColor;				//!< The specified color that is tracked in the image.
