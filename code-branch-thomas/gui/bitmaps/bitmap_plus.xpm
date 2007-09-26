@@ -1,5 +1,5 @@
 /* XPM */
-static char *minus[] = {
+static char *bitmap_plus[] = {
 /* columns rows colors chars-per-pixel */
 "8 8 16 1",
 "  c black",
@@ -19,12 +19,12 @@ static char *minus[] = {
 "; c cyan",
 ": c gray100",
 /* pixels */
-"########",
-"########",
-"########",
+"###  ###",
+"###  ###",
+"###  ###",
 "        ",
 "        ",
-"########",
-"########",
-"########"
+"###  ###",
+"###  ###",
+"###  ###"
 };
