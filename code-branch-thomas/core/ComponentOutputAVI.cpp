@@ -1,3 +1,5 @@
+#ifdef WIN32
+
 #include "ComponentOutputAVI.h"
 #define THISCLASS ComponentOutputAVI
 
@@ -111,3 +113,5 @@ void THISCLASS::OnDisplayImageUnsubscribe(DisplayImage *di) {
 
 	mCurrentDisplayImage=0;
 }
+
+#endif

@@ -13,7 +13,7 @@ public:
 	//! Constructor.
 	DisplaySubscriberInterface() {}
 	//! Destructor.
-	~DisplaySubscriberInterface() {}
+	virtual ~DisplaySubscriberInterface() {}
 
 	//! Called when subscribing to a Display.
 	virtual void OnDisplaySubscribe(Display *display) = 0;

@@ -97,3 +97,4 @@ void THISCLASS::OnStop() {
 	if (mOutputImage) {cvReleaseImage(&mOutputImage);}
 	if (mWriter) {cvReleaseVideoWriter(&mWriter);}
 }
+

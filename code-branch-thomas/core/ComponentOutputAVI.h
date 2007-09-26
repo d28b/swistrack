@@ -1,6 +1,8 @@
 #ifndef HEADER_ComponentOutputAVI
 #define HEADER_ComponentOutputAVI
 
+#ifdef WIN32 // mask as quick&dirty hack!!!
+
 #include "Component.h"
 
 //! A component that generates an AVI movie.
@@ -36,6 +38,8 @@ private:
 	int mWrittenFramesCount;		//!< The number of written frames.
 	DisplayImage *mCurrentDisplayImage;
 };
+
+#endif
 
 #endif
 

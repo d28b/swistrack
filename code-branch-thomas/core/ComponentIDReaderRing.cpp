@@ -77,7 +77,8 @@ void THISCLASS::OnReloadConfiguration() {
 	}
 
 	// Allocate enough space
-	mRingValuesMax=(2*mRingRadiusOuter+1)*(2*mRingRadiusOuter+1)-(2*mRingRadiusInner-1)*(2*mRingRadiusInner-1);
+	mRingValuesMax = (int)( (2*mRingRadiusOuter+1)*(2*mRingRadiusOuter+1)
+                    -(2*mRingRadiusInner-1)*(2*mRingRadiusInner-1) );
 	delete mRingAngles; mRingAngles=new float[mRingValuesMax];
 	delete mRingValues; mRingValues=new int[mRingValuesMax];
 }
@@ -85,7 +86,7 @@ void THISCLASS::OnReloadConfiguration() {
 void THISCLASS::OnStep() {
 	IplImage *img=mCore->mDataStructureImageGray.mImage;
 
-	int fileid=0;
+	//int fileid=0;
 	DataStructureParticles::tParticleVector::iterator it=mCore->mDataStructureParticles.mParticles->begin();
 	while (it!=mCore->mDataStructureParticles.mParticles->end()) {
 		// Determine the position of the ring

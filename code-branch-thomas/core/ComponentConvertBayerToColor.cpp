@@ -6,7 +6,7 @@
 
 THISCLASS::ComponentConvertBayerToColor(SwisTrackCore *stc):
 		Component(stc, "ConvertBayerToColor"),
-		mOutputImage(0), mBayerType(0),
+		mBayerType(0), mOutputImage(0),
 		mDisplayOutput("Output", "After conversion from Bayer to BGR") {
 
 	// Data structure relations

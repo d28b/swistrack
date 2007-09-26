@@ -13,7 +13,7 @@ public:
 	//! Constructor.
 	SwisTrackCoreInterface() {}
 	//! Destructor.
-	~SwisTrackCoreInterface() {}
+	virtual ~SwisTrackCoreInterface() {}
 
 	//! Called before the components are started.
 	virtual void OnBeforeStart(bool productivemode) {};

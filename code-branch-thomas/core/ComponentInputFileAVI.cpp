@@ -2,6 +2,7 @@
 #define THISCLASS ComponentInputFileAVI
 
 #include <sstream>
+#include <fstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
@@ -28,25 +29,14 @@ void THISCLASS::OnStart() {
 	mCapture = cvCaptureFromFile(filename.c_str());
 	
 	// Error? Check whether the file exists or not, to give an appropriate error message to the user
-	if (! mCapture) {
-		FILE* f;
-#ifdef VS2003
-		f=fopen(filename, "r");
-#else
-		fopen_s(&f, filename.c_str(), "r");
-#endif
-		if (f) {
-			fclose(f);
+	if (mCapture == NULL) {
+        std::fstream f;
+        f.open(filename.c_str());
+		if (f.is_open()) {
+			f.close();
 			AddError("Cannot open AVI file: codec problem, VFW codec required, not DirectShow.");
 			return;
 		} else {
-#ifdef VS2003
-			f = fopen("swistrack.log", "w");
-#else
-			fopen_s(&f,"swistrack.log", "w");
-#endif
-			fprintf(f, "%s not found", filename);
-			fclose(f);
 			AddError("Cannot open AVI file: file not found.");
 			return;
 		}

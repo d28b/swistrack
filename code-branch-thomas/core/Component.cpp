@@ -89,7 +89,7 @@ bool THISCLASS::GetConfigurationBool(const std::string &key, bool defvalue) {
 		}
 	}
 
-	std::transform(str.begin(), str.end(), str.begin(), std::tolower);
+	std::transform(str.begin(), str.end(), str.begin(), (int(*)(int))std::tolower);
 	if (str=="true") {return true;}
 	if (str=="false") {return false;}
 	int value=(defvalue ? 1 : 0);

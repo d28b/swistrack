@@ -25,7 +25,7 @@ public:
 private:
 	double mMinArea;	//!< (configuration) The minimum area of a blob.
 	double mMaxArea;	//!< (configuration) The maximum area of a blob.
-	int mMaxNumber;		//!< (configuration) The maximum number of blobs that are to detect.
+	unsigned int mMaxNumber;	//!< (configuration) The maximum number of blobs that are to detect.
 
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 	DataStructureParticles::tParticleVector mParticles;		//!< The list of detected particles. This is the list given to DataStructureParticles.

@@ -5,7 +5,7 @@
 #include <algorithm>
 
 THISCLASS::SimulationParticles(const std::string &filename):
-		mFileName(filename), mFile(0), mFrames(), mFrameRead(),
+		mFrames(), mFrameRead(), mFileName(filename), mFile(0), 
 		mCurrentFrame(mFrames.end()), mEmptyFrame() {
 
 	// Initialize structures

@@ -189,3 +189,4 @@ CvPoint2D32f THISCLASS::Image2World(CvPoint2D32f p)
 	w.y=cameraMatrix[6]*p.x+cameraMatrix[7]*p.y+cameraMatrix[8]+cameraMatrix[9]*pxx+cameraMatrix[10]*pyy+cameraMatrix[11]*pxy;
 	return(w);
 }
+

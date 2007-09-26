@@ -5,9 +5,8 @@
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentTracking(SwisTrackCore *stc):
-Component(stc, "Tracking"),
-mMaxNumber(10), mDistanceGate(0.1), mShareTrajectories(1),
-mDisplayOutput("Output", "Tracking") {
+        Component(stc, "Tracking"), mShareTrajectories(1), mMaxNumber(10),
+        mDistanceGate(0.1), mDisplayOutput("Output", "Tracking") {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryTracking);

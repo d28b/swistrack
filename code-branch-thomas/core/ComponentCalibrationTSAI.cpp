@@ -159,3 +159,4 @@ CvPoint2D32f THISCLASS::World2Image(CvPoint2D32f worldCoordinates)
 	imageCoordinates=cvPoint2D32f(ix,iy);
 	return imageCoordinates;
 }
+

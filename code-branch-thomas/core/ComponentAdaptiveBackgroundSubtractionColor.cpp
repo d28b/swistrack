@@ -7,7 +7,8 @@
 
 THISCLASS::ComponentAdaptiveBackgroundSubtractionColor(SwisTrackCore *stc):
 		Component(stc, "AdaptiveBackgroundSubtractionColor"),
-		mBackgroundImageMean(cvScalarAll(0)), mUpdateProportion(0), mCorrectMean(true),
+		mBackgroundImageMean(cvScalarAll(0)), mCorrectMean(true),
+        mUpdateProportion(0), 
 		mDisplayOutput("Output", "After background subtraction") {
 
 	// Data structure relations

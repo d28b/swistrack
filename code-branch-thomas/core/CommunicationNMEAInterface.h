@@ -20,7 +20,7 @@ public:
 	//! Constructor.
 	CommunicationNMEAInterface(): mState(0), mBufferPos(0), mChecksum(0), mMessage(0) {}
 	//! Destructor.
-	~CommunicationNMEAInterface() {}
+	virtual ~CommunicationNMEAInterface() {}
 
 	//! Processes incoming data. This method should be called each time a piece of data is received. The data doesn't need to contain a complete NMEA record.
 	void NMEAProcessData(const char *data, int len);

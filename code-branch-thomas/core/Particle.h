@@ -15,7 +15,7 @@ public:
 	double mCompactness;	//!< The contour's compactness (area/circumference ratio).
 
 	//! Constructor.
-	Particle(): mCenter(), mArea(0), mCompactness(0), mOrientation(0), mID(-1) {}
+	Particle(): mID(-1), mCenter(), mOrientation(0), mArea(0), mCompactness(0) {}
 	//! Destructor.
 	~Particle() {}
 };
