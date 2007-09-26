@@ -45,7 +45,7 @@ BITMAP_MINUS            BITMAP                  "../bitmaps/minus.bmp"
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-ICON_GUI                ICON                    "../bitmaps/gui.ico"
+ICON_GUI                ICON                    "../bitmaps/icon_gui.ico"
 #endif    // Neutral resources
 /////////////////////////////////////////////////////////////////////////////
 
