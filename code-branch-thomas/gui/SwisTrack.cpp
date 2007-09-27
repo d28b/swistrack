@@ -286,8 +286,9 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 		}
 		return true;
 	} else if (m->mCommand=="MODE") {
-		wxString mode=m->GetString("DEFAULT");
-		if (mode=="PRODUCTION") {
+		wxString str=m->GetString("DEFAULT");
+		strlc=str.Lower();
+		if (strlc=="production") {
 			Control_StartProductionMode();
 		} else {
 			Control_StopProductionMode();
