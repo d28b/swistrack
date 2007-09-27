@@ -72,7 +72,7 @@ void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum)
 		return;
 	} else if (m->mCommand=="BROADCAST") {
 		// Broadcast the content of this message to all clients
-		m->mCommand=m->GetString("");
+		m->mCommand=m->GetString("BROADCAST_EMPTY_MESSAGE");
 		mTCPServer->Send(m);
 		return;
 	}

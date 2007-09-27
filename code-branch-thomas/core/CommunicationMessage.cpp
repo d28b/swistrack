@@ -1,5 +1,7 @@
 #include "CommunicationMessage.h"
 #include <sstream>
+#include <cctype>
+#include <algorithm>
 #define THISCLASS CommunicationMessage
 
 
@@ -10,10 +12,15 @@ THISCLASS::CommunicationMessage(const std::string &cmd, CommunicationMessage *in
 
 bool THISCLASS::GetBool(bool defvalue) {
 	if (mParameters.size()<1) {return defvalue;}
-	std::string t=mParameters.front();
+	std::string str=mParameters.front();
 	mParameters.pop_front();
 
-	std::istringstream istr(t);
+	std::string strlc(str);
+	std::transform(strlc.begin(), strlc.end(), strlc.begin(), std::tolower);
+	if (strlc=="true") {return true;}
+	if (strlc=="false") {return false;}
+
+	std::istringstream istr(str);
 	bool val=0;
 	istr >> val;
 	return val;
@@ -21,10 +28,10 @@ bool THISCLASS::GetBool(bool defvalue) {
 
 int THISCLASS::GetInt(int defvalue) {
 	if (mParameters.size()<1) {return defvalue;}
-	std::string t=mParameters.front();
+	std::string str=mParameters.front();
 	mParameters.pop_front();
 
-	std::istringstream istr(t);
+	std::istringstream istr(str);
 	int val=0;
 	istr >> val;
 	return val;
@@ -32,10 +39,10 @@ int THISCLASS::GetInt(int defvalue) {
 
 double THISCLASS::GetDouble(double defvalue) {
 	if (mParameters.size()<1) {return defvalue;}
-	std::string t=mParameters.front();
+	std::string str=mParameters.front();
 	mParameters.pop_front();
 
-	std::istringstream istr(t);
+	std::istringstream istr(str);
 	double val=0;
 	istr >> val;
 	return val;
@@ -43,16 +50,18 @@ double THISCLASS::GetDouble(double defvalue) {
 
 std::string THISCLASS::GetString(const std::string &defvalue) {
 	if (mParameters.size()<1) {return defvalue;}
-	std::string t=mParameters.front();
+	std::string str=mParameters.front();
 	mParameters.pop_front();
 
-	return t;
+	return str;
 }
 
 bool THISCLASS::AddBool(bool value) {
-	std::ostringstream oss;
-	oss << value;
-	mParameters.push_back(oss.str());
+	if (value) {
+		mParameters.push_back("true");
+	} else {
+		mParameters.push_back("false");
+	}
 	return true;
 }
 
