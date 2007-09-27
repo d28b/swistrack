@@ -16,8 +16,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\..\release"
-			IntermediateDirectory="T:\"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -78,7 +78,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxbase28_net.lib wxbase28_xml.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib"
-				OutputFile="..\..\..\release\$(ConfigurationName).exe"
+				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\core\lib;L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib"
@@ -120,8 +120,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\..\release"
-			IntermediateDirectory="T:\"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -191,7 +191,7 @@
 				LinkLibraryDependencies="true"
 				UseLibraryDependencyInputs="false"
 				AdditionalDependencies="wxbase28d_net.lib wxbase28d_xml.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib"
-				OutputFile="..\..\..\release\$(ConfigurationName).exe"
+				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\core\lib;L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib"
@@ -241,8 +241,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug - GigaBit Camera|Win32"
-			OutputDirectory="..\..\..\release"
-			IntermediateDirectory="T:\"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -302,7 +302,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxbase28d_net.lib wxbase28d_xml.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib GCBase_MDd_VC80.lib GenApi_MDd_VC80.lib PylonBase_MDd_VC80.lib PylonGigE_MDd_VC80.lib"
-				OutputFile="..\..\..\release\$(ConfigurationName).exe"
+				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;&quot;L:\Basler\Pylon 1.0\pylon\lib&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\lib\win32_i86&quot;"
@@ -344,8 +344,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug - FireWire Camera|Win32"
-			OutputDirectory="..\..\..\release"
-			IntermediateDirectory="T:\"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -407,7 +407,7 @@
 				LinkLibraryDependencies="true"
 				UseLibraryDependencyInputs="false"
 				AdditionalDependencies="wxbase28d_net.lib wxbase28d_xml.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib 1394camera.lib"
-				OutputFile="..\..\..\release\$(ConfigurationName).exe"
+				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\core\lib;L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\1394camera\lib;L:\opencv\lib"
@@ -450,8 +450,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release - GigaBit Camera|Win32"
-			OutputDirectory="..\..\..\release"
-			IntermediateDirectory="T:\"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -512,7 +512,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxbase28_net.lib wxbase28_xml.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib GCBase_MD_VC80.lib GenApi_MD_VC80.lib PylonBase_MD_VC80.lib PylonGigE_MD_VC80.lib"
-				OutputFile="..\..\..\release\$(ConfigurationName).exe"
+				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\core\lib;L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;&quot;L:\Basler\Pylon 1.0\pylon\lib&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\lib\win32_i86&quot;"
@@ -554,8 +554,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release - FireWire Camera|Win32"
-			OutputDirectory="..\..\..\release"
-			IntermediateDirectory="T:\"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -616,7 +616,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxbase28_net.lib wxbase28_xml.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib 1394camera.lib"
-				OutputFile="..\..\..\release\$(ConfigurationName).exe"
+				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\core\lib;L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;L:\1394camera\lib"

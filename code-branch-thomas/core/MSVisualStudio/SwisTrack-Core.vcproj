@@ -16,8 +16,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="T:\"
-			IntermediateDirectory="T:\"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -93,8 +93,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="T:\"
-			IntermediateDirectory="T:\"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -171,8 +171,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug - GigaBit Camera|Win32"
-			OutputDirectory="T:\"
-			IntermediateDirectory="T:\"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -246,8 +246,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug - FireWire Camera|Win32"
-			OutputDirectory="T:\"
-			IntermediateDirectory="T:\"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -323,8 +323,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release - GigaBit Camera|Win32"
-			OutputDirectory="T:\"
-			IntermediateDirectory="T:\"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -401,8 +401,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release - FireWire Camera|Win32"
-			OutputDirectory="T:\"
-			IntermediateDirectory="T:\"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
