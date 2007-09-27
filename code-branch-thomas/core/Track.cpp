@@ -1,9 +1,7 @@
 #include "Track.h"
 
 /** \brief Constructor - id number id*/
-Track::Track(int idnumber,int n_objects) 
-{
-
+Track::Track(int idnumber,int n_objects) {
 	int r=128,g=128,b=128;
 
 	if(idnumber>2*(n_objects)/3){
@@ -27,21 +25,19 @@ Track::~Track() {
 }
 
 /** \brief Add a point to the current track (max track) */
-void Track::AddPoint(CvPoint2D32f p){
+void Track::AddPoint(CvPoint2D32f p) {
 	trajectory.push_back(p);
 	if((int)(trajectory.size()) > maxlength)
 		trajectory.erase(trajectory.begin());
 }
 
-void Track::SetCritPoint(CvPoint2D32f *p)
-{
+void Track::SetCritPoint(CvPoint2D32f *p) {
 	critpoint.x=p->x;
 	critpoint.y=p->y;
 }
 
-double Track::GetDist(CvPoint2D32f *p1, CvPoint2D32f *p2)
-{
-	return(
+double Track::GetDist(CvPoint2D32f *p1, CvPoint2D32f *p2) {
+	return (
 		(p1->x-p2->x)*
 		(p1->x-p2->x)
 		+

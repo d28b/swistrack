@@ -5,7 +5,7 @@
 
 THISCLASS::SwisTrackCoreEventRecorder(SwisTrackCore *stc):
 		mSwisTrackCore(stc), mFrequency(0), mCurrentTimeline(0), 
-        mLastTimeline(0), mPreviousStep(), mStepDistance(0) {
+		mLastTimeline(0), mPreviousStep(), mStepDistance(0) {
 
 	// Store the frequency of the counter
 #ifdef __WXMSW__
@@ -42,9 +42,7 @@ THISCLASS::~SwisTrackCoreEventRecorder() {
 void THISCLASS::StartRecording() {
 	// Set the end time of the current timeline
 	if (mCurrentTimeline) {
-		if (mCurrentTimeline->mEvents.size() >= 
-                (unsigned int)Timeline::mNumberOfEvents) 
-        {
+		if (mCurrentTimeline->mEvents.size() >= (unsigned int)Timeline::mNumberOfEvents) {
 			mCurrentTimeline->mEvents.back().mType=sType_TimelineOverflow;
 			mCurrentTimeline->mEvents.back().mComponent=0;
 		}
@@ -84,15 +82,13 @@ void THISCLASS::LapTime(Event *it, eType type, Component *c) {
 
 void THISCLASS::Add(const Event *it) {
 	if (! mCurrentTimeline) {return;}
-	if (mCurrentTimeline->mEvents.size() >= 
-            (unsigned int) Timeline::mNumberOfEvents) {return;}
+	if (mCurrentTimeline->mEvents.size() >= (unsigned int) Timeline::mNumberOfEvents) {return;}
 	mCurrentTimeline->mEvents.push_back(*it);
 }
 
 void THISCLASS::Add(eType type, Component *component) {
 	if (! mCurrentTimeline) {return;}
-	if (mCurrentTimeline->mEvents.size() >= 
-            (unsigned int) Timeline::mNumberOfEvents) {return;}
+	if (mCurrentTimeline->mEvents.size() >= (unsigned int) Timeline::mNumberOfEvents) {return;}
 
 	Event it;
 	LapTime(&it, type, component);

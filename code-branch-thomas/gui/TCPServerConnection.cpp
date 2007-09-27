@@ -5,7 +5,7 @@ BEGIN_EVENT_TABLE(TCPServerConnection, wxEvtHandler)
 	EVT_SOCKET(SOCKET_ID, TCPServerConnection::OnSocketEvent)
 END_EVENT_TABLE()
 
-THISCLASS::TCPServerConnection(TCPServer* ss, wxSocketBase *sb): 
+THISCLASS::TCPServerConnection(TCPServer* ss, wxSocketBase *sb):
 		mSocket(sb), mTCPServer(ss), mCurrentRequest(0), mSubscriptions() {
 
 	// Configure the socket to be non-blocking

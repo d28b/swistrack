@@ -64,8 +64,8 @@ void THISCLASS::OnTriggerClear(wxCommandEvent &event) {
 void THISCLASS::OnIdle() {
 	// In case there is no trigger, we execute the steps as fast as possible.
 	// Hence try to launch the next step.
-	wxCommandEvent event;
-    OnTrigger(event);
+	wxCommandEvent ev;
+	OnTrigger(ev);
 }
 
 void THISCLASS::OnAfterStart(bool productivemode) {
