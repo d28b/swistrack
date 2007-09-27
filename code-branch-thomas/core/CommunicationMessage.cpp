@@ -16,7 +16,7 @@ bool THISCLASS::GetBool(bool defvalue) {
 	mParameters.pop_front();
 
 	std::string strlc(str);
-	std::transform(strlc.begin(), strlc.end(), strlc.begin(), std::tolower);
+	std::transform(strlc.begin(), strlc.end(), strlc.begin(), (int(*)(int))std::tolower);
 	if (strlc=="true") {return true;}
 	if (strlc=="false") {return false;}
 
