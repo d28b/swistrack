@@ -224,10 +224,10 @@ void THISCLASS::UpdateStatus() {
 	}
 }
 
-void THISCLASS::OnAfterStart(bool productivemode) {
+void THISCLASS::OnAfterStart(bool productionmode) {
 	UpdateStatus();
 
-	if (productivemode) {
+	if (productionmode) {
 		mButtonAdd->Enable(false);
 		mButtonRemove->Enable(false);
 		mButtonUp->Enable(false);

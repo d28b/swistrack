@@ -34,8 +34,8 @@ public:
 	void CommitChanges();
 
 	// SwisTrackCoreInterface methods
-	void OnBeforeStart(bool productivemode);
-	void OnAfterStart(bool productivemode) {};
+	void OnBeforeStart(bool productionmode);
+	void OnAfterStart(bool productionmode) {};
 	void OnBeforeStop() {};
 	void OnAfterStop();
 	void OnBeforeStep() {};

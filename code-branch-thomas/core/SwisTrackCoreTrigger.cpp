@@ -68,6 +68,6 @@ void THISCLASS::OnIdle() {
 	OnTrigger(ev);
 }
 
-void THISCLASS::OnAfterStart(bool productivemode) {
+void THISCLASS::OnAfterStart(bool productionmode) {
 	mStepPerformed=false;
 }

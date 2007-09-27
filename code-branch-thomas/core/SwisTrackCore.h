@@ -68,12 +68,12 @@ public:
 	~SwisTrackCore();
 
 	//! Starts all the components. This may only be called if IsStarted()==false.
-	bool Start(bool productivemode);
+	bool Start(bool productionmode);
 	//! Performs one complete step, including cleanup. This may only be called if IsStarted()==true.
 	bool Step();
 	//! Stops all started components. This may only be called if IsStarted()==true.
 	bool Stop();
-	//! Reloads the configuration while a session is runnning. This may only be called if IsStarted()==false. Note that not all configuration parameters may be reloaded. This function may also be called in productive mode.
+	//! Reloads the configuration while a session is runnning. This may only be called if IsStarted()==false. Note that not all configuration parameters may be reloaded. This function may also be called in production mode.
 	bool ReloadConfiguration();
 
 	//! Starts the automatic trigger.
@@ -91,8 +91,8 @@ public:
 
 	//! Returns whether the components have been started.
 	bool IsStarted() {return mStarted;}
-	//! Returns whether the components have been started in productive mode.
-	bool IsStartedInProductiveMode() {return (mStarted && mProductiveMode);}
+	//! Returns whether the components have been started in production mode.
+	bool IsStartedInProductionMode() {return (mStarted && mProductionMode);}
 	//! Returns whether the automatic trigger is active.
 	bool IsTriggerActive() {return mTrigger->GetActive();}
 
@@ -106,7 +106,7 @@ public:
 
 protected:
 	bool mStarted;			//!< Whether the components have been started or not.
-	bool mProductiveMode;	//!< Whether the components are running in productive mode or not. Note that this is only valid if mStarted=true.
+	bool mProductionMode;	//!< Whether the components are running in production mode or not. Note that this is only valid if mStarted=true.
 	int mEditLocks;			//!< The number of edit locks.
 
 	tComponentList mDeployedComponents;						//!< The list of deployed components.

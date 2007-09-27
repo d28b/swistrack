@@ -50,18 +50,18 @@ void THISCLASS::SetNewValue(wxWindow *updateprotection) {
 	// Reload the configuration and perform a step
 	if (mReloadable) {
 		mSwisTrack->mSwisTrackCore->ReloadConfiguration();
-		if (mSwisTrack->mSwisTrackCore->IsStartedInProductiveMode()) {return;}
+		if (mSwisTrack->mSwisTrackCore->IsStartedInProductionMode()) {return;}
 		mSwisTrack->Control_Step();
 	} else {
-		if (mSwisTrack->mSwisTrackCore->IsStartedInProductiveMode()) {return;}
+		if (mSwisTrack->mSwisTrackCore->IsStartedInProductionMode()) {return;}
 		mSwisTrack->mSwisTrackCore->Stop();
 		mSwisTrack->mSwisTrackCore->Start(false);
 		mSwisTrack->Control_Step();
 	}
 }
 
-void THISCLASS::OnBeforeStart(bool productivemode) {
-	if (! productivemode) {return;}
+void THISCLASS::OnBeforeStart(bool productionmode) {
+	if (! productionmode) {return;}
 
 	if (! mReloadable) {
 		this->Hide();

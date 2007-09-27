@@ -7,8 +7,8 @@
 
 //! A component that generates an AVI movie.
 /*!
-	This component writes an AVI file using CvAVIWriter (only available on Win32). The file is written when started in productive mode only.
-	The frames written are taken from a DisplayImage. Hence, any intermediate image can be stored. The DisplayImage may be changed (or even disabled) while the component is running in productive mode.
+	This component writes an AVI file using CvAVIWriter (only available on Win32). The file is written when started in production mode only.
+	The frames written are taken from a DisplayImage. Hence, any intermediate image can be stored. The DisplayImage may be changed (or even disabled) while the component is running in production mode.
 */
 class ComponentOutputAVI: public Component {
 

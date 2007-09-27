@@ -48,7 +48,7 @@ public:
 	void OnListLeftDoubleClick(wxMouseEvent& event);
 
 	// SwisTrackCoreInterface methods
-	void OnAfterStart(bool productivemode);
+	void OnAfterStart(bool productionmode);
 	void OnAfterStop();
 	void OnAfterStep();
 	void OnAfterEdit();

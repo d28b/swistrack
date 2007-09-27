@@ -284,19 +284,19 @@ void THISCLASS::DrawStartStop(wxPaintDC &dc, const SwisTrackCoreEventRecorder::T
 	// Draw
 	double starttime=-1;
 	bool started=timeline->mBeginState.mStarted;
-	bool productive=timeline->mBeginState.mStartedInProductiveMode;
+	bool production=timeline->mBeginState.mStartedInProductionMode;
 	SwisTrackCoreEventRecorder::Timeline::tEventList::const_iterator it=timeline->mEvents.begin();
 	while (it!=timeline->mEvents.end()) {
-		if (it->mType == SwisTrackCoreEventRecorder::sType_SetModeProductive) {
-			productive=true;
+		if (it->mType == SwisTrackCoreEventRecorder::sType_SetModeProduction) {
+			production=true;
 		} else if (it->mType == SwisTrackCoreEventRecorder::sType_SetModeNormal) {
-			productive=false;
+			production=false;
 		} else if (it->mType == SwisTrackCoreEventRecorder::sType_BeforeStart) {
 			starttime=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(*it));
 			started=true;
 		} else if (it->mType == SwisTrackCoreEventRecorder::sType_AfterStop) {
 			double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(*it));
-			DrawStartStop(dc, dw, dh, starttime, time, productive);
+			DrawStartStop(dc, dw, dh, starttime, time, production);
 			starttime=time;
 			started=false;
 		}
@@ -307,12 +307,12 @@ void THISCLASS::DrawStartStop(wxPaintDC &dc, const SwisTrackCoreEventRecorder::T
 	// Draw last event
 	if (started) {
 		//double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timeline->mBegin), &(timeline->mEnd));
-		DrawStartStop(dc, dw, dh, starttime, -1, productive);
+		DrawStartStop(dc, dw, dh, starttime, -1, production);
 	}
 }
 
-void THISCLASS::DrawStartStop(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool productive) {
-	if (productive) {
+void THISCLASS::DrawStartStop(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool production) {
+	if (production) {
 		dc.SetBrush(wxBrush(wxColour(0x00, 0xcc, 0x00)));
 		dc.SetPen(wxPen(wxColour(0x00, 0x88, 0x00)));
 	} else {

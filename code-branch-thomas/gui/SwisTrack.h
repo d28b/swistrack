@@ -57,13 +57,13 @@ public:
 	//! Sets the configuration panel on the right side.
 	void SetConfigurationPanel(Component *c);
 
-	//! Starts in productive mode.
-	void Control_StartProductiveMode();
-	//! Stops productive mode.
-	void Control_StopProductiveMode();
-	//! Performs a single step. If necessary, the core is started (in non-productive mode).
+	//! Starts in production mode.
+	void Control_StartProductionMode();
+	//! Stops production mode.
+	void Control_StopProductionMode();
+	//! Performs a single step. If necessary, the core is started (in non-production mode).
 	void Control_Step();
-	//! Reloads the configuration. If the core is started in productive mode, this only reloads a subset of the parameters. Otherwise, a complete core stop/start is performed.
+	//! Reloads the configuration. If the core is started in production mode, this only reloads a subset of the parameters. Otherwise, a complete core stop/start is performed.
 	void Control_ReloadConfiguration();
 	//! Starts the automatic trigger.
 	void Control_StartRunMode();
@@ -85,7 +85,7 @@ protected:
 		sID_Save,
 		sID_SaveAs,
 		sID_Quit,
-		sID_Control_ProductiveMode,
+		sID_Control_ProductionMode,
 		sID_Control_Run,
 		sID_Control_Step,
 		sID_Control_Reset,
@@ -116,7 +116,7 @@ protected:
 	void OnFileSave(wxCommandEvent& WXUNUSED(event));
 	void OnFileSaveAs(wxCommandEvent& WXUNUSED(event));
 	void OnFileQuit(wxCommandEvent& WXUNUSED(event));
-	void OnControlProductiveMode(wxCommandEvent& WXUNUSED(event));
+	void OnControlProductionMode(wxCommandEvent& WXUNUSED(event));
 	void OnControlRun(wxCommandEvent& WXUNUSED(event));
 	void OnControlStep(wxCommandEvent& WXUNUSED(event));
 	void OnControlReset(wxCommandEvent& WXUNUSED(event));

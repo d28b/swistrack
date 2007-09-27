@@ -33,8 +33,8 @@ void THISCLASS::OnStart() {
 void THISCLASS::OnStep() {
 	// The video file is written upon invocation of OnDisplayImageChanged().
 
-	// Do nothing unless we are in productive mode
-	if (! mCore->IsStartedInProductiveMode()) {return;}
+	// Do nothing unless we are in production mode
+	if (! mCore->IsStartedInProductionMode()) {return;}
 
 	// Report errors
 	if (mErrorAVIFile) {
@@ -82,8 +82,8 @@ void THISCLASS::OnDisplayImageChanged(DisplayImage *di) {
 	if (mCurrentDisplayImage!=di) {return;}
 	if (mErrorAVIFile) {return;}
 
-	// Do nothing unless we are in productive mode
-	if (! mCore->IsStartedInProductiveMode()) {return;}
+	// Do nothing unless we are in production mode
+	if (! mCore->IsStartedInProductionMode()) {return;}
 
 	// Show only every mFrameRate image
 	if (mFrameRate==0) {return;}

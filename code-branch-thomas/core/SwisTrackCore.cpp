@@ -57,7 +57,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 		mDataStructureImageBinary("ImageBinary", "Binary image"),
 		mDataStructureParticles(),
 		mDataStructureTracks(),
-		mStarted(false), mProductiveMode(false), mEditLocks(0), mDeployedComponents() {
+		mStarted(false), mProductionMode(false), mEditLocks(0), mDeployedComponents() {
 
 	// Initialize the list of available components
 	mAvailableComponents.push_back(new ComponentTriggerTimer(this));
@@ -137,13 +137,13 @@ THISCLASS::~SwisTrackCore() {
 	delete mEventRecorder;
 }
 
-bool THISCLASS::Start(bool productivemode) {
+bool THISCLASS::Start(bool productionmode) {
 	if (mStarted) {return false;}
 	if (mEditLocks>0) {return false;}
 
 	// Event recorder
-	if (productivemode) {
-		mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_SetModeProductive);
+	if (productionmode) {
+		mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_SetModeProduction);
 	} else {
 		mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_SetModeNormal);
 	}
@@ -152,13 +152,13 @@ bool THISCLASS::Start(bool productivemode) {
 	// Notify the interfaces
 	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
 	while (iti!=mSwisTrackCoreInterfaces.end()) {
-		(*iti)->OnBeforeStart(productivemode);
+		(*iti)->OnBeforeStart(productionmode);
 		iti++;
 	}
 
 	// Update the flags
 	mStarted=true;
-	mProductiveMode=productivemode;
+	mProductionMode=productionmode;
 
 	// Start all components (until first error)
 	tComponentList::iterator it=mDeployedComponents.begin();
@@ -173,7 +173,7 @@ bool THISCLASS::Start(bool productivemode) {
 	// Notify the interfaces
 	iti=mSwisTrackCoreInterfaces.begin();
 	while (iti!=mSwisTrackCoreInterfaces.end()) {
-		(*iti)->OnAfterStart(productivemode);
+		(*iti)->OnAfterStart(productionmode);
 		iti++;
 	}
 
@@ -209,7 +209,7 @@ bool THISCLASS::Stop() {
 
 	// Update flags
 	mStarted=false;
-	mProductiveMode=false;
+	mProductionMode=false;
 
 	// Notify the interfaces
 	iti=mSwisTrackCoreInterfaces.begin();
@@ -433,8 +433,8 @@ void THISCLASS::OnIdle() {
 bool THISCLASS::IncrementEditLocks() {
 	if (mEditLocks>0) {mEditLocks++; return true;}
 
-	// If started in productive mode, editing is not allowed
-	if (IsStartedInProductiveMode()) {return false;}
+	// If started in production mode, editing is not allowed
+	if (IsStartedInProductionMode()) {return false;}
 
 	// If started in test mode, stop and allow editing
 	Stop();

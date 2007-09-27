@@ -41,7 +41,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 	EVT_MENU(sID_Save, THISCLASS::OnFileSave)
 	EVT_MENU(sID_SaveAs, THISCLASS::OnFileSaveAs)
 	EVT_MENU(sID_Quit,  THISCLASS::OnFileQuit)
-	EVT_MENU(sID_Control_ProductiveMode, THISCLASS::OnControlProductiveMode)
+	EVT_MENU(sID_Control_ProductionMode, THISCLASS::OnControlProductionMode)
 	EVT_MENU(sID_Control_Run, THISCLASS::OnControlRun)
 	EVT_MENU(sID_Control_Step, THISCLASS::OnControlStep)
 	EVT_MENU(sID_Control_Reset, THISCLASS::OnControlReset)
@@ -109,7 +109,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 
 SwisTrack::~SwisTrack(){
 	Control_StopRunMode();
-	Control_StopProductiveMode();
+	Control_StopProductionMode();
 
 	// Delete the components that rely on SwisTrackCore
 	mComponentListPanel->Destroy();
@@ -170,7 +170,7 @@ void THISCLASS::BuildToolBar() {
 	toolbar->AddTool(sID_Open, _T("Open"), wxBITMAP(bitmap_open), _T("Open"));
 	toolbar->AddTool(sID_Save, _T("Save"), wxBITMAP(bitmap_save), _T("Save"));
 	toolbar->AddSeparator();
-	toolbar->AddTool(sID_Control_ProductiveMode, _T("Productive"), wxBITMAP(bitmap_production), _T("Run in productive mode"), wxITEM_CHECK);
+	toolbar->AddTool(sID_Control_ProductionMode, _T("Production"), wxBITMAP(bitmap_production), _T("Run in production mode"), wxITEM_CHECK);
 	toolbar->AddTool(sID_Control_Run, _T("Run"), wxBITMAP(bitmap_play), _T("Run automatically"), wxITEM_CHECK);
 	toolbar->AddSeparator();
 	toolbar->AddTool(sID_Control_Step, _T("Step"), wxBITMAP(bitmap_singlestep), _T("Processes one image"));
@@ -214,7 +214,7 @@ void THISCLASS::SetConfigurationPanel(Component *c) {
 
 	// Show errors
 	if (mConfigurationPanel->mErrorList.mList.empty()) {return;}
-	if (mSwisTrackCore->IsStartedInProductiveMode()) {return;}
+	if (mSwisTrackCore->IsStartedInProductionMode()) {return;}
 	ErrorListDialog eld(this, &(mConfigurationPanel->mErrorList), "Component configuration", "The following errors occurred while reading the component configuration description:");
 	eld.ShowModal();
 }
@@ -227,9 +227,9 @@ void THISCLASS::Control_Step() {
 }
 
 void THISCLASS::Control_ReloadConfiguration() {
-	// In productive mode, we just call Control_ReloadConfiguration which may not update all configuration parameters.
+	// In production mode, we just call Control_ReloadConfiguration which may not update all configuration parameters.
 	// Otherwise, we stop the simulation (it is automatically restarted upon the next step).
-	if (mSwisTrackCore->IsStartedInProductiveMode()) {
+	if (mSwisTrackCore->IsStartedInProductionMode()) {
 		mSwisTrackCore->ReloadConfiguration();
 	} else {
 		mSwisTrackCore->Stop();
@@ -237,20 +237,20 @@ void THISCLASS::Control_ReloadConfiguration() {
 	}
 }
 
-void THISCLASS::Control_StartProductiveMode() {
-	// Stop and start in productive mode, unless we are in productive mode already
-	if (mSwisTrackCore->IsStartedInProductiveMode()) {return;}
+void THISCLASS::Control_StartProductionMode() {
+	// Stop and start in production mode, unless we are in production mode already
+	if (mSwisTrackCore->IsStartedInProductionMode()) {return;}
 	mSwisTrackCore->Stop();
-	GetToolBar()->ToggleTool(sID_Control_ProductiveMode, true);
+	GetToolBar()->ToggleTool(sID_Control_ProductionMode, true);
 	GetToolBar()->EnableTool(sID_Control_Reset, false);
 	mSwisTrackCore->Start(true);
 }
 
-void THISCLASS::Control_StopProductiveMode() {
-	// Stop productive mode (if we are running in productive mode) and start in normal mode
-	if (! mSwisTrackCore->IsStartedInProductiveMode()) {return;}
+void THISCLASS::Control_StopProductionMode() {
+	// Stop production mode (if we are running in production mode) and start in normal mode
+	if (! mSwisTrackCore->IsStartedInProductionMode()) {return;}
 	mSwisTrackCore->Stop();
-	GetToolBar()->ToggleTool(sID_Control_ProductiveMode, false);
+	GetToolBar()->ToggleTool(sID_Control_ProductionMode, false);
 	GetToolBar()->EnableTool(sID_Control_Reset, true);
 	mSwisTrackCore->Start(false);
 }
@@ -271,15 +271,7 @@ void THISCLASS::Control_StopRunMode() {
 }
 
 bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
-	if (m->mCommand=="START") {
-		// DEPRECATED: use RUN true
-		Control_StartProductiveMode();
-		return true;
-	} else if (m->mCommand=="STOP") {
-		// DEPRECATED: use RUN false
-		Control_StopProductiveMode();
-		return true;
-	} else if (m->mCommand=="STEP") {
+	if (m->mCommand=="STEP") {
 		Control_Step();
 		return true;
 	} else if (m->mCommand=="RELOADCONFIGURATION") {
@@ -293,12 +285,12 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 			Control_StopRunMode();
 		}
 		return true;
-	} else if (m->mCommand=="PRODUCTIVE") {
-		bool state=m->GetBool(false);
-		if (state) {
-			Control_StartProductiveMode();
+	} else if (m->mCommand=="MODE") {
+		wxString mode=m->GetString("DEFAULT");
+		if (mode=="PRODUCTION") {
+			Control_StartProductionMode();
 		} else {
-			Control_StopProductiveMode();
+			Control_StopProductionMode();
 		}
 		return true;
 	}
@@ -341,7 +333,7 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	// At this point, we consider the SwisTrack configuration to be valid. The next few lines close the current configuration and read the configuration.
 
 	// Close the current configuration
-	Control_StopProductiveMode();
+	Control_StopProductionMode();
 	Control_StopRunMode();
 	SetConfigurationPanel(0);
 	if (mChanged) {
@@ -446,11 +438,11 @@ void SwisTrack::OnFileQuit(wxCommandEvent& WXUNUSED(event)) {
 	Destroy();
 }
 
-void THISCLASS::OnControlProductiveMode(wxCommandEvent& WXUNUSED(event)) {
-	if (mSwisTrackCore->IsStartedInProductiveMode()) {
-		Control_StopProductiveMode();
+void THISCLASS::OnControlProductionMode(wxCommandEvent& WXUNUSED(event)) {
+	if (mSwisTrackCore->IsStartedInProductionMode()) {
+		Control_StopProductionMode();
 	} else {
-		Control_StartProductiveMode();
+		Control_StartProductionMode();
 	}
 }
 

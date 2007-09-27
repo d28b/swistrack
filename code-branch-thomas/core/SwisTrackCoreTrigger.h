@@ -30,7 +30,7 @@ public:
 	bool GetActive() const {return mActive;}
 
 	// SwisTrackCoreInterface methods
-	void OnAfterStart(bool productivemode);
+	void OnAfterStart(bool productionmode);
 
 private:
 	bool mActive;				//!< Whether the automatic trigger is activated or not.

@@ -27,11 +27,11 @@ THISCLASS::~ComponentSimulationParticles() {
 }
 
 void THISCLASS::OnStart() {
-	bool productive=mCore->IsStartedInProductiveMode();
+	bool production=mCore->IsStartedInProductionMode();
 
-	// Read the file (if the filename changed or if we are in productive mode)
+	// Read the file (if the filename changed or if we are in production mode)
 	std::string filename=GetConfigurationString("File", "");
-	if (productive || (mSimulationParticles==0) || (mSimulationParticles->GetFileName()!=filename)) {
+	if (production || (mSimulationParticles==0) || (mSimulationParticles->GetFileName()!=filename)) {
 		delete mSimulationParticles;
 		mSimulationParticles=new SimulationParticles(filename);
 		if (! mSimulationParticles->IsOpen()) {

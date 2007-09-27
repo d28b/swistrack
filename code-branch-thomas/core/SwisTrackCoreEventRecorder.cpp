@@ -19,7 +19,7 @@ THISCLASS::SwisTrackCoreEventRecorder(SwisTrackCore *stc):
 
 	// Type names
 	mTypeNames[sType_None]="None";
-	mTypeNames[sType_SetModeProductive]="SetModeProductive";
+	mTypeNames[sType_SetModeProduction]="SetModeProduction";
 	mTypeNames[sType_SetModeNormal]="SetModeNormal";
 	mTypeNames[sType_BeforeStart]="BeforeStart";
 	mTypeNames[sType_AfterStart]="AfterStart";
@@ -62,7 +62,7 @@ void THISCLASS::StartRecording() {
 	mCurrentTimeline->mEvents.reserve(Timeline::mNumberOfEvents);
 
 	// Set the start state
-	mCurrentTimeline->mBeginState.mStartedInProductiveMode=mSwisTrackCore->IsStartedInProductiveMode();
+	mCurrentTimeline->mBeginState.mStartedInProductionMode=mSwisTrackCore->IsStartedInProductionMode();
 	mCurrentTimeline->mBeginState.mStarted=mSwisTrackCore->IsStarted();
 	mCurrentTimeline->mBeginState.mTriggerActive=mSwisTrackCore->IsTriggerActive();
 	

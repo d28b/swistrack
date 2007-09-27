@@ -22,7 +22,7 @@ public:
 	enum eType {
 		sType_None,
 		sType_TimelineOverflow,
-		sType_SetModeProductive,
+		sType_SetModeProduction,
 		sType_SetModeNormal,
 		sType_BeforeStart,
 		sType_AfterStart,
@@ -53,7 +53,7 @@ public:
 	//! A class holding the state of SwisTrackCore at a specific time instance.
 	class State {
 	public:
-		bool mStartedInProductiveMode;		//!< Whether started in productive mode.
+		bool mStartedInProductionMode;		//!< Whether started in production mode.
 		bool mStarted;						//!< Whether started at all.
 		bool mTriggerActive;				//!< Whether the automatic trigger is active.
 	};

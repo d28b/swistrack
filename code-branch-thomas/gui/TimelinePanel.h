@@ -90,7 +90,7 @@ private:
 	//! Draws executions (from start to stop).
 	void DrawStartStop(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline);
 	//! Draws one execution.
-	void DrawStartStop(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool productive);
+	void DrawStartStop(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool production);
 	//! Draws the beginning and the end of the timeline.
 	void DrawBeginEnd(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline);
 	//! Draws a red line at the point where the timeline run out of memory.
