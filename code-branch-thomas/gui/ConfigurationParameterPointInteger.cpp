@@ -75,8 +75,8 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 }
 
 void THISCLASS::OnUpdate(wxWindow *updateprotection) {
-	double valuex=mComponent->GetConfigurationDouble((mName+".x").c_str(), mValueDefaultX);
-	double valuey=mComponent->GetConfigurationDouble((mName+".y").c_str(), mValueDefaultY);
+	int valuex=mComponent->GetConfigurationInt((mName+".x").c_str(), mValueDefaultX);
+	int valuey=mComponent->GetConfigurationInt((mName+".y").c_str(), mValueDefaultY);
 	if (updateprotection!=mSpinCtrlX) {mSpinCtrlX->SetValue(valuex);}
 	if (updateprotection!=mSpinCtrlY) {mSpinCtrlY->SetValue(valuey);}
 }
