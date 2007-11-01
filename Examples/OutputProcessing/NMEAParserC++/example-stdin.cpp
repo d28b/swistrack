@@ -15,7 +15,7 @@ public:
 	// CommunicationNMEAInterface methods
 	void OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum);
 	void OnNMEAProcessMessageChecksumError(CommunicationMessage *m);
-	void OnNMEAProcessUnrecognizedChar(unsigned char chr);
+	void OnNMEAProcessUnrecognizedChar(unsigned char c);
 	void OnNMEASend(const std::string &str);
 
 	//! Just as an example, we count the number of PARTICLE messages per frame
@@ -71,7 +71,7 @@ void MySwisTrackClientSTDIN::OnNMEAProcessMessage(CommunicationMessage *m, bool 
 		mParticleMessagesCount++;
 	} else if (m->mCommand=="ENDFRAME") {
 		// This messages indicates the end of the current frame
-		std::cout << "  -- Got " << mParticleMessagesCount << " particle(s) for that frame." << std::endl;
+		std::cout << "  -- Got " << mParticleMessagesCount << " particle(s) for that frame" << std::endl;
 	} else {
 		std::cout << "Unknown message '" << m->mCommand << "' received!" << std::endl;
 	}
@@ -85,7 +85,7 @@ void MySwisTrackClientSTDIN::OnNMEAProcessMessageChecksumError(CommunicationMess
 	 */ 
 }
 
-void MySwisTrackClientSTDIN::OnNMEAProcessUnrecognizedChar(unsigned char chr) {
+void MySwisTrackClientSTDIN::OnNMEAProcessUnrecognizedChar(unsigned char c) {
 	/* Unrecognized chars are bytes that are transmitted between valid NMEA messages.
 	 * An NMEA stream usually only consists of NMEA messages, but people sometimes put human readable comments in between.
 	 * On lossy channels, messages missing the $ sign (start-of-message) would also fall in here.

@@ -3,19 +3,19 @@
 
 #include <sstream>
 
-void THISCLASS::NMEAProcessData(const char *data, int len) {
+void THISCLASS::NMEAProcessData(const char *buffer, int len) {
 	for (int i=0; i<len; i++) {
-		char inchar=data[i];
-		if (mState==0) {
+		char inchar=buffer[i];
+		if (mState==cState_None) {
 			if (inchar=='$') {
-				mState=1;
 				mMessage=new CommunicationMessage();
 				mBufferPos=0;
 				mChecksum=0;
+				mState=cState_Argument;
 			} else {
 				OnNMEAProcessUnrecognizedChar(inchar);
 			}
-		} else if (mState==1) {
+		} else if (mState==cState_Argument) {
 			if (inchar==',') {
 				mBuffer[mBufferPos]=0;
 				mMessage->AddParsedArgument(mBuffer);
@@ -24,45 +24,45 @@ void THISCLASS::NMEAProcessData(const char *data, int len) {
 			} else if (inchar=='*') {
 				mBuffer[mBufferPos]=0;
 				mMessage->AddParsedArgument(mBuffer);
-				mState=2;
-			} else if (inchar=='\n') {
+				mState=cState_Checksum1;
+			} else if ((inchar=='\n') || (inchar=='\r')) {
 				mBuffer[mBufferPos]=0;
 				mMessage->AddParsedArgument(mBuffer);
 				OnNMEAProcessMessage(mMessage, false);
 				delete mMessage;
 				mMessage=0;
-				mState=0;
+				mState=cState_None;
 			} else {
 				mBuffer[mBufferPos++]=inchar;
 				mChecksum=mChecksum ^ inchar;
 			}
-		} else if (mState==2) {
-			char ch="0123456789ABCDEF"[(mChecksum >> 4) & 0xF];
+		} else if (mState==cState_Checksum1) {
+			char checksum_expected="0123456789ABCDEF"[(mChecksum >> 4) & 0xF];
 			if (inchar=='\n') {
 				OnNMEAProcessMessageChecksumError(mMessage);
 				delete mMessage;
 				mMessage=0;
-				mState=0;
-			} else if (inchar==ch) {
-				mState=3;
+				mState=cState_None;
+			} else if (inchar==checksum_expected) {
+				mState=cState_Checksum2;
 			} else {
 				OnNMEAProcessMessageChecksumError(mMessage);
 				delete mMessage;
 				mMessage=0;
-				mState=4;
+				mState=cState_Checksum2Discard;
 			}
-		} else if (mState==3) {
-			char ch="0123456789ABCDEF"[mChecksum & 0xF];
-			if (inchar==ch) {
+		} else if (mState==cState_Checksum2) {
+			char checksum_expected="0123456789ABCDEF"[mChecksum & 0xF];
+			if (inchar==checksum_expected) {
 				OnNMEAProcessMessage(mMessage, true);
 			} else {
 				OnNMEAProcessMessageChecksumError(mMessage);
 			}
 			delete mMessage;
 			mMessage=0;
-			mState=0;
-		} else if (mState==4) {
-			mState=0;
+			mState=cState_None;
+		} else if (mState==cState_Checksum2Discard) {
+			mState=cState_None;
 		} else {
 		}
 	}

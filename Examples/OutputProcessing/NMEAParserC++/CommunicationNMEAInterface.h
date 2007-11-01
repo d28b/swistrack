@@ -11,7 +11,15 @@ class CommunicationNMEAInterface;
 class CommunicationNMEAInterface {
 
 private:
-	int mState;
+	enum eState {
+		cState_None,
+		cState_Argument,
+		cState_Checksum1,
+		cState_Checksum2,
+		cState_Checksum2Discard
+	};
+
+	enum eState mState;
 	static const int mBufferSize=1024;
 	char mBuffer[mBufferSize];
 	int mBufferPos;
@@ -20,10 +28,10 @@ private:
 
 public:
 	//! Constructor.
-	CommunicationNMEAInterface(): mState(0), mBufferPos(0), mChecksum(0), mMessage(0) {}
+	CommunicationNMEAInterface(): mState(cState_None), mBufferPos(0), mChecksum(0), mMessage(0) {}
 
 	//! Processes incoming data. This method should be called each time a piece of data is received. The data doesn't need to contain a complete NMEA record.
-	void NMEAProcessData(const char *data, int len);
+	void NMEAProcessData(const char *buffer, int len);
 	//! This method can be called to send an NMEA message.
 	void NMEASendMessage(CommunicationMessage *m);
 
@@ -32,7 +40,7 @@ public:
 	//! Called when an NMEA record with a checksum error ist received.
 	virtual void OnNMEAProcessMessageChecksumError(CommunicationMessage *m) = 0;
 	//! Called to process a char that does not belong to an NMEA record.
-	virtual void OnNMEAProcessUnrecognizedChar(unsigned char chr) = 0;
+	virtual void OnNMEAProcessUnrecognizedChar(unsigned char c) = 0;
 	//! Called to send text to the client.
 	virtual void OnNMEASend(const std::string &str) = 0;
 };
