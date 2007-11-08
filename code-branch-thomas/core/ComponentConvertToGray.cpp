@@ -22,10 +22,15 @@ THISCLASS::ComponentConvertToGray(SwisTrackCore *stc):
 THISCLASS::~ComponentConvertToGray() {
 }
 
-void THISCLASS::OnStart() {
+void THISCLASS::OnStart() 
+{
+	OnReloadConfiguration();
 }
 
-void THISCLASS::OnReloadConfiguration() {
+void THISCLASS::OnReloadConfiguration() 
+{
+	channel=GetConfigurationInt("Channel", 0);
+	strcpy(channelColorSeq,"BGR");
 }
 
 void THISCLASS::OnStep() {
@@ -34,11 +39,23 @@ void THISCLASS::OnStep() {
 	
 	try {
 		// We convert the input image to black and white
-		if (inputimage->nChannels==3) {
-			// BGR case, we convert to gray or select one channel
+		if (inputimage->nChannels==3) 
+		{
+			// 3 color case, we convert to gray or select one channel
 			PrepareOutputImage(inputimage);
-			int channel=GetConfigurationInt("Channel", 0);
-			if ((channel>0) && (channel<=3)) {
+			if ((channel>0) && (channel<=3)) 
+			{
+				// Correct the channel sequence
+				if (strncmp(inputimage->channelSeq,channelColorSeq,3))		
+				{				
+					for (int i=1;i<4;i++)		
+						if (inputimage->channelSeq[i-1]==channelColorSeq[channel-1])
+						{
+							channel=i;
+							break;
+						}
+					strcpy(channelColorSeq,inputimage->channelSeq);					
+				}
 				cvSetImageCOI(inputimage, channel);
 				cvCopy(inputimage, mOutputImage);
 			} else {

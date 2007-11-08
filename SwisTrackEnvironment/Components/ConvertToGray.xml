@@ -7,7 +7,7 @@
 
 	<configuration>
 		<parameter type="dropdownlist">
-			<name>Device</name>
+			<name>Channel</name>
 			<label>Channel</label>
 			<items>
 				<item key="0">All (convert to gray)</item>
