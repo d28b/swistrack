@@ -54,16 +54,22 @@ void MySwisTrackClientSTDIN::OnNMEAProcessMessage(CommunicationMessage *m, bool 
 	 * A message consists of a command string and arguments. The command string can be accessed via
 	 *     m->mCommand
 	 * while the arguments can be read (and converted) with
-	 *     bool myvar = m->GetBool(bool defaultvalue);
-	 *     int myvar = m->GetInt(int defaultvalue);
-	 *     double myvar = m->GetDouble(double defaultvalue);
-	 *     std::string myvar = m->GetString(const std::string defaultvalue);
-	 * Each of these methods pops the next argument of the lists, converts it and returns the result.
+	 *     bool myvar = m->GetBool(int i, bool defaultvalue);
+	 *     int myvar = m->GetInt(int i, int defaultvalue);
+	 *     double myvar = m->GetDouble(int i, double defaultvalue);
+	 *     std::string myvar = m->GetString(int i, const std::string defaultvalue);
+	 * or
+	 *     bool myvar = m->PopBool(bool defaultvalue);
+	 *     int myvar = m->PopInt(int defaultvalue);
+	 *     double myvar = m->PopDouble(double defaultvalue);
+	 *     std::string myvar = m->PopString(const std::string defaultvalue);
+	 * The Get* methods return the argument at a specific index, or the default value if that argument doesn't exist.
+	 * The Pop* methods return the next argument each time they are called.
 	 */
 
 	if (m->mCommand=="BEGINFRAME") {
 		// This messages indicates the beginning of a new frame
-		int framenumber=m->GetInt(0);
+		int framenumber=m->PopInt(0);
 		std::cout << "Getting data for frame number " << framenumber << std::endl;
 		mParticleMessagesCount=0;
 	} else if (m->mCommand=="PARTICLE") {
