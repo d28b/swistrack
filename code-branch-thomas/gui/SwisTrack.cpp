@@ -278,7 +278,7 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 		Control_ReloadConfiguration();
 		return true;
 	} else if (m->mCommand=="RUN") {
-		bool state=m->GetBool(false);
+		bool state=m->PopBool(false);
 		if (state) {
 			Control_StartRunMode();
 		} else {
@@ -286,7 +286,7 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 		}
 		return true;
 	} else if (m->mCommand=="MODE") {
-		wxString str=m->GetString("DEFAULT");
+		wxString str=m->PopString("DEFAULT");
 		wxString strlc=str.Lower();
 		if (strlc=="production") {
 			Control_StartProductionMode();

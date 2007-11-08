@@ -25,14 +25,14 @@ THISCLASS::~SimulationParticles() {
 
 void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum) {
 	if (m->mCommand=="BEGINFRAME") {
-		mFrameRead.number=m->GetInt(0);
+		mFrameRead.number=m->PopInt(0);
 		mFrameRead.particles.clear();
 	} else if (m->mCommand=="PARTICLE") {
 		Particle p;
-		p.mID=m->GetInt(0);
-		p.mCenter.x=(float)m->GetDouble(0);
-		p.mCenter.y=(float)m->GetDouble(0);
-		p.mOrientation=(float)m->GetDouble(0);
+		p.mID=m->PopInt(0);
+		p.mCenter.x=(float)m->PopDouble(0);
+		p.mCenter.y=(float)m->PopDouble(0);
+		p.mOrientation=(float)m->PopDouble(0);
 		mFrameRead.particles.push_back(p);
 	} else if (m->mCommand=="ENDFRAME") {
 		mFrames.push_back(mFrameRead);

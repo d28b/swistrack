@@ -72,7 +72,13 @@ void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum)
 		return;
 	} else if (m->mCommand=="BROADCAST") {
 		// Broadcast the content of this message to all clients
-		m->mCommand=m->GetString("BROADCAST_EMPTY_MESSAGE");
+		
+		// The first element becomes the command and is removed
+		m->mCommand=m->GetString(0, "BROADCAST_EMPTY_MESSAGE");
+		if (m->mParameters.begin()!=m->mParameters.end()) {
+			m->mParameters.erase(m->mParameters.begin());
+		}
+
 		mTCPServer->Send(m);
 		return;
 	}
