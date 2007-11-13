@@ -13,6 +13,7 @@
 #include "ComponentConvertToGray.h"
 #include "ComponentConvertToColor.h"
 #include "ComponentConvertBayerToColor.h"
+#include "ComponentChannelArithmetic.h"
 #include "ComponentBackgroundSubtractionGray.h"
 #include "ComponentBackgroundSubtractionColor.h"
 #include "ComponentHSVBackgroundSubtractionColor.h"
@@ -70,6 +71,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentConvertToGray(this));
 	mAvailableComponents.push_back(new ComponentConvertToColor(this));
 	mAvailableComponents.push_back(new ComponentConvertBayerToColor(this));
+	mAvailableComponents.push_back(new ComponentChannelArithmetic(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentHSVBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionColor(this));

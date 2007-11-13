@@ -7,7 +7,13 @@
 #ifdef USE_CAMERA_CMU_1394
 #include <cv.h>
 #include <highgui.h>  // 1394camera.h requires this to be included before
+
+#ifdef __WXMSW__
 #include <1394camera.h>
+#else // __WXMSW__
+#include <dc1394_control.h>
+#endif // __WXMSW__
+
 #include "Display.h"
 
 //! An input component that interfaces a Firewire 1394 camera.
@@ -28,7 +34,11 @@ public:
 	Component *Create() {return new ComponentInputCamera1394(mCore);}
 
 private:
+#ifdef __WXMSW__
 	C1394Camera mCamera;				//!< Camera handle.
+#else // __WXMSW__
+    dc1394_camera_t mCamera;
+#endif // __WXMSW__
 	IplImage* mOutputImage;				//!< The last acquired image.
 	int mFrameNumber;					//!< The frame number since the component was started.
 	unsigned char *grabbedImageBuffer;	//!< Memory buffer were the grabbed image is put
@@ -53,7 +63,7 @@ public:
 	Component *Create() {return new ComponentInputCamera1394(mCore);}
 };
 
-#endif
+#endif // USE_CAMERA_CMU_1394
 
-#endif
+#endif // HEADER_ComponentInputCamera1394
 
