@@ -180,8 +180,8 @@ bool THISCLASS::Start(bool productionmode) {
 	}
 
 	// Notify the clients
-	CommunicationMessage mbegin("START");
-	mCore->mCommunicationInterface->Send(&mbegin);
+	CommunicationMessage mstart("START");
+	mCommunicationInterface->Send(&mstart);
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterStart);
@@ -225,8 +225,8 @@ bool THISCLASS::Stop() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mbegin("STOP");
-	mCore->mCommunicationInterface->Send(&mbegin);
+	CommunicationMessage mstop("STOP");
+	mCommunicationInterface->Send(&mstop);
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterStop);
@@ -259,8 +259,8 @@ bool THISCLASS::Step() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mbegin("STEP_START");
-	mCore->mCommunicationInterface->Send(&mbegin);
+	CommunicationMessage mstart("STEP_START");
+	mCommunicationInterface->Send(&mstart);
 
 	// Reset the step durations
 	it=mDeployedComponents.begin();
@@ -309,8 +309,8 @@ bool THISCLASS::Step() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mbegin("STEP_STOP");
-	mCore->mCommunicationInterface->Send(&mbegin);
+	CommunicationMessage mstop("STEP_STOP");
+	mCommunicationInterface->Send(&mstop);
 
 	// Notify the displays (OnAfterStep)
 	it=mDeployedComponents.begin();
@@ -381,8 +381,8 @@ void THISCLASS::TriggerStart() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mbegin("TRIGGER_START");
-	mCore->mCommunicationInterface->Send(&mbegin);
+	CommunicationMessage mstart("TRIGGER_START");
+	mCommunicationInterface->Send(&mstart);
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterTriggerStart);
@@ -412,8 +412,8 @@ void THISCLASS::TriggerStop() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mbegin("TRIGGER_STOP");
-	mCore->mCommunicationInterface->Send(&mbegin);
+	CommunicationMessage mstop("TRIGGER_STOP");
+	mCommunicationInterface->Send(&mstop);
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterTriggerStop);

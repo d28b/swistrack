@@ -115,9 +115,9 @@ SwisTrack::~SwisTrack(){
 	mComponentListPanel->Destroy();
 	mConfigurationPanel->Destroy();
 
-	// Delete the TCP server and the SwisTrackCore object
-	delete mTCPServer;
+	// Delete the SwisTrackCore object and then the TCP server object (in that order)
 	delete mSwisTrackCore;
+	delete mTCPServer;
 }
 
 void THISCLASS::BuildMenuBar() {
