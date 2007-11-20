@@ -87,7 +87,7 @@ void THISCLASS::OnStart() {
 	if (aoiy>camerah-1) {aoiy=camerah-1;}
 	if (aoiw>cameraw-aoix) {aoiw=cameraw-aoix;}
 	if (aoih>camerah-aoiy) {aoih=camerah-aoiy;}
-	aoiw=(aoiw>>2)<<2;	// The image width must currently be a multiple of 4, for alignment reasons.
+	aoiw=aoiw ^ (aoiw & 0x3);	// The image width must currently be a multiple of 4, for alignment reasons.
 	if (aoiw<4) {aoiw=4;}
 	if (aoih<1) {aoih=1;}
 	mCamera->OffsetX.SetValue(aoix);

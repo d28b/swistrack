@@ -179,6 +179,10 @@ bool THISCLASS::Start(bool productionmode) {
 		iti++;
 	}
 
+	// Notify the clients
+	CommunicationMessage mbegin("START");
+	mCore->mCommunicationInterface->Send(&mbegin);
+
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterStart);
 
@@ -220,6 +224,10 @@ bool THISCLASS::Stop() {
 		iti++;
 	}
 
+	// Notify the clients
+	CommunicationMessage mbegin("STOP");
+	mCore->mCommunicationInterface->Send(&mbegin);
+
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterStop);
 
@@ -249,6 +257,10 @@ bool THISCLASS::Step() {
 		}
 		it++;
 	}
+
+	// Notify the clients
+	CommunicationMessage mbegin("STEP_START");
+	mCore->mCommunicationInterface->Send(&mbegin);
 
 	// Reset the step durations
 	it=mDeployedComponents.begin();
@@ -295,6 +307,10 @@ bool THISCLASS::Step() {
 		it--;
 		(*it)->OnStepCleanup();
 	}
+
+	// Notify the clients
+	CommunicationMessage mbegin("STEP_STOP");
+	mCore->mCommunicationInterface->Send(&mbegin);
 
 	// Notify the displays (OnAfterStep)
 	it=mDeployedComponents.begin();
@@ -364,6 +380,10 @@ void THISCLASS::TriggerStart() {
 		it++;
 	}
 
+	// Notify the clients
+	CommunicationMessage mbegin("TRIGGER_START");
+	mCore->mCommunicationInterface->Send(&mbegin);
+
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterTriggerStart);
 }
@@ -390,6 +410,10 @@ void THISCLASS::TriggerStop() {
 		(*it)->OnAfterTriggerStop();
 		it++;
 	}
+
+	// Notify the clients
+	CommunicationMessage mbegin("TRIGGER_STOP");
+	mCore->mCommunicationInterface->Send(&mbegin);
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterTriggerStop);

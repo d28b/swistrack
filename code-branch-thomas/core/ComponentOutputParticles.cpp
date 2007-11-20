@@ -26,7 +26,7 @@ void THISCLASS::OnStart() {
 void THISCLASS::OnStep() {
 	if (! mCore->mCommunicationInterface) {return;}
 
-	CommunicationMessage mbegin("BEGINFRAME");
+	CommunicationMessage mbegin("FRAMENUMBER");
 	mbegin.AddInt(mCore->mDataStructureInput.mFrameNumber);
 	mCore->mCommunicationInterface->Send(&mbegin);
 
@@ -42,9 +42,6 @@ void THISCLASS::OnStep() {
 		mCore->mCommunicationInterface->Send(&m);
 		it++;
 	}
-
-	CommunicationMessage mend("ENDFRAME");
-	mCore->mCommunicationInterface->Send(&mend);
 }
 
 void THISCLASS::OnReloadConfiguration() {
