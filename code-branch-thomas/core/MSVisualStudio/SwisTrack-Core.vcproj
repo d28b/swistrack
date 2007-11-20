@@ -752,6 +752,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentChannelArithmetic.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentChannelArithmetic.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentHSVBackgroundSubtractionColor.cpp"
 					>
 				</File>
