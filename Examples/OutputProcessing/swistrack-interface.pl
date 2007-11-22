@@ -17,13 +17,14 @@ print $swistrack '$RUN,true', "\n";
 print 'Waiting for the first blob ...', "\n";
 my $framenumber=0;
 while (my $line=<$swistrack>) {
-	if ($line =~ /\$BEGINFRAME,([\d-]*)\*/) {
-		# This is the beginning of a frame - just store the frame number (first result of regular expression)
-		$framenumber=$1;
+	if ($line =~ /\$STEP_START\*/) {
 	} elsif ($line =~ /\$PARTICLE,([\d-]*),([\d\.-]*),([\d\.-]*),([\d\.-]*)\*/) {
 		# This is a particle
-		print 'Particle found in frame ', $framenumber, ': ', $1, ' ', $2, ' ', $3, ' ', $4, "\n";
+		print 'Particle found: ', $1, ' ', $2, ' ', $3, ' ', $4, "\n";
+
+		# We stop SwisTrack here (note that you may receive a few more particles until SwisTrack really stops)
 		print 'Stopping SwisTrack now ...', "\n";
 		print $swistrack '$RUN,false', "\n";
+		last;
 	} 
 }
