@@ -68,6 +68,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 #endif
 
 	// General initialization
+	SetBackgroundColour(wxColour(128, 128, 128));
 	SetIcon(wxICON(icon_gui));
 	BuildMenuBar();
 	BuildToolBar();

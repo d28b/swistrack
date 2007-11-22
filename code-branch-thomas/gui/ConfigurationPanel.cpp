@@ -17,7 +17,7 @@ THISCLASS::ConfigurationPanel(wxWindow *parent, SwisTrack *st, Component *c):
 	// Prepare
 	SetSizer(new wxBoxSizer(wxVERTICAL));
 	wxStaticLine *line=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(230, 2), wxLI_HORIZONTAL);
-	GetSizer()->Add(line, 0, 0, 0);
+	GetSizer()->Add(line, 0, wxEXPAND|wxALL, 0);
 
 	// Create a scrollable subpanel
 	mPanel=new wxScrolledWindow(this, wxID_ANY);
@@ -100,7 +100,7 @@ void THISCLASS::Read(const wxFileName &filename) {
 		mPanelSizer->Add(label, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 4);
 	}
 
-	wxStaticLine *line=new wxStaticLine(mPanel, wxID_ANY, wxDefaultPosition, wxSize(200, 2), wxLI_HORIZONTAL);
+	wxStaticLine *line=new wxStaticLine(mPanel, wxID_ANY, wxDefaultPosition, wxSize(230, 2), wxLI_HORIZONTAL);
 	mPanelSizer->Add(line, 0, wxEXPAND|wxALL, 4);
 
 	// Read the list of settings
@@ -139,7 +139,7 @@ void THISCLASS::ReadConfigurationNode(wxXmlNode *node) {
 		label->Wrap(scParameterWidth);
 		mPanelSizer->Add(label, 0, wxEXPAND|wxALL, 4);
 	} else if (nodename=="line") {
-		wxStaticLine *line=new wxStaticLine(mPanel, wxID_ANY, wxDefaultPosition, wxSize(200, 2), wxLI_HORIZONTAL);
+		wxStaticLine *line=new wxStaticLine(mPanel, wxID_ANY, wxDefaultPosition, wxSize(230, 2), wxLI_HORIZONTAL);
 		mPanelSizer->Add(line, 0, wxEXPAND|wxALL, 4);
 	} else {
 		std::ostringstream oss;

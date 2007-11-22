@@ -4,11 +4,10 @@
 
 //! Just as an example, we count the number of PARTICLE messages per frame
 int particle_messages_count=0;
-
+//! Keeps track of the current frame number
+int framenumber=0;
 
 void nmea_process_message(struct sNMEAMessage *m, int withchecksum) {
-	int framenumber;
-
 	/* This method is called each time a complete message was received (with either a valid or no checksum).
 	 * A message consists of a command string and arguments. The command string can be accessed via
 	 *     m->command
@@ -18,20 +17,22 @@ void nmea_process_message(struct sNMEAMessage *m, int withchecksum) {
 	 *     int numarg = m->argument_count;
 	 */
 
-	if (strcmp(m->command, "BEGINFRAME")==0) {
-		// This messages indicates the beginning of a new frame
+	if (strcmp(m->command, "STEP_START")==0) {
+		// This message indicates the beginning of a new frame
+		framenumber=0;
+		particle_messages_count=0;
+	} else if (strcmp(m->command, "FRAMENUMBER")==0) {
+		// This message contains the frame number
 		framenumber=0;
 		if (m->argument[0]) {
 			framenumber=atoi(m->argument[0]);
 		}
-		printf("Getting data for frame number %d\r\n", framenumber);
-		particle_messages_count=0;
 	} else if (strcmp(m->command, "PARTICLE")==0) {
-		// This messages transmits the position of a particle for the current frame
+		// This message transmits the position of a particle for the current frame
 		particle_messages_count++;
-	} else if (strcmp(m->command, "ENDFRAME")==0) {
-		// This messages indicates the end of the current frame
-		printf("  -- Got %d particle(s) for that frame\r\n", particle_messages_count);
+	} else if (strcmp(m->command, "STEP_STOP")==0) {
+		// This message indicates the end of the current frame
+		printf("Got %d particle(s) for frame %d\r\n", particle_messages_count, framenumber);
 	} else {
 		printf("Unknown message '%s' received!\r\n", m->command);
 	}
@@ -70,9 +71,10 @@ int main(int argc, char *argv) {
 	struct sNMEAParser parser;
 
 	printf("Go ahead and give me some NMEA messages, e.g.:\r\n");
-	printf("  $BEGINFRAME,34\r\n");
-	printf("  $PARTICLE,0,0,0\r\n");
-	printf("  $ENDFRAME\r\n");
+	printf("  $STEP_START\r\n");
+	printf("  $FRAMENUMBER,34\r\n");
+	printf("  $PARTICLE,0,0,0,0\r\n");
+	printf("  $STEP_STOP\r\n");
 	printf("\r\n");
 
 	// Initialize a parser

@@ -20,19 +20,23 @@ public:
 
 	//! Just as an example, we count the number of PARTICLE messages per frame
 	int mParticleMessagesCount;
+	//! Keeps track of the current frame number
+	int mFrameNumber;
 };
 
 MySwisTrackClientSTDIN::MySwisTrackClientSTDIN(): CommunicationNMEAInterface() {
 	mParticleMessagesCount=0;
+	mFrameNumber=0;
 }
 
 void MySwisTrackClientSTDIN::Run() {
 	char buffer[128];
 
 	std::cout << "Go ahead and give me some NMEA messages, e.g.:" << std::endl;
-	std::cout << "  $BEGINFRAME,34" << std::endl;
-	std::cout << "  $PARTICLE,0,0,0" << std::endl;
-	std::cout << "  $ENDFRAME" << std::endl;
+	std::cout << "  $STEP_START" << std::endl;
+	std::cout << "  $FRAMENUMBER,34" << std::endl;
+	std::cout << "  $PARTICLE,0,0,0,0" << std::endl;
+	std::cout << "  $STEP_STOP" << std::endl;
 	std::cout << std::endl;
 
 	// As long as we can
@@ -67,17 +71,19 @@ void MySwisTrackClientSTDIN::OnNMEAProcessMessage(CommunicationMessage *m, bool 
 	 * The Pop* methods return the next argument each time they are called.
 	 */
 
-	if (m->mCommand=="BEGINFRAME") {
-		// This messages indicates the beginning of a new frame
-		int framenumber=m->PopInt(0);
-		std::cout << "Getting data for frame number " << framenumber << std::endl;
+	if (m->mCommand=="STEP_START") {
+		// This message indicates the beginning of a new frame
+		mFrameNumber=0;
 		mParticleMessagesCount=0;
+	} else if (m->mCommand=="FRAMENUMBER") {
+		// This message contains the frame number
+		mFrameNumber=m->PopInt(0);
 	} else if (m->mCommand=="PARTICLE") {
-		// This messages transmits the position of a particle for the current frame
+		// This message transmits the position of a particle for the current frame
 		mParticleMessagesCount++;
-	} else if (m->mCommand=="ENDFRAME") {
-		// This messages indicates the end of the current frame
-		std::cout << "  -- Got " << mParticleMessagesCount << " particle(s) for that frame" << std::endl;
+	} else if (m->mCommand=="STEP_STOP") {
+		// This message indicates the end of the current frame
+		std::cout << "Got " << mParticleMessagesCount << " particle(s) for frame " << mFrameNumber << std::endl;
 	} else {
 		std::cout << "Unknown message '" << m->mCommand << "' received!" << std::endl;
 	}

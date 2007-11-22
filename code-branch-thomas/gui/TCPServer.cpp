@@ -35,7 +35,7 @@ void THISCLASS::Open() {
 	// Check whether the server is listening.
 	if (! mServer->Ok()) {
 		wxString str;
-		str.Printf("Could not listen at port %d.", mPort);
+		str.Printf("Could not listen on port %d.", mPort);
 		mSwisTrack->SetStatusText(str);
 
 		mServer->Destroy();

@@ -6,12 +6,12 @@
 
 
 THISCLASS::CommunicationMessage(const std::string &cmd, CommunicationMessage *inreplyto):
-		mParameters(), mCommand(cmd), mInReplyTo(inreplyto) {
+		mPopIndex(0), mParameters(), mCommand(cmd), mInReplyTo(inreplyto){
 
 }
 
-bool THISCLASS::GetBool(int i, bool defvalue) {
-	if (mParameters.size()<1) {return defvalue;}
+bool THISCLASS::GetBool(unsigned int i, bool defvalue) {
+	if (mParameters.size()<=i) {return defvalue;}
 	std::string str=mParameters[i];
 
 	std::string strlc(str);
@@ -25,8 +25,8 @@ bool THISCLASS::GetBool(int i, bool defvalue) {
 	return val;
 }
 
-int THISCLASS::GetInt(int i, int defvalue) {
-	if (mParameters.size()<1) {return defvalue;}
+int THISCLASS::GetInt(unsigned int i, int defvalue) {
+	if (mParameters.size()<=i) {return defvalue;}
 	std::string str=mParameters[i];
 
 	std::istringstream istr(str);
@@ -35,8 +35,8 @@ int THISCLASS::GetInt(int i, int defvalue) {
 	return val;
 }
 
-double THISCLASS::GetDouble(int i, double defvalue) {
-	if (mParameters.size()<1) {return defvalue;}
+double THISCLASS::GetDouble(unsigned int i, double defvalue) {
+	if (mParameters.size()<=i) {return defvalue;}
 	std::string str=mParameters[i];
 
 	std::istringstream istr(str);
@@ -45,8 +45,8 @@ double THISCLASS::GetDouble(int i, double defvalue) {
 	return val;
 }
 
-std::string THISCLASS::GetString(int i, const std::string &defvalue) {
-	if (mParameters.size()<1) {return defvalue;}
+std::string THISCLASS::GetString(unsigned int i, const std::string &defvalue) {
+	if (mParameters.size()<=i) {return defvalue;}
 	return mParameters[i];
 }
 

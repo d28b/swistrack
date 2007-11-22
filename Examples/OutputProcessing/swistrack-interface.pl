@@ -17,8 +17,8 @@ print $swistrack '$RUN,true', "\n";
 print 'Waiting for the first blob ...', "\n";
 my $framenumber=0;
 while (my $line=<$swistrack>) {
-	if ($line =~ /\$STEP_START\*/) {
-	} elsif ($line =~ /\$PARTICLE,([\d-]*),([\d\.-]*),([\d\.-]*),([\d\.-]*)\*/) {
+	if ($line =~ /\$STEP_START/) {
+	} elsif ($line =~ /\$PARTICLE,([\d-]*),([\d\.-]*),([\d\.-]*),([\d\.-]*)/) {
 		# This is a particle
 		print 'Particle found: ', $1, ' ', $2, ' ', $3, ' ', $4, "\n";
 

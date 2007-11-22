@@ -10,10 +10,13 @@ class MySwisTrackClientSTDIN extends CommunicationNMEAInterface {
 
 	// Just as an example, we count the number of PARTICLE messages per frame
 	private int particleMessagesCount;
+	// Keeps track of the current frame number
+	private int frameNumber;
 
 	// Constructor
 	MySwisTrackClientSTDIN() {
 		this.particleMessagesCount = 0;
+		this.frameNumber = 0;
 	}
 
 	// CommunicationNMEAInterface methods
@@ -39,19 +42,21 @@ class MySwisTrackClientSTDIN extends CommunicationNMEAInterface {
 		 * the next argument each time they are called.
 		 */
 
-		if (m.command.equals("BEGINFRAME")) {
+		if (m.command.equals("STEP_START")) {
 			// This messages indicates the beginning of a new frame
-			int framenumber = m.popInteger(0);
-			System.out.println("Getting data for frame number " + framenumber);
+			this.frameNumber = 0;
 			this.particleMessagesCount = 0;
+		} else if (m.command.equals("FRAMENUMBER")) {
+			// This message contains the frame number
+			this.frameNumber = m.popInteger(0);
 		} else if (m.command.equals("PARTICLE")) {
 			// This messages transmits the position of a particle for the
 			// current frame
 			this.particleMessagesCount++;
-		} else if (m.command.equals("ENDFRAME")) {
+		} else if (m.command.equals("STEP_STOP")) {
 			// This messages indicates the end of the current frame
-			System.out.println("  -- Got " + this.particleMessagesCount
-					+ " particle(s) for that frame");
+			System.out.println("Got " + this.particleMessagesCount
+					+ " particle(s) for frame " + this.frameNumber);
 		} else {
 			System.out.println("Unknown message '" + m.command + "' received!");
 		}
@@ -98,9 +103,10 @@ class MySwisTrackClientSTDIN extends CommunicationNMEAInterface {
 	// Main loop.
 	void Run() {
 		System.out.println("Go ahead and give me some NMEA messages, e.g.:");
-		System.out.println("  $BEGINFRAME,34");
-		System.out.println("  $PARTICLE,0,0,0");
-		System.out.println("  $ENDFRAME");
+		System.out.println("  $STEP_START");
+		System.out.println("  $FRAMENUMBER,34");
+		System.out.println("  $PARTICLE,0,0,0,0");
+		System.out.println("  $STEP_STOP");
 		System.out.println("");
 
 		// As long as we can

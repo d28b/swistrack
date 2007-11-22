@@ -10,7 +10,7 @@ class CommunicationMessage;
 class CommunicationMessage {
 
 private:
-	int mPopIndex;						//!< The index of the next element to pop from the list.
+	unsigned int mPopIndex;				//!< The index of the next element to pop from the list.
 
 public:
 	//! Parameter list type.
@@ -26,13 +26,13 @@ public:
 	~CommunicationMessage() {}
 
 	//! Returns a boolean from the parameter list.
-	bool GetBool(int i, bool defvalue);
+	bool GetBool(unsigned int i, bool defvalue);
 	//! Returns an integer value from the parameter list.
-	int GetInt(int i, int defvalue);
+	int GetInt(unsigned int i, int defvalue);
 	//! Returns a double from the parameter list.
-	double GetDouble(int i, double defvalue);
+	double GetDouble(unsigned int i, double defvalue);
 	//! Returns a string from the parameter list.
-	std::string GetString(int i, const std::string &defvalue);
+	std::string GetString(unsigned int i, const std::string &defvalue);
 
 	//! Returns the next parameter as boolean value from the list.
 	bool PopBool(bool defvalue) {return GetBool(mPopIndex++, defvalue);}
