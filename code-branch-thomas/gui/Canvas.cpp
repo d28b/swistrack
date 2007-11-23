@@ -116,7 +116,7 @@ bool THISCLASS::OnPaintImage(wxPaintDC &dc) {
 	if (sx2>img->width) {sx2=img->width;}
 	if (sy2>img->height) {sy2=img->height;}
 	int w=sx2-sx1;
-	int h=sy2-sy1;
+	//int h=sy2-sy1;	// Not needed
 
 	// Prepare the area of interest of the destination image
 	int dx1=mViewOffset.x;

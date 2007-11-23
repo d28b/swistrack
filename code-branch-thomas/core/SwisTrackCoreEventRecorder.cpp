@@ -1,11 +1,15 @@
 #include "SwisTrackCoreEventRecorder.h"
 #define THISCLASS SwisTrackCoreEventRecorder
 
+#ifndef __WXMSW__
+#include <sys/time.h>
+#endif
+
 #include "SwisTrackCore.h"
 
 THISCLASS::SwisTrackCoreEventRecorder(SwisTrackCore *stc):
-		mSwisTrackCore(stc), mFrequency(0), mCurrentTimeline(0), 
-		mLastTimeline(0), mPreviousStep(), mStepDistance(0) {
+		mSwisTrackCore(stc), mCurrentTimeline(0), mLastTimeline(0),
+		mPreviousStep(), mStepDistance(0) {
 
 	// Store the frequency of the counter
 #ifdef __WXMSW__
@@ -42,7 +46,7 @@ THISCLASS::~SwisTrackCoreEventRecorder() {
 void THISCLASS::StartRecording() {
 	// Set the end time of the current timeline
 	if (mCurrentTimeline) {
-		if (mCurrentTimeline->mEvents.size() >= (unsigned int)Timeline::mNumberOfEvents) {
+		if (mCurrentTimeline->mEvents.size() >= Timeline::mNumberOfEvents) {
 			mCurrentTimeline->mEvents.back().mType=sType_TimelineOverflow;
 			mCurrentTimeline->mEvents.back().mComponent=0;
 		}
@@ -74,7 +78,7 @@ void THISCLASS::LapTime(Event *it, eType type, Component *c) {
 #ifdef __WXMSW__
 	QueryPerformanceCounter(&(it->mTime));
 #else
-	it->mTime=0;
+	gettimeofday(&(it->mTime), 0);
 #endif
 	it->mType=type;
 	it->mComponent=c;
@@ -82,13 +86,13 @@ void THISCLASS::LapTime(Event *it, eType type, Component *c) {
 
 void THISCLASS::Add(const Event *it) {
 	if (! mCurrentTimeline) {return;}
-	if (mCurrentTimeline->mEvents.size() >= (unsigned int) Timeline::mNumberOfEvents) {return;}
+	if (mCurrentTimeline->mEvents.size() >= Timeline::mNumberOfEvents) {return;}
 	mCurrentTimeline->mEvents.push_back(*it);
 }
 
 void THISCLASS::Add(eType type, Component *component) {
 	if (! mCurrentTimeline) {return;}
-	if (mCurrentTimeline->mEvents.size() >= (unsigned int) Timeline::mNumberOfEvents) {return;}
+	if (mCurrentTimeline->mEvents.size() >= Timeline::mNumberOfEvents) {return;}
 
 	Event it;
 	LapTime(&it, type, component);
@@ -115,8 +119,9 @@ void THISCLASS::AddStepStart() {
 double THISCLASS::CalculateDuration(const Event *it1, const Event *it2) const {
 #ifdef __WXMSW__
 	double diff=(double)(it2->mTime.QuadPart-it1->mTime.QuadPart);
-#else
-	double diff=0;
-#endif
 	return diff/mFrequency;
+#else
+	double diff=(double)(it2->mTime.tv_sec-it1->mTime.tv_sec)+(double)(it2->mTime.tv_usec-it1->mTime.tv_usec)/1000/1000;
+	return diff;
+#endif
 }

@@ -31,7 +31,7 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 
 	// Create List
 	mList=new wxListCtrl(this, eID_List);
-	mList->SetWindowStyle(wxLC_REPORT|wxLC_HRULES|wxLC_SINGLE_SEL);
+	mList->SetWindowStyle(wxLC_REPORT|wxLC_HRULES|wxLC_SINGLE_SEL|wxBORDER_SIMPLE);
 	mList->Connect(wxID_ANY, wxEVT_LEFT_DCLICK, wxMouseEventHandler(THISCLASS::OnListLeftDoubleClick), 0, this);
 
 	// Add column for the component name
@@ -55,28 +55,37 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 	mList->InsertColumn(col++, "Step duration", wxLIST_FORMAT_LEFT, 100);
 
 	// Create Buttons
-	wxStaticLine *line1=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 2), wxLI_HORIZONTAL);
-	wxStaticLine *line2=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 2), wxLI_HORIZONTAL);
+	//wxStaticLine *line1=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 2), wxLI_HORIZONTAL);
+	//wxStaticLine *line2=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 2), wxLI_HORIZONTAL);
 	mButtonAdd=new wxBitmapButton(this, eID_ButtonAdd, wxBITMAP(bitmap_plus), wxDefaultPosition, wxSize(25, 25));
 	mButtonRemove=new wxBitmapButton(this, eID_ButtonRemove, wxBITMAP(bitmap_minus), wxDefaultPosition, wxSize(25, 25));
 	mButtonUp=new wxBitmapButton(this, eID_ButtonUp, wxBITMAP(bitmap_up), wxDefaultPosition, wxSize(25, 25));
 	mButtonDown=new wxBitmapButton(this, eID_ButtonDown, wxBITMAP(bitmap_down), wxDefaultPosition, wxSize(25, 25));
 
+	// Create top and bottom lines
+	wxStaticLine *topline=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 1), wxLI_HORIZONTAL);
+	wxStaticLine *bottomline=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 1), wxLI_HORIZONTAL);
+
 	// Layout the components in the panel
 	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
-	vs->Add(line1, 0, 0, 0);
+	//vs->Add(line1, 0, 0, 0);
 	vs->Add(mButtonAdd, 0, 0, 0);
 	vs->Add(mButtonRemove, 0, 0, 0);
 	vs->AddStretchSpacer(1);
 	vs->Add(mButtonUp, 0, 0, 0);
 	vs->Add(mButtonDown, 0, 0, 0);
-	vs->Add(line2, 0, 0, 0);
+	//vs->Add(line2, 0, 0, 0);
 
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(mList, 1, wxEXPAND, 0);
 	hs->Add(vs, 0, wxEXPAND, 0);
 
-	SetSizer(hs);
+	wxBoxSizer *vstop=new wxBoxSizer(wxVERTICAL);
+	vstop->Add(topline, 0, wxEXPAND, 0);
+	vstop->Add(hs, 1, wxEXPAND, 0);
+	vstop->Add(bottomline, 0, wxEXPAND, 0);
+
+	SetSizer(vstop);
 
 	// Update list
 	Update();

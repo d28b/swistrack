@@ -149,7 +149,7 @@ void THISCLASS::DrawTrigger(wxPaintDC &dc, int dw, int dh, double starttime, dou
 void THISCLASS::DrawTicks(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
 	wxSize dcsize=dc.GetSize();
 	int dw=dcsize.GetWidth();
-	int dh=dcsize.GetHeight();
+	//int dh=dcsize.GetHeight(); // Not needed
 
 	dc.SetFont(GetFont());
 	dc.SetPen(wxPen(wxColour(0xcc, 0xcc, 0xcc)));
@@ -228,7 +228,6 @@ void THISCLASS::DrawStepLapTimes(wxPaintDC &dc, const SwisTrackCoreEventRecorder
 	dc.SetPen(wxPen(wxColour(0x00, 0x00, 0x00)));
 
 	// Draw
-	double starttime=-1;
 	SwisTrackCoreEventRecorder::Timeline::tEventList::const_iterator it=timeline->mEvents.begin();
 	while (it!=timeline->mEvents.end()) {
 		if (it->mType == SwisTrackCoreEventRecorder::sType_StepLapTime) {
@@ -354,7 +353,7 @@ void THISCLASS::DrawTimelineOverflow(wxPaintDC &dc, const SwisTrackCoreEventReco
 
 	// Prepare
 	wxSize dcsize=dc.GetSize();
-	int dw=dcsize.GetWidth();
+	//int dw=dcsize.GetWidth(); // Not needed
 	int dh=dcsize.GetHeight();
 	dc.SetBrush(wxBrush(wxColour(0x33, 0x33, 0x33)));
 	dc.SetPen(wxPen(wxColour(0x00, 0x00, 0x00)));

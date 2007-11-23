@@ -2,9 +2,9 @@
 static char *bitmap_cut_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 15 3 1",
-"  c opaque",
+"  c black",
 ". c navy",
-"X c #c0c0c0",
+"X c opaque",
 /* pixels */
 "XXXXXXXXXXXXXXXX",
 "XXXXX XXX XXXXXX",

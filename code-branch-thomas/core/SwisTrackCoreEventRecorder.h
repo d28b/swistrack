@@ -15,7 +15,7 @@ public:
 #ifdef __WXMSW__
 	typedef LARGE_INTEGER tTime;
 #else
-	typedef int tTime;
+	typedef struct timeval tTime;
 #endif
 
 	//! Types of timeline items.
@@ -64,11 +64,11 @@ public:
 		//! An event list type.
 		typedef std::vector<Event> tEventList;
 
-		static const int mNumberOfEvents = 1000;	//!< The number of events stored per timeline.
-		Event mBegin;								//!< Holds the time at which the timeline begins.
-		Event mEnd;									//!< Holds the time at which the timeline end.
-		State mBeginState;							//!< The state of the SwisTrackCore object at time of starting.
-		tEventList mEvents;							//!< The recorded events. This vector is initialized to a certain size 
+		static const unsigned int mNumberOfEvents = 1000;	//!< The number of events stored per timeline.
+		Event mBegin;										//!< Holds the time at which the timeline begins.
+		Event mEnd;											//!< Holds the time at which the timeline end.
+		State mBeginState;									//!< The state of the SwisTrackCore object at time of starting.
+		tEventList mEvents;									//!< The recorded events. This vector is initialized to a certain size 
 	};
 
 	SwisTrackCore *mSwisTrackCore;				//!< The associated SwisTrackCore object.
@@ -100,7 +100,9 @@ public:
 	double GetStepDistance() const {return mStepDistance;}
 
 private:
+#ifdef __WXMSW__
 	double mFrequency;				//!< The frequency of the performance counter.
+#endif
 	Timeline *mCurrentTimeline;		//!< The timeline which currently records events.
 	Timeline *mLastTimeline;		//!< The previously recorded timeline.
 	Event mPreviousStep;			//!< Timestamp of the previous step.

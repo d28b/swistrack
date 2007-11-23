@@ -2,10 +2,10 @@
 static char *bitmap_preview_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 15 5 1",
-"  c opaque",
+"  c black",
 ". c cyan",
 "X c #808080",
-"o c #c0c0c0",
+"o c opaque",
 "O c white",
 /* pixels */
 "         ooooooo",

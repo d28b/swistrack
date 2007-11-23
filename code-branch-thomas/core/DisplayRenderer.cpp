@@ -165,15 +165,24 @@ bool THISCLASS::DrawTrajectories(ErrorList *errors) {
 	DataStructureTracks::tTrackVector *tracks=mDisplay->mComponent->GetSwisTrackCore()->mDataStructureTracks.mTracks;
 	DataStructureTracks::tTrackVector::iterator it=tracks->begin();
 	while (it!=tracks->end()) {
-		int x=(int)floor(it->trajectory.back().x*mScalingFactor+0.5);
-		int y=(int)floor(it->trajectory.back().y*mScalingFactor+0.5);
-		
+		// Color for this track
+		CvScalar color = cvScalar((it->mID * 50) % 255, (it->mID * 50) % 255, (it->mID * 50) % 255);
+
 		// draw every single point
-		std::vector<CvPoint2D32f>::iterator p;
-		for( p = it->trajectory.begin()+1; p != it->trajectory.end(); p++ ){
-			cvLine(mImage,cvPoint((*p).x*mScalingFactor,(*p).y*mScalingFactor),cvPoint((*(p-1)).x*mScalingFactor,(*(p-1)).y*mScalingFactor),cvScalar((it->mID*50)%255,(it->mID*50)%255,(it->mID*50)%255));
+		std::vector<CvPoint2D32f>::iterator p = it->trajectory.begin();
+		int xprev=(int)floor((*p).x*mScalingFactor+0.5);
+		int yprev=(int)floor((*p).y*mScalingFactor+0.5);
+		p++;
+		while (p != it->trajectory.end()) {
+			int x=(int)floor((*p).x*mScalingFactor+0.5);
+			int y=(int)floor((*p).y*mScalingFactor+0.5);
+			cvLine(mImage, cvPoint(xprev, yprev), cvPoint(x, y), color);
+			xprev=x;
+			yprev=y;
+			p++;
 		}
-		cvRectangle(mImage, cvPoint(x-2, y-2), cvPoint(x+2, y+2), cvScalar(192, 0, 0), 1);
+
+		cvRectangle(mImage, cvPoint(xprev-2, yprev-2), cvPoint(xprev+2, yprev+2), color, 1);
 		it++;
 	}
 

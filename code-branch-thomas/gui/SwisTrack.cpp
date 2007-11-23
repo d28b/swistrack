@@ -185,7 +185,7 @@ void THISCLASS::BuildToolBar() {
 void THISCLASS::BuildStatusBar() {
 #if wxUSE_STATUSBAR
 	int n=3;
-	int w[3]={-1, 50, 120};
+	int w[3]={-1, 120, 120};
 
 	CreateStatusBar(n);
 	SetStatusWidths(n, w);

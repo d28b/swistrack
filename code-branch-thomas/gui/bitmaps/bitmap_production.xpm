@@ -10,7 +10,7 @@ static char *bitmap_production_xpm[] = {
 "+ c #800080",
 "@ c #008080",
 "# c #808080",
-"$ c #C0C0C0",
+"$ c opaque",
 "% c red",
 "& c green",
 "* c yellow",

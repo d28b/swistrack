@@ -2,10 +2,10 @@
 static char *bitmap_help_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 15 4 1",
-"  c opaque",
+"  c black",
 ". c navy",
 "X c blue",
-"o c #c0c0c0",
+"o c opaque",
 /* pixels */
 "oooooooooooooooo",
 "ooooo      ooooo",
