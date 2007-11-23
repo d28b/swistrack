@@ -99,5 +99,15 @@
 			</default>
 			<reloadable>false</reloadable>
 		</parameter>
+		<parameter type="integer">
+			<name>InputBufferSize</name>
+			<label>Input buffer size</label>
+			<min>1</min>
+			<max>16</max>
+			<unit>images</unit>
+			<default>8</default>
+			<slider>false</slider>
+			<reloadable>false</reloadable>
+		</parameter>
 	</configuration>
 </swistrackcomponent>

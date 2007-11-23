@@ -38,6 +38,17 @@ void THISCLASS::OnStart() {
 	mColor=GetConfigurationBool("Color", true);
 	mTriggerMode=(eTriggerMode)GetConfigurationInt("TriggerMode", 0);
 	mTriggerTimerFPS=GetConfigurationInt("TriggerTimerFPS", 10);
+	mInputBufferSize=GetConfigurationInt("InputBufferSize", 8);
+
+	// Check the maximum amount of buffers
+	if (mInputBufferSize < 1) {
+		mInputBufferSize = 1;
+		AddWarning(wxString::Format("Using %d input buffer.", mInputBufferSize));
+	}
+	if (mInputBufferSize > mInputBufferSizeMax) {
+		mInputBufferSize = mInputBufferSizeMax;
+		AddWarning(wxString::Format("Using %d input buffers.", mInputBufferSize));
+	}
 
 	// Get the transport layer
 	Pylon::CTlFactory& tlfactory=Pylon::CTlFactory::GetInstance();
@@ -135,10 +146,10 @@ void THISCLASS::OnStart() {
 	mStreamGrabber->MaxNumBuffer=mInputBufferCount;
 	mStreamGrabber->PrepareGrab();
 
+	// Allocate and register image buffers, put them into the grabber's input queue
 	try {
-		// Allocate and register image buffers, put them into the grabber's input queue
 		int channels=(mColor ? 2 : 1);
-		for (int i=0; i<mInputBufferCount; ++i) {
+		for (int i=0; i<mInputBufferSize; ++i) {
 			mInputBufferImages[i]=cvCreateImage(cvSize(aoiw, aoih), 8, channels);
 			mInputBufferHandles[i]=mStreamGrabber->RegisterBuffer(mInputBufferImages[i]->imageData, mInputBufferImages[i]->imageSize);
 			mStreamGrabber->QueueBuffer(mInputBufferHandles[i], mInputBufferImages[i]);
@@ -259,7 +270,7 @@ void THISCLASS::OnStop() {
 	}
 
 	// Deregister and free buffers
-	for (int i=0; i<mInputBufferCount; ++i) {
+	for (int i=0; i<mInputBufferSize; ++i) {
 		mStreamGrabber->DeregisterBuffer(mInputBufferHandles[i]);
 		cvReleaseImage(&mInputBufferImages[i]);
 	}

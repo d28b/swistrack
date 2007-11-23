@@ -44,13 +44,14 @@ private:
 	bool mColor;										//!< (configuration) Whether to acquire color or mono images.
 	eTriggerMode mTriggerMode;							//!< (configuration) The trigger source.
 	double mTriggerTimerFPS;							//!< (configuration) The FPS of the trigger timer.
+	int mInputBufferSize;								//!< (configuration) The number of input buffer images.
 
 	Pylon::CBaslerGigECamera *mCamera;					//!< Camera object.
 	Pylon::CBaslerGigEStreamGrabber *mStreamGrabber;	//!< Stream grabber object.
 
-	static const int mInputBufferCount = 8;								//!< The number of input buffers.
-	IplImage *mInputBufferImages[mInputBufferCount];					//!< The input buffer images.
-	Pylon::StreamBufferHandle mInputBufferHandles[mInputBufferCount];	//!< The corresponding buffer handles.
+	static const int mInputBufferSizeMax = 32;							//!< The maximum number of input buffer images.
+	IplImage *mInputBufferImages[mInputBufferSizeMax];					//!< The input buffer images.
+	Pylon::StreamBufferHandle mInputBufferHandles[mInputBufferSizeMax];	//!< The corresponding buffer handles.
 	Pylon::GrabResult mCurrentResult;									//!< The current result.
 
 	int mFrameNumber;									//!< The frame number since the component was started.
