@@ -15,7 +15,7 @@ public:
 	// CommunicationNMEAInterface methods
 	void OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum);
 	void OnNMEAProcessMessageChecksumError(CommunicationMessage *m);
-	void OnNMEAProcessUnrecognizedChar(unsigned char c);
+	void OnNMEAProcessUnrecognizedChar(char c);
 	void OnNMEASend(const std::string &str);
 
 	//! Just as an example, we count the number of PARTICLE messages per frame
@@ -25,8 +25,8 @@ public:
 };
 
 MySwisTrackClientSTDIN::MySwisTrackClientSTDIN(): CommunicationNMEAInterface() {
-	mParticleMessagesCount=0;
-	mFrameNumber=0;
+	mParticleMessagesCount = 0;
+	mFrameNumber = 0;
 }
 
 void MySwisTrackClientSTDIN::Run() {
@@ -42,8 +42,8 @@ void MySwisTrackClientSTDIN::Run() {
 	// As long as we can
 	while (1) {
 		// Read available bytes
-		int len=read(0, buffer, 128);
-		if (len<0) {
+		int len = read(0, buffer, 128);
+		if (len < 0) {
 			std::cout << "STDIN closed ..." << std::endl;
 			break;
 		}
@@ -71,17 +71,17 @@ void MySwisTrackClientSTDIN::OnNMEAProcessMessage(CommunicationMessage *m, bool 
 	 * The Pop* methods return the next argument each time they are called.
 	 */
 
-	if (m->mCommand=="STEP_START") {
+	if (m->mCommand == "STEP_START") {
 		// This message indicates the beginning of a new frame
-		mFrameNumber=0;
-		mParticleMessagesCount=0;
-	} else if (m->mCommand=="FRAMENUMBER") {
+		mFrameNumber = 0;
+		mParticleMessagesCount = 0;
+	} else if (m->mCommand == "FRAMENUMBER") {
 		// This message contains the frame number
-		mFrameNumber=m->PopInt(0);
-	} else if (m->mCommand=="PARTICLE") {
+		mFrameNumber = m->PopInt(0);
+	} else if (m->mCommand == "PARTICLE") {
 		// This message transmits the position of a particle for the current frame
 		mParticleMessagesCount++;
-	} else if (m->mCommand=="STEP_STOP") {
+	} else if (m->mCommand == "STEP_STOP") {
 		// This message indicates the end of the current frame
 		std::cout << "Got " << mParticleMessagesCount << " particle(s) for frame " << mFrameNumber << std::endl;
 	} else {
@@ -94,10 +94,10 @@ void MySwisTrackClientSTDIN::OnNMEAProcessMessageChecksumError(CommunicationMess
 	 * Hence, we just discard such messages.
 	 *
 	 * In case you are working with lossy channels, you could do something more fancy here.
-	 */ 
+	 */
 }
 
-void MySwisTrackClientSTDIN::OnNMEAProcessUnrecognizedChar(unsigned char c) {
+void MySwisTrackClientSTDIN::OnNMEAProcessUnrecognizedChar(char c) {
 	/* Unrecognized chars are bytes that are transmitted between valid NMEA messages.
 	 * An NMEA stream usually only consists of NMEA messages, but people sometimes put human readable comments in between.
 	 * On lossy channels, messages missing the $ sign (start-of-message) would also fall in here.

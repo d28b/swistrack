@@ -21,7 +21,7 @@ public:
 	CommunicationMessage *mInReplyTo;	//!< The associated request (if any).
 
 	//! Constructor.
-	CommunicationMessage(const std::string &cmd = "", CommunicationMessage *inreplyto=0);
+	CommunicationMessage(const std::string &cmd = "", CommunicationMessage *inreplyto = 0);
 	//! Destructor.
 	~CommunicationMessage() {}
 
@@ -35,13 +35,21 @@ public:
 	std::string GetString(unsigned int i, const std::string &defvalue);
 
 	//! Returns the next parameter as boolean value from the list.
-	bool PopBool(bool defvalue) {return GetBool(mPopIndex++, defvalue);}
+	bool PopBool(bool defvalue) {
+		return GetBool(mPopIndex++, defvalue);
+	}
 	//! Returns the next parameter as integer value from the list.
-	int PopInt(int defvalue) {return GetInt(mPopIndex++, defvalue);}
+	int PopInt(int defvalue) {
+		return GetInt(mPopIndex++, defvalue);
+	}
 	//! Returns the next parameter as double value from the list.
-	double PopDouble(double defvalue) {return GetDouble(mPopIndex++, defvalue);}
+	double PopDouble(double defvalue) {
+		return GetDouble(mPopIndex++, defvalue);
+	}
 	//! Returns the next parameter as string from the list.
-	std::string PopString(const std::string &defvalue) {return GetString(mPopIndex++, defvalue);}
+	std::string PopString(const std::string &defvalue) {
+		return GetString(mPopIndex++, defvalue);
+	}
 
 	//! Adds a boolean value to the parameter list.
 	bool AddBool(bool value);

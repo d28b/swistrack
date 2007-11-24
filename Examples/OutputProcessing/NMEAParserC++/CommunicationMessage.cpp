@@ -11,42 +11,54 @@ THISCLASS::CommunicationMessage(const std::string &cmd, CommunicationMessage *in
 }
 
 bool THISCLASS::GetBool(unsigned int i, bool defvalue) {
-	if (mParameters.size()<=i) {return defvalue;}
-	std::string str=mParameters[i];
+	if (mParameters.size() <= i) {
+		return defvalue;
+	}
+	std::string str = mParameters[i];
 
 	std::string strlc(str);
 	std::transform(strlc.begin(), strlc.end(), strlc.begin(), (int(*)(int))std::tolower);
-	if (strlc=="true") {return true;}
-	if (strlc=="false") {return false;}
+	if (strlc == "true") {
+		return true;
+	}
+	if (strlc == "false") {
+		return false;
+	}
 
 	std::istringstream istr(str);
-	bool val=0;
+	bool val = 0;
 	istr >> val;
 	return val;
 }
 
 int THISCLASS::GetInt(unsigned int i, int defvalue) {
-	if (mParameters.size()<=i) {return defvalue;}
-	std::string str=mParameters[i];
+	if (mParameters.size() <= i) {
+		return defvalue;
+	}
+	std::string str = mParameters[i];
 
 	std::istringstream istr(str);
-	int val=0;
+	int val = 0;
 	istr >> val;
 	return val;
 }
 
 double THISCLASS::GetDouble(unsigned int i, double defvalue) {
-	if (mParameters.size()<=i) {return defvalue;}
-	std::string str=mParameters[i];
+	if (mParameters.size() <= i) {
+		return defvalue;
+	}
+	std::string str = mParameters[i];
 
 	std::istringstream istr(str);
-	double val=0;
+	double val = 0;
 	istr >> val;
 	return val;
 }
 
 std::string THISCLASS::GetString(unsigned int i, const std::string &defvalue) {
-	if (mParameters.size()<=i) {return defvalue;}
+	if (mParameters.size() <= i) {
+		return defvalue;
+	}
 	return mParameters[i];
 }
 
@@ -79,8 +91,8 @@ bool THISCLASS::AddString(const std::string &value) {
 }
 
 bool THISCLASS::AddParsedArgument(const std::string &value) {
-	if (mCommand=="") {
-		mCommand=value;
+	if (mCommand == "") {
+		mCommand = value;
 	} else {
 		mParameters.push_back(value);
 	}

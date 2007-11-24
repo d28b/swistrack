@@ -20,7 +20,7 @@ private:
 	};
 
 	enum eState mState;
-	static const int mBufferSize=1024;
+	static const int mBufferSize = 1024;
 	char mBuffer[mBufferSize];
 	int mBufferPos;
 	int mChecksum;
@@ -40,7 +40,7 @@ public:
 	//! Called when an NMEA record with a checksum error ist received.
 	virtual void OnNMEAProcessMessageChecksumError(CommunicationMessage *m) = 0;
 	//! Called to process a char that does not belong to an NMEA record.
-	virtual void OnNMEAProcessUnrecognizedChar(unsigned char c) = 0;
+	virtual void OnNMEAProcessUnrecognizedChar(char c) = 0;
 	//! Called to send text to the client.
 	virtual void OnNMEASend(const std::string &str) = 0;
 };

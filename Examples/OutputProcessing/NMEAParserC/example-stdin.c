@@ -3,9 +3,9 @@
 #include "nmea_parser.h"
 
 //! Just as an example, we count the number of PARTICLE messages per frame
-int particle_messages_count=0;
+int particle_messages_count = 0;
 //! Keeps track of the current frame number
-int framenumber=0;
+int framenumber = 0;
 
 void nmea_process_message(struct sNMEAMessage *m, int withchecksum) {
 	/* This method is called each time a complete message was received (with either a valid or no checksum).
@@ -13,24 +13,24 @@ void nmea_process_message(struct sNMEAMessage *m, int withchecksum) {
 	 *     m->command
 	 * while the arguments can be access with
 	 *     unsigned char *arg = m->argument[i];
-	 * The number of arguments is 
+	 * The number of arguments is
 	 *     int numarg = m->argument_count;
 	 */
 
-	if (strcmp(m->command, "STEP_START")==0) {
+	if (strcmp(m->command, "STEP_START") == 0) {
 		// This message indicates the beginning of a new frame
-		framenumber=0;
-		particle_messages_count=0;
-	} else if (strcmp(m->command, "FRAMENUMBER")==0) {
+		framenumber = 0;
+		particle_messages_count = 0;
+	} else if (strcmp(m->command, "FRAMENUMBER") == 0) {
 		// This message contains the frame number
-		framenumber=0;
+		framenumber = 0;
 		if (m->argument[0]) {
-			framenumber=atoi(m->argument[0]);
+			framenumber = atoi(m->argument[0]);
 		}
-	} else if (strcmp(m->command, "PARTICLE")==0) {
+	} else if (strcmp(m->command, "PARTICLE") == 0) {
 		// This message transmits the position of a particle for the current frame
 		particle_messages_count++;
-	} else if (strcmp(m->command, "STEP_STOP")==0) {
+	} else if (strcmp(m->command, "STEP_STOP") == 0) {
 		// This message indicates the end of the current frame
 		printf("Got %d particle(s) for frame %d\r\n", particle_messages_count, framenumber);
 	} else {
@@ -43,10 +43,10 @@ void nmea_process_message_checksum_error(struct sNMEAMessage *m) {
 	 * Hence, we just discard such messages.
 	 *
 	 * In case you are working with lossy channels, you could do something more fancy here.
-	 */ 
+	 */
 }
 
-void nmea_process_unrecognized_char(unsigned char c) {
+void nmea_process_unrecognized_char(char c) {
 	/* Unrecognized chars are bytes that are transmitted between valid NMEA messages.
 	 * An NMEA stream usually only consists of NMEA messages, but people sometimes put human readable comments in between.
 	 * On lossy channels, messages missing the $ sign (start-of-message) would also fall in here.
@@ -56,7 +56,7 @@ void nmea_process_unrecognized_char(unsigned char c) {
 	 */
 }
 
-void nmea_send(const unsigned char *buffer, int len) {
+void nmea_send(const char *buffer, int len) {
 	/* Whenever you send a message using NMEASendMessage(CommunicationMessage *m),
 	 * this method is called to actually transmit the bytes.
 	 */
@@ -79,16 +79,16 @@ int main(int argc, char *argv) {
 
 	// Initialize a parser
 	nmea_parser_init(&parser);
-	parser.hook_process_message=&nmea_process_message;
-	parser.hook_process_message_checksum_error=&nmea_process_message_checksum_error;
-	parser.hook_process_unrecognized_char=&nmea_process_unrecognized_char;
-	parser.hook_send=&nmea_send;
+	parser.hook_process_message = &nmea_process_message;
+	parser.hook_process_message_checksum_error = &nmea_process_message_checksum_error;
+	parser.hook_process_unrecognized_char = &nmea_process_unrecognized_char;
+	parser.hook_send = &nmea_send;
 
 	// As long as we can
 	while (1) {
 		// Read available bytes
-		int len=read(0, buffer, 128);
-		if (len<0) {
+		int len = read(0, buffer, 128);
+		if (len < 0) {
 			printf("STDIN closed ...\r\n");
 			break;
 		}
