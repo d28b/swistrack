@@ -2,7 +2,6 @@
 <swistrack>
   <components>
     <component type="SimulationParticles">
-      <parameter name="AngleNoiseStdDev" value="0"/>
       <parameter name="CameraOrigin.x" value="-1000"/>
       <parameter name="CameraOrigin.y" value="-250"/>
       <parameter name="CameraPixelSize" value="10"/>
@@ -10,7 +9,6 @@
       <parameter name="CameraSize.h" value="640"/>
       <parameter name="CameraSize.w" value="480"/>
       <parameter name="File" value="Particles.txt"/>
-      <parameter name="PositionNoiseStdDev" value="0.01"/>
     </component>
     <component type="CalibrationLinear">
       <parameter name="CameraBottomRight.x" value="480"/>

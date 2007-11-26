@@ -29,8 +29,6 @@ private:
 	float mCameraRotation;			//!< (configuration) The rotation of the virtual camera in rad.
 	float mCameraPixelSize;			//!< (configuration) The pixel size of the virtual camera. Note that pixels are supposed to be square.
 	CvSize2D32f mCameraSize;		//!< (configuration) The width and height (in pixels) of the virtual camera.
-	float mPositionNoiseStdDev;		//!< (configuration) The standard deviation of the gaussian noise superimposed to the particle position. This noise is added to both x and y component of the position.
-	float mAngleNoiseStdDev;		//!< (configuration) The standard deviation of the gaussian noise superimposed to the particle angles.
 
 	SimulationParticles *mSimulationParticles;				//!< The frames with the particle.
 	int mFrameNumber;										//!< The current frame number.

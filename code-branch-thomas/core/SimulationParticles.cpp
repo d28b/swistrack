@@ -24,9 +24,12 @@ THISCLASS::~SimulationParticles() {
 }
 
 void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum) {
-	if (m->mCommand=="BEGINFRAME") {
-		mFrameRead.number=m->PopInt(0);
+	// We process known messages only (and discard other messages without warning)
+	if (m->mCommand=="STEP_START") {
+		mFrameRead.number=0;
 		mFrameRead.particles.clear();
+	} else if (m->mCommand=="FRAMENUMBER") {
+		mFrameRead.number=m->PopInt(0);
 	} else if (m->mCommand=="PARTICLE") {
 		Particle p;
 		p.mID=m->PopInt(0);
@@ -34,7 +37,7 @@ void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum)
 		p.mCenter.y=(float)m->PopDouble(0);
 		p.mOrientation=(float)m->PopDouble(0);
 		mFrameRead.particles.push_back(p);
-	} else if (m->mCommand=="ENDFRAME") {
+	} else if (m->mCommand=="STEP_STOP") {
 		mFrames.push_back(mFrameRead);
 	}
 }
