@@ -22,15 +22,13 @@ THISCLASS::ComponentConvertToGray(SwisTrackCore *stc):
 THISCLASS::~ComponentConvertToGray() {
 }
 
-void THISCLASS::OnStart() 
-{
+void THISCLASS::OnStart() {
 	OnReloadConfiguration();
 }
 
-void THISCLASS::OnReloadConfiguration() 
-{
-	channel=GetConfigurationInt("Channel", 0);
-	strcpy(channelColorSeq,"BGR");
+void THISCLASS::OnReloadConfiguration() {
+	mChannel=GetConfigurationInt("Channel", 0);
+	memcpy(mChannelColorSeq, "BGR ", 4);
 }
 
 void THISCLASS::OnStep() {
@@ -39,39 +37,37 @@ void THISCLASS::OnStep() {
 	
 	try {
 		// We convert the input image to black and white
-		if (inputimage->nChannels==3) 
-		{
-			// 3 color case, we convert to gray or select one channel
+		if (inputimage->nChannels==3) {
+			// The input image is a color image
 			PrepareOutputImage(inputimage);
-			if ((channel>0) && (channel<=3)) 
-			{
-				// Correct the channel sequence
-				if (strncmp(inputimage->channelSeq,channelColorSeq,3))		
-				{				
-					for (int i=1;i<4;i++)		
-						if (inputimage->channelSeq[i-1]==channelColorSeq[channel-1])
-						{
-							channel=i;
+
+			if ((mChannel>0) && (mChannel<=3)) {
+				// If the user selected one channel, copy that channel
+				
+				// If the channel sequence in the image changed, follow the channel
+				if (memcmp(inputimage->channelSeq, mChannelColorSeq, 3)) {
+					for (int i=0;i<3;i++) {
+						if (inputimage->channelSeq[i]==mChannelColorSeq[mChannel]) {
+							mChannel=i;
 							break;
 						}
-					strcpy(channelColorSeq,inputimage->channelSeq);					
+					}
+					memcpy(mChannelColorSeq, inputimage->channelSeq, 3);
 				}
-				cvSetImageCOI(inputimage, channel);
+
+				// Copy 
+				cvSetImageCOI(inputimage, mChannel);
 				cvCopy(inputimage, mOutputImage);
 			} else {
+				// Otherwise, convert to gray using the standard procedure
 				cvCvtColor(inputimage, mOutputImage, CV_BGR2GRAY);
 			}
 			mCore->mDataStructureImageGray.mImage=mOutputImage;
-		} else if (inputimage->nChannels==2) {
-			// Packed YUV422
-			PrepareOutputImage(inputimage);
-			CvtYUV422ToGray(inputimage, mOutputImage);
-			mCore->mDataStructureImageGray.mImage=mOutputImage;
 		} else if (inputimage->nChannels==1) {
-			// Already in Gray
+			// The input image is in gray already, so just take that very same image
 			mCore->mDataStructureImageGray.mImage=inputimage;
 		} else {
-			// Other cases, we take the first channel
+			// Other cases (should never happen), we take the first channel
 			PrepareOutputImage(inputimage);
 			cvCvtPixToPlane(inputimage, mOutputImage, NULL, NULL, NULL);
 			mCore->mDataStructureImageGray.mImage=mOutputImage;
@@ -93,24 +89,4 @@ void THISCLASS::OnStepCleanup() {
 
 void THISCLASS::OnStop() {
 	if (mOutputImage) {cvReleaseImage(&mOutputImage);}
-}
-
-void THISCLASS::CvtYUV422ToGray(IplImage *inputimage, IplImage *outputimage) {
-	unsigned char *crl=(unsigned char *)inputimage->imageData;
-	unsigned char *cwl=(unsigned char *)outputimage->imageData;
-	for (int y=0; y<inputimage->height; y++) {
-		unsigned char *cr=crl;
-		unsigned char *cw=cwl;
-		for (int x=0; x<inputimage->width; x+=2) {
-			cr++;
-			int y1=(int)*cr; cr++;
-			cr++;
-			int y2=(int)*cr; cr++;
-
-			*cw=y1; cw++;
-			*cw=y2; cw++;
-		}
-		crl+=inputimage->widthStep;
-		cwl+=outputimage->widthStep;
-	}
 }

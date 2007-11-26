@@ -24,11 +24,8 @@ public:
 private:
 	IplImage *mOutputImage;				//!< The image created by this component.
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
-	int channel;						//!< The number of the channel we use for the conversion
-	char channelColorSeq[4];			//!< The sequence of channel used for the channel
-
-	//! Converts from packed YUV422 to grayscale.
-	void CvtYUV422ToGray(IplImage *inputimage, IplImage *outputimage);
+	int mChannel;						//!< The number of the channel we use for the conversion
+	char mChannelColorSeq[4];			//!< The sequence of channel used for the channel
 
 	//! Prepares the output image (recreates the image if necessary).
 	inline void PrepareOutputImage(IplImage *inputimage) {

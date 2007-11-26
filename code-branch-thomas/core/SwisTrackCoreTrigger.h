@@ -21,7 +21,7 @@ public:
 	void OnTrigger(wxCommandEvent &event);
 	//! Clears the StepPerformed flag so that the a new step can be executed.
 	void OnTriggerClear(wxCommandEvent &event);
-	// Idle event handler.
+	//! Idle event handler.
 	void OnIdle();
 
 	//! Actives or deactivates the trigger.

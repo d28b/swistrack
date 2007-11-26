@@ -55,6 +55,7 @@ private:
 	Pylon::GrabResult mCurrentResult;									//!< The current result.
 
 	int mFrameNumber;									//!< The frame number since the component was started.
+	IplImage *mOutputImage;								//!< The current output image (only used for color acquisition, for mono acquision one of the mInputBufferImages is used).
 
 	//! The thread waiting for new images (in case of external trigger).
 	class Thread: public wxThread {
@@ -72,6 +73,14 @@ private:
 
 	wxCriticalSection mThreadCriticalSection; 	//!< The critical section object to synchronize with the thread.
 
+	//! Prepares the output image (recreates the image if necessary).
+	inline void PrepareOutputImage(IplImage *inputimage) {
+		if (mOutputImage) {
+			if ((mOutputImage->width==inputimage->width) && (mOutputImage->height==inputimage->height) && (mOutputImage->depth==inputimage->depth)) {return;}
+			cvReleaseImage(&mOutputImage);
+		}
+		mOutputImage = cvCreateImage(cvSize(inputimage->width, inputimage->height), inputimage->depth, 3);
+	}
 };
 
 #else // USE_CAMERA_PYLON_GIGE

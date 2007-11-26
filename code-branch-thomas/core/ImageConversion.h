@@ -15,6 +15,11 @@ public:
 	static IplImage *ToBGR(IplImage *src);
 	//! Returns a new image with a different channel order.
 	static IplImage *SwitchChannels(IplImage *src, char *order);
+
+	//! Converts from packed YUV422 to BGR. (inputimage and outputimage must not be the same.)
+	static void CvtYUV422ToBGR(IplImage *inputimage, IplImage *outputimage);
+	//! Converts from packed YUV422 to grayscale. (inputimage and outputimage must not be the same.)
+	static void CvtYUV422ToGray(IplImage *inputimage, IplImage *outputimage);
 };
 
 #endif

@@ -7,8 +7,8 @@
 
 THISCLASS::ComponentInputCameraGigE(SwisTrackCore *stc):
 		Component(stc, "InputCameraGigE"),
-		mCamera(0), mStreamGrabber(0),
-		mCurrentResult(), mFrameNumber(0) {
+		mCamera(0), mStreamGrabber(0), mCurrentResult(),
+		mFrameNumber(0), mOutputImage(0) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryInput);
@@ -22,6 +22,11 @@ THISCLASS::ComponentInputCameraGigE(SwisTrackCore *stc):
 }
 
 THISCLASS::~ComponentInputCameraGigE() {
+	// Free the output image
+	if (mOutputImage) {
+		cvReleaseImage(&mOutputImage);
+	}
+
 	delete mTrigger;
 }
 
@@ -220,14 +225,20 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
-	// Set the current image
-	mFrameNumber++;
-
 	// This is the acquired image
 	IplImage *outputimage=(IplImage*)(mCurrentResult.Context());
 
-	// Set this image in the DataStructureImage
-	mCore->mDataStructureInput.mImage=outputimage;
+	// If we are acquireing a color image, we need to transform it from YUV422 to BGR, otherwise we use the raw image
+	if (mColor) {
+		PrepareOutputImage(outputimage);
+		CvtYUV422ToBGR(outputImage, mOutputImage);
+		mCore->mDataStructureInput.mImage=mOutputImage;
+	} else {
+		mCore->mDataStructureInput.mImage=outputimage;
+	}
+
+	// Set the frame number
+	mFrameNumber++;
 	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
 }
 
@@ -274,7 +285,6 @@ void THISCLASS::OnStop() {
 		mStreamGrabber->DeregisterBuffer(mInputBufferHandles[i]);
 		cvReleaseImage(&mInputBufferImages[i]);
 	}
-	//mCurrentImageIndex=-1;
 
 	// Clean up
 	mStreamGrabber->FinishGrab();
