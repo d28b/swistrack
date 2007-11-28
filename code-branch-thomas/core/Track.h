@@ -2,7 +2,7 @@
 #define HEADER_Track
 
 #include <vector>
-#include <math.h>
+#include <cmath>
 #include <cv.h>
 
 class Track {

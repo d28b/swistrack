@@ -96,10 +96,10 @@ void THISCLASS::OnStep()
 	while ((contour=cvFindNextContour(blobs))!=NULL) {
 		//A priori, we don't want to remove the blob
 		drawBlobBool=true;
-		// Calculating the moments
+		// Computing the moments
 		cvMoments(contour, &moments);
 
-		// Calculating particle area
+		// Computing particle area
 		contourArea=moments.m00;
 
 		// Selection based on area
@@ -126,9 +126,9 @@ void THISCLASS::OnStep()
 			}
 		}
 			
-		//If we need to remove the blob, we paint it in black
+		//If we keep the contour, we paint it in white
 		if (drawBlobBool) {
-			//Paint the bad contour in black
+			//Paint the kept contours in white
 			cvDrawContours(mOutputImage,contour,cvScalarAll(255),cvScalarAll(255),0,CV_FILLED);
 		}
 

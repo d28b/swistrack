@@ -4,6 +4,7 @@
 #include "ImageConversion.h"
 #include <sstream>
 #include <cmath>
+#include <iomanip>
 #define PI 3.14159265358979
 
 THISCLASS::DisplayRenderer(Display *display):
@@ -143,12 +144,12 @@ bool THISCLASS::DrawParticles(ErrorList *errors) {
 		int y=(int)floor(it->mCenter.y*mScalingFactor+0.5);
 		cvRectangle(mImage, cvPoint(x-2, y-2), cvPoint(x+2, y+2), cvScalar(192, 0, 0), 1);
 
-		float c=cosf(it->mOrientation)*20+(float)0.5;
-		float s=sinf(it->mOrientation)*20+(float)0.5;
+		float c=cosf(it->mOrientation/57.29577951)*20+(float)0.5;
+		float s=sinf(it->mOrientation/57.29577951)*20+(float)0.5;
 		cvLine(mImage, cvPoint(x, y), cvPoint(x+(int)floorf(c), y+(int)floorf(s)), cvScalar(192, 0, 0), 1);
 
 		std::ostringstream oss;
-		oss << it->mID << " (" << it->mOrientation/PI*180. << ") [" << it->mIDCovariance << "]";
+		oss << it->mID << " (" << (short)(floor(it->mOrientation+0.5)) << ") [" << it->mIDCovariance << "]";
 		cvPutText(mImage, oss.str().c_str(), cvPoint(x+12, y+10), &mFontMain, cvScalar(255, 0, 0));
 		it++;
 	}
