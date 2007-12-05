@@ -4,6 +4,7 @@
 #ifdef USE_CAMERA_PYLON_GIGE
 #include <sstream>
 #include "DisplayEditor.h"
+#include "ImageConversion.h"
 
 THISCLASS::ComponentInputCameraGigE(SwisTrackCore *stc):
 		Component(stc, "InputCameraGigE"),
@@ -48,11 +49,11 @@ void THISCLASS::OnStart() {
 	// Check the maximum amount of buffers
 	if (mInputBufferSize < 1) {
 		mInputBufferSize = 1;
-		AddWarning(wxString::Format("Using %d input buffer.", mInputBufferSize));
+		AddWarning(wxString::Format("Using %d input buffer.", mInputBufferSize).c_str());
 	}
 	if (mInputBufferSize > mInputBufferSizeMax) {
 		mInputBufferSize = mInputBufferSizeMax;
-		AddWarning(wxString::Format("Using %d input buffers.", mInputBufferSize));
+		AddWarning(wxString::Format("Using %d input buffers.", mInputBufferSize).c_str());
 	}
 
 	// Get the transport layer
@@ -148,7 +149,7 @@ void THISCLASS::OnStart() {
 	// Parameterize the stream grabber
 	const int buffersize=mCamera->PayloadSize.GetValue();
 	mStreamGrabber->MaxBufferSize=buffersize;
-	mStreamGrabber->MaxNumBuffer=mInputBufferCount;
+	mStreamGrabber->MaxNumBuffer=mInputBufferSize;
 	mStreamGrabber->PrepareGrab();
 
 	// Allocate and register image buffers, put them into the grabber's input queue
@@ -231,7 +232,7 @@ void THISCLASS::OnStep() {
 	// If we are acquireing a color image, we need to transform it from YUV422 to BGR, otherwise we use the raw image
 	if (mColor) {
 		PrepareOutputImage(outputimage);
-		CvtYUV422ToBGR(outputImage, mOutputImage);
+		ImageConversion::CvtYUV422ToBGR(outputimage, mOutputImage);
 		mCore->mDataStructureInput.mImage=mOutputImage;
 	} else {
 		mCore->mDataStructureInput.mImage=outputimage;
