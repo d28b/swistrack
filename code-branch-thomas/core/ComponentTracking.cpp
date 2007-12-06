@@ -93,6 +93,8 @@ void THISCLASS::DataAssociation()
 	// At this point, two or more trajectories can share one particle. However, all 
 	// trajectories that join an already associated particle are kept as competitors
 
+/*
+
 	// Now, check which particles have not been associated
 	int fp,ap;		// free particles, associated particles	
 
@@ -100,10 +102,11 @@ void THISCLASS::DataAssociation()
 
 	if(fp && ap <mMaxNumber){ // if there are unassociated particles and less associated particles than objects
 		if(!competitors.empty()){
-			CleanParticles(); // delete all assigned particles from the particle list			
+			//CleanParticles(); // delete all assigned particles from the particle list			
 			AssociateParticlesToCompetitors(mDistanceGate);
 		}  // end if !competitors.empty
 	} // end if fp && ap<num_objects
+*/
 	avg_speed = mDistanceGate/2;
 
 	///////////////////// Determine number and age of shared trajectories //////////////////
@@ -129,10 +132,9 @@ void THISCLASS::DataAssociation()
 	}
 
 
-
 	///////////////////////////// Create new trajectories for noise  //////////////////////
 
-	CleanParticles();
+	//CleanParticles();
 	//	printf("We have now %d particles to assign, and have already %d noise trajectories\n",particles->size(),ptargets.size());
 	DataStructureParticles::tParticleVector::iterator p;
 	for(p=particles->begin();p != particles->end();p++) // assign particles to existing noise trajectories
@@ -218,6 +220,7 @@ void THISCLASS::DataAssociation()
 		}
 		if(found) break;
 	}
+
 }
 
 /** Calculates cost for two points to be associated.

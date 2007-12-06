@@ -844,6 +844,14 @@
 				Name="9 Tracking"
 				>
 				<File
+					RelativePath="..\ComponentNearestNeighborTracking.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentNearestNeighborTracking.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentTracking.cpp"
 					>
 				</File>

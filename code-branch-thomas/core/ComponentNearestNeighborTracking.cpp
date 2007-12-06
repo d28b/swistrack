@@ -5,7 +5,7 @@
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentNearestNeighborTracking(SwisTrackCore *stc):
-		Component(stc, "Tracking"),
+		Component(stc, "NearestNeighborTracking"),
 		mMaxNumber(10),
 		mDisplayOutput("Output", "Tracking") 
 {
@@ -120,8 +120,6 @@ double THISCLASS::GetCost(int id,CvPoint2D32f p){
 		(mTracks.at(id).trajectory.back().y-p.y)
 		);
 }
-
-
 
 /** Add a point to the current track (max track) 
 *

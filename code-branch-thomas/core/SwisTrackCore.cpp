@@ -30,6 +30,7 @@
 #include "ComponentBlobDetectionMinMax.h"
 #include "ComponentBlobDetectionCircle.h"
 #include "ComponentTracking.h"
+#include "ComponentNearestNeighborTracking.h"
 #include "ComponentIDReaderRing.h"
 #include "ComponentSimulationParticles.h"
 #include "ComponentCalibrationLinear.h"
@@ -92,6 +93,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
 	mAvailableComponents.push_back(new ComponentCalibrationTSAI(this));
 	mAvailableComponents.push_back(new ComponentTracking(this));
+	mAvailableComponents.push_back(new ComponentNearestNeighborTracking(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentOutputMarkFrameManual(this));
