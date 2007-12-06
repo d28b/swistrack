@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Nearest neighbor tracking</friendlyname>
+	<friendlyname>Original Tracking Core (N. Correll)</friendlyname>
 	<description>To be implemented</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/Tracking</url>
 	<displayimage>Output</displayimage>
