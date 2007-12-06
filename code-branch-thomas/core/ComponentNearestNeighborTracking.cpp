@@ -12,6 +12,7 @@ THISCLASS::ComponentNearestNeighborTracking(SwisTrackCore *stc):
 	// Data structure relations
 	mCategory=&(mCore->mCategoryTracking);
 	AddDataStructureRead(&(mCore->mDataStructureParticles));
+	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 	AddDataStructureWrite(&(mCore->mDataStructureTracks));
 	AddDisplay(&mDisplayOutput);
 
@@ -35,7 +36,7 @@ void THISCLASS::OnStart()
 	{
 		mTracks.push_back(Track(i,		// id number
 			mMaxNumber));
-		mTracks.at(i).AddPoint(cvPoint2D32f(320,240));
+		//mTracks.at(i).AddPoint(cvPoint2D32f(320,240));
 	}
 }
 
@@ -85,6 +86,7 @@ void THISCLASS::DataAssociation()
 
 		min_dist = 
 			GetCost(0,p->mCenter);
+		min_dist_t = 0;
 		for(int t=1; t<mMaxNumber; t++)	// compare to all existing tracks
 		{
 			double dist = 				// and find the one which is 
@@ -95,8 +97,9 @@ void THISCLASS::DataAssociation()
 				min_dist_t = t;			//	and the track number
 			}
 		}
-		p->mID = min_dist_t;			// finally, assign trackID in particle
-		AddPoint(min_dist_t,p->mCenter);//  and add particle to track listing
+			p->mID = min_dist_t;		// finally, assign trackID in particle
+			AddPoint(min_dist_t,		//  and add particle to track listing
+				p->mCenter);
 	}
 }
 
@@ -110,15 +113,18 @@ void THISCLASS::DataAssociation()
 * \todo The cost function used here is very simple. One could imagine to take also other
 * attributes, for instance the speed of the object into account.
 */
-double THISCLASS::GetCost(int id,CvPoint2D32f p){
-
-	return(
-		(mTracks.at(id).trajectory.back().x-p.x)*
-		(mTracks.at(id).trajectory.back().x-p.x)
-		+
-		(mTracks.at(id).trajectory.back().y-p.y)*
-		(mTracks.at(id).trajectory.back().y-p.y)
-		);
+double THISCLASS::GetCost(int id,CvPoint2D32f p)
+{
+	if(mTracks.at(id).trajectory.size()==0)
+		return -1;
+	else
+		return(
+			(mTracks.at(id).trajectory.back().x-p.x)*
+			(mTracks.at(id).trajectory.back().x-p.x)
+			+
+			(mTracks.at(id).trajectory.back().y-p.y)*
+			(mTracks.at(id).trajectory.back().y-p.y)
+			);
 }
 
 /** Add a point to the current track (max track) 

@@ -30,7 +30,6 @@ private:
 	DataStructureParticles::tParticleVector *particles;
 
 	// Parameters	
-	int mShareTrajectories; //!< If set to one, trajectories can share a particle, otherwise not (suitable for marker based tracking)
 	int mMaxNumber;		//!< (configuration) The maximum number of objects that are to track.
 	DataStructureTracks::tTrackVector mTracks;
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.	
