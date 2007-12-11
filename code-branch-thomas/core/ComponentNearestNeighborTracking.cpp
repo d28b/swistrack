@@ -32,6 +32,7 @@ void THISCLASS::OnStart()
 	if (mMaxNumber<1)
 		AddError("Max number of tracks must be greater or equal to 1");
 
+	if(mTracks.size()) mTracks.clear();	// handle reset properly
 	for (int i=0;i<mMaxNumber;i++)		// initiate mMaxNumber Track classes
 	{
 		mTracks.push_back(Track(i,		// id number
