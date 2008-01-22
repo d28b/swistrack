@@ -63,7 +63,7 @@
 			<default>4</default>
 			<reloadable>false</reloadable>
 		</parameter>
-		<parameter type="checkbox">
+		<parameter type="button">
 			<name>ConfigurationWindow</name>
 			<label>Configuration Window</label>
 			<default>0</default>
