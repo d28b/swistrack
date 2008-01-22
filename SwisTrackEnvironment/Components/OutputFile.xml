@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Output to a file</friendlyname>
+	<description>Write tracking data to a file. Each track as an individual track</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputFile</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="string">
+			<name>DirectoryName</name>
+			<label>Output Directory</label>
+			<reloadable>false</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

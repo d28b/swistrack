@@ -122,20 +122,6 @@ void THISCLASS::OnStart() {
 	cvReleaseMat(&imagematrix32f);
 	cvReleaseMat(&objectmatrix32f);
 	cvReleaseMat(&cameratransform32f);
-
-#ifdef _DEBUG
-	// For Debug Purpose, just compute the transformation of the 
-	for (unsigned int i=0; i<calibrationPointList.size(); i++) {
-		CvPoint2D32f originalImage,originalWorld,finalWorld;
-		originalImage.x=(float)(calibrationPointList.at(i)).xImage;
-		originalImage.y=(float)(calibrationPointList.at(i)).yImage;
-		originalWorld.x=(float)(calibrationPointList.at(i)).xWorld;
-		originalWorld.y=(float)(calibrationPointList.at(i)).yWorld;
-		finalWorld=THISCLASS::Image2World(originalImage);
-		int justToBeAbleToStopTheDebugger=0;
-	}
-#endif
-
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -149,7 +135,7 @@ void THISCLASS::OnStep() {
 	// Transform all particle positions
 	DataStructureParticles::tParticleVector::iterator it=particles->begin();
 	while (it!=particles->end()) {
-		it->mCenter=Image2World(it->mCenter);
+		it->mWorldCenter=Image2World(it->mCenter);
 		it++;
 	}
 }

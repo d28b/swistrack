@@ -37,6 +37,7 @@
 #include "ComponentCalibrationTSAI.h"
 #include "ComponentOutputParticles.h"
 #include "ComponentOutputFileAVI.h"
+#include "ComponentOutputFile.h"
 #include "ComponentOutputMarkFrameManual.h"
 
 THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
@@ -97,6 +98,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentOutputMarkFrameManual(this));
+	mAvailableComponents.push_back(new ComponentOutputFile(this));
 
 	// Initialize the available components
 	tComponentList::iterator ita=mAvailableComponents.begin();

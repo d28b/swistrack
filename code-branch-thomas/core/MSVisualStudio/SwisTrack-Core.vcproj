@@ -780,6 +780,14 @@
 				Name="10 Output"
 				>
 				<File
+					RelativePath="..\ComponentOutputFile.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOutputFile.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentOutputFileAVI.cpp"
 					>
 				</File>

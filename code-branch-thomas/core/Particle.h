@@ -13,6 +13,7 @@ public:
 	float mOrientation;		//!< The orientation of the particle.
 	double mArea;			//!< Particle area.
 	double mCompactness;	//!< The contour's compactness (area/circumference ratio).
+	CvPoint2D32f mWorldCenter; //!< Particle center after calibration.
 
 	//! Constructor.
 	Particle(): mID(-1), mCenter(), mOrientation(0), mArea(0), mCompactness(0) {}

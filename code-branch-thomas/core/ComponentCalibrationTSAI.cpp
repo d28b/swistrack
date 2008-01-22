@@ -117,7 +117,7 @@ void THISCLASS::OnStep() {
 	DataStructureParticles::tParticleVector::iterator it=particles->begin();
 	while (it!=particles->end()) 
 	{
-		it->mCenter=Image2World(it->mCenter);
+		it->mWorldCenter=Image2World(it->mCenter);
 		it++;
 	}
 }
