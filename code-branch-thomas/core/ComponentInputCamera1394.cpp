@@ -114,6 +114,7 @@ void THISCLASS::OnStart() {
 void THISCLASS::OnReloadConfiguration() {
 	if (GetConfigurationBool("ConfigurationWindow", false)) {
 		CameraControlDialog(NULL,&mCamera,true);
+		mConfiguration["ConfigurationWindow"]="false";  // reset value to false
 	}
 }
 
