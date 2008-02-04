@@ -112,7 +112,7 @@ void THISCLASS::writeHeader(structOutputFile *outputFile)
 	//Write the header of the file
 	outputFile->fileStream
 		//Frame number
-		<< "Frame Number" << "\t"
+		<< "%Frame Number" << "\t"
 		//image center
 		<< "Image Center x" << "\t" << "Image Center y" << "\t"
 		//World center
