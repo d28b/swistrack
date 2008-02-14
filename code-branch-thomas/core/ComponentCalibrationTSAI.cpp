@@ -5,6 +5,7 @@
 #include "DataStructureParticles.h"
 #include <wx/log.h>
 #include "libtsai.h"
+#include <fstream>
 
 THISCLASS::ComponentCalibrationTSAI(SwisTrackCore *stc):
 		Component(stc, "CalibrationTSAI"),
@@ -90,19 +91,52 @@ void THISCLASS::OnStart() {
 		AddError("Calibration using libtsai failed.");
 	}
 	
-#ifdef _DEBUG
-	//For Debug Purpose, just compute the transformation of the 
-	for (unsigned int i=0; i<calibrationPointList.size(); i++) {
-		CvPoint2D32f originalImage,originalWorld,finalImage,finalWorld;
+	//Compute error of calibration on calibration points
+	double errorX,errorY,maxErrorX,maxErrorY,maxErrorD,errorD;
+	maxErrorX=0;
+	maxErrorY=0;
+	errorX=0;
+	errorY=0;
+	maxErrorD=0;
+	errorD=0;
+
+	for (unsigned int i=0; i<calibrationPointList.size(); i++) 
+	{
+		double tmpErrorX,tmpErrorY,tmpErrorD;
+		CvPoint2D32f originalImage,originalWorld,finalWorld;
 		originalImage.x=(float)(calibrationPointList.at(i)).xImage;
 		originalImage.y=(float)(calibrationPointList.at(i)).yImage;
 		originalWorld.x=(float)(calibrationPointList.at(i)).xWorld;
 		originalWorld.y=(float)(calibrationPointList.at(i)).yWorld;
 		finalWorld=THISCLASS::Image2World(originalImage);
-		finalImage=THISCLASS::World2Image(originalWorld);
-		int justToBeAbleToStopTheDebugger=0;
+		tmpErrorX=abs(originalWorld.x-finalWorld.x);
+		tmpErrorY=abs(originalWorld.y-finalWorld.y);
+		tmpErrorD=sqrt(tmpErrorX*tmpErrorX+tmpErrorY*tmpErrorY);
+		errorX+=tmpErrorX;
+		errorY+=tmpErrorY;
+		errorD+=tmpErrorD;
+		if (tmpErrorX>maxErrorX)
+			maxErrorX=tmpErrorX;
+		if (tmpErrorY>maxErrorY)
+			maxErrorY=tmpErrorY;
+		if (tmpErrorD>maxErrorD)
+			maxErrorD=tmpErrorD;
 	}
-#endif
+	errorX=errorX/calibrationPointList.size();
+	errorY=errorY/calibrationPointList.size();
+	errorD=errorD/calibrationPointList.size();
+	
+	//Write error into calibration.log
+	std::fstream outputFile;
+	outputFile.open("calibration.log",std::fstream::out | std::fstream::trunc);
+	outputFile<<"Calibration error"<<std::endl;
+	outputFile<<"Max error in X: \t"<<maxErrorX<<std::endl;
+	outputFile<<"Max error in Y: \t"<<maxErrorY<<std::endl;
+	outputFile<<"Average error in X: \t"<<errorX<<std::endl;
+	outputFile<<"Average error in Y: \t"<<errorY<<std::endl;
+	outputFile<<"Max distance error: \t"<<errorY<<std::endl;
+	outputFile<<"Average distance error: \t"<<errorY<<std::endl;
+	outputFile.close();
 }
 
 void THISCLASS::OnReloadConfiguration() {
