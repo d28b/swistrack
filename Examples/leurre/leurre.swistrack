@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<swistrack>
+  <components>
+    <component type="InputFileAVI">
+      <parameter name="File" value="C:\boulot\swistrack\Examples\leurre\leurre.avi"/>
+    </component>
+    <component type="ConvertToColor"/>
+    <component type="BackgroundSubtractionColor">
+      <parameter name="BackgroundImage" value="C:\boulot\swistrack\Examples\leurre\background.bmp"/>
+      <parameter name="CorrectMean" value="false"/>
+    </component>
+    <component type="ThresholdColorCommon">
+      <parameter name="AverageBool" value="true"/>
+      <parameter name="InvertThreshold" value="false"/>
+      <parameter name="Threshold" value="28"/>
+    </component>
+    <component type="BinaryMask">
+      <parameter name="MaskImage" value="C:\boulot\swistrack\Examples\leurre\mask.bmp"/>
+    </component>
+    <component type="BinaryErosion">
+      <parameter name="Iterations" value=""/>
+    </component>
+    <component type="BinaryDilation">
+      <parameter name="Iterations" value="1"/>
+    </component>
+    <component type="BinaryErosion">
+      <parameter name="Iterations" value="1"/>
+    </component>
+    <component type="BlobDetectionMinMax">
+      <parameter name="AreaBool" value="true"/>
+      <parameter name="CompactnessBool" value="false"/>
+      <parameter name="MaxArea" value="200"/>
+      <parameter name="MaxCompactness" value="1"/>
+      <parameter name="MaxNumber" value=""/>
+      <parameter name="MaxOrientation" value=""/>
+      <parameter name="MinArea" value="10"/>
+      <parameter name="MinCompactness" value="0.51"/>
+      <parameter name="MinOrientation" value=""/>
+      <parameter name="OrientationBool" value=""/>
+    </component>
+    <component type="CalibrationTSAI">
+      <parameter name="CalibrationPoints" value="C:\boulot\swistrack\Examples\leurre\calibrationPoints.xml"/>
+      <parameter name="Ncx" value=""/>
+      <parameter name="Ncy" value=""/>
+      <parameter name="Nfx" value=""/>
+      <parameter name="Nfy" value=""/>
+      <parameter name="dx" value=""/>
+      <parameter name="dy" value=""/>
+      <parameter name="sx" value=""/>
+    </component>
+    <component type="NearestNeighborTracking">
+      <parameter name="MaxNumber" value=""/>
+    </component>
+    <component type="OutputFile">
+      <parameter name="DirectoryName" value=""/>
+    </component>
+  </components>
+  <server>
+    <port>3000</port>
+  </server>
+</swistrack>
