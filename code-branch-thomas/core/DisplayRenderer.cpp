@@ -144,12 +144,12 @@ bool THISCLASS::DrawParticles(ErrorList *errors) {
 		int y=(int)floor(it->mCenter.y*mScalingFactor+0.5);
 		cvRectangle(mImage, cvPoint(x-2, y-2), cvPoint(x+2, y+2), cvScalar(192, 0, 0), 1);
 
-		float c=cosf(it->mOrientation/57.29577951)*20+(float)0.5;
-		float s=sinf(it->mOrientation/57.29577951)*20+(float)0.5;
-		cvLine(mImage, cvPoint(x, y), cvPoint(x+(int)floorf(c), y+(int)floorf(s)), cvScalar(192, 0, 0), 1);
+		float c=cosf(it->mOrientation)*8; //cosf(it->mOrientation/57.29577951)*20; // TODO: mOrientation contains an angle (rad), and the appropriate conversion to rad should be done when filling this structure
+		float s=sinf(it->mOrientation)*8; //sinf(it->mOrientation/57.29577951)*20;
+		cvLine(mImage, cvPoint(x, y), cvPoint(x+(int)floorf(c+0.5), y+(int)floorf(s+0.5)), cvScalar(192, 0, 0), 1);
 
 		std::ostringstream oss;
-		oss << it->mID << " (" << (short)(floor(it->mOrientation+0.5)) << ") [" << it->mIDCovariance << "]";
+		oss << it->mID << " [" << it->mIDCovariance << "]";
 		cvPutText(mImage, oss.str().c_str(), cvPoint(x+12, y+10), &mFontMain, cvScalar(255, 0, 0));
 		it++;
 	}

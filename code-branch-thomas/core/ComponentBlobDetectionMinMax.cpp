@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include "DisplayEditor.h"
+#define PI 3.14159265358979
 
 THISCLASS::ComponentBlobDetectionMinMax(SwisTrackCore *stc):
 		Component(stc, "BlobDetectionMinMax"),
@@ -105,8 +106,8 @@ void THISCLASS::OnStep() {
 			if ((mCompactnessSelection==false)||((tmpParticle.mCompactness>mMinCompactness) && (tmpParticle.mCompactness<mMaxCompactness)))
 			{
 				double tempValue=cvGetCentralMoment(&moments,2,0)-cvGetCentralMoment(&moments,0,2);
-				tmpParticle.mOrientation=atan(2*cvGetCentralMoment(&moments,1,1)/(tempValue+sqrt(tempValue*tempValue+4*cvGetCentralMoment(&moments,1,1)*cvGetCentralMoment(&moments,1,1))))*57.29577951;
-				if ((mOrientationSelection==false)||(((tmpParticle.mOrientation>mMinOrientation)&&(tmpParticle.mOrientation<mMaxOrientation))||((tmpParticle.mOrientation>mMinOrientation+180)&&(tmpParticle.mOrientation<mMaxOrientation+180))||((tmpParticle.mOrientation>mMinOrientation-180)&&(tmpParticle.mOrientation<mMaxOrientation-180))))
+				tmpParticle.mOrientation=atan(2*cvGetCentralMoment(&moments,1,1)/(tempValue+sqrt(tempValue*tempValue+4*cvGetCentralMoment(&moments,1,1)*cvGetCentralMoment(&moments,1,1))));
+				if ((mOrientationSelection==false)||(((tmpParticle.mOrientation>mMinOrientation)&&(tmpParticle.mOrientation<mMaxOrientation))||((tmpParticle.mOrientation>mMinOrientation+PI)&&(tmpParticle.mOrientation<mMaxOrientation+PI))||((tmpParticle.mOrientation>mMinOrientation-PI)&&(tmpParticle.mOrientation<mMaxOrientation-PI))))
 				{
 					cvDrawContours(outputImage,contour,cvScalarAll(255),cvScalarAll(255),0,CV_FILLED);
 					// Check if we have already enough particles

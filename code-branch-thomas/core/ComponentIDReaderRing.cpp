@@ -78,6 +78,7 @@ void THISCLASS::OnReloadConfiguration() {
 
 	// Allocate enough space
 	mRingValuesMax=(int)((2*mRingRadiusOuter+1)*(2*mRingRadiusOuter+1)-(2*mRingRadiusInner-1)*(2*mRingRadiusInner-1));
+	if (mRingValuesMax<0) {mRingValuesMax=1;}
 	delete mRingAngles; mRingAngles=new float[mRingValuesMax];
 	delete mRingValues; mRingValues=new int[mRingValuesMax];
 }
@@ -95,6 +96,10 @@ void THISCLASS::OnStep() {
 		float y1=floor(cy-mRingRadiusOuter);
 		float x2=ceil(cx+mRingRadiusOuter);
 		float y2=ceil(cy+mRingRadiusOuter);
+		if (x1<0) {x1=0;}
+		if (y1<0) {y1=0;}
+		if (x2>img->width) {x2=img->width;}
+		if (y2>img->height) {y2=img->height;}
 
 		// Retrieve all pixels on the ring
 		//wxStopWatch sw;
@@ -124,10 +129,12 @@ void THISCLASS::OnStep() {
 		//std::ostringstream oss;
 		//oss << "pixels" << fileid << ".txt";
 		//std::ofstream ofs(oss.str().c_str());
-		int mean=sum/mRingCount;
-		for (int i=0; i<mRingCount; i++) {
-			//ofs << mRingAngles[i] << "\t" << mRingValues[i] << std::endl;
-			mRingValues[i]-=mean;
+		if (mRingCount>0) {
+			int mean=sum/mRingCount;
+			for (int i=0; i<mRingCount; i++) {
+				//ofs << mRingAngles[i] << "\t" << mRingValues[i] << std::endl;
+				mRingValues[i]-=mean;
+			}
 		}
 
 		//std::ostringstream oss1;
