@@ -28,7 +28,9 @@ private:
 	void AddPoint(int i, CvPoint2D32f p);
 
 	DataStructureParticles::tParticleVector *particles;
-
+	double** distanceArray;
+	int maxParticles;
+		
 	// Parameters	
 	int mMaxNumber;		//!< (configuration) The maximum number of objects that are to track.
 	DataStructureTracks::tTrackVector mTracks;
