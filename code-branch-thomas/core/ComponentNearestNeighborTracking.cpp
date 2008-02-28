@@ -27,7 +27,7 @@ THISCLASS::~ComponentNearestNeighborTracking()
 void THISCLASS::OnStart() 
 {
 	mMaxNumber=GetConfigurationInt("MaxNumber", 10);
-	maxParticles=mCore->mDataStructureParticles.mParticles->size();
+	maxParticles=10;
 
 	// Check for stupid configurations
 	if (mMaxNumber<1)
@@ -42,10 +42,14 @@ void THISCLASS::OnStart()
 	}
 	distanceArray= new double*[mMaxNumber];
 	for (int i=0;i<mMaxNumber;i++)
-		distanceArray[i]=new double[maxParticles];	
+		distanceArray[i]=new double[maxParticles];
+	THISCLASS::OnReloadConfiguration();
 }
 
-void THISCLASS::OnReloadConfiguration() {
+void THISCLASS::OnReloadConfiguration() 
+{
+	mMaxDistance=GetConfigurationDouble("MaxDistance",10);
+	mMaxDistance*=mMaxDistance;
 }
 
 void THISCLASS::OnStep() 
@@ -106,9 +110,9 @@ void THISCLASS::DataAssociation()
 	std::vector<int> trackIndexes;
 	std::vector<int> particleIndexes;
 	for (int i=0;i<particles->size();i++)
-		particleIndexes[i]=i;
+		particleIndexes.push_back(i);
 	for (int i=0;i<mMaxNumber;i++)
-		trackIndexes[i]=i;
+		trackIndexes.push_back(i);
 	//Search for the minimalDistance
 	while ((!trackIndexes.empty())&&(!particleIndexes.empty()))
 	{
@@ -116,39 +120,28 @@ void THISCLASS::DataAssociation()
 		int minDistanceI,minDistanceJ;
 		minDistanceI=0;
 		minDistanceJ=0;
-		minDistance=distanceArray[0][0];
+		minDistance=distanceArray[trackIndexes[0]][particleIndexes[0]];
 		for (int i=0;i<trackIndexes.size();i++)
 		{
-			for (int j=0;j<particles->size();j++)
+			for (int j=0;j<particleIndexes.size();j++)
 			{
-				if (distanceArray[i][j]<minDistance)
+				if (distanceArray[trackIndexes[i]][particleIndexes[j]]<minDistance)
 				{
-					minDistance=distanceArray[i][j];
+					minDistance=distanceArray[trackIndexes[i]][particleIndexes[j]];
 					minDistanceI=i;
 					minDistanceJ=j;
 				}
 			}
 		}
+		//If the distance between track and particle is too big, allocate nothing.
+		if (minDistance>mMaxDistance)
+			break;
 		//The smallest distance into the array is for i,j
-		(particles->at(minDistanceJ)).mID=minDistanceI;
-		AddPoint(minDistanceI,(particles->at(minDistanceJ)).mCenter);
+		(particles->at(particleIndexes[minDistanceJ])).mID=trackIndexes[minDistanceI];
+		AddPoint(trackIndexes[minDistanceI],(particles->at(particleIndexes[minDistanceJ])).mCenter);
 		//Suppress the indexes in the vectors
-		for (int i=0;;i++)
-		{
-			if (trackIndexes[i]=minDistanceI)
-			{
-				trackIndexes.erase(trackIndexes.begin()+i);
-				break;
-			}
-		}
-		for (int j=0;;j++)
-		{
-			if (trackIndexes[j]=minDistanceJ)
-			{
-				particleIndexes.erase(particleIndexes.begin()+j);
-				break;
-			}
-		}
+		trackIndexes.erase(trackIndexes.begin()+minDistanceI);
+		particleIndexes.erase(particleIndexes.begin()+minDistanceJ);		
 	}
 }
 
@@ -167,13 +160,11 @@ double THISCLASS::GetCost(int id,CvPoint2D32f p)
 	if(mTracks.at(id).trajectory.size()==0)
 		return -1;
 	else
-		return(
-			(mTracks.at(id).trajectory.back().x-p.x)*
-			(mTracks.at(id).trajectory.back().x-p.x)
-			+
-			(mTracks.at(id).trajectory.back().y-p.y)*
-			(mTracks.at(id).trajectory.back().y-p.y)
-			);
+	{
+		double dx=mTracks.at(id).trajectory.back().x-p.x;
+		double dy=mTracks.at(id).trajectory.back().y-p.y;
+		return dx*dx+dy*dy;
+	}
 }
 
 /** Add a point to the current track (max track) 
