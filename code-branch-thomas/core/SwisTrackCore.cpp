@@ -28,7 +28,6 @@
 #include "ComponentBinaryMask.h"
 #include "ComponentBlobSelection.h"
 #include "ComponentBlobDetectionMinMax.h"
-#include "ComponentBlobDetectionCircle.h"
 #include "ComponentTracking.h"
 #include "ComponentNearestNeighborTracking.h"
 #include "ComponentIDReaderRing.h"
@@ -88,7 +87,6 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentBinaryMask(this));
 	mAvailableComponents.push_back(new ComponentBlobSelection(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionMinMax(this));
-	mAvailableComponents.push_back(new ComponentBlobDetectionCircle(this));
 	mAvailableComponents.push_back(new ComponentIDReaderRing(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));

@@ -628,14 +628,6 @@
 				Name="7 Particle detection"
 				>
 				<File
-					RelativePath="..\ComponentBlobDetectionCircle.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentBlobDetectionCircle.h"
-					>
-				</File>
-				<File
 					RelativePath="..\ComponentBlobDetectionMinMax.cpp"
 					>
 				</File>
