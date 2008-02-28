@@ -134,8 +134,8 @@ void THISCLASS::OnStart() {
 	outputFile<<"Max error in Y: \t"<<maxErrorY<<std::endl;
 	outputFile<<"Average error in X: \t"<<errorX<<std::endl;
 	outputFile<<"Average error in Y: \t"<<errorY<<std::endl;
-	outputFile<<"Max distance error: \t"<<errorY<<std::endl;
-	outputFile<<"Average distance error: \t"<<errorY<<std::endl;
+	outputFile<<"Max distance error: \t"<<maxErrorD<<std::endl;
+	outputFile<<"Average distance error: \t"<<errorD<<std::endl;
 	outputFile.close();
 }
 
