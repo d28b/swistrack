@@ -6,7 +6,7 @@
 
 THISCLASS::ComponentOutputFileAVI(SwisTrackCore *stc):
 		Component(stc, "OutputFileAVI"),
-		mWriter(0), mOutputImage(0), mFrameRate(15),mInputSelection(0),
+		mWriter(0), mFrameRate(15),mInputSelection(0),
 		mDisplayOutput("Output", "AVI File: Unprocessed Frame") {
 
 	// Data structure relations
@@ -59,33 +59,35 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
-	// Prepare the output image
-	if (! mOutputImage) {
-		mOutputImage=cvCreateImage(cvGetSize(inputimage), 8, inputimage->nChannels);
-	} else if (inputimage->nChannels != mOutputImage->nChannels) {
-		cvReleaseImage(&mOutputImage);
-		mOutputImage=cvCreateImage(cvGetSize(inputimage), 8, inputimage->nChannels);
-	}
-
 	// Create the Writer
-	if (! mWriter) {
-		mWriter = cvCreateVideoWriter(mFilename.c_str(), -1, mFrameRate, cvGetSize(inputimage));
-		if (! mWriter) {
+	if (! mWriter) 
+	{
+		if (inputimage->nChannels==3)
+			mWriter = cvCreateVideoWriter(mFilename.c_str(), -1, mFrameRate, cvGetSize(inputimage));
+		else if (inputimage->nChannels==1)
+			mWriter = cvCreateVideoWriter(mFilename.c_str(), -1, mFrameRate, cvGetSize(inputimage),0);
+		else
+		{
+			AddError("Input image must have 1 or 3 channels");
+			return;
+		}
+
+		if (! mWriter) 
+		{
 			AddError("Error while creating the AVI file.");
 			return;
 		}
 	}
-
-	// AVI files are flipped
-	cvFlip(inputimage, mOutputImage);
+	//Image is always top down in Swistrack
+	inputimage->origin=0;
 
 	//Write the frame to the avi
-	cvWriteFrame(mWriter,mOutputImage);
+	cvWriteFrame(mWriter,inputimage);
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
-		de.SetMainImage(mOutputImage);
+		de.SetMainImage(inputimage);
 	}
 }
 
@@ -94,7 +96,6 @@ void THISCLASS::OnStepCleanup()
 }
 
 void THISCLASS::OnStop() {
-	if (mOutputImage) {cvReleaseImage(&mOutputImage);}
 	if (mWriter) {cvReleaseVideoWriter(&mWriter);}
 }
 

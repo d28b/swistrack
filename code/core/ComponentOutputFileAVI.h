@@ -30,7 +30,6 @@ public:
 
 private:
 	CvVideoWriter* mWriter;				//!< Pointer to AVI sequence.
-	IplImage* mOutputImage;				//!< The last acquired image.
 	int mFrameRate;						//!< The frame rate of the output AVI
 	int mInputSelection;				//!< Select the input
 	std::string mFilename;				//!< Name of the saved AVI
