@@ -29,8 +29,8 @@ Global
 		{44405FF3-5736-429E-B8E3-DE423B43038B}.Debug - GigaBit Camera|Win32.Build.0 = Debug - GigaBit Camera|Win32
 		{44405FF3-5736-429E-B8E3-DE423B43038B}.Debug|Win32.ActiveCfg = Debug|Win32
 		{44405FF3-5736-429E-B8E3-DE423B43038B}.Debug|Win32.Build.0 = Debug|Win32
-		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release - FireWire Camera|Win32.ActiveCfg = Release - GigaBit Camera|Win32
-		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release - FireWire Camera|Win32.Build.0 = Release - GigaBit Camera|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release - FireWire Camera|Win32.ActiveCfg = Release - FireWire Camera|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release - FireWire Camera|Win32.Build.0 = Release - FireWire Camera|Win32
 		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release - GigaBit Camera|Win32.ActiveCfg = Release - GigaBit Camera|Win32
 		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release - GigaBit Camera|Win32.Build.0 = Release - GigaBit Camera|Win32
 		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release|Win32.ActiveCfg = Release|Win32
@@ -41,8 +41,8 @@ Global
 		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Debug - GigaBit Camera|Win32.Build.0 = Debug - GigaBit Camera|Win32
 		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Debug|Win32.Build.0 = Debug|Win32
-		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release - FireWire Camera|Win32.ActiveCfg = Release - GigaBit Camera|Win32
-		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release - FireWire Camera|Win32.Build.0 = Release - GigaBit Camera|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release - FireWire Camera|Win32.ActiveCfg = Release - FireWire Camera|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release - FireWire Camera|Win32.Build.0 = Release - FireWire Camera|Win32
 		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release - GigaBit Camera|Win32.ActiveCfg = Release - GigaBit Camera|Win32
 		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release - GigaBit Camera|Win32.Build.0 = Release - GigaBit Camera|Win32
 		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release|Win32.ActiveCfg = Release|Win32

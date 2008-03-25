@@ -864,6 +864,14 @@
 				Name="5 Thresholding"
 				>
 				<File
+					RelativePath="..\ComponentDoubleThresholdColorIndependent.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentDoubleThresholdColorIndependent.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentThresholdColorCommon.cpp"
 					>
 				</File>

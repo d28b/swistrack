@@ -38,6 +38,7 @@
 #include "ComponentOutputFileAVI.h"
 #include "ComponentOutputFile.h"
 #include "ComponentOutputMarkFrameManual.h"
+#include "ComponentDoubleThresholdColorIndependent.h"
 
 THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 		mAvailableComponents(), mDataStructures(), mSwisTrackCoreInterfaces(), mComponentConfigurationFolder(componentconfigurationfolder),
@@ -82,6 +83,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentThresholdGray(this));
 	mAvailableComponents.push_back(new ComponentThresholdColorCommon(this));
 	mAvailableComponents.push_back(new ComponentThresholdColorIndependent(this));
+	mAvailableComponents.push_back(new ComponentDoubleThresholdColorIndependent(this));
 	mAvailableComponents.push_back(new ComponentBinaryDilation(this));
 	mAvailableComponents.push_back(new ComponentBinaryErosion(this));
 	mAvailableComponents.push_back(new ComponentBinaryMask(this));
@@ -97,6 +99,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentOutputMarkFrameManual(this));
 	mAvailableComponents.push_back(new ComponentOutputFile(this));
+	
 
 	// Initialize the available components
 	tComponentList::iterator ita=mAvailableComponents.begin();
