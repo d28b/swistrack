@@ -24,7 +24,7 @@ THISCLASS::~ComponentOutputFileM4V() {
 }
 
 void THISCLASS::OnStart() {
-	mFilename=GetConfigurationString("File", "");
+	mFilename=GetConfigurationString("Filename", "");
 	mFrameRate=GetConfigurationInt("FrameRate", 15);
 	OnReloadConfiguration();
 }
@@ -116,6 +116,13 @@ void THISCLASS::M4VOpen(IplImage* image) {
 	xvid_enc_create.height = image->height;
 	xvid_enc_create.profile = XVID_PROFILE_AS_L4;
 
+	// Allocate memory for the compressed frame
+	mM4VBuffer = new unsigned char[image->width * image->height * 6];
+	if (! mM4VBuffer) {
+		AddError("Failed to allocate memory for the compressed frame.");
+		return;
+	}
+
 	// Init zones
 	//xvid_enc_create.zones = mM4VZones;
 	//xvid_enc_create.num_zones = 0;
@@ -149,8 +156,9 @@ void THISCLASS::M4VOpen(IplImage* image) {
 	xvid_enc_create.global = 0;
 
 	// I use a small value here, since will not encode whole movies, but short clips
-	int result = xvid_encore(0, XVID_ENC_CREATE, &xvid_enc_create, 0);
-	if (! result) {
+	printf("open\n");
+	int error = xvid_encore(0, XVID_ENC_CREATE, &xvid_enc_create, 0);
+	if (error) {
 		AddError("Error while opening the encoder.");
 		return;
 	}
@@ -162,6 +170,11 @@ void THISCLASS::M4VOpen(IplImage* image) {
 void THISCLASS::M4VWriteFrame(IplImage* image) {
 	xvid_enc_frame_t xvid_enc_frame;
 	xvid_enc_stats_t xvid_enc_stats;
+
+	// If we could not open the encoder, just do nothing
+	if (! mM4VHandle) {
+		return;
+	}
 
 	// Version for the frame and the stats
 	memset(&xvid_enc_frame, 0, sizeof(xvid_enc_frame));
@@ -177,7 +190,7 @@ void THISCLASS::M4VWriteFrame(IplImage* image) {
 	xvid_enc_frame.vop_flags = 0;
 
 	// Initialize input image fields
-	xvid_enc_frame.input.plane[0] = image;
+	xvid_enc_frame.input.plane[0] = image->imageData;
 	xvid_enc_frame.input.stride[0] = image->widthStep;
 	xvid_enc_frame.input.csp = XVID_CSP_BGR;
 
@@ -213,6 +226,7 @@ void THISCLASS::M4VWriteFrame(IplImage* image) {
 	xvid_enc_frame.quant_inter_matrix = 0;
 
 	// Encode the frame
+	printf("write\n");
 	int size=xvid_encore(mM4VHandle, XVID_ENC_ENCODE, &xvid_enc_frame, &xvid_enc_stats);
 	if (size<0) {
 		AddError("Error while encoding a frame.");
@@ -224,6 +238,9 @@ void THISCLASS::M4VWriteFrame(IplImage* image) {
 
 void THISCLASS::M4VClose() {
 	mFile.Close();
-	xvid_encore(mM4VHandle, XVID_ENC_DESTROY, 0, 0);
-	mM4VHandle=0;
+	printf("close\n");
+	if (mM4VHandle) {
+		xvid_encore(mM4VHandle, XVID_ENC_DESTROY, 0, 0);
+		mM4VHandle=0;
+	}
 }
