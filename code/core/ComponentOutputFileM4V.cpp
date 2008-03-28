@@ -1,12 +1,13 @@
 #include "ComponentOutputFileM4V.h"
 #define THISCLASS ComponentOutputFileM4V
 
+#ifdef USE_XVID
 #include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentOutputFileM4V(SwisTrackCore *stc):
 		Component(stc, "OutputFileM4V"),
-		mM4VHandle(0), mM4VBuffer(0), mFrameRate(15), mInputSelection(0),
+		mM4VHandle(0), mM4VBuffer(0), mFrameRate(15), mInputChannel(0),
 		mDisplayOutput("Output", "M4V File: Unprocessed Frame") {
 
 	// Data structure relations
@@ -26,46 +27,62 @@ THISCLASS::~ComponentOutputFileM4V() {
 void THISCLASS::OnStart() {
 	mFilename=GetConfigurationString("Filename", "");
 	mFrameRate=GetConfigurationInt("FrameRate", 15);
+	
+	std::string keepinmemory = GetConfigurationString("WriteMode", "");
+	if (keepinmemory == "raw") {
+		mKeepInMemory = cKeepInMemory_Raw;
+	} else if (keepinmemory == "compressed") {
+		mKeepInMemory = cKeepInMemory_Compressed;
+	} else {
+		mKeepInMemory = cKeepInMemory_None;
+	}
+	
 	OnReloadConfiguration();
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mInputSelection=GetConfigurationInt("InputImage", 0);
+	std::string inputchannel = GetConfigurationInt("InputChannel", "");
+	if (inputchannel == "color") {
+		mInputChannel = cInputChannel_Color;
+	} else if (inputchannel == "grayscale") {
+		mInputChannel = cInputChannel_Grayscale;
+	} else if (inputchannel == "binary") {
+		mInputChannel = cInputChannel_Binary;
+	} else {
+		mInputChannel = cInputChannel_None;
+	}
 }
 
 void THISCLASS::OnStep() {
 	// Get the input image
-	IplImage* inputimage;
-	switch (mInputSelection) {
-	case 0:
-		// Gray image
+	IplImage* inputimage = 0;
+	if (mInputChannel == sInputChannel_Grayscale) {
 		inputimage=mCore->mDataStructureImageGray.mImage;
-		break;
-	case 1:
-		// Color image
+	} else if (mInputChannel == sInputChannel_Color) {
 		inputimage=mCore->mDataStructureImageColor.mImage;
-		break;
-	case 2:
-		// Binary image
+	} else if (mInputChannel == sInputChannel_Binary) {
 		inputimage=mCore->mDataStructureImageBinary.mImage;
-		break;
-	default:
-		AddError("Invalid input image");
-		return;
+	} else {
+		AddError("No input channel selected.");
 	}
 
+	// Do nothing if no image is available
 	if (! inputimage) {
 		AddError("No image on selected input.");
 		return;
 	}
 
-	// Open the output file if necessary
-	if (! mM4VHandle) {
-		M4VOpen(inputimage);
-	}
+	if (mKeepInMemory == cKeepInMemory_None) {
+		// Open the output file if necessary
+		if (! mM4VHandle) {
+			M4VOpen(inputimage);
+		}
 
-	// Write the frame
-	M4VWriteFrame(inputimage);
+		// Write the frame
+		M4VWriteFrame(inputimage);
+	} else if (mKeepInMemory == cKeepInMemory_Raw) {
+	} else if (mKeepInMemory == cKeepInMemory_Compressed) {
+	} 
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
@@ -133,7 +150,7 @@ void THISCLASS::M4VOpen(IplImage* image) {
 	xvid_enc_create.plugins = plugins;
 	xvid_enc_create.num_plugins = 0;
 
-	/* No fancy thread tests */
+	// No fancy thread tests
 	xvid_enc_create.num_threads = 0;
 
 	// Frame rate
@@ -201,7 +218,7 @@ void THISCLASS::M4VWriteFrame(IplImage* image) {
 	// Frame type -- let core decide for us
 	xvid_enc_frame.type = XVID_TYPE_AUTO;
 
-	// Force the right quantizer -- It is internally managed by RC plugins
+	// Force the right quantizer -- it is internally managed by RC plugins
 	xvid_enc_frame.quant = 0;
 
 	// Set up motion estimation flags
@@ -244,3 +261,5 @@ void THISCLASS::M4VClose() {
 		mM4VHandle=0;
 	}
 }
+
+#endif // USE_XVID
