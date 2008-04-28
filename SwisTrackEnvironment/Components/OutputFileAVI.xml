@@ -14,7 +14,7 @@
 		<parameter type="integer">
 			<name>FrameRate</name>
 			<label>Frame Rate</label>
-			<default>15</default>		
+			<default>15</default>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="dropdownlist">
@@ -28,5 +28,15 @@
 			<default>0</default>
 			<reloadable>true</reloadable>
 		</parameter>
+		<title>Frame Buffering</title>
+		<parameter type="integer">
+			<name>FrameBufferCount</name>
+			<label>Buffer Frames</label>
+			<min>1</min>
+			<max>1000</max>
+			<default>1</default>
+			<reloadable>false</reloadable>
+		</parameter>
+		<label>The frames will be kept in memory and written only after having collected that number of frames (or when resetting). This is useful for high-speed acquisition/recording of short sequences.</label>
 	</configuration>
 </swistrackcomponent>

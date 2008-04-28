@@ -301,11 +301,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxbase28d_net.lib wxbase28d_xml.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib GCBase_MDd_VC80.lib GenApi_MDd_VC80.lib PylonBase_MDd_VC80.lib PylonGigE_MDd_VC80.lib"
+				AdditionalDependencies="wxbase28d_net.lib wxbase28d_xml.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib GCBase_MDd_VC80.lib GenApi_MDd_VC80.lib PylonBase_MDd_VC80.lib PylonGigE_MDd_VC80.lib xvidcore.dll.a"
 				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;&quot;L:\Basler\Pylon 1.0\pylon\lib&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\lib\win32_i86&quot;"
+				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;&quot;L:\Basler\Pylon 1.0\pylon\lib&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\lib\win32_i86&quot;;L:\xvidcore\build\win32\bin"
 				IgnoreDefaultLibraryNames="libci.lib;msvcrt.lib;libc.lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)\debug/swistrack.pdb"

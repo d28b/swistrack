@@ -197,7 +197,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE"
+				AdditionalIncludeDirectories="../include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE;L:\xvidcore\src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;USE_CAMERA_PYLON_GIGE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -785,6 +785,14 @@
 				</File>
 				<File
 					RelativePath="..\ComponentOutputFileAVI.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOutputFileM4V.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOutputFileM4V.h"
 					>
 				</File>
 				<File

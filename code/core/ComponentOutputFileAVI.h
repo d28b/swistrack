@@ -23,18 +23,20 @@ public:
 	void OnStop();
 	Component *Create() {return new ComponentOutputFileAVI(mCore);}
 
-	double GetProgressPercent();
-	double GetProgressMSec();
-	int GetProgressFrameNumber();
-	double GetFPS();
-
 private:
 	CvVideoWriter* mWriter;				//!< Pointer to AVI sequence.
-	int mFrameRate;						//!< The frame rate of the output AVI
-	int mInputSelection;				//!< Select the input
-	std::string mFilename;				//!< Name of the saved AVI
+	int mFrameRate;						//!< (configuration) The frame rate of the output AVI.
+	int mInputSelection;				//!< (configuration) Selects the input channel.
+	std::string mFilename;				//!< (configuration) Name of the saved AVI.
+	int mFrameBufferCount;				//!< (configuration) Number of frames to buffer before writing to disk.
+	IplImage** mFrameBuffer;			//!< The frame buffer.
+	int mFrameBufferWriteCounter;		//!< The number of frames in the frame buffer.
 
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
+
+	void BufferedFrames_Allocate(int count);
+	void BufferedFrames_Add(IplImage *inputimage);
+	void BufferedFrames_Write();
 };
 
 #endif
