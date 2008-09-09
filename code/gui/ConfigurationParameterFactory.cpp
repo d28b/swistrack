@@ -7,6 +7,7 @@
 #include "ConfigurationParameterCheckBox.h"
 #include "ConfigurationParameterButton.h"
 #include "ConfigurationParameterDropdownList.h"
+#include "ConfigurationParameterColor.h"
 #include "ConfigurationParameterFile.h"
 #include "ConfigurationParameterImage.h"
 #include "ConfigurationParameterPointInteger.h"
@@ -24,6 +25,7 @@ ConfigurationParameter *THISCLASS::Create(const wxString &type, wxWindow* parent
 	if (typelc=="checkbox") {return new ConfigurationParameterCheckBox(parent);}
 	if (typelc=="button") {return new ConfigurationParameterButton(parent);}
 	if (typelc=="dropdownlist") {return new ConfigurationParameterDropdownList(parent);}
+	if (typelc=="color") {return new ConfigurationParameterColor(parent);}
 
 	// Files
 	if (typelc=="file") {return new ConfigurationParameterFile(parent);}

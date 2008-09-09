@@ -636,6 +636,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentBlobDetectionTwoColors.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentBlobDetectionTwoColors.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentIDReaderRing.cpp"
 					>
 				</File>

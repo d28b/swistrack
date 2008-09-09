@@ -1047,6 +1047,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ConfigurationParameterColor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ConfigurationParameterColor.h"
+				>
+			</File>
+			<File
 				RelativePath="..\ConfigurationParameterDouble.cpp"
 				>
 			</File>

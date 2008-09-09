@@ -22,10 +22,17 @@ public:
 	Component *Create() {return new ComponentAdaptiveBackgroundSubtractionColor(mCore);}
 
 private:
+	enum eMode {
+		sMode_AbsDiff,
+		sMode_SubImageBackground,
+		sMode_SubBackgroundImage,
+	};
+
 	IplImage *mBackgroundImage;		//!< The background image.
 	CvScalar mBackgroundImageMean;	//!< The mean of the background image.
 	bool mCorrectMean;				//!< (configuration) Whether to correct for the mean or not.
 	float mUpdateProportion;		//!< (configuration) Proportion of the input image added to the background
+	eMode mMode;					//!< (configuration) The subtraction mode.
 
 	Display mDisplayOutput;			//!< The DisplayImage showing the output of this component.
 };
