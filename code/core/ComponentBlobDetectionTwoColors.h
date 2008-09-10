@@ -25,6 +25,11 @@ public:
 private:
 	unsigned int mMaxNumberOfParticles;	//!< (configuration) The maximum number of blobs that are to detect.
 	double mMaxDistance;		//!< (configuration) The maximum distance (in pixels) between the two color blobs that make one robot.
+	int mColor1;				//!< (configuration) Color 1.
+	int mColor2;				//!< (configuration) Color 2.
+	int mThresholdB;			//!< (configuration) Threshold for the blue channel.
+	int mThresholdG;			//!< (configuration) Threshold for the green channel.
+	int mThresholdR;			//!< (configuration) Threshold for the red channel.
 	bool mSelectionByArea; 		//!< (configuration) If the selection is based on the blob area
 	int mAreaMin;				//!< (configuration) The minimum area of a blob.
 	int mAreaMax;				//!< (configuration) The maximum area of a blob.
@@ -39,7 +44,7 @@ private:
 	//! Returns the compactness of a contour. Used by the blob detection algorithm.
 	double GetContourCompactness(const void* contour);
 	//! Finds blobs of a specific color on a color image.
-	void FindColorBlobs(IplImage *colorimage, cvScalar color, DataStructureParticles::tParticleVector &particlevector, Display &display);
+	void FindColorBlobs(IplImage *colorimage, int color, DataStructureParticles::tParticleVector &particlevector, Display &display);
 	//! Find blobs on a binary image (changes the binary image).
 	void FindBlobs(IplImage *inputimage, DataStructureParticles::tParticleVector &particlevector);
 };

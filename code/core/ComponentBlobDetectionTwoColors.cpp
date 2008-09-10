@@ -7,7 +7,11 @@
 
 THISCLASS::ComponentBlobDetectionTwoColors(SwisTrackCore *stc):
 		Component(stc, "BlobDetectionTwoColors"),
-		mMinArea(0), mMaxArea(1000000), mMaxNumber(10), mParticles(),
+		mMaxNumberOfParticles(10), mMaxDistance(10), mColor1(0xff), mColor2(0xff0000),
+		mSelectionByArea(false), mAreaMin(0), mAreaMax(1000),
+		mSelectionByCompactness(false), mCompactnessMin(0), mCompactnessMax(1000),
+		mThresholdB(255), mThresholdG(255), mThresholdR(255),
+		mParticles(),
 		mDisplayColor1("Output", "Particles of color 1"),
 		mDisplayColor2("Output", "Particles of color 2"),
 		mDisplayOutput("Output", "Particles") {
@@ -35,12 +39,17 @@ void THISCLASS::OnStart() {
 void THISCLASS::OnReloadConfiguration() {
 	mMaxNumberOfParticles=GetConfigurationInt("mMaxNumberOfParticles", 10);
 	mMaxDistance=GetConfigurationDouble("MaxDistance", 10.);
+	mColor1=GetConfigurationInt("Color1", 0xff);
+	mColor2=GetConfigurationInt("Color2", 0xff0000);
 	mSelectionByArea=GetConfigurationBool("SelectionByArea",false);
 	mAreaMin=GetConfigurationInt("AreaMin", 1);
 	mAreaMax=GetConfigurationInt("AreaMax", 1000);
 	mSelectionByCompactness=GetConfigurationBool("SelectionByCompactness",false);
 	mCompactnessMin=GetConfigurationDouble("CompactnessMin", 1.);
 	mCompactnessMax=GetConfigurationDouble("CompactnessMax", 1000.);
+	mThresholdB=GetConfigurationInt("ThresholdB", 255);
+	mThresholdG=GetConfigurationInt("ThresholdG", 255);
+	mThresholdR=GetConfigurationInt("ThresholdR", 255);
 
 	// Check for stupid configurations
 	if (mMaxNumberOfParticles<1) {
@@ -71,24 +80,27 @@ void THISCLASS::OnStep() {
 		AddError("The input image is not a color image.");
 		return;
 	}
+	if (memcmp(inputimage->channelSeq, "BGR", 3)) {
+		AddWarning("The input image is not a BGR image. The result may be unexpected.");
+	}
 
 	// Detect the blobs of the two colors
 	DataStructureParticles::tParticleVector particles_1;
-	FindColorBlobs(inputimage, mColor1, &particles_1, &mDisplayColor1);
+	FindColorBlobs(inputimage, mColor1, particles_1, mDisplayColor1);
 	DataStructureParticles::tParticleVector particles_2;
-	FindColorBlobs(inputimage, mColor2, &particles_2, &mDisplayColor2);
+	FindColorBlobs(inputimage, mColor2, particles_2, mDisplayColor2);
 
 	// We clear the output vector
 	mParticles.clear();
 
 	// Match blobs of color 1 to blobs of color 2
-	for (std::vector<Particle>::iterator i=particlevector_1.begin(); i!=particlevector_1.end(); i++) {
+	for (std::vector<Particle>::iterator i=particles_1.begin(); i!=particles_1.end(); i++) {
 		// Select blob of color 2 which is closest
-		std::vector<Particle>::iterator k_min=particlevector_2.end();
-		double distance2_min = mMaxDistance +1;
-		for (std::vector<Particle>::iterator k=particlevector_2.begin(); k!=particlevector_2.end(); k++) {
-			int distance2=pow((*i).mCenter.x-(*k).mCenter.x, 2.0)+pow((*i).mCenter.y-(*k).mCenter.y), 2.0);
-			
+		std::vector<Particle>::iterator k_min=particles_2.end();
+		double k_min_distance2 = mMaxDistance +1;
+		for (std::vector<Particle>::iterator k=particles_2.begin(); k!=particles_2.end(); k++) {
+			float distance2=pow((*i).mCenter.x-(*k).mCenter.x, 2.0f)+pow((*i).mCenter.y-(*k).mCenter.y, 2.0f);
+
 			if (distance2 < k_min_distance2) {
 				k_min = k;
 				k_min_distance2 = distance2;	
@@ -96,7 +108,7 @@ void THISCLASS::OnStep() {
 		}
 
 		// Create particle with this combination of blobs		
-		if (k_min!=particlevector_2.end()) {
+		if (k_min!=particles_2.end()) {
 			Particle newparticle;
 			newparticle.mArea=(*k_min).mArea+(*i).mArea;
 			newparticle.mCenter.x=((*k_min).mCenter.x+(*i).mCenter.x)*0.5;
@@ -129,12 +141,16 @@ double THISCLASS::GetContourCompactness(const void* contour) {
 	return fabs(12.56*cvContourArea(contour)/(l*l));	
 }
 
-void FindColorBlobs(IplImage *colorimage, cvScalar color, DataStructureParticles::tParticleVector &particlevector, Display &display) {
+void THISCLASS::FindColorBlobs(IplImage *colorimage, int color, DataStructureParticles::tParticleVector &particlevector, Display &display) {
 	// Take a copy of the input image
 	IplImage *inputimage=cvCloneImage(colorimage);
 
 	// Subtract the color
-	cvAbsDiffS(inputimage, inputimage, color);
+	CvScalar color_scalar;
+	color_scalar.val[0]=(double)(color & 0xff);
+	color_scalar.val[1]=(double)((color & 0xff00) >> 8);
+	color_scalar.val[2]=(double)((color & 0xff0000) >> 16);
+	cvAbsDiffS(inputimage, inputimage, color_scalar);
 
 	// Split the image into channels
 	IplImage* imagechannels[3];
@@ -144,34 +160,22 @@ void FindColorBlobs(IplImage *colorimage, cvScalar color, DataStructureParticles
 	cvSplit(inputimage, imagechannels[0], imagechannels[1], imagechannels[2], NULL);
 
 	// Threshold each channel
-	for (int i=0;i<3;i++) {
-		switch(inputimage->channelSeq[i]) {
-		case 'B':
-			cvThreshold(imagechannels[i], imagechannels[i], mBlueThreshold, 255, CV_THRESH_BINARY);
-			break;
-		case 'G':
-			cvThreshold(imagechannels[i], imagechannels[i], mGreenThreshold, 255, CV_THRESH_BINARY);
-			break;
-		case 'R':
-			cvThreshold(imagechannels[i], imagechannels[i], mRedThreshold, 255, CV_THRESH_BINARY);
-			break;
-		default:
-			AddWarning("Invalid channel (other than R, G or B) found in input image.");
-		}
-	}
+	cvThreshold(imagechannels[0], imagechannels[0], mThresholdB, 255, CV_THRESH_BINARY);
+	cvThreshold(imagechannels[1], imagechannels[1], mThresholdG, 255, CV_THRESH_BINARY);
+	cvThreshold(imagechannels[2], imagechannels[2], mThresholdR, 255, CV_THRESH_BINARY);
 
 	// Combine channels (ch0 & ch1 -> ch0, ch0 & ch2 -> ch0)
 	cvAnd(imagechannels[0], imagechannels[1], imagechannels[0]);
 	cvAnd(imagechannels[0], imagechannels[2], imagechannels[0]);
 
 	// Do blob detection
-	FindBlobs(imagechannels[0], &particlevector);
+	FindBlobs(imagechannels[0], particlevector);
 
 	// Let the DisplayImage know about our image
 	DisplayEditor de(&display);
 	if (de.IsActive()) {
 		de.SetParticles(&particlevector);
-		de.SetMainImage(&imagechannels[0]);
+		de.SetMainImage(imagechannels[0]);
 	}
 
 	// Release temporary images
@@ -181,7 +185,7 @@ void FindColorBlobs(IplImage *colorimage, cvScalar color, DataStructureParticles
 	cvReleaseImage(&imagechannels[2]);
 }
 
-void FindBlobs(IplImage *inputimage, DataStructureParticles::tParticleVector &particlevector) {
+void THISCLASS::FindBlobs(IplImage *inputimage, DataStructureParticles::tParticleVector &particlevector) {
 	// Init blob extraxtion
 	CvMemStorage* storage = cvCreateMemStorage(0);
 	CvContourScanner blobs = cvStartFindContours(inputimage,storage,sizeof(CvContour),CV_RETR_LIST,CV_CHAIN_APPROX_NONE);
@@ -205,11 +209,11 @@ void FindBlobs(IplImage *inputimage, DataStructureParticles::tParticleVector &pa
 		newparticle.mCenter.y=(float)(moments.m01/moments.m00+0.5);  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
 
 		// Selection based on area
-		if ((mAreaSelection==false)||((tmpParticle.mArea<=mMaxArea) && (tmpParticle.mArea>=mMinArea))) {
-			tmpParticle.mCompactness=GetContourCompactness(contour);
-			if ((mCompactnessSelection==false)||((tmpParticle.mCompactness>mMinCompactness) && (tmpParticle.mCompactness<mMaxCompactness))) {
+		if ((mSelectionByArea==false)||((newparticle.mArea<=mAreaMax) && (newparticle.mArea>=mAreaMin))) {
+			newparticle.mCompactness=GetContourCompactness(contour);
+			if ((mSelectionByCompactness==false)||((newparticle.mCompactness>mCompactnessMin) && (newparticle.mCompactness<mCompactnessMax))) {
 				double centralmoment=cvGetCentralMoment(&moments,2,0)-cvGetCentralMoment(&moments,0,2);
-				tmpParticle.mOrientation=atan(2*cvGetCentralMoment(&moments,1,1)/(centralmoment+sqrt(centralmoment*centralmoment+4*cvGetCentralMoment(&moments,1,1)*cvGetCentralMoment(&moments,1,1))));
+				newparticle.mOrientation=atan(2*cvGetCentralMoment(&moments,1,1)/(centralmoment+sqrt(centralmoment*centralmoment+4*cvGetCentralMoment(&moments,1,1)*cvGetCentralMoment(&moments,1,1))));
 
 				// Fill unused values
 				newparticle.mID=-1;
@@ -218,10 +222,10 @@ void FindBlobs(IplImage *inputimage, DataStructureParticles::tParticleVector &pa
 				// Insert the particle at the right place, such that the list remains sorted (note that one could use a heap here to lower the complexity)
 				std::vector<Particle>::iterator j;
 				for (j=particlevector.begin(); (j!=particlevector.end()) && (newparticle.mArea<(*j).mArea); j++);
-				particlevector.insert(j, tmpParticle);
+				particlevector.insert(j, newparticle);
 
 				// Remove particles if we have too many of them
-				while (particlevector.size()>mMaxNumber) {
+				while (particlevector.size()>mMaxNumberOfParticles) {
 					// Remove the smallest one
 					particlevector.pop_back();
 				}
