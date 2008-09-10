@@ -8,12 +8,16 @@
 THISCLASS::ComponentBlobDetectionTwoColors(SwisTrackCore *stc):
 		Component(stc, "BlobDetectionTwoColors"),
 		mMinArea(0), mMaxArea(1000000), mMaxNumber(10), mParticles(),
+		mDisplayColor1("Output", "Particles of color 1"),
+		mDisplayColor2("Output", "Particles of color 2"),
 		mDisplayOutput("Output", "Particles") {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryParticleDetection);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
+	AddDisplay(&mDisplayColor1);
+	AddDisplay(&mDisplayColor2);
 	AddDisplay(&mDisplayOutput);
 
 	// Read the XML configuration file
@@ -29,26 +33,36 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mMinArea=GetConfigurationInt("MinArea", 1);
-	mMaxArea=GetConfigurationInt("MaxArea", 1000);
-	mMaxNumber=GetConfigurationInt("MaxNumber", 10);
-	mAreaSelection=GetConfigurationBool("AreaBool",false);
+	mMaxNumberOfParticles=GetConfigurationInt("mMaxNumberOfParticles", 10);
+	mMaxDistance=GetConfigurationDouble("MaxDistance", 10.);
+	mSelectionByArea=GetConfigurationBool("SelectionByArea",false);
+	mAreaMin=GetConfigurationInt("AreaMin", 1);
+	mAreaMax=GetConfigurationInt("AreaMax", 1000);
+	mSelectionByCompactness=GetConfigurationBool("SelectionByCompactness",false);
+	mCompactnessMin=GetConfigurationDouble("CompactnessMin", 1.);
+	mCompactnessMax=GetConfigurationDouble("CompactnessMax", 1000.);
 
 	// Check for stupid configurations
-	if (mMaxNumber<1) {
-		AddError("Max number of particles must be greater or equal to 1");
+	if (mMaxNumberOfParticles<1) {
+		AddError("The maximum number of particles must be greater or equal to 1.");
 	}
 
-	if (mMinArea>mMaxArea) {
-		AddError("The min area must be smaller than the max area.");
+	if (mAreaMin>mAreaMax) {
+		AddError("The minimum area must be smaller than the maximum area.");
+	}
+
+	if (mMaxDistance<0) {
+		AddError("The maximum distane must be equal to 0.");
+	}
+
+	if (mCompactnessMin>mCompactnessMax) {
+		AddError("The minimum compactness must be small than the maximum compactness.");
 	}
 }
 
 void THISCLASS::OnStep() {
-	std::vector<Particle> rejectedparticles;
-
 	// Get and check input image
-	IplImage *inputimage = cvCloneImage(mCore->mDataStructureImageColor.mImage);
+	IplImage *inputimage = mCore->mDataStructureImageColor.mImage;
 	if (! inputimage) {
 		AddError("No input image.");
 		return;
@@ -58,111 +72,39 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
+	// Detect the blobs of the two colors
+	DataStructureParticles::tParticleVector particles_1;
+	FindColorBlobs(inputimage, mColor1, &particles_1, &mDisplayColor1);
+	DataStructureParticles::tParticleVector particles_2;
+	FindColorBlobs(inputimage, mColor2, &particles_2, &mDisplayColor2);
+
 	// We clear the output vector
 	mParticles.clear();
 
-	// Initialization
-	Particle tmpParticle; // Used to put the calculated value in memory
-	CvMoments moments; // Used to calculate the moments
-	std::vector<Particle>::iterator j; // Iterator used to stock the particles by size
-
-	// We allocate memory to extract the contours from the binary image
-	CvMemStorage* storage = cvCreateMemStorage(0);
-	CvSeq* contour = 0;
-	
-	
-	// Init blob extraxtion
-	CvContourScanner blobs = cvStartFindContours(inputimage,storage,sizeof(CvContour),CV_RETR_LIST,CV_CHAIN_APPROX_NONE);
-
-	// This is used to correct the position in case of ROI
-	CvRect rectROI;
-	if(inputimage->roi != NULL) {
-		rectROI = cvGetImageROI(inputimage);
-	} else {
-		rectROI.x = 0;
-		rectROI.y = 0;
-	}
-
-	while ((contour=cvFindNextContour(blobs))!=NULL) {
-		// Computing the moments
-		cvMoments(contour, &moments);
-
-		// Computing particle area
-		tmpParticle.mArea=moments.m00;
-		tmpParticle.mCenter.x=(float)(rectROI.x + (moments.m10/moments.m00+0.5));  // moments using Green theorem
-		tmpParticle.mCenter.y=(float)(rectROI.y + (moments.m01/moments.m00+0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
-
-		// Selection based on area
-		if ((mAreaSelection==false)||((tmpParticle.mArea<=mMaxArea) && (tmpParticle.mArea>=mMinArea)))
-		{
-			tmpParticle.mCompactness=GetContourCompactness(contour);
-			if ((mCompactnessSelection==false)||((tmpParticle.mCompactness>mMinCompactness) && (tmpParticle.mCompactness<mMaxCompactness)))
-			{
-				double tempValue=cvGetCentralMoment(&moments,2,0)-cvGetCentralMoment(&moments,0,2);
-				tmpParticle.mOrientation=atan(2*cvGetCentralMoment(&moments,1,1)/(tempValue+sqrt(tempValue*tempValue+4*cvGetCentralMoment(&moments,1,1)*cvGetCentralMoment(&moments,1,1))));
-				if ((mOrientationSelection==false)||(((tmpParticle.mOrientation>mMinOrientation)&&(tmpParticle.mOrientation<mMaxOrientation))||((tmpParticle.mOrientation>mMinOrientation+PI)&&(tmpParticle.mOrientation<mMaxOrientation+PI))||((tmpParticle.mOrientation>mMinOrientation-PI)&&(tmpParticle.mOrientation<mMaxOrientation-PI))))
-				{
-					//cvDrawContours(outputImage,contour,cvScalarAll(255),cvScalarAll(255),0,CV_FILLED);
-					// Check if we have already enough particles
-					if (mParticles.size()==mMaxNumber) 
-					{
-						// If the particle is bigger than the smallest stored particle, store it, else do nothing
-						if (tmpParticle.mArea>mParticles.back().mArea) 
-						{
-							// Find the place were it must be inserted, sorted by size
-							for (j=mParticles.begin(); (j!=mParticles.end()) && (tmpParticle.mArea<(*j).mArea); j++);
-
-							// Fill unused values			
-							tmpParticle.mID=-1;
-							tmpParticle.mIDCovariance=-1;
-
-							// Insert the particle
-							mParticles.insert(j, tmpParticle);
-							// Remove the smallest one
-							mParticles.pop_back();
-						}
-					}					
-					else 
-					{
-						// The particle is added at the correct place
-						// Find the place were it must be inserted, sorted by size
-						for (j=mParticles.begin(); (j!=mParticles.end()) && (tmpParticle.mArea<(*j).mArea); j++);
-
-						// Fill unused values						
-						tmpParticle.mID=-1;
-						tmpParticle.mIDCovariance=-1;
-
-						// Insert the particle
-						mParticles.insert(j, tmpParticle);
-					}
-				}
+	// Match blobs of color 1 to blobs of color 2
+	for (std::vector<Particle>::iterator i=particlevector_1.begin(); i!=particlevector_1.end(); i++) {
+		// Select blob of color 2 which is closest
+		std::vector<Particle>::iterator k_min=particlevector_2.end();
+		double distance2_min = mMaxDistance +1;
+		for (std::vector<Particle>::iterator k=particlevector_2.begin(); k!=particlevector_2.end(); k++) {
+			int distance2=pow((*i).mCenter.x-(*k).mCenter.x, 2.0)+pow((*i).mCenter.y-(*k).mCenter.y), 2.0);
+			
+			if (distance2 < k_min_distance2) {
+				k_min = k;
+				k_min_distance2 = distance2;	
 			}
-		} 
-		else 
-		{
-			rejectedparticles.push_back(tmpParticle);
 		}
-		cvRelease((void**)&contour);
+
+		// Create particle with this combination of blobs		
+		if (k_min!=particlevector_2.end()) {
+			Particle newparticle;
+			newparticle.mArea=(*k_min).mArea+(*i).mArea;
+			newparticle.mCenter.x=((*k_min).mCenter.x+(*i).mCenter.x)*0.5;
+			newparticle.mCenter.y=((*k_min).mCenter.y+(*i).mCenter.y)*0.5;
+			newparticle.mOrientation=atan2((*k_min).mCenter.y - (*i).mCenter.y, (*k_min).mCenter.x - (*i).mCenter.x);
+			mParticles.push_back(newparticle);
+		}
 	}
-	contour = cvEndFindContours(&blobs);
-
-	// If we need to display the particles
-	/* if(trackingimg->GetDisplay())
-	{
-		for(j=rejectedparticles.begin();j!=rejectedparticles.end();j++)
-		{
-			trackingimg->DrawCircle(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255,0,0));
-		}
-		for(j=particles.begin();j!=particles.end();j++)
-		{
-			trackingimg->DrawCircle(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(0,255,0));
-			trackingimg->Cover(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255,0,0),2);
-		}
-	} */
-
-	cvReleaseImage(&inputimage);
-	cvRelease((void**)&contour);
-	cvReleaseMemStorage(&storage);
 
 	// Set these particles
 	mCore->mDataStructureParticles.mParticles=&mParticles;
@@ -185,4 +127,112 @@ void THISCLASS::OnStop() {
 double THISCLASS::GetContourCompactness(const void* contour) {
 	double l = cvArcLength(contour, CV_WHOLE_SEQ, 1);
 	return fabs(12.56*cvContourArea(contour)/(l*l));	
+}
+
+void FindColorBlobs(IplImage *colorimage, cvScalar color, DataStructureParticles::tParticleVector &particlevector, Display &display) {
+	// Take a copy of the input image
+	IplImage *inputimage=cvCloneImage(colorimage);
+
+	// Subtract the color
+	cvAbsDiffS(inputimage, inputimage, color);
+
+	// Split the image into channels
+	IplImage* imagechannels[3];
+	imagechannels[0]=cvCreateImage(cvGetSize(inputimage),8,1);
+	imagechannels[1]=cvCreateImage(cvGetSize(inputimage),8,1);
+	imagechannels[2]=cvCreateImage(cvGetSize(inputimage),8,1);
+	cvSplit(inputimage, imagechannels[0], imagechannels[1], imagechannels[2], NULL);
+
+	// Threshold each channel
+	for (int i=0;i<3;i++) {
+		switch(inputimage->channelSeq[i]) {
+		case 'B':
+			cvThreshold(imagechannels[i], imagechannels[i], mBlueThreshold, 255, CV_THRESH_BINARY);
+			break;
+		case 'G':
+			cvThreshold(imagechannels[i], imagechannels[i], mGreenThreshold, 255, CV_THRESH_BINARY);
+			break;
+		case 'R':
+			cvThreshold(imagechannels[i], imagechannels[i], mRedThreshold, 255, CV_THRESH_BINARY);
+			break;
+		default:
+			AddWarning("Invalid channel (other than R, G or B) found in input image.");
+		}
+	}
+
+	// Combine channels (ch0 & ch1 -> ch0, ch0 & ch2 -> ch0)
+	cvAnd(imagechannels[0], imagechannels[1], imagechannels[0]);
+	cvAnd(imagechannels[0], imagechannels[2], imagechannels[0]);
+
+	// Do blob detection
+	FindBlobs(imagechannels[0], &particlevector);
+
+	// Let the DisplayImage know about our image
+	DisplayEditor de(&display);
+	if (de.IsActive()) {
+		de.SetParticles(&particlevector);
+		de.SetMainImage(&imagechannels[0]);
+	}
+
+	// Release temporary images
+	cvReleaseImage(&inputimage);
+	cvReleaseImage(&imagechannels[0]);
+	cvReleaseImage(&imagechannels[1]);
+	cvReleaseImage(&imagechannels[2]);
+}
+
+void FindBlobs(IplImage *inputimage, DataStructureParticles::tParticleVector &particlevector) {
+	// Init blob extraxtion
+	CvMemStorage* storage = cvCreateMemStorage(0);
+	CvContourScanner blobs = cvStartFindContours(inputimage,storage,sizeof(CvContour),CV_RETR_LIST,CV_CHAIN_APPROX_NONE);
+
+	// Iterate over blobs
+	while (1) {
+		// Get next contour (if one exists)
+		CvSeq* contour=cvFindNextContour(blobs);
+		if (! contour) {
+			break;
+		}
+
+		// Compute the moments
+		CvMoments moments;
+		cvMoments(contour, &moments);
+
+		// Compute particle position
+		Particle newparticle;
+		newparticle.mArea=moments.m00;
+		newparticle.mCenter.x=(float)(moments.m10/moments.m00+0.5);  // moments using Green theorem
+		newparticle.mCenter.y=(float)(moments.m01/moments.m00+0.5);  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
+
+		// Selection based on area
+		if ((mAreaSelection==false)||((tmpParticle.mArea<=mMaxArea) && (tmpParticle.mArea>=mMinArea))) {
+			tmpParticle.mCompactness=GetContourCompactness(contour);
+			if ((mCompactnessSelection==false)||((tmpParticle.mCompactness>mMinCompactness) && (tmpParticle.mCompactness<mMaxCompactness))) {
+				double centralmoment=cvGetCentralMoment(&moments,2,0)-cvGetCentralMoment(&moments,0,2);
+				tmpParticle.mOrientation=atan(2*cvGetCentralMoment(&moments,1,1)/(centralmoment+sqrt(centralmoment*centralmoment+4*cvGetCentralMoment(&moments,1,1)*cvGetCentralMoment(&moments,1,1))));
+
+				// Fill unused values
+				newparticle.mID=-1;
+				newparticle.mIDCovariance=-1;
+
+				// Insert the particle at the right place, such that the list remains sorted (note that one could use a heap here to lower the complexity)
+				std::vector<Particle>::iterator j;
+				for (j=particlevector.begin(); (j!=particlevector.end()) && (newparticle.mArea<(*j).mArea); j++);
+				particlevector.insert(j, tmpParticle);
+
+				// Remove particles if we have too many of them
+				while (particlevector.size()>mMaxNumber) {
+					// Remove the smallest one
+					particlevector.pop_back();
+				}
+			}
+		}
+		
+		// Release the contour
+		cvRelease((void**)&contour);
+	}
+
+	// Finalize blob extraction
+	cvEndFindContours(&blobs);
+	cvReleaseMemStorage(&storage);
 }

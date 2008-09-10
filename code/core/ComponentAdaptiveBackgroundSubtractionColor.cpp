@@ -79,7 +79,7 @@ void THISCLASS::OnStep() {
 
 	try {
 		// Correct the tmpImage with the difference in image mean		
-		if (mCorrectMean) {					
+		if (mCorrectMean) {
 			mBackgroundImageMean=cvAvg(mBackgroundImage);			
 			CvScalar tmpScalar=cvAvg(inputimage);			
 			cvAddS(inputimage, cvScalar(mBackgroundImageMean.val[0]-tmpScalar.val[0], mBackgroundImageMean.val[1]-tmpScalar.val[1], mBackgroundImageMean.val[2]-tmpScalar.val[2]),inputimage);

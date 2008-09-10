@@ -1,23 +1,44 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Blob detection</friendlyname>
-	<description>Select the blobs on the binary image based on given criteria.</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BlobDetectionMinMax</url>
+	<friendlyname>Blob detection (two colors)</friendlyname>
+	<description>Detects two-colored markers (particles) and their orientation on a color image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BlobDetectionTwoColors</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>
 		<parameter type="integer">
-			<name>MaxNumber</name>
-			<label>Max. blobs</label>
+			<name>mMaxNumberOfParticles</name>
+			<label>Max. particles</label>
 			<min>1</min>
 			<max>50</max>
 			<default>10</default>
 			<unit>blobs</unit>
 			<slider>true</slider>
 		</parameter>
+		<parameter type="double">
+			<name>MaxDistance</name>
+			<label>Max. distance</label>
+			<min>0</min>
+			<default>10</default>
+			<max>100</max>
+			<slider>true</slider>
+			<sliderstep>1</sliderstep>
+		</parameter>
+		<parameter type="color">
+			<name>Color 1</name>
+			<label>Color 1</label>
+			<default>#ff0000</default>
+		</parameter>
+		<parameter type="color">
+			<name>Color 2</name>
+			<label>Color 2</label>
+			<default>#0000ff</default>
+		</parameter>
+		<line />
+		<label>The following parameters set the selection criterion for the colored blobs. Two of these blobs will make one particle.</label>
 		<parameter type="checkbox">
-			<name>AreaBool</name>
-			<label>Area selection</label>
+			<name>SelectionByArea</name>
+			<label>Selection by area</label>
 			<default>0</default>
 		</parameter>
 		<parameter type="integer">
@@ -34,15 +55,28 @@
 			<default>100</default>
 			<unit>pixels</unit>
 		</parameter>
-		<parameter type="color">
-			<name>Color 1</name>
-			<label>Color 1</label>
-			<default>#ff0000</default>
+		<parameter type="checkbox">
+			<name>SelectionByCompactness</name>
+			<label>Selection by compactness</label>
+			<default>0</default>
 		</parameter>
-		<parameter type="color">
-			<name>Color 2</name>
-			<label>Color 2</label>
-			<default>#0000ff</default>
+		<parameter type="double">
+			<name>MinCompactness</name>
+			<label>Min. compactness</label>
+			<min>0</min>
+			<default>0</default>
+			<max>1</max>
+			<slider>true</slider>
+			<sliderstep>0.01</sliderstep>
+		</parameter>
+		<parameter type="double">
+			<name>MaxCompactness</name>
+			<label>Max. compactness</label>
+			<min>0</min>
+			<default>1</default>
+			<max>1</max>
+			<slider>true</slider>
+			<sliderstep>0.01</sliderstep>
 		</parameter>
 	</configuration>
 </swistrackcomponent>
