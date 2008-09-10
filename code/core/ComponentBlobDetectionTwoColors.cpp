@@ -20,9 +20,9 @@ THISCLASS::ComponentBlobDetectionTwoColors(SwisTrackCore *stc):
 	mCategory=&(mCore->mCategoryParticleDetection);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
+	AddDisplay(&mDisplayOutput);
 	AddDisplay(&mDisplayColor1);
 	AddDisplay(&mDisplayColor2);
-	AddDisplay(&mDisplayOutput);
 
 	// Read the XML configuration file
 	Initialize();
