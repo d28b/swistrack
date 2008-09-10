@@ -26,28 +26,30 @@ THISCLASS::~ConfigurationParameterColor() {
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
-	mValueDefault=config->ReadString("default", "");
+	mValueDefault = config->ReadString("default", "");
 
 	// Create the controls
-	wxStaticText *label=new wxStaticText(this, wxID_ANY, config->ReadString("label", ""), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
-	mTextCtrl=new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxSize(scParameterWidth-25, -1), wxTE_PROCESS_ENTER);
+	wxStaticText *label = new wxStaticText(this, wxID_ANY, config->ReadString("label", ""), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
+	mTextCtrl = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxSize(scParameterWidth - 25, -1), wxTE_PROCESS_ENTER);
 	mTextCtrl->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
-	mButton=new wxButton(this, wxID_ANY, "...", wxDefaultPosition, wxSize(25, -1), wxST_NO_AUTORESIZE);
+	mButton = new wxButton(this, wxID_ANY, "...", wxDefaultPosition, wxSize(25, -1), wxST_NO_AUTORESIZE);
 
 	// Layout the controls
-	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer *hs = new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(mTextCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mButton, 0, wxALIGN_CENTER_VERTICAL, 0);
 
-	wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *vs = new wxBoxSizer(wxVERTICAL);
 	vs->Add(label, 0, wxBOTTOM, 2);
 	vs->Add(hs, 0, 0, 0);
 	SetSizer(vs);
 }
 
 void THISCLASS::OnUpdate(wxWindow *updateprotection) {
-	if (updateprotection==mTextCtrl) {return;}
-	wxString value=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
+	if (updateprotection == mTextCtrl) {
+		return;
+	}
+	wxString value = mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
 	mTextCtrl->SetValue(value);
 }
 
@@ -56,8 +58,8 @@ bool THISCLASS::ValidateNewValue() {
 }
 
 bool THISCLASS::CompareNewValue() {
-	wxString value=mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
-	return (value==mNewValue);
+	wxString value = mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
+	return (value == mNewValue);
 }
 
 void THISCLASS::OnSetNewValue() {
@@ -68,14 +70,16 @@ void THISCLASS::OnSetNewValue() {
 void THISCLASS::OnButtonClicked(wxCommandEvent& event) {
 	wxColourDialog dlg(this);
 	dlg.GetColourData().SetColour(wxColour(mTextCtrl->GetValue()));
-	if (dlg.ShowModal() != wxID_OK) {return;}
-	mNewValue=dlg.GetColourData().GetColour().GetAsString(wxC2S_HTML_SYNTAX);
+	if (dlg.ShowModal() != wxID_OK) {
+		return;
+	}
+	mNewValue = dlg.GetColourData().GetColour().GetAsString(wxC2S_HTML_SYNTAX);
 	ValidateNewValue();
 	SetNewValue();
 }
 
 void THISCLASS::OnTextEnter(wxCommandEvent& event) {
-	mNewValue=mTextCtrl->GetValue();
+	mNewValue = mTextCtrl->GetValue();
 	ValidateNewValue();
 	SetNewValue();
 }

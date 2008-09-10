@@ -20,7 +20,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentBlobDetectionTwoColors(mCore);}
+	Component *Create() {
+		return new ComponentBlobDetectionTwoColors(mCore);
+	}
 
 private:
 	unsigned int mMaxNumberOfParticles;	//!< (configuration) The maximum number of blobs that are to detect.
