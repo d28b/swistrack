@@ -16,7 +16,7 @@ END_EVENT_TABLE()
 THISCLASS::ConfigurationParameterColor(wxWindow* parent):
 		ConfigurationParameter(parent),
 		mTextCtrl(0), mButton(0),
-		mValueDefault("") {
+		mValueDefault(0) {
 
 }
 
@@ -26,7 +26,7 @@ THISCLASS::~ConfigurationParameterColor() {
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
-	mValueDefault = config->ReadString("default", "");
+	mValueDefault = config->ReadInt("default", 0);
 
 	// Create the controls
 	wxStaticText *label = new wxStaticText(this, wxID_ANY, config->ReadString("label", ""), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
@@ -49,8 +49,8 @@ void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 	if (updateprotection == mTextCtrl) {
 		return;
 	}
-	wxString value = mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
-	mTextCtrl->SetValue(value);
+	int value = mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
+	mTextCtrl->SetValue(wxColour(value).GetAsString(wxC2S_HTML_SYNTAX));
 }
 
 bool THISCLASS::ValidateNewValue() {
@@ -58,13 +58,13 @@ bool THISCLASS::ValidateNewValue() {
 }
 
 bool THISCLASS::CompareNewValue() {
-	wxString value = mComponent->GetConfigurationString(mName.c_str(), mValueDefault.c_str());
+	int value = mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
 	return (value == mNewValue);
 }
 
 void THISCLASS::OnSetNewValue() {
 	ComponentEditor ce(mComponent);
-	ce.SetConfigurationString(mName.c_str(), mNewValue.c_str());
+	ce.SetConfigurationInt(mName.c_str(), mNewValue);
 }
 
 void THISCLASS::OnButtonClicked(wxCommandEvent& event) {
@@ -73,18 +73,22 @@ void THISCLASS::OnButtonClicked(wxCommandEvent& event) {
 	if (dlg.ShowModal() != wxID_OK) {
 		return;
 	}
-	mNewValue = dlg.GetColourData().GetColour().GetAsString(wxC2S_HTML_SYNTAX);
+	mNewValue = ColorToInt(dlg.GetColourData().GetColour());
 	ValidateNewValue();
 	SetNewValue();
 }
 
 void THISCLASS::OnTextEnter(wxCommandEvent& event) {
-	mNewValue = mTextCtrl->GetValue();
+	//wxFocusEvent ev;
+	//OnKillFocus(ev);
+}
+
+void THISCLASS::OnKillFocus(wxFocusEvent& event) {
+	mNewValue = ColorToInt(wxColour(mTextCtrl->GetValue()));
 	ValidateNewValue();
 	SetNewValue();
 }
 
-void THISCLASS::OnKillFocus(wxFocusEvent& event) {
-	wxCommandEvent ev;
-	OnTextEnter(ev);
+int THISCLASS::ColorToInt(wxColour &color) {
+	return color.Red()+(color.Green()<<8)+(color.Blue()<<16);
 }

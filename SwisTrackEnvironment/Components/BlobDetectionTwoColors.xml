@@ -27,35 +27,57 @@
 		</parameter>
 		<line />
 		<parameter type="color">
-			<name>Color 1</name>
+			<name>Color1_Color</name>
 			<label>Color 1</label>
 			<default>#ff0000</default>
 		</parameter>
+		<parameter type="integer">
+			<name>Color1_ThresholdR</name>
+			<label>Threshold R</label>
+			<min>0</min>
+			<max>255</max>
+			<default>32</default>
+		</parameter>
+		<parameter type="integer">
+			<name>Color1_ThresholdG</name>
+			<label>Threshold G</label>
+			<min>0</min>
+			<max>255</max>
+			<default>32</default>
+		</parameter>
+		<parameter type="integer">
+			<name>Color1_ThresholdB</name>
+			<label>Threshold B</label>
+			<min>0</min>
+			<max>255</max>
+			<default>32</default>
+		</parameter>
+		<line />
 		<parameter type="color">
-			<name>Color 2</name>
+			<name>Color2_Color</name>
 			<label>Color 2</label>
 			<default>#0000ff</default>
 		</parameter>
 		<parameter type="integer">
-			<name>ThresholdR</name>
-			<label>Threshold red</label>
+			<name>Color2_ThresholdR</name>
+			<label>Threshold R</label>
 			<min>0</min>
 			<max>255</max>
-			<default>128</default>
+			<default>32</default>
 		</parameter>
 		<parameter type="integer">
-			<name>ThresholdG</name>
-			<label>Threshold green</label>
+			<name>Color2_ThresholdG</name>
+			<label>Threshold G</label>
 			<min>0</min>
 			<max>255</max>
-			<default>128</default>
+			<default>32</default>
 		</parameter>
 		<parameter type="integer">
-			<name>ThresholdB</name>
-			<label>Threshold blue</label>
+			<name>Color2_ThresholdB</name>
+			<label>Threshold B</label>
 			<min>0</min>
 			<max>255</max>
-			<default>128</default>
+			<default>32</default>
 		</parameter>
 		<line />
 		<label>The following parameters set the selection criterion for the colored blobs. Two of these blobs will make one particle.</label>
@@ -65,14 +87,14 @@
 			<default>0</default>
 		</parameter>
 		<parameter type="integer">
-			<name>MinArea</name>
+			<name>AreaMin</name>
 			<label>Min. blob size</label>
 			<min>0</min>
 			<default>10</default>
 			<unit>pixels</unit>
 		</parameter>
 		<parameter type="integer">
-			<name>MaxArea</name>
+			<name>AreaMax</name>
 			<label>Max. blob size</label>
 			<min>0</min>
 			<default>100</default>
@@ -84,7 +106,7 @@
 			<default>0</default>
 		</parameter>
 		<parameter type="double">
-			<name>MinCompactness</name>
+			<name>CompactnessMin</name>
 			<label>Min. compactness</label>
 			<min>0</min>
 			<default>0</default>
@@ -93,7 +115,7 @@
 			<sliderstep>0.01</sliderstep>
 		</parameter>
 		<parameter type="double">
-			<name>MaxCompactness</name>
+			<name>CompactnessMax</name>
 			<label>Max. compactness</label>
 			<min>0</min>
 			<default>1</default>

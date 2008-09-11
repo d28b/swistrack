@@ -7,13 +7,12 @@
 
 THISCLASS::ComponentBlobDetectionTwoColors(SwisTrackCore *stc):
 		Component(stc, "BlobDetectionTwoColors"),
-		mMaxNumberOfParticles(10), mMaxDistance(10), mColor1(0xff), mColor2(0xff0000),
+		mMaxNumberOfParticles(10), mMaxDistance(10),
+		mColor1(0x0000ff, "Color1", "After subtraction of color 1", "Binary1", "After subtraction of color 1 and thresholding"),
+		mColor2(0xff0000, "Color2", "After subtraction of color 2", "Binary2", "After subtraction of color 2 and thresholding"),
 		mSelectionByArea(false), mAreaMin(0), mAreaMax(1000),
 		mSelectionByCompactness(false), mCompactnessMin(0), mCompactnessMax(1000),
-		mThresholdB(255), mThresholdG(255), mThresholdR(255),
 		mParticles(),
-		mDisplayColor1("Output", "Particles of color 1"),
-		mDisplayColor2("Output", "Particles of color 2"),
 		mDisplayOutput("Output", "Particles") {
 
 	// Data structure relations
@@ -21,8 +20,10 @@ THISCLASS::ComponentBlobDetectionTwoColors(SwisTrackCore *stc):
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 	AddDisplay(&mDisplayOutput);
-	AddDisplay(&mDisplayColor1);
-	AddDisplay(&mDisplayColor2);
+	AddDisplay(&mColor1.mDisplayColor);
+	AddDisplay(&mColor1.mDisplayBinary);
+	AddDisplay(&mColor2.mDisplayColor);
+	AddDisplay(&mColor2.mDisplayBinary);
 
 	// Read the XML configuration file
 	Initialize();
@@ -39,17 +40,20 @@ void THISCLASS::OnStart() {
 void THISCLASS::OnReloadConfiguration() {
 	mMaxNumberOfParticles = GetConfigurationInt("mMaxNumberOfParticles", 10);
 	mMaxDistance = GetConfigurationDouble("MaxDistance", 10.);
-	mColor1 = GetConfigurationInt("Color1", 0xff);
-	mColor2 = GetConfigurationInt("Color2", 0xff0000);
+	mColor1.mColor = GetConfigurationInt("Color1_Color", 0xff);
+	mColor1.mThresholdB = GetConfigurationInt("Color1_ThresholdB", 32);
+	mColor1.mThresholdG = GetConfigurationInt("Color1_ThresholdG", 32);
+	mColor1.mThresholdR = GetConfigurationInt("Color1_ThresholdR", 32);
+	mColor2.mColor = GetConfigurationInt("Color2_Color", 0xff0000);
+	mColor2.mThresholdB = GetConfigurationInt("Color2_ThresholdB", 32);
+	mColor2.mThresholdG = GetConfigurationInt("Color2_ThresholdG", 32);
+	mColor2.mThresholdR = GetConfigurationInt("Color2_ThresholdR", 32);
 	mSelectionByArea = GetConfigurationBool("SelectionByArea", false);
 	mAreaMin = GetConfigurationInt("AreaMin", 1);
 	mAreaMax = GetConfigurationInt("AreaMax", 1000);
 	mSelectionByCompactness = GetConfigurationBool("SelectionByCompactness", false);
 	mCompactnessMin = GetConfigurationDouble("CompactnessMin", 1.);
 	mCompactnessMax = GetConfigurationDouble("CompactnessMax", 1000.);
-	mThresholdB = GetConfigurationInt("ThresholdB", 255);
-	mThresholdG = GetConfigurationInt("ThresholdG", 255);
-	mThresholdR = GetConfigurationInt("ThresholdR", 255);
 
 	// Check for stupid configurations
 	if (mMaxNumberOfParticles < 1) {
@@ -85,20 +89,20 @@ void THISCLASS::OnStep() {
 	}
 
 	// Detect the blobs of the two colors
-	DataStructureParticles::tParticleVector particles_1;
-	FindColorBlobs(inputimage, mColor1, particles_1, mDisplayColor1);
-	DataStructureParticles::tParticleVector particles_2;
-	FindColorBlobs(inputimage, mColor2, particles_2, mDisplayColor2);
+	FindColorBlobs(inputimage, mColor1);
+	mCore->mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepLapTime, this);
+	FindColorBlobs(inputimage, mColor2);
+	mCore->mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepLapTime, this);
 
 	// We clear the output vector
 	mParticles.clear();
 
 	// Match blobs of color 1 to blobs of color 2
-	for (std::vector<Particle>::iterator i = particles_1.begin(); i != particles_1.end(); i++) {
+	for (std::vector<Particle>::iterator i = mColor1.mParticles.begin(); i != mColor1.mParticles.end(); i++) {
 		// Select blob of color 2 which is closest
-		std::vector<Particle>::iterator k_min = particles_2.end();
-		double k_min_distance2 = mMaxDistance + 1;
-		for (std::vector<Particle>::iterator k = particles_2.begin(); k != particles_2.end(); k++) {
+		std::vector<Particle>::iterator k_min = mColor2.mParticles.end();
+		float k_min_distance2 = pow((float)mMaxDistance, 2.0f);
+		for (std::vector<Particle>::iterator k = mColor2.mParticles.begin(); k != mColor2.mParticles.end(); k++) {
 			float distance2 = pow((*i).mCenter.x - (*k).mCenter.x, 2.0f) + pow((*i).mCenter.y - (*k).mCenter.y, 2.0f);
 
 			if (distance2 < k_min_distance2) {
@@ -108,7 +112,7 @@ void THISCLASS::OnStep() {
 		}
 
 		// Create particle with this combination of blobs
-		if (k_min != particles_2.end()) {
+		if (k_min != mColor2.mParticles.end()) {
 			Particle newparticle;
 			newparticle.mArea = (*k_min).mArea + (*i).mArea;
 			newparticle.mCenter.x = ((*k_min).mCenter.x + (*i).mCenter.x) * 0.5;
@@ -125,7 +129,7 @@ void THISCLASS::OnStep() {
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
 		de.SetParticles(&mParticles);
-		de.SetMainImage(mCore->mDataStructureImageBinary.mImage);
+		de.SetMainImage(inputimage);
 	}
 }
 
@@ -141,15 +145,15 @@ double THISCLASS::GetContourCompactness(const void* contour) {
 	return fabs(12.56*cvContourArea(contour) / (l*l));
 }
 
-void THISCLASS::FindColorBlobs(IplImage *colorimage, int color, DataStructureParticles::tParticleVector &particlevector, Display &display) {
+void THISCLASS::FindColorBlobs(IplImage *colorimage, cColor &color) {
 	// Take a copy of the input image
 	IplImage *inputimage = cvCloneImage(colorimage);
 
 	// Subtract the color
 	CvScalar color_scalar;
-	color_scalar.val[0] = (double)(color & 0xff);
-	color_scalar.val[1] = (double)((color & 0xff00) >> 8);
-	color_scalar.val[2] = (double)((color & 0xff0000) >> 16);
+	color_scalar.val[0] = (double)((color.mColor & 0xff0000) >> 16);
+	color_scalar.val[1] = (double)((color.mColor & 0xff00) >> 8);
+	color_scalar.val[2] = (double)(color.mColor & 0xff);
 	cvAbsDiffS(inputimage, inputimage, color_scalar);
 
 	// Split the image into channels
@@ -160,22 +164,33 @@ void THISCLASS::FindColorBlobs(IplImage *colorimage, int color, DataStructurePar
 	cvSplit(inputimage, imagechannels[0], imagechannels[1], imagechannels[2], NULL);
 
 	// Threshold each channel
-	cvThreshold(imagechannels[0], imagechannels[0], mThresholdB, 255, CV_THRESH_BINARY);
-	cvThreshold(imagechannels[1], imagechannels[1], mThresholdG, 255, CV_THRESH_BINARY);
-	cvThreshold(imagechannels[2], imagechannels[2], mThresholdR, 255, CV_THRESH_BINARY);
+	cvThreshold(imagechannels[0], imagechannels[0], color.mThresholdB, 255, CV_THRESH_BINARY_INV);
+	cvThreshold(imagechannels[1], imagechannels[1], color.mThresholdG, 255, CV_THRESH_BINARY_INV);
+	cvThreshold(imagechannels[2], imagechannels[2], color.mThresholdR, 255, CV_THRESH_BINARY_INV);
 
 	// Combine channels (ch0 & ch1 -> ch0, ch0 & ch2 -> ch0)
 	cvAnd(imagechannels[0], imagechannels[1], imagechannels[0]);
 	cvAnd(imagechannels[0], imagechannels[2], imagechannels[0]);
 
-	// Do blob detection
-	FindBlobs(imagechannels[0], particlevector);
+	// Set the binary DisplayImage
+	DisplayEditor de_binary(&color.mDisplayBinary);
+	if (de_binary.IsActive()) {
+		de_binary.SetMainImage(imagechannels[0]);
+	}
 
-	// Let the DisplayImage know about our image
-	DisplayEditor de(&display);
-	if (de.IsActive()) {
-		de.SetParticles(&particlevector);
-		de.SetMainImage(imagechannels[0]);
+	// Do blob detection
+	FindBlobs(imagechannels[0], color.mParticles);
+
+	// Set the color DisplayImage
+	DisplayEditor de_color(&color.mDisplayColor);
+	if (de_color.IsActive()) {
+		de_color.SetParticles(&color.mParticles);
+		de_color.SetMainImage(inputimage);
+	}
+
+	// Fill the particles of the binary display image
+	if (de_binary.IsActive()) {
+		de_binary.SetParticles(&color.mParticles);
 	}
 
 	// Release temporary images
@@ -189,6 +204,9 @@ void THISCLASS::FindBlobs(IplImage *inputimage, DataStructureParticles::tParticl
 	// Init blob extraxtion
 	CvMemStorage* storage = cvCreateMemStorage(0);
 	CvContourScanner blobs = cvStartFindContours(inputimage, storage, sizeof(CvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+
+	// We clear the output vector
+	particlevector.clear();
 
 	// Iterate over blobs
 	while (1) {

@@ -68,7 +68,7 @@ void THISCLASS::OnStep() {
 	// Check and update the background
 	if (! mBackgroundImage) {
 		mBackgroundImage=cvCloneImage(inputimage);
-	} else {
+	} else if (mUpdateProportion>0) {
 		if ((cvGetSize(inputimage).height != cvGetSize(mBackgroundImage).height) || (cvGetSize(inputimage).width != cvGetSize(mBackgroundImage).width)) {
 			AddError("Input and background images do not have the same size.");
 			return;

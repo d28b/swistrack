@@ -760,6 +760,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentColorMask.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentColorMask.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentHSVBackgroundSubtractionColor.cpp"
 					>
 				</File>
