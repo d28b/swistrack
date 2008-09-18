@@ -10,8 +10,6 @@ THISCLASS::ComponentBlobDetectionTwoColors(SwisTrackCore *stc):
 		mMaxNumberOfParticles(10), mMaxDistance(10),
 		mColor1(0x0000ff, "Color1", "After subtraction of color 1", "Binary1", "After subtraction of color 1 and thresholding"),
 		mColor2(0xff0000, "Color2", "After subtraction of color 2", "Binary2", "After subtraction of color 2 and thresholding"),
-		mSelectionByArea(false), mAreaMin(0), mAreaMax(1000),
-		mSelectionByCompactness(false), mCompactnessMin(0), mCompactnessMax(1000),
 		mParticles(),
 		mDisplayOutput("Output", "Particles") {
 
@@ -44,31 +42,45 @@ void THISCLASS::OnReloadConfiguration() {
 	mColor1.mThresholdB = GetConfigurationInt("Color1_ThresholdB", 32);
 	mColor1.mThresholdG = GetConfigurationInt("Color1_ThresholdG", 32);
 	mColor1.mThresholdR = GetConfigurationInt("Color1_ThresholdR", 32);
+	mColor1.mSelectionByArea = GetConfigurationBool("Color1_SelectionByArea", false);
+	mColor1.mAreaMin = GetConfigurationInt("Color1_AreaMin", 1);
+	mColor1.mAreaMax = GetConfigurationInt("Color1_AreaMax", 1000);
+	mColor1.mSelectionByCompactness = GetConfigurationBool("Color1_SelectionByCompactness", false);
+	mColor1.mCompactnessMin = GetConfigurationDouble("Color1_CompactnessMin", 1.);
+	mColor1.mCompactnessMax = GetConfigurationDouble("Color1_CompactnessMax", 1000.);
 	mColor2.mColor = GetConfigurationInt("Color2_Color", 0xff0000);
 	mColor2.mThresholdB = GetConfigurationInt("Color2_ThresholdB", 32);
 	mColor2.mThresholdG = GetConfigurationInt("Color2_ThresholdG", 32);
 	mColor2.mThresholdR = GetConfigurationInt("Color2_ThresholdR", 32);
-	mSelectionByArea = GetConfigurationBool("SelectionByArea", false);
-	mAreaMin = GetConfigurationInt("AreaMin", 1);
-	mAreaMax = GetConfigurationInt("AreaMax", 1000);
-	mSelectionByCompactness = GetConfigurationBool("SelectionByCompactness", false);
-	mCompactnessMin = GetConfigurationDouble("CompactnessMin", 1.);
-	mCompactnessMax = GetConfigurationDouble("CompactnessMax", 1000.);
+	mColor2.mSelectionByArea = GetConfigurationBool("Color2_SelectionByArea", false);
+	mColor2.mAreaMin = GetConfigurationInt("Color2_AreaMin", 1);
+	mColor2.mAreaMax = GetConfigurationInt("Color2_AreaMax", 1000);
+	mColor2.mSelectionByCompactness = GetConfigurationBool("Color2_SelectionByCompactness", false);
+	mColor2.mCompactnessMin = GetConfigurationDouble("Color2_CompactnessMin", 1.);
+	mColor2.mCompactnessMax = GetConfigurationDouble("Color2_CompactnessMax", 1000.);
 
 	// Check for stupid configurations
 	if (mMaxNumberOfParticles < 1) {
 		AddError("The maximum number of particles must be greater or equal to 1.");
 	}
 
-	if (mAreaMin > mAreaMax) {
-		AddError("The minimum area must be smaller than the maximum area.");
-	}
-
 	if (mMaxDistance < 0) {
 		AddError("The maximum distane must be equal to 0.");
 	}
 
-	if (mCompactnessMin > mCompactnessMax) {
+	if (mColor1.mAreaMin > mColor1.mAreaMax) {
+		AddError("The minimum area must be smaller than the maximum area.");
+	}
+
+	if (mColor2.mAreaMin > mColor2.mAreaMax) {
+		AddError("The minimum area must be smaller than the maximum area.");
+	}
+
+	if (mColor1.mCompactnessMin > mColor1.mCompactnessMax) {
+		AddError("The minimum compactness must be small than the maximum compactness.");
+	}
+
+	if (mColor2.mCompactnessMin > mColor2.mCompactnessMax) {
 		AddError("The minimum compactness must be small than the maximum compactness.");
 	}
 }
@@ -179,7 +191,7 @@ void THISCLASS::FindColorBlobs(IplImage *colorimage, cColor &color) {
 	}
 
 	// Do blob detection
-	FindBlobs(imagechannels[0], color.mParticles);
+	FindBlobs(imagechannels[0], color);
 
 	// Set the color DisplayImage
 	DisplayEditor de_color(&color.mDisplayColor);
@@ -200,13 +212,13 @@ void THISCLASS::FindColorBlobs(IplImage *colorimage, cColor &color) {
 	cvReleaseImage(&imagechannels[2]);
 }
 
-void THISCLASS::FindBlobs(IplImage *inputimage, DataStructureParticles::tParticleVector &particlevector) {
+void THISCLASS::FindBlobs(IplImage *inputimage, cColor &color) {
 	// Init blob extraxtion
 	CvMemStorage* storage = cvCreateMemStorage(0);
 	CvContourScanner blobs = cvStartFindContours(inputimage, storage, sizeof(CvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
 
 	// We clear the output vector
-	particlevector.clear();
+	color.mParticles.clear();
 
 	// Iterate over blobs
 	while (1) {
@@ -227,9 +239,9 @@ void THISCLASS::FindBlobs(IplImage *inputimage, DataStructureParticles::tParticl
 		newparticle.mCenter.y = (float)(moments.m01 / moments.m00 + 0.5);  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
 
 		// Selection based on area
-		if ((mSelectionByArea == false) || ((newparticle.mArea <= mAreaMax) && (newparticle.mArea >= mAreaMin))) {
+		if ((color.mSelectionByArea == false) || ((newparticle.mArea <= color.mAreaMax) && (newparticle.mArea >= color.mAreaMin))) {
 			newparticle.mCompactness = GetContourCompactness(contour);
-			if ((mSelectionByCompactness == false) || ((newparticle.mCompactness > mCompactnessMin) && (newparticle.mCompactness < mCompactnessMax))) {
+			if ((color.mSelectionByCompactness == false) || ((newparticle.mCompactness > color.mCompactnessMin) && (newparticle.mCompactness < color.mCompactnessMax))) {
 				double centralmoment = cvGetCentralMoment(&moments, 2, 0) - cvGetCentralMoment(&moments, 0, 2);
 				newparticle.mOrientation = atan(2 * cvGetCentralMoment(&moments, 1, 1) / (centralmoment + sqrt(centralmoment * centralmoment + 4 * cvGetCentralMoment(&moments, 1, 1) * cvGetCentralMoment(&moments, 1, 1))));
 
@@ -239,13 +251,13 @@ void THISCLASS::FindBlobs(IplImage *inputimage, DataStructureParticles::tParticl
 
 				// Insert the particle at the right place, such that the list remains sorted (note that one could use a heap here to lower the complexity)
 				std::vector<Particle>::iterator j;
-				for (j = particlevector.begin(); (j != particlevector.end()) && (newparticle.mArea < (*j).mArea); j++);
-				particlevector.insert(j, newparticle);
+				for (j = color.mParticles.begin(); (j != color.mParticles.end()) && (newparticle.mArea < (*j).mArea); j++);
+				color.mParticles.insert(j, newparticle);
 
 				// Remove particles if we have too many of them
-				while (particlevector.size() > mMaxNumberOfParticles) {
+				while (color.mParticles.size() > mMaxNumberOfParticles) {
 					// Remove the smallest one
-					particlevector.pop_back();
+					color.mParticles.pop_back();
 				}
 			}
 		}

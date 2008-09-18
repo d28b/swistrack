@@ -52,6 +52,48 @@
 			<max>255</max>
 			<default>32</default>
 		</parameter>
+		<parameter type="checkbox">
+			<name>Color1_SelectionByArea</name>
+			<label>Selection by area</label>
+			<default>0</default>
+		</parameter>
+		<parameter type="integer">
+			<name>Color1_AreaMin</name>
+			<label>Min. blob size</label>
+			<min>0</min>
+			<default>10</default>
+			<unit>pixels</unit>
+		</parameter>
+		<parameter type="integer">
+			<name>Color1_AreaMax</name>
+			<label>Max. blob size</label>
+			<min>0</min>
+			<default>100</default>
+			<unit>pixels</unit>
+		</parameter>
+		<parameter type="checkbox">
+			<name>Color1_SelectionByCompactness</name>
+			<label>Selection by compactness</label>
+			<default>0</default>
+		</parameter>
+		<parameter type="double">
+			<name>Color1_CompactnessMin</name>
+			<label>Min. compactness</label>
+			<min>0</min>
+			<default>0</default>
+			<max>1</max>
+			<slider>true</slider>
+			<sliderstep>0.01</sliderstep>
+		</parameter>
+		<parameter type="double">
+			<name>Color1_CompactnessMax</name>
+			<label>Max. compactness</label>
+			<min>0</min>
+			<default>1</default>
+			<max>1</max>
+			<slider>true</slider>
+			<sliderstep>0.01</sliderstep>
+		</parameter>
 		<line />
 		<parameter type="color">
 			<name>Color2_Color</name>
@@ -79,34 +121,32 @@
 			<max>255</max>
 			<default>32</default>
 		</parameter>
-		<line />
-		<label>The following parameters set the selection criterion for the colored blobs. Two of these blobs will make one particle.</label>
 		<parameter type="checkbox">
-			<name>SelectionByArea</name>
+			<name>Color2_SelectionByArea</name>
 			<label>Selection by area</label>
 			<default>0</default>
 		</parameter>
 		<parameter type="integer">
-			<name>AreaMin</name>
+			<name>Color2_AreaMin</name>
 			<label>Min. blob size</label>
 			<min>0</min>
 			<default>10</default>
 			<unit>pixels</unit>
 		</parameter>
 		<parameter type="integer">
-			<name>AreaMax</name>
+			<name>Color2_AreaMax</name>
 			<label>Max. blob size</label>
 			<min>0</min>
 			<default>100</default>
 			<unit>pixels</unit>
 		</parameter>
 		<parameter type="checkbox">
-			<name>SelectionByCompactness</name>
+			<name>Color2_SelectionByCompactness</name>
 			<label>Selection by compactness</label>
 			<default>0</default>
 		</parameter>
 		<parameter type="double">
-			<name>CompactnessMin</name>
+			<name>Color2_CompactnessMin</name>
 			<label>Min. compactness</label>
 			<min>0</min>
 			<default>0</default>
@@ -115,7 +155,7 @@
 			<sliderstep>0.01</sliderstep>
 		</parameter>
 		<parameter type="double">
-			<name>CompactnessMax</name>
+			<name>Color2_CompactnessMax</name>
 			<label>Max. compactness</label>
 			<min>0</min>
 			<default>1</default>

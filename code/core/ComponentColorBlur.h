@@ -22,7 +22,8 @@ public:
 	Component *Create() {return new ComponentColorBlur(mCore);}
 
 private:
-	int mRadius;						//<! The radius parameter for the gaussian blur.
+	int mBlurType;						//!< (configuration) The type of blur to apply.
+	int mRadius;						//!< (configuration) The radius.
 
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 };
