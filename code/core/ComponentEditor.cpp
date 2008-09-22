@@ -22,7 +22,7 @@ void THISCLASS::ConfigurationReadXML(wxXmlNode *configuration, ErrorList *xmlerr
 	
 	// Default settings
 	mComponent->mConfiguration.clear();
-	mComponent->mEnabled
+	mComponent->mEnabled=true;
 
 	// Read all nodes of the XML node belonging to the component
 	wxXmlNode *node=configuration->GetChildren();

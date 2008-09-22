@@ -361,13 +361,13 @@ void THISCLASS::OnListLeftDoubleClick(wxMouseEvent& event) {
 }
 
 void THISCLASS::OnListMouseRightDown(wxMouseEvent& event) {
-	mPopupMenu.Check(cID_Enabled, mSelectedComponent.GetEnabled());
-	mPopupMenu.Enable(cID_Enabled, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
+	mPopupMenu.Check(cID_PopupMenu_Enabled, mSelectedComponent->GetEnabled());
+	mPopupMenu.Enable(cID_PopupMenu_Enabled, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
 
 	PopupMenu(&mPopupMenu);
 }
 
-void THISCLASS::OnMenuZoom(wxCommandEvent& event) {
+void THISCLASS::OnPopupMenuEnabled(wxCommandEvent& event) {
 	if (mSwisTrack->mSwisTrackCore->IsStartedInProductionMode()) {return;}
 
 	// Set the enabled flag	
