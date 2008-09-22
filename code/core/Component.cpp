@@ -70,6 +70,12 @@ Display *THISCLASS::GetDisplayByName(const std::string &name) {
 }
 
 void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmlerr) {
+	// Write enabled flag
+	wxXmlNode *node=new wxXmlNode(0, wxXML_ELEMENT_NODE, "enabled");
+	configuration->AddChild(node);
+	node->AddProperty("value", (mEnabled ? "true" : "false"));
+
+	// Write configuration
 	tConfigurationMap::iterator it=mConfiguration.begin();
 	while (it!=mConfiguration.end()) {
 		wxXmlNode *node=new wxXmlNode(0, wxXML_ELEMENT_NODE, "parameter");
@@ -78,6 +84,10 @@ void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmler
 		node->AddProperty("value", it->second.c_str());
 		it++;
 	}
+}
+
+bool THISCLASS::GetEnabled() {
+	return mEnabled;
 }
 
 bool THISCLASS::GetConfigurationBool(const std::string &key, bool defvalue) {

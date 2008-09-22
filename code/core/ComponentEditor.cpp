@@ -19,11 +19,23 @@ THISCLASS::~ComponentEditor() {
 
 void THISCLASS::ConfigurationReadXML(wxXmlNode *configuration, ErrorList *xmlerr) {
 	if (! mComponent) {return;}
+	
+	// Default settings
 	mComponent->mConfiguration.clear();
+	mComponent->mEnabled
 
+	// Read all nodes of the XML node belonging to the component
 	wxXmlNode *node=configuration->GetChildren();
 	while (node) {
-		if (node->GetName()=="parameter") {
+		if (node->GetName()=="enabled") {
+			wxString value="true";
+			wxXmlProperty *prop=node->GetProperties();
+			while (prop) {
+				if (prop->GetName()=="value") {value=prop->GetValue();}
+				prop=prop->GetNext();
+			}
+			mComponent->mEnabled=(value=="false" ? false : true);  // TODO: replace this by wxStringToBool(value, mComponent->mEnabled)
+		} else if (node->GetName()=="parameter") {
 			wxString name="";
 			wxString value="";
 			wxXmlProperty *prop=node->GetProperties();
@@ -43,6 +55,12 @@ void THISCLASS::ConfigurationReadXML(wxXmlNode *configuration, ErrorList *xmlerr
 
 		node=node->GetNext();
 	}
+}
+
+bool THISCLASS::SetEnabled(bool value) {
+	if (! mComponent) {return false;}
+	mComponent->mEnabled=value;
+	return true;
 }
 
 bool THISCLASS::SetConfigurationBool(const std::string &key, bool value) {

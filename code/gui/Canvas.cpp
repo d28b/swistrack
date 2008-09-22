@@ -13,14 +13,14 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 	EVT_LEFT_UP(THISCLASS::OnMouseLeftUp)
 	EVT_RIGHT_DOWN(THISCLASS::OnMouseRightDown)
 	EVT_MOTION(THISCLASS::OnMouseMove)
-	EVT_MENU(sID_Zoom200, THISCLASS::OnMenuZoom)
-	EVT_MENU(sID_Zoom100, THISCLASS::OnMenuZoom)
-	EVT_MENU(sID_Zoom50, THISCLASS::OnMenuZoom)
-	EVT_MENU(sID_Zoom25, THISCLASS::OnMenuZoom)
-	EVT_MENU(sID_Zoom10, THISCLASS::OnMenuZoom)
-	EVT_MENU(sID_ZoomFit, THISCLASS::OnMenuZoom)
-	EVT_MENU(sID_SaveViewImageAs, THISCLASS::OnMenuSaveViewImageAs)
-	EVT_MENU(sID_SaveOriginalImageAs, THISCLASS::OnMenuSaveOriginalImageAs)
+	EVT_MENU(cID_Zoom200, THISCLASS::OnMenuZoom)
+	EVT_MENU(cID_Zoom100, THISCLASS::OnMenuZoom)
+	EVT_MENU(cID_Zoom50, THISCLASS::OnMenuZoom)
+	EVT_MENU(cID_Zoom25, THISCLASS::OnMenuZoom)
+	EVT_MENU(cID_Zoom10, THISCLASS::OnMenuZoom)
+	EVT_MENU(cID_ZoomFit, THISCLASS::OnMenuZoom)
+	EVT_MENU(cID_SaveViewImageAs, THISCLASS::OnMenuSaveViewImageAs)
+	EVT_MENU(cID_SaveOriginalImageAs, THISCLASS::OnMenuSaveOriginalImageAs)
 END_EVENT_TABLE()
 
 THISCLASS::Canvas(CanvasPanel *cp):
@@ -30,18 +30,18 @@ THISCLASS::Canvas(CanvasPanel *cp):
 	SetWindowStyle(wxNO_BORDER);
 
 	// Create the popup menu
-	mPopupMenu.AppendCheckItem(sID_Zoom200, "Zoom: 200 %");
-	mPopupMenu.AppendCheckItem(sID_Zoom100, "Zoom: 100 %");
-	mPopupMenu.AppendCheckItem(sID_Zoom50, "Zoom: 50 %");
-	mPopupMenu.AppendCheckItem(sID_Zoom25, "Zoom: 25 %");
-	mPopupMenu.AppendCheckItem(sID_Zoom10, "Zoom: 10 %");
-	mPopupMenu.AppendCheckItem(sID_ZoomFit, "Fit zoom");
+	mPopupMenu.AppendCheckItem(cID_Zoom200, "Zoom: 200 %");
+	mPopupMenu.AppendCheckItem(cID_Zoom100, "Zoom: 100 %");
+	mPopupMenu.AppendCheckItem(cID_Zoom50, "Zoom: 50 %");
+	mPopupMenu.AppendCheckItem(cID_Zoom25, "Zoom: 25 %");
+	mPopupMenu.AppendCheckItem(cID_Zoom10, "Zoom: 10 %");
+	mPopupMenu.AppendCheckItem(cID_ZoomFit, "Fit zoom");
 	mPopupMenu.AppendSeparator();
-	mPopupMenu.AppendCheckItem(sID_FlipVertically, "Flip vertically");
-	mPopupMenu.AppendCheckItem(sID_FlipHorizontally, "Flip horizontally");
+	mPopupMenu.AppendCheckItem(cID_FlipVertically, "Flip vertically");
+	mPopupMenu.AppendCheckItem(cID_FlipHorizontally, "Flip horizontally");
 	mPopupMenu.AppendSeparator();
-	mPopupMenu.Append(sID_SaveViewImageAs, "Save displayed image as ...");
-	mPopupMenu.Append(sID_SaveOriginalImageAs, "Save original image as ...");
+	mPopupMenu.Append(cID_SaveViewImageAs, "Save displayed image as ...");
+	mPopupMenu.Append(cID_SaveOriginalImageAs, "Save original image as ...");
 
 	// Set non-bold font
 	wxFont f=GetFont();
@@ -203,12 +203,12 @@ void THISCLASS::OnMouseMove(wxMouseEvent &event) {
 }
 
 void THISCLASS::OnMouseRightDown(wxMouseEvent &event) {
-	mPopupMenu.Check(sID_FlipVertically, mDisplayRenderer.GetFlipVertical());
-	mPopupMenu.Check(sID_FlipHorizontally, mDisplayRenderer.GetFlipHorizontal());
+	mPopupMenu.Check(cID_FlipVertically, mDisplayRenderer.GetFlipVertical());
+	mPopupMenu.Check(cID_FlipHorizontally, mDisplayRenderer.GetFlipHorizontal());
 
-	mPopupMenu.Check(sID_Zoom200, (mDisplayRenderer.GetScalingFactor()==2));
-	mPopupMenu.Check(sID_Zoom100, (mDisplayRenderer.GetScalingFactor()==1));
-	mPopupMenu.Check(sID_Zoom50, (mDisplayRenderer.GetScalingFactor()==0.5));
+	mPopupMenu.Check(cID_Zoom200, (mDisplayRenderer.GetScalingFactor()==2));
+	mPopupMenu.Check(cID_Zoom100, (mDisplayRenderer.GetScalingFactor()==1));
+	mPopupMenu.Check(cID_Zoom50, (mDisplayRenderer.GetScalingFactor()==0.5));
 
 	PopupMenu(&mPopupMenu);
 }
@@ -277,15 +277,15 @@ void THISCLASS::OnMenuFlipHorizontally(wxCommandEvent& event) {
 }
 
 void THISCLASS::OnMenuZoom(wxCommandEvent& event) {
-	if (event.GetId()==sID_Zoom200) {
+	if (event.GetId()==cID_Zoom200) {
 		mDisplayRenderer.SetScalingFactor(2);
-	} else if (event.GetId()==sID_Zoom100) {
+	} else if (event.GetId()==cID_Zoom100) {
 		mDisplayRenderer.SetScalingFactor(1);
-	} else if (event.GetId()==sID_Zoom50) {
+	} else if (event.GetId()==cID_Zoom50) {
 		mDisplayRenderer.SetScalingFactor(0.5);
-	} else if (event.GetId()==sID_Zoom25) {
+	} else if (event.GetId()==cID_Zoom25) {
 		mDisplayRenderer.SetScalingFactor(0.25);
-	} else if (event.GetId()==sID_Zoom10) {
+	} else if (event.GetId()==cID_Zoom10) {
 		mDisplayRenderer.SetScalingFactor(0.1);
 	} else {
 		mDisplayRenderer.SetScalingFactorMax(cvSize(mCanvasPanel->mAvailableSpace.GetWidth(), mCanvasPanel->mAvailableSpace.GetHeight()));

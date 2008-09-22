@@ -177,10 +177,12 @@ bool THISCLASS::Start(bool productionmode) {
 	// Start all components (until first error)
 	tComponentList::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
-		(*it)->ClearStatus();
-		(*it)->OnStart();
-		if ((*it)->mStatusHasError) {break;}
-		(*it)->mStarted=true;
+		if ((*it)->GetEnabled()) {
+			(*it)->ClearStatus();
+			(*it)->OnStart();
+			if ((*it)->mStatusHasError) {break;}
+			(*it)->mStarted=true;
+		}
 		it++;
 	}
 
@@ -284,25 +286,25 @@ bool THISCLASS::Step() {
 	// Run until first error, or until the end (all started components)
 	it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
-		if (! (*it)->mStarted) {break;}
+		if ((*it)->mStarted) {
+			// Event recorder
+			SwisTrackCoreEventRecorder::Event starttime;
+			mEventRecorder->LapTime(&starttime, SwisTrackCoreEventRecorder::sType_StepStart, (*it));
+			mEventRecorder->Add(&starttime);
 
-		// Event recorder
-		SwisTrackCoreEventRecorder::Event starttime;
-		mEventRecorder->LapTime(&starttime, SwisTrackCoreEventRecorder::sType_StepStart, (*it));
-		mEventRecorder->Add(&starttime);
+			// Execute the step
+			(*it)->ClearStatus();
+			(*it)->OnStep();
 
-		// Execute the step
-		(*it)->ClearStatus();
-		(*it)->OnStep();
+			// Event recorder
+			SwisTrackCoreEventRecorder::Event endtime;
+			mEventRecorder->LapTime(&endtime, SwisTrackCoreEventRecorder::sType_StepStop, (*it));
+			mEventRecorder->Add(&endtime);
+			(*it)->mStepDuration=mEventRecorder->CalculateDuration(&starttime, &endtime);
 
-		// Event recorder
-		SwisTrackCoreEventRecorder::Event endtime;
-		mEventRecorder->LapTime(&endtime, SwisTrackCoreEventRecorder::sType_StepStop, (*it));
-		mEventRecorder->Add(&endtime);
-		(*it)->mStepDuration=mEventRecorder->CalculateDuration(&starttime, &endtime);
-
-		// Error handling
-		if ((*it)->mStatusHasError) {break;}
+			// Error handling
+			if ((*it)->mStatusHasError) {break;}
+		}
 
 		it++;
 	}
@@ -357,9 +359,10 @@ bool THISCLASS::ReloadConfiguration() {
 	// Start all components (until first error)
 	tComponentList::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
-		if (! (*it)->mStarted) {break;}
-		(*it)->ClearStatus();
-		(*it)->OnReloadConfiguration();
+		if ((*it)->mStarted) {
+			(*it)->ClearStatus();
+			(*it)->OnReloadConfiguration();
+		}
 		it++;
 	}
 

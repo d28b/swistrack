@@ -41,16 +41,16 @@ public:
 
 private:
 	enum {
-		sID_SaveViewImageAs,
-		sID_SaveOriginalImageAs,
-		sID_FlipVertically,
-		sID_FlipHorizontally,
-		sID_Zoom200,
-		sID_Zoom100,
-		sID_Zoom50,
-		sID_Zoom25,
-		sID_Zoom10,
-		sID_ZoomFit
+		cID_SaveViewImageAs,
+		cID_SaveOriginalImageAs,
+		cID_FlipVertically,
+		cID_FlipHorizontally,
+		cID_Zoom200,
+		cID_Zoom100,
+		cID_Zoom50,
+		cID_Zoom25,
+		cID_Zoom10,
+		cID_ZoomFit
 	};
 
 	wxMenu mPopupMenu;					//!< The popup menu.

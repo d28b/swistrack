@@ -73,6 +73,9 @@ public:
 	//! Writes the configuration to an XML element.
 	void ConfigurationWriteXML(wxXmlNode *element, ErrorList *xmlerr);
 
+	//! Returns whether the component is enabled or not.
+	bool GetEnabled();
+
 	//! Returns a boolean from the configuration.
 	bool GetConfigurationBool(const std::string &key, bool defvalue);
 	//! Returns an integer value from the configuration.
@@ -100,6 +103,7 @@ protected:
 	SwisTrackCore *mCore; 						//!< The associated SwisTrackCore object.
 	tConfigurationMap mConfiguration;			//!< The configuration values.
 	tConfigurationMap mConfigurationDefault;	//!< The default configuration values.
+	bool mEnabled;								//!< Tells whether the component is enabled or not. During execution, disabled components act as if they were not in the list (i.e. none of OnStart, OnStep and OnStop is called).
 	int mEditLocks;								//!< The number of edit locks.
 
 	//! Adds an error message to the status list.

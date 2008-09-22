@@ -21,6 +21,9 @@ public:
 	//! Reads the configuration from an XML element.
 	void ConfigurationReadXML(wxXmlNode *element, ErrorList *xmlerr);
 
+	//! Sets the enabled flag of the component.
+	bool SetEnabled(bool value);
+
 	//! Sets a boolean value in the configuration.
 	bool SetConfigurationBool(const std::string &key, bool value);
 	//! Sets an integer value in the configuration.

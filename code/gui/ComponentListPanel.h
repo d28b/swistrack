@@ -46,6 +46,8 @@ public:
 	void OnListItemDeselected(wxListEvent& event);
 	//! Handles the corresponding GUI event.
 	void OnListLeftDoubleClick(wxMouseEvent& event);
+	//! Handles the corresponding GUI event.
+	void OnListMouseRightDown(wxMouseEvent& event);
 
 	// SwisTrackCoreInterface methods
 	void OnAfterStart(bool productionmode);
@@ -56,19 +58,21 @@ public:
 private:
 	//! GUI constants.
 	enum eConstants {
-		eID_ButtonAdd,
-		eID_ButtonRemove,
-		eID_ButtonUp,
-		eID_ButtonDown,
-		eID_List,
+		cID_ButtonAdd,
+		cID_ButtonRemove,
+		cID_ButtonUp,
+		cID_ButtonDown,
+		cID_List,
+		cID_PopupMenu_Enabled,
 	};
 
-	wxListCtrl *mList;			//!< The corresponding GUI widget.
-	int mColumnMessages;		//!< The column number of the messages.
-	int mColumnStepDuration;		//!< The column number of the step duration.
-	wxBitmapButton *mButtonAdd;		//!< The corresponding GUI widget.
-	wxBitmapButton *mButtonRemove;	//!< The corresponding GUI widget.
-	wxBitmapButton *mButtonUp;		//!< The corresponding GUI widget.
+	wxMenu mPopupMenu;					//!< The popup menu.
+	wxListCtrl *mList;					//!< The corresponding GUI widget.
+	int mColumnMessages;				//!< The column number of the messages.
+	int mColumnStepDuration;			//!< The column number of the step duration.
+	wxBitmapButton *mButtonAdd;			//!< The corresponding GUI widget.
+	wxBitmapButton *mButtonRemove;		//!< The corresponding GUI widget.
+	wxBitmapButton *mButtonUp;			//!< The corresponding GUI widget.
 	wxBitmapButton *mButtonDown;		//!< The corresponding GUI widget.
 
 	ComponentsDialog *mComponentsDialog;	//!< The component selector dialog used when adding a new component.
