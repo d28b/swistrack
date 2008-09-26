@@ -47,7 +47,8 @@ public:
 	ComponentCategory mCategoryInputConversion;
 	ComponentCategory mCategoryPreprocessingColor;
 	ComponentCategory mCategoryPreprocessingGray;
-	ComponentCategory mCategoryThresholding;
+	ComponentCategory mCategoryThresholdingColor;
+	ComponentCategory mCategoryThresholdingGray;
 	ComponentCategory mCategoryPreprocessingBinary;
 	ComponentCategory mCategoryParticleDetection;
 	ComponentCategory mCategoryCalibration;

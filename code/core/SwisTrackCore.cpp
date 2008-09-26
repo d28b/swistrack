@@ -19,6 +19,7 @@
 #include "ComponentHSVBackgroundSubtractionColor.h"
 #include "ComponentAdaptiveBackgroundSubtractionGray.h"
 #include "ComponentAdaptiveBackgroundSubtractionColor.h"
+#include "ComponentGrayMask.h"
 #include "ComponentSpecificColorSubtraction.h"
 #include "ComponentColorMask.h"
 #include "ComponentColorBlur.h"
@@ -52,7 +53,8 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 		mCategoryInputConversion("InputConversion", "Input conversion", 200, ComponentCategory::sTypeAuto),
 		mCategoryPreprocessingColor("PreprocessingColor", "Preprocessing (color)", 300),
 		mCategoryPreprocessingGray("PreprocessingGray", "Preprocessing (grayscale)", 350),
-		mCategoryThresholding("Thresholding", "Thresholding", 400),
+		mCategoryThresholdingColor("ThresholdingColor", "Thresholding (color)", 400),
+		mCategoryThresholdingGray("ThresholdingGray", "Thresholding (grayscale)", 450),
 		mCategoryPreprocessingBinary("PreprocessingBinary", "Preprocessing (binary)", 500),
 		mCategoryParticleDetection("ParticleDetection", "Particle detection", 600),
 		mCategoryCalibration("Calibration", "Calibration", 700),
@@ -86,6 +88,7 @@ THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentColorBlur(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionGray(this));
+	mAvailableComponents.push_back(new ComponentGrayMask(this));
 	mAvailableComponents.push_back(new ComponentThresholdGray(this));
 	mAvailableComponents.push_back(new ComponentThresholdColorCommon(this));
 	mAvailableComponents.push_back(new ComponentThresholdColorIndependent(this));

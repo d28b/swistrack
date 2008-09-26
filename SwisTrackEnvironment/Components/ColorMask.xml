@@ -14,10 +14,10 @@
 			<name>Mode</name>
 			<label>Mode</label>
 			<items>
-				<item key="black-black">Black becomes black (M and I)</item>
-				<item key="white-white">White becomes white (M or I)</item>
-				<item key="white-black">White becomes black (not M and I)</item>
-				<item key="black-white">Black becomes white (not M or I)</item>
+				<item key="black-black">Black -> black (M and I)</item>
+				<item key="white-white">White -> white (M or I)</item>
+				<item key="white-black">White -> black (not M and I)</item>
+				<item key="black-white">Black -> white (not M or I)</item>
 			</items>
 			<default>black-black</default>
 			<reloadable>true</reloadable>

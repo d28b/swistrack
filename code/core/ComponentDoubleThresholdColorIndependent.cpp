@@ -10,7 +10,7 @@ THISCLASS::ComponentDoubleThresholdColorIndependent(SwisTrackCore *stc):
 		mDisplayOutput("Output", "After thresholding") {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryThresholding);
+	mCategory=&(mCore->mCategoryThresholdingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);
@@ -26,8 +26,7 @@ void THISCLASS::OnStart() {
 	OnReloadConfiguration();
 }
 
-void THISCLASS::OnReloadConfiguration() 
-{
+void THISCLASS::OnReloadConfiguration() {
 	mLowThreshold.val[0]=GetConfigurationInt("BlueLowThreshold", 0);
 	mLowThreshold.val[1]=GetConfigurationInt("GreenLowThreshold", 0);
 	mLowThreshold.val[2]=GetConfigurationInt("RedLowThreshold", 0);
