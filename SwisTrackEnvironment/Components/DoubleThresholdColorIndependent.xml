@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Double Threshold a color image (independent)</friendlyname>
-	<description>Thresholds a color image, using two independent thresholds value for each channel, and stores the result in a binary image.</description>
+	<friendlyname>Double Threshold</friendlyname>
+	<description>Thresholds a color image using a lower and an upper threshold value for each channel. The result is a binary image.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/DoubleThresholdColorIndependent</url>
 	<displayimage>Output</displayimage>
 
@@ -15,7 +15,7 @@
 			<default>0</default>
 			<reloadable>true</reloadable>
 		</parameter>
-                <parameter type="integer">
+		<parameter type="integer">
 			<name>BlueHighThreshold</name>
 			<label>Blue High Threshold</label>
 			<min>0</min>
@@ -33,7 +33,7 @@
 			<default>0</default>
 			<reloadable>true</reloadable>
 		</parameter>
-                <parameter type="integer">
+		<parameter type="integer">
 			<name>GreenHighThreshold</name>
 			<label>Green High Threshold</label>
 			<min>0</min>
@@ -51,7 +51,7 @@
 			<default>0</default>
 			<reloadable>true</reloadable>
 		</parameter>
-                <parameter type="integer">
+		<parameter type="integer">
 			<name>RedHighThreshold</name>
 			<label>Red High Threshold</label>
 			<min>0</min>

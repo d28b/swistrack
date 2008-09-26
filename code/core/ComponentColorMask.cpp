@@ -7,7 +7,7 @@
 
 THISCLASS::ComponentColorMask(SwisTrackCore *stc):
 		Component(stc, "ColorMask"),
-		mMaskImage(0),
+		mMaskImage(0), mMode(cMode_BlackBlack),
 		mDisplayOutput("Output", "After applying mask") {
 
 	// Data structure relations
@@ -29,6 +29,7 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
+	// Load mask image
 	std::string filename=GetConfigurationString("MaskImage", "");
 	if (filename!="") {
 		mMaskImage=cvLoadImage(filename.c_str(), -1);
@@ -38,6 +39,7 @@ void THISCLASS::OnReloadConfiguration() {
 		return;
 	}
 
+	// Convert mask image
 	if (mMaskImage->nChannels==3) {
 		// Already in BGR, do nothing
 	} else if (mMaskImage->nChannels==1) {
@@ -50,6 +52,20 @@ void THISCLASS::OnReloadConfiguration() {
 		AddError("Invalid mask file. The mask file must be a grayscale or color image.");
 		return;
 	}
+	
+	// Mask mode
+	std::string mode=GetConfigurationString("Mode", "black-black");
+	if (mode=="white-white") {
+		mMode=cMode_WhiteWhite;
+	} else if (mode=="white-black") {
+		mMode=cMode_WhiteBlack;
+		cvNot(mMaskImage, mMaskImage);
+	} else if (mode=="black-white") {
+		mMode=cMode_BlackWhite;
+		cvNot(mMaskImage, mMaskImage);
+	} else {
+		mMode=cMode_BlackBlack;
+	}
 }
 
 void THISCLASS::OnStep() {
@@ -58,12 +74,18 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
+	// Mask the image
 	if (mMaskImage) {
 		if ((mCore->mDataStructureImageColor.mImage->width!=mMaskImage->width) || (mCore->mDataStructureImageColor.mImage->height!=mMaskImage->height)) {
 			AddError("Wrong mask size.");
 			return;
 		}
-		cvAnd(mCore->mDataStructureImageColor.mImage, mMaskImage, mCore->mDataStructureImageColor.mImage);
+
+		if ((mMode==cMode_WhiteWhite) || (mMode==cMode_BlackWhite)) {
+			cvOr(mCore->mDataStructureImageColor.mImage, mMaskImage, mCore->mDataStructureImageColor.mImage);
+		} else {
+			cvAnd(mCore->mDataStructureImageColor.mImage, mMaskImage, mCore->mDataStructureImageColor.mImage);
+		}
 	}
 
 	// Set the display

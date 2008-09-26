@@ -22,9 +22,17 @@ public:
 	Component *Create() {return new ComponentColorMask(mCore);}
 
 private:
-	IplImage *mMaskImage;				//!< The mask.
+	enum eMode {
+		cMode_BlackBlack,
+		cMode_WhiteWhite,
+		cMode_WhiteBlack,
+		cMode_BlackWhite
+	};
 
-	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
+	IplImage *mMaskImage;		//!< The mask image.
+	enum eMode mMode;			//!< (configuration) The mode.
+
+	Display mDisplayOutput;		//!< The DisplayImage showing the output of this component.
 };
 
 #endif

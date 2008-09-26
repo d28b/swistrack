@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Blur color image</friendlyname>
-	<description>Blurs the entire image. This an expensive operation, but will reduce the noise.</description>
+	<friendlyname>Blur</friendlyname>
+	<description>Blurs a color image. This an expensive operation, but will reduce the noise.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ColorBlur</url>
 	<displayimage>Output</displayimage>
 	<configuration>

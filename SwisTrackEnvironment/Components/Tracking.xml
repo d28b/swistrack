@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Original Tracking Core (N. Correll)</friendlyname>
-	<description>To be implemented</description>
+	<friendlyname>Nearest Neighbor Tracking (SwisTrack 3)</friendlyname>
+	<description>This is the nearest neighbor tracking code used in SwisTrack 3. Note that this component is only provided for compatibility with old setups. New applications should use the new "Nearest Neighbor Tracking" component instead.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/Tracking</url>
 	<displayimage>Output</displayimage>
 	<configuration>

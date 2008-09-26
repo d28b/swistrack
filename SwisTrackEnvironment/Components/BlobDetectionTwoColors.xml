@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Blob detection (two colors)</friendlyname>
-	<description>Detects two-colored markers (particles) and their orientation on a color image.</description>
+	<friendlyname>Two-Colored Marker Detection</friendlyname>
+	<description>Detects two-colored markers on a color image and stores their position and orientation as particles.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BlobDetectionTwoColors</url>
 	<displayimage>Output</displayimage>
 

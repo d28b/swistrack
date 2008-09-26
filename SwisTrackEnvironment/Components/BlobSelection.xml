@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
 	<friendlyname>Blob Selection</friendlyname>
-	<description>Select the blobs on the binary image based on given criteria</description>
+	<description>Selects blobs on a binary image based on their size, compactness or orientation. The result is a binary image containing only the blobs which comply with the selection criteria.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BlobSelection</url>
 	<displayimage>Output</displayimage>
 

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>GigE Camera</friendlyname>
+	<friendlyname>Input from GigE Camera</friendlyname>
 	<description>Grabs an image from a gigabit ethernet (GigE) camera using the Basler Pylon driver.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/InputCameraGigE</url>
 	<displayimage>Output</displayimage>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Threshold a color image (common)</friendlyname>
-	<description>Thresholds a color image with the same threshold for all the channels and stores the result in a binary image.</description>
+	<friendlyname>Threshold</friendlyname>
+	<description>Thresholds a color image and stores the result in a binary image.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ThresholdColorCommon</url>
 	<displayimage>Output</displayimage>
 

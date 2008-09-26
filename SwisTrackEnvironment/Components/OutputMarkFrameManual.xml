@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Manually mark frames</friendlyname>
+	<friendlyname>Manually Mark Frames</friendlyname>
 	<description>Sends MARK messages to the output stream whenever the user clicks a button. The image is left untouched.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputMarkFrameManual</url>
 	<displayimage>Output</displayimage>

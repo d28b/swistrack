@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Output particles</friendlyname>
+	<friendlyname>Output Particles</friendlyname>
 	<description>Sends the particles to all connected TCP clients.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputParticles</url>
 	<displayimage>Output</displayimage>

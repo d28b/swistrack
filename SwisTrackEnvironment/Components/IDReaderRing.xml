@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>ID Reader (Ring)</friendlyname>
-	<description>Reads the ID of the robot from a ring placed around the blob. In addition, the orientation of the robot is detected.</description>
+	<friendlyname>Read Circular Bar Code</friendlyname>
+	<description>Detects ID and orientation of all robots by reading a circular bar code placed around the blob.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/IDReaderRing</url>
 	<displayimage>Output</displayimage>
 

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>1394 Camera (FireWire)</friendlyname>
+	<friendlyname>Input from Firewire (1394) Camera</friendlyname>
 	<description>Grabs an image from a Firewire camera (CMU 1394 driver).</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/InputCamera1394</url>
 	<displayimage>Output</displayimage>

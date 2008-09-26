@@ -29,6 +29,7 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
+	// Load mask image
 	std::string filename=GetConfigurationString("MaskImage", "");
 	if (filename!="") {
 		mMaskImage=cvLoadImage(filename.c_str(), -1);
@@ -38,6 +39,7 @@ void THISCLASS::OnReloadConfiguration() {
 		return;
 	}
 
+	// Convert mask image
 	if (mMaskImage->nChannels==3) {
 		// BGR case, we convert to gray
 		IplImage *img=cvCreateImage(cvSize(mMaskImage->width, mMaskImage->height), mMaskImage->depth, 1);
@@ -53,6 +55,20 @@ void THISCLASS::OnReloadConfiguration() {
 		cvReleaseImage(&mMaskImage);
 		mMaskImage=img;
 	}
+
+	// Mask mode
+	std::string mode=GetConfigurationString("Mode", "black-black");
+	if (mode=="white-white") {
+		mMode=cMode_WhiteWhite;
+	} else if (mode=="white-black") {
+		mMode=cMode_WhiteBlack;
+		cvNot(mMaskImage, mMaskImage);
+	} else if (mode=="black-white") {
+		mMode=cMode_BlackWhite;
+		cvNot(mMaskImage, mMaskImage);
+	} else {
+		mMode=cMode_BlackBlack;
+	}
 }
 
 void THISCLASS::OnStep() {
@@ -61,12 +77,18 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
+	// Mask the image
 	if (mMaskImage) {
 		if ((mCore->mDataStructureImageBinary.mImage->width!=mMaskImage->width) || (mCore->mDataStructureImageBinary.mImage->height!=mMaskImage->height)) {
 			AddError("Wrong mask size.");
 			return;
 		}
-		cvAnd(mCore->mDataStructureImageBinary.mImage, mMaskImage, mCore->mDataStructureImageBinary.mImage);
+
+		if ((mMode==cMode_WhiteWhite) || (mMode==cMode_BlackWhite)) {
+			cvOr(mCore->mDataStructureImageBinary.mImage, mMaskImage, mCore->mDataStructureImageBinary.mImage);
+		} else {
+			cvAnd(mCore->mDataStructureImageBinary.mImage, mMaskImage, mCore->mDataStructureImageBinary.mImage);
+		}
 	}
 
 	// Set the display

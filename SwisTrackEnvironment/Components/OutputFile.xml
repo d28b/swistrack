@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Output to a file</friendlyname>
-	<description>Write tracking data to a file. Each track as an individual track</description>
+	<friendlyname>Output Particles to a Text File</friendlyname>
+	<description>Writes particles to a text file. Each track is stored in a separate file.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputFile</url>
 	<displayimage>Output</displayimage>
 

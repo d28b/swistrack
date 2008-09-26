@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Blob detection</friendlyname>
-	<description>Select the blobs on the binary image based on given criteria.</description>
+	<friendlyname>Blob Detection</friendlyname>
+	<description>Detects blobs on a binary image and stores them as particles.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BlobDetectionMinMax</url>
 	<displayimage>Output</displayimage>
 
