@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Background subtraction (Gray)</friendlyname>
+	<friendlyname>Background Subtraction</friendlyname>
 	<description>Subtracts a background image.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/AdaptiveBackgroundSubtractionGray</url>
 	<displayimage>Output</displayimage>
