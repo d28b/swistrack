@@ -20,7 +20,7 @@
 				<item key="black-white">Black -> white (not M or I)</item>
 			</items>
 			<default>black-black</default>
-			<reloadable>true</reloadable>
+			<reloadable>false</reloadable>
 		</parameter>
 	</configuration>
 </swistrackcomponent>
