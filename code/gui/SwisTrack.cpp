@@ -23,7 +23,7 @@
 #include <wx/textdlg.h>
 #include <wx/minifram.h>
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
 #include "bitmaps/icon_gui.xpm"
 #include "bitmaps/bitmap_new.xpm"
 #include "bitmaps/bitmap_open.xpm"

@@ -1,5 +1,5 @@
 /* XPM */
-static char *bitmap_up_xpm[] = {
+static const char *bitmap_up_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "9 11 2 1",
 "  c black",

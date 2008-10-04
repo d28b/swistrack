@@ -15,7 +15,7 @@ public:
 	//! Constructor.
 	ComponentTrigger(Component *c);
 	//! Destructor.
-	~ComponentTrigger() {}
+	virtual ~ComponentTrigger() {}
 
 	//! This event is called on all trigger components to check if the trigger is ready.
 	virtual bool IsReady() {
