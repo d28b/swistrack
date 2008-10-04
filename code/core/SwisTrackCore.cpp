@@ -1,7 +1,6 @@
 #include "SwisTrackCore.h"
 #define THISCLASS SwisTrackCore
 
-#include <sstream>
 #include <algorithm>
 #include "ComponentTriggerTimer.h"
 #include "ComponentTriggerCounter.h"
@@ -45,25 +44,25 @@
 #include "ComponentOutputMarkFrameManual.h"
 #include "ComponentDoubleThresholdColorIndependent.h"
 
-THISCLASS::SwisTrackCore(std::string componentconfigurationfolder):
+THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 		mAvailableComponents(), mDataStructures(), mSwisTrackCoreInterfaces(), mComponentConfigurationFolder(componentconfigurationfolder),
 		mComponentCategories(), mCommunicationInterface(0), mTrigger(new SwisTrackCoreTrigger(this)), mEventRecorder(new SwisTrackCoreEventRecorder(this)),
-		mCategoryTrigger("Trigger", "Trigger", 0),
-		mCategoryInput("Input", "Input", 100, ComponentCategory::sTypeOne),
-		mCategoryInputConversion("InputConversion", "Input conversion", 200, ComponentCategory::sTypeAuto),
-		mCategoryPreprocessingColor("PreprocessingColor", "Preprocessing (color)", 300),
-		mCategoryPreprocessingGray("PreprocessingGray", "Preprocessing (grayscale)", 350),
-		mCategoryThresholdingColor("ThresholdingColor", "Thresholding (color)", 400),
-		mCategoryThresholdingGray("ThresholdingGray", "Thresholding (grayscale)", 450),
-		mCategoryPreprocessingBinary("PreprocessingBinary", "Preprocessing (binary)", 500),
-		mCategoryParticleDetection("ParticleDetection", "Particle detection", 600),
-		mCategoryCalibration("Calibration", "Calibration", 700),
-		mCategoryTracking("Tracking", "Tracking", 800),
-		mCategoryOutput("Output", "Output", 10000),
+		mCategoryTrigger(wxT("Trigger"), wxT("Trigger"), 0),
+		mCategoryInput(wxT("Input"), wxT("Input"), 100, ComponentCategory::sTypeOne),
+		mCategoryInputConversion(wxT("InputConversion"), wxT("Input conversion"), 200, ComponentCategory::sTypeAuto),
+		mCategoryPreprocessingColor(wxT("PreprocessingColor"), wxT("Preprocessing (color)"), 300),
+		mCategoryPreprocessingGray(wxT("PreprocessingGray"), wxT("Preprocessing (grayscale)"), 350),
+		mCategoryThresholdingColor(wxT("ThresholdingColor"), wxT("Thresholding (color)"), 400),
+		mCategoryThresholdingGray(wxT("ThresholdingGray"), wxT("Thresholding (grayscale)"), 450),
+		mCategoryPreprocessingBinary(wxT("PreprocessingBinary"), wxT("Preprocessing (binary)"), 500),
+		mCategoryParticleDetection(wxT("ParticleDetection"), wxT("Particle detection"), 600),
+		mCategoryCalibration(wxT("Calibration"), wxT("Calibration"), 700),
+		mCategoryTracking(wxT("Tracking"), wxT("Tracking"), 800),
+		mCategoryOutput(wxT("Output"), wxT("Output"), 10000),
 		mDataStructureInput(),
-		mDataStructureImageColor("ImageColor", "Color image"),
-		mDataStructureImageGray("ImageGray", "Grayscale image"),
-		mDataStructureImageBinary("ImageBinary", "Binary image"),
+		mDataStructureImageColor(wxT("ImageColor"), wxT("Color image")),
+		mDataStructureImageGray(wxT("ImageGray"), wxT("Grayscale image")),
+		mDataStructureImageBinary(wxT("ImageBinary"), wxT("Binary image")),
 		mDataStructureParticles(),
 		mDataStructureTracks(),
 		mStarted(false), mProductionMode(false), mEditLocks(0), mDeployedComponents() {
@@ -197,7 +196,7 @@ bool THISCLASS::Start(bool productionmode) {
 	}
 
 	// Notify the clients
-	CommunicationMessage mstart("START");
+	CommunicationMessage mstart(wxT("START"));
 	mCommunicationInterface->Send(&mstart);
 
 	// Event recorder
@@ -242,7 +241,7 @@ bool THISCLASS::Stop() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mstop("STOP");
+	CommunicationMessage mstop(wxT("STOP"));
 	mCommunicationInterface->Send(&mstop);
 
 	// Event recorder
@@ -276,7 +275,7 @@ bool THISCLASS::Step() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mstart("STEP_START");
+	CommunicationMessage mstart(wxT("STEP_START"));
 	mCommunicationInterface->Send(&mstart);
 
 	// Reset the step durations
@@ -326,7 +325,7 @@ bool THISCLASS::Step() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mstop("STEP_STOP");
+	CommunicationMessage mstop(wxT("STEP_STOP"));
 	mCommunicationInterface->Send(&mstop);
 
 	// Notify the displays (OnAfterStep)
@@ -399,7 +398,7 @@ void THISCLASS::TriggerStart() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mstart("TRIGGER_START");
+	CommunicationMessage mstart(wxT("TRIGGER_START"));
 	mCommunicationInterface->Send(&mstart);
 
 	// Event recorder
@@ -430,7 +429,7 @@ void THISCLASS::TriggerStop() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mstop("TRIGGER_STOP");
+	CommunicationMessage mstop(wxT("TRIGGER_STOP"));
 	mCommunicationInterface->Send(&mstop);
 
 	// Event recorder
@@ -441,16 +440,16 @@ void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmler
 	// Add an element for each component
 	tComponentList::iterator it=mDeployedComponents.begin();
 	while (it!=mDeployedComponents.end()) {
-		wxXmlNode *node=new wxXmlNode(0, wxXML_ELEMENT_NODE, "component");
+		wxXmlNode *node=new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("component"));
 		configuration->AddChild(node);
-		node->AddProperty("type", (*it)->mName);
+		node->AddProperty(wxT("type"), (*it)->mName);
 		(*it)->ConfigurationWriteXML(node, xmlerr);
 
 		it++;
 	}
 }
 
-Component *THISCLASS::GetComponentByName(const std::string &name) {
+Component *THISCLASS::GetComponentByName(const wxString &name) {
 	tComponentList::iterator it=mAvailableComponents.begin();
 	while (it!=mAvailableComponents.end()) {
 		if ((*it)->mName==name) {return (*it);}

@@ -2,13 +2,12 @@
 #define THISCLASS ComponentGrayMask
 
 #include <highgui.h>
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentGrayMask(SwisTrackCore *stc):
-		Component(stc, "GrayMask"),
+		Component(stc, wxT("GrayMask")),
 		mMaskImage(0),
-		mDisplayOutput("Output", "After applying mask") {
+		mDisplayOutput(wxT("Output"), wxT("After applying mask")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryPreprocessingGray);
@@ -30,12 +29,12 @@ void THISCLASS::OnStart() {
 
 void THISCLASS::OnReloadConfiguration() {
 	// Load mask image
-	std::string filename=GetConfigurationString("MaskImage", "");
-	if (filename!="") {
-		mMaskImage=cvLoadImage(filename.c_str(), -1);
+	wxString filename=GetConfigurationString(wxT("MaskImage"), wxT(""));
+	if (filename!=wxT("")) {
+		mMaskImage=cvLoadImage(filename.mb_str(wxConvISO8859_1), -1);
 	}
 	if (! mMaskImage) {
-		AddError("Cannot open mask file.");
+		AddError(wxT("Cannot open mask file."));
 		return;
 	}
 
@@ -57,13 +56,13 @@ void THISCLASS::OnReloadConfiguration() {
 	}
 
 	// Mask mode
-	std::string mode=GetConfigurationString("Mode", "black-black");
-	if (mode=="white-white") {
+	wxString mode=GetConfigurationString(wxT("Mode"), wxT("black-black"));
+	if (mode==wxT("white-white")) {
 		mMode=cMode_WhiteWhite;
-	} else if (mode=="white-black") {
+	} else if (mode==wxT("white-black")) {
 		mMode=cMode_WhiteBlack;
 		cvNot(mMaskImage, mMaskImage);
-	} else if (mode=="black-white") {
+	} else if (mode==wxT("black-white")) {
 		mMode=cMode_BlackWhite;
 		cvNot(mMaskImage, mMaskImage);
 	} else {
@@ -73,14 +72,14 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	if (! mCore->mDataStructureImageGray.mImage) {
-		AddError("No input image.");
+		AddError(wxT("No input image."));
 		return;
 	}
 
 	// Mask the image
 	if (mMaskImage) {
 		if ((mCore->mDataStructureImageGray.mImage->width!=mMaskImage->width) || (mCore->mDataStructureImageGray.mImage->height!=mMaskImage->height)) {
-			AddError("Wrong mask size.");
+			AddError(wxT("Wrong mask size."));
 			return;
 		}
 

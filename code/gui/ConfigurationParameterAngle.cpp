@@ -29,18 +29,18 @@ THISCLASS::~ConfigurationParameterAngle() {
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
-	mValueMin=config->ReadDouble("min", 0);
-	mValueMax=config->ReadDouble("max", 2*PI);
-	mValueDefault=config->ReadDouble("default", 0);
+	mValueMin=config->ReadDouble(wxT("min"), 0);
+	mValueMax=config->ReadDouble(wxT("max"), 2*PI);
+	mValueDefault=config->ReadDouble(wxT("default"), 0);
 
 	// Create the controls
-	wxStaticText *label=new wxStaticText(this, wxID_ANY, config->ReadString("label", ""), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
-	mTextCtrl=new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
+	wxStaticText *label=new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
+	mTextCtrl=new wxTextCtrl(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
 	mTextCtrl->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
-	wxStaticText *unitlabel=new wxStaticText(this, wxID_ANY, " deg", wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText *unitlabel=new wxStaticText(this, wxID_ANY, wxT(" deg"), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
 
-	if (config->ReadBool("slider", false)) {
-		mSliderStep=config->ReadDouble("sliderstep", PI/180);
+	if (config->ReadBool(wxT("slider"), false)) {
+		mSliderStep=config->ReadDouble(wxT("sliderstep"), PI/180);
 		mSlider = new wxSlider(this, wxID_ANY, (int)floor((mValueDefault-mValueMin)/mSliderStep+0.5), 0, (int)floor((mValueMax-mValueMin)/mSliderStep+0.5), wxDefaultPosition, wxSize(scParameterWidth, -1), wxSL_AUTOTICKS);
 	}
 
@@ -57,8 +57,8 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 }
 
 void THISCLASS::OnUpdate(wxWindow *updateprotection) {
-	double value=mComponent->GetConfigurationDouble(mName.c_str(), mValueDefault);
-	if (updateprotection!=mTextCtrl) {mTextCtrl->SetValue(wxString::Format("%f", value*180/PI));}
+	double value=mComponent->GetConfigurationDouble(mName, mValueDefault);
+	if (updateprotection!=mTextCtrl) {mTextCtrl->SetValue(wxString::Format(wxT("%f"), value*180/PI));}
 	if ((mSlider) && (updateprotection!=mSlider)) {mSlider->SetValue((int)floor((value-mValueMin)/mSliderStep+0.5));}
 }
 
@@ -73,13 +73,13 @@ bool THISCLASS::ValidateNewValue() {
 }
 
 bool THISCLASS::CompareNewValue() {
-	double value=mComponent->GetConfigurationDouble(mName.c_str(), mValueDefault);
+	double value=mComponent->GetConfigurationDouble(mName, mValueDefault);
 	return (value==mNewValue);
 }
 
 void THISCLASS::OnSetNewValue() {
 	ComponentEditor ce(mComponent);
-	ce.SetConfigurationDouble(mName.c_str(), mNewValue);
+	ce.SetConfigurationDouble(mName, mNewValue);
 }
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {

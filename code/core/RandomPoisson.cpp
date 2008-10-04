@@ -48,7 +48,7 @@ long int THISCLASS::Poisson(double L) {
       return PoissonModeSearch(L);
 	}
   } else {
-    if (L > 2.E9) return -1; //wxASSERT_MSG(0, "Parameter too big in Poisson function");
+    if (L > 2.E9) return -1; //wxASSERT_MSG(0, wxT("Parameter too big in Poisson function"));
 
     //----------------------------------------------------------------
     // patchword rejection method
@@ -368,7 +368,7 @@ double THISCLASS::LnFac(long int n) {
 
   if (n < FAK_LEN) {
     if (n <= 1) {
-      if (n < 0) return 0; //FatalError("Parameter negative in LnFac function");  
+      if (n < 0) return 0; //FatalError(wxT("Parameter negative in LnFac function"));  
       return 0;}
     if (!initialized) { // first time. Must initialize table
       // make table of ln(n!)

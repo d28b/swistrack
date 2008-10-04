@@ -2,13 +2,12 @@
 #define THISCLASS ComponentBackgroundSubtractionColor
 
 #include <highgui.h>
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentBackgroundSubtractionColor(SwisTrackCore *stc):
-		Component(stc, "BackgroundSubtractionColor"),
+		Component(stc, wxT("BackgroundSubtractionColor")),
 		mBackgroundImage(0), mBackgroundImageMean(cvScalarAll(0)), mCorrectMean(true),
-		mDisplayOutput("Output", "After background subtraction") {
+		mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryPreprocessingColor);
@@ -24,23 +23,23 @@ THISCLASS::~ComponentBackgroundSubtractionColor() {
 }
 
 void THISCLASS::OnStart() {
-	std::string filename=GetConfigurationString("BackgroundImage", "");
-	if (filename!="") {
-		mBackgroundImage=cvLoadImage(filename.c_str(),CV_LOAD_IMAGE_UNCHANGED);
+	wxString filename=GetConfigurationString(wxT("BackgroundImage"), wxT(""));
+	if (filename!=wxT("")) {
+		mBackgroundImage=cvLoadImage(filename.mb_str(wxConvISO8859_1),CV_LOAD_IMAGE_UNCHANGED);
 	}
 	if (! mBackgroundImage) {
-		AddError("Cannot open background image.");
+		AddError(wxT("Cannot open background image."));
 		return;
 	}
 
 	if (mBackgroundImage->nChannels!=3) 
 	{
-		AddError("Background Image has not 3 channels");
+		AddError(wxT("Background Image has not 3 channels"));
 		return;
 	}
 
 	// Whether to correct the mean or not
-	mCorrectMean=GetConfigurationBool("CorrectMean", true);
+	mCorrectMean=GetConfigurationBool(wxT("CorrectMean"), true);
 
 	// We always calculate the background average, so we can select if we use the moving threshold during the segmentation
 	if (mCorrectMean) {
@@ -53,7 +52,7 @@ void THISCLASS::OnStart() {
 void THISCLASS::OnReloadConfiguration() 
 {
 	// Whether to correct the mean or not
-	mCorrectMean=GetConfigurationBool("CorrectMean", true);
+	mCorrectMean=GetConfigurationBool(wxT("CorrectMean"), true);
 	// We always calculate the background average, so we can select if we use the moving threshold during the segmentation
 	if (mCorrectMean) {
 		mBackgroundImageMean=cvAvg(mBackgroundImage);
@@ -67,22 +66,22 @@ void THISCLASS::OnStep() {
 	//Check the images
 	if (! inputimage) 
 	{
-		AddError("No input Image");
+		AddError(wxT("No input Image"));
 		return;
 	}
 	if (inputimage->nChannels !=3)
 	{
-		AddError("Input image has not 3 channels.");
+		AddError(wxT("Input image has not 3 channels."));
 		return;
 	}
 	if (! mBackgroundImage) 
 	{
-		AddError("Background image not accessible");
+		AddError(wxT("Background image not accessible"));
 		return;
 	}
 	if ((cvGetSize(inputimage).height!=cvGetSize(mBackgroundImage).height)||(cvGetSize(inputimage).width!=cvGetSize(mBackgroundImage).width))
 	{
-		AddError("Input and background images have not the same dimension");
+		AddError(wxT("Input and background images have not the same dimension"));
 		return;
 	}
 
@@ -124,7 +123,7 @@ void THISCLASS::OnStep() {
 		// Background Substraction
 		cvAbsDiff(inputimage, mBackgroundImage, inputimage);
 	} catch(...) {
-		AddError("Background subtraction failed.");
+		AddError(wxT("Background subtraction failed."));
 	}
 
 	// Set the display

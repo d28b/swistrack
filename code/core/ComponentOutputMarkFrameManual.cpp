@@ -2,7 +2,7 @@
 #define THISCLASS ComponentOutputMarkFrameManual
 
 THISCLASS::ComponentOutputMarkFrameManual(SwisTrackCore *stc):
-		Component(stc, "OutputMarkFrameManual"), mMarkerName("") {
+		Component(stc, wxT("OutputMarkFrameManual")), mMarkerName(wxT("")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryOutput);
@@ -16,7 +16,7 @@ THISCLASS::~ComponentOutputMarkFrameManual() {
 
 void THISCLASS::OnStart() {
 	if (! mCore->mCommunicationInterface) {
-		AddError("No communication interface set.");
+		AddError(wxT("No communication interface set."));
 		return;
 	}
 
@@ -24,19 +24,19 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mMarkerName=GetConfigurationString("MarkerName", "");
+	mMarkerName=GetConfigurationString(wxT("MarkerName"), wxT(""));
 }
 
 void THISCLASS::OnStep() {
 	if (! mCore->mCommunicationInterface) {return;}
 
 	// Get the marker (and return if there is none)
-	std::string mark=GetConfigurationString("Mark", "");
-	if (mark.length()==0) {return;}
-	mConfiguration["Mark"]="";
+	wxString mark=GetConfigurationString(wxT("Mark"), wxT(""));
+	if (mark.Len()==0) {return;}
+	mConfiguration[wxT("Mark")]=wxT("");
 
 	// Write a marker
-	CommunicationMessage m("MARK");
+	CommunicationMessage m(wxT("MARK"));
 	m.AddString(mMarkerName);
 	m.AddString(mark);
 	mCore->mCommunicationInterface->Send(&m);

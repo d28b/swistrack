@@ -7,8 +7,8 @@
 #include <fstream>
 
 THISCLASS::ComponentCalibrationLinear(SwisTrackCore *stc):
-		Component(stc, "CalibrationLinear"),
-		mDisplayOutput("Output", "Linear Calibration: Output") {
+		Component(stc, wxT("CalibrationLinear")),
+		mDisplayOutput(wxT("Output"), wxT("Linear Calibration: Output")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryCalibration);
@@ -25,26 +25,26 @@ THISCLASS::~ComponentCalibrationLinear() {
 
 void THISCLASS::OnStart() {
 	// Read the file containing the calibration points
-	std::string filename=GetConfigurationString("CalibrationPoints", "");
+	wxString filename=GetConfigurationString(wxT("CalibrationPoints"), wxT(""));
 	wxLogNull log;
 	wxXmlDocument document;
 	bool isopen=document.Load(filename);
 	if (! isopen) {
-		AddError("Could not open or parse the XML file!");
+		AddError(wxT("Could not open or parse the XML file!"));
 		return;
 	}
 
 	// Select the root element and check its name
 	SetRootNode(document.GetRoot());
-	if (GetRootNode()->GetName() != "pointlist") {
-		AddError("The XML root node must be called 'pointlist'!");
+	if (GetRootNode()->GetName() != wxT("pointlist")) {
+		AddError(wxT("The XML root node must be called 'pointlist'!"));
 		return;
 	}
 
 	// Enumerate all points in the list
-	SelectChildNode("points");
+	SelectChildNode(wxT("points"));
 	if (! mSelectedNode) {
-		AddError("No node 'points' found!");
+		AddError(wxT("No node 'points' found!"));
 		return;
 	}
 
@@ -54,7 +54,7 @@ void THISCLASS::OnStart() {
 	// Fill the vector with the readen points
 	wxXmlNode *node=mSelectedNode->GetChildren();
 	while (node) {
-		if (node->GetName()=="point") {
+		if (node->GetName()==wxT("point")) {
 			ReadPoint(node);
 		}
 		node=node->GetNext();
@@ -198,10 +198,10 @@ void THISCLASS::ReadPoint(wxXmlNode *node) {
 	mSelectedNode=node;
 
 	CalibrationPoint calibrationPoint;
-	calibrationPoint.xImage=Double(ReadChildContent("ximage"),0);
-	calibrationPoint.yImage=Double(ReadChildContent("yimage"),0);
-	calibrationPoint.xWorld=Double(ReadChildContent("xworld"),0);
-	calibrationPoint.yWorld=Double(ReadChildContent("yworld"),0);
+	calibrationPoint.xImage=ConfigurationConversion::Double(ReadChildContent(wxT("ximage")),0);
+	calibrationPoint.yImage=ConfigurationConversion::Double(ReadChildContent(wxT("yimage")),0);
+	calibrationPoint.xWorld=ConfigurationConversion::Double(ReadChildContent(wxT("xworld")),0);
+	calibrationPoint.yWorld=ConfigurationConversion::Double(ReadChildContent(wxT("yworld")),0);
 	calibrationPointList.push_back(calibrationPoint);
 }
 

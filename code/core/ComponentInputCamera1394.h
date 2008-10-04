@@ -51,15 +51,15 @@ private:
 class ComponentInputCamera1394: public Component {
 
 public:
-	ComponentInputCamera1394(SwisTrackCore *stc): Component(stc, "InputCamera1394") {Initialize();}
+	ComponentInputCamera1394(SwisTrackCore *stc): Component(stc, wxT("InputCamera1394")) {Initialize();}
 	~ComponentInputCamera1394() {}
 
 	// Overwritten Component methods
-	void OnStart() {AddError("1394 support was not compiled into this executable.");}
-	void OnReloadConfiguration() {AddError("1394 support was not compiled into this executable.");}
-	void OnStep() {AddError("1394 support was not compiled into this executable.");}
+	void OnStart() {AddError(wxT("1394 support was not compiled into this executable."));}
+	void OnReloadConfiguration() {AddError(wxT("1394 support was not compiled into this executable."));}
+	void OnStep() {AddError(wxT("1394 support was not compiled into this executable."));}
 	void OnStepCleanup() {}
-	void OnStop() {AddError("1394 support was not compiled into this executable.");}
+	void OnStop() {AddError(wxT("1394 support was not compiled into this executable."));}
 	Component *Create() {return new ComponentInputCamera1394(mCore);}
 };
 

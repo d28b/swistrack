@@ -3,7 +3,7 @@
 
 #include <algorithm>
 
-THISCLASS::Display(const std::string &name, const std::string &displayname):
+THISCLASS::Display(const wxString &name, const wxString &displayname):
 		mComponent(0), mName(name), mDisplayName(displayname), mSubscribers(),
 		mFrameNumber(-1), mFramesCount(-1), mTime(wxDateTime::UNow()), mAnnotation(), mErrors(),
 		mTopLeft(cvPoint(0, 0)), mSize(cvSize(0, 0)),

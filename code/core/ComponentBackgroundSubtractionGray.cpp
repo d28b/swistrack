@@ -2,14 +2,13 @@
 #define THISCLASS ComponentBackgroundSubtractionGray
 
 #include <highgui.h>
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore *stc):
-		Component(stc, "BackgroundSubtractionGray"),
+		Component(stc, wxT("BackgroundSubtractionGray")),
 		mBackgroundImage(0), mBackgroundImageMean(cvScalarAll(0)),
 		mCorrectMean(true), mMode(sMode_AbsDiff),
-		mDisplayOutput("Output", "After background subtraction") {
+		mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryPreprocessingGray);
@@ -26,19 +25,19 @@ THISCLASS::~ComponentBackgroundSubtractionGray() {
 
 void THISCLASS::OnStart() {
 	// Load the background image
-	std::string filename=GetConfigurationString("BackgroundImage", "");
-	if (filename!="") {
-		mBackgroundImage=cvLoadImage(filename.c_str(),CV_LOAD_IMAGE_UNCHANGED);
+	wxString filename=GetConfigurationString(wxT("BackgroundImage"), wxT(""));
+	if (filename!=wxT("")) {
+		mBackgroundImage=cvLoadImage(filename.mb_str(wxConvISO8859_1),CV_LOAD_IMAGE_UNCHANGED);
 	}
 	if (! mBackgroundImage) {
-		AddError("Cannot open background image.");
+		AddError(wxT("Cannot open background image."));
 		return;
 	}
 
 	// Check the background image
 	// We explicitely do not convert image to grayscale automatically, as this is likely to be a configuration error of the user (e.g. wrong background selected). In addition, the user can easily convert a file to grayscale.
 	if (mBackgroundImage->nChannels != 1) {
-		AddError("Background image is not grayscale.");
+		AddError(wxT("Background image is not grayscale."));
 		return;
 	}
 
@@ -48,13 +47,13 @@ void THISCLASS::OnStart() {
 
 void THISCLASS::OnReloadConfiguration() {
 	// Whether to correct the mean or not
-	mCorrectMean=GetConfigurationBool("CorrectMean", true);
+	mCorrectMean=GetConfigurationBool(wxT("CorrectMean"), true);
 
 	// Mode
-	std::string modestr=GetConfigurationString("Mode", "AbsDiff");
-	if (modestr=="SubImageBackground") {
+	wxString modestr=GetConfigurationString(wxT("Mode"), wxT("AbsDiff"));
+	if (modestr==wxT("SubImageBackground")) {
 		mMode=sMode_SubImageBackground;
-	} else if (modestr=="SubBackgroundImage") {
+	} else if (modestr==wxT("SubBackgroundImage")) {
 		mMode=sMode_SubBackgroundImage;
 	} else {
 		mMode=sMode_AbsDiff;
@@ -72,21 +71,21 @@ void THISCLASS::OnStep() {
 	// Get and check input image
 	IplImage *inputimage=mCore->mDataStructureImageGray.mImage;
 	if (! inputimage) {
-		AddError("No input image.");
+		AddError(wxT("No input image."));
 		return;
 	}
 	if (inputimage->nChannels != 1) {
-		AddError("The input image is not a grayscale image.");
+		AddError(wxT("The input image is not a grayscale image."));
 		return;
 	}
 
 	// Check the background image
 	if (! mBackgroundImage) {
-		AddError("No background image loaded.");
+		AddError(wxT("No background image loaded."));
 		return;
 	}
 	if ((cvGetSize(inputimage).height != cvGetSize(mBackgroundImage).height) || (cvGetSize(inputimage).width != cvGetSize(mBackgroundImage).width)) {
-		AddError("Input and background images don't have the same size.");
+		AddError(wxT("Input and background images don't have the same size."));
 		return;
 	}
 
@@ -105,7 +104,7 @@ void THISCLASS::OnStep() {
 			cvAbsDiff(inputimage, mBackgroundImage, inputimage);
 		}
 	} catch (...) {
-		AddError("Background subtraction failed.");
+		AddError(wxT("Background subtraction failed."));
 	}
 
 	// Set the display

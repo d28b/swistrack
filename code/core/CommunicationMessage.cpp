@@ -1,85 +1,58 @@
 #include "CommunicationMessage.h"
+#include "ConfigurationConversion.h"
 #include <sstream>
 #include <cctype>
 #include <algorithm>
 #define THISCLASS CommunicationMessage
 
 
-THISCLASS::CommunicationMessage(const std::string &cmd, CommunicationMessage *inreplyto):
+THISCLASS::CommunicationMessage(const wxString &cmd, CommunicationMessage *inreplyto):
 		mPopIndex(0), mParameters(), mCommand(cmd), mInReplyTo(inreplyto){
 
 }
 
 bool THISCLASS::GetBool(unsigned int i, bool defvalue) {
 	if (mParameters.size()<=i) {return defvalue;}
-	std::string str=mParameters[i];
-
-	std::string strlc(str);
-	std::transform(strlc.begin(), strlc.end(), strlc.begin(), (int(*)(int))std::tolower);
-	if (strlc=="true") {return true;}
-	if (strlc=="false") {return false;}
-
-	std::istringstream istr(str);
-	bool val=0;
-	istr >> val;
-	return val;
+	return ConfigurationConversion::Bool(mParameters[i], defvalue);
 }
 
 int THISCLASS::GetInt(unsigned int i, int defvalue) {
 	if (mParameters.size()<=i) {return defvalue;}
-	std::string str=mParameters[i];
-
-	std::istringstream istr(str);
-	int val=0;
-	istr >> val;
-	return val;
+	return ConfigurationConversion::Int(mParameters[i], defvalue);
 }
 
 double THISCLASS::GetDouble(unsigned int i, double defvalue) {
 	if (mParameters.size()<=i) {return defvalue;}
-	std::string str=mParameters[i];
-
-	std::istringstream istr(str);
-	double val=0;
-	istr >> val;
-	return val;
+	return ConfigurationConversion::Double(mParameters[i], defvalue);
 }
 
-std::string THISCLASS::GetString(unsigned int i, const std::string &defvalue) {
+wxString THISCLASS::GetString(unsigned int i, const wxString &defvalue) {
 	if (mParameters.size()<=i) {return defvalue;}
 	return mParameters[i];
 }
 
 bool THISCLASS::AddBool(bool value) {
-	if (value) {
-		mParameters.push_back("true");
-	} else {
-		mParameters.push_back("false");
-	}
+	mParameters.push_back(ConfigurationConversion::Bool(value));
 	return true;
 }
 
 bool THISCLASS::AddInt(int value) {
-	std::ostringstream oss;
-	oss << value;
-	mParameters.push_back(oss.str());
+	mParameters.push_back(ConfigurationConversion::Int(value));
 	return true;
 }
 
 bool THISCLASS::AddDouble(double value) {
-	std::ostringstream oss;
-	oss << value;
-	mParameters.push_back(oss.str());
+	mParameters.push_back(ConfigurationConversion::Double(value));
 	return true;
 }
 
-bool THISCLASS::AddString(const std::string &value) {
+bool THISCLASS::AddString(const wxString &value) {
 	mParameters.push_back(value);
 	return true;
 }
 
-bool THISCLASS::AddParsedArgument(const std::string &value) {
-	if (mCommand=="") {
+bool THISCLASS::AddParsedArgument(const wxString &value) {
+	if (mCommand.Len()==0) {
 		mCommand=value;
 	} else {
 		mParameters.push_back(value);

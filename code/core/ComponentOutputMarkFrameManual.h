@@ -21,7 +21,7 @@ public:
 	Component *Create() {return new ComponentOutputMarkFrameManual(mCore);}
 
 private:
-	std::string mMarkerName;
+	wxString mMarkerName;
 };
 
 #endif

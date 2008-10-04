@@ -1,13 +1,12 @@
 #include "ComponentThresholdGray.h"
 #define THISCLASS ComponentThresholdGray
 
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentThresholdGray(SwisTrackCore *stc):
-		Component(stc, "ThresholdGray"),
+		Component(stc, wxT("ThresholdGray")),
 		mOutputImage(0), mThreshold(128), mInvertThreshold(false),
-		mDisplayOutput("Output", "After thresholding") {
+		mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryThresholdingGray);
@@ -27,8 +26,8 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mThreshold=GetConfigurationInt("Threshold", 128);
-	mInvertThreshold=GetConfigurationBool("InvertThreshold", false);
+	mThreshold=GetConfigurationInt(wxT("Threshold"), 128);
+	mInvertThreshold=GetConfigurationBool(wxT("InvertThreshold"), false);
 }
 
 void THISCLASS::OnStep() {
@@ -43,7 +42,7 @@ void THISCLASS::OnStep() {
 			cvThreshold(inputimage, mOutputImage, mThreshold, 255, CV_THRESH_BINARY);
 		mCore->mDataStructureImageBinary.mImage=mOutputImage;
 	} catch (...) {
-		AddError("Thresholding failed.");
+		AddError(wxT("Thresholding failed."));
 	}
 
 	// Set the display

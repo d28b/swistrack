@@ -36,7 +36,7 @@ public:
 	//! Tries to determine the size automatically.
 	bool SetSizeAuto();
 	//! Adds an error message.
-	void AddError(const std::string &message);
+	void AddError(const wxString &message);
 
 	void SetArea(CvPoint2D32f topleft, CvPoint2D32f bottomright) {}
 	void SetArea(double x1, double y1, double x2, double y2) {}

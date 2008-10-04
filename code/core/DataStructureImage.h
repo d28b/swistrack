@@ -2,7 +2,7 @@
 #define HEADER_DataStructureImage
 
 #include "DataStructure.h"
-#include <string>
+#include <wx/string.h>
 #include <cv.h>
 
 //! A DataStructure holding an image.
@@ -12,7 +12,7 @@ public:
 	IplImage* mImage;	//! Image.
 
 	//! Constructor.
-	DataStructureImage(const std::string &name, const std::string &displayname): DataStructure(name), mImage(0) {mDisplayName=displayname;}
+	DataStructureImage(const wxString &name, const wxString &displayname): DataStructure(name), mImage(0) {mDisplayName=displayname;}
 	//! Destructor.
 	~DataStructureImage() {}
 };

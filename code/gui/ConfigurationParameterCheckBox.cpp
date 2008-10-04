@@ -13,7 +13,7 @@ END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterCheckBox(wxWindow* parent):
 		ConfigurationParameter(parent),
-		mValueDefault("") {
+		mValueDefault(wxT("")) {
 
 }
 
@@ -23,10 +23,10 @@ THISCLASS::~ConfigurationParameterCheckBox() {
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
-	mValueDefault=config->ReadBool("default", false);
+	mValueDefault=config->ReadBool(wxT("default"), false);
 
 	// Create the controls
-	mCheckBox=new wxCheckBox(this, wxID_ANY, config->ReadString("label", ""), wxDefaultPosition, wxSize(scParameterWidth, -1));
+	mCheckBox=new wxCheckBox(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scParameterWidth, -1));
 
 	// Layout the controls
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
@@ -36,7 +36,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 
 void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 	if (updateprotection==mCheckBox) {return;}
-	bool value=mComponent->GetConfigurationBool(mName.c_str(), mValueDefault);
+	bool value=mComponent->GetConfigurationBool(mName, mValueDefault);
 	mCheckBox->SetValue(value);
 }
 
@@ -45,13 +45,13 @@ bool THISCLASS::ValidateNewValue() {
 }
 
 bool THISCLASS::CompareNewValue() {
-	bool value=mComponent->GetConfigurationBool(mName.c_str(), mValueDefault);
+	bool value=mComponent->GetConfigurationBool(mName, mValueDefault);
 	return (value==mNewValue);
 }
 
 void THISCLASS::OnSetNewValue() {
 	ComponentEditor ce(mComponent);
-	ce.SetConfigurationBool(mName.c_str(), mNewValue);
+	ce.SetConfigurationBool(mName, mNewValue);
 }
 
 void THISCLASS::OnChecked(wxCommandEvent& event) {

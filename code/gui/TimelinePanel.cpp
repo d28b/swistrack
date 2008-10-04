@@ -33,15 +33,15 @@ THISCLASS::TimelinePanel(wxWindow *parent, SwisTrack *st):
 	SetMinSize(wxSize(20, 20));
 
 	// Create the popup menu
-	mPopupMenu.AppendCheckItem(sID_TriggerAuto10, "Update every 10 seconds");
-	mPopupMenu.AppendCheckItem(sID_TriggerAuto1, "Update every second");
-	mPopupMenu.AppendCheckItem(sID_TriggerManual, "Update manually (double click)");
+	mPopupMenu.AppendCheckItem(sID_TriggerAuto10, wxT("Update every 10 seconds"));
+	mPopupMenu.AppendCheckItem(sID_TriggerAuto1, wxT("Update every second"));
+	mPopupMenu.AppendCheckItem(sID_TriggerManual, wxT("Update manually (double click)"));
 	mPopupMenu.AppendSeparator();
-	mPopupMenu.AppendCheckItem(sID_ViewReset, "Reset view");
-	mPopupMenu.AppendCheckItem(sID_ViewZoomIn, "Zoom in");
-	mPopupMenu.AppendCheckItem(sID_ViewZoomOut, "Zoom out");
+	mPopupMenu.AppendCheckItem(sID_ViewReset, wxT("Reset view"));
+	mPopupMenu.AppendCheckItem(sID_ViewZoomIn, wxT("Zoom in"));
+	mPopupMenu.AppendCheckItem(sID_ViewZoomOut, wxT("Zoom out"));
 	mPopupMenu.AppendSeparator();
-	mPopupMenu.Append(sID_SaveTimeline, "Save timeline as ...");
+	mPopupMenu.Append(sID_SaveTimeline, wxT("Save timeline as ..."));
 
 	// Set non-bold font
 	wxFont f=GetFont();
@@ -66,9 +66,9 @@ void THISCLASS::StartRecording() {
 
 	double stepdistance=mSwisTrack->mSwisTrackCore->mEventRecorder->GetStepDistance();
 	if (stepdistance==0) {
-		mSwisTrack->SetStatusText("", SwisTrack::sStatusField_Timeline);
+		mSwisTrack->SetStatusText(wxT(""), SwisTrack::sStatusField_Timeline);
 	} else {
-		mSwisTrack->SetStatusText(wxString::Format("%0.2f fps (%0.0f ms)", 1/stepdistance, stepdistance*1000), SwisTrack::sStatusField_Timeline);
+		mSwisTrack->SetStatusText(wxString::Format(wxT("%0.2f fps (%0.0f ms)"), 1/stepdistance, stepdistance*1000), SwisTrack::sStatusField_Timeline);
 	}
 }
 
@@ -82,7 +82,7 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 		dc.SetTextForeground(wxColour(0xff, 0xff, 0xff));
 		dc.Clear();
 		dc.SetFont(GetFont());
-		dc.DrawText("No timeline.", 4, 4);
+		dc.DrawText(wxT("No timeline."), 4, 4);
 	}
 }
 
@@ -171,7 +171,7 @@ void THISCLASS::DrawTicks(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timel
 
 		if (ticknumber % 10 == 0) {
 			dc.DrawLine(x, 0, x, 4);
-			wxString label=wxString::Format("%d", (int)(xtime*1000));
+			wxString label=wxString::Format(wxT("%d"), (int)(xtime*1000));
 			int textwidth, textheight;
 			GetTextExtent(label, &textwidth, &textheight) ;
 			textwidth >>= 1;
@@ -366,7 +366,7 @@ void THISCLASS::DrawTimelineOverflow(wxPaintDC &dc, const SwisTrackCoreEventReco
 	dc.SetPen(wxPen(wxColour(255, 0, 0)));
 	dc.SetTextForeground(wxColour(255, 0, 0));
 	dc.DrawLine(x, -1, x, dh);
-	dc.DrawText("Timeline memory exhausted.", x+2, 2);
+	dc.DrawText(wxT("Timeline memory exhausted."), x+2, 2);
 }
 
 void THISCLASS::OnMouseLeftDoubleClick(wxMouseEvent &event) {
@@ -476,14 +476,14 @@ void THISCLASS::OnMenuSaveTimeline(wxCommandEvent& event) {
 	SwisTrackCoreEventRecorder::Timeline timelinecopy=*timeline;
 
 	// Show the file save dialog
-	wxFileDialog dlg(this, "Save timeline", "", "", "Text (*.txt)|*.txt", wxSAVE, wxDefaultPosition);
+	wxFileDialog dlg(this, wxT("Save timeline"), wxT(""), wxT(""), wxT("Text (*.txt)|*.txt"), wxSAVE, wxDefaultPosition);
 	if (dlg.ShowModal() != wxID_OK) {return;}
 
 	// Save the timeline
 	wxString filename=dlg.GetPath();
-	std::ofstream ofs(filename.c_str());
+	std::ofstream ofs(filename.mb_str(wxConvFile));
 	if(! ofs.is_open()) {
-		wxMessageDialog dlg(this, "The file could not be saved!", "Save timeline", wxOK);
+		wxMessageDialog dlg(this, wxT("The file could not be saved!"), wxT("Save timeline"), wxOK);
 		dlg.ShowModal();
 		return;
 	}
@@ -494,15 +494,15 @@ void THISCLASS::OnMenuSaveTimeline(wxCommandEvent& event) {
 		double time=mSwisTrack->mSwisTrackCore->mEventRecorder->CalculateDuration(&(timelinecopy.mBegin), &(*it));
 		ofs << time;
 
-		std::string type=mSwisTrack->mSwisTrackCore->mEventRecorder->mTypeNames[it->mType];
-		if (type=="") {
-			ofs << "\t" << "(unknown)";
+		wxString type=mSwisTrack->mSwisTrackCore->mEventRecorder->mTypeNames[it->mType];
+		if (type==wxT("")) {
+			ofs << wxT("\t") << wxT("(unknown)");
 		} else {
-			ofs << "\t" << type;
+			ofs << wxT("\t") << type;
 		}
 
 		if (it->mComponent) {
-			ofs << "\t" << it->mComponent->mName;
+			ofs << wxT("\t") << it->mComponent->mName;
 		}
 
 		ofs << std::endl;

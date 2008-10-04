@@ -28,31 +28,31 @@ THISCLASS::~ConfigurationParameterPointDouble() {
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
-	config->SelectChildNode("min");
-	mValueMinX=config->ReadDouble("x", -DBL_MAX);
-	mValueMinY=config->ReadDouble("y", -DBL_MAX);
+	config->SelectChildNode(wxT("min"));
+	mValueMinX=config->ReadDouble(wxT("x"), -DBL_MAX);
+	mValueMinY=config->ReadDouble(wxT("y"), -DBL_MAX);
 	config->SelectRootNode();
-	config->SelectChildNode("max");
-	mValueMaxX=config->ReadDouble("x", DBL_MAX);
-	mValueMaxY=config->ReadDouble("y", DBL_MAX);
+	config->SelectChildNode(wxT("max"));
+	mValueMaxX=config->ReadDouble(wxT("x"), DBL_MAX);
+	mValueMaxY=config->ReadDouble(wxT("y"), DBL_MAX);
 	config->SelectRootNode();
-	config->SelectChildNode("default");
-	mValueDefaultX=config->ReadDouble("x", 0);
-	mValueDefaultY=config->ReadDouble("y", 0);
+	config->SelectChildNode(wxT("default"));
+	mValueDefaultX=config->ReadDouble(wxT("x"), 0);
+	mValueDefaultY=config->ReadDouble(wxT("y"), 0);
 
 	// Create the controls
 	config->SelectRootNode();
-	wxStaticText *label=new wxStaticText(this, wxID_ANY, config->ReadString("label", ""), wxDefaultPosition, wxSize(scParameterWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *dummyx=new wxStaticText(this, wxID_ANY, "", wxDefaultPosition, wxSize(scIndentWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *dummyy=new wxStaticText(this, wxID_ANY, "", wxDefaultPosition, wxSize(scIndentWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *labelx=new wxStaticText(this, wxID_ANY, config->ReadString("labelx", "X"), wxDefaultPosition, wxSize(scLabelWidth-scIndentWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *labely=new wxStaticText(this, wxID_ANY, config->ReadString("labely", "Y"), wxDefaultPosition, wxSize(scLabelWidth-scIndentWidth, -1), wxST_NO_AUTORESIZE);
-	mTextCtrlX=new wxTextCtrl(this, sID_X, "", wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
+	wxStaticText *label=new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scParameterWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText *dummyx=new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scIndentWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText *dummyy=new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scIndentWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText *labelx=new wxStaticText(this, wxID_ANY, config->ReadString(wxT("labelx"), wxT("X")), wxDefaultPosition, wxSize(scLabelWidth-scIndentWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText *labely=new wxStaticText(this, wxID_ANY, config->ReadString(wxT("labely"), wxT("Y")), wxDefaultPosition, wxSize(scLabelWidth-scIndentWidth, -1), wxST_NO_AUTORESIZE);
+	mTextCtrlX=new wxTextCtrl(this, sID_X, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
 	mTextCtrlX->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
-	mTextCtrlY=new wxTextCtrl(this, sID_Y, "", wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
+	mTextCtrlY=new wxTextCtrl(this, sID_Y, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER);
 	mTextCtrlY->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
-	wxStaticText *unitx=new wxStaticText(this, wxID_ANY, " "+config->ReadString("unitx", ""), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *unity=new wxStaticText(this, wxID_ANY, " "+config->ReadString("unity", ""), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText *unitx=new wxStaticText(this, wxID_ANY, wxT(" ")+config->ReadString(wxT("unitx"), wxT("")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText *unity=new wxStaticText(this, wxID_ANY, wxT(" ")+config->ReadString(wxT("unity"), wxT("")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
 
 	// Layout the controls
 	wxBoxSizer *hsx=new wxBoxSizer(wxHORIZONTAL);
@@ -74,10 +74,10 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 }
 
 void THISCLASS::OnUpdate(wxWindow *updateprotection) {
-	double valuex=mComponent->GetConfigurationDouble((mName+".x").c_str(), mValueDefaultX);
-	double valuey=mComponent->GetConfigurationDouble((mName+".y").c_str(), mValueDefaultY);
-	if (updateprotection!=mTextCtrlX) {mTextCtrlX->SetValue(wxString::Format("%f", valuex));}
-	if (updateprotection!=mTextCtrlY) {mTextCtrlY->SetValue(wxString::Format("%f", valuey));}
+	double valuex=mComponent->GetConfigurationDouble(mName+wxT(".x"), mValueDefaultX);
+	double valuey=mComponent->GetConfigurationDouble(mName+wxT(".y"), mValueDefaultY);
+	if (updateprotection!=mTextCtrlX) {mTextCtrlX->SetValue(wxString::Format(wxT("%f"), valuex));}
+	if (updateprotection!=mTextCtrlY) {mTextCtrlY->SetValue(wxString::Format(wxT("%f"), valuey));}
 }
 
 bool THISCLASS::ValidateNewValueX() {
@@ -101,15 +101,15 @@ bool THISCLASS::ValidateNewValueY() {
 }
 
 bool THISCLASS::CompareNewValue() {
-	double valuex=mComponent->GetConfigurationDouble((mName+".x").c_str(), mValueDefaultX);
-	double valuey=mComponent->GetConfigurationDouble((mName+".y").c_str(), mValueDefaultY);
+	double valuex=mComponent->GetConfigurationDouble(mName+wxT(".x"), mValueDefaultX);
+	double valuey=mComponent->GetConfigurationDouble(mName+wxT(".y"), mValueDefaultY);
 	return ((valuex==mNewValueX) && (valuey==mNewValueY));
 }
 
 void THISCLASS::OnSetNewValue() {
 	ComponentEditor ce(mComponent);
-	ce.SetConfigurationDouble((mName+".x").c_str(), mNewValueX);
-	ce.SetConfigurationDouble((mName+".y").c_str(), mNewValueY);
+	ce.SetConfigurationDouble(mName+wxT(".x"), mNewValueX);
+	ce.SetConfigurationDouble(mName+wxT(".y"), mNewValueY);
 }
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {

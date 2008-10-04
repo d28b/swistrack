@@ -35,7 +35,7 @@ private:
 	typedef std::vector<structOutputFile*> filesVector;
 	void writeData(structOutputFile *outputFile);
 	void writeHeader(structOutputFile *outputFile);	
-	std::string mDirectoryName;			//!< Name of the directory to save
+	wxString mDirectoryName;			//!< Name of the directory to save
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 	filesVector mFilesVector;			//!< Vector containing the FileName	
 };

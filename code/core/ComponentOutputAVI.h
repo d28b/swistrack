@@ -27,7 +27,7 @@ public:
 	Component *Create() {return new ComponentOutputAVI(mCore);}
 
 private:
-	std::string mFileName;			//!< (configuration) File name of the AVI file to write.
+	wxString mFileName;			//!< (configuration) File name of the AVI file to write.
 	double mPlaybackSpeedFPS;		//!< (configuration) Playback speed FPS.
 	int mFrameRate;					//!< (configuration) Record every mFrameRate image.
 	CvSize mMaxImageSize;			//!< (configuration) The maximum image size. (Images are scaled proportionally, with neither side exceeding these values.)
@@ -44,15 +44,15 @@ private:
 class ComponentOutputAVI: public Component {
 
 public:
-	ComponentOutputAVI(SwisTrackCore *stc): Component(stc, "OutputAVI") {Initialize();}
+	ComponentOutputAVI(SwisTrackCore *stc): Component(stc, wxT("OutputAVI")) {Initialize();}
 	~ComponentOutputAVI() {}
 
 	// Overwritten Component methods
-	void OnStart() {AddError("Output to AVI is only supported on Microsoft Windows.");}
-	void OnReloadConfiguration() {AddError("Output to AVI is only supported on Microsoft Windows.");}
-	void OnStep() {AddError("Output to AVI is only supported on Microsoft Windows.");}
+	void OnStart() {AddError(wxT("Output to AVI is only supported on Microsoft Windows."));}
+	void OnReloadConfiguration() {AddError(wxT("Output to AVI is only supported on Microsoft Windows."));}
+	void OnStep() {AddError(wxT("Output to AVI is only supported on Microsoft Windows."));}
 	void OnStepCleanup() {}
-	void OnStop() {AddError("Output to AVI is only supported on Microsoft Windows.");}
+	void OnStop() {AddError(wxT("Output to AVI is only supported on Microsoft Windows."));}
 	Component *Create() {return new ComponentOutputAVI(mCore);}
 };
 

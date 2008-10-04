@@ -2,13 +2,12 @@
 #define THISCLASS ComponentInputCamera1394
 
 #ifdef USE_CAMERA_CMU_1394
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentInputCamera1394(SwisTrackCore *stc):
-		Component(stc, "InputCamera1394"),
+		Component(stc, wxT("InputCamera1394")),
 		mCamera(), mOutputImage(0), mFrameNumber(0),
-		mDisplayOutput("Output", "1394 Camera: Input Frame") {
+		mDisplayOutput(wxT("Output"), wxT("1394 Camera: Input Frame")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryInput);
@@ -24,37 +23,37 @@ THISCLASS::~ComponentInputCamera1394() {
 
 void THISCLASS::OnStart() {
 	if (mCamera.CheckLink() != CAM_SUCCESS) {
-		AddError("Cannot access 1394 Camera. Make sure the CMU driver is installed.");
+		AddError(wxT("Cannot access 1394 Camera. Make sure the CMU driver is installed."));
 		return;
 	}
 	int num_cameras = mCamera.GetNumberCameras();
 	if (mCamera.GetNumberCameras() == 0) {
-		AddError("No camera detected");		
+		AddError(wxT("No camera detected"));		
 		return;
 	}
-	if (mCamera.SelectCamera(GetConfigurationInt("CameraNumber",0) != CAM_SUCCESS)) {
-		AddError("The specified camera is not available");
+	if (mCamera.SelectCamera(GetConfigurationInt(wxT("CameraNumber"),0) != CAM_SUCCESS)) {
+		AddError(wxT("The specified camera is not available"));
 		return;
 	}
 	if (mCamera.InitCamera()!= CAM_SUCCESS) {
-		AddError("The specified camera cannot be initialized");
+		AddError(wxT("The specified camera cannot be initialized"));
 		return;
 	}
-	if (mCamera.SetVideoFormat(GetConfigurationInt("VideoFormat", 0))!= CAM_SUCCESS) {
-		AddError("The specified format is not available");
+	if (mCamera.SetVideoFormat(GetConfigurationInt(wxT("VideoFormat"), 0))!= CAM_SUCCESS) {
+		AddError(wxT("The specified format is not available"));
 		return;
 	}
-	if (mCamera.SetVideoMode(GetConfigurationInt("VideoMode", 5))!= CAM_SUCCESS) {
-		AddError("The specified mode is not available");
+	if (mCamera.SetVideoMode(GetConfigurationInt(wxT("VideoMode"), 5))!= CAM_SUCCESS) {
+		AddError(wxT("The specified mode is not available"));
 		return;
 	}
-	int toto = GetConfigurationInt("FrameRate", 2);
-	if (mCamera.SetVideoFrameRate(GetConfigurationInt("FrameRate", 4))!=CAM_SUCCESS) {
-		AddError("The specified frame rate is not available");
+	int toto = GetConfigurationInt(wxT("FrameRate"), 2);
+	if (mCamera.SetVideoFrameRate(GetConfigurationInt(wxT("FrameRate"), 4))!=CAM_SUCCESS) {
+		AddError(wxT("The specified frame rate is not available"));
 		return;
 	}
 	if (mCamera.StartImageAcquisition() != 0) {
-		AddError("Could not start image acquisition.");
+		AddError(wxT("Could not start image acquisition."));
 		return;
 	}
 
@@ -102,7 +101,7 @@ void THISCLASS::OnStart() {
 	} else if (dataDepth == 2) {
 		mOutputImage = cvCreateImage(cvSize((int)imageWidth, (int)imageHeight), IPL_DEPTH_16U, nbChannels);
 	} else {
-		AddError("Illegal depth");
+		AddError(wxT("Illegal depth"));
 		return;
 	}
 	if (nbChannels==3) {
@@ -112,9 +111,9 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	if (GetConfigurationBool("ConfigurationWindow", false)) {
+	if (GetConfigurationBool(wxT("ConfigurationWindow"), false)) {
 		CameraControlDialog(NULL,&mCamera,true);
-		mConfiguration["ConfigurationWindow"]="false";  // reset value to false
+		mConfiguration[wxT("ConfigurationWindow")]=wxT("false");  // reset value to false
 	}
 }
 
@@ -126,10 +125,10 @@ void THISCLASS::OnStep() {
 	case CAM_SUCCESS:
 		break;
 	case CAM_ERROR_NOT_INITIALIZED:
-		AddError("Camera not initialized.");
+		AddError(wxT("Camera not initialized."));
 		return;
 	default:
-		AddError("Camera acquisition error.");
+		AddError(wxT("Camera acquisition error."));
 		return;
 	}
 
@@ -163,7 +162,7 @@ void THISCLASS::OnStepCleanup() {
 
 void THISCLASS::OnStop() {
 	if (mCamera.StopImageAcquisition() != 0) {
-		AddError("Could not stop image acquisition.");
+		AddError(wxT("Could not stop image acquisition."));
 		return;
 	}
 	if (mOutputImage) {cvReleaseImage(&mOutputImage);}

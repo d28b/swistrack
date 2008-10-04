@@ -30,12 +30,12 @@ public:
 	//! A list of SwisTrackCoreInterface objects.
 	typedef std::list<SwisTrackCoreInterface*> tSwisTrackCoreInterfaceList;
 	//! A map of ComponentCategory objects.
-	typedef std::map<std::string, ComponentCategory> tComponentCategoryMap;
+	typedef std::map<wxString, ComponentCategory> tComponentCategoryMap;
 
 	tComponentList mAvailableComponents;					//!< The list of all available components.
 	tDataStructureList mDataStructures;						//!< The list of all available data structures.
 	tSwisTrackCoreInterfaceList mSwisTrackCoreInterfaces;	//!< The list of SwisTrackCoreInterface objects.
-	std::string mComponentConfigurationFolder;				//!< The path to the component configuration files, including the trailing slash.
+	wxString mComponentConfigurationFolder;				//!< The path to the component configuration files, including the trailing slash.
 	tComponentCategoryMap mComponentCategories;				//!< The component categories. (not used, TODO: read categories from XML file and put them here, then modify components to read categoryID from their XML file)
 	CommunicationInterface *mCommunicationInterface;		//!< The associated communication interface.
 	SwisTrackCoreTrigger *mTrigger;							//!< The associated trigger.
@@ -64,7 +64,7 @@ public:
 	DataStructureTracks mDataStructureTracks;
 
 	//! Constructor.
-	SwisTrackCore(std::string componentconfigurationfolder);
+	SwisTrackCore(wxString componentconfigurationfolder);
 	//! Destructor.
 	~SwisTrackCore();
 
@@ -88,7 +88,7 @@ public:
 	//! Returns the list of deployed components. Note that this list can only be read. To modify the list, you need to use a SwisTrackCoreEditor object.
 	const SwisTrackCore::tComponentList *GetDeployedComponents() {return &mDeployedComponents;}
 	//! Returns a component by name.
-	Component *GetComponentByName(const std::string &name);
+	Component *GetComponentByName(const wxString &name);
 
 	//! Returns whether the components have been started.
 	bool IsStarted() {return mStarted;}

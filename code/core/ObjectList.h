@@ -1,7 +1,7 @@
 #ifndef HEADER_ObjectList
 #define HEADER_ObjectList
 
-#include <string>
+#include <wx/string.h>
 #include <list>
 #include "ConfigurationXML.h"
 
@@ -24,18 +24,18 @@ public:
 	typedef std::list<Object> tObjectList;
 
 	tObjectList mObjects;		//!< The objects.
-	std::string mError;			//!< The first error that occured.
+	wxString mError;			//!< The first error that occured.
 
 	//! Constructor.
-	ObjectList(const std::string &filename);
+	ObjectList(const wxString &filename);
 	//! Destructor.
 	~ObjectList();
 
 	//! Returns the file name of the current simulation.
-	std::string GetFileName() {return mFileName;}
+	wxString GetFileName() {return mFileName;}
 
 private:
-	std::string mFileName;		//!< The name of the currently open file.
+	wxString mFileName;		//!< The name of the currently open file.
 
 	//! Reads one object from the file.
 	void ReadObject(wxXmlNode *node);

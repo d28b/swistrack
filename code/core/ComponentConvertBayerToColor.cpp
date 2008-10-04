@@ -1,13 +1,12 @@
 #include "ComponentConvertBayerToColor.h"
 #define THISCLASS ComponentConvertBayerToColor
 
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentConvertBayerToColor(SwisTrackCore *stc):
-		Component(stc, "ConvertBayerToColor"),
+		Component(stc, wxT("ConvertBayerToColor")),
 		mBayerType(0), mOutputImage(0),
-		mDisplayOutput("Output", "After conversion from Bayer to BGR") {
+		mDisplayOutput(wxT("Output"), wxT("After conversion from Bayer to BGR")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryInputConversion);
@@ -29,7 +28,7 @@ void THISCLASS::OnStart()
 
 void THISCLASS::OnReloadConfiguration() 
 {
-	mBayerType=GetConfigurationInt("BayerType",0);
+	mBayerType=GetConfigurationInt(wxT("BayerType"),0);
 
 }
 
@@ -41,7 +40,7 @@ void THISCLASS::OnStep()
 		mOutputImage=cvCreateImage(cvSize(inputimage->width,inputimage->height),inputimage->depth,3);
 	if (inputimage->nChannels!=1)
 	{
-		AddError("This function require a Gray input Image");
+		AddError(wxT("This function require a Gray input Image"));
 	}
 	
 	try {
@@ -60,11 +59,11 @@ void THISCLASS::OnStep()
 			cvCvtColor(inputimage,mOutputImage,CV_BayerGR2BGR);
 			break;
 		default :
-			AddError("Invalid Bayer Pattern Type");
+			AddError(wxT("Invalid Bayer Pattern Type"));
 			return;
 		}
 	} catch(...) {
-		AddError("Conversion from Bayer to BGR failed.");
+		AddError(wxT("Conversion from Bayer to BGR failed."));
 	}
 	mCore->mDataStructureImageColor.mImage=mOutputImage;
 

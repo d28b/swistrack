@@ -2,13 +2,12 @@
 #define THISCLASS ComponentAdaptiveBackgroundSubtractionColor
 
 #include <highgui.h>
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentAdaptiveBackgroundSubtractionColor(SwisTrackCore *stc):
-		Component(stc, "AdaptiveBackgroundSubtractionColor"),
+		Component(stc, wxT("AdaptiveBackgroundSubtractionColor")),
 		mBackgroundImageMean(cvScalarAll(0)), mCorrectMean(true), mUpdateProportion(0), mMode(sMode_AbsDiff),
-		mDisplayOutput("Output", "After background subtraction") {
+		mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryPreprocessingColor);
@@ -32,24 +31,24 @@ void THISCLASS::OnStart() {
 
 void THISCLASS::OnReloadConfiguration() {
 	// Whether to correct the mean or not
-	mCorrectMean=GetConfigurationBool("CorrectMean", true);
-	mUpdateProportion=GetConfigurationDouble("UpdateProportion", 0.1);
+	mCorrectMean=GetConfigurationBool(wxT("CorrectMean"), true);
+	mUpdateProportion=GetConfigurationDouble(wxT("UpdateProportion"), 0.1);
 
 	// Mode
-	std::string modestr=GetConfigurationString("Mode", "AbsDiff");
-	if (modestr=="SubImageBackground") {
+	wxString modestr=GetConfigurationString(wxT("Mode"), wxT("AbsDiff"));
+	if (modestr==wxT("SubImageBackground")) {
 		mMode=sMode_SubImageBackground;
-	} else if (modestr=="SubBackgroundImage") {
+	} else if (modestr==wxT("SubBackgroundImage")) {
 		mMode=sMode_SubBackgroundImage;
 	} else {
 		mMode=sMode_AbsDiff;
 	}
 
 	// Whether to take the next image as background image
-	if (GetConfigurationBool("ResetBackgroundImage", false)) {
+	if (GetConfigurationBool(wxT("ResetBackgroundImage"), false)) {
 		cvReleaseImage(&mBackgroundImage);
 		mBackgroundImage=NULL;
-		mConfiguration["ResetBackgroundImage"]="false";
+		mConfiguration[wxT("ResetBackgroundImage")]=wxT("false");
 	}
 }
 
@@ -57,11 +56,11 @@ void THISCLASS::OnStep() {
 	// Get and check input image
 	IplImage *inputimage=mCore->mDataStructureImageColor.mImage;
 	if (! inputimage) {
-		AddError("No input image.");
+		AddError(wxT("No input image."));
 		return;
 	}
 	if (inputimage->nChannels != 3) {
-		AddError("The input image is not a color image.");
+		AddError(wxT("The input image is not a color image."));
 		return;
 	}
 
@@ -70,7 +69,7 @@ void THISCLASS::OnStep() {
 		mBackgroundImage=cvCloneImage(inputimage);
 	} else if (mUpdateProportion>0) {
 		if ((cvGetSize(inputimage).height != cvGetSize(mBackgroundImage).height) || (cvGetSize(inputimage).width != cvGetSize(mBackgroundImage).width)) {
-			AddError("Input and background images do not have the same size.");
+			AddError(wxT("Input and background images do not have the same size."));
 			return;
 		}
 
@@ -94,7 +93,7 @@ void THISCLASS::OnStep() {
 			cvAbsDiff(inputimage, mBackgroundImage, inputimage);
 		}
 	} catch (...) {
-		AddError("Background subtraction failed.");
+		AddError(wxT("Background subtraction failed."));
 	}
 
 	// Set the display

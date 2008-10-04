@@ -14,12 +14,12 @@ THISCLASS::ErrorListDialog(wxWindow *parent, ErrorList *el, const wxString &titl
 	// Create list control
 	mList=new wxListCtrl(this, wxID_ANY);
 	mList->SetWindowStyle(wxLC_REPORT|wxLC_HRULES|wxLC_SINGLE_SEL);
-	mList->InsertColumn(0, "Line", wxLIST_FORMAT_RIGHT, 50);
-	mList->InsertColumn(1, "Error message", wxLIST_FORMAT_LEFT, 400);
+	mList->InsertColumn(0, wxT("Line"), wxLIST_FORMAT_RIGHT, 50);
+	mList->InsertColumn(1, wxT("Error message"), wxLIST_FORMAT_LEFT, 400);
 
 	// Create other controls
 	mLabel=new wxStaticText(this, wxID_ANY, text);
-	mButtonOK=new wxButton(this, eID_ButtonOK, "OK");
+	mButtonOK=new wxButton(this, eID_ButtonOK, wxT("OK"));
 
 	// Layout the components in the panel
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
@@ -50,16 +50,16 @@ void THISCLASS::OnUpdate() {
 		li.SetId(row);
 		li.SetColumn(0);
 		if (it->mLineNumber > 0) {
-			li.SetText(wxString::Format("%d", it->mLineNumber));
+			li.SetText(wxString::Format(wxT("%d"), it->mLineNumber));
 		} else {
-			li.SetText("");
+			li.SetText(wxT(""));
 		}
 		li.SetTextColour(*wxBLACK);
 		mList->InsertItem(li);
 
 		// Message
 		li.SetColumn(1);
-		li.SetText(it->mMessage.c_str());
+		li.SetText(it->mMessage);
 		mList->SetItem(li);
 
 		// Next item

@@ -1,18 +1,17 @@
 #include "ComponentIDReaderRing.h"
 #define THISCLASS ComponentIDReaderRing
 
-#include <sstream>
 #include <fstream>
 #include <cmath>
 #define PI (3.14159265358979)
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentIDReaderRing(SwisTrackCore *stc):
-		Component(stc, "IDReaderRing"),
+		Component(stc, wxT("IDReaderRing")),
 		mRingRadiusInner(3), mRingRadiusOuter(5), mObjectList(0),
 		mRingValuesMax(0), mRingCount(0), mRingAngles(0), mRingValues(0),
 		mCodeLength(0), mBinValues(0), mBinCounts(0),
-		mDisplayOutput("Output", "Particles") {
+		mDisplayOutput(wxT("Output"), wxT("Particles")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryParticleDetection);
@@ -30,9 +29,9 @@ THISCLASS::~ComponentIDReaderRing() {
 
 void THISCLASS::OnStart() {
 	// Read the object list
-	wxString filename=GetConfigurationString("ObjectListFileName", "");
-	mObjectList=new ObjectList(filename.c_str());
-	if (mObjectList->mError!="") {
+	wxString filename=GetConfigurationString(wxT("ObjectListFileName"), wxT(""));
+	mObjectList=new ObjectList(filename);
+	if (mObjectList->mError!=wxT("")) {
 		AddError(mObjectList->mError);
 		return;
 	}
@@ -44,7 +43,7 @@ void THISCLASS::OnStart() {
 		int thiscodelength=ito->chips.size();
 		if (mCodeLength==-1) {mCodeLength=thiscodelength;}
 		if (mCodeLength!=thiscodelength) {
-			AddError("All codes must have the same length (same number of chips).");
+			AddError(wxT("All codes must have the same length (same number of chips)."));
 			return;
 		}
 		ito++;
@@ -52,7 +51,7 @@ void THISCLASS::OnStart() {
 
 	// And check if there are any codes longer than 0
 	if (mCodeLength<1) {
-		AddError("No codes defined.");
+		AddError(wxT("No codes defined."));
 		return;
 	}
 
@@ -66,14 +65,14 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mRingRadiusInner=GetConfigurationDouble("RingRadiusInner", 6);
-	mRingRadiusOuter=GetConfigurationDouble("RingRadiusOuter", 12);
+	mRingRadiusInner=GetConfigurationDouble(wxT("RingRadiusInner"), 6);
+	mRingRadiusOuter=GetConfigurationDouble(wxT("RingRadiusOuter"), 12);
 	mRingRadiusInner2=mRingRadiusInner*mRingRadiusInner;
 	mRingRadiusOuter2=mRingRadiusOuter*mRingRadiusOuter;
 
 	// Check for stupid configurations
 	if (mRingRadiusInner>mRingRadiusOuter) {
-		AddError("The inner radius must be smaller than the outer radius.");
+		AddError(wxT("The inner radius must be smaller than the outer radius."));
 	}
 
 	// Allocate enough space

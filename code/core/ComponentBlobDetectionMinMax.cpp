@@ -1,14 +1,13 @@
 #include "ComponentBlobDetectionMinMax.h"
 #define THISCLASS ComponentBlobDetectionMinMax
 
-#include <sstream>
 #include "DisplayEditor.h"
 #define PI 3.14159265358979
 
 THISCLASS::ComponentBlobDetectionMinMax(SwisTrackCore *stc):
-		Component(stc, "BlobDetectionMinMax"),
+		Component(stc, wxT("BlobDetectionMinMax")),
 		mMinArea(0), mMaxArea(1000000), mMaxNumber(10), mParticles(),
-		mDisplayOutput("Output", "Particles") {
+		mDisplayOutput(wxT("Output"), wxT("Particles")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryParticleDetection);
@@ -29,23 +28,23 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mMinArea=GetConfigurationInt("MinArea", 1);
-	mMaxArea=GetConfigurationInt("MaxArea", 1000);
-	mMaxNumber=GetConfigurationInt("MaxNumber", 10);
-	mAreaSelection=GetConfigurationBool("AreaBool",false);
-	mMinCompactness=GetConfigurationDouble("MinCompactness", 1);
-	mMaxCompactness=GetConfigurationDouble("MaxCompactness", 1000);
-	mCompactnessSelection=GetConfigurationBool("CompactnessBool",false);
-	mMinOrientation=GetConfigurationDouble("MinOrientation", -90);
-	mMaxOrientation=GetConfigurationDouble("MaxOrientation", 90);
-	mOrientationSelection=GetConfigurationBool("OrientationBool",false);
+	mMinArea=GetConfigurationInt(wxT("MinArea"), 1);
+	mMaxArea=GetConfigurationInt(wxT("MaxArea"), 1000);
+	mMaxNumber=GetConfigurationInt(wxT("MaxNumber"), 10);
+	mAreaSelection=GetConfigurationBool(wxT("AreaBool"),false);
+	mMinCompactness=GetConfigurationDouble(wxT("MinCompactness"), 1);
+	mMaxCompactness=GetConfigurationDouble(wxT("MaxCompactness"), 1000);
+	mCompactnessSelection=GetConfigurationBool(wxT("CompactnessBool"),false);
+	mMinOrientation=GetConfigurationDouble(wxT("MinOrientation"), -90);
+	mMaxOrientation=GetConfigurationDouble(wxT("MaxOrientation"), 90);
+	mOrientationSelection=GetConfigurationBool(wxT("OrientationBool"),false);
 	// Check for stupid configurations
 	if (mMaxNumber<1) {
-		AddError("Max number of particles must be greater or equal to 1");
+		AddError(wxT("Max number of particles must be greater or equal to 1"));
 	}
 
 	if (mMinArea>mMaxArea) {
-		AddError("The min area must be smaller than the max area.");
+		AddError(wxT("The min area must be smaller than the max area."));
 	}
 }
 
@@ -56,11 +55,11 @@ void THISCLASS::OnStep() {
 	IplImage *inputimage = cvCloneImage(mCore->mDataStructureImageBinary.mImage);
 	IplImage *outputImage = mCore->mDataStructureImageBinary.mImage;
 	if (! inputimage) {
-		AddError("No input image.");
+		AddError(wxT("No input image."));
 		return;
 	}
 	if (inputimage->nChannels != 1) {
-		AddError("The input image is not a grayscale image.");
+		AddError(wxT("The input image is not a grayscale image."));
 		return;
 	}
 	cvZero(outputImage);

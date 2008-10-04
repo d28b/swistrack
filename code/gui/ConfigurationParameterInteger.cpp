@@ -28,17 +28,17 @@ THISCLASS::~ConfigurationParameterInteger() {
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
-	mValueMin=config->ReadInt("min", INT_MIN);
-	mValueMax=config->ReadInt("max", INT_MAX);
-	mValueDefault=config->ReadInt("default", 0);
+	mValueMin=config->ReadInt(wxT("min"), INT_MIN);
+	mValueMax=config->ReadInt(wxT("max"), INT_MAX);
+	mValueDefault=config->ReadInt(wxT("default"), 0);
 
 	// Create the controls
-	wxStaticText *label=new wxStaticText(this, wxID_ANY, config->ReadString("label", ""), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
-	mSpinCtrl=new wxSpinCtrl(this, wxID_ANY, "", wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER, mValueMin, mValueMax, mValueDefault);
+	wxStaticText *label=new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
+	mSpinCtrl=new wxSpinCtrl(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT|wxTE_PROCESS_ENTER, mValueMin, mValueMax, mValueDefault);
 	mSpinCtrl->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
-	wxStaticText *unitlabel=new wxStaticText(this, wxID_ANY, " "+config->ReadString("unit", ""), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText *unitlabel=new wxStaticText(this, wxID_ANY, wxT(" ")+config->ReadString(wxT("unit"), wxT("")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
 
-	if (config->ReadBool("slider", false)) {
+	if (config->ReadBool(wxT("slider"), false)) {
 		mSlider = new wxSlider(this, wxID_ANY, mValueDefault, mValueMin, mValueMax, wxDefaultPosition, wxSize(scParameterWidth, -1), wxSL_AUTOTICKS);
 	}
 
@@ -55,7 +55,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 }
 
 void THISCLASS::OnUpdate(wxWindow *updateprotection) {
-	int value=mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
+	int value=mComponent->GetConfigurationInt(mName, mValueDefault);
 	if (updateprotection!=mSpinCtrl) {mSpinCtrl->SetValue(value);}
 	if ((mSlider) && (updateprotection!=mSlider)) {mSlider->SetValue(value);}
 }
@@ -71,13 +71,13 @@ bool THISCLASS::ValidateNewValue() {
 }
 
 bool THISCLASS::CompareNewValue() {
-	int value=mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
+	int value=mComponent->GetConfigurationInt(mName, mValueDefault);
 	return (value==mNewValue);
 }
 
 void THISCLASS::OnSetNewValue() {
 	ComponentEditor ce(mComponent);
-	ce.SetConfigurationInt(mName.c_str(), mNewValue);
+	ce.SetConfigurationInt(mName, mNewValue);
 }
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {

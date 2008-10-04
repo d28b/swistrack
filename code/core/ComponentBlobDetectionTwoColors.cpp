@@ -1,17 +1,16 @@
 #include "ComponentBlobDetectionTwoColors.h"
 #define THISCLASS ComponentBlobDetectionTwoColors
 
-#include <sstream>
 #include "DisplayEditor.h"
 #define PI 3.14159265358979
 
 THISCLASS::ComponentBlobDetectionTwoColors(SwisTrackCore *stc):
-		Component(stc, "BlobDetectionTwoColors"),
+		Component(stc, wxT("BlobDetectionTwoColors")),
 		mMaxNumberOfParticles(10), mMaxDistance(10),
-		mColor1(0x0000ff, "Color1", "After subtraction of color 1", "Binary1", "After subtraction of color 1 and thresholding"),
-		mColor2(0xff0000, "Color2", "After subtraction of color 2", "Binary2", "After subtraction of color 2 and thresholding"),
+		mColor1(0x0000ff, wxT("Color1"), wxT("After subtraction of color 1"), wxT("Binary1"), wxT("After subtraction of color 1 and thresholding")),
+		mColor2(0xff0000, wxT("Color2"), wxT("After subtraction of color 2"), wxT("Binary2"), wxT("After subtraction of color 2 and thresholding")),
 		mParticles(),
-		mDisplayOutput("Output", "Particles") {
+		mDisplayOutput(wxT("Output"), wxT("Particles")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryParticleDetection);
@@ -36,52 +35,52 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mMaxNumberOfParticles = GetConfigurationInt("mMaxNumberOfParticles", 10);
-	mMaxDistance = GetConfigurationDouble("MaxDistance", 10.);
-	mColor1.mColor = GetConfigurationInt("Color1_Color", 0xff);
-	mColor1.mThresholdB = GetConfigurationInt("Color1_ThresholdB", 32);
-	mColor1.mThresholdG = GetConfigurationInt("Color1_ThresholdG", 32);
-	mColor1.mThresholdR = GetConfigurationInt("Color1_ThresholdR", 32);
-	mColor1.mSelectionByArea = GetConfigurationBool("Color1_SelectionByArea", false);
-	mColor1.mAreaMin = GetConfigurationInt("Color1_AreaMin", 1);
-	mColor1.mAreaMax = GetConfigurationInt("Color1_AreaMax", 1000);
-	mColor1.mSelectionByCompactness = GetConfigurationBool("Color1_SelectionByCompactness", false);
-	mColor1.mCompactnessMin = GetConfigurationDouble("Color1_CompactnessMin", 1.);
-	mColor1.mCompactnessMax = GetConfigurationDouble("Color1_CompactnessMax", 1000.);
-	mColor2.mColor = GetConfigurationInt("Color2_Color", 0xff0000);
-	mColor2.mThresholdB = GetConfigurationInt("Color2_ThresholdB", 32);
-	mColor2.mThresholdG = GetConfigurationInt("Color2_ThresholdG", 32);
-	mColor2.mThresholdR = GetConfigurationInt("Color2_ThresholdR", 32);
-	mColor2.mSelectionByArea = GetConfigurationBool("Color2_SelectionByArea", false);
-	mColor2.mAreaMin = GetConfigurationInt("Color2_AreaMin", 1);
-	mColor2.mAreaMax = GetConfigurationInt("Color2_AreaMax", 1000);
-	mColor2.mSelectionByCompactness = GetConfigurationBool("Color2_SelectionByCompactness", false);
-	mColor2.mCompactnessMin = GetConfigurationDouble("Color2_CompactnessMin", 1.);
-	mColor2.mCompactnessMax = GetConfigurationDouble("Color2_CompactnessMax", 1000.);
+	mMaxNumberOfParticles = GetConfigurationInt(wxT("mMaxNumberOfParticles"), 10);
+	mMaxDistance = GetConfigurationDouble(wxT("MaxDistance"), 10.);
+	mColor1.mColor = GetConfigurationInt(wxT("Color1_Color"), 0xff);
+	mColor1.mThresholdB = GetConfigurationInt(wxT("Color1_ThresholdB"), 32);
+	mColor1.mThresholdG = GetConfigurationInt(wxT("Color1_ThresholdG"), 32);
+	mColor1.mThresholdR = GetConfigurationInt(wxT("Color1_ThresholdR"), 32);
+	mColor1.mSelectionByArea = GetConfigurationBool(wxT("Color1_SelectionByArea"), false);
+	mColor1.mAreaMin = GetConfigurationInt(wxT("Color1_AreaMin"), 1);
+	mColor1.mAreaMax = GetConfigurationInt(wxT("Color1_AreaMax"), 1000);
+	mColor1.mSelectionByCompactness = GetConfigurationBool(wxT("Color1_SelectionByCompactness"), false);
+	mColor1.mCompactnessMin = GetConfigurationDouble(wxT("Color1_CompactnessMin"), 1.);
+	mColor1.mCompactnessMax = GetConfigurationDouble(wxT("Color1_CompactnessMax"), 1000.);
+	mColor2.mColor = GetConfigurationInt(wxT("Color2_Color"), 0xff0000);
+	mColor2.mThresholdB = GetConfigurationInt(wxT("Color2_ThresholdB"), 32);
+	mColor2.mThresholdG = GetConfigurationInt(wxT("Color2_ThresholdG"), 32);
+	mColor2.mThresholdR = GetConfigurationInt(wxT("Color2_ThresholdR"), 32);
+	mColor2.mSelectionByArea = GetConfigurationBool(wxT("Color2_SelectionByArea"), false);
+	mColor2.mAreaMin = GetConfigurationInt(wxT("Color2_AreaMin"), 1);
+	mColor2.mAreaMax = GetConfigurationInt(wxT("Color2_AreaMax"), 1000);
+	mColor2.mSelectionByCompactness = GetConfigurationBool(wxT("Color2_SelectionByCompactness"), false);
+	mColor2.mCompactnessMin = GetConfigurationDouble(wxT("Color2_CompactnessMin"), 1.);
+	mColor2.mCompactnessMax = GetConfigurationDouble(wxT("Color2_CompactnessMax"), 1000.);
 
 	// Check for stupid configurations
 	if (mMaxNumberOfParticles < 1) {
-		AddError("The maximum number of particles must be greater or equal to 1.");
+		AddError(wxT("The maximum number of particles must be greater or equal to 1."));
 	}
 
 	if (mMaxDistance < 0) {
-		AddError("The maximum distane must be equal to 0.");
+		AddError(wxT("The maximum distane must be equal to 0."));
 	}
 
 	if (mColor1.mAreaMin > mColor1.mAreaMax) {
-		AddError("The minimum area must be smaller than the maximum area.");
+		AddError(wxT("The minimum area must be smaller than the maximum area."));
 	}
 
 	if (mColor2.mAreaMin > mColor2.mAreaMax) {
-		AddError("The minimum area must be smaller than the maximum area.");
+		AddError(wxT("The minimum area must be smaller than the maximum area."));
 	}
 
 	if (mColor1.mCompactnessMin > mColor1.mCompactnessMax) {
-		AddError("The minimum compactness must be small than the maximum compactness.");
+		AddError(wxT("The minimum compactness must be small than the maximum compactness."));
 	}
 
 	if (mColor2.mCompactnessMin > mColor2.mCompactnessMax) {
-		AddError("The minimum compactness must be small than the maximum compactness.");
+		AddError(wxT("The minimum compactness must be small than the maximum compactness."));
 	}
 }
 
@@ -89,15 +88,15 @@ void THISCLASS::OnStep() {
 	// Get and check input image
 	IplImage *inputimage = mCore->mDataStructureImageColor.mImage;
 	if (! inputimage) {
-		AddError("No input image.");
+		AddError(wxT("No input image."));
 		return;
 	}
 	if (inputimage->nChannels != 3) {
-		AddError("The input image is not a color image.");
+		AddError(wxT("The input image is not a color image."));
 		return;
 	}
 	if (memcmp(inputimage->channelSeq, "BGR", 3)) {
-		AddWarning("The input image is not a BGR image. The result may be unexpected.");
+		AddWarning(wxT("The input image is not a BGR image. The result may be unexpected."));
 	}
 
 	// Detect the blobs of the two colors

@@ -27,7 +27,7 @@ private:
 	CvVideoWriter* mWriter;				//!< Pointer to AVI sequence.
 	int mFrameRate;						//!< (configuration) The frame rate of the output AVI.
 	int mInputSelection;				//!< (configuration) Selects the input channel.
-	std::string mFilename;				//!< (configuration) Name of the saved AVI.
+	wxString mFilename;				//!< (configuration) Name of the saved AVI.
 	int mFrameBufferCount;				//!< (configuration) Number of frames to buffer before writing to disk.
 	IplImage** mFrameBuffer;			//!< The frame buffer.
 	int mFrameBufferWriteCounter;		//!< The number of frames in the frame buffer.

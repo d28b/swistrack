@@ -3,7 +3,7 @@
 
 class Display;
 
-#include <string>
+#include <wx/string.h>
 #include <list>
 #include <cv.h>
 #include <wx/datetime.h>
@@ -22,15 +22,15 @@ public:
 
 	// Internal display information
 	Component *mComponent;			//!< The associated component
-	std::string mName;				//!< The internal name of this display.
-	std::string mDisplayName;		//!< The name displayed to the user.
+	wxString mName;				//!< The internal name of this display.
+	wxString mDisplayName;		//!< The name displayed to the user.
 	tSubscriberList mSubscribers;	//!< The list of subscribers.
 
 	// General information
 	int mFrameNumber;				//!< The frame number.
 	int mFramesCount;				//!< The number of frames.
 	wxDateTime mTime;				//!< The time when the displayed image was updated.
-	std::string mAnnotation;		//!< Annotation, usually displayed below the image.
+	wxString mAnnotation;		//!< Annotation, usually displayed below the image.
 	ErrorList mErrors;				//!< This holds more information display errors (e.g. wrong image format, ...).
 
 	// Display window
@@ -50,7 +50,7 @@ public:
 	bool mTrajectories;				//!< Whether to draw the trajectories in this image. The current trajectories will be drawn.
 
 	//! Constructor.
-	Display(const std::string &name, const std::string &displayname);
+	Display(const wxString &name, const wxString &displayname);
 	//! Destructor.
 	~Display();
 

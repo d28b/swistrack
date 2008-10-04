@@ -16,7 +16,7 @@ public:
 	tParticleVector *mParticles;	//!< Vector of particles.
 
 	//! Constructor.
-	DataStructureParticles(): DataStructure("Particles", "Particles"), mParticles(0) {}
+	DataStructureParticles(): DataStructure(wxT("Particles"), wxT("Particles")), mParticles(0) {}
 	//! Destructor.
 	~DataStructureParticles() {}
 };

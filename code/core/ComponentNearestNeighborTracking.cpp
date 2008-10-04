@@ -1,13 +1,12 @@
 #include "ComponentNearestNeighborTracking.h"
 #define THISCLASS ComponentNearestNeighborTracking
 
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentNearestNeighborTracking(SwisTrackCore *stc):
-		Component(stc, "NearestNeighborTracking"),
+		Component(stc, wxT("NearestNeighborTracking")),
 		mMaxNumber(10),
-		mDisplayOutput("Output", "Tracking") 
+		mDisplayOutput(wxT("Output"), wxT("Tracking")) 
 {
 	// Data structure relations
 	mCategory=&(mCore->mCategoryTracking);
@@ -26,12 +25,12 @@ THISCLASS::~ComponentNearestNeighborTracking()
 
 void THISCLASS::OnStart() 
 {
-	mMaxNumber=GetConfigurationInt("MaxNumber", 10);
+	mMaxNumber=GetConfigurationInt(wxT("MaxNumber"), 10);
 	maxParticles=10;
 
 	// Check for stupid configurations
 	if (mMaxNumber<1)
-		AddError("Max number of tracks must be greater or equal to 1");
+		AddError(wxT("Max number of tracks must be greater or equal to 1"));
 
 	if(mTracks.size()) mTracks.clear();	// handle reset properly
 	for (int i=0;i<mMaxNumber;i++)		// initiate mMaxNumber Track classes
@@ -48,7 +47,7 @@ void THISCLASS::OnStart()
 
 void THISCLASS::OnReloadConfiguration() 
 {
-	mMaxDistance=GetConfigurationDouble("MaxDistance",10);
+	mMaxDistance=GetConfigurationDouble(wxT("MaxDistance"),10);
 	mMaxDistance*=mMaxDistance;
 }
 
@@ -95,7 +94,7 @@ void THISCLASS::OnStop() {
 void THISCLASS::DataAssociation()
 {	
 	int p=0;
-	//for each input particle, blob selection has already removed any "noise", so there should not be any unwanted particles in the list
+	//for each input particle, blob selection has already removed any wxT("noise"), so there should not be any unwanted particles in the list
 	for(DataStructureParticles::tParticleVector::iterator pIt=particles->begin();pIt != particles->end();pIt++,p++)	
 	{
 		assert(pIt->mID == -1);			// (particle should not be associated)		

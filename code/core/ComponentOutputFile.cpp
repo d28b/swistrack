@@ -1,13 +1,12 @@
 #include "ComponentOutputFile.h"
 #define THISCLASS ComponentOutputFile
 
-#include <sstream>
 #include <fstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentOutputFile(SwisTrackCore *stc):
-		Component(stc, "OutputFile"),		
-		mDisplayOutput("Output", "After tracking") 
+		Component(stc, wxT("OutputFile")),		
+		mDisplayOutput(wxT("Output"), wxT("After tracking")) 
 {
 	// Data structure relations
 	mCategory=&(mCore->mCategoryOutput);
@@ -23,7 +22,7 @@ THISCLASS::~ComponentOutputFile() {
 
 void THISCLASS::OnStart() 
 {
-	mDirectoryName=GetConfigurationString("DirectoryName", "");		
+	mDirectoryName=GetConfigurationString(wxT("DirectoryName"), wxT(""));		
 }
 
 void THISCLASS::OnReloadConfiguration() 
@@ -37,7 +36,7 @@ void THISCLASS::OnStep()
 	mTracks=mCore->mDataStructureTracks.mTracks;	
 	if (! mTracks) 
 	{
-		AddError("No Track");
+		AddError(wxT("No Track"));
 		return;
 	}
 	 
@@ -64,17 +63,13 @@ void THISCLASS::OnStep()
 		{		
 			structOutputFile *newOutputFile = new structOutputFile;
 			newOutputFile->trackID=it->mID;
-			std::string tmpFileName=mDirectoryName;
-			tmpFileName+="track_";			
-			std::stringstream tmpStringStream;
-			tmpStringStream<<it->mID;
-			tmpFileName+=tmpStringStream.str();		
-			tmpFileName+=".txt";
-			(newOutputFile->fileStream).open(tmpFileName.c_str(),std::fstream::out | std::fstream::trunc);
+			wxString tmpFileName=mDirectoryName;
+			tmpFileName+=wxString::Format(wxT("track_%d.txt"), it->mID);			
+			(newOutputFile->fileStream).open(tmpFileName.mb_str(wxConvISO8859_1),std::fstream::out | std::fstream::trunc);
 
 			if (!(newOutputFile->fileStream).is_open())
 			{
-				AddError("Unable to open one of the output file");
+				AddError(wxT("Unable to open one of the output file"));
 				return;
 			}
 			mFilesVector.push_back(newOutputFile);
@@ -132,7 +127,7 @@ void THISCLASS::writeData(structOutputFile *outputFile)
 	DataStructureParticles::tParticleVector *particles=mCore->mDataStructureParticles.mParticles;
 	if (! particles) 
 	{
-		AddError("There are no particles");	
+		AddError(wxT("There are no particles"));	
 		return;
 	}
 		
@@ -161,3 +156,4 @@ void THISCLASS::writeData(structOutputFile *outputFile)
 		it++;
 	}	
 }
+

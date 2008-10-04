@@ -1,16 +1,15 @@
 #include "ComponentInputFileImage.h"
 #define THISCLASS ComponentInputFileImage
 
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentInputFileImage(SwisTrackCore *stc):
-		Component(stc, "InputFileImage"),
+		Component(stc, wxT("InputFileImage")),
 		mOutputImage(0), mFrameNumber(0),
-		mDisplayOutput("Output", "Input image") {
+		mDisplayOutput(wxT("Output"), wxT("Input image")) {
 
 	// Data structure relations
-	mDisplayName="Input from image file";
+	mDisplayName=wxT("Input from image file");
 	mCategory=&(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 	AddDisplay(&mDisplayOutput);
@@ -24,12 +23,12 @@ THISCLASS::~ComponentInputFileImage() {
 
 void THISCLASS::OnStart() {
 	// Load the image
-	std::string filename=GetConfigurationString("File", "");
-	if (filename!="") {
-		mOutputImage=cvLoadImage(filename.c_str(), -1);
+	wxString filename=GetConfigurationString(wxT("File"), wxT(""));
+	if (filename!=wxT("")) {
+		mOutputImage=cvLoadImage(filename.mb_str(wxConvISO8859_1), -1);
 	}
 	if (! mOutputImage) {
-		AddError("Cannot open image file.");
+		AddError(wxT("Cannot open image file."));
 		return;
 	}
 

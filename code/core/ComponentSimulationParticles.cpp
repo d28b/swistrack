@@ -1,14 +1,13 @@
 #include "ComponentSimulationParticles.h"
 #define THISCLASS ComponentSimulationParticles
 
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentSimulationParticles(SwisTrackCore *stc):
-		Component(stc, "SimulationParticles"),
+		Component(stc, wxT("SimulationParticles")),
 		mCameraOrigin(cvPoint2D32f(0, 0)), mCameraRotation(0), mCameraPixelSize(1), mCameraSize(cvSize2D32f(640, 480)),
 		mSimulationParticles(0), mParticles(),
-		mDisplayOutput("Output", "Particle Simulation: Output") {
+		mDisplayOutput(wxT("Output"), wxT("Particle Simulation: Output")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryParticleDetection);
@@ -28,18 +27,14 @@ void THISCLASS::OnStart() {
 	bool production=mCore->IsStartedInProductionMode();
 
 	// Read the file (if the filename changed or if we are in production mode)
-	std::string filename=GetConfigurationString("File", "");
+	wxString filename=GetConfigurationString(wxT("File"), wxT(""));
 	if (production || (mSimulationParticles==0) || (mSimulationParticles->GetFileName()!=filename)) {
 		delete mSimulationParticles;
 		mSimulationParticles=new SimulationParticles(filename);
 		if (! mSimulationParticles->IsOpen()) {
-			std::ostringstream oss;
-			oss << "The file \'" << filename << "\' could not be read.";
-			AddError(oss.str());
+			AddError(wxT("The file \'")+ filename +wxT("\' could not be read."));
 		} else {
-			std::ostringstream oss;
-			oss << "File \'" << mSimulationParticles->GetFileName() << "\' loaded.";
-			AddInfo(oss.str());
+			AddInfo(wxT("File \'") + mSimulationParticles->GetFileName() + wxT("\' loaded."));
 		}
 	}
 
@@ -60,16 +55,16 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mCameraOrigin.x=(float)GetConfigurationDouble("CameraOrigin.x", 0);
-	mCameraOrigin.y=(float)GetConfigurationDouble("CameraOrigin.y", 0);
-	mCameraRotation=(float)GetConfigurationDouble("CameraRotation", 0);
-	mCameraPixelSize=(float)GetConfigurationDouble("CameraPixelSize", 1);
-	mCameraSize.width=(float)GetConfigurationDouble("CameraSize.w", 640);
-	mCameraSize.height=(float)GetConfigurationDouble("CameraSize.h", 480);
+	mCameraOrigin.x=(float)GetConfigurationDouble(wxT("CameraOrigin.x"), 0);
+	mCameraOrigin.y=(float)GetConfigurationDouble(wxT("CameraOrigin.y"), 0);
+	mCameraRotation=(float)GetConfigurationDouble(wxT("CameraRotation"), 0);
+	mCameraPixelSize=(float)GetConfigurationDouble(wxT("CameraPixelSize"), 1);
+	mCameraSize.width=(float)GetConfigurationDouble(wxT("CameraSize.w"), 640);
+	mCameraSize.height=(float)GetConfigurationDouble(wxT("CameraSize.h"), 480);
 
 	// Check for stupid configurations
 	if (mCameraPixelSize<=0) {
-		AddError("The pixel size must be bigger than 0.");
+		AddError(wxT("The pixel size must be bigger than 0."));
 	}
 }
 

@@ -1,14 +1,13 @@
 #include "ComponentInputFileAVI.h"
 #define THISCLASS ComponentInputFileAVI
 
-#include <sstream>
 #include <fstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
-		Component(stc, "InputFileAVI"),
+		Component(stc, wxT("InputFileAVI")),
 		mCapture(0), mOutputImage(0),
-		mDisplayOutput("Output", "AVI File: Unprocessed Frame") {
+		mDisplayOutput(wxT("Output"), wxT("AVI File: Unprocessed Frame")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryInput);
@@ -25,19 +24,19 @@ THISCLASS::~ComponentInputFileAVI() {
 
 void THISCLASS::OnStart() {
 	// Open file
-	std::string filename=GetConfigurationString("File", "");
-	mCapture = cvCaptureFromFile(filename.c_str());
+	wxString filename=GetConfigurationString(wxT("File"), wxT(""));
+	mCapture = cvCaptureFromFile(filename.mb_str(wxConvISO8859_1));
 	
 	// Error? Check whether the file exists or not, to give an appropriate error message to the user
 	if (mCapture == NULL) {
 		std::fstream f;
-		f.open(filename.c_str());
+		f.open(filename.mb_str(wxConvISO8859_1));
 		if (f.is_open()) {
 			f.close();
-			AddError("Cannot open AVI file: codec problem, VFW codec required, not DirectShow.");
+			AddError(wxT("Cannot open AVI file: codec problem, VFW codec required, not DirectShow."));
 			return;
 		} else {
-			AddError("Cannot open AVI file: file not found.");
+			AddError(wxT("Cannot open AVI file: file not found."));
 			return;
 		}
 	}
@@ -57,7 +56,7 @@ void THISCLASS::OnStep() {
 	int framescount=(int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_FRAME_COUNT);
 	mOutputImage=cvQueryFrame(mCapture);
 	if (! mOutputImage) {
-		AddError("Could not read frame from AVI file.");
+		AddError(wxT("Could not read frame from AVI file."));
 		return;
 	}
 

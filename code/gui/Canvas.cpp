@@ -30,18 +30,18 @@ THISCLASS::Canvas(CanvasPanel *cp):
 	SetWindowStyle(wxNO_BORDER);
 
 	// Create the popup menu
-	mPopupMenu.AppendCheckItem(cID_Zoom200, "Zoom: 200 %");
-	mPopupMenu.AppendCheckItem(cID_Zoom100, "Zoom: 100 %");
-	mPopupMenu.AppendCheckItem(cID_Zoom50, "Zoom: 50 %");
-	mPopupMenu.AppendCheckItem(cID_Zoom25, "Zoom: 25 %");
-	mPopupMenu.AppendCheckItem(cID_Zoom10, "Zoom: 10 %");
-	mPopupMenu.AppendCheckItem(cID_ZoomFit, "Fit zoom");
+	mPopupMenu.AppendCheckItem(cID_Zoom200, wxT("Zoom: 200 %"));
+	mPopupMenu.AppendCheckItem(cID_Zoom100, wxT("Zoom: 100 %"));
+	mPopupMenu.AppendCheckItem(cID_Zoom50, wxT("Zoom: 50 %"));
+	mPopupMenu.AppendCheckItem(cID_Zoom25, wxT("Zoom: 25 %"));
+	mPopupMenu.AppendCheckItem(cID_Zoom10, wxT("Zoom: 10 %"));
+	mPopupMenu.AppendCheckItem(cID_ZoomFit, wxT("Fit zoom"));
 	mPopupMenu.AppendSeparator();
-	mPopupMenu.AppendCheckItem(cID_FlipVertically, "Flip vertically");
-	mPopupMenu.AppendCheckItem(cID_FlipHorizontally, "Flip horizontally");
+	mPopupMenu.AppendCheckItem(cID_FlipVertically, wxT("Flip vertically"));
+	mPopupMenu.AppendCheckItem(cID_FlipHorizontally, wxT("Flip horizontally"));
 	mPopupMenu.AppendSeparator();
-	mPopupMenu.Append(cID_SaveViewImageAs, "Save displayed image as ...");
-	mPopupMenu.Append(cID_SaveOriginalImageAs, "Save original image as ...");
+	mPopupMenu.Append(cID_SaveViewImageAs, wxT("Save displayed image as ..."));
+	mPopupMenu.Append(cID_SaveOriginalImageAs, wxT("Save original image as ..."));
 
 	// Set non-bold font
 	wxFont f=GetFont();
@@ -88,7 +88,7 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 		dc.SetBrush(*wxWHITE_BRUSH);
 		dc.DrawRectangle(0, 0, size.GetWidth(), size.GetHeight());
 		dc.SetFont(GetFont());
-		dc.DrawText("No image.", 4, 4);
+		dc.DrawText(wxT("No image."), 4, 4);
 	}
 }
 
@@ -231,13 +231,13 @@ void THISCLASS::OnMenuSaveOriginalImageAs(wxCommandEvent& event) {
 	}
 
 	// Show the file save dialog
-	wxFileDialog *dlg = new wxFileDialog(this, "Save original image", "", "", "Bitmap (*.bmp)|*.bmp", wxSAVE, wxDefaultPosition);
+	wxFileDialog *dlg = new wxFileDialog(this, wxT("Save original image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp"), wxSAVE, wxDefaultPosition);
 	if (dlg->ShowModal() != wxID_OK) {return;}
 
 	// Save the image
 	wxString filename=dlg->GetPath();
-	if(! cvSaveImage(filename.c_str(), imgcopy)) {
-		wxMessageDialog dlg(this, "The file could not be saved!", "Save original image", wxOK);
+	if(! cvSaveImage(filename.mb_str(wxConvFile), imgcopy)) {
+		wxMessageDialog dlg(this, wxT("The file could not be saved!"), wxT("Save original image"), wxOK);
 		dlg.ShowModal();
 		return;
 	}
@@ -256,13 +256,13 @@ void THISCLASS::OnMenuSaveViewImageAs(wxCommandEvent& event) {
 	}
 
 	// Show the file save dialog
-	wxFileDialog *dlg = new wxFileDialog(this, "Save displayed image", "", "", "Bitmap (*.bmp)|*.bmp", wxSAVE, wxDefaultPosition);
+	wxFileDialog *dlg = new wxFileDialog(this, wxT("Save displayed image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp"), wxSAVE, wxDefaultPosition);
 	if (dlg->ShowModal() != wxID_OK) {return;}
 
 	// Save the image
 	wxString filename=dlg->GetPath();
-	if(! cvSaveImage(filename.c_str(), imgcopy)) {
-		wxMessageDialog dlg(this, "The file could not be saved!", "Save displayed image", wxOK);
+	if(! cvSaveImage(filename.mb_str(wxConvFile), imgcopy)) {
+		wxMessageDialog dlg(this, wxT("The file could not be saved!"), wxT("Save displayed image"), wxOK);
 		dlg.ShowModal();
 		return;
 	}

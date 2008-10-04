@@ -40,7 +40,7 @@ public:
 	};
 
 	//! A map type to map event types to names.
-	typedef std::map<eType, std::string> tTypeNameMap;
+	typedef std::map<eType, wxString> tTypeNameMap;
 
 	//! A timeline item.
 	class Event {

@@ -1,7 +1,7 @@
 #include "ErrorList.h"
 #define THISCLASS ErrorList
 
-void THISCLASS::Add(const std::string &msg, int linenumber) {
+void THISCLASS::Add(const wxString &msg, int linenumber) {
 	ErrorListItem e;
 	e.mMessage=msg;
 	e.mLineNumber=linenumber;

@@ -3,7 +3,7 @@
 
 class CommunicationInterface;
 
-#include <string>
+#include <wx/string.h>
 #include <list>
 #include "CommunicationMessage.h"
 #include "CommunicationCommandHandler.h"

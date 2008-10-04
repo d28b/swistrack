@@ -2,13 +2,12 @@
 #define THISCLASS ComponentOutputFileM4V
 
 #ifdef USE_XVID
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentOutputFileM4V(SwisTrackCore *stc):
-		Component(stc, "OutputFileM4V"),
+		Component(stc, wxT("OutputFileM4V")),
 		mM4VHandle(0), mM4VBuffer(0), mFrameRate(15), mInputChannel(0),
-		mDisplayOutput("Output", "M4V File: Unprocessed Frame") {
+		mDisplayOutput(wxT("Output"), wxT("M4V File: Unprocessed Frame")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryOutput);
@@ -25,13 +24,13 @@ THISCLASS::~ComponentOutputFileM4V() {
 }
 
 void THISCLASS::OnStart() {
-	mFilename=GetConfigurationString("Filename", "");
-	mFrameRate=GetConfigurationInt("FrameRate", 15);
+	mFilename=GetConfigurationString(wxT("Filename"), wxT(""));
+	mFrameRate=GetConfigurationInt(wxT("FrameRate"), 15);
 	
-	std::string keepinmemory = GetConfigurationString("WriteMode", "");
-	if (keepinmemory == "raw") {
+	wxString keepinmemory = GetConfigurationString(wxT("WriteMode"), wxT(""));
+	if (keepinmemory == wxT("raw")) {
 		mKeepInMemory = cKeepInMemory_Raw;
-	} else if (keepinmemory == "compressed") {
+	} else if (keepinmemory == wxT("compressed")) {
 		mKeepInMemory = cKeepInMemory_Compressed;
 	} else {
 		mKeepInMemory = cKeepInMemory_None;
@@ -41,12 +40,12 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	std::string inputchannel = GetConfigurationInt("InputChannel", "");
-	if (inputchannel == "color") {
+	wxString inputchannel = GetConfigurationInt(wxT("InputChannel"), wxT(""));
+	if (inputchannel == wxT("color")) {
 		mInputChannel = cInputChannel_Color;
-	} else if (inputchannel == "grayscale") {
+	} else if (inputchannel == wxT("grayscale")) {
 		mInputChannel = cInputChannel_Grayscale;
-	} else if (inputchannel == "binary") {
+	} else if (inputchannel == wxT("binary")) {
 		mInputChannel = cInputChannel_Binary;
 	} else {
 		mInputChannel = cInputChannel_None;
@@ -63,12 +62,12 @@ void THISCLASS::OnStep() {
 	} else if (mInputChannel == sInputChannel_Binary) {
 		inputimage=mCore->mDataStructureImageBinary.mImage;
 	} else {
-		AddError("No input channel selected.");
+		AddError(wxT("No input channel selected."));
 	}
 
 	// Do nothing if no image is available
 	if (! inputimage) {
-		AddError("No image on selected input.");
+		AddError(wxT("No image on selected input."));
 		return;
 	}
 
@@ -105,9 +104,9 @@ void THISCLASS::M4VOpen(IplImage* image) {
 	xvid_enc_create_t xvid_enc_create;
 
 	// Open the output file
-	mFile.Open(mFilename.c_str(), wxFile::write);
+	mFile.Open(mFilename, wxFile::write);
 	if (mFile.IsOpened() == false) {
-		AddError("Error while opening the output file.");
+		AddError(wxT("Error while opening the output file."));
 		return;
 	}
 
@@ -136,7 +135,7 @@ void THISCLASS::M4VOpen(IplImage* image) {
 	// Allocate memory for the compressed frame
 	mM4VBuffer = new unsigned char[image->width * image->height * 6];
 	if (! mM4VBuffer) {
-		AddError("Failed to allocate memory for the compressed frame.");
+		AddError(wxT("Failed to allocate memory for the compressed frame."));
 		return;
 	}
 
@@ -176,7 +175,7 @@ void THISCLASS::M4VOpen(IplImage* image) {
 	printf("open\n");
 	int error = xvid_encore(0, XVID_ENC_CREATE, &xvid_enc_create, 0);
 	if (error) {
-		AddError("Error while opening the encoder.");
+		AddError(wxT("Error while opening the encoder."));
 		return;
 	}
 
@@ -246,7 +245,7 @@ void THISCLASS::M4VWriteFrame(IplImage* image) {
 	printf("write\n");
 	int size=xvid_encore(mM4VHandle, XVID_ENC_ENCODE, &xvid_enc_frame, &xvid_enc_stats);
 	if (size<0) {
-		AddError("Error while encoding a frame.");
+		AddError(wxT("Error while encoding a frame."));
 	}
 	
 	// Write the frame

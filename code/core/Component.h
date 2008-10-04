@@ -3,7 +3,7 @@
 
 class Component;
 
-#include <string>
+#include <wx/string.h>
 #include <list>
 #include <map>
 #include <wx/xml/xml.h>
@@ -23,7 +23,7 @@ public:
 	//! Status item list type.
 	typedef std::list<StatusItem> tStatusItemList;
 	//! The type for configuration values.
-	typedef std::map<std::string, std::string> tConfigurationMap;
+	typedef std::map<wxString, wxString> tConfigurationMap;
 	//! Display list type.
 	typedef std::list<Display*> tDisplayList;
 	//! Data structure list type.
@@ -33,12 +33,12 @@ public:
 	bool mStatusHasError;				//!< Whether there is an error in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)
 	bool mStatusHasWarning;				//!< Whether there is a warning in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)
 	bool mStarted;						//!< Tells whether the component is started. This flag is set and reset by the SwisTrackCore class and should not be used by the components.
-	std::string mName;					//!< The internal name of the component (used to save configuration).
-	std::string mDisplayName;			//!< The name that is displayed to the user.
-	std::string mDescription;			//!< The description.
-	std::string mHelpURL;				//!< The url pointing to the website with more information about the component.
+	wxString mName;					//!< The internal name of the component (used to save configuration).
+	wxString mDisplayName;			//!< The name that is displayed to the user.
+	wxString mDescription;			//!< The description.
+	wxString mHelpURL;				//!< The url pointing to the website with more information about the component.
 	ComponentCategory *mCategory;		//!< The category which this component belongs to.
-	std::string mDefaultDisplay;		//!< The default view (not used).
+	wxString mDefaultDisplay;		//!< The default view (not used).
 	ComponentTrigger *mTrigger;			//!< The trigger of this component (if any).
 	ErrorList mInitializationErrors;	//!< Error messages (during component initialization) are added here.
 	double mStepDuration;				//!< The duration of the last step in milliseconds. This information is filled in by SwisTrackCore.
@@ -48,7 +48,7 @@ public:
 	tDisplayList mDisplays;						//! The Display objects that this component provides.
 
 	//! Constructor.
-	Component(SwisTrackCore *stc, const std::string &name);
+	Component(SwisTrackCore *stc, const wxString &name);
 	//! Destructor.
 	virtual ~Component() {}
 
@@ -77,13 +77,13 @@ public:
 	bool GetEnabled();
 
 	//! Returns a boolean from the configuration.
-	bool GetConfigurationBool(const std::string &key, bool defvalue);
+	bool GetConfigurationBool(const wxString &key, bool defvalue);
 	//! Returns an integer value from the configuration.
-	int GetConfigurationInt(const std::string &key, int defvalue);
+	int GetConfigurationInt(const wxString &key, int defvalue);
 	//! Returns a double from the configuration.
-	double GetConfigurationDouble(const std::string &key, double defvalue);
+	double GetConfigurationDouble(const wxString &key, double defvalue);
 	//! Returns a string from the configuration.
-	std::string GetConfigurationString(const std::string &key, const std::string &defvalue);
+	wxString GetConfigurationString(const wxString &key, const wxString &defvalue);
 
 	//! Clears the status list
 	void ClearStatus();
@@ -94,7 +94,7 @@ public:
 	bool HasDataStructureWrite(DataStructure *ds);
 
 	//! Returns a component by name.
-	Display *GetDisplayByName(const std::string &name);
+	Display *GetDisplayByName(const wxString &name);
 
 	//! Returns the SwisTrackCore object.
 	SwisTrackCore *GetSwisTrackCore() {return mCore;}
@@ -107,11 +107,11 @@ protected:
 	int mEditLocks;								//!< The number of edit locks.
 
 	//! Adds an error message to the status list.
-	void AddError(const std::string &msg);
+	void AddError(const wxString &msg);
 	//! Adds a warning to the status list.
-	void AddWarning(const std::string &msg);
+	void AddWarning(const wxString &msg);
 	//! Adds an informational message to the status list.
-	void AddInfo(const std::string &msg);
+	void AddInfo(const wxString &msg);
 
 	//! Reads the XML file that belongs to the component.
 	void Initialize();

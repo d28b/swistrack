@@ -1,13 +1,12 @@
 #include "ComponentTracking.h"
 #define THISCLASS ComponentTracking
 
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentTracking(SwisTrackCore *stc):
-		Component(stc, "Tracking"),
+		Component(stc, wxT("Tracking")),
 		mShareTrajectories(1), mMaxNumber(10),
-		mDistanceGate(0.1), mDisplayOutput("Output", "Tracking") {
+		mDistanceGate(0.1), mDisplayOutput(wxT("Output"), wxT("Tracking")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryTracking);
@@ -24,17 +23,17 @@ THISCLASS::~ComponentTracking() {
 }
 
 void THISCLASS::OnStart() {
-	mMaxNumber=GetConfigurationInt("MaxNumber", 10);
-	mDistanceGate=GetConfigurationDouble("DistanceGate",0.1);
-	mShareTrajectories=GetConfigurationInt("ShareTrajectories",1);
+	mMaxNumber=GetConfigurationInt(wxT("MaxNumber"), 10);
+	mDistanceGate=GetConfigurationDouble(wxT("DistanceGate"),0.1);
+	mShareTrajectories=GetConfigurationInt(wxT("ShareTrajectories"),1);
 
 	// Check for stupid configurations
 	if (mMaxNumber<1) {
-		AddError("Max number of tracks must be greater or equal to 1");
+		AddError(wxT("Max number of tracks must be greater or equal to 1."));
 	}
 
 	if (mDistanceGate<0) {
-		AddError("The minimal distance (DistanceGate) cannot be smaller than zero");
+		AddError(wxT("The minimal distance (DistanceGate) cannot be smaller than zero."));
 	}
 
 	

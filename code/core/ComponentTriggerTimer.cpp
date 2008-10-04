@@ -1,10 +1,8 @@
 #include "ComponentTriggerTimer.h"
 #define THISCLASS ComponentTriggerTimer
 
-#include <sstream>
-
 THISCLASS::ComponentTriggerTimer(SwisTrackCore *stc):
-		Component(stc, "TriggerTimer"),
+		Component(stc, wxT("TriggerTimer")),
 		mTimer(0) {
 
 	// Data structure relations
@@ -31,7 +29,7 @@ void THISCLASS::OnReloadConfiguration() {
 		mTimer=new Timer(this);
 	}
 
-	double interval=GetConfigurationDouble("Interval", 1);
+	double interval=GetConfigurationDouble(wxT("Interval"), 1);
 	int interval_ms=(int)(interval*1000);
 	if (interval_ms<1) {interval_ms=1;}
 

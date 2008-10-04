@@ -23,16 +23,16 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
-		wxPanel(parent, -1), mPopupMenu(), mList(0),
-		SwisTrackCoreInterface(),
-		mSwisTrack(st), mSelectedComponent(0), mComponentsDialog(0) {
+		wxPanel(parent, -1), SwisTrackCoreInterface(),
+		mSwisTrack(st), mSelectedComponent(0),
+		mPopupMenu(), mList(0), mComponentsDialog(0) {
 
 	// Add SwisTrackCoreInterface
 	SwisTrackCore *stc=mSwisTrack->mSwisTrackCore;
 	stc->AddInterface(this);
 
 	// Create the popup menu
-	mPopupMenu.AppendCheckItem(cID_PopupMenu_Enabled, "Enabled");
+	mPopupMenu.AppendCheckItem(cID_PopupMenu_Enabled, wxT("Enabled"));
 
 	// Create List
 	mList=new wxListCtrl(this, cID_List);
@@ -42,23 +42,23 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 
 	// Add column for the component name
 	int col=0;
-	mList->InsertColumn(col++, "Component", wxLIST_FORMAT_LEFT, 200);
+	mList->InsertColumn(col++, wxT("Component"), wxLIST_FORMAT_LEFT, 200);
 
 	// Add column for the trigger flag
-	mList->InsertColumn(col++, "Trigger", wxLIST_FORMAT_CENTER, 50);
+	mList->InsertColumn(col++, wxT("Trigger"), wxLIST_FORMAT_CENTER, 50);
 
 	// Add columns for data structures
 	SwisTrackCore::tDataStructureList::iterator it=stc->mDataStructures.begin();
 	while (it!=stc->mDataStructures.end()) {
-		mList->InsertColumn(col++, (*it)->mDisplayName.c_str(), wxLIST_FORMAT_CENTER, 50);
+		mList->InsertColumn(col++, (*it)->mDisplayName, wxLIST_FORMAT_CENTER, 50);
 		it++;
 	}
 
 	// Add column for error messages
 	mColumnMessages=col;
-	mList->InsertColumn(col++, "Messages", wxLIST_FORMAT_LEFT, 400);
+	mList->InsertColumn(col++, wxT("Messages"), wxLIST_FORMAT_LEFT, 400);
 	mColumnStepDuration=col;
-	mList->InsertColumn(col++, "Step duration", wxLIST_FORMAT_LEFT, 100);
+	mList->InsertColumn(col++, wxT("Step duration"), wxLIST_FORMAT_LEFT, 100);
 
 	// Create Buttons
 	//wxStaticLine *line1=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 2), wxLI_HORIZONTAL);
@@ -124,7 +124,7 @@ void THISCLASS::Update() {
 		// Name
 		li.SetId(row);
 		li.SetColumn(col++);
-		li.SetText((*it)->mDisplayName.c_str());
+		li.SetText((*it)->mDisplayName);
 		li.SetTextColour(*wxBLACK);
 		li.SetData((void*)(*it));
 		if (mSelectedComponent==(*it)) {
@@ -136,7 +136,7 @@ void THISCLASS::Update() {
 		// Trigger flag
 		li.SetColumn(col++);
 		if ((*it)->mTrigger) {
-			li.SetText("T");
+			li.SetText(wxT("T"));
 			mList->SetItem(li);
 		}
 
@@ -148,13 +148,13 @@ void THISCLASS::Update() {
 			bool read=(*it)->HasDataStructureRead(*itds);
 			bool write=(*it)->HasDataStructureWrite(*itds);
 			if (read && write) {
-				li.SetText("E");
+				li.SetText(wxT("E"));
 				mList->SetItem(li);
 			} else if (read) {
-				li.SetText("R");
+				li.SetText(wxT("R"));
 				mList->SetItem(li);
 			} else if (write) {
-				li.SetText("W");
+				li.SetText(wxT("W"));
 				mList->SetItem(li);
 			}
 
@@ -206,11 +206,11 @@ void THISCLASS::UpdateStatus() {
 			Component::tStatusItemList::iterator itsl=c->mStatus.begin();
 			while (itsl!=c->mStatus.end()) {
 				if (itsl->mType==StatusItem::sTypeError) {
-					str+=itsl->mMessage.c_str();
-					str+=" ";
+					str+=itsl->mMessage;
+					str+=wxT(" ");
 				} else if (itsl->mType==StatusItem::sTypeWarning) {
-					str+=itsl->mMessage.c_str();
-					str+=" ";
+					str+=itsl->mMessage;
+					str+=wxT(" ");
 				}
 
 				itsl++;
@@ -222,7 +222,7 @@ void THISCLASS::UpdateStatus() {
 			wxListItem li;
 			li.SetId(item);
 			li.SetColumn(mColumnMessages);
-			li.SetText("");
+			li.SetText(wxT(""));
 			mList->SetItem(li);
 		}
 
@@ -231,9 +231,9 @@ void THISCLASS::UpdateStatus() {
 		li.SetId(item);
 		li.SetColumn(mColumnStepDuration);
 		if (c->mStepDuration<0) {
-			li.SetText("");
+			li.SetText(wxT(""));
 		} else {
-			li.SetText(wxString::Format("%0.3f ms", c->mStepDuration*1000.));
+			li.SetText(wxString::Format(wxT("%0.3f ms"), c->mStepDuration*1000.));
 		}
 		mList->SetItem(li);
 	}

@@ -1,14 +1,13 @@
 #include "ComponentBlobSelection.h"
 #define THISCLASS ComponentBlobSelection
 
-#include <sstream>
 #include "DisplayEditor.h"
 #include "highgui.h"
 
 THISCLASS::ComponentBlobSelection(SwisTrackCore *stc):
-		Component(stc, "BlobSelection"),
+		Component(stc, wxT("BlobSelection")),
 		mMinArea(0), mMaxArea(1000000), mOutputImage(0),
-		mDisplayOutput("Output", "After Blob Selection") {
+		mDisplayOutput(wxT("Output"), wxT("After Blob Selection")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryPreprocessingBinary);
@@ -29,15 +28,15 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mMinArea=GetConfigurationInt("MinArea", 1);
-	mMaxArea=GetConfigurationInt("MaxArea", 1000);
-	mAreaSelection=GetConfigurationBool("AreaBool",false);
-	mMinCompactness=GetConfigurationDouble("MinCompactness", 1);
-	mMaxCompactness=GetConfigurationDouble("MaxCompactness", 1000);
-	mCompactnessSelection=GetConfigurationBool("CompactnessBool",false);
-	mMinOrientation=GetConfigurationDouble("MinOrientation", -90);
-	mMaxOrientation=GetConfigurationDouble("MaxOrientation", 90);
-	mOrientationSelection=GetConfigurationBool("OrientationBool",false);
+	mMinArea=GetConfigurationInt(wxT("MinArea"), 1);
+	mMaxArea=GetConfigurationInt(wxT("MaxArea"), 1000);
+	mAreaSelection=GetConfigurationBool(wxT("AreaBool"),false);
+	mMinCompactness=GetConfigurationDouble(wxT("MinCompactness"), 1);
+	mMaxCompactness=GetConfigurationDouble(wxT("MaxCompactness"), 1000);
+	mCompactnessSelection=GetConfigurationBool(wxT("CompactnessBool"),false);
+	mMinOrientation=GetConfigurationDouble(wxT("MinOrientation"), -90);
+	mMaxOrientation=GetConfigurationDouble(wxT("MaxOrientation"), 90);
+	mOrientationSelection=GetConfigurationBool(wxT("OrientationBool"),false);
 }
 
 void THISCLASS::OnStep() 
@@ -46,7 +45,7 @@ void THISCLASS::OnStep()
 	IplImage* inputimage = mCore->mDataStructureImageBinary.mImage;
 	if (!inputimage)
 	{
-		AddError("There is no input image");
+		AddError(wxT("There is no input image"));
 	}
 
 	// Prepare mOutputImage

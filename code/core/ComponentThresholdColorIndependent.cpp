@@ -1,13 +1,12 @@
 #include "ComponentThresholdColorIndependent.h"
 #define THISCLASS ComponentThresholdColorIndependent
 
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentThresholdColorIndependent(SwisTrackCore *stc):
-		Component(stc, "ThresholdColorIndependent"),
+		Component(stc, wxT("ThresholdColorIndependent")),
 		mOutputImage(0), mBlueThreshold(128), mGreenThreshold(128), mRedThreshold(128), mOrBool(true), mInvertThreshold(false),
-		mDisplayOutput("Output", "After thresholding") {
+		mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryThresholdingColor);
@@ -30,21 +29,21 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mBlueThreshold=GetConfigurationInt("BlueThreshold", 128);
-	mGreenThreshold=GetConfigurationInt("GreenThreshold", 128);
-	mRedThreshold=GetConfigurationInt("RedThreshold", 128);
-	mOrBool=GetConfigurationBool("OrBool", true);
-	mInvertThreshold=GetConfigurationBool("InvertThreshold", false);
+	mBlueThreshold=GetConfigurationInt(wxT("BlueThreshold"), 128);
+	mGreenThreshold=GetConfigurationInt(wxT("GreenThreshold"), 128);
+	mRedThreshold=GetConfigurationInt(wxT("RedThreshold"), 128);
+	mOrBool=GetConfigurationBool(wxT("OrBool"), true);
+	mInvertThreshold=GetConfigurationBool(wxT("InvertThreshold"), false);
 }
 
 void THISCLASS::OnStep() {
 	IplImage *inputimage=mCore->mDataStructureImageColor.mImage;	
 	if (! inputimage) {
-		AddError("Cannot access Input image");
+		AddError(wxT("Cannot access input image."));
 		return;
 	}
 	if (inputimage->nChannels!=3) {
-		AddError("Input must be a color image (3 channels)");
+		AddError(wxT("Input must be a color image (3 channels)."));
 	}
 	//Create the images needed for the work if necessary
 	for (int i=0;i<3;i++) {
@@ -87,7 +86,7 @@ void THISCLASS::OnStep() {
 				break;
 
 			default:
-				AddError("Only Blue, Green and Red channels are accepted for this thresholding method.");
+				AddError(wxT("Only Blue, Green and Red channels are accepted for this thresholding method."));
 				return;
 			}
 		}
@@ -101,7 +100,7 @@ void THISCLASS::OnStep() {
 		}
 		mCore->mDataStructureImageBinary.mImage=mOutputImage;
 	} catch (...) {
-		AddError("Thresholding failed.");
+		AddError(wxT("Thresholding failed."));
 		return;
 	}
 

@@ -1,13 +1,12 @@
 #include "ComponentDoubleThresholdColorIndependent.h"
 #define THISCLASS ComponentDoubleThresholdColorIndependent
 
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentDoubleThresholdColorIndependent(SwisTrackCore *stc):
-		Component(stc, "DoubleThresholdColorIndependent"),
+		Component(stc, wxT("DoubleThresholdColorIndependent")),
 		mOutputImage(0), mLowThreshold(cvScalarAll(0)), mHighThreshold(cvScalarAll(0)),
-		mDisplayOutput("Output", "After thresholding") {
+		mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryThresholdingColor);
@@ -27,24 +26,24 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mLowThreshold.val[0]=GetConfigurationInt("BlueLowThreshold", 0);
-	mLowThreshold.val[1]=GetConfigurationInt("GreenLowThreshold", 0);
-	mLowThreshold.val[2]=GetConfigurationInt("RedLowThreshold", 0);
+	mLowThreshold.val[0]=GetConfigurationInt(wxT("BlueLowThreshold"), 0);
+	mLowThreshold.val[1]=GetConfigurationInt(wxT("GreenLowThreshold"), 0);
+	mLowThreshold.val[2]=GetConfigurationInt(wxT("RedLowThreshold"), 0);
 	//1 is added because of the way cvInRangeS makes the comparison
-	mHighThreshold.val[0]=GetConfigurationInt("BlueHighThreshold", 255)+1;
-	mHighThreshold.val[1]=GetConfigurationInt("GreenHighThreshold", 255)+1;
-	mHighThreshold.val[2]=GetConfigurationInt("RedHighThreshold", 255)+1;
+	mHighThreshold.val[0]=GetConfigurationInt(wxT("BlueHighThreshold"), 255)+1;
+	mHighThreshold.val[1]=GetConfigurationInt(wxT("GreenHighThreshold"), 255)+1;
+	mHighThreshold.val[2]=GetConfigurationInt(wxT("RedHighThreshold"), 255)+1;
 	strcpy(thresholdColorSeq,"BGR");
 }
 
 void THISCLASS::OnStep() {
 	IplImage *inputimage=mCore->mDataStructureImageColor.mImage;	
 	if (! inputimage) {
-		AddError("Cannot access Input image");
+		AddError(wxT("Cannot access Input image."));
 		return;
 	}
 	if (inputimage->nChannels!=3) {
-		AddError("Input must be a color image (3 channels)");
+		AddError(wxT("Input must be a color image (3 channels)."));
 	}
 
 	//Do the thresholding
@@ -76,7 +75,7 @@ void THISCLASS::OnStep() {
 		mCore->mDataStructureImageBinary.mImage=mOutputImage;
 	} catch (...) 
 	{
-		AddError("Thresholding failed.");
+		AddError(wxT("Thresholding failed."));
 		return;
 	}
 

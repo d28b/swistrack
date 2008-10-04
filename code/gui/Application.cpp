@@ -29,7 +29,7 @@ bool THISCLASS::OnInit() {
 	if (argc>1) {
 		mSwisTrack->OpenFile(argv[1], true, false);
 	} else {
-		mSwisTrack->OpenFile(mApplicationFolder+"/default.swistrack", false, true);
+		mSwisTrack->OpenFile(mApplicationFolder+wxT("/default.swistrack"), false, true);
 	}
 
 #if defined(__WIN16__) || defined(__WXMOTIF__)

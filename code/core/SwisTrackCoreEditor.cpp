@@ -1,7 +1,6 @@
 #include "SwisTrackCoreEditor.h"
 #define THISCLASS SwisTrackCoreEditor
 
-#include <sstream>
 #include <wx/xml/xml.h>
 #include "ComponentEditor.h"
 
@@ -45,7 +44,7 @@ void THISCLASS::ConfigurationReadXML(wxXmlNode* configuration, ErrorList *xmlerr
 	if (! configuration) {return;}
 	wxXmlNode *node=configuration->GetChildren();
 	while (node) {
-		if (node->GetName()=="component") {
+		if (node->GetName()==wxT("component")) {
 			ConfigurationReadXMLElement(node, xmlerr);
 		}
 		node=node->GetNext();
@@ -59,22 +58,18 @@ void THISCLASS::ConfigurationReadXMLElement(wxXmlNode* node, ErrorList *xmlerr) 
 	wxString type;
 	wxXmlProperty *prop=node->GetProperties();
 	while (prop) {
-		if (prop->GetName()=="type") {type=prop->GetValue();}
+		if (prop->GetName()==wxT("type")) {type=prop->GetValue();}
 		prop=prop->GetNext();
 	}
-	if (type=="") {
-		std::ostringstream oss;
-		oss << "A component was ignored because it does not have a 'type' attribute.";
-		xmlerr->Add(oss.str(), 0);
+	if (type.Len()==0) {
+		xmlerr->Add(wxT("A component was ignored because it does not have a 'type' attribute."), 0);
 		return;
 	}
 
 	// Search for the component
-	Component *component=mSwisTrackCore->GetComponentByName(type.c_str());
+	Component *component=mSwisTrackCore->GetComponentByName(type);
 	if (! component) {
-		std::ostringstream oss;
-		oss << "The component '" << type << "' was ignored because there is no component with this name.";
-		xmlerr->Add(oss.str(), 0);
+		xmlerr->Add(wxT("The component '")+type+wxT("' was ignored because there is no component with this name."), 0);
 		return;
 	}
 

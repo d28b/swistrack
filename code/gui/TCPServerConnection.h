@@ -27,7 +27,7 @@ public:
 	void OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum);
 	void OnNMEAProcessMessageChecksumError(CommunicationMessage *m);
 	void OnNMEAProcessUnrecognizedChar(unsigned char chr);
-	void OnNMEASend(const std::string &str);
+	void OnNMEASend(const char *buffer, int len);
 
 	//! Sends a message.
 	bool SendMessage(CommunicationMessage *m);
@@ -50,7 +50,7 @@ private:
 	CommunicationMessage* mCurrentRequest;
 
 	//! The list of subscriptions type.
-	typedef std::list<std::string> tSubscriptions;
+	typedef std::list<wxString> tSubscriptions;
 	//! The list of subscriptions.
 	tSubscriptions mSubscriptions;
 

@@ -3,7 +3,7 @@
 
 class SwisTrackCoreInterface;
 
-#include <string>
+#include <wx/string.h>
 class Component;
 
 //! A class defining the events of SwisTrackCore.

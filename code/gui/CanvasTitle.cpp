@@ -1,7 +1,6 @@
 #include "CanvasTitle.h"
 #define THISCLASS CanvasTitle
 
-#include <sstream>
 #include <wx/image.h>
 
 BEGIN_EVENT_TABLE(THISCLASS, wxControl)
@@ -14,7 +13,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 END_EVENT_TABLE()
 
 THISCLASS::CanvasTitle(CanvasPanel *cp):
-		wxControl(cp, -1), mCanvasPanel(cp), mTitle(""), mHighlight(false), mMenu(0) {
+		wxControl(cp, -1), mCanvasPanel(cp), mTitle(wxT("")), mHighlight(false), mMenu(0) {
 
 	SetWindowStyle(wxNO_BORDER);
 	SetBackgroundColour(*wxBLACK);
@@ -62,7 +61,7 @@ void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 	mMenu = new wxMenu;
 
 	// Add the no-display option
-	mMenu->Append(0, "No display (maximum speed)");
+	mMenu->Append(0, wxT("No display (maximum speed)"));
 
 	// Add all possible displays
 	int id=1;
@@ -75,11 +74,7 @@ void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 		Component::tDisplayList::iterator itdi=c->mDisplays.begin();
 		while (itdi!=c->mDisplays.end()) {
 			Display *display=(*itdi);
-
-			std::ostringstream oss;
-			oss << display->mDisplayName;
-			mMenu->Append(id++, oss.str().c_str());
-
+			mMenu->Append(id++, display->mDisplayName);
 			itdi++;
 		}
 		

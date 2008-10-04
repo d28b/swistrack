@@ -2,13 +2,12 @@
 #define THISCLASS ComponentColorMask
 
 #include <highgui.h>
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentColorMask(SwisTrackCore *stc):
-		Component(stc, "ColorMask"),
+		Component(stc, wxT("ColorMask")),
 		mMaskImage(0), mMode(cMode_BlackBlack),
-		mDisplayOutput("Output", "After applying mask") {
+		mDisplayOutput(wxT("Output"), wxT("After applying mask")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryPreprocessingColor);
@@ -30,12 +29,12 @@ void THISCLASS::OnStart() {
 
 void THISCLASS::OnReloadConfiguration() {
 	// Load mask image
-	std::string filename=GetConfigurationString("MaskImage", "");
-	if (filename!="") {
-		mMaskImage=cvLoadImage(filename.c_str(), -1);
+	wxString filename=GetConfigurationString(wxT("MaskImage"), wxT(""));
+	if (filename!=wxT("")) {
+		mMaskImage=cvLoadImage(filename.mb_str(wxConvISO8859_1), -1);
 	}
 	if (! mMaskImage) {
-		AddError("Cannot open mask file.");
+		AddError(wxT("Cannot open mask file."));
 		return;
 	}
 
@@ -49,18 +48,18 @@ void THISCLASS::OnReloadConfiguration() {
 		cvReleaseImage(&mMaskImage);
 		mMaskImage=img;
 	} else {
-		AddError("Invalid mask file. The mask file must be a grayscale or color image.");
+		AddError(wxT("Invalid mask file. The mask file must be a grayscale or color image."));
 		return;
 	}
 	
 	// Mask mode
-	std::string mode=GetConfigurationString("Mode", "black-black");
-	if (mode=="white-white") {
+	wxString mode=GetConfigurationString(wxT("Mode"), wxT("black-black"));
+	if (mode==wxT("white-white")) {
 		mMode=cMode_WhiteWhite;
-	} else if (mode=="white-black") {
+	} else if (mode==wxT("white-black")) {
 		mMode=cMode_WhiteBlack;
 		cvNot(mMaskImage, mMaskImage);
-	} else if (mode=="black-white") {
+	} else if (mode==wxT("black-white")) {
 		mMode=cMode_BlackWhite;
 		cvNot(mMaskImage, mMaskImage);
 	} else {
@@ -70,14 +69,14 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	if (! mCore->mDataStructureImageColor.mImage) {
-		AddError("No input image.");
+		AddError(wxT("No input image."));
 		return;
 	}
 
 	// Mask the image
 	if (mMaskImage) {
 		if ((mCore->mDataStructureImageColor.mImage->width!=mMaskImage->width) || (mCore->mDataStructureImageColor.mImage->height!=mMaskImage->height)) {
-			AddError("Wrong mask size.");
+			AddError(wxT("Wrong mask size."));
 			return;
 		}
 

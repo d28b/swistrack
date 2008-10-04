@@ -2,7 +2,6 @@
 #define THISCLASS ComponentSpecificColorSubtraction
 
 #include <highgui.h>
-#include <sstream>
 #include "DisplayEditor.h"
 
 /*
@@ -19,10 +18,10 @@ void UpdateMouse(int event, int x, int y, int flags,void* param)
 */
 
 THISCLASS::ComponentSpecificColorSubtraction(SwisTrackCore *stc):
-		Component(stc, "SpecificColorSubtraction"),
+		Component(stc, wxT("SpecificColorSubtraction")),
 		mCorrectMean(true), mSpecifyColorBool(true), 
 		mTrackedColor(cvScalar(0)), mSpecifiedImageAverage(cvScalarAll(0)),
-		mDisplayOutput("Output", "After background subtraction") {
+		mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryPreprocessingColor);
@@ -44,17 +43,17 @@ void THISCLASS::OnStart() {
 void THISCLASS::OnReloadConfiguration() 
 {
 	// Whether to correct the mean or not
-	mCorrectMean=GetConfigurationBool("CorrectMean", true);
+	mCorrectMean=GetConfigurationBool(wxT("CorrectMean"), true);
 	
 	
 	//Whether to use an image to specify the color or not
-	mSpecifyColorBool=GetConfigurationBool("SpecifyColorBool",true);
+	mSpecifyColorBool=GetConfigurationBool(wxT("SpecifyColorBool"),true);
 	
 
 	//Get the specified color from the interface
-	mTrackedColor.val[0]=GetConfigurationInt("BlueChannel",true);
-	mTrackedColor.val[1]=GetConfigurationInt("GreenChannel",true);
-	mTrackedColor.val[2]=GetConfigurationInt("RedChannel",true);
+	mTrackedColor.val[0]=GetConfigurationInt(wxT("BlueChannel"),true);
+	mTrackedColor.val[1]=GetConfigurationInt(wxT("GreenChannel"),true);
+	mTrackedColor.val[2]=GetConfigurationInt(wxT("RedChannel"),true);
 	strcpy(trackedColorSeq,"BGR");
 
 	if (mCorrectMean)
@@ -70,12 +69,12 @@ void THISCLASS::OnStep() {
 	//Check the images
 	if (! inputimage) 
 	{
-		AddError("No input Image");
+		AddError(wxT("No input Image"));
 		return;
 	}
 	if (inputimage->nChannels !=3)
 	{
-		AddError("Input image has not 3 channels.");
+		AddError(wxT("Input image has not 3 channels."));
 		return;
 	}
 	if ((mCorrectMean)&&(mSpecifiedImageAverage.val[0]==-1))
@@ -86,9 +85,9 @@ void THISCLASS::OnStep() {
 	{
 		
 		cvNamedWindow("Click on the desired color in the image");
-		cvShowImage("Click on the desired color in the image",inputimage);
+		cvShowImage(wxT("Click on the desired color in the image"),inputimage);
 		cmx=-1;
-		cvSetMouseCallback("Click on the desired color in the image", UpdateMouse);
+		cvSetMouseCallback(wxT("Click on the desired color in the image"), UpdateMouse);
 		while(cmx<0)
 		{
 			cvWaitKey();
@@ -129,7 +128,7 @@ void THISCLASS::OnStep() {
 		}
 
 	} catch(...) {
-		AddError("Substracting specifique color failed");
+		AddError(wxT("Substracting specifique color failed"));
 	}
 
 	// Set the display

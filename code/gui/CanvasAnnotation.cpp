@@ -24,7 +24,7 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	wxPaintDC dc(this);
 
 	// Prepare
-	wxFont f=GetFont();
+	 wxFont f=GetFont();
 	dc.SetFont(f);
 	dc.SetTextForeground(*wxWHITE);
 	wxSize size=GetClientSize();

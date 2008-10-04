@@ -26,7 +26,7 @@ THISCLASS::~DisplayEditor() {
 	if ((mDisplay->mSize.width==0) && (mDisplay->mSize.width==0)) {
 		if (! SetSizeAuto()) {
 			mDisplay->mSize=cvSize(300, 200);
-			AddError("Unable to determine display size.");
+			AddError(wxT("Unable to determine display size."));
 		}
 	}
 
@@ -72,7 +72,7 @@ void THISCLASS::SetMaskImage(IplImage *img) {
 		mDisplay->mMaskImage=cvCreateImage(cvSize(img->width, img->height), img->depth, 1);
 		cvCopy(img, mDisplay->mMaskImage);
 	} else {
-		AddError("Cannot display mask: wrong format.");
+		AddError(wxT("Cannot display mask: wrong format."));
 		mDisplay->mMaskImage=0;
 	}
 }
@@ -131,7 +131,7 @@ bool THISCLASS::SetSizeAuto() {
 	return false;
 }
 
-void THISCLASS::AddError(const std::string &message) {
+void THISCLASS::AddError(const wxString &message) {
 	if (! mDisplay) {return;}
 	mDisplay->mErrors.Add(message);
 }

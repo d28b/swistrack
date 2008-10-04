@@ -4,13 +4,13 @@
 #ifdef __WXMSW__
 
 THISCLASS::ComponentOutputAVI(SwisTrackCore *stc):
-		Component(stc, "OutputAVI"),
-		mFileName(""), mPlaybackSpeedFPS(30), mFrameRate(1), mMaxImageSize(cvSize(0, 0)),
+		Component(stc, wxT("OutputAVI")),
+		mFileName(), mPlaybackSpeedFPS(30), mFrameRate(1), mMaxImageSize(cvSize(0, 0)),
 		mAVIWriter(0), mFrameCounter(0), mErrorAVIFile(false), mWrittenFramesCount(0),
 		mCurrentDisplayImage(0) {
 
 	// Data structure relations
-	mDisplayName="Write AVI movie";
+	mDisplayName=wxT("Write AVI movie");
 	mCategory=&(mCore->mCategoryOutput);
 	AddDataStructureRead(&(mCore->mDataStructureInput));
 }
@@ -19,8 +19,8 @@ THISCLASS::~ComponentOutputAVI() {
 }
 
 void THISCLASS::OnStart() {
-	mFileName=GetConfigurationString("File", "");
-	mPlaybackSpeedFPS=GetConfigurationDouble("PlaybackSpeedFPS", 30);
+	mFileName=GetConfigurationString(wxT("File"), wxT(""));
+	mPlaybackSpeedFPS=GetConfigurationDouble(wxT("PlaybackSpeedFPS"), 30);
 	mMaxImageSize.width=GetConfigurationDouble("MaxImageSize.width", 0);
 	mMaxImageSize.height=GetConfigurationDouble("MaxImageSize.height", 0);
 
@@ -38,18 +38,14 @@ void THISCLASS::OnStep() {
 
 	// Report errors
 	if (mErrorAVIFile) {
-		ostringstream oss;
-		oss << "Could not open file \'" << mFileName << "\' for writing!";
-		AddError(oss.str());
+		AddError(wxT("Could not open file \'") + mFileName + wxT("\' for writing!"));
 	} else {
-		ostringstream oss;
-		oss << mFramesWrittenCount << " frames written.";
-		AddInfo(oss.str());
+		AddInfo(wxString::Format(wxT("%d frames written."), mFramesWrittenCount));
 	}
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mFrameRate=GetConfigurationDouble("FrameRate", 1);
+	mFrameRate=GetConfigurationDouble(wxT("FrameRate"), 1);
 
 	// Unsubscribe
 	if (mCurrentDisplayImage) {
@@ -57,8 +53,8 @@ void THISCLASS::OnReloadConfiguration() {
 	}
 
 	// Subscribe
-	std::string componentname=GetConfigurationString("Component", "");
-	std::string displayimagename=GetConfigurationString("DisplayImage", "");
+	wxString componentname=GetConfigurationString(wxT("Component"), wxT(""));
+	wxString displayimagename=GetConfigurationString(wxT("DisplayImage"), wxT(""));
 	Component *c=mCore->GetComponentByName(componentname);
 	if (! c) {return;}
 	DisplayImage *di=c->GetDisplayImageByName(displayimagename);

@@ -1,17 +1,17 @@
 #ifndef _DATASTRUCTURE_H
 #define _DATASTRUCTURE_H
 
-#include <string>
+#include <wx/string.h>
 
 //! The base class for data structures.
 class DataStructure {
 
 public:
-	std::string mName;			//!< The internal name of this data structure. This should only contain english letters and numbers.
-	std::string mDisplayName;	//!< The name that is displayed to the user.
+	wxString mName;			//!< The internal name of this data structure. This should only contain english letters and numbers.
+	wxString mDisplayName;	//!< The name that is displayed to the user.
 
 	//! Constructor.
-	DataStructure(const std::string &name="", const std::string &displayname=""): mName(name), mDisplayName(displayname) {}
+	DataStructure(const wxString &name=wxT(""), const wxString &displayname=wxT("")): mName(name), mDisplayName(displayname) {}
 	//! Destructor.
 	virtual ~DataStructure() {}
 };

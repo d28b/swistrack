@@ -3,41 +3,41 @@
 
 #include <fstream>
 #include <algorithm>
-#include <sstream>
 #include <wx/log.h>
+#include "ConfigurationConversion.h"
 
-THISCLASS::ObjectList(const std::string &filename):
+THISCLASS::ObjectList(const wxString &filename):
 		ConfigurationXML(0, true),
-		mObjects(), mError(""), mFileName(filename) {
+		mObjects(), mError(), mFileName(filename) {
 
 	// Read the file
 	wxLogNull log;
 	wxXmlDocument document;
 	bool isopen=document.Load(filename);
 	if (! isopen) {
-		mError="Could not open or parse the XML file!";
+		mError=wxT("Could not open or parse the XML file!");
 		return;
 	}
 
 	// Select the root element and check its name
 	SetRootNode(document.GetRoot());
-	if (GetRootNode()->GetName() != "objectlist") {
-		mError="The XML root node must be called 'objectlist'!";
+	if (GetRootNode()->GetName() != wxT("objectlist")) {
+		mError=wxT("The XML root node must be called 'objectlist'!");
 		return;
 	}
 
 	// Enumerate all robots in the list
-	SelectChildNode("objects");
+	SelectChildNode(wxT("objects"));
 	if (! mSelectedNode) {
-		mError="No node 'objects' found!";
+		mError=wxT("No node 'objects' found!");
 		return;
 	}
 
 	wxXmlNode *node=mSelectedNode->GetChildren();
 	while (node) {
-		if (node->GetName()=="object") {
+		if (node->GetName()==wxT("object")) {
 			ReadObject(node);
-			if (mError!="") {return;}
+			if (mError!=wxT("")) {return;}
 		}
 		node=node->GetNext();
 	}
@@ -51,16 +51,16 @@ void THISCLASS::ReadObject(wxXmlNode *node) {
 
 	// Create id
 	Object object;
-	object.objectid=Int(ReadProperty("id"), 0);
-	SelectChildNode("barcode");
+	object.objectid=ConfigurationConversion::Int(ReadProperty(wxT("id")), 0);
+	SelectChildNode(wxT("barcode"));
 	if (! mSelectedNode) {return;}
-	object.angle=(float)Double(ReadChildContent("angle"), 0);
+	object.angle=(float)ConfigurationConversion::Double(ReadChildContent(wxT("angle")), 0);
 
 	// Read chips
-	std::string chips=ReadChildContent("chips", "").c_str();
-	std::string chipsdirection=ReadChildProperty("chips", "direction", "").c_str();
-	int length=Int(ReadChildProperty("chips", "length"), 0);
-	int symbol=Int(ReadChildProperty("chips", "symbol"), 0);
+	wxString chips=ReadChildContent(wxT("chips"), wxT(""));
+	wxString chipsdirection=ReadChildProperty(wxT("chips"), wxT("direction"), wxT(""));
+	int length=ConfigurationConversion::Int(ReadChildProperty(wxT("chips"), wxT("length")), 0);
+	int symbol=ConfigurationConversion::Int(ReadChildProperty(wxT("chips"), wxT("symbol")), 0);
 
 	// Add the chips given by length and symbol
 	while (length>0) {
@@ -71,7 +71,7 @@ void THISCLASS::ReadObject(wxXmlNode *node) {
 	std::reverse(object.chips.begin(), object.chips.end());
 
 	// Add the chips given by the 01-string
-	std::string::iterator it=chips.begin();
+	wxString::iterator it=chips.begin();
 	while (it!=chips.end()) {
 		if (*it=='0') {
 			object.chips.push_back(-1);
@@ -83,14 +83,12 @@ void THISCLASS::ReadObject(wxXmlNode *node) {
 
 	// If empty, return with error
 	if (object.chips.empty()) {
-		std::ostringstream oss;
-		oss << "Invalid barcode for object id " << object.objectid << "!";
-		mError=oss.str();
+		mError=wxString::Format(wxT("Invalid barcode for object id %d!"), object.objectid);
 		return;
 	}
 
 	// Reverse the chips if necessary
-	if (chipsdirection=="counter-clockwise") {
+	if (chipsdirection==wxT("counter-clockwise")) {
 		std::reverse(object.chips.begin(), object.chips.end());
 	}
 

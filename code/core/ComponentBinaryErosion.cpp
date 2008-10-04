@@ -1,13 +1,12 @@
 #include "ComponentBinaryErosion.h"
 #define THISCLASS ComponentBinaryErosion
 
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentBinaryErosion(SwisTrackCore *stc):
-		Component(stc, "BinaryErosion"),
+		Component(stc, wxT("BinaryErosion")),
 		mIterations(1),
-		mDisplayOutput("Output", "After erosion") {
+		mDisplayOutput(wxT("Output"), wxT("After erosion")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryPreprocessingBinary);
@@ -28,17 +27,17 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mIterations=GetConfigurationInt("Iterations", 1);
+	mIterations=GetConfigurationInt(wxT("Iterations"), 1);
 	
 	// Check for stupid configurations
 	if (mIterations<0) {
-		AddError("The number of erosions must be greater or equal to 0.");
+		AddError(wxT("The number of erosions must be greater or equal to 0."));
 	}
 }
 
 void THISCLASS::OnStep() {
 	if (! mCore->mDataStructureImageBinary.mImage) {
-		AddError("No input image.");
+		AddError(wxT("No input image."));
 		return;
 	}
 

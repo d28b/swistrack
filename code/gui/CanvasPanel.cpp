@@ -2,7 +2,6 @@
 #define THISCLASS CanvasPanel
 
 #include "cv.h"
-#include <sstream>
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_SIZE(THISCLASS::OnSize)
@@ -27,7 +26,7 @@ THISCLASS::CanvasPanel(wxWindow *parent, SwisTrack *st):
 	//SetSizer(vs);
 
 	// Set the title
-	mCanvasTitle->SetText("No display (maximum speed)", "");
+	mCanvasTitle->SetText(wxT("No display (maximum speed)"), wxT(""));
 }
 
 THISCLASS::~CanvasPanel() {
@@ -66,8 +65,8 @@ void THISCLASS::OnDisplayUnsubscribe(Display *display) {
 	// Set everything to empty
 	mCurrentDisplay=0;
 	mCanvas->SetDisplay(0);
-	mCanvasTitle->SetText("No display (maximum speed)", "");
-	mCanvasAnnotation->SetText("", "");
+	mCanvasTitle->SetText(wxT("No display (maximum speed)"), wxT(""));
+	mCanvasAnnotation->SetText(wxT(""), wxT(""));
 }
 
 void THISCLASS::OnDisplayBeforeStep(Display *display) {
@@ -100,15 +99,13 @@ void THISCLASS::OnDisplayChanged(Display *display) {
 	mCanvas->OnDisplayChanged();
 
 	// Update title and annotation
-	mCanvasTitle->SetText(display->mDisplayName.c_str(), "");
-	std::ostringstream oss;
-	oss << "Frame " << display->mFrameNumber;
+	mCanvasTitle->SetText(display->mDisplayName, wxT(""));
+	wxString str=wxString::Format(wxT("Frame %d"), display->mFrameNumber);
 	if (display->mFramesCount>=0) {
-		oss << " / " << display->mFramesCount;
+		str += wxString::Format(wxT(" / %d"), display->mFramesCount);
 	}
-	oss << ", " << display->mSize.width << "x" << display->mSize.height;
-	oss << ", " << display->mTime.FormatTime().c_str();
-	mCanvasAnnotation->SetText(oss.str().c_str(), display->mAnnotation.c_str());
+	str += wxString::Format(wxT(", %dx%d, %s"), display->mSize.width, display->mSize.height, display->mTime.FormatTime());
+	mCanvasAnnotation->SetText(str, display->mAnnotation);
 
 	// Move the children
 	UpdateSize();

@@ -18,16 +18,16 @@ void THISCLASS::NMEAProcessData(const char *data, int len) {
 		} else if (mState==1) {
 			if (inchar==',') {
 				mBuffer[mBufferPos]=0;
-				mMessage->AddParsedArgument(mBuffer);
+				mMessage->AddParsedArgument(wxString(mBuffer, wxConvISO8859_1));
 				mChecksum=mChecksum ^ inchar;
 				mBufferPos=0;
 			} else if (inchar=='*') {
 				mBuffer[mBufferPos]=0;
-				mMessage->AddParsedArgument(mBuffer);
+				mMessage->AddParsedArgument(wxString(mBuffer, wxConvISO8859_1));
 				mState=2;
 			} else if (inchar=='\n') {
 				mBuffer[mBufferPos]=0;
-				mMessage->AddParsedArgument(mBuffer);
+				mMessage->AddParsedArgument(wxString(mBuffer, wxConvISO8859_1));
 				OnNMEAProcessMessage(mMessage, false);
 				delete mMessage;
 				mMessage=0;
@@ -69,29 +69,35 @@ void THISCLASS::NMEAProcessData(const char *data, int len) {
 }
 
 void THISCLASS::NMEASendMessage(CommunicationMessage *m) {
-	// Concatenate
-	std::ostringstream line;
-	line << "$" << m->mCommand;
+	char buffer[1024+5];
+	int len;
+
+	// Start of message
+	buffer[0]='$';
+	len=1;
+
+	// Concatenate commands and arguments
+	//len+=snprintf(buffer+len, 1024-len, "%s", (char*)(m->mCommand.mb_str(wxConvISO8859_1)));
 	CommunicationMessage::tParameters::iterator it=m->mParameters.begin();
 	while (it != m->mParameters.end()) {
-		line << "," << *it;
+		//len+=snprintf(buffer+len, 1024-len, "%s,", (char *)(m->mCommand.mb_str(wxConvISO8859_1)));
 		it++;
 	}
 
 	// Calculate checksum
 	int checksum=0;
-	std::string linestr=line.str();
-	int len=linestr.length();
-	const char *buffer=linestr.c_str();
 	for (int n=1; n<len; n++) {
 		checksum=checksum ^ buffer[n];
 	}
 	char ch1="0123456789ABCDEF"[(checksum >> 4) & 0xF];
 	char ch2="0123456789ABCDEF"[checksum & 0xF];
-	line << "*" << ch1 << ch2;
+	buffer[len++]='*';
+	buffer[len++]=ch1;
+	buffer[len++]=ch2;	
+	buffer[len++]='\r';
+	buffer[len++]='\n';
 
 	// Send
-	line << "\r\n";
-	OnNMEASend(line.str());
+	OnNMEASend(buffer, len);
 	return;
 }

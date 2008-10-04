@@ -40,7 +40,7 @@ public:
 	Component *Create() {return new ComponentInputCameraGigE(mCore);}
 
 private:
-	std::string mCameraFullName;						//!< (configuration) Full name of the camera (as returned by Pylon::DeviceInfo::GetFullName()).
+	wxString mCameraFullName;						//!< (configuration) Full name of the camera (as returned by Pylon::DeviceInfo::GetFullName()).
 	bool mColor;										//!< (configuration) Whether to acquire color or mono images.
 	eTriggerMode mTriggerMode;							//!< (configuration) The trigger source.
 	double mTriggerTimerFPS;							//!< (configuration) The FPS of the trigger timer.
@@ -88,15 +88,15 @@ private:
 class ComponentInputCameraGigE: public Component {
 
 public:
-	ComponentInputCameraGigE(SwisTrackCore *stc): Component(stc, "InputCameraGigE") {Initialize();}
+	ComponentInputCameraGigE(SwisTrackCore *stc): Component(stc, wxT("InputCameraGigE")) {Initialize();}
 	~ComponentInputCameraGigE() {}
 
 	// Overwritten Component methods
-	void OnStart() {AddError("GigE support was not compiled into this executable.");}
-	void OnReloadConfiguration() {AddError("GigE support was not compiled into this executable.");}
-	void OnStep() {AddError("GigE support was not compiled into this executable.");}
+	void OnStart() {AddError(wxT("GigE support was not compiled into this executable."));}
+	void OnReloadConfiguration() {AddError(wxT("GigE support was not compiled into this executable."));}
+	void OnStep() {AddError(wxT("GigE support was not compiled into this executable."));}
 	void OnStepCleanup() {}
-	void OnStop() {AddError("GigE support was not compiled into this executable.");}
+	void OnStop() {AddError(wxT("GigE support was not compiled into this executable."));}
 	Component *Create() {return new ComponentInputCameraGigE(mCore);}
 };
 

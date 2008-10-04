@@ -22,20 +22,20 @@ THISCLASS::SwisTrackCoreEventRecorder(SwisTrackCore *stc):
 	mPreviousStep.mType=sType_None;
 
 	// Type names
-	mTypeNames[sType_None]="None";
-	mTypeNames[sType_SetModeProduction]="SetModeProduction";
-	mTypeNames[sType_SetModeNormal]="SetModeNormal";
-	mTypeNames[sType_BeforeStart]="BeforeStart";
-	mTypeNames[sType_AfterStart]="AfterStart";
-	mTypeNames[sType_BeforeStop]="BeforeStop";
-	mTypeNames[sType_AfterStop]="AfterStop";
-	mTypeNames[sType_BeforeTriggerStart]="BeforeTriggerStart";
-	mTypeNames[sType_AfterTriggerStart]="AfterTriggerStart";
-	mTypeNames[sType_BeforeTriggerStop]="BeforeTriggerStop";
-	mTypeNames[sType_AfterTriggerStop]="AfterTriggerStop";
-	mTypeNames[sType_StepStart]="StepStart";
-	mTypeNames[sType_StepStop]="StepStop";
-	mTypeNames[sType_StepLapTime]="StepLapTime";
+	mTypeNames[sType_None]=wxT("None");
+	mTypeNames[sType_SetModeProduction]=wxT("SetModeProduction");
+	mTypeNames[sType_SetModeNormal]=wxT("SetModeNormal");
+	mTypeNames[sType_BeforeStart]=wxT("BeforeStart");
+	mTypeNames[sType_AfterStart]=wxT("AfterStart");
+	mTypeNames[sType_BeforeStop]=wxT("BeforeStop");
+	mTypeNames[sType_AfterStop]=wxT("AfterStop");
+	mTypeNames[sType_BeforeTriggerStart]=wxT("BeforeTriggerStart");
+	mTypeNames[sType_AfterTriggerStart]=wxT("AfterTriggerStart");
+	mTypeNames[sType_BeforeTriggerStop]=wxT("BeforeTriggerStop");
+	mTypeNames[sType_AfterTriggerStop]=wxT("AfterTriggerStop");
+	mTypeNames[sType_StepStart]=wxT("StepStart");
+	mTypeNames[sType_StepStop]=wxT("StepStop");
+	mTypeNames[sType_StepLapTime]=wxT("StepLapTime");
 }
 
 THISCLASS::~SwisTrackCoreEventRecorder() {

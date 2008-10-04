@@ -43,7 +43,7 @@ private:
 		Display mDisplayColor;		//!< The Display showing the resulting color image.
 		Display mDisplayBinary;		//!< The Display showing the thresholded image.
 
-		cColor(int color, const std::string &display_name_color, const std::string &display_title_color, const std::string &display_name_binary, const std::string &display_title_binary):
+		cColor(int color, const wxString &display_name_color, const wxString &display_title_color, const wxString &display_name_binary, const wxString &display_title_binary):
 			mColor(color), mThresholdR(32), mThresholdG(32), mThresholdB(32),
 			mSelectionByArea(false), mAreaMin(0), mAreaMax(1000),
 			mSelectionByCompactness(false), mCompactnessMin(0), mCompactnessMax(1000),

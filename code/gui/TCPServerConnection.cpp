@@ -17,7 +17,7 @@ THISCLASS::TCPServerConnection(TCPServer* ss, wxSocketBase *sb):
 	mSocket->Notify(true);
 
 	// TODO remove this
-	mSubscriptions.push_back("*");
+	mSubscriptions.push_back(wxT("*"));
 }
 
 THISCLASS::~TCPServerConnection() {
@@ -56,7 +56,7 @@ void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum)
 	if (! mSocket) {return;}
 
 	// Treat special messages
-	if (m->mCommand=="SUBSCRIBE") {
+	if (m->mCommand==wxT("SUBSCRIBE")) {
 		// The user wants to subscribe to a subset of the messages
 		mSubscriptions.clear();
 
@@ -70,11 +70,11 @@ void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum)
 		}
 
 		return;
-	} else if (m->mCommand=="BROADCAST") {
+	} else if (m->mCommand==wxT("BROADCAST")) {
 		// Broadcast the content of this message to all clients
 		
 		// The first element becomes the command and is removed
-		m->mCommand=m->GetString(0, "BROADCAST_EMPTY_MESSAGE");
+		m->mCommand=m->GetString(0, wxT("BROADCAST_EMPTY_MESSAGE"));
 		if (m->mParameters.begin()!=m->mParameters.end()) {
 			m->mParameters.erase(m->mParameters.begin());
 		}
@@ -98,9 +98,9 @@ void THISCLASS::OnNMEAProcessUnrecognizedChar(unsigned char chr) {
 	// Don't do anything, just ignore such chars
 }
 
-void THISCLASS::OnNMEASend(const std::string &str) {
+void THISCLASS::OnNMEASend(const char *buffer, int len) {
 	if (! mSocket) {return;}
-	mSocket->Write(str.c_str(), str.length());
+	mSocket->Write(buffer, len);
 }
 
 bool THISCLASS::SendMessage(CommunicationMessage *m) {
@@ -119,7 +119,7 @@ bool THISCLASS::SendMessage(CommunicationMessage *m) {
 	// If it's a normal message, only send if if the sender subscribed for it
 	tSubscriptions::iterator it=mSubscriptions.begin();
 	while (it!=mSubscriptions.end()) {
-		if (((*it)=="*") || ((*it)==m->mCommand)) {
+		if (((*it)==wxT("*")) || ((*it)==m->mCommand)) {
 			NMEASendMessage(m);
 			return true;
 		}

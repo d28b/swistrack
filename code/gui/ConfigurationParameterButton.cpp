@@ -22,10 +22,10 @@ THISCLASS::~ConfigurationParameterButton() {
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
-	mValue=config->ReadString("value", "true");
+	mValue=config->ReadString(wxT("value"), wxT("true"));
 
 	// Create the controls
-	mButton=new wxButton(this, wxID_ANY, config->ReadString("label", ""), wxDefaultPosition, wxSize(scParameterWidth, -1));
+	mButton=new wxButton(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scParameterWidth, -1));
 
 	// Layout the controls
 	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
@@ -38,7 +38,7 @@ void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 
 void THISCLASS::OnSetNewValue() {
 	ComponentEditor ce(mComponent);
-	ce.SetConfigurationString(mName.c_str(), mValue.c_str());
+	ce.SetConfigurationString(mName, mValue);
 }
 
 void THISCLASS::OnClick(wxCommandEvent& event) {

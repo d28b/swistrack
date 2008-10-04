@@ -1,13 +1,12 @@
 #include "ComponentThresholdColorCommon.h"
 #define THISCLASS ComponentThresholdColorCommon
 
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentThresholdColorCommon(SwisTrackCore *stc):
-		Component(stc, "ThresholdColorCommon"),
+		Component(stc, wxT("ThresholdColorCommon")),
 		mOutputImage(0), mThreshold(128), mAverageBool(false), mInvertThreshold(false),
-		mDisplayOutput("Output", "After thresholding") {
+		mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryThresholdingColor);
@@ -31,21 +30,21 @@ void THISCLASS::OnStart()
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mThreshold=GetConfigurationInt("Threshold", 128);
-	mAverageBool=GetConfigurationBool("AverageBool", true);
-	mInvertThreshold=GetConfigurationBool("InvertThreshold", false);
+	mThreshold=GetConfigurationInt(wxT("Threshold"), 128);
+	mAverageBool=GetConfigurationBool(wxT("AverageBool"), true);
+	mInvertThreshold=GetConfigurationBool(wxT("InvertThreshold"), false);
 }
 
 void THISCLASS::OnStep() {
 	IplImage *inputimage=mCore->mDataStructureImageColor.mImage;	
 	if (! inputimage) 
 	{
-		AddError("Cannot access Input image");
+		AddError(wxT("Cannot access input image."));
 		return;
 	}
 	if (inputimage->nChannels!=3)
 	{
-		AddError("Input must be a color image (3 channels)");
+		AddError(wxT("Input must be a color image (3 channels)."));
 	}
 	//Create the images needed for the work if necessary
 	for (int i=0;i<3;i++)
@@ -71,7 +70,7 @@ void THISCLASS::OnStep() {
 			mCore->mDataStructureImageBinary.mImage=mOutputImage;
 		} catch (...) 
 		{
-			AddError("Thresholding failed.");
+			AddError(wxT("Thresholding failed."));
 		}
 	}
 	else
@@ -92,7 +91,7 @@ void THISCLASS::OnStep() {
 			mCore->mDataStructureImageBinary.mImage=mOutputImage;
 		} catch (...) 
 		{
-			AddError("Thresholding failed.");
+			AddError(wxT("Thresholding failed."));
 		}
 
 	}

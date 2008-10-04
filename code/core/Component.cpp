@@ -5,9 +5,10 @@
 #include <wx/log.h>
 #include "ConfigurationXML.h"
 #include "SwisTrackCoreInterface.h"
+#include "ConfigurationConversion.h"
 #define THISCLASS Component
 
-THISCLASS::Component(SwisTrackCore *stc, const std::string &name):
+THISCLASS::Component(SwisTrackCore *stc, const wxString &name):
 		mStatus(), mStatusHasError(false), mStatusHasWarning(false), mStarted(false),
 		mName(name), mDisplayName(name), mDescription(), mHelpURL(), mCategory(0), mDefaultDisplay(), mTrigger(0),
 		mInitializationErrors(), mStepDuration(-1),
@@ -22,17 +23,17 @@ void THISCLASS::ClearStatus() {
 	mStatusHasWarning=false;
 }
 
-void THISCLASS::AddError(const std::string &msg) {
+void THISCLASS::AddError(const wxString &msg) {
 	mStatus.push_back(StatusItem(StatusItem::sTypeError, msg));
 	mStatusHasError=true;
 }
 
-void THISCLASS::AddWarning(const std::string &msg) {
+void THISCLASS::AddWarning(const wxString &msg) {
 	mStatus.push_back(StatusItem(StatusItem::sTypeWarning, msg));
 	mStatusHasWarning=true;
 }
 
-void THISCLASS::AddInfo(const std::string &msg) {
+void THISCLASS::AddInfo(const wxString &msg) {
 	mStatus.push_back(StatusItem(StatusItem::sTypeInfo, msg));
 }
 
@@ -59,7 +60,7 @@ bool THISCLASS::HasDataStructureWrite(DataStructure *ds) {
 	return (it != mDataStructureWrite.end());
 }
 
-Display *THISCLASS::GetDisplayByName(const std::string &name) {
+Display *THISCLASS::GetDisplayByName(const wxString &name) {
 	tDisplayList::iterator it=mDisplays.begin();
 	while (it!=mDisplays.end()) {
 		if ((*it)->mName==name) {return (*it);}
@@ -71,17 +72,17 @@ Display *THISCLASS::GetDisplayByName(const std::string &name) {
 
 void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmlerr) {
 	// Write enabled flag
-	wxXmlNode *node=new wxXmlNode(0, wxXML_ELEMENT_NODE, "enabled");
+	wxXmlNode *node=new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("enabled"));
 	configuration->AddChild(node);
-	node->AddProperty("value", (mEnabled ? "true" : "false"));
+	node->AddProperty(wxT("value"), ConfigurationConversion::Bool(mEnabled));
 
 	// Write configuration
 	tConfigurationMap::iterator it=mConfiguration.begin();
 	while (it!=mConfiguration.end()) {
-		wxXmlNode *node=new wxXmlNode(0, wxXML_ELEMENT_NODE, "parameter");
+		wxXmlNode *node=new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("parameter"));
 		configuration->AddChild(node);
-		node->AddProperty("name", it->first.c_str());
-		node->AddProperty("value", it->second.c_str());
+		node->AddProperty(wxT("name"), it->first);
+		node->AddProperty(wxT("value"), it->second);
 		it++;
 	}
 }
@@ -90,47 +91,33 @@ bool THISCLASS::GetEnabled() {
 	return mEnabled;
 }
 
-bool THISCLASS::GetConfigurationBool(const std::string &key, bool defvalue) {
-	std::string str=mConfiguration[key];
-	if (str=="") {
-		str=mConfigurationDefault[key];
-		if (str=="") {
-			return defvalue;
-		}
-	}
-
-	std::transform(str.begin(), str.end(), str.begin(), (int(*)(int))std::tolower);
-	if (str=="true") {return true;}
-	if (str=="false") {return false;}
-	int value=(defvalue ? 1 : 0);
-	std::istringstream istr(str);
-	istr >> value;
-	return (value!=0);
+bool THISCLASS::GetConfigurationBool(const wxString &key, bool defvalue) {
+	return ConfigurationConversion::Bool(GetConfigurationString(key, wxT("")), defvalue);
 }
 
-int THISCLASS::GetConfigurationInt(const std::string &key, int defvalue) {
-	std::istringstream istrdefault(mConfigurationDefault[key]);
-	istrdefault >> defvalue;
-	std::istringstream istr(mConfiguration[key]);
-	istr >> defvalue;
-	return defvalue;
+int THISCLASS::GetConfigurationInt(const wxString &key, int defvalue) {
+	return ConfigurationConversion::Int(GetConfigurationString(key, wxT("")), defvalue);
 }
 
-double THISCLASS::GetConfigurationDouble(const std::string &key, double defvalue) {
-	std::istringstream istrdefault(mConfigurationDefault[key]);
-	istrdefault >> defvalue;
-	std::istringstream istr(mConfiguration[key]);
-	istr >> defvalue;
-	return defvalue;
+double THISCLASS::GetConfigurationDouble(const wxString &key, double defvalue) {
+	return ConfigurationConversion::Double(GetConfigurationString(key, wxT("")), defvalue);
 }
 
-std::string THISCLASS::GetConfigurationString(const std::string &key, const std::string &defvalue) {
+wxString THISCLASS::GetConfigurationString(const wxString &key, const wxString &defvalue) {
+	// If the key is available in the configuration, return its value
 	tConfigurationMap::const_iterator it=mConfiguration.find(key);
-	if (it==mConfiguration.end()) {
-		it=mConfigurationDefault.find(key);
-		if (it==mConfigurationDefault.end()) {return defvalue;}
+	if (it!=mConfiguration.end()) {
+		return mConfiguration[key];
 	}
-	return mConfiguration[key];
+
+	// If the key is available in the default configuration, return that value
+	it=mConfigurationDefault.find(key);
+	if (it!=mConfigurationDefault.end()) {
+		return mConfigurationDefault[key];
+	}
+
+	// Otherwise, return the default value provided to this function
+	return defvalue;
 }
 
 bool THISCLASS::IncrementEditLocks() {
@@ -164,15 +151,13 @@ void THISCLASS::DecrementEditLocks() {
 
 void THISCLASS::Initialize() {
 	// Read the configuration and create the parameter panels
-	std::string filename=mCore->mComponentConfigurationFolder+mName+".xml";
+	wxString filename=mCore->mComponentConfigurationFolder+mName+wxT(".xml");
 
 	// Open the file
 	wxLogNull log;
 	wxXmlDocument document;
 	if (! document.Load(filename)) {
-		std::ostringstream oss;
-		oss << "Unable to open or parse the file '" << filename << "'.";
-		mInitializationErrors.Add(oss.str());
+		mInitializationErrors.Add(wxT("Unable to open or parse the file \'") + filename + wxT("\'."));
 		return;
 	}
 
@@ -180,22 +165,22 @@ void THISCLASS::Initialize() {
 	ConfigurationXML config(document.GetRoot());
 
 	// Set title and basic information
-	wxString friendlyname=config.ReadString("friendlyname", "");
-	if (friendlyname!="") {
-		mDisplayName=friendlyname.c_str();
+	wxString friendlyname=config.ReadString(wxT("friendlyname"), wxT(""));
+	if (friendlyname!=wxT("")) {
+		mDisplayName=friendlyname;
 	}
-	mDescription=config.ReadString("description", "");
-	mHelpURL=config.ReadString("url", "");
-	mDefaultDisplay=config.ReadString("defaultdisplay", "");
+	mDescription=config.ReadString(wxT("description"), wxT(""));
+	mHelpURL=config.ReadString(wxT("url"), wxT(""));
+	mDefaultDisplay=config.ReadString(wxT("defaultdisplay"), wxT(""));
 
 	// Read the list of settings
-	wxXmlNode *configurationnode=config.GetChildNode("configuration");
+	wxXmlNode *configurationnode=config.GetChildNode(wxT("configuration"));
 	InitializeReadConfiguration(configurationnode);
 }
 
 void THISCLASS::InitializeReadConfiguration(wxXmlNode *configurationnode) {
 	if (! configurationnode) {
-		mInitializationErrors.Add("The node 'configuration' is missing.");
+		mInitializationErrors.Add(wxT("The node 'configuration' is missing."));
 		return;
 	}
 
@@ -210,15 +195,13 @@ void THISCLASS::InitializeReadConfiguration(wxXmlNode *configurationnode) {
 
 void THISCLASS::InitializeReadConfigurationNode(wxXmlNode *node) {
 	wxString nodename=node->GetName();
-	if (nodename=="parameter") {
+	if (nodename==wxT("parameter")) {
 		InitializeReadParameter(node);
-	} else if (nodename=="label") {
-	} else if (nodename=="title") {
-	} else if (nodename=="line") {
+	} else if (nodename==wxT("label")) {
+	} else if (nodename==wxT("title")) {
+	} else if (nodename==wxT("line")) {
 	} else {
-		std::ostringstream oss;
-		oss << "Invalid node '" << nodename << "' in 'configuration'. Allowed types are 'line', 'label', 'title' and 'parameter'.";
-		mInitializationErrors.Add(oss.str());
+		mInitializationErrors.Add(wxT("Invalid node '") + nodename + wxT("' in 'configuration'. Allowed types are 'line', 'label', 'title' and 'parameter'."));
 	}
 }
 
@@ -227,7 +210,7 @@ void THISCLASS::InitializeReadParameter(wxXmlNode *node) {
 
 	// Read name and default value
 	ConfigurationXML config(node);
-	std::string name=config.ReadString("name", "").c_str();
-	std::string defaultvalue=config.ReadString("default", "").c_str();
+	wxString name=config.ReadString(wxT("name"), wxT(""));
+	wxString defaultvalue=config.ReadString(wxT("default"), wxT(""));
 	mConfigurationDefault[name]=defaultvalue;
 }

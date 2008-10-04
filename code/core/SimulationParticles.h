@@ -1,7 +1,7 @@
 #ifndef HEADER_SimulationParticles
 #define HEADER_SimulationParticles
 
-#include <string>
+#include <wx/string.h>
 #include <list>
 #include <fstream>
 #include "DataStructureParticles.h"
@@ -25,12 +25,12 @@ public:
 	Frame mFrameRead;			//!< The frame that is currently being read.
 
 	//! Constructor.
-	SimulationParticles(const std::string &filename);
+	SimulationParticles(const wxString &filename);
 	//! Destructor.
 	~SimulationParticles();
 
 	//! Returns the file name of the current simulation.
-	std::string GetFileName() {return mFileName;}
+	wxString GetFileName() {return mFileName;}
 	//! Returns true if the file could be opened.
 	bool IsOpen() {return mFile->is_open();}
 
@@ -44,7 +44,7 @@ public:
 	Frame *GetFutureFrameByNumber(int number);
 
 protected:
-	std::string mFileName;				//!< The name of the file currently open.
+	wxString mFileName;				//!< The name of the file currently open.
 	std::ifstream *mFile;				//!< The file.
 	tFrameList::iterator mCurrentFrame;	//!< The current frame.
 	Frame mEmptyFrame;					//!< Used if a frame was not available in the simulation file.
@@ -53,7 +53,7 @@ protected:
 	void OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum);
 	void OnNMEAProcessMessageChecksumError(CommunicationMessage *m);
 	void OnNMEAProcessUnrecognizedChar(unsigned char chr);
-	void OnNMEASend(const std::string &str);
+	void OnNMEASend(const char *buffer, int len);
 
 	//! Reads the next block in the file.
 	bool ReadBlock();

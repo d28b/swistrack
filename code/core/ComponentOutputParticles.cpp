@@ -2,7 +2,7 @@
 #define THISCLASS ComponentOutputParticles
 
 THISCLASS::ComponentOutputParticles(SwisTrackCore *stc):
-		Component(stc, "OutputParticles") {
+		Component(stc, wxT("OutputParticles")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryOutput);
@@ -18,7 +18,7 @@ THISCLASS::~ComponentOutputParticles() {
 
 void THISCLASS::OnStart() {
 	if (! mCore->mCommunicationInterface) {
-		AddError("No communication interface set.");
+		AddError(wxT("No communication interface set."));
 		return;
 	}
 }
@@ -26,7 +26,7 @@ void THISCLASS::OnStart() {
 void THISCLASS::OnStep() {
 	if (! mCore->mCommunicationInterface) {return;}
 
-	CommunicationMessage mbegin("FRAMENUMBER");
+	CommunicationMessage mbegin(wxT("FRAMENUMBER"));
 	mbegin.AddInt(mCore->mDataStructureInput.mFrameNumber);
 	mCore->mCommunicationInterface->Send(&mbegin);
 
@@ -34,7 +34,7 @@ void THISCLASS::OnStep() {
 	if (!p) {return;}
 	DataStructureParticles::tParticleVector::iterator it=p->begin();
 	while (it!=p->end()) {
-		CommunicationMessage m("PARTICLE");
+		CommunicationMessage m(wxT("PARTICLE"));
 		m.AddInt(it->mID);
 		m.AddDouble(it->mCenter.x);
 		m.AddDouble(it->mCenter.y);

@@ -1,13 +1,12 @@
 #include "ComponentInputCameraUSB.h"
 #define THISCLASS ComponentInputCameraUSB
 
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
-		Component(stc, "InputCameraUSB"),
+		Component(stc, wxT("InputCameraUSB")),
 		mCapture(0), mOutputImage(0),
-		mDisplayOutput("Output", "USB Camera: Input Frame") {
+		mDisplayOutput(wxT("Output"), wxT("USB Camera: Input Frame")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryInput);
@@ -26,13 +25,13 @@ THISCLASS::~ComponentInputCameraUSB() {
 void THISCLASS::OnStart() {
 	mCapture = cvCaptureFromCAM(-1);
 	if (! mCapture) {
-		AddError("Could not open USB camera.");
+		AddError(wxT("Could not open USB camera."));
 		return;
 	}
 
 	mOutputImage = cvQueryFrame(mCapture);
 	if (! mOutputImage) {
-		AddError("Could not retrieve image from USB camera.");
+		AddError(wxT("Could not retrieve image from USB camera."));
 		return;
 	}
 }
@@ -47,7 +46,7 @@ void THISCLASS::OnStep() {
 	int framenumber=(int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES);
 	mOutputImage=cvQueryFrame(mCapture);
 	if (! mOutputImage) {
-		AddError("Could not retrieve image from USB camera.");
+		AddError(wxT("Could not retrieve image from USB camera."));
 		return;
 	}
 

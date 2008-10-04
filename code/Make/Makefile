@@ -32,7 +32,7 @@ LD_LIBS    = m stdc++ cv cxcore highgui
 
 ifneq ($(XVID_PREFIX),)
 INCL_DIRS += $(XVID_PREFIX)/include
-LD_LIBS   += xvidcore
+#LD_LIBS   += xvidcore
 
 endif
 

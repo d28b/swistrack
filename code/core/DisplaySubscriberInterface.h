@@ -3,7 +3,7 @@
 
 class DisplaySubscriberInterface;
 
-#include <string>
+#include <wx/string.h>
 #include "Display.h"
 
 //! This is the interface for subscribers to Display classes.

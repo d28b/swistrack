@@ -28,13 +28,13 @@ THISCLASS::ConfigurationPanel(wxWindow *parent, SwisTrack *st, Component *c):
 
 	// If there is no component, we simply display a text
 	if (! mComponent) {
-		mLabelTitle=new wxStaticText(mPanel, wxID_ANY, "No component selected.");
+		mLabelTitle=new wxStaticText(mPanel, wxID_ANY, wxT("No component selected."));
 		mPanelSizer->Add(mLabelTitle, 0, wxEXPAND|wxALL, 4);
 		return;
 	}
 
 	// Add the title of the component
-	mLabelTitle=new wxStaticText(mPanel, wxID_ANY, mComponent->mDisplayName.c_str());
+	mLabelTitle=new wxStaticText(mPanel, wxID_ANY, mComponent->mDisplayName);
 	wxFont f=mLabelTitle->GetFont();
 	f.SetWeight(wxFONTWEIGHT_BOLD);
 	mLabelTitle->SetFont(f);
@@ -42,13 +42,13 @@ THISCLASS::ConfigurationPanel(wxWindow *parent, SwisTrack *st, Component *c):
 	mPanelSizer->Add(mLabelTitle, 0, wxEXPAND|wxALL, 4);
 
 	// Read the configuration and create the parameter panels
-	wxFileName filename(wxGetApp().mApplicationFolder, mComponent->mName.c_str(), "xml");
-	filename.AppendDir("Components");
+	wxFileName filename(wxGetApp().mApplicationFolder, mComponent->mName, wxT("xml"));
+	filename.AppendDir(wxT("Components"));
 	Read(filename);
 
 	// In case of errors, show a dialog with the error messages and add a label to the panel
 	if (! mErrorList.mList.empty()) {
-		wxStaticText *label=new wxStaticText(mPanel, wxID_ANY, "An error occured while loading the configuration panel of this component.");
+		wxStaticText *label=new wxStaticText(mPanel, wxID_ANY, wxT("An error occured while loading the configuration panel of this component."));
 		label->Wrap(scParameterWidth);
 		mPanelSizer->Add(label, 0, wxEXPAND|wxALL, 4);
 	}
@@ -62,9 +62,7 @@ void THISCLASS::Read(const wxFileName &filename) {
 	wxLogNull log;
 	wxXmlDocument document;
 	if (! document.Load(filename.GetFullPath())) {
-		std::ostringstream oss;
-		oss << "Unable to open or parse the file '" << filename.GetFullPath() << "'.";
-		mErrorList.Add(oss.str());
+		mErrorList.Add(wxT("Unable to open or parse the file '") + filename.GetFullPath() + wxT("'."));
 		return;
 	}
 
@@ -72,26 +70,26 @@ void THISCLASS::Read(const wxFileName &filename) {
 	ConfigurationXML config(document.GetRoot());
 
 	// Set the title
-	wxString friendlyname=config.ReadString("friendlyname", "");
-	if (friendlyname!="") {
+	wxString friendlyname=config.ReadString(wxT("friendlyname"), wxT(""));
+	if (friendlyname!=wxT("")) {
 		mLabelTitle->SetLabel(friendlyname);
 	}
 
 	// Add a description (if available)
-	wxString description=config.ReadString("description", "");
-	if (description!="") {
+	wxString description=config.ReadString(wxT("description"), wxT(""));
+	if (description!=wxT("")) {
 		wxStaticText *label=new wxStaticText(mPanel, wxID_ANY, description);
 		label->Wrap(scParameterWidth);
 		mPanelSizer->Add(label, 0, wxEXPAND|wxALL, 4);
 	}
 
 	// Read other properties
-	mHelpURL=config.ReadString("url", "");
-	mDisplayName=config.ReadString("displayimage", ""); // TODO rename this
+	mHelpURL=config.ReadString(wxT("url"), wxT(""));
+	mDisplayName=config.ReadString(wxT("displayimage"), wxT("")); // TODO rename this
 
 	// Add a help button (if available)
-	if (mHelpURL!="") {
-		wxStaticText *label=new wxStaticText(mPanel, wxID_ANY, "More information ...");
+	if (mHelpURL!=wxT("")) {
+		wxStaticText *label=new wxStaticText(mPanel, wxID_ANY, wxT("More information ..."));
 		wxFont f=label->GetFont();
 		f.SetUnderlined(true);
 		label->SetFont(f);
@@ -104,13 +102,13 @@ void THISCLASS::Read(const wxFileName &filename) {
 	mPanelSizer->Add(line, 0, wxEXPAND|wxALL, 4);
 
 	// Read the list of settings
-	wxXmlNode *configurationnode=config.GetChildNode("configuration");
+	wxXmlNode *configurationnode=config.GetChildNode(wxT("configuration"));
 	ReadConfiguration(configurationnode);
 }
 
 void THISCLASS::ReadConfiguration(wxXmlNode *configurationnode) {
 	if (! configurationnode) {
-		mErrorList.Add("The node 'configuration' is missing.");
+		mErrorList.Add(wxT("The node 'configuration' is missing."));
 		return;
 	}
 
@@ -125,26 +123,24 @@ void THISCLASS::ReadConfiguration(wxXmlNode *configurationnode) {
 
 void THISCLASS::ReadConfigurationNode(wxXmlNode *node) {
 	wxString nodename=node->GetName();
-	if (nodename=="parameter") {
+	if (nodename==wxT("parameter")) {
 		ReadParameter(node);
-	} else if (nodename=="label") {
+	} else if (nodename==wxT("label")) {
 		wxStaticText *label=new wxStaticText(mPanel, wxID_ANY, node->GetNodeContent());
 		label->Wrap(scParameterWidth);
 		mPanelSizer->Add(label, 0, wxEXPAND|wxALL, 4);
-	} else if (nodename=="title") {
+	} else if (nodename==wxT("title")) {
 		wxStaticText *label=new wxStaticText(mPanel, wxID_ANY, node->GetNodeContent());
 		wxFont f=label->GetFont();
 		f.SetWeight(wxFONTWEIGHT_BOLD);
 		label->SetFont(f);
 		label->Wrap(scParameterWidth);
 		mPanelSizer->Add(label, 0, wxEXPAND|wxALL, 4);
-	} else if (nodename=="line") {
+	} else if (nodename==wxT("line")) {
 		wxStaticLine *line=new wxStaticLine(mPanel, wxID_ANY, wxDefaultPosition, wxSize(230, 2), wxLI_HORIZONTAL);
 		mPanelSizer->Add(line, 0, wxEXPAND|wxALL, 4);
 	} else {
-		std::ostringstream oss;
-		oss << "Invalid node '" << nodename << "' in 'configuration'. Allowed types are 'line', 'label', 'title' and 'parameter'.";
-		mErrorList.Add(oss.str());
+		mErrorList.Add(wxT("Invalid node '") + nodename + wxT("' in 'configuration'. Allowed types are 'line', 'label', 'title' and 'parameter'."));
 	}
 }
 
@@ -152,13 +148,11 @@ void THISCLASS::ReadParameter(wxXmlNode *node) {
 	if (! node) {return;}
 
 	// Find out the type and create a new object
-	wxString type=GetPropertyString(node, "type", "");
+	wxString type=GetPropertyString(node, wxT("type"), wxT(""));
 	ConfigurationParameterFactory cpf;
 	ConfigurationParameter *cp=cpf.Create(type, mPanel);
 	if (! cp) {
-		std::ostringstream oss;
-		oss << "There is no parameter of type '" << type << "'.";
-		mErrorList.Add(oss.str());
+		mErrorList.Add(wxT("There is no parameter of type '") + type + wxT("'."));
 		return;
 	}
 

@@ -4,7 +4,7 @@
 #include <fstream>
 #include <algorithm>
 
-THISCLASS::SimulationParticles(const std::string &filename):
+THISCLASS::SimulationParticles(const wxString &filename):
 		mFrames(), mFrameRead(), mFileName(filename), mFile(0), 
 		mCurrentFrame(mFrames.end()), mEmptyFrame() {
 
@@ -16,7 +16,7 @@ THISCLASS::SimulationParticles(const std::string &filename):
 	// Open file
 	mFile=new std::ifstream();
 	mFile->clear();
-	mFile->open(filename.c_str(), std::ios::in);
+	mFile->open(filename.mb_str(wxConvISO8859_1), std::ios::in);
 }
 
 THISCLASS::~SimulationParticles() {
@@ -25,19 +25,19 @@ THISCLASS::~SimulationParticles() {
 
 void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum) {
 	// We process known messages only (and discard other messages without warning)
-	if (m->mCommand=="STEP_START") {
+	if (m->mCommand==wxT("STEP_START")) {
 		mFrameRead.number=0;
 		mFrameRead.particles.clear();
-	} else if (m->mCommand=="FRAMENUMBER") {
+	} else if (m->mCommand==wxT("FRAMENUMBER")) {
 		mFrameRead.number=m->PopInt(0);
-	} else if (m->mCommand=="PARTICLE") {
+	} else if (m->mCommand==wxT("PARTICLE")) {
 		Particle p;
 		p.mID=m->PopInt(0);
 		p.mCenter.x=(float)m->PopDouble(0);
 		p.mCenter.y=(float)m->PopDouble(0);
 		p.mOrientation=(float)m->PopDouble(0);
 		mFrameRead.particles.push_back(p);
-	} else if (m->mCommand=="STEP_STOP") {
+	} else if (m->mCommand==wxT("STEP_STOP")) {
 		mFrames.push_back(mFrameRead);
 	}
 }
@@ -51,7 +51,7 @@ void THISCLASS::OnNMEAProcessUnrecognizedChar(unsigned char chr) {
 	// Don't do anything, just ignore such chars
 }
 
-void THISCLASS::OnNMEASend(const std::string &str) {
+void THISCLASS::OnNMEASend(const char *buffer, int len) {
 	// We don't write
 }
 

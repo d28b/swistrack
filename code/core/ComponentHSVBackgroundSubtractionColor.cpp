@@ -2,13 +2,12 @@
 #define THISCLASS ComponentHSVBackgroundSubtractionColor
 
 #include <highgui.h>
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentHSVBackgroundSubtractionColor(SwisTrackCore *stc):
-		Component(stc, "HSVBackgroundSubtractionColor"),
+		Component(stc, wxT("HSVBackgroundSubtractionColor")),
 		mBackgroundImage(0), mCorrectMean(true),
-		mDisplayOutput("Output", "After background subtraction") {
+		mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryPreprocessingColor);
@@ -24,18 +23,18 @@ THISCLASS::~ComponentHSVBackgroundSubtractionColor() {
 }
 
 void THISCLASS::OnStart() {
-	std::string filename=GetConfigurationString("BackgroundImage", "");
-	if (filename!="") {
-		mBackgroundImage=cvLoadImage(filename.c_str(),CV_LOAD_IMAGE_UNCHANGED);
+	wxString filename=GetConfigurationString(wxT("BackgroundImage"), wxT(""));
+	if (filename!=wxT("")) {
+		mBackgroundImage=cvLoadImage(filename.mb_str(wxConvISO8859_1),CV_LOAD_IMAGE_UNCHANGED);
 	}
 	if (! mBackgroundImage) {
-		AddError("Cannot open background image.");
+		AddError(wxT("Cannot open background image."));
 		return;
 	}
 
 	if (mBackgroundImage->nChannels!=3) 
 	{
-		AddError("Background Image has not 3 channels");
+		AddError(wxT("Background Image has not 3 channels"));
 		return;
 	}
 	tmpHSVImage=cvCreateImage(cvGetSize(mBackgroundImage),8,3);
@@ -56,12 +55,12 @@ void THISCLASS::OnStep() {
 	//Check the images
 	if (! inputimage) 
 	{
-		AddError("No input Image");
+		AddError(wxT("No input Image"));
 		return;
 	}
 	if (inputimage->nChannels !=3)
 	{
-		AddError("Input image has not 3 channels.");
+		AddError(wxT("Input image has not 3 channels."));
 		return;
 	}
 	if (!outputImage) 
@@ -72,12 +71,12 @@ void THISCLASS::OnStep() {
 	mCore->mDataStructureImageGray.mImage=outputImage;
 	if (! mBackgroundImage) 
 	{
-		AddError("Background image not accessible");
+		AddError(wxT("Background image not accessible"));
 		return;
 	}
 	if ((cvGetSize(inputimage).height!=cvGetSize(mBackgroundImage).height)||(cvGetSize(inputimage).width!=cvGetSize(mBackgroundImage).width))
 	{
-		AddError("Input and background images have not the same dimension");
+		AddError(wxT("Input and background images have not the same dimension"));
 		return;
 	}
 
@@ -118,7 +117,7 @@ void THISCLASS::OnStep() {
 		cvThreshold(outputImage,tmpBinaryImage,90,255,CV_THRESH_BINARY);
 		cvSubRS(outputImage,cvScalar(180),outputImage,tmpBinaryImage);
 	} catch(...) {
-		AddError("Background subtraction failed.");
+		AddError(wxT("Background subtraction failed."));
 	}
 	
 	// Set the display

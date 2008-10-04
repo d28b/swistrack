@@ -1,13 +1,12 @@
 #include "ComponentConvertToColor.h"
 #define THISCLASS ComponentConvertToColor
 
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentConvertToColor(SwisTrackCore *stc):
-		Component(stc, "ConvertToColor"),
+		Component(stc, wxT("ConvertToColor")),
 		mOutputImage(0),
-		mDisplayOutput("Output", "After conversion to color") {
+		mDisplayOutput(wxT("Output"), wxT("After conversion to color")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryInputConversion);
@@ -50,7 +49,7 @@ void THISCLASS::OnStep() {
 			mCore->mDataStructureImageColor.mImage=mOutputImage;
 		}
 	} catch(...) {
-		AddError("Conversion to gray failed.");
+		AddError(wxT("Conversion to gray failed."));
 	}
 
 	// Set the display

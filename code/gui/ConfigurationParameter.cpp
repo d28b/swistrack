@@ -7,7 +7,7 @@
 
 THISCLASS::ConfigurationParameter(wxWindow* parent):
 		wxPanel(parent, -1), mSwisTrack(0), mComponent(0),
-		mLabel(""), mDisplay(""), mReloadable(true),
+		mLabel(wxT("")), mDisplay(wxT("")), mReloadable(true),
 		mUpdating(true), mUpdateProtection(0) {
 
 }
@@ -26,10 +26,10 @@ void THISCLASS::Initialize(SwisTrack *st, Component *c, ConfigurationXML *config
 
 	// Read general configuration
 	config->SelectRootNode();
-	mName=config->ReadString("name", "");
-	mLabel=config->ReadString("label", "");
-	mDisplay=config->ReadString("display", "");
-	mReloadable=config->ReadBool("reloadable", true);
+	mName=config->ReadString(wxT("name"), wxT(""));
+	mLabel=config->ReadString(wxT("label"), wxT(""));
+	mDisplay=config->ReadString(wxT("display"), wxT(""));
+	mReloadable=config->ReadBool(wxT("reloadable"), true);
 
 	// Initializes the parameter
 	OnInitialize(config, errorlist);

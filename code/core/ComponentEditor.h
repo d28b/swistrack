@@ -25,13 +25,13 @@ public:
 	bool SetEnabled(bool value);
 
 	//! Sets a boolean value in the configuration.
-	bool SetConfigurationBool(const std::string &key, bool value);
+	bool SetConfigurationBool(const wxString &key, bool value);
 	//! Sets an integer value in the configuration.
-	bool SetConfigurationInt(const std::string &key, int value);
+	bool SetConfigurationInt(const wxString &key, int value);
 	//! Sets a double in the configuration.
-	bool SetConfigurationDouble(const std::string &key, double value);
+	bool SetConfigurationDouble(const wxString &key, double value);
 	//! Sets a string in the configuration.
-	bool SetConfigurationString(const std::string &key, const std::string &value);
+	bool SetConfigurationString(const wxString &key, const wxString &value);
 
 private:
 	Component *mComponent;		//!< The associated Component object.

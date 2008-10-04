@@ -2,16 +2,15 @@
 #define THISCLASS ComponentChannelArithmetic
 
 #include <highgui.h>
-#include <sstream>
 #include "DisplayEditor.h"
 
 
 THISCLASS::ComponentChannelArithmetic(SwisTrackCore *stc):
-		Component(stc, "ChannelArithmetic"),
+		Component(stc, wxT("ChannelArithmetic")),
 		coeff1(0.3), coeff2(0.59), coeff3(0.11),
         channel1(1), channel2(2), channel3(3),
         op1(ADD), op2(ADD),
-		mDisplayOutput("Output", "After channel arithmetic")
+		mDisplayOutput(wxT("Output"), wxT("After channel arithmetic"))
 {
 	// Data structure relations
 	mCategory=&(mCore->mCategoryPreprocessingColor);
@@ -32,22 +31,22 @@ void THISCLASS::OnStart() {
 
 void THISCLASS::OnReloadConfiguration() 
 {
-    coeff1=GetConfigurationDouble("Coeff1", 0.3);
-    coeff2=GetConfigurationDouble("Coeff2", 0.59);
-    coeff3=GetConfigurationDouble("Coeff3", 0.11);
+    coeff1=GetConfigurationDouble(wxT("Coeff1"), 0.3);
+    coeff2=GetConfigurationDouble(wxT("Coeff2"), 0.59);
+    coeff3=GetConfigurationDouble(wxT("Coeff3"), 0.11);
 
-    channel1=GetConfigurationInt("Channel1", 1);
-    channel2=GetConfigurationInt("Channel1", 2);
-    channel3=GetConfigurationInt("Channel1", 3);
+    channel1=GetConfigurationInt(wxT("Channel1"), 1);
+    channel2=GetConfigurationInt(wxT("Channel1"), 2);
+    channel3=GetConfigurationInt(wxT("Channel1"), 3);
 
-    switch (GetConfigurationInt("Op1", ADD))
+    switch (GetConfigurationInt(wxT("Op1"), ADD))
     {
         case ADD: op1=ADD; break;
         case SUB: op1=SUB; break;
         case MUL: op1=MUL; break;
         case DIV: op1=DIV; break;
     }
-    switch (GetConfigurationInt("Op2", ADD))
+    switch (GetConfigurationInt(wxT("Op2"), ADD))
     {
         case ADD: op2=ADD; break;
         case SUB: op2=SUB; break;
@@ -63,12 +62,12 @@ void THISCLASS::OnStep() {
 	//Check the images
 	if (!inputimage) 
 	{
-		AddError("No input Image");
+		AddError(wxT("No input Image"));
 		return;
 	}
     else if (inputimage->nChannels !=3)
 	{
-		AddError("Input image does not have 3 channels.");
+		AddError(wxT("Input image does not have 3 channels."));
 		return;
 	}
 
@@ -86,7 +85,7 @@ void THISCLASS::OnStep() {
 		    cvSplit(inputimage,tmpImage[0],tmpImage[1],tmpImage[2],NULL);
         else if (memcmp(inputimage->channelSeq,"BGR",3)==0)
 		    cvSplit(inputimage,tmpImage[2],tmpImage[1],tmpImage[0],NULL);
-        else AddError("Image neither RGB nor BGR.");
+        else AddError(wxT("Image neither RGB nor BGR."));
 
         // begin with channel selected in first dropdown
         cvCopy(tmpImage[channel1-1], mOutputImage);
@@ -139,7 +138,7 @@ void THISCLASS::OnStep() {
 
         mCore->mDataStructureImageGray.mImage=mOutputImage;
     } catch(...) {
-        AddError("Channel arithmetic failed.");
+        AddError(wxT("Channel arithmetic failed."));
     }
 
     }

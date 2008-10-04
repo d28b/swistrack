@@ -26,13 +26,13 @@ THISCLASS::~ConfigurationParameterColor() {
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
-	mValueDefault = config->ReadInt("default", 0);
+	mValueDefault = config->ReadInt(wxT("default"), 0);
 
 	// Create the controls
-	wxStaticText *label = new wxStaticText(this, wxID_ANY, config->ReadString("label", ""), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
-	mTextCtrl = new wxTextCtrl(this, wxID_ANY, "", wxDefaultPosition, wxSize(scParameterWidth - 25, -1), wxTE_PROCESS_ENTER);
+	wxStaticText *label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
+	mTextCtrl = new wxTextCtrl(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scParameterWidth - 25, -1), wxTE_PROCESS_ENTER);
 	mTextCtrl->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
-	mButton = new wxButton(this, wxID_ANY, "...", wxDefaultPosition, wxSize(25, -1), wxST_NO_AUTORESIZE);
+	mButton = new wxButton(this, wxID_ANY, wxT("..."), wxDefaultPosition, wxSize(25, -1), wxST_NO_AUTORESIZE);
 
 	// Layout the controls
 	wxBoxSizer *hs = new wxBoxSizer(wxHORIZONTAL);
@@ -49,7 +49,7 @@ void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 	if (updateprotection == mTextCtrl) {
 		return;
 	}
-	int value = mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
+	int value = mComponent->GetConfigurationInt(mName, mValueDefault);
 	mTextCtrl->SetValue(wxColour(value).GetAsString(wxC2S_HTML_SYNTAX));
 }
 
@@ -58,13 +58,13 @@ bool THISCLASS::ValidateNewValue() {
 }
 
 bool THISCLASS::CompareNewValue() {
-	int value = mComponent->GetConfigurationInt(mName.c_str(), mValueDefault);
+	int value = mComponent->GetConfigurationInt(mName, mValueDefault);
 	return (value == mNewValue);
 }
 
 void THISCLASS::OnSetNewValue() {
 	ComponentEditor ce(mComponent);
-	ce.SetConfigurationInt(mName.c_str(), mNewValue);
+	ce.SetConfigurationInt(mName, mNewValue);
 }
 
 void THISCLASS::OnButtonClicked(wxCommandEvent& event) {
@@ -84,7 +84,8 @@ void THISCLASS::OnTextEnter(wxCommandEvent& event) {
 }
 
 void THISCLASS::OnKillFocus(wxFocusEvent& event) {
-	mNewValue = ColorToInt(wxColour(mTextCtrl->GetValue()));
+	wxColour color=wxColour(mTextCtrl->GetValue());
+	mNewValue = ColorToInt(color);
 	ValidateNewValue();
 	SetNewValue();
 }

@@ -74,7 +74,7 @@ private:
 	//! Draws the errors.
 	bool DrawErrors(ErrorList *errors);
 	//! Draws an image with a message in the center.
-	bool DrawMessagePanel(std::string errstr="");
+	bool DrawMessagePanel(wxString errstr=wxT(""));
 
 };
 

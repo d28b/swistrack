@@ -5,6 +5,7 @@ class ConfigurationXML;
 
 #include <wx/xml/xml.h>
 #include "SwisTrackCore.h"
+#include "ConfigurationConversion.h"
 
 //! Wrapper around an XML node to read and write configuration values.
 /*!
@@ -33,13 +34,13 @@ public:
 	wxXmlNode *GetChildNode(const wxString &name);
 
 	//! Reads a string of the selected node.
-	wxString ReadContent(const wxString &defvalue="");
+	wxString ReadContent(const wxString &defvalue=wxT(""));
 	//! Reads a string of a child node.
-	wxString ReadChildContent(const wxString &childname, const wxString &defvalue="");
+	wxString ReadChildContent(const wxString &childname, const wxString &defvalue=wxT(""));
 	//! Reads a property of the selected node.
-	wxString ReadProperty(const wxString &name, const wxString &defvalue="");
+	wxString ReadProperty(const wxString &name, const wxString &defvalue=wxT(""));
 	//! Reads a property of a child node.
-	wxString ReadChildProperty(const wxString &childname, const wxString &name, const wxString &defvalue="");
+	wxString ReadChildProperty(const wxString &childname, const wxString &name, const wxString &defvalue=wxT(""));
 
 	//! Writes a string value in the currently selected node.
 	void WriteContent(const wxString &value);
@@ -50,38 +51,25 @@ public:
 	//! Sets a child node property.
 	void WriteChildProperty(const wxString &childname, const wxString &name, const wxString &value);
 
-	//! Converts a configuration value into a boolean value.
-	bool Bool(const wxString &str, bool defvalue);
-	//! Converts a configuration value into an int value.
-	int Int(const wxString &str, int defvalue);
-	//! Converts a configuration value into a double value.
-	double Double(const wxString &str, double defvalue);
-	//! Converts a boolean value into a configuration value.
-	wxString Bool(bool value);
-	//! Converts a boolean value into a configuration value.
-	wxString Int(int value);
-	//! Converts a boolean value into a configuration value.
-	wxString Double(double value);
-
 	// Simple configuration interface: read methods
 	//! Reads a string.
 	inline wxString ReadString(const wxString &name, const wxString &defvalue) {return ReadChildContent(name, defvalue);}
 	//! Reads a boolean value.
-	inline bool ReadBool(const wxString &name, bool defvalue) {return Bool(ReadChildContent(name), defvalue);}
+	inline bool ReadBool(const wxString &name, bool defvalue) {return ConfigurationConversion::Bool(ReadChildContent(name), defvalue);}
 	//! Reads an integer.
-	inline int ReadInt(const wxString &name, int defvalue) {return Int(ReadChildContent(name), defvalue);}
+	inline int ReadInt(const wxString &name, int defvalue) {return ConfigurationConversion::Int(ReadChildContent(name), defvalue);}
 	//! Reads a double.
-	inline double ReadDouble(const wxString &name, double defvalue) {return Double(ReadChildContent(name), defvalue);}
+	inline double ReadDouble(const wxString &name, double defvalue) {return ConfigurationConversion::Double(ReadChildContent(name), defvalue);}
 
 	// Simple configuration interface: write methods
 	//! Writes a string value in the currently selected node.
 	inline void WriteString(const wxString &name, const wxString &value) {WriteChildContent(name, value);}
 	//! Writes a boolean value in the currently selected node.
-	inline void WriteBool(const wxString &name, bool value) {WriteChildContent(name, Bool(value));}
+	inline void WriteBool(const wxString &name, bool value) {WriteChildContent(name, ConfigurationConversion::Bool(value));}
 	//! Writes an integer value in the currently selected node.
-	inline void WriteInt(const wxString &name, int value) {WriteChildContent(name, Int(value));}
+	inline void WriteInt(const wxString &name, int value) {WriteChildContent(name, ConfigurationConversion::Int(value));}
 	//! Writes a double value in the currently selected node.
-	inline void WriteDouble(const wxString &name, double value) {WriteChildContent(name, Double(value));}
+	inline void WriteDouble(const wxString &name, double value) {WriteChildContent(name, ConfigurationConversion::Double(value));}
 
 protected:
 	wxXmlNode *mRootNode;		//!< The root node. Note that this doesn't need to be the root node of a document. It is simply the node that this object regards as its root.

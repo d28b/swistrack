@@ -3,18 +3,18 @@
 
 class ErrorListItemItem;
 
-#include <string>
+#include <wx/string.h>
 #include <list>
 
 // An item in an error list.
 class ErrorListItem {
 
 public:
-	std::string mMessage;	//!< The error message.
+	wxString mMessage;	//!< The error message.
 	int mLineNumber;		//!< The line number.
 
 	//! Constructor.
-	ErrorListItem(): mMessage(""), mLineNumber(0) {}
+	ErrorListItem(): mMessage(wxT("")), mLineNumber(0) {}
 	//! Destructor.
 	~ErrorListItem() {}
 };

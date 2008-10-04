@@ -34,7 +34,7 @@ public:
 	//! Called to process a char that does not belong to an NMEA record.
 	virtual void OnNMEAProcessUnrecognizedChar(unsigned char chr) = 0;
 	//! Called to send text to the client.
-	virtual void OnNMEASend(const std::string &str) = 0;
+	virtual void OnNMEASend(const char *buffer, int len) = 0;
 };
 
 #endif

@@ -8,8 +8,8 @@
 #include <fstream>
 
 THISCLASS::ComponentCalibrationTSAI(SwisTrackCore *stc):
-		Component(stc, "CalibrationTSAI"),
-		mDisplayOutput("Output", "TSAI Calibration: Output") {
+		Component(stc, wxT("CalibrationTSAI")),
+		mDisplayOutput(wxT("Output"), wxT("TSAI Calibration: Output")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryCalibration);
@@ -26,26 +26,26 @@ THISCLASS::~ComponentCalibrationTSAI() {
 
 void THISCLASS::OnStart() {
 	// Read the file containing the calibration points
-	std::string filename=GetConfigurationString("CalibrationPoints", "");
+	wxString filename=GetConfigurationString(wxT("CalibrationPoints"), wxT(""));
 	wxLogNull log;
 	wxXmlDocument document;
 	bool isopen=document.Load(filename);
 	if (! isopen) {
-		AddError("Could not open or parse the XML file!");
+		AddError(wxT("Could not open or parse the XML file!"));
 		return;
 	}
 
 	// Select the root element and check its name
 	SetRootNode(document.GetRoot());
-	if (GetRootNode()->GetName() != "pointlist") {
-		AddError("The XML root node must be called 'pointlist'!");
+	if (GetRootNode()->GetName() != wxT("pointlist")) {
+		AddError(wxT("The XML root node must be called 'pointlist'!"));
 		return;
 	}
 
 	// Enumerate all points in the list
-	SelectChildNode("points");
+	SelectChildNode(wxT("points"));
 	if (! mSelectedNode) {
-		AddError("No node 'points' found!");
+		AddError(wxT("No node 'points' found!"));
 		return;
 	}
 
@@ -55,25 +55,25 @@ void THISCLASS::OnStart() {
 	// Fill the vector with the readen points
 	wxXmlNode *node=mSelectedNode->GetChildren();
 	while (node) {
-		if (node->GetName()=="point") {
+		if (node->GetName()==wxT("point")) {
 			ReadPoint(node);
 		}
 		node=node->GetNext();
 	}
 
 	//Getting camera parametrs from configuration file
-	cameraParameters.Ncx=GetConfigurationDouble("Ncx",640);
-	cameraParameters.Nfx=GetConfigurationDouble("Nfx",640);
-	cameraParameters.dx=GetConfigurationDouble("dx",0.0065);
+	cameraParameters.Ncx=GetConfigurationDouble(wxT("Ncx"),640);
+	cameraParameters.Nfx=GetConfigurationDouble(wxT("Nfx"),640);
+	cameraParameters.dx=GetConfigurationDouble(wxT("dx"),0.0065);
 	cameraParameters.dpx=cameraParameters.dx*cameraParameters.Ncx/cameraParameters.Nfx;
-	cameraParameters.dy=GetConfigurationDouble("dy",0.0065);
-	cameraParameters.dpy=cameraParameters.dy*GetConfigurationDouble("Ncy",480)/GetConfigurationDouble("Nfy",480);
+	cameraParameters.dy=GetConfigurationDouble(wxT("dy"),0.0065);
+	cameraParameters.dpy=cameraParameters.dy*GetConfigurationDouble(wxT("Ncy"),480)/GetConfigurationDouble(wxT("Nfy"),480);
 	cameraParameters.Cx=cameraParameters.Ncx/2;
-	cameraParameters.Cy=GetConfigurationDouble("Ncy",480)/2;
-	cameraParameters.sx=GetConfigurationDouble("sx",1.0);
+	cameraParameters.Cy=GetConfigurationDouble(wxT("Ncy"),480)/2;
+	cameraParameters.sx=GetConfigurationDouble(wxT("sx"),1.0);
 	// Put the points into the matrix
 	if (calibrationPointList.size()>TSAI_MAX_POINTS) {
-		AddError("There are more calibration points than accepted by the Tsai calibration library");
+		AddError(wxT("There are more calibration points than accepted by the Tsai calibration library"));
 	}
 	calibrationData.point_count=calibrationPointList.size();
 	for (int i=0; i<calibrationData.point_count; i++) {
@@ -88,7 +88,7 @@ void THISCLASS::OnStart() {
 		coplanar_calibration_with_full_optimization(&calibrationData,&calibrationConstants,&cameraParameters);
 	} 
 	catch (...) {
-		AddError("Calibration using libtsai failed.");
+		AddError(wxT("Calibration using libtsai failed."));
 	}
 	
 	//Compute error of calibration on calibration points
@@ -165,10 +165,10 @@ void THISCLASS::OnStop() {
 void THISCLASS::ReadPoint(wxXmlNode *node) {
 	mSelectedNode=node;
 	CalibrationPoint calibrationPoint;
-	calibrationPoint.xImage=Double(ReadChildContent("ximage"),0);
-	calibrationPoint.yImage=Double(ReadChildContent("yimage"),0);
-	calibrationPoint.xWorld=Double(ReadChildContent("xworld"),0);
-	calibrationPoint.yWorld=Double(ReadChildContent("yworld"),0);
+	calibrationPoint.xImage=ConfigurationConversion::Double(ReadChildContent(wxT("ximage")),0);
+	calibrationPoint.yImage=ConfigurationConversion::Double(ReadChildContent(wxT("yimage")),0);
+	calibrationPoint.xWorld=ConfigurationConversion::Double(ReadChildContent(wxT("xworld")),0);
+	calibrationPoint.yWorld=ConfigurationConversion::Double(ReadChildContent(wxT("yworld")),0);
 	calibrationPointList.push_back(calibrationPoint);
 }
 

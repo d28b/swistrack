@@ -2,7 +2,6 @@
 #define THISCLASS DisplayRenderer
 
 #include "ImageConversion.h"
-#include <sstream>
 #include <cmath>
 #include <iomanip>
 #define PI 3.14159265358979
@@ -86,7 +85,7 @@ IplImage *THISCLASS::GetImage() {
 
 	// If the display is null, just display an error message
 	if (! mDisplay) {
-		DrawMessagePanel("No display selected.");
+		DrawMessagePanel(wxT("No display selected."));
 		return mImage;
 	}
 
@@ -95,7 +94,7 @@ IplImage *THISCLASS::GetImage() {
 
 	// If the display size is too small, show an error message
 	if ((mDisplay->mSize.width<10) || (mDisplay->mSize.height<10)) {
-		errors.Add("No image or too small image.");
+		errors.Add(wxT("No image or too small image."));
 	}
 
 	// Draw the image
@@ -148,9 +147,8 @@ bool THISCLASS::DrawParticles(ErrorList *errors) {
 		float s=sinf(it->mOrientation)*8; //sinf(it->mOrientation/57.29577951)*20;
 		cvLine(mImage, cvPoint(x, y), cvPoint(x+(int)floorf(c+0.5), y+(int)floorf(s+0.5)), cvScalar(192, 0, 0), 1);
 
-		std::ostringstream oss;
-		oss << it->mID << " [" << it->mIDCovariance << "]";
-		cvPutText(mImage, oss.str().c_str(), cvPoint(x+12, y+10), &mFontMain, cvScalar(255, 0, 0));
+		wxString label=wxString::Format(wxT("%d [%f]"), it->mID, it->mIDCovariance);
+		cvPutText(mImage, label.mb_str(wxConvISO8859_1), cvPoint(x+12, y+10), &mFontMain, cvScalar(255, 0, 0));
 		it++;
 	}
 
@@ -199,7 +197,7 @@ bool THISCLASS::DrawErrors(ErrorList *errors) {
 	// Draw all error messages
 	ErrorList::tList::iterator it=errors->mList.begin();
 	while (it!=errors->mList.end()) {
-		cvPutText(mImage, (*it).mMessage.c_str(), cvPoint(4, y), &mFontMain, cvScalar(0, 0, 255));
+		cvPutText(mImage, (*it).mMessage.mb_str(wxConvISO8859_1), cvPoint(4, y), &mFontMain, cvScalar(0, 0, 255));
 		y+=20;
 		it++;
 	}
@@ -207,7 +205,7 @@ bool THISCLASS::DrawErrors(ErrorList *errors) {
 	// Draw all error messages
 	it=mDisplay->mErrors.mList.begin();
 	while (it!=mDisplay->mErrors.mList.end()) {
-		cvPutText(mImage, (*it).mMessage.c_str(), cvPoint(4, y), &mFontMain, cvScalar(0, 0, 255));
+		cvPutText(mImage, (*it).mMessage.mb_str(wxConvISO8859_1), cvPoint(4, y), &mFontMain, cvScalar(0, 0, 255));
 		y+=20;
 		it++;
 	}
@@ -215,12 +213,12 @@ bool THISCLASS::DrawErrors(ErrorList *errors) {
 	return true;
 }
 
-bool THISCLASS::DrawMessagePanel(std::string errstr) {
+bool THISCLASS::DrawMessagePanel(wxString errstr) {
 	cvRectangle(mImage, cvPoint(0, 0), cvPoint(mImage->width-1, mImage->height-1), cvScalar(0, 0, 0), 1);
-	if (errstr.length()==0) {return true;}
+	if (errstr.Len()==0) {return true;}
 	CvSize textsize;
 	int ymin;
-	cvGetTextSize(errstr.c_str(), &mFontMain, &textsize, &ymin);
-	cvPutText(mImage, errstr.c_str(), cvPoint((mImage->width-textsize.width)/2, (mImage->height+textsize.height)/2), &mFontMain, cvScalar(255, 0, 0));
+	cvGetTextSize(errstr.mb_str(wxConvISO8859_1), &mFontMain, &textsize, &ymin);
+	cvPutText(mImage, errstr.mb_str(wxConvISO8859_1), cvPoint((mImage->width-textsize.width)/2, (mImage->height+textsize.height)/2), &mFontMain, cvScalar(255, 0, 0));
 	return true;
 }

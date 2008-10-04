@@ -3,7 +3,7 @@
 
 class CommunicationMessage;
 
-#include <string>
+#include <wx/string.h>
 #include <vector>
 
 //! A communication message tailored for NMEA message.
@@ -14,14 +14,14 @@ private:
 
 public:
 	//! Parameter list type.
-	typedef std::vector<std::string> tParameters;
+	typedef std::vector<wxString> tParameters;
 
 	tParameters mParameters;			//!< The list of message parameters.
-	std::string mCommand;				//!< The message type (command).
+	wxString mCommand;				//!< The message type (command).
 	CommunicationMessage *mInReplyTo;	//!< The associated request (if any).
 
 	//! Constructor.
-	CommunicationMessage(const std::string &cmd = "", CommunicationMessage *inreplyto=0);
+	CommunicationMessage(const wxString &cmd = wxT(""), CommunicationMessage *inreplyto=0);
 	//! Destructor.
 	~CommunicationMessage() {}
 
@@ -32,7 +32,7 @@ public:
 	//! Returns a double from the parameter list.
 	double GetDouble(unsigned int i, double defvalue);
 	//! Returns a string from the parameter list.
-	std::string GetString(unsigned int i, const std::string &defvalue);
+	wxString GetString(unsigned int i, const wxString &defvalue);
 
 	//! Returns the next parameter as boolean value from the list.
 	bool PopBool(bool defvalue) {return GetBool(mPopIndex++, defvalue);}
@@ -41,7 +41,7 @@ public:
 	//! Returns the next parameter as double value from the list.
 	double PopDouble(double defvalue) {return GetDouble(mPopIndex++, defvalue);}
 	//! Returns the next parameter as string from the list.
-	std::string PopString(const std::string &defvalue) {return GetString(mPopIndex++, defvalue);}
+	wxString PopString(const wxString &defvalue) {return GetString(mPopIndex++, defvalue);}
 
 	//! Adds a boolean value to the parameter list.
 	bool AddBool(bool value);
@@ -50,9 +50,9 @@ public:
 	//! Adds a double to the parameter list.
 	bool AddDouble(double value);
 	//! Adds a string to the parameter list.
-	bool AddString(const std::string &value);
+	bool AddString(const wxString &value);
 	//! Sets the command or adds a string to the parameter list.
-	bool AddParsedArgument(const std::string &value);
+	bool AddParsedArgument(const wxString &value);
 };
 
 #endif

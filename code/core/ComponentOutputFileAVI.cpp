@@ -1,13 +1,12 @@
 #include "ComponentOutputFileAVI.h"
 #define THISCLASS ComponentOutputFileAVI
 
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentOutputFileAVI(SwisTrackCore *stc):
-		Component(stc, "OutputFileAVI"),
+		Component(stc, wxT("OutputFileAVI")),
 		mWriter(0), mFrameRate(15), mInputSelection(0), mFrameBufferCount(1), mFrameBuffer(0), mFrameBufferWriteCounter(0),
-		mDisplayOutput("Output", "AVI File: Unprocessed Frame") {
+		mDisplayOutput(wxT("Output"), wxT("AVI File: Unprocessed Frame")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryOutput);
@@ -25,14 +24,14 @@ THISCLASS::~ComponentOutputFileAVI() {
 }
 
 void THISCLASS::OnStart() {
-	mFilename=GetConfigurationString("File", "");
-	mFrameRate=GetConfigurationInt("FrameRate", 15);
-	BufferedFrames_Allocate(GetConfigurationInt("FrameBufferCount", 1));
+	mFilename=GetConfigurationString(wxT("File"), wxT(""));
+	mFrameRate=GetConfigurationInt(wxT("FrameRate"), 15);
+	BufferedFrames_Allocate(GetConfigurationInt(wxT("FrameBufferCount"), 1));
 	OnReloadConfiguration();
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mInputSelection=GetConfigurationInt("InputImage", 0);
+	mInputSelection=GetConfigurationInt(wxT("InputImage"), 0);
 }
 
 void THISCLASS::OnStep() {
@@ -52,28 +51,28 @@ void THISCLASS::OnStep() {
 		inputimage=mCore->mDataStructureImageBinary.mImage;
 		break;
 	default:
-		AddError("Invalid input image");
+		AddError(wxT("Invalid input image"));
 		return;
 	}
 
 	if (! inputimage) {
-		AddError("No image on selected input.");
+		AddError(wxT("No image on selected input."));
 		return;
 	}
 
 	// Create the Writer
 	if (! mWriter) {
 		if (inputimage->nChannels==3) {
-			mWriter = cvCreateVideoWriter(mFilename.c_str(), -1, mFrameRate, cvGetSize(inputimage));
+			mWriter = cvCreateVideoWriter(mFilename.mb_str(wxConvISO8859_1), -1, mFrameRate, cvGetSize(inputimage));
 		} else if (inputimage->nChannels==1) {
-			mWriter = cvCreateVideoWriter(mFilename.c_str(), -1, mFrameRate, cvGetSize(inputimage),0);
+			mWriter = cvCreateVideoWriter(mFilename.mb_str(wxConvISO8859_1), -1, mFrameRate, cvGetSize(inputimage),0);
 		} else {
-			AddError("Input image must have 1 or 3 channels");
+			AddError(wxT("Input image must have 1 or 3 channels"));
 			return;
 		}
 
 		if (! mWriter) {
-			AddError("Error while creating the AVI file.");
+			AddError(wxT("Error while creating the AVI file."));
 			return;
 		}
 	}

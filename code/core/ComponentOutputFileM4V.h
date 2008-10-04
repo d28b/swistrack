@@ -4,7 +4,7 @@
 #include "Component.h"
 
 #ifdef USE_XVID
-#include <string>
+#include <wx/string.h>
 #include <cv.h>
 #include <xvid.h>
 #include <wx/file.h>
@@ -56,7 +56,7 @@ private:
 	enum eKeepInMemory mKeepInMemory;	//!< (configuration) Keep in memory feature.
 	int mKeepInMemoryFrameCount;		//!< (configuration) Number of uncompressed frames to keep in memory (raw mode).
 	int mKeepInMemoryBufferSize;		//!< (configuration) Size of the memory buffer in bytes (compressed mode).
-	std::string mFilename;				//!< (configuration) Output file name.
+	wxString mFilename;				//!< (configuration) Output file name.
 
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 
@@ -73,15 +73,15 @@ private:
 class ComponentOutputFileM4V: public Component {
 
 public:
-	ComponentOutputFileM4V(SwisTrackCore *stc): Component(stc, "OutputFileM4V") {Initialize();}
+	ComponentOutputFileM4V(SwisTrackCore *stc): Component(stc, wxT("OutputFileM4V")) {Initialize();}
 	~ComponentOutputFileM4V() {}
 
 	// Overwritten Component methods
-	void OnStart() {AddError("XVID support was not compiled into this executable.");}
-	void OnReloadConfiguration() {AddError("GigE support was not compiled into this executable.");}
-	void OnStep() {AddError("XVID support was not compiled into this executable.");}
+	void OnStart() {AddError(wxT("XVID support was not compiled into this executable."));}
+	void OnReloadConfiguration() {AddError(wxT("GigE support was not compiled into this executable."));}
+	void OnStep() {AddError(wxT("XVID support was not compiled into this executable."));}
 	void OnStepCleanup() {}
-	void OnStop() {AddError("XVID support was not compiled into this executable.");}
+	void OnStop() {AddError(wxT("XVID support was not compiled into this executable."));}
 	Component *Create() {return new ComponentOutputFileM4V(mCore);}
 };
 

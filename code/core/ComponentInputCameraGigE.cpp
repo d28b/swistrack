@@ -2,12 +2,11 @@
 #define THISCLASS ComponentInputCameraGigE
 
 #ifdef USE_CAMERA_PYLON_GIGE
-#include <sstream>
 #include "DisplayEditor.h"
 #include "ImageConversion.h"
 
 THISCLASS::ComponentInputCameraGigE(SwisTrackCore *stc):
-		Component(stc, "InputCameraGigE"),
+		Component(stc, wxT("InputCameraGigE")),
 		mCamera(0), mStreamGrabber(0), mCurrentResult(),
 		mFrameNumber(0), mOutputImage(0) {
 
@@ -40,30 +39,30 @@ void THISCLASS::OnTerminateStatic() {
 }
 
 void THISCLASS::OnStart() {
-	mCameraFullName=GetConfigurationString("CameraFullName", "");
-	mColor=GetConfigurationBool("Color", true);
-	mTriggerMode=(eTriggerMode)GetConfigurationInt("TriggerMode", 0);
-	mTriggerTimerFPS=GetConfigurationInt("TriggerTimerFPS", 10);
-	mInputBufferSize=GetConfigurationInt("InputBufferSize", 8);
+	mCameraFullName=GetConfigurationString(wxT("CameraFullName"), wxT(""));
+	mColor=GetConfigurationBool(wxT("Color"), true);
+	mTriggerMode=(eTriggerMode)GetConfigurationInt(wxT("TriggerMode"), 0);
+	mTriggerTimerFPS=GetConfigurationInt(wxT("TriggerTimerFPS"), 10);
+	mInputBufferSize=GetConfigurationInt(wxT("InputBufferSize"), 8);
 
 	// Check the maximum amount of buffers
 	if (mInputBufferSize < 1) {
 		mInputBufferSize = 1;
-		AddWarning(wxString::Format("Using %d input buffer.", mInputBufferSize).c_str());
+		AddWarning(wxString::Format(wxT("Using %d input buffer."), mInputBufferSize));
 	}
 	if (mInputBufferSize > mInputBufferSizeMax) {
 		mInputBufferSize = mInputBufferSizeMax;
-		AddWarning(wxString::Format("Using %d input buffers.", mInputBufferSize).c_str());
+		AddWarning(wxString::Format(wxT("Using %d input buffers."), mInputBufferSize));
 	}
 
 	// Get the transport layer
 	Pylon::CTlFactory& tlfactory=Pylon::CTlFactory::GetInstance();
 
 	try {
-		if (mCameraFullName=="") {
+		if (mCameraFullName.Len()==0) {
 			Pylon::DeviceInfoList_t devices;
 			if (tlfactory.EnumerateDevices(devices)==0) {
-				AddError("No GigE cameras found!");
+				AddError(wxT("No GigE cameras found!"));
 				return;
 			}
 			mCore->mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepLapTime, this);
@@ -71,9 +70,9 @@ void THISCLASS::OnStart() {
 			mCore->mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepLapTime, this);
 		} else {
 			// Create a camera object and cast to the camera class
-			mCamera=dynamic_cast<Pylon::CBaslerGigECamera*>(tlfactory.CreateDevice(mCameraFullName.c_str()));
+			mCamera=dynamic_cast<Pylon::CBaslerGigECamera*>(tlfactory.CreateDevice(mCameraFullName.mb_str(wxConvISO8859_1)));
 			if (! mCamera) {
-				AddError("Camera not found!");
+				AddError(wxT("Camera not found!"));
 				return;
 			}
 		}
@@ -188,12 +187,12 @@ void THISCLASS::OnStart() {
 void THISCLASS::OnReloadConfiguration() {
 	try {
 		// Configure exposure time and mode
-		int exposuretime=GetConfigurationInt("ExposureTime", 100);
+		int exposuretime=GetConfigurationInt(wxT("ExposureTime"), 100);
 		mCamera->ExposureMode.SetValue(Basler_GigECameraParams::ExposureMode_Timed);
 		mCamera->ExposureTimeRaw.SetValue(exposuretime);
 
 		// Configure analog gain
-		int analoggain=GetConfigurationInt("AnalogGain", 500);
+		int analoggain=GetConfigurationInt(wxT("AnalogGain"), 500);
 		mCamera->GainRaw.SetValue(analoggain);
 	} catch (GenICam::GenericException &e) {
 		AddError(e.GetDescription());
@@ -209,7 +208,7 @@ void THISCLASS::OnStep() {
 
 		// Wait for the grabbed image with a timeout of 3 seconds
 		if (! mStreamGrabber->GetWaitObject().Wait(3000)) {
-			AddError("Failed to retrieve an image: the camera did not send any image.");
+			AddError(wxT("Failed to retrieve an image: the camera did not send any image."));
 			return;
 		}
 	} else {
@@ -220,9 +219,7 @@ void THISCLASS::OnStep() {
 	// Get an item from the grabber's output queue
 	mStreamGrabber->RetrieveResult(mCurrentResult);
 	if (! mCurrentResult.Succeeded()) {
-		std::ostringstream oss;
-		oss << "Failed to retrieve an item from the output queue: " << mCurrentResult.GetErrorDescription();
-		AddError(oss.str());
+		AddError(wxString::Format(wxT("Failed to retrieve an item from the output queue: %s"), mCurrentResult.GetErrorDescription()));
 		return;
 	}
 
@@ -248,9 +245,7 @@ void THISCLASS::OnStepCleanup() {
 	try {
 		mStreamGrabber->QueueBuffer(mCurrentResult.Handle(), mCurrentResult.Context());
 	} catch (GenICam::GenericException &e) {
-		std::ostringstream oss;
-		oss << "Failed to requeue buffer: " << e.GetDescription();
-		AddError(oss.str());
+		AddError(wxString::Format(wxT("Failed to requeue buffer: %s", e.GetDescription()));
 	}
 
 	// Prepare the trigger for the next frame

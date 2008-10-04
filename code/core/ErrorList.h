@@ -3,7 +3,7 @@
 
 class ErrorList;
 
-#include <string>
+#include <wx/string.h>
 #include <list>
 #include "ErrorListItem.h"
 
@@ -22,7 +22,7 @@ public:
 	~ErrorList() {}
 
 	//! Adds an error message.
-	void Add(const std::string &msg, int linenumber=0);
+	void Add(const wxString &msg, int linenumber=0);
 };
 
 #endif

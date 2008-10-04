@@ -1,13 +1,12 @@
 #include "ComponentConvertToGray.h"
 #define THISCLASS ComponentConvertToGray
 
-#include <sstream>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentConvertToGray(SwisTrackCore *stc):
-		Component(stc, "ConvertToGray"),
+		Component(stc, wxT("ConvertToGray")),
 		mOutputImage(0),
-		mDisplayOutput("Output", "After conversion to grayscale") {
+		mDisplayOutput(wxT("Output"), wxT("After conversion to grayscale")) {
 
 	// Data structure relations
 	mCategory=&(mCore->mCategoryInputConversion);
@@ -27,8 +26,8 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mChannel=GetConfigurationInt("Channel", 0);
-	memcpy(mChannelColorSeq, "BGR ", 4);
+	mChannel=GetConfigurationInt(wxT("Channel"), 0);
+	memcpy(mChannelColorSeq, wxT("BGR "), 4);
 }
 
 void THISCLASS::OnStep() {
@@ -73,7 +72,7 @@ void THISCLASS::OnStep() {
 			mCore->mDataStructureImageGray.mImage=mOutputImage;
 		}
 	} catch(...) {
-		AddError("Conversion to gray failed.");
+		AddError(wxT("Conversion to gray failed."));
 	}
 
 	// Let the Display know about our image
