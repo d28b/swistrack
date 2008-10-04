@@ -9,7 +9,7 @@ THISCLASS::ComponentDoubleThresholdColorIndependent(SwisTrackCore *stc):
 		mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryThresholdingColor);
+	mCategory = &(mCore->mCategoryThresholdingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);
@@ -21,28 +21,28 @@ THISCLASS::ComponentDoubleThresholdColorIndependent(SwisTrackCore *stc):
 THISCLASS::~ComponentDoubleThresholdColorIndependent() {
 }
 
-void THISCLASS::OnStart() {	
+void THISCLASS::OnStart() {
 	OnReloadConfiguration();
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mLowThreshold.val[0]=GetConfigurationInt(wxT("BlueLowThreshold"), 0);
-	mLowThreshold.val[1]=GetConfigurationInt(wxT("GreenLowThreshold"), 0);
-	mLowThreshold.val[2]=GetConfigurationInt(wxT("RedLowThreshold"), 0);
+	mLowThreshold.val[0] = GetConfigurationInt(wxT("BlueLowThreshold"), 0);
+	mLowThreshold.val[1] = GetConfigurationInt(wxT("GreenLowThreshold"), 0);
+	mLowThreshold.val[2] = GetConfigurationInt(wxT("RedLowThreshold"), 0);
 	//1 is added because of the way cvInRangeS makes the comparison
-	mHighThreshold.val[0]=GetConfigurationInt(wxT("BlueHighThreshold"), 255)+1;
-	mHighThreshold.val[1]=GetConfigurationInt(wxT("GreenHighThreshold"), 255)+1;
-	mHighThreshold.val[2]=GetConfigurationInt(wxT("RedHighThreshold"), 255)+1;
-	strcpy(thresholdColorSeq,"BGR");
+	mHighThreshold.val[0] = GetConfigurationInt(wxT("BlueHighThreshold"), 255) + 1;
+	mHighThreshold.val[1] = GetConfigurationInt(wxT("GreenHighThreshold"), 255) + 1;
+	mHighThreshold.val[2] = GetConfigurationInt(wxT("RedHighThreshold"), 255) + 1;
+	strcpy(thresholdColorSeq, "BGR");
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputimage=mCore->mDataStructureImageColor.mImage;	
+	IplImage *inputimage = mCore->mDataStructureImageColor.mImage;
 	if (! inputimage) {
 		AddError(wxT("Cannot access Input image."));
 		return;
 	}
-	if (inputimage->nChannels!=3) {
+	if (inputimage->nChannels != 3) {
 		AddError(wxT("Input must be a color image (3 channels)."));
 	}
 
@@ -51,29 +51,29 @@ void THISCLASS::OnStep() {
 	try {
 		PrepareOutputImage(inputimage);
 		// Correct the channel sequence
-		if (strncmp(inputimage->channelSeq,thresholdColorSeq,3))		
+		if (strncmp(inputimage->channelSeq, thresholdColorSeq, 3))
 		{
 			CvScalar tmpLowThreshold;
 			CvScalar tmpHighThreshold;
 
-			for (int i=0;i<3;i++)				
-					for (int j=0;j<3;j++)
-						if (inputimage->channelSeq[i]==thresholdColorSeq[j])
-						{	
-							tmpLowThreshold.val[i]=mLowThreshold.val[j];							
-							tmpHighThreshold.val[i]=mLowThreshold.val[j];
-						}
-			strcpy(thresholdColorSeq,inputimage->channelSeq);
-			for (int i=0;i<3;i++)
+			for (int i = 0;i < 3;i++)
+				for (int j = 0;j < 3;j++)
+					if (inputimage->channelSeq[i] == thresholdColorSeq[j])
+					{
+						tmpLowThreshold.val[i] = mLowThreshold.val[j];
+						tmpHighThreshold.val[i] = mLowThreshold.val[j];
+					}
+			strcpy(thresholdColorSeq, inputimage->channelSeq);
+			for (int i = 0;i < 3;i++)
 			{
-				mLowThreshold.val[i]=tmpLowThreshold.val[i];
-				mHighThreshold.val[i]=tmpHighThreshold.val[i];				
+				mLowThreshold.val[i] = tmpLowThreshold.val[i];
+				mHighThreshold.val[i] = tmpHighThreshold.val[i];
 			}
-				
-		}		
-		cvInRangeS(inputimage,mLowThreshold,mHighThreshold,mOutputImage);				
-		mCore->mDataStructureImageBinary.mImage=mOutputImage;
-	} catch (...) 
+
+		}
+		cvInRangeS(inputimage, mLowThreshold, mHighThreshold, mOutputImage);
+		mCore->mDataStructureImageBinary.mImage = mOutputImage;
+	} catch (...)
 	{
 		AddError(wxT("Thresholding failed."));
 		return;
@@ -87,10 +87,12 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureImageBinary.mImage=0;
+	mCore->mDataStructureImageBinary.mImage = 0;
 }
 
-void THISCLASS::OnStop() 
+void THISCLASS::OnStop()
 {
-	if (mOutputImage) {cvReleaseImage(&mOutputImage);}
+	if (mOutputImage) {
+		cvReleaseImage(&mOutputImage);
+	}
 }

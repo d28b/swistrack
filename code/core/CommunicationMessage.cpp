@@ -12,22 +12,30 @@ THISCLASS::CommunicationMessage(const wxString &cmd, CommunicationMessage *inrep
 }
 
 bool THISCLASS::GetBool(unsigned int i, bool defvalue) {
-	if (mParameters.size()<=i) {return defvalue;}
+	if (mParameters.size() <= i) {
+		return defvalue;
+	}
 	return ConfigurationConversion::Bool(mParameters[i], defvalue);
 }
 
 int THISCLASS::GetInt(unsigned int i, int defvalue) {
-	if (mParameters.size()<=i) {return defvalue;}
+	if (mParameters.size() <= i) {
+		return defvalue;
+	}
 	return ConfigurationConversion::Int(mParameters[i], defvalue);
 }
 
 double THISCLASS::GetDouble(unsigned int i, double defvalue) {
-	if (mParameters.size()<=i) {return defvalue;}
+	if (mParameters.size() <= i) {
+		return defvalue;
+	}
 	return ConfigurationConversion::Double(mParameters[i], defvalue);
 }
 
 wxString THISCLASS::GetString(unsigned int i, const wxString &defvalue) {
-	if (mParameters.size()<=i) {return defvalue;}
+	if (mParameters.size() <= i) {
+		return defvalue;
+	}
 	return mParameters[i];
 }
 
@@ -52,8 +60,8 @@ bool THISCLASS::AddString(const wxString &value) {
 }
 
 bool THISCLASS::AddParsedArgument(const wxString &value) {
-	if (mCommand.Len()==0) {
-		mCommand=value;
+	if (mCommand.Len() == 0) {
+		mCommand = value;
 	} else {
 		mParameters.push_back(value);
 	}

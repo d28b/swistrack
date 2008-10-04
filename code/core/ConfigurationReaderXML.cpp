@@ -4,7 +4,7 @@
 #include <wx/log.h>
 #include "SwisTrackCoreEditor.h"
 
-THISCLASS::ConfigurationReaderXML(): 
+THISCLASS::ConfigurationReaderXML():
 		ConfigurationXML(0, true),
 		mErrorList(), mDocument(), mIsOpen(false) {
 
@@ -16,7 +16,7 @@ THISCLASS::~ConfigurationReaderXML() {
 bool THISCLASS::Open(const wxString &filename) {
 	// Read the file
 	wxLogNull log;
-	mIsOpen=mDocument.Load(filename);
+	mIsOpen = mDocument.Load(filename);
 	if (! mIsOpen) {
 		mDocument.SetRoot(new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("swistrack")));
 		SelectRootNode();
@@ -26,7 +26,7 @@ bool THISCLASS::Open(const wxString &filename) {
 	// Select the root element and check its name
 	SetRootNode(mDocument.GetRoot());
 	if (GetRootNode()->GetName() != wxT("swistrack")) {
-		mIsOpen=false;
+		mIsOpen = false;
 		return false;
 	}
 
@@ -35,7 +35,9 @@ bool THISCLASS::Open(const wxString &filename) {
 
 bool THISCLASS::ReadComponents(SwisTrackCore *stc) {
 	SwisTrackCoreEditor stce(stc);
-	if (! stce.IsEditable()) {return false;}
+	if (! stce.IsEditable()) {
+		return false;
+	}
 
 	// Read the component list
 	SelectRootNode();

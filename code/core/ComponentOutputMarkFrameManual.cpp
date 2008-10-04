@@ -5,7 +5,7 @@ THISCLASS::ComponentOutputMarkFrameManual(SwisTrackCore *stc):
 		Component(stc, wxT("OutputMarkFrameManual")), mMarkerName(wxT("")) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryOutput);
+	mCategory = &(mCore->mCategoryOutput);
 
 	// Read the XML configuration file
 	Initialize();
@@ -24,16 +24,20 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mMarkerName=GetConfigurationString(wxT("MarkerName"), wxT(""));
+	mMarkerName = GetConfigurationString(wxT("MarkerName"), wxT(""));
 }
 
 void THISCLASS::OnStep() {
-	if (! mCore->mCommunicationInterface) {return;}
+	if (! mCore->mCommunicationInterface) {
+		return;
+	}
 
 	// Get the marker (and return if there is none)
-	wxString mark=GetConfigurationString(wxT("Mark"), wxT(""));
-	if (mark.Len()==0) {return;}
-	mConfiguration[wxT("Mark")]=wxT("");
+	wxString mark = GetConfigurationString(wxT("Mark"), wxT(""));
+	if (mark.Len() == 0) {
+		return;
+	}
+	mConfiguration[wxT("Mark")] = wxT("");
 
 	// Write a marker
 	CommunicationMessage m(wxT("MARK"));

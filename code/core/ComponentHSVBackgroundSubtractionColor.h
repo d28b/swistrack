@@ -19,7 +19,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentHSVBackgroundSubtractionColor(mCore);}
+	Component *Create() {
+		return new ComponentHSVBackgroundSubtractionColor(mCore);
+	}
 
 private:
 	IplImage *mBackgroundImage;			//!< The background image.

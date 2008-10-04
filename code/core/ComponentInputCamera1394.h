@@ -31,13 +31,15 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentInputCamera1394(mCore);}
+	Component *Create() {
+		return new ComponentInputCamera1394(mCore);
+	}
 
 private:
 #ifdef __WXMSW__
 	C1394Camera mCamera;				//!< Camera handle.
 #else // __WXMSW__
-    dc1394_camera_t mCamera;
+	dc1394_camera_t mCamera;
 #endif // __WXMSW__
 	IplImage* mOutputImage;				//!< The last acquired image.
 	int mFrameNumber;					//!< The frame number since the component was started.
@@ -51,16 +53,28 @@ private:
 class ComponentInputCamera1394: public Component {
 
 public:
-	ComponentInputCamera1394(SwisTrackCore *stc): Component(stc, wxT("InputCamera1394")) {Initialize();}
+	ComponentInputCamera1394(SwisTrackCore *stc): Component(stc, wxT("InputCamera1394")) {
+		Initialize();
+	}
 	~ComponentInputCamera1394() {}
 
 	// Overwritten Component methods
-	void OnStart() {AddError(wxT("1394 support was not compiled into this executable."));}
-	void OnReloadConfiguration() {AddError(wxT("1394 support was not compiled into this executable."));}
-	void OnStep() {AddError(wxT("1394 support was not compiled into this executable."));}
+	void OnStart() {
+		AddError(wxT("1394 support was not compiled into this executable."));
+	}
+	void OnReloadConfiguration() {
+		AddError(wxT("1394 support was not compiled into this executable."));
+	}
+	void OnStep() {
+		AddError(wxT("1394 support was not compiled into this executable."));
+	}
 	void OnStepCleanup() {}
-	void OnStop() {AddError(wxT("1394 support was not compiled into this executable."));}
-	Component *Create() {return new ComponentInputCamera1394(mCore);}
+	void OnStop() {
+		AddError(wxT("1394 support was not compiled into this executable."));
+	}
+	Component *Create() {
+		return new ComponentInputCamera1394(mCore);
+	}
 };
 
 #endif // USE_CAMERA_CMU_1394

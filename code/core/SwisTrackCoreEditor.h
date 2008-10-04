@@ -16,7 +16,9 @@ public:
 	~SwisTrackCoreEditor();
 
 	//! Returns whether the SwisTrackCore object is editable or not.
-	bool IsEditable() {return (mSwisTrackCore!=0);}
+	bool IsEditable() {
+		return (mSwisTrackCore != 0);
+	}
 
 	//! Returns the list of deployed components. Note that this list may only be edited as long as the SwisTrackCoreEditor object exists.
 	SwisTrackCore::tComponentList *GetDeployedComponents();

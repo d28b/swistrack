@@ -4,7 +4,7 @@
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
-	#include <wx/wx.h>
+#include <wx/wx.h>
 #endif
 
 class TimelinePanel;
@@ -32,17 +32,19 @@ public:
 
 private:
 	//! An overwritten wxTimer.
-	class EventRecorderResetTimer: public wxTimer {
+class EventRecorderResetTimer: public wxTimer {
 	public:
 		TimelinePanel *mTimelinePanel;		//!< The associated timeline panel.
-		
+
 		//! Constructor.
 		EventRecorderResetTimer(TimelinePanel *tp): wxTimer(), mTimelinePanel(tp) {}
 		//! Destructor.
 		~EventRecorderResetTimer() {}
 
 		// wxTimer methods
-		void Notify() {mTimelinePanel->StartRecording();}
+		void Notify() {
+			mTimelinePanel->StartRecording();
+		}
 	};
 
 	//! Component IDs.

@@ -5,16 +5,16 @@
 #include <algorithm>
 
 THISCLASS::SimulationParticles(const wxString &filename):
-		mFrames(), mFrameRead(), mFileName(filename), mFile(0), 
+		mFrames(), mFrameRead(), mFileName(filename), mFile(0),
 		mCurrentFrame(mFrames.end()), mEmptyFrame() {
 
 	// Initialize structures
-	mFrameRead.number=0;
+	mFrameRead.number = 0;
 	mFrameRead.particles.clear();
-	mCurrentFrame=mFrames.end();
+	mCurrentFrame = mFrames.end();
 
 	// Open file
-	mFile=new std::ifstream();
+	mFile = new std::ifstream();
 	mFile->clear();
 	mFile->open(filename.mb_str(wxConvISO8859_1), std::ios::in);
 }
@@ -25,19 +25,19 @@ THISCLASS::~SimulationParticles() {
 
 void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum) {
 	// We process known messages only (and discard other messages without warning)
-	if (m->mCommand==wxT("STEP_START")) {
-		mFrameRead.number=0;
+	if (m->mCommand == wxT("STEP_START")) {
+		mFrameRead.number = 0;
 		mFrameRead.particles.clear();
-	} else if (m->mCommand==wxT("FRAMENUMBER")) {
-		mFrameRead.number=m->PopInt(0);
-	} else if (m->mCommand==wxT("PARTICLE")) {
+	} else if (m->mCommand == wxT("FRAMENUMBER")) {
+		mFrameRead.number = m->PopInt(0);
+	} else if (m->mCommand == wxT("PARTICLE")) {
 		Particle p;
-		p.mID=m->PopInt(0);
-		p.mCenter.x=(float)m->PopDouble(0);
-		p.mCenter.y=(float)m->PopDouble(0);
-		p.mOrientation=(float)m->PopDouble(0);
+		p.mID = m->PopInt(0);
+		p.mCenter.x = (float)m->PopDouble(0);
+		p.mCenter.y = (float)m->PopDouble(0);
+		p.mOrientation = (float)m->PopDouble(0);
 		mFrameRead.particles.push_back(p);
-	} else if (m->mCommand==wxT("STEP_STOP")) {
+	} else if (m->mCommand == wxT("STEP_STOP")) {
 		mFrames.push_back(mFrameRead);
 	}
 }
@@ -56,12 +56,16 @@ void THISCLASS::OnNMEASend(const char *buffer, int len) {
 }
 
 bool THISCLASS::ReadBlock() {
-	if (! mFile->is_open()) {return false;}
+	if (! mFile->is_open()) {
+		return false;
+	}
 
 	char buffer[1024];
 	mFile->read(buffer, sizeof(buffer));
-	int len=mFile->gcount();
-	if (len<1) {return false;}
+	int len = mFile->gcount();
+	if (len < 1) {
+		return false;
+	}
 	NMEAProcessData(buffer, len);
 	return true;
 }
@@ -69,10 +73,10 @@ bool THISCLASS::ReadBlock() {
 THISCLASS::Frame *THISCLASS::FirstFrame() {
 	while (1) {
 		// Move to the first frame
-		mCurrentFrame=mFrames.begin();
+		mCurrentFrame = mFrames.begin();
 
 		// Found? Great ...
-		if (mCurrentFrame!=mFrames.end()) {
+		if (mCurrentFrame != mFrames.end()) {
 			return &*mCurrentFrame;
 		}
 
@@ -86,37 +90,45 @@ THISCLASS::Frame *THISCLASS::FirstFrame() {
 THISCLASS::Frame *THISCLASS::NextFrame() {
 	while (1) {
 		// Try incrementing
-		tFrameList::iterator nextframe=mCurrentFrame;
+		tFrameList::iterator nextframe = mCurrentFrame;
 		nextframe++;
 
 		// Found? Great ...
-		if (nextframe!=mFrames.end()) {
-			mCurrentFrame=nextframe;
+		if (nextframe != mFrames.end()) {
+			mCurrentFrame = nextframe;
 			return &*mCurrentFrame;
 		}
 
 		// Read the next block in the file and quit if we are at the end of the file
 		if (! ReadBlock()) {
-			mCurrentFrame=mFrames.end();
+			mCurrentFrame = mFrames.end();
 			return 0;
 		}
 	}
 }
 
 THISCLASS::Frame *THISCLASS::GetCurrentFrame() {
-	if (mCurrentFrame==mFrames.end()) {return 0;}
+	if (mCurrentFrame == mFrames.end()) {
+		return 0;
+	}
 	return &*mCurrentFrame;
 }
 
 THISCLASS::Frame *THISCLASS::GetFutureFrameByNumber(int number) {
-	while (mCurrentFrame!=mFrames.end()) {
-		if (mCurrentFrame->number == number) {return &*mCurrentFrame;}
-		if (mCurrentFrame->number > number) {break;}
-		if (! NextFrame()) {break;}
+	while (mCurrentFrame != mFrames.end()) {
+		if (mCurrentFrame->number == number) {
+			return &*mCurrentFrame;
+		}
+		if (mCurrentFrame->number > number) {
+			break;
+		}
+		if (! NextFrame()) {
+			break;
+		}
 	}
 
 	// If no frame is available for this frame number, pretend to have a frame with no particles
-	mEmptyFrame.number=number;
+	mEmptyFrame.number = number;
 	return &mEmptyFrame;
 }
 

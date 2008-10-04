@@ -25,7 +25,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentCalibrationTSAI(mCore);}
+	Component *Create() {
+		return new ComponentCalibrationTSAI(mCore);
+	}
 
 private:
 	//! A structure containing the position values of the calibration points

@@ -111,8 +111,8 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentOutputFile(this));
 
 	// Initialize the available components
-	tComponentList::iterator ita=mAvailableComponents.begin();
-	while (ita!=mAvailableComponents.end()) {
+	tComponentList::iterator ita = mAvailableComponents.begin();
+	while (ita != mAvailableComponents.end()) {
 		(*ita)->OnInitializeStatic();
 		ita++;
 	}
@@ -130,8 +130,8 @@ THISCLASS::~SwisTrackCore() {
 	Stop();
 
 	// Delete deployed components
-	tComponentList::iterator itd=mDeployedComponents.begin();
-	while (itd!=mDeployedComponents.end()) {
+	tComponentList::iterator itd = mDeployedComponents.begin();
+	while (itd != mDeployedComponents.end()) {
 		delete (*itd);
 		itd++;
 	}
@@ -139,8 +139,8 @@ THISCLASS::~SwisTrackCore() {
 	mDeployedComponents.clear();
 
 	// Terminate and delete available components
-	tComponentList::iterator ita=mAvailableComponents.begin();
-	while (ita!=mAvailableComponents.end()) {
+	tComponentList::iterator ita = mAvailableComponents.begin();
+	while (ita != mAvailableComponents.end()) {
 		(*ita)->OnTerminateStatic();
 		delete (*ita);
 		ita++;
@@ -154,8 +154,12 @@ THISCLASS::~SwisTrackCore() {
 }
 
 bool THISCLASS::Start(bool productionmode) {
-	if (mStarted) {return false;}
-	if (mEditLocks>0) {return false;}
+	if (mStarted) {
+		return false;
+	}
+	if (mEditLocks > 0) {
+		return false;
+	}
 
 	// Event recorder
 	if (productionmode) {
@@ -166,31 +170,33 @@ bool THISCLASS::Start(bool productionmode) {
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeStart);
 
 	// Notify the interfaces
-	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
-	while (iti!=mSwisTrackCoreInterfaces.end()) {
+	tSwisTrackCoreInterfaceList::iterator iti = mSwisTrackCoreInterfaces.begin();
+	while (iti != mSwisTrackCoreInterfaces.end()) {
 		(*iti)->OnBeforeStart(productionmode);
 		iti++;
 	}
 
 	// Update the flags
-	mStarted=true;
-	mProductionMode=productionmode;
+	mStarted = true;
+	mProductionMode = productionmode;
 
 	// Start all components (until first error)
-	tComponentList::iterator it=mDeployedComponents.begin();
-	while (it!=mDeployedComponents.end()) {
+	tComponentList::iterator it = mDeployedComponents.begin();
+	while (it != mDeployedComponents.end()) {
 		if ((*it)->GetEnabled()) {
 			(*it)->ClearStatus();
 			(*it)->OnStart();
-			if ((*it)->mStatusHasError) {break;}
-			(*it)->mStarted=true;
+			if ((*it)->mStatusHasError) {
+				break;
+			}
+			(*it)->mStarted = true;
 		}
 		it++;
 	}
 
 	// Notify the interfaces
-	iti=mSwisTrackCoreInterfaces.begin();
-	while (iti!=mSwisTrackCoreInterfaces.end()) {
+	iti = mSwisTrackCoreInterfaces.begin();
+	while (iti != mSwisTrackCoreInterfaces.end()) {
 		(*iti)->OnAfterStart(productionmode);
 		iti++;
 	}
@@ -206,36 +212,38 @@ bool THISCLASS::Start(bool productionmode) {
 }
 
 bool THISCLASS::Stop() {
-	if (! mStarted) {return false;}
+	if (! mStarted) {
+		return false;
+	}
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeStop);
 
 	// Notify the interfaces
-	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
-	while (iti!=mSwisTrackCoreInterfaces.end()) {
+	tSwisTrackCoreInterfaceList::iterator iti = mSwisTrackCoreInterfaces.begin();
+	while (iti != mSwisTrackCoreInterfaces.end()) {
 		(*iti)->OnBeforeStop();
 		iti++;
 	}
 
 	// Stop all components
-	tComponentList::iterator it=mDeployedComponents.end();
-	while (it!=mDeployedComponents.begin()) {
+	tComponentList::iterator it = mDeployedComponents.end();
+	while (it != mDeployedComponents.begin()) {
 		it--;
 		if ((*it)->mStarted) {
 			(*it)->ClearStatus();
 			(*it)->OnStop();
-			(*it)->mStarted=false;
+			(*it)->mStarted = false;
 		}
 	}
 
 	// Update flags
-	mStarted=false;
-	mProductionMode=false;
+	mStarted = false;
+	mProductionMode = false;
 
 	// Notify the interfaces
-	iti=mSwisTrackCoreInterfaces.begin();
-	while (iti!=mSwisTrackCoreInterfaces.end()) {
+	iti = mSwisTrackCoreInterfaces.begin();
+	while (iti != mSwisTrackCoreInterfaces.end()) {
 		(*iti)->OnAfterStop();
 		iti++;
 	}
@@ -251,23 +259,25 @@ bool THISCLASS::Stop() {
 }
 
 bool THISCLASS::Step() {
-	if (! mStarted) {return false;}
+	if (! mStarted) {
+		return false;
+	}
 
 	// Event recorder
 	mEventRecorder->AddStepStart();
 
 	// Notify the interfaces (OnBeforeStep)
-	tSwisTrackCoreInterfaceList::iterator iti=mSwisTrackCoreInterfaces.begin();
-	while (iti!=mSwisTrackCoreInterfaces.end()) {
+	tSwisTrackCoreInterfaceList::iterator iti = mSwisTrackCoreInterfaces.begin();
+	while (iti != mSwisTrackCoreInterfaces.end()) {
 		(*iti)->OnBeforeStep();
 		iti++;
 	}
 
 	// Notify the displays (OnBeforeStep)
-	tComponentList::iterator it=mDeployedComponents.begin();
-	while (it!=mDeployedComponents.end()) {
-		Component::tDisplayList::iterator itdi=(*it)->mDisplays.begin();
-		while (itdi!=(*it)->mDisplays.end()) {
+	tComponentList::iterator it = mDeployedComponents.begin();
+	while (it != mDeployedComponents.end()) {
+		Component::tDisplayList::iterator itdi = (*it)->mDisplays.begin();
+		while (itdi != (*it)->mDisplays.end()) {
 			(*itdi)->OnBeforeStep();
 			itdi++;
 		}
@@ -279,15 +289,15 @@ bool THISCLASS::Step() {
 	mCommunicationInterface->Send(&mstart);
 
 	// Reset the step durations
-	it=mDeployedComponents.begin();
-	while (it!=mDeployedComponents.end()) {
-		(*it)->mStepDuration=-1;
+	it = mDeployedComponents.begin();
+	while (it != mDeployedComponents.end()) {
+		(*it)->mStepDuration = -1;
 		it++;
 	}
 
 	// Run until first error, or until the end (all started components)
-	it=mDeployedComponents.begin();
-	while (it!=mDeployedComponents.end()) {
+	it = mDeployedComponents.begin();
+	while (it != mDeployedComponents.end()) {
 		if ((*it)->mStarted) {
 			// Event recorder
 			SwisTrackCoreEventRecorder::Event starttime;
@@ -302,24 +312,26 @@ bool THISCLASS::Step() {
 			SwisTrackCoreEventRecorder::Event endtime;
 			mEventRecorder->LapTime(&endtime, SwisTrackCoreEventRecorder::sType_StepStop, (*it));
 			mEventRecorder->Add(&endtime);
-			(*it)->mStepDuration=mEventRecorder->CalculateDuration(&starttime, &endtime);
+			(*it)->mStepDuration = mEventRecorder->CalculateDuration(&starttime, &endtime);
 
 			// Error handling
-			if ((*it)->mStatusHasError) {break;}
+			if ((*it)->mStatusHasError) {
+				break;
+			}
 		}
 
 		it++;
 	}
 
 	// Notify the interfaces (OnStepReady)
-	iti=mSwisTrackCoreInterfaces.begin();
-	while (iti!=mSwisTrackCoreInterfaces.end()) {
+	iti = mSwisTrackCoreInterfaces.begin();
+	while (iti != mSwisTrackCoreInterfaces.end()) {
 		(*iti)->OnStepReady();
 		iti++;
 	}
 
 	// and then cleanup what we run
-	while (it!=mDeployedComponents.begin()) {
+	while (it != mDeployedComponents.begin()) {
 		it--;
 		(*it)->OnStepCleanup();
 	}
@@ -329,10 +341,10 @@ bool THISCLASS::Step() {
 	mCommunicationInterface->Send(&mstop);
 
 	// Notify the displays (OnAfterStep)
-	it=mDeployedComponents.begin();
-	while (it!=mDeployedComponents.end()) {
-		Component::tDisplayList::iterator itdi=(*it)->mDisplays.begin();
-		while (itdi!=(*it)->mDisplays.end()) {
+	it = mDeployedComponents.begin();
+	while (it != mDeployedComponents.end()) {
+		Component::tDisplayList::iterator itdi = (*it)->mDisplays.begin();
+		while (itdi != (*it)->mDisplays.end()) {
 			(*itdi)->OnAfterStep();
 			itdi++;
 		}
@@ -340,8 +352,8 @@ bool THISCLASS::Step() {
 	}
 
 	// Notify the interfaces (OnAfterStep)
-	iti=mSwisTrackCoreInterfaces.begin();
-	while (iti!=mSwisTrackCoreInterfaces.end()) {
+	iti = mSwisTrackCoreInterfaces.begin();
+	while (iti != mSwisTrackCoreInterfaces.end()) {
 		(*iti)->OnAfterStep();
 		iti++;
 	}
@@ -353,14 +365,16 @@ bool THISCLASS::Step() {
 }
 
 bool THISCLASS::ReloadConfiguration() {
-	if (! mStarted) {return false;}
+	if (! mStarted) {
+		return false;
+	}
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeReloadConfiguration);
 
 	// Start all components (until first error)
-	tComponentList::iterator it=mDeployedComponents.begin();
-	while (it!=mDeployedComponents.end()) {
+	tComponentList::iterator it = mDeployedComponents.begin();
+	while (it != mDeployedComponents.end()) {
 		if ((*it)->mStarted) {
 			(*it)->ClearStatus();
 			(*it)->OnReloadConfiguration();
@@ -375,14 +389,16 @@ bool THISCLASS::ReloadConfiguration() {
 }
 
 void THISCLASS::TriggerStart() {
-	if (mTrigger->GetActive()) {return;}
+	if (mTrigger->GetActive()) {
+		return;
+	}
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeTriggerStart);
 
 	// Notify the interfaces
-	tSwisTrackCoreInterfaceList::iterator it=mSwisTrackCoreInterfaces.begin();
-	while (it!=mSwisTrackCoreInterfaces.end()) {
+	tSwisTrackCoreInterfaceList::iterator it = mSwisTrackCoreInterfaces.begin();
+	while (it != mSwisTrackCoreInterfaces.end()) {
 		(*it)->OnBeforeTriggerStart();
 		it++;
 	}
@@ -391,8 +407,8 @@ void THISCLASS::TriggerStart() {
 	mTrigger->SetActive(true);
 
 	// Notify the interfaces
-	it=mSwisTrackCoreInterfaces.begin();
-	while (it!=mSwisTrackCoreInterfaces.end()) {
+	it = mSwisTrackCoreInterfaces.begin();
+	while (it != mSwisTrackCoreInterfaces.end()) {
 		(*it)->OnAfterTriggerStart();
 		it++;
 	}
@@ -406,14 +422,16 @@ void THISCLASS::TriggerStart() {
 }
 
 void THISCLASS::TriggerStop() {
-	if (! mTrigger->GetActive()) {return;}
+	if (! mTrigger->GetActive()) {
+		return;
+	}
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeTriggerStop);
 
 	// Notify the interfaces
-	tSwisTrackCoreInterfaceList::iterator it=mSwisTrackCoreInterfaces.begin();
-	while (it!=mSwisTrackCoreInterfaces.end()) {
+	tSwisTrackCoreInterfaceList::iterator it = mSwisTrackCoreInterfaces.begin();
+	while (it != mSwisTrackCoreInterfaces.end()) {
 		(*it)->OnBeforeTriggerStop();
 		it++;
 	}
@@ -422,8 +440,8 @@ void THISCLASS::TriggerStop() {
 	mTrigger->SetActive(false);
 
 	// Notify the interfaces
-	it=mSwisTrackCoreInterfaces.begin();
-	while (it!=mSwisTrackCoreInterfaces.end()) {
+	it = mSwisTrackCoreInterfaces.begin();
+	while (it != mSwisTrackCoreInterfaces.end()) {
 		(*it)->OnAfterTriggerStop();
 		it++;
 	}
@@ -438,9 +456,9 @@ void THISCLASS::TriggerStop() {
 
 void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmlerr) {
 	// Add an element for each component
-	tComponentList::iterator it=mDeployedComponents.begin();
-	while (it!=mDeployedComponents.end()) {
-		wxXmlNode *node=new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("component"));
+	tComponentList::iterator it = mDeployedComponents.begin();
+	while (it != mDeployedComponents.end()) {
+		wxXmlNode *node = new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("component"));
 		configuration->AddChild(node);
 		node->AddProperty(wxT("type"), (*it)->mName);
 		(*it)->ConfigurationWriteXML(node, xmlerr);
@@ -450,9 +468,11 @@ void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmler
 }
 
 Component *THISCLASS::GetComponentByName(const wxString &name) {
-	tComponentList::iterator it=mAvailableComponents.begin();
-	while (it!=mAvailableComponents.end()) {
-		if ((*it)->mName==name) {return (*it);}
+	tComponentList::iterator it = mAvailableComponents.begin();
+	while (it != mAvailableComponents.end()) {
+		if ((*it)->mName == name) {
+			return (*it);
+		}
 		it++;
 	}
 
@@ -464,8 +484,10 @@ void THISCLASS::AddInterface(SwisTrackCoreInterface *stc) {
 }
 
 void THISCLASS::RemoveInterface(SwisTrackCoreInterface *stc) {
-	tSwisTrackCoreInterfaceList::iterator it=find(mSwisTrackCoreInterfaces.begin(), mSwisTrackCoreInterfaces.end(), stc);
-	if (it==mSwisTrackCoreInterfaces.end()) {return;}
+	tSwisTrackCoreInterfaceList::iterator it = find(mSwisTrackCoreInterfaces.begin(), mSwisTrackCoreInterfaces.end(), stc);
+	if (it == mSwisTrackCoreInterfaces.end()) {
+		return;
+	}
 	mSwisTrackCoreInterfaces.erase(it);
 }
 
@@ -474,35 +496,44 @@ void THISCLASS::OnIdle() {
 }
 
 bool THISCLASS::IncrementEditLocks() {
-	if (mEditLocks>0) {mEditLocks++; return true;}
+	if (mEditLocks > 0) {
+		mEditLocks++;
+		return true;
+	}
 
 	// If started in production mode, editing is not allowed
-	if (IsStartedInProductionMode()) {return false;}
+	if (IsStartedInProductionMode()) {
+		return false;
+	}
 
 	// If started in test mode, stop and allow editing
 	Stop();
 
 	// Notify the interfaces
-	tSwisTrackCoreInterfaceList::iterator it=mSwisTrackCoreInterfaces.begin();
-	while (it!=mSwisTrackCoreInterfaces.end()) {
+	tSwisTrackCoreInterfaceList::iterator it = mSwisTrackCoreInterfaces.begin();
+	while (it != mSwisTrackCoreInterfaces.end()) {
 		(*it)->OnBeforeEdit();
 		it++;
 	}
 
-	mEditLocks=1;
+	mEditLocks = 1;
 	return true;
 }
 
 void THISCLASS::DecrementEditLocks() {
-	if (mEditLocks<1) {return;}
+	if (mEditLocks < 1) {
+		return;
+	}
 
 	// Decrement and return if there are still other locks
 	mEditLocks--;
-	if (mEditLocks>0) {return;}
+	if (mEditLocks > 0) {
+		return;
+	}
 
 	// Notify the interfaces
-	tSwisTrackCoreInterfaceList::iterator it=mSwisTrackCoreInterfaces.begin();
-	while (it!=mSwisTrackCoreInterfaces.end()) {
+	tSwisTrackCoreInterfaceList::iterator it = mSwisTrackCoreInterfaces.begin();
+	while (it != mSwisTrackCoreInterfaces.end()) {
 		(*it)->OnAfterEdit();
 		it++;
 	}

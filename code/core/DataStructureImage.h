@@ -12,7 +12,9 @@ public:
 	IplImage* mImage;	//! Image.
 
 	//! Constructor.
-	DataStructureImage(const wxString &name, const wxString &displayname): DataStructure(name), mImage(0) {mDisplayName=displayname;}
+	DataStructureImage(const wxString &name, const wxString &displayname): DataStructure(name), mImage(0) {
+		mDisplayName = displayname;
+	}
 	//! Destructor.
 	~DataStructureImage() {}
 };

@@ -9,7 +9,7 @@ THISCLASS::ComponentThresholdGray(SwisTrackCore *stc):
 		mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryThresholdingGray);
+	mCategory = &(mCore->mCategoryThresholdingGray);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);
@@ -26,13 +26,15 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mThreshold=GetConfigurationInt(wxT("Threshold"), 128);
-	mInvertThreshold=GetConfigurationBool(wxT("InvertThreshold"), false);
+	mThreshold = GetConfigurationInt(wxT("Threshold"), 128);
+	mInvertThreshold = GetConfigurationBool(wxT("InvertThreshold"), false);
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputimage=mCore->mDataStructureImageGray.mImage;
-	if (! inputimage) {return;}
+	IplImage *inputimage = mCore->mDataStructureImageGray.mImage;
+	if (! inputimage) {
+		return;
+	}
 
 	try {
 		PrepareOutputImage(inputimage);
@@ -40,7 +42,7 @@ void THISCLASS::OnStep() {
 			cvThreshold(inputimage, mOutputImage, mThreshold, 255, CV_THRESH_BINARY_INV);
 		else
 			cvThreshold(inputimage, mOutputImage, mThreshold, 255, CV_THRESH_BINARY);
-		mCore->mDataStructureImageBinary.mImage=mOutputImage;
+		mCore->mDataStructureImageBinary.mImage = mOutputImage;
 	} catch (...) {
 		AddError(wxT("Thresholding failed."));
 	}
@@ -53,9 +55,11 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureImageBinary.mImage=0;
+	mCore->mDataStructureImageBinary.mImage = 0;
 }
 
 void THISCLASS::OnStop() {
-	if (mOutputImage) {cvReleaseImage(&mOutputImage);}
+	if (mOutputImage) {
+		cvReleaseImage(&mOutputImage);
+	}
 }

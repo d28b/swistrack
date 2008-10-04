@@ -22,7 +22,7 @@ public:
 	~ErrorList() {}
 
 	//! Adds an error message.
-	void Add(const wxString &msg, int linenumber=0);
+	void Add(const wxString &msg, int linenumber = 0);
 };
 
 #endif

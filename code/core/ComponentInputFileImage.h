@@ -21,7 +21,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentInputFileImage(mCore);}
+	Component *Create() {
+		return new ComponentInputFileImage(mCore);
+	}
 
 private:
 	IplImage* mOutputImage;				//!< The image.

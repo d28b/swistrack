@@ -20,7 +20,7 @@ class SwisTrackCoreEditor;
 
 //! The main class of the core part of SwisTrack. This class holds everything together.
 class SwisTrackCore {
-friend class SwisTrackCoreEditor;
+	friend class SwisTrackCoreEditor;
 
 public:
 	//! A list of components type.
@@ -86,16 +86,24 @@ public:
 	void ConfigurationWriteXML(wxXmlNode* configuration, ErrorList *xmlerr);
 
 	//! Returns the list of deployed components. Note that this list can only be read. To modify the list, you need to use a SwisTrackCoreEditor object.
-	const SwisTrackCore::tComponentList *GetDeployedComponents() {return &mDeployedComponents;}
+	const SwisTrackCore::tComponentList *GetDeployedComponents() {
+		return &mDeployedComponents;
+	}
 	//! Returns a component by name.
 	Component *GetComponentByName(const wxString &name);
 
 	//! Returns whether the components have been started.
-	bool IsStarted() {return mStarted;}
+	bool IsStarted() {
+		return mStarted;
+	}
 	//! Returns whether the components have been started in production mode.
-	bool IsStartedInProductionMode() {return (mStarted && mProductionMode);}
+	bool IsStartedInProductionMode() {
+		return (mStarted && mProductionMode);
+	}
 	//! Returns whether the automatic trigger is active.
-	bool IsTriggerActive() {return mTrigger->GetActive();}
+	bool IsTriggerActive() {
+		return mTrigger->GetActive();
+	}
 
 	//! Adds an object to the list of interfaces. Objects on this list will be informed upon changes.
 	void AddInterface(SwisTrackCoreInterface *stc);

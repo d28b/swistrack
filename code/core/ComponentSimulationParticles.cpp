@@ -10,7 +10,7 @@ THISCLASS::ComponentSimulationParticles(SwisTrackCore *stc):
 		mDisplayOutput(wxT("Output"), wxT("Particle Simulation: Output")) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryParticleDetection);
+	mCategory = &(mCore->mCategoryParticleDetection);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 	AddDisplay(&mDisplayOutput);
@@ -24,15 +24,15 @@ THISCLASS::~ComponentSimulationParticles() {
 }
 
 void THISCLASS::OnStart() {
-	bool production=mCore->IsStartedInProductionMode();
+	bool production = mCore->IsStartedInProductionMode();
 
 	// Read the file (if the filename changed or if we are in production mode)
-	wxString filename=GetConfigurationString(wxT("File"), wxT(""));
-	if (production || (mSimulationParticles==0) || (mSimulationParticles->GetFileName()!=filename)) {
+	wxString filename = GetConfigurationString(wxT("File"), wxT(""));
+	if (production || (mSimulationParticles == 0) || (mSimulationParticles->GetFileName() != filename)) {
 		delete mSimulationParticles;
-		mSimulationParticles=new SimulationParticles(filename);
+		mSimulationParticles = new SimulationParticles(filename);
 		if (! mSimulationParticles->IsOpen()) {
-			AddError(wxT("The file \'")+ filename +wxT("\' could not be read."));
+			AddError(wxT("The file \'") + filename + wxT("\' could not be read."));
 		} else {
 			AddInfo(wxT("File \'") + mSimulationParticles->GetFileName() + wxT("\' loaded."));
 		}
@@ -42,53 +42,53 @@ void THISCLASS::OnStart() {
 	OnReloadConfiguration();
 
 	// Start the simulation at the first frame that is available in the file
-	SimulationParticles::Frame *frame=mSimulationParticles->FirstFrame();
+	SimulationParticles::Frame *frame = mSimulationParticles->FirstFrame();
 	if (frame) {
-		mFrameNumber=frame->number-1;
+		mFrameNumber = frame->number - 1;
 	} else {
-		mFrameNumber=0;
+		mFrameNumber = 0;
 	}
 
 	// Data structure initialization
-	mCore->mDataStructureInput.mFrameNumber=0;
-	mCore->mDataStructureParticles.mParticles=0;
+	mCore->mDataStructureInput.mFrameNumber = 0;
+	mCore->mDataStructureParticles.mParticles = 0;
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mCameraOrigin.x=(float)GetConfigurationDouble(wxT("CameraOrigin.x"), 0);
-	mCameraOrigin.y=(float)GetConfigurationDouble(wxT("CameraOrigin.y"), 0);
-	mCameraRotation=(float)GetConfigurationDouble(wxT("CameraRotation"), 0);
-	mCameraPixelSize=(float)GetConfigurationDouble(wxT("CameraPixelSize"), 1);
-	mCameraSize.width=(float)GetConfigurationDouble(wxT("CameraSize.w"), 640);
-	mCameraSize.height=(float)GetConfigurationDouble(wxT("CameraSize.h"), 480);
+	mCameraOrigin.x = (float)GetConfigurationDouble(wxT("CameraOrigin.x"), 0);
+	mCameraOrigin.y = (float)GetConfigurationDouble(wxT("CameraOrigin.y"), 0);
+	mCameraRotation = (float)GetConfigurationDouble(wxT("CameraRotation"), 0);
+	mCameraPixelSize = (float)GetConfigurationDouble(wxT("CameraPixelSize"), 1);
+	mCameraSize.width = (float)GetConfigurationDouble(wxT("CameraSize.w"), 640);
+	mCameraSize.height = (float)GetConfigurationDouble(wxT("CameraSize.h"), 480);
 
 	// Check for stupid configurations
-	if (mCameraPixelSize<=0) {
+	if (mCameraPixelSize <= 0) {
 		AddError(wxT("The pixel size must be bigger than 0."));
 	}
 }
 
 void THISCLASS::OnStep() {
 	mFrameNumber++;
-	SimulationParticles::Frame *frame=mSimulationParticles->GetFutureFrameByNumber(mFrameNumber);
+	SimulationParticles::Frame *frame = mSimulationParticles->GetFutureFrameByNumber(mFrameNumber);
 
 	// Clear the particles
 	mParticles.clear();
 
 	// Add those particles that are in the range of the camera
-	DataStructureParticles::tParticleVector::iterator it=frame->particles.begin();
-	while (it!=frame->particles.end()) {
-		float sx=(it->mCenter.x-mCameraOrigin.x)/mCameraPixelSize;
-		float sy=(it->mCenter.y-mCameraOrigin.y)/mCameraPixelSize;
-		float x=sx*cos(mCameraRotation)-sy*sin(mCameraRotation);
-		float y=sx*sin(mCameraRotation)+sy*cos(mCameraRotation);
+	DataStructureParticles::tParticleVector::iterator it = frame->particles.begin();
+	while (it != frame->particles.end()) {
+		float sx = (it->mCenter.x - mCameraOrigin.x) / mCameraPixelSize;
+		float sy = (it->mCenter.y - mCameraOrigin.y) / mCameraPixelSize;
+		float x = sx * cos(mCameraRotation) - sy * sin(mCameraRotation);
+		float y = sx * sin(mCameraRotation) + sy * cos(mCameraRotation);
 
-		if ((x>=0) && (y>=0) && (x<mCameraSize.width) && (y<mCameraSize.height)) {
+		if ((x >= 0) && (y >= 0) && (x < mCameraSize.width) && (y < mCameraSize.height)) {
 			Particle p;
-			p.mID=it->mID;
-			p.mCenter.x=x;
-			p.mCenter.y=y;
-			p.mOrientation=it->mOrientation;
+			p.mID = it->mID;
+			p.mCenter.x = x;
+			p.mCenter.y = y;
+			p.mOrientation = it->mOrientation;
 			mParticles.push_back(p);
 		}
 
@@ -96,8 +96,8 @@ void THISCLASS::OnStep() {
 	}
 
 	// Set these particles
-	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
-	mCore->mDataStructureParticles.mParticles=&mParticles;
+	mCore->mDataStructureInput.mFrameNumber = mFrameNumber;
+	mCore->mDataStructureParticles.mParticles = &mParticles;
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
@@ -109,8 +109,8 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureInput.mFrameNumber=0;
-	mCore->mDataStructureParticles.mParticles=0;
+	mCore->mDataStructureInput.mFrameNumber = 0;
+	mCore->mDataStructureParticles.mParticles = 0;
 }
 
 void THISCLASS::OnStop() {

@@ -9,8 +9,8 @@ THISCLASS::ComponentInputFileImage(SwisTrackCore *stc):
 		mDisplayOutput(wxT("Output"), wxT("Input image")) {
 
 	// Data structure relations
-	mDisplayName=wxT("Input from image file");
-	mCategory=&(mCore->mCategoryInput);
+	mDisplayName = wxT("Input from image file");
+	mCategory = &(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 	AddDisplay(&mDisplayOutput);
 
@@ -23,9 +23,9 @@ THISCLASS::~ComponentInputFileImage() {
 
 void THISCLASS::OnStart() {
 	// Load the image
-	wxString filename=GetConfigurationString(wxT("File"), wxT(""));
-	if (filename!=wxT("")) {
-		mOutputImage=cvLoadImage(filename.mb_str(wxConvISO8859_1), -1);
+	wxString filename = GetConfigurationString(wxT("File"), wxT(""));
+	if (filename != wxT("")) {
+		mOutputImage = cvLoadImage(filename.mb_str(wxConvISO8859_1), -1);
 	}
 	if (! mOutputImage) {
 		AddError(wxT("Cannot open image file."));
@@ -33,20 +33,22 @@ void THISCLASS::OnStart() {
 	}
 
 	// Set the frame number to 0
-	mFrameNumber=0;
+	mFrameNumber = 0;
 }
 
 void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
-	if (! mOutputImage) {return;}
+	if (! mOutputImage) {
+		return;
+	}
 
 	mFrameNumber++;
 
 	// Set DataStructureImage
-	mCore->mDataStructureInput.mImage=mOutputImage;
-	mCore->mDataStructureInput.mFrameNumber=mFrameNumber;
+	mCore->mDataStructureInput.mImage = mOutputImage;
+	mCore->mDataStructureInput.mFrameNumber = mFrameNumber;
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
@@ -56,7 +58,7 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureInput.mImage=0;
+	mCore->mDataStructureInput.mImage = 0;
 	//mOutputImage should not be released here, as this is handled by the HighGUI library
 }
 

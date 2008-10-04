@@ -24,7 +24,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentOutputFileM4V(mCore);}
+	Component *Create() {
+		return new ComponentOutputFileM4V(mCore);
+	}
 
 	double GetProgressPercent();
 	double GetProgressMSec();
@@ -73,16 +75,28 @@ private:
 class ComponentOutputFileM4V: public Component {
 
 public:
-	ComponentOutputFileM4V(SwisTrackCore *stc): Component(stc, wxT("OutputFileM4V")) {Initialize();}
+	ComponentOutputFileM4V(SwisTrackCore *stc): Component(stc, wxT("OutputFileM4V")) {
+		Initialize();
+	}
 	~ComponentOutputFileM4V() {}
 
 	// Overwritten Component methods
-	void OnStart() {AddError(wxT("XVID support was not compiled into this executable."));}
-	void OnReloadConfiguration() {AddError(wxT("GigE support was not compiled into this executable."));}
-	void OnStep() {AddError(wxT("XVID support was not compiled into this executable."));}
+	void OnStart() {
+		AddError(wxT("XVID support was not compiled into this executable."));
+	}
+	void OnReloadConfiguration() {
+		AddError(wxT("GigE support was not compiled into this executable."));
+	}
+	void OnStep() {
+		AddError(wxT("XVID support was not compiled into this executable."));
+	}
 	void OnStepCleanup() {}
-	void OnStop() {AddError(wxT("XVID support was not compiled into this executable."));}
-	Component *Create() {return new ComponentOutputFileM4V(mCore);}
+	void OnStop() {
+		AddError(wxT("XVID support was not compiled into this executable."));
+	}
+	Component *Create() {
+		return new ComponentOutputFileM4V(mCore);
+	}
 };
 
 #endif // USE_XVID

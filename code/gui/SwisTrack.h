@@ -6,7 +6,7 @@
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
-	#include <wx/wx.h>
+#include <wx/wx.h>
 #endif
 
 class SwisTrack;
@@ -28,9 +28,9 @@ class SwisTrack: public wxFrame, public CommunicationCommandHandler {
 public:
 	//! Status field IDs
 	enum eStatusField {
-		sStatusField_Messages=0,
-		sStatusField_ServerPort=1,
-		sStatusField_Timeline=2,
+		sStatusField_Messages = 0,
+		sStatusField_ServerPort = 1,
+		sStatusField_Timeline = 2,
 	};
 
 	SwisTrackCore *mSwisTrackCore;	//!< The SwisTrackCore object.
@@ -72,7 +72,7 @@ public:
 
 #ifdef MULTITHREAD
 	// Critical section used to synchronize the main and auxiliary threads
-	wxCriticalSection* mCriticalSection; 
+	wxCriticalSection* mCriticalSection;
 #endif
 
 protected:

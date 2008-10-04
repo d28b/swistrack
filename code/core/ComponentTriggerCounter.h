@@ -19,7 +19,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentTriggerCounter(mCore);}
+	Component *Create() {
+		return new ComponentTriggerCounter(mCore);
+	}
 
 private:
 	int mCount;				//!< (configuration) The number of steps to perform.

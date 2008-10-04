@@ -4,7 +4,7 @@
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
-	#include <wx/wx.h>
+#include <wx/wx.h>
 #endif
 
 class TCPServer;
@@ -24,9 +24,13 @@ public:
 	//! Sets the desired port and tries to start listening.
 	void SetPort(int port);
 	//! Returns the desired port (whether open or not).
-	int GetPort() {return mPort;}
+	int GetPort() {
+		return mPort;
+	}
 	//! Returns whether the server is listening or not.
-	bool IsListening() {return (mServer!=0);}
+	bool IsListening() {
+		return (mServer != 0);
+	}
 
 	//! Handles server events.
 	void OnServerEvent(wxSocketEvent& event);

@@ -19,7 +19,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentBackgroundSubtractionGray(mCore);}
+	Component *Create() {
+		return new ComponentBackgroundSubtractionGray(mCore);
+	}
 
 private:
 	enum eMode {

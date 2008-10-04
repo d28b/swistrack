@@ -22,13 +22,13 @@ THISCLASS::~ConfigurationParameterButton() {
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
-	mValue=config->ReadString(wxT("value"), wxT("true"));
+	mValue = config->ReadString(wxT("value"), wxT("true"));
 
 	// Create the controls
-	mButton=new wxButton(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scParameterWidth, -1));
+	mButton = new wxButton(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scParameterWidth, -1));
 
 	// Layout the controls
-	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer *hs = new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(mButton, 0, wxALIGN_CENTER_VERTICAL, 0);
 	SetSizer(hs);
 }

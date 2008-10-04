@@ -8,16 +8,16 @@
 void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
 	try {
 		// Get the list of all cameras
-		Pylon::CTlFactory& tlfactory=Pylon::CTlFactory::GetInstance();
+		Pylon::CTlFactory& tlfactory = Pylon::CTlFactory::GetInstance();
 		Pylon::DeviceInfoList_t devices;
-		if (tlfactory.EnumerateDevices(devices)==0) {
+		if (tlfactory.EnumerateDevices(devices) == 0) {
 			AddItem(wxT("error"), wxT("No GigE cameras found!"));
 			return;
 		}
 
 		// Fill in the list
-		Pylon::DeviceInfoList_t::iterator it=devices.begin();
-		while (it!=devices.end()) {
+		Pylon::DeviceInfoList_t::iterator it = devices.begin();
+		while (it != devices.end()) {
 			AddItem(it->GetFullName().c_str(), it->GetFriendlyName().c_str());
 			it++;
 		}

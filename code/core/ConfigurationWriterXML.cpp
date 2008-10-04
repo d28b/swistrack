@@ -12,7 +12,7 @@ THISCLASS::~ConfigurationWriterXML() {
 
 void THISCLASS::WriteComponents(SwisTrackCore *stc) {
 	SelectRootNode();
-	wxXmlNode *node=GetChildNode(wxT("components"));
+	wxXmlNode *node = GetChildNode(wxT("components"));
 	stc->ConfigurationWriteXML(node, &mErrorList);
 }
 

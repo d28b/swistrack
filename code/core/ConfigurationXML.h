@@ -15,7 +15,7 @@ class ConfigurationXML {
 
 public:
 	//! Constructor.
-	ConfigurationXML(wxXmlNode *rootnode=0, bool readonly=true): mRootNode(rootnode), mSelectedNode(rootnode), mReadOnly(readonly) {}
+	ConfigurationXML(wxXmlNode *rootnode = 0, bool readonly = true): mRootNode(rootnode), mSelectedNode(rootnode), mReadOnly(readonly) {}
 	//! Destructor.
 	~ConfigurationXML() {}
 
@@ -23,24 +23,32 @@ public:
 	void SetRootNode(wxXmlNode *rootnode);
 
 	//! Selects the root node.
-	void SelectRootNode() {mSelectedNode=mRootNode;}
+	void SelectRootNode() {
+		mSelectedNode = mRootNode;
+	}
 	//! Selects a child node of the current node. If the node doesn't exist, it is created unless the readonly flag is set.
-	void SelectChildNode(const wxString &name) {mSelectedNode=GetChildNode(name);}
+	void SelectChildNode(const wxString &name) {
+		mSelectedNode = GetChildNode(name);
+	}
 	//! Returns the root node.
-	wxXmlNode *GetSelectedNode() {return mSelectedNode;}
+	wxXmlNode *GetSelectedNode() {
+		return mSelectedNode;
+	}
 	//! Returns the root node.
-	wxXmlNode *GetRootNode() {return mRootNode;}
+	wxXmlNode *GetRootNode() {
+		return mRootNode;
+	}
 	//! Returns a child node of the current node. If the node doesn't exist, it is created unless the readonly flag is set.
 	wxXmlNode *GetChildNode(const wxString &name);
 
 	//! Reads a string of the selected node.
-	wxString ReadContent(const wxString &defvalue=wxT(""));
+	wxString ReadContent(const wxString &defvalue = wxT(""));
 	//! Reads a string of a child node.
-	wxString ReadChildContent(const wxString &childname, const wxString &defvalue=wxT(""));
+	wxString ReadChildContent(const wxString &childname, const wxString &defvalue = wxT(""));
 	//! Reads a property of the selected node.
-	wxString ReadProperty(const wxString &name, const wxString &defvalue=wxT(""));
+	wxString ReadProperty(const wxString &name, const wxString &defvalue = wxT(""));
 	//! Reads a property of a child node.
-	wxString ReadChildProperty(const wxString &childname, const wxString &name, const wxString &defvalue=wxT(""));
+	wxString ReadChildProperty(const wxString &childname, const wxString &name, const wxString &defvalue = wxT(""));
 
 	//! Writes a string value in the currently selected node.
 	void WriteContent(const wxString &value);
@@ -53,23 +61,39 @@ public:
 
 	// Simple configuration interface: read methods
 	//! Reads a string.
-	inline wxString ReadString(const wxString &name, const wxString &defvalue) {return ReadChildContent(name, defvalue);}
+	inline wxString ReadString(const wxString &name, const wxString &defvalue) {
+		return ReadChildContent(name, defvalue);
+	}
 	//! Reads a boolean value.
-	inline bool ReadBool(const wxString &name, bool defvalue) {return ConfigurationConversion::Bool(ReadChildContent(name), defvalue);}
+	inline bool ReadBool(const wxString &name, bool defvalue) {
+		return ConfigurationConversion::Bool(ReadChildContent(name), defvalue);
+	}
 	//! Reads an integer.
-	inline int ReadInt(const wxString &name, int defvalue) {return ConfigurationConversion::Int(ReadChildContent(name), defvalue);}
+	inline int ReadInt(const wxString &name, int defvalue) {
+		return ConfigurationConversion::Int(ReadChildContent(name), defvalue);
+	}
 	//! Reads a double.
-	inline double ReadDouble(const wxString &name, double defvalue) {return ConfigurationConversion::Double(ReadChildContent(name), defvalue);}
+	inline double ReadDouble(const wxString &name, double defvalue) {
+		return ConfigurationConversion::Double(ReadChildContent(name), defvalue);
+	}
 
 	// Simple configuration interface: write methods
 	//! Writes a string value in the currently selected node.
-	inline void WriteString(const wxString &name, const wxString &value) {WriteChildContent(name, value);}
+	inline void WriteString(const wxString &name, const wxString &value) {
+		WriteChildContent(name, value);
+	}
 	//! Writes a boolean value in the currently selected node.
-	inline void WriteBool(const wxString &name, bool value) {WriteChildContent(name, ConfigurationConversion::Bool(value));}
+	inline void WriteBool(const wxString &name, bool value) {
+		WriteChildContent(name, ConfigurationConversion::Bool(value));
+	}
 	//! Writes an integer value in the currently selected node.
-	inline void WriteInt(const wxString &name, int value) {WriteChildContent(name, ConfigurationConversion::Int(value));}
+	inline void WriteInt(const wxString &name, int value) {
+		WriteChildContent(name, ConfigurationConversion::Int(value));
+	}
 	//! Writes a double value in the currently selected node.
-	inline void WriteDouble(const wxString &name, double value) {WriteChildContent(name, ConfigurationConversion::Double(value));}
+	inline void WriteDouble(const wxString &name, double value) {
+		WriteChildContent(name, ConfigurationConversion::Double(value));
+	}
 
 protected:
 	wxXmlNode *mRootNode;		//!< The root node. Note that this doesn't need to be the root node of a document. It is simply the node that this object regards as its root.

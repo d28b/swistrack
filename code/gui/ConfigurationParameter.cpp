@@ -18,42 +18,48 @@ THISCLASS::~ConfigurationParameter() {
 
 void THISCLASS::Initialize(SwisTrack *st, Component *c, ConfigurationXML *config, ErrorList *errorlist) {
 	// Set the associated objects
-	mSwisTrack=st;
-	mComponent=c;
+	mSwisTrack = st;
+	mComponent = c;
 
 	// Add SwisTrackCoreInterface
 	mSwisTrack->mSwisTrackCore->AddInterface(this);
 
 	// Read general configuration
 	config->SelectRootNode();
-	mName=config->ReadString(wxT("name"), wxT(""));
-	mLabel=config->ReadString(wxT("label"), wxT(""));
-	mDisplay=config->ReadString(wxT("display"), wxT(""));
-	mReloadable=config->ReadBool(wxT("reloadable"), true);
+	mName = config->ReadString(wxT("name"), wxT(""));
+	mLabel = config->ReadString(wxT("label"), wxT(""));
+	mDisplay = config->ReadString(wxT("display"), wxT(""));
+	mReloadable = config->ReadBool(wxT("reloadable"), true);
 
 	// Initializes the parameter
 	OnInitialize(config, errorlist);
 	OnUpdate(0);
-	mUpdating=false;
+	mUpdating = false;
 }
 
 
 void THISCLASS::SetNewValue(wxWindow *updateprotection) {
 	// If we are in OnUpdate(), do nothing
-	if (mUpdating) {return;}
+	if (mUpdating) {
+		return;
+	}
 
 	// Set the new configuration values
-	mUpdateProtection=updateprotection;
+	mUpdateProtection = updateprotection;
 	OnSetNewValue();
-	mUpdateProtection=0;
+	mUpdateProtection = 0;
 
 	// Reload the configuration and perform a step
 	if (mReloadable) {
 		mSwisTrack->mSwisTrackCore->ReloadConfiguration();
-		if (mSwisTrack->mSwisTrackCore->IsStartedInProductionMode()) {return;}
+		if (mSwisTrack->mSwisTrackCore->IsStartedInProductionMode()) {
+			return;
+		}
 		mSwisTrack->Control_Step();
 	} else {
-		if (mSwisTrack->mSwisTrackCore->IsStartedInProductionMode()) {return;}
+		if (mSwisTrack->mSwisTrackCore->IsStartedInProductionMode()) {
+			return;
+		}
 		mSwisTrack->mSwisTrackCore->Stop();
 		mSwisTrack->mSwisTrackCore->Start(false);
 		mSwisTrack->Control_Step();
@@ -61,7 +67,9 @@ void THISCLASS::SetNewValue(wxWindow *updateprotection) {
 }
 
 void THISCLASS::OnBeforeStart(bool productionmode) {
-	if (! productionmode) {return;}
+	if (! productionmode) {
+		return;
+	}
 
 	if (! mReloadable) {
 		this->Hide();
@@ -74,10 +82,14 @@ void THISCLASS::OnAfterStop() {
 }
 
 void THISCLASS::OnAfterEditComponent(Component *c) {
-	if (mUpdating) {return;}
-	if (mComponent!=c) {return;}
+	if (mUpdating) {
+		return;
+	}
+	if (mComponent != c) {
+		return;
+	}
 
-	mUpdating=true;
+	mUpdating = true;
 	OnUpdate(mUpdateProtection);
-	mUpdating=false;
+	mUpdating = false;
 }

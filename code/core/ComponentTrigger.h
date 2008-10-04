@@ -14,11 +14,15 @@ public:
 
 	//! Constructor.
 	ComponentTrigger(Component *c);
+	//! Destructor.
+	~ComponentTrigger() {}
 
 	//! This event is called on all trigger components to check if the trigger is ready.
-	virtual bool IsReady() {return mIsReady;}
+	virtual bool IsReady() {
+		return mIsReady;
+	}
 	//! Sets the ready flag.
-	void SetReady(bool ready=true);
+	void SetReady(bool ready = true);
 	//! Clears the ready flag.
 	void ClearReady();
 

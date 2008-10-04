@@ -14,7 +14,7 @@ bool THISCLASS::OnInit() {
 	SetAppName(wxT("SwisTrack"));
 
 	// Take the current directory as the application folder
-	mApplicationFolder=wxGetCwd();
+	mApplicationFolder = wxGetCwd();
 
 	// Initialize the random number generator
 	Random::Initialize();
@@ -26,10 +26,10 @@ bool THISCLASS::OnInit() {
 	mSwisTrack = new SwisTrack(_T("SwisTrack"), wxPoint(-1, -1), wxSize(1024, 700));
 
 	// Open a file
-	if (argc>1) {
+	if (argc > 1) {
 		mSwisTrack->OpenFile(argv[1], true, false);
 	} else {
-		mSwisTrack->OpenFile(mApplicationFolder+wxT("/default.swistrack"), false, true);
+		mSwisTrack->OpenFile(mApplicationFolder + wxT("/default.swistrack"), false, true);
 	}
 
 #if defined(__WIN16__) || defined(__WXMOTIF__)

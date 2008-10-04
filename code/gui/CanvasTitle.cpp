@@ -20,15 +20,17 @@ THISCLASS::CanvasTitle(CanvasPanel *cp):
 }
 
 THISCLASS::~CanvasTitle() {
-	if (mMenu) {delete mMenu;}
+	if (mMenu) {
+		delete mMenu;
+	}
 }
 
 void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	wxPaintDC dc(this);
 
 	// Prepare
-	wxFont f=GetFont();
-	wxSize size=GetClientSize();
+	wxFont f = GetFont();
+	wxSize size = GetClientSize();
 
 	// Left
 	f.SetWeight(wxFONTWEIGHT_BOLD);
@@ -46,8 +48,8 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	f.SetUnderlined(false);
 	dc.SetFont(f);
 	dc.SetTextForeground(*wxWHITE);
-	wxSize textsize=dc.GetTextExtent(mTextRight);
-	dc.DrawText(mTextRight, 0, size.GetWidth()-textsize.GetWidth());
+	wxSize textsize = dc.GetTextExtent(mTextRight);
+	dc.DrawText(mTextRight, 0, size.GetWidth() - textsize.GetWidth());
 
 	//wxCoord w;
 	//wxCoord h;
@@ -57,32 +59,34 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 
 void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 	// Create a new menu
-	if (mMenu) {delete mMenu;}
+	if (mMenu) {
+		delete mMenu;
+	}
 	mMenu = new wxMenu;
 
 	// Add the no-display option
 	mMenu->Append(0, wxT("No display (maximum speed)"));
 
 	// Add all possible displays
-	int id=1;
-	SwisTrackCore *stc=mCanvasPanel->mSwisTrack->mSwisTrackCore;
-	const SwisTrackCore::tComponentList *cl=stc->GetDeployedComponents();
-	SwisTrackCore::tComponentList::const_iterator it=cl->begin();
-	while (it!=cl->end()) {
-		Component *c=(*it);
+	int id = 1;
+	SwisTrackCore *stc = mCanvasPanel->mSwisTrack->mSwisTrackCore;
+	const SwisTrackCore::tComponentList *cl = stc->GetDeployedComponents();
+	SwisTrackCore::tComponentList::const_iterator it = cl->begin();
+	while (it != cl->end()) {
+		Component *c = (*it);
 
-		Component::tDisplayList::iterator itdi=c->mDisplays.begin();
-		while (itdi!=c->mDisplays.end()) {
-			Display *display=(*itdi);
+		Component::tDisplayList::iterator itdi = c->mDisplays.begin();
+		while (itdi != c->mDisplays.end()) {
+			Display *display = (*itdi);
 			mMenu->Append(id++, display->mDisplayName);
 			itdi++;
 		}
-		
+
 		it++;
 	}
 
 	// Show the popup menu
-	wxSize size=GetSize();
+	wxSize size = GetSize();
 	PopupMenu(mMenu, 0, size.GetHeight());
 }
 
@@ -90,39 +94,41 @@ void THISCLASS::OnMouseRightDown(wxMouseEvent &event) {
 }
 
 void THISCLASS::OnMouseEnter(wxMouseEvent &event) {
-	mHighlight=true;
+	mHighlight = true;
 	Refresh(true);
 }
 
 void THISCLASS::OnMouseLeave(wxMouseEvent &event) {
-	mHighlight=false;
+	mHighlight = false;
 	Refresh(true);
 }
 
 void THISCLASS::OnMenu(wxCommandEvent& event) {
-	Display *display=GetDisplay(event.GetId());
+	Display *display = GetDisplay(event.GetId());
 	mCanvasPanel->SetDisplay(display);
 }
 
 void THISCLASS::SetText(const wxString &title, const wxString &textright) {
-	mTitle=title;
-	mTextRight=textright;
+	mTitle = title;
+	mTextRight = textright;
 	Refresh(true);
 }
 
 Display *THISCLASS::GetDisplay(int selid) {
-	if (selid<1) {return 0;}
+	if (selid < 1) {
+		return 0;
+	}
 
-	int id=1;
-	SwisTrackCore *stc=mCanvasPanel->mSwisTrack->mSwisTrackCore;
-	const SwisTrackCore::tComponentList *cl=stc->GetDeployedComponents();
-	SwisTrackCore::tComponentList::const_iterator it=cl->begin();
-	while (it!=cl->end()) {
-		Component *c=(*it);
+	int id = 1;
+	SwisTrackCore *stc = mCanvasPanel->mSwisTrack->mSwisTrackCore;
+	const SwisTrackCore::tComponentList *cl = stc->GetDeployedComponents();
+	SwisTrackCore::tComponentList::const_iterator it = cl->begin();
+	while (it != cl->end()) {
+		Component *c = (*it);
 
-		Component::tDisplayList::iterator itdi=c->mDisplays.begin();
-		while (itdi!=c->mDisplays.end()) {
-			if (id==selid) {
+		Component::tDisplayList::iterator itdi = c->mDisplays.begin();
+		while (itdi != c->mDisplays.end()) {
+			if (id == selid) {
 				return (*itdi);
 			}
 

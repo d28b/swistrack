@@ -22,7 +22,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentSimulationParticles(mCore);}
+	Component *Create() {
+		return new ComponentSimulationParticles(mCore);
+	}
 
 private:
 	CvPoint2D32f mCameraOrigin;		//!< (configuration) The origin of the virtual camera.

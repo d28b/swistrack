@@ -19,7 +19,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentConvertToColor(mCore);}
+	Component *Create() {
+		return new ComponentConvertToColor(mCore);
+	}
 
 private:
 	IplImage *mOutputImage;				//!< The image created by this component.
@@ -28,7 +30,9 @@ private:
 	//! Prepares the output image (recreates the image if necessary).
 	inline void PrepareOutputImage(IplImage *inputimage) {
 		if (mOutputImage) {
-			if ((mOutputImage->width==inputimage->width) && (mOutputImage->height==inputimage->height) && (mOutputImage->depth==inputimage->depth)) {return;}
+			if ((mOutputImage->width == inputimage->width) && (mOutputImage->height == inputimage->height) && (mOutputImage->depth == inputimage->depth)) {
+				return;
+			}
 			cvReleaseImage(&mOutputImage);
 		}
 		mOutputImage = cvCreateImage(cvSize(inputimage->width, inputimage->height), inputimage->depth, 3);

@@ -3,7 +3,7 @@
 
 void THISCLASS::Add(const wxString &msg, int linenumber) {
 	ErrorListItem e;
-	e.mMessage=msg;
-	e.mLineNumber=linenumber;
+	e.mMessage = msg;
+	e.mLineNumber = linenumber;
 	mList.push_back(e);
 }

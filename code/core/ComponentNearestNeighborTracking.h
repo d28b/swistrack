@@ -20,22 +20,24 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentNearestNeighborTracking(mCore);}
+	Component *Create() {
+		return new ComponentNearestNeighborTracking(mCore);
+	}
 
 private:
 	void DataAssociation();
-	double GetCost(int id,CvPoint2D32f p);
+	double GetCost(int id, CvPoint2D32f p);
 	void AddPoint(int i, CvPoint2D32f p);
 
 	DataStructureParticles::tParticleVector *particles;
 	double** distanceArray;
 	int maxParticles;
-		
+
 	// Parameters
 	double mMaxDistance; //!< (configuration) The maximum distance between a track and a particle to attach
 	int mMaxNumber;		//!< (configuration) The maximum number of objects that are to track.
 	DataStructureTracks::tTrackVector mTracks;
-	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.	
+	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 };
 
 #endif

@@ -19,7 +19,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentColorMask(mCore);}
+	Component *Create() {
+		return new ComponentColorMask(mCore);
+	}
 
 private:
 	enum eMode {

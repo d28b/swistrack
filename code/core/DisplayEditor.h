@@ -14,12 +14,14 @@ public:
 	Display *mDisplay;
 
 	//! Constructor.
-	DisplayEditor(Display *display=0);
+	DisplayEditor(Display *display = 0);
 	//! Destructor.
 	~DisplayEditor();
 
 	//! Returns if the display is active.
-	bool IsActive() {return (mDisplay!=0);}
+	bool IsActive() {
+		return (mDisplay != 0);
+	}
 
 	//! Sets the main image.
 	void SetMainImage(IplImage *img);

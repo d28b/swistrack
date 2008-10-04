@@ -10,7 +10,7 @@ THISCLASS::ComponentColorMask(SwisTrackCore *stc):
 		mDisplayOutput(wxT("Output"), wxT("After applying mask")) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryPreprocessingColor);
+	mCategory = &(mCore->mCategoryPreprocessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);
@@ -29,9 +29,9 @@ void THISCLASS::OnStart() {
 
 void THISCLASS::OnReloadConfiguration() {
 	// Load mask image
-	wxString filename=GetConfigurationString(wxT("MaskImage"), wxT(""));
-	if (filename!=wxT("")) {
-		mMaskImage=cvLoadImage(filename.mb_str(wxConvISO8859_1), -1);
+	wxString filename = GetConfigurationString(wxT("MaskImage"), wxT(""));
+	if (filename != wxT("")) {
+		mMaskImage = cvLoadImage(filename.mb_str(wxConvISO8859_1), -1);
 	}
 	if (! mMaskImage) {
 		AddError(wxT("Cannot open mask file."));
@@ -39,31 +39,31 @@ void THISCLASS::OnReloadConfiguration() {
 	}
 
 	// Convert mask image
-	if (mMaskImage->nChannels==3) {
+	if (mMaskImage->nChannels == 3) {
 		// Already in BGR, do nothing
-	} else if (mMaskImage->nChannels==1) {
+	} else if (mMaskImage->nChannels == 1) {
 		// Grayscale image, we convert to BGR
-		IplImage *img=cvCreateImage(cvSize(mMaskImage->width, mMaskImage->height), mMaskImage->depth, 3);
+		IplImage *img = cvCreateImage(cvSize(mMaskImage->width, mMaskImage->height), mMaskImage->depth, 3);
 		cvCvtColor(mMaskImage, img, CV_GRAY2BGR);
 		cvReleaseImage(&mMaskImage);
-		mMaskImage=img;
+		mMaskImage = img;
 	} else {
 		AddError(wxT("Invalid mask file. The mask file must be a grayscale or color image."));
 		return;
 	}
-	
+
 	// Mask mode
-	wxString mode=GetConfigurationString(wxT("Mode"), wxT("black-black"));
-	if (mode==wxT("white-white")) {
-		mMode=cMode_WhiteWhite;
-	} else if (mode==wxT("white-black")) {
-		mMode=cMode_WhiteBlack;
+	wxString mode = GetConfigurationString(wxT("Mode"), wxT("black-black"));
+	if (mode == wxT("white-white")) {
+		mMode = cMode_WhiteWhite;
+	} else if (mode == wxT("white-black")) {
+		mMode = cMode_WhiteBlack;
 		cvNot(mMaskImage, mMaskImage);
-	} else if (mode==wxT("black-white")) {
-		mMode=cMode_BlackWhite;
+	} else if (mode == wxT("black-white")) {
+		mMode = cMode_BlackWhite;
 		cvNot(mMaskImage, mMaskImage);
 	} else {
-		mMode=cMode_BlackBlack;
+		mMode = cMode_BlackBlack;
 	}
 }
 
@@ -75,12 +75,12 @@ void THISCLASS::OnStep() {
 
 	// Mask the image
 	if (mMaskImage) {
-		if ((mCore->mDataStructureImageColor.mImage->width!=mMaskImage->width) || (mCore->mDataStructureImageColor.mImage->height!=mMaskImage->height)) {
+		if ((mCore->mDataStructureImageColor.mImage->width != mMaskImage->width) || (mCore->mDataStructureImageColor.mImage->height != mMaskImage->height)) {
 			AddError(wxT("Wrong mask size."));
 			return;
 		}
 
-		if ((mMode==cMode_WhiteWhite) || (mMode==cMode_BlackWhite)) {
+		if ((mMode == cMode_WhiteWhite) || (mMode == cMode_BlackWhite)) {
 			cvOr(mCore->mDataStructureImageColor.mImage, mMaskImage, mCore->mDataStructureImageColor.mImage);
 		} else {
 			cvAnd(mCore->mDataStructureImageColor.mImage, mMaskImage, mCore->mDataStructureImageColor.mImage);

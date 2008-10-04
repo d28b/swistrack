@@ -21,8 +21,10 @@ THISCLASS::~Display() {
 
 void THISCLASS::Subscribe(DisplaySubscriberInterface *disi) {
 	// Return if this interface is in the subscriber list already
-	tSubscriberList::iterator it=find(mSubscribers.begin(), mSubscribers.end(), disi);
-	if (it!=mSubscribers.end()) {return;}
+	tSubscriberList::iterator it = find(mSubscribers.begin(), mSubscribers.end(), disi);
+	if (it != mSubscribers.end()) {
+		return;
+	}
 
 	// Otherwise, add the interface
 	mSubscribers.push_back(disi);
@@ -31,8 +33,10 @@ void THISCLASS::Subscribe(DisplaySubscriberInterface *disi) {
 
 void THISCLASS::Unsubscribe(DisplaySubscriberInterface *disi) {
 	// Look up the interface and return if not found
-	tSubscriberList::iterator it=find(mSubscribers.begin(), mSubscribers.end(), disi);
-	if (it==mSubscribers.end()) {return;}
+	tSubscriberList::iterator it = find(mSubscribers.begin(), mSubscribers.end(), disi);
+	if (it == mSubscribers.end()) {
+		return;
+	}
 
 	// Remove the interface
 	disi->OnDisplayUnsubscribe(this);
@@ -41,11 +45,11 @@ void THISCLASS::Unsubscribe(DisplaySubscriberInterface *disi) {
 
 void THISCLASS::OnBeforeStep() {
 	// By default, the display is inactive
-	mActive=false;
+	mActive = false;
 
 	// Call the subscribers to check if the want an image
-	tSubscriberList::iterator it=mSubscribers.begin();
-	while (it!=mSubscribers.end()) {
+	tSubscriberList::iterator it = mSubscribers.begin();
+	while (it != mSubscribers.end()) {
 		(*it)->OnDisplayBeforeStep(this);
 		it++;
 	}
@@ -53,14 +57,16 @@ void THISCLASS::OnBeforeStep() {
 
 void THISCLASS::OnAfterStep() {
 	// Proceed only if the display changed (this flag is set by the DisplayEditor)
-	if (! mChanged) {return;}
+	if (! mChanged) {
+		return;
+	}
 
 	// Otherwise, let the subscribers know that we have a new image
-	tSubscriberList::iterator it=mSubscribers.begin();
-	while (it!=mSubscribers.end()) {
+	tSubscriberList::iterator it = mSubscribers.begin();
+	while (it != mSubscribers.end()) {
 		(*it)->OnDisplayChanged(this);
 		it++;
 	}
 
-	mChanged=false;
+	mChanged = false;
 }

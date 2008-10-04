@@ -19,7 +19,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentBinaryDilation(mCore);}
+	Component *Create() {
+		return new ComponentBinaryDilation(mCore);
+	}
 
 private:
 	int mIterations;					//!< (configuration) The number of dilations to apply to the binary image.

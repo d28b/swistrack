@@ -21,7 +21,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentInputFileAVI(mCore);}
+	Component *Create() {
+		return new ComponentInputFileAVI(mCore);
+	}
 
 	double GetProgressPercent();
 	double GetProgressMSec();

@@ -5,7 +5,7 @@ THISCLASS::ComponentOutputParticles(SwisTrackCore *stc):
 		Component(stc, wxT("OutputParticles")) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryOutput);
+	mCategory = &(mCore->mCategoryOutput);
 	AddDataStructureRead(&(mCore->mDataStructureInput));
 	AddDataStructureRead(&(mCore->mDataStructureParticles));
 
@@ -24,16 +24,20 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnStep() {
-	if (! mCore->mCommunicationInterface) {return;}
+	if (! mCore->mCommunicationInterface) {
+		return;
+	}
 
 	CommunicationMessage mbegin(wxT("FRAMENUMBER"));
 	mbegin.AddInt(mCore->mDataStructureInput.mFrameNumber);
 	mCore->mCommunicationInterface->Send(&mbegin);
 
-	DataStructureParticles::tParticleVector *p=mCore->mDataStructureParticles.mParticles;
-	if (!p) {return;}
-	DataStructureParticles::tParticleVector::iterator it=p->begin();
-	while (it!=p->end()) {
+	DataStructureParticles::tParticleVector *p = mCore->mDataStructureParticles.mParticles;
+	if (!p) {
+		return;
+	}
+	DataStructureParticles::tParticleVector::iterator it = p->begin();
+	while (it != p->end()) {
 		CommunicationMessage m(wxT("PARTICLE"));
 		m.AddInt(it->mID);
 		m.AddDouble(it->mCenter.x);

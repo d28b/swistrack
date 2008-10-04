@@ -30,9 +30,13 @@ public:
 	~SimulationParticles();
 
 	//! Returns the file name of the current simulation.
-	wxString GetFileName() {return mFileName;}
+	wxString GetFileName() {
+		return mFileName;
+	}
 	//! Returns true if the file could be opened.
-	bool IsOpen() {return mFile->is_open();}
+	bool IsOpen() {
+		return mFile->is_open();
+	}
 
 	//! Moves to the first frame in the file and returns it. If the file is empty, 0 is returned.
 	Frame *FirstFrame();

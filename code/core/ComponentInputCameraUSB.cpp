@@ -9,7 +9,7 @@ THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
 		mDisplayOutput(wxT("Output"), wxT("USB Camera: Input Frame")) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryInput);
+	mCategory = &(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 	AddDisplay(&mDisplayOutput);
 
@@ -18,7 +18,9 @@ THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
 }
 
 THISCLASS::~ComponentInputCameraUSB() {
-	if (! mCapture) {return;}
+	if (! mCapture) {
+		return;
+	}
 	cvReleaseCapture(&mCapture);
 }
 
@@ -40,19 +42,21 @@ void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
-	if (! mCapture) {return;}	
+	if (! mCapture) {
+		return;
+	}
 
 	// Read from camera
-	int framenumber=(int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES);
-	mOutputImage=cvQueryFrame(mCapture);
+	int framenumber = (int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES);
+	mOutputImage = cvQueryFrame(mCapture);
 	if (! mOutputImage) {
 		AddError(wxT("Could not retrieve image from USB camera."));
 		return;
 	}
 
 	// Set DataStructureImage
-	mCore->mDataStructureInput.mImage=mOutputImage;
-	mCore->mDataStructureInput.mFrameNumber=framenumber;
+	mCore->mDataStructureInput.mImage = mOutputImage;
+	mCore->mDataStructureInput.mFrameNumber = framenumber;
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
@@ -62,17 +66,21 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureInput.mImage=0;
+	mCore->mDataStructureInput.mImage = 0;
 	//mOutputImage should not be released here, as this is handled by the HighGUI library
 }
 
 void THISCLASS::OnStop() {
-	if (! mCapture) {return;}
+	if (! mCapture) {
+		return;
+	}
 
 	cvReleaseCapture(&mCapture);
 }
 
 double THISCLASS::GetFPS() {
-	if (! mCapture) {return 0;}	
+	if (! mCapture) {
+		return 0;
+	}
 	return cvGetCaptureProperty(mCapture, CV_CAP_PROP_FPS);
 }

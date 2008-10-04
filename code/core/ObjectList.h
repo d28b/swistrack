@@ -32,7 +32,9 @@ public:
 	~ObjectList();
 
 	//! Returns the file name of the current simulation.
-	wxString GetFileName() {return mFileName;}
+	wxString GetFileName() {
+		return mFileName;
+	}
 
 private:
 	wxString mFileName;		//!< The name of the currently open file.

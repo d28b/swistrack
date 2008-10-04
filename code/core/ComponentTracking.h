@@ -20,11 +20,13 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentTracking(mCore);}
+	Component *Create() {
+		return new ComponentTracking(mCore);
+	}
 
 private:
 	void DataAssociation();
-	double GetCost(int id,CvPoint2D32f p);
+	double GetCost(int id, CvPoint2D32f p);
 	void AddPoint(int i, CvPoint2D32f p);
 	void AddCompetitor(int c);
 	void FindFreeParticles(int* fp, int* ap);
@@ -51,12 +53,12 @@ private:
 
 
 	// Parameters
-			
+
 	int mShareTrajectories; //!< If set to one, trajectories can share a particle, otherwise not (suitable for marker based tracking)
 	int mMaxNumber;		//!< (configuration) The maximum number of objects that are to track.
 	double mDistanceGate; //!< (configuration) The maximum distance a particle can move during one step.
 	DataStructureTracks::tTrackVector mTracks;
-	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.	
+	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 };
 
 #endif

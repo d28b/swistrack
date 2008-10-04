@@ -19,7 +19,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentBlobSelection(mCore);}
+	Component *Create() {
+		return new ComponentBlobSelection(mCore);
+	}
 
 private:
 	int mMinArea;	//!< (configuration) The minimum area of a blob.

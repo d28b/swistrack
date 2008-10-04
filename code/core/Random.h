@@ -27,13 +27,15 @@ protected:
 	static RandomExponential* smRandomExponential;
 	//! The RandomPoisson object.
 	static RandomPoisson* smRandomPoisson;
-	
+
 	//! Reinitializes the distribution objects.
 	static void ReinitializeDistributions();
 
 public:
 	//! Constructor.
-	Random() {assert(smRandomMersenneTwister);}
+	Random() {
+		assert(smRandomMersenneTwister);
+	}
 	//! Destructor.
 	~Random() {}
 
@@ -55,13 +57,15 @@ public:
 
 	//! Returns 1 with probability p and 0 with probability 1-p.
 	int Binary(double p) {
-		return (Uniform()<p) ? 1 : 0;
+		return (Uniform() < p) ? 1 : 0;
 	}
 
 	//! Returns an integer in the range [from, to) with uniform distribution.
 	int Uniform(int from, int to) {
-		if (from>=to) {return from;}
-		return smRandomMersenneTwister->randInt(to-from-1)+from;
+		if (from >= to) {
+			return from;
+		}
+		return smRandomMersenneTwister->randInt(to - from - 1) + from;
 		//return (int)((double)random() / ((double)RAND_MAX+1) * (double)(to-from)) + from;
 	}
 
@@ -73,7 +77,7 @@ public:
 
 	//! Returns a double in the range [from, to) with uniform distribution.
 	double Uniform(double from, double to) {
-		return smRandomMersenneTwister->randExc()*(to-from)+from;
+		return smRandomMersenneTwister->randExc()*(to - from) + from;
 		//return ((double)random() / ((double)RAND_MAX+1) * (double)(to-from)) + from;
 	}
 
@@ -84,7 +88,7 @@ public:
 
 	//! Returns a float with a gaussian distribution with a given standard deviation and mean.
 	double Normal(float mean, float stddev) {
-		return smRandomNormal->Normal()*stddev+mean;
+		return smRandomNormal->Normal()*stddev + mean;
 	}
 
 	//! Returns a float with an exponential distribution.

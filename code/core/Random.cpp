@@ -3,14 +3,16 @@
 #include "Random.h"
 #define THISCLASS Random
 
-RandomMersenneTwister *Random::smRandomMersenneTwister=0;
-RandomNormal *Random::smRandomNormal=0;
-RandomExponential *Random::smRandomExponential=0;
-RandomPoisson *Random::smRandomPoisson=0;
+RandomMersenneTwister *Random::smRandomMersenneTwister = 0;
+RandomNormal *Random::smRandomNormal = 0;
+RandomExponential *Random::smRandomExponential = 0;
+RandomPoisson *Random::smRandomPoisson = 0;
 
 void THISCLASS::Initialize() {
-	if (smRandomMersenneTwister) {return;}
-	smRandomMersenneTwister=new RandomMersenneTwister();
+	if (smRandomMersenneTwister) {
+		return;
+	}
+	smRandomMersenneTwister = new RandomMersenneTwister();
 	ReinitializeDistributions();
 }
 
@@ -18,9 +20,9 @@ void THISCLASS::ReinitializeDistributions() {
 	delete smRandomNormal;
 	delete smRandomExponential;
 	delete smRandomPoisson;
-	smRandomNormal=new RandomNormal(smRandomMersenneTwister);
-	smRandomExponential=new RandomExponential(smRandomMersenneTwister);
-	smRandomPoisson=new RandomPoisson(smRandomMersenneTwister);
+	smRandomNormal = new RandomNormal(smRandomMersenneTwister);
+	smRandomExponential = new RandomExponential(smRandomMersenneTwister);
+	smRandomPoisson = new RandomPoisson(smRandomMersenneTwister);
 }
 
 void THISCLASS::Uninitialize() {
@@ -28,10 +30,10 @@ void THISCLASS::Uninitialize() {
 	delete smRandomNormal;
 	delete smRandomExponential;
 	delete smRandomPoisson;
-	smRandomMersenneTwister=0;
-	smRandomNormal=0;
-	smRandomExponential=0;
-	smRandomPoisson=0;
+	smRandomMersenneTwister = 0;
+	smRandomNormal = 0;
+	smRandomExponential = 0;
+	smRandomPoisson = 0;
 }
 
 void THISCLASS::SaveState(std::ofstream &out) {

@@ -68,7 +68,7 @@ public:
 		Event mBegin;										//!< Holds the time at which the timeline begins.
 		Event mEnd;											//!< Holds the time at which the timeline end.
 		State mBeginState;									//!< The state of the SwisTrackCore object at time of starting.
-		tEventList mEvents;									//!< The recorded events. This vector is initialized to a certain size 
+		tEventList mEvents;									//!< The recorded events. This vector is initialized to a certain size
 	};
 
 	SwisTrackCore *mSwisTrackCore;				//!< The associated SwisTrackCore object.
@@ -82,22 +82,28 @@ public:
 	//! Starts a new recording and makes the old recording available through GetLastTimeline().
 	void StartRecording();
 	//! Adds a new event to the current timeline.
-	void Add(const eType type, Component *component=0);
+	void Add(const eType type, Component *component = 0);
 	//! Adds a new event to the current timeline.
 	void Add(const Event *it);
 	//! Adds a sType_StepStart event and keeps track of the FPS.
 	void AddStepStart();
 	//! Stores an event in an Item object.
-	static void LapTime(Event *it, const eType type, Component *component=0);
+	static void LapTime(Event *it, const eType type, Component *component = 0);
 	//! Returns the duration (in seconds) between two timeline items.
 	double CalculateDuration(const Event *it1, const Event *it2) const;
 
 	//! Returns the last timeline.
-	const Timeline *GetLastTimeline() const {return mLastTimeline;}
+	const Timeline *GetLastTimeline() const {
+		return mLastTimeline;
+	}
 	//! Returns the frames per seconds.
-	double GetFramesPerSecond() const {return 1/mStepDistance;}
+	double GetFramesPerSecond() const {
+		return 1 / mStepDistance;
+	}
 	//! Returns the average distance between steps.
-	double GetStepDistance() const {return mStepDistance;}
+	double GetStepDistance() const {
+		return mStepDistance;
+	}
 
 private:
 #ifdef __WXMSW__

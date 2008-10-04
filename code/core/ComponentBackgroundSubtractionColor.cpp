@@ -10,7 +10,7 @@ THISCLASS::ComponentBackgroundSubtractionColor(SwisTrackCore *stc):
 		mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryPreprocessingColor);
+	mCategory = &(mCore->mCategoryPreprocessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);
@@ -23,63 +23,63 @@ THISCLASS::~ComponentBackgroundSubtractionColor() {
 }
 
 void THISCLASS::OnStart() {
-	wxString filename=GetConfigurationString(wxT("BackgroundImage"), wxT(""));
-	if (filename!=wxT("")) {
-		mBackgroundImage=cvLoadImage(filename.mb_str(wxConvISO8859_1),CV_LOAD_IMAGE_UNCHANGED);
+	wxString filename = GetConfigurationString(wxT("BackgroundImage"), wxT(""));
+	if (filename != wxT("")) {
+		mBackgroundImage = cvLoadImage(filename.mb_str(wxConvISO8859_1), CV_LOAD_IMAGE_UNCHANGED);
 	}
 	if (! mBackgroundImage) {
 		AddError(wxT("Cannot open background image."));
 		return;
 	}
 
-	if (mBackgroundImage->nChannels!=3) 
+	if (mBackgroundImage->nChannels != 3)
 	{
 		AddError(wxT("Background Image has not 3 channels"));
 		return;
 	}
 
 	// Whether to correct the mean or not
-	mCorrectMean=GetConfigurationBool(wxT("CorrectMean"), true);
+	mCorrectMean = GetConfigurationBool(wxT("CorrectMean"), true);
 
 	// We always calculate the background average, so we can select if we use the moving threshold during the segmentation
 	if (mCorrectMean) {
-		mBackgroundImageMean=cvAvg(mBackgroundImage);
+		mBackgroundImageMean = cvAvg(mBackgroundImage);
 	} else {
-		mBackgroundImageMean=cvScalarAll(0);
+		mBackgroundImageMean = cvScalarAll(0);
 	}
 }
 
-void THISCLASS::OnReloadConfiguration() 
+void THISCLASS::OnReloadConfiguration()
 {
 	// Whether to correct the mean or not
-	mCorrectMean=GetConfigurationBool(wxT("CorrectMean"), true);
+	mCorrectMean = GetConfigurationBool(wxT("CorrectMean"), true);
 	// We always calculate the background average, so we can select if we use the moving threshold during the segmentation
 	if (mCorrectMean) {
-		mBackgroundImageMean=cvAvg(mBackgroundImage);
+		mBackgroundImageMean = cvAvg(mBackgroundImage);
 	} else {
-		mBackgroundImageMean=cvScalarAll(0);
+		mBackgroundImageMean = cvScalarAll(0);
 	}
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputimage=mCore->mDataStructureImageColor.mImage;	
+	IplImage *inputimage = mCore->mDataStructureImageColor.mImage;
 	//Check the images
-	if (! inputimage) 
+	if (! inputimage)
 	{
 		AddError(wxT("No input Image"));
 		return;
 	}
-	if (inputimage->nChannels !=3)
+	if (inputimage->nChannels != 3)
 	{
 		AddError(wxT("Input image has not 3 channels."));
 		return;
 	}
-	if (! mBackgroundImage) 
+	if (! mBackgroundImage)
 	{
 		AddError(wxT("Background image not accessible"));
 		return;
 	}
-	if ((cvGetSize(inputimage).height!=cvGetSize(mBackgroundImage).height)||(cvGetSize(inputimage).width!=cvGetSize(mBackgroundImage).width))
+	if ((cvGetSize(inputimage).height != cvGetSize(mBackgroundImage).height) || (cvGetSize(inputimage).width != cvGetSize(mBackgroundImage).width))
 	{
 		AddError(wxT("Input and background images have not the same dimension"));
 		return;
@@ -87,42 +87,42 @@ void THISCLASS::OnStep() {
 
 	//Check for the color system of the input image (The loaded image is BGR, OpenCV default) and convert the background respectively
 	if (strncmp(mCore->mDataStructureImageColor.mImage->channelSeq, mBackgroundImage->channelSeq, 3))
-	{	
+	{
 		//Make a temporary clone of the image in 3 seperate channels
 		IplImage* tmpImage[3];
-		for (int i=0;i<3;i++)
-			tmpImage[i]=cvCreateImage(cvGetSize(mBackgroundImage),8,1);
-		cvSplit(mBackgroundImage,tmpImage[0],tmpImage[1],tmpImage[2],NULL);
-		CvScalar tmpBackgroundMean=mBackgroundImageMean;
-		//Modify the sequence of the channels in the background		
-		for (int i=0;i<3;i++)
+		for (int i = 0;i < 3;i++)
+			tmpImage[i] = cvCreateImage(cvGetSize(mBackgroundImage), 8, 1);
+		cvSplit(mBackgroundImage, tmpImage[0], tmpImage[1], tmpImage[2], NULL);
+		CvScalar tmpBackgroundMean = mBackgroundImageMean;
+		//Modify the sequence of the channels in the background
+		for (int i = 0;i < 3;i++)
 			//If the channel is not the same, search for the corresponding channel to copy, else copy the channel directly
-			if (inputimage->channelSeq[i]!=mBackgroundImage->channelSeq[i])
-				for (int j=0;j<3;j++)
-					if (inputimage->channelSeq[i]==mBackgroundImage->channelSeq[j])
-					{						
-						cvSetImageCOI(mBackgroundImage,i+1);						
-						cvCopy(tmpImage[j],mBackgroundImage);
-						//Remove the COI						
-						cvSetImageCOI(mBackgroundImage,0);												
-						mBackgroundImageMean.val[i]=tmpBackgroundMean.val[j];
+			if (inputimage->channelSeq[i] != mBackgroundImage->channelSeq[i])
+				for (int j = 0;j < 3;j++)
+					if (inputimage->channelSeq[i] == mBackgroundImage->channelSeq[j])
+					{
+						cvSetImageCOI(mBackgroundImage, i + 1);
+						cvCopy(tmpImage[j], mBackgroundImage);
+						//Remove the COI
+						cvSetImageCOI(mBackgroundImage, 0);
+						mBackgroundImageMean.val[i] = tmpBackgroundMean.val[j];
 					}
-		strcpy(mBackgroundImage->channelSeq,inputimage->channelSeq);
-		for (int i=0; i<3;i++)
+		strcpy(mBackgroundImage->channelSeq, inputimage->channelSeq);
+		for (int i = 0; i < 3;i++)
 			cvReleaseImage(&(tmpImage[i]));
 	}
-	
+
 	try {
-		// Correct the tmpImage with the difference in image mean		
-		if (mCorrectMean) 
-		{			
-			CvScalar tmpScalar=cvAvg(inputimage);			
-			cvAddS(inputimage, cvScalar(mBackgroundImageMean.val[0]-tmpScalar.val[0],mBackgroundImageMean.val[1]-tmpScalar.val[1],mBackgroundImageMean.val[2]-tmpScalar.val[2]),inputimage);
+		// Correct the tmpImage with the difference in image mean
+		if (mCorrectMean)
+		{
+			CvScalar tmpScalar = cvAvg(inputimage);
+			cvAddS(inputimage, cvScalar(mBackgroundImageMean.val[0] - tmpScalar.val[0], mBackgroundImageMean.val[1] - tmpScalar.val[1], mBackgroundImageMean.val[2] - tmpScalar.val[2]), inputimage);
 		}
 
 		// Background Substraction
 		cvAbsDiff(inputimage, mBackgroundImage, inputimage);
-	} catch(...) {
+	} catch (...) {
 		AddError(wxT("Background subtraction failed."));
 	}
 
@@ -137,5 +137,7 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-	if (mBackgroundImage) {cvReleaseImage(&mBackgroundImage);}
+	if (mBackgroundImage) {
+		cvReleaseImage(&mBackgroundImage);
+	}
 }

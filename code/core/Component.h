@@ -17,7 +17,7 @@ class Component;
 
 //! The base class for all components.
 class Component {
-friend class ComponentEditor;
+	friend class ComponentEditor;
 
 public:
 	//! Status item list type.
@@ -97,7 +97,9 @@ public:
 	Display *GetDisplayByName(const wxString &name);
 
 	//! Returns the SwisTrackCore object.
-	SwisTrackCore *GetSwisTrackCore() {return mCore;}
+	SwisTrackCore *GetSwisTrackCore() {
+		return mCore;
+	}
 
 protected:
 	SwisTrackCore *mCore; 						//!< The associated SwisTrackCore object.
@@ -129,7 +131,7 @@ protected:
 	//! Decrements the edit locks.
 	void DecrementEditLocks();
 
-	
+
 private:
 	//! Reads the configuration section of the XML file belonging to the component.
 	void InitializeReadConfiguration(wxXmlNode *configurationnode);
@@ -137,7 +139,7 @@ private:
 	void InitializeReadConfigurationNode(wxXmlNode *node);
 	//! Reads a parameter node within the configuration section of the XML file.
 	void InitializeReadParameter(wxXmlNode *node);
-	
+
 };
 
 #endif

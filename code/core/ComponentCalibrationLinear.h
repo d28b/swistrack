@@ -24,7 +24,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentCalibrationLinear(mCore);}
+	Component *Create() {
+		return new ComponentCalibrationLinear(mCore);
+	}
 
 	void Transform(Particle *p);
 

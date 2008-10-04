@@ -9,7 +9,7 @@ THISCLASS::ComponentConvertToColor(SwisTrackCore *stc):
 		mDisplayOutput(wxT("Output"), wxT("After conversion to color")) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryInputConversion);
+	mCategory = &(mCore->mCategoryInputConversion);
 	AddDataStructureRead(&(mCore->mDataStructureInput));
 	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);
@@ -28,27 +28,29 @@ void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputimage=mCore->mDataStructureInput.mImage;
-	if (! inputimage) {return;}
-	
+	IplImage *inputimage = mCore->mDataStructureInput.mImage;
+	if (! inputimage) {
+		return;
+	}
+
 	try {
 		// We convert the input image to a color image
-		if (inputimage->nChannels==3) {
+		if (inputimage->nChannels == 3) {
 			// We already have a color image
-			mCore->mDataStructureImageColor.mImage=inputimage;
-		} else if (inputimage->nChannels==1) {
+			mCore->mDataStructureImageColor.mImage = inputimage;
+		} else if (inputimage->nChannels == 1) {
 			// Gray, convert to BGR
 			PrepareOutputImage(inputimage);
 			cvCvtColor(inputimage, mOutputImage, CV_GRAY2BGR);
-			mCore->mDataStructureImageColor.mImage=mOutputImage;
+			mCore->mDataStructureImageColor.mImage = mOutputImage;
 		} else {
 			// Other cases, we take the first channel and transform it in BGR
 			PrepareOutputImage(inputimage);
 			cvCvtPixToPlane(inputimage, mOutputImage, NULL, NULL, NULL);
 			cvCvtColor(mOutputImage, mOutputImage, CV_GRAY2BGR);
-			mCore->mDataStructureImageColor.mImage=mOutputImage;
+			mCore->mDataStructureImageColor.mImage = mOutputImage;
 		}
-	} catch(...) {
+	} catch (...) {
 		AddError(wxT("Conversion to gray failed."));
 	}
 
@@ -60,9 +62,11 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureImageColor.mImage=0;
+	mCore->mDataStructureImageColor.mImage = 0;
 }
 
 void THISCLASS::OnStop() {
-	if (mOutputImage) {cvReleaseImage(&mOutputImage);}
+	if (mOutputImage) {
+		cvReleaseImage(&mOutputImage);
+	}
 }

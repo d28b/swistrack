@@ -6,10 +6,10 @@ THISCLASS::ComponentTriggerCounter(SwisTrackCore *stc):
 		mCount(1), mTodo(0) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryTrigger);
+	mCategory = &(mCore->mCategoryTrigger);
 
 	// Trigger
-	mTrigger=new ComponentTrigger(this);
+	mTrigger = new ComponentTrigger(this);
 
 	// Read the XML configuration file
 	Initialize();
@@ -24,22 +24,22 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mCount=GetConfigurationInt(wxT("Count"), 1);
-	if (mCount<1) {
-		mCount=1;
+	mCount = GetConfigurationInt(wxT("Count"), 1);
+	if (mCount < 1) {
+		mCount = 1;
 	}
 
-	bool start=GetConfigurationBool(wxT("Start"), false);
+	bool start = GetConfigurationBool(wxT("Start"), false);
 	if (start) {
-		mConfiguration[wxT("Start")]=wxT("false"); // SetConfigurationBool(wxT("Start"), false); TODO
-		mTodo=mCount;
+		mConfiguration[wxT("Start")] = wxT("false"); // SetConfigurationBool(wxT("Start"), false); TODO
+		mTodo = mCount;
 		mTrigger->SetReady();
 	}
 }
 
 void THISCLASS::OnStep() {
 	mTodo--;
-	if (mTodo>0) {
+	if (mTodo > 0) {
 		mTrigger->SetReady();
 	}
 }
@@ -48,5 +48,5 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-	mTodo=0;
+	mTodo = 0;
 }

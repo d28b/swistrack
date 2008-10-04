@@ -4,7 +4,7 @@
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
-	#include <wx/wx.h>
+#include <wx/wx.h>
 #endif
 
 class ConfigurationPanel;
@@ -35,7 +35,7 @@ protected:
 	wxScrolledWindow *mPanel;				//!< The main panel with the parameters.
 	wxBoxSizer *mPanelSizer;				//!< The main sizer of the panel (where the parameter components go in).
 	wxStaticText *mLabelTitle;				//!< The label holding the title of the component.
-	static const int scParameterWidth=200;	//!< The width of a parameter (or another element).
+	static const int scParameterWidth = 200;	//!< The width of a parameter (or another element).
 
 	//! Reads the *.swistrackcomponent file.
 	void Read(const wxFileName &filename);

@@ -18,9 +18,9 @@ THISCLASS::ConfigurationParameterDropdownList(wxWindow* parent):
 }
 
 THISCLASS::~ConfigurationParameterDropdownList() {
-	int cc=mComboBox->GetCount();
-	for (int i=0; i<cc; i++) {
-		wxString *itemvalue=(wxString *)(mComboBox->GetClientData(i));
+	int cc = mComboBox->GetCount();
+	for (int i = 0; i < cc; i++) {
+		wxString *itemvalue = (wxString *)(mComboBox->GetClientData(i));
 		mComboBox->SetClientData(i, 0);
 		delete itemvalue;
 	}
@@ -29,14 +29,14 @@ THISCLASS::~ConfigurationParameterDropdownList() {
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
-	mValueDefault=config->ReadString(wxT("default"), wxT(""));
+	mValueDefault = config->ReadString(wxT("default"), wxT(""));
 
 	// Create the controls
-	wxStaticText *label=new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
-	mComboBox=new wxComboBox(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth+scUnitWidth, -1), 0, NULL, wxCB_READONLY);
+	wxStaticText *label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
+	mComboBox = new wxComboBox(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth + scUnitWidth, -1), 0, NULL, wxCB_READONLY);
 
 	// Layout the controls
-	wxBoxSizer *hs=new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer *hs = new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(label, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mComboBox, 0, wxALIGN_CENTER_VERTICAL, 0);
 	SetSizer(hs);
@@ -46,48 +46,52 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 }
 
 void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
-	wxXmlNode *items=config->GetChildNode(wxT("items"));
-	wxXmlNode *node=items->GetChildren();
+	wxXmlNode *items = config->GetChildNode(wxT("items"));
+	wxXmlNode *node = items->GetChildren();
 	while (node) {
 		// Create one list item per "item" node
-		if (node->GetName()==wxT("item")) {
+		if (node->GetName() == wxT("item")) {
 			wxString key(wxT(""));
-			wxXmlProperty *prop=node->GetProperties();
+			wxXmlProperty *prop = node->GetProperties();
 			while (prop) {
-				if (prop->GetName()==wxT("key")) {key=prop->GetValue();}
-				prop=prop->GetNext();
+				if (prop->GetName() == wxT("key")) {
+					key = prop->GetValue();
+				}
+				prop = prop->GetNext();
 			}
 			AddItem(key, node->GetNodeContent());
 		}
 
 		// Next node
-		node=node->GetNext();
+		node = node->GetNext();
 	}
 }
 
 void THISCLASS::AddItem(const wxString &key, const wxString &label) {
-	wxString *itemvalue=new wxString(key);
+	wxString *itemvalue = new wxString(key);
 	mComboBox->Append(label, itemvalue);
 }
 
 void THISCLASS::OnUpdate(wxWindow *updateprotection) {
-	if (updateprotection==mComboBox) {return;}
+	if (updateprotection == mComboBox) {
+		return;
+	}
 
 	// Fetch the configuration value
-	wxString value=mComponent->GetConfigurationString(mName, mValueDefault);
+	wxString value = mComponent->GetConfigurationString(mName, mValueDefault);
 
 	// Select the appropriate item in the list
-	int cc=mComboBox->GetCount();
-	for (int i=0; i<cc; i++) {
-		wxString *itemvalue=(wxString *)(mComboBox->GetClientData(i));
-		if (*itemvalue==value) {
+	int cc = mComboBox->GetCount();
+	for (int i = 0; i < cc; i++) {
+		wxString *itemvalue = (wxString *)(mComboBox->GetClientData(i));
+		if (*itemvalue == value) {
 			mComboBox->SetSelection(i);
 			return;
 		}
 	}
 
 	// If the item is not available, add a new entry to the list
-	wxString *itemvalue=new wxString(value);
+	wxString *itemvalue = new wxString(value);
 	mComboBox->Append(value, itemvalue);
 }
 
@@ -96,8 +100,8 @@ bool THISCLASS::ValidateNewValue() {
 }
 
 bool THISCLASS::CompareNewValue() {
-	wxString value=mComponent->GetConfigurationString(mName, mValueDefault);
-	return (value==mNewValue);
+	wxString value = mComponent->GetConfigurationString(mName, mValueDefault);
+	return (value == mNewValue);
 }
 
 void THISCLASS::OnSetNewValue() {
@@ -106,11 +110,15 @@ void THISCLASS::OnSetNewValue() {
 }
 
 void THISCLASS::OnItemSelected(wxCommandEvent& event) {
-	int sel=mComboBox->GetSelection();
-	if (sel==wxNOT_FOUND) {return;}
-	wxString *itemvalue=(wxString *)mComboBox->GetClientData(sel);
-	mNewValue=*itemvalue;
+	int sel = mComboBox->GetSelection();
+	if (sel == wxNOT_FOUND) {
+		return;
+	}
+	wxString *itemvalue = (wxString *)mComboBox->GetClientData(sel);
+	mNewValue = *itemvalue;
 	ValidateNewValue();
-	if (CompareNewValue()) {return;}
+	if (CompareNewValue()) {
+		return;
+	}
 	SetNewValue(mComboBox);
 }

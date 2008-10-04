@@ -4,7 +4,7 @@
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
-	#include <wx/wx.h>
+#include <wx/wx.h>
 #endif
 
 class ConfigurationParameter;
@@ -51,11 +51,11 @@ protected:
 	wxString mLabel;		//!< The main label of the parameter.
 	wxString mDisplay;		//!< The display to be selected when the parameter is changed.
 	bool mReloadable;		//!< If true, the parameters can be applied by reloading the parameters of this component (without restarting the components).
-	static const int scParameterWidth=200;	//!< The width of a parameter.
-	static const int scLabelWidth=75;		//!< The width of a label.
-	static const int scIndentWidth=25;		//!< The indent width.
-	static const int scTextBoxWidth=75;		//!< The width of a text box.
-	static const int scUnitWidth=50;		//!< The width of a unit label.
+	static const int scParameterWidth = 200;	//!< The width of a parameter.
+	static const int scLabelWidth = 75;		//!< The width of a label.
+	static const int scIndentWidth = 25;		//!< The indent width.
+	static const int scTextBoxWidth = 75;		//!< The width of a text box.
+	static const int scUnitWidth = 50;		//!< The width of a unit label.
 
 private:
 	// Update control variables
@@ -71,7 +71,7 @@ protected:
 	virtual void OnSetNewValue() = 0;
 
 	//! Sets the new value. The provided window (e.g. text box) will be protected against updates caused by this call.
-	void SetNewValue(wxWindow *updateprotection=0);
+	void SetNewValue(wxWindow *updateprotection = 0);
 };
 
 #endif

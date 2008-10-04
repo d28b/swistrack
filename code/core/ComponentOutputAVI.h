@@ -24,7 +24,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentOutputAVI(mCore);}
+	Component *Create() {
+		return new ComponentOutputAVI(mCore);
+	}
 
 private:
 	wxString mFileName;			//!< (configuration) File name of the AVI file to write.
@@ -44,16 +46,28 @@ private:
 class ComponentOutputAVI: public Component {
 
 public:
-	ComponentOutputAVI(SwisTrackCore *stc): Component(stc, wxT("OutputAVI")) {Initialize();}
+	ComponentOutputAVI(SwisTrackCore *stc): Component(stc, wxT("OutputAVI")) {
+		Initialize();
+	}
 	~ComponentOutputAVI() {}
 
 	// Overwritten Component methods
-	void OnStart() {AddError(wxT("Output to AVI is only supported on Microsoft Windows."));}
-	void OnReloadConfiguration() {AddError(wxT("Output to AVI is only supported on Microsoft Windows."));}
-	void OnStep() {AddError(wxT("Output to AVI is only supported on Microsoft Windows."));}
+	void OnStart() {
+		AddError(wxT("Output to AVI is only supported on Microsoft Windows."));
+	}
+	void OnReloadConfiguration() {
+		AddError(wxT("Output to AVI is only supported on Microsoft Windows."));
+	}
+	void OnStep() {
+		AddError(wxT("Output to AVI is only supported on Microsoft Windows."));
+	}
 	void OnStepCleanup() {}
-	void OnStop() {AddError(wxT("Output to AVI is only supported on Microsoft Windows."));}
-	Component *Create() {return new ComponentOutputAVI(mCore);}
+	void OnStop() {
+		AddError(wxT("Output to AVI is only supported on Microsoft Windows."));
+	}
+	Component *Create() {
+		return new ComponentOutputAVI(mCore);
+	}
 };
 
 #endif // __WXMSW__

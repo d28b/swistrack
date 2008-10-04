@@ -9,7 +9,7 @@ THISCLASS::ComponentBinaryDilation(SwisTrackCore *stc):
 		mDisplayOutput(wxT("Output"), wxT("After dilation")) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryPreprocessingBinary);
+	mCategory = &(mCore->mCategoryPreprocessingBinary);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);
@@ -27,10 +27,10 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mIterations=GetConfigurationInt(wxT("Iterations"), 1);
-	
+	mIterations = GetConfigurationInt(wxT("Iterations"), 1);
+
 	// Check for stupid configurations
-	if (mIterations<0) {
+	if (mIterations < 0) {
 		AddError(wxT("The number of dilations must be greater or equal to 0."));
 	}
 }
@@ -41,7 +41,7 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
-	if (mIterations>0) {
+	if (mIterations > 0) {
 		cvDilate(mCore->mDataStructureImageBinary.mImage, mCore->mDataStructureImageBinary.mImage, NULL, mIterations);
 	}
 

@@ -21,7 +21,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentOutputFileAVI(mCore);}
+	Component *Create() {
+		return new ComponentOutputFileAVI(mCore);
+	}
 
 private:
 	CvVideoWriter* mWriter;				//!< Pointer to AVI sequence.

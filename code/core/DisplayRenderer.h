@@ -11,7 +11,7 @@ class DisplayRenderer {
 
 public:
 	//! Constructor.
-	DisplayRenderer(Display *display=0);
+	DisplayRenderer(Display *display = 0);
 	//! Destructor.
 	~DisplayRenderer();
 
@@ -29,15 +29,25 @@ public:
 	void SetCropRectangle(CvRect rect);
 
 	//! Returns the display.
-	Display *GetDisplay() {return mDisplay;}
+	Display *GetDisplay() {
+		return mDisplay;
+	}
 	//! Returns the scaling factor.
-	double GetScalingFactor() {return mScalingFactor;}
+	double GetScalingFactor() {
+		return mScalingFactor;
+	}
 	//! Returns the horizontal flip flag.
-	bool GetFlipHorizontal() {return mFlipHorizontal;}
+	bool GetFlipHorizontal() {
+		return mFlipHorizontal;
+	}
 	//! Returns the vertical flip flag.
-	bool GetFlipVertical() {return mFlipVertical;}
+	bool GetFlipVertical() {
+		return mFlipVertical;
+	}
 	//! Returns the crop rectangle.
-	CvRect GetCropRectangle() {return mCropRectangle;}
+	CvRect GetCropRectangle() {
+		return mCropRectangle;
+	}
 
 	//! Deletes the cached image. This forces the image to be recreated on the next request.
 	void DeleteCache();
@@ -74,7 +84,7 @@ private:
 	//! Draws the errors.
 	bool DrawErrors(ErrorList *errors);
 	//! Draws an image with a message in the center.
-	bool DrawMessagePanel(wxString errstr=wxT(""));
+	bool DrawMessagePanel(wxString errstr = wxT(""));
 
 };
 

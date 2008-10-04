@@ -24,7 +24,9 @@ public:
 	//! Opens an XML document. If this function returns true, the document can be read.
 	bool Open(const wxString &filename);
 	//! Returns whether a document is open.
-	bool IsOpen() {return mIsOpen;}
+	bool IsOpen() {
+		return mIsOpen;
+	}
 
 	//! Reads the components and uses the supplied SwisTrackCoreEditor to set them. If no document is open, an empty component list is created and the return value will be true. If the return value is false, the SwisTrackCore object was not editable.
 	bool ReadComponents(SwisTrackCore *stc);

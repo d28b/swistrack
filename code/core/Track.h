@@ -1,4 +1,4 @@
-#ifndef HEADER_Track       
+#ifndef HEADER_Track
 #define HEADER_Track
 
 #include <vector>
@@ -17,14 +17,14 @@ public:
 	int mID;					/*< Holds ID number of track */
 	std::vector<CvPoint2D32f> trajectory; /*< Info about objects being tracked */
 	/** Critical point */
-	CvPoint2D32f critpoint;		
+	CvPoint2D32f critpoint;
 	/** Constructor - id number id*/
-	Track(int idnumber,int n_objects);	
+	Track(int idnumber, int n_objects);
 	/** Add a point to the current track (max track) */
-	void AddPoint(CvPoint2D32f p);				
-	
+	void AddPoint(CvPoint2D32f p);
+
 	/** Destructor */
 	~Track();
-};	
+};
 
 #endif

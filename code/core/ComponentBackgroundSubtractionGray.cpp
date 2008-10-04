@@ -11,7 +11,7 @@ THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore *stc):
 		mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryPreprocessingGray);
+	mCategory = &(mCore->mCategoryPreprocessingGray);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 	AddDisplay(&mDisplayOutput);
@@ -25,9 +25,9 @@ THISCLASS::~ComponentBackgroundSubtractionGray() {
 
 void THISCLASS::OnStart() {
 	// Load the background image
-	wxString filename=GetConfigurationString(wxT("BackgroundImage"), wxT(""));
-	if (filename!=wxT("")) {
-		mBackgroundImage=cvLoadImage(filename.mb_str(wxConvISO8859_1),CV_LOAD_IMAGE_UNCHANGED);
+	wxString filename = GetConfigurationString(wxT("BackgroundImage"), wxT(""));
+	if (filename != wxT("")) {
+		mBackgroundImage = cvLoadImage(filename.mb_str(wxConvISO8859_1), CV_LOAD_IMAGE_UNCHANGED);
 	}
 	if (! mBackgroundImage) {
 		AddError(wxT("Cannot open background image."));
@@ -47,29 +47,29 @@ void THISCLASS::OnStart() {
 
 void THISCLASS::OnReloadConfiguration() {
 	// Whether to correct the mean or not
-	mCorrectMean=GetConfigurationBool(wxT("CorrectMean"), true);
+	mCorrectMean = GetConfigurationBool(wxT("CorrectMean"), true);
 
 	// Mode
-	wxString modestr=GetConfigurationString(wxT("Mode"), wxT("AbsDiff"));
-	if (modestr==wxT("SubImageBackground")) {
-		mMode=sMode_SubImageBackground;
-	} else if (modestr==wxT("SubBackgroundImage")) {
-		mMode=sMode_SubBackgroundImage;
+	wxString modestr = GetConfigurationString(wxT("Mode"), wxT("AbsDiff"));
+	if (modestr == wxT("SubImageBackground")) {
+		mMode = sMode_SubImageBackground;
+	} else if (modestr == wxT("SubBackgroundImage")) {
+		mMode = sMode_SubBackgroundImage;
 	} else {
-		mMode=sMode_AbsDiff;
+		mMode = sMode_AbsDiff;
 	}
 
 	// We always calculate the background average, so we can select if we use the moving threshold during the segmentation
 	if (mCorrectMean) {
-		mBackgroundImageMean=cvAvg(mBackgroundImage);
+		mBackgroundImageMean = cvAvg(mBackgroundImage);
 	} else {
-		mBackgroundImageMean=cvScalar(0);
+		mBackgroundImageMean = cvScalar(0);
 	}
 }
 
 void THISCLASS::OnStep() {
 	// Get and check input image
-	IplImage *inputimage=mCore->mDataStructureImageGray.mImage;
+	IplImage *inputimage = mCore->mDataStructureImageGray.mImage;
 	if (! inputimage) {
 		AddError(wxT("No input image."));
 		return;
@@ -92,13 +92,13 @@ void THISCLASS::OnStep() {
 	try {
 		// Correct the inputimage with the difference in image mean
 		if (mCorrectMean) {
-			cvAddS(inputimage, cvScalar(mBackgroundImageMean.val[0]-cvAvg(inputimage).val[0]), inputimage);
+			cvAddS(inputimage, cvScalar(mBackgroundImageMean.val[0] - cvAvg(inputimage).val[0]), inputimage);
 		}
 
 		// Background subtraction
-		if (mMode==sMode_SubImageBackground) {
+		if (mMode == sMode_SubImageBackground) {
 			cvSub(inputimage, mBackgroundImage, inputimage);
-		} else if (mMode==sMode_SubBackgroundImage) {
+		} else if (mMode == sMode_SubBackgroundImage) {
 			cvSub(mBackgroundImage, inputimage, inputimage);
 		} else {
 			cvAbsDiff(inputimage, mBackgroundImage, inputimage);
@@ -118,5 +118,7 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-	if (mBackgroundImage) {cvReleaseImage(&mBackgroundImage);}
+	if (mBackgroundImage) {
+		cvReleaseImage(&mBackgroundImage);
+	}
 }

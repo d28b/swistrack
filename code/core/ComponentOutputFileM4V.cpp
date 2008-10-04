@@ -10,7 +10,7 @@ THISCLASS::ComponentOutputFileM4V(SwisTrackCore *stc):
 		mDisplayOutput(wxT("Output"), wxT("M4V File: Unprocessed Frame")) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryOutput);
+	mCategory = &(mCore->mCategoryOutput);
 	AddDisplay(&mDisplayOutput);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
@@ -24,9 +24,9 @@ THISCLASS::~ComponentOutputFileM4V() {
 }
 
 void THISCLASS::OnStart() {
-	mFilename=GetConfigurationString(wxT("Filename"), wxT(""));
-	mFrameRate=GetConfigurationInt(wxT("FrameRate"), 15);
-	
+	mFilename = GetConfigurationString(wxT("Filename"), wxT(""));
+	mFrameRate = GetConfigurationInt(wxT("FrameRate"), 15);
+
 	wxString keepinmemory = GetConfigurationString(wxT("WriteMode"), wxT(""));
 	if (keepinmemory == wxT("raw")) {
 		mKeepInMemory = cKeepInMemory_Raw;
@@ -35,7 +35,7 @@ void THISCLASS::OnStart() {
 	} else {
 		mKeepInMemory = cKeepInMemory_None;
 	}
-	
+
 	OnReloadConfiguration();
 }
 
@@ -56,11 +56,11 @@ void THISCLASS::OnStep() {
 	// Get the input image
 	IplImage* inputimage = 0;
 	if (mInputChannel == sInputChannel_Grayscale) {
-		inputimage=mCore->mDataStructureImageGray.mImage;
+		inputimage = mCore->mDataStructureImageGray.mImage;
 	} else if (mInputChannel == sInputChannel_Color) {
-		inputimage=mCore->mDataStructureImageColor.mImage;
+		inputimage = mCore->mDataStructureImageColor.mImage;
 	} else if (mInputChannel == sInputChannel_Binary) {
-		inputimage=mCore->mDataStructureImageBinary.mImage;
+		inputimage = mCore->mDataStructureImageBinary.mImage;
 	} else {
 		AddError(wxT("No input channel selected."));
 	}
@@ -81,7 +81,7 @@ void THISCLASS::OnStep() {
 		M4VWriteFrame(inputimage);
 	} else if (mKeepInMemory == cKeepInMemory_Raw) {
 	} else if (mKeepInMemory == cKeepInMemory_Compressed) {
-	} 
+	}
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
@@ -158,7 +158,7 @@ void THISCLASS::M4VOpen(IplImage* image) {
 	xvid_enc_create.fbase = (int) floor(framerate_increment * mFrameRate + 0.5);
 
 	// Maximum key frame interval
-	xvid_enc_create.max_key_interval = (int)floor(mFrameRate+0.5) * 10;
+	xvid_enc_create.max_key_interval = (int)floor(mFrameRate + 0.5) * 10;
 
 	// Bframes settings
 	xvid_enc_create.max_bframes = 0;
@@ -210,7 +210,7 @@ void THISCLASS::M4VWriteFrame(IplImage* image) {
 	xvid_enc_frame.input.stride[0] = image->widthStep;
 	xvid_enc_frame.input.csp = XVID_CSP_BGR;
 
-	if (image->nChannels==1) {
+	if (image->nChannels == 1) {
 		xvid_enc_frame.vop_flags |= XVID_VOP_GREYSCALE;
 	}
 
@@ -224,8 +224,8 @@ void THISCLASS::M4VWriteFrame(IplImage* image) {
 	xvid_enc_frame.motion = 0;
 
 	//if (ARG_TURBO) {
-	//	xvid_enc_frame.motion |= XVID_ME_FASTREFINE16 | XVID_ME_FASTREFINE8 | 
-	//							 XVID_ME_SKIP_DELTASEARCH | XVID_ME_FAST_MODEINTERPOLATE | 
+	//	xvid_enc_frame.motion |= XVID_ME_FASTREFINE16 | XVID_ME_FASTREFINE8 |
+	//							 XVID_ME_SKIP_DELTASEARCH | XVID_ME_FAST_MODEINTERPOLATE |
 	//							 XVID_ME_BFRAME_EARLYSTOP;
 	//}
 
@@ -236,18 +236,18 @@ void THISCLASS::M4VWriteFrame(IplImage* image) {
 	//xvid_enc_frame.motion |= XVID_ME_QUARTERPELREFINE8_RD;
 	//xvid_enc_frame.motion |= XVID_ME_CHECKPREDICTION_RD;
 	//xvid_enc_frame.motion |= XVID_ME_EXTSEARCH_RD;
-	    
+
 	// We don't use special matrices
 	xvid_enc_frame.quant_intra_matrix = 0;
 	xvid_enc_frame.quant_inter_matrix = 0;
 
 	// Encode the frame
 	printf("write\n");
-	int size=xvid_encore(mM4VHandle, XVID_ENC_ENCODE, &xvid_enc_frame, &xvid_enc_stats);
-	if (size<0) {
+	int size = xvid_encore(mM4VHandle, XVID_ENC_ENCODE, &xvid_enc_frame, &xvid_enc_stats);
+	if (size < 0) {
 		AddError(wxT("Error while encoding a frame."));
 	}
-	
+
 	// Write the frame
 	mFile.Write(mM4VBuffer, size);
 }
@@ -257,7 +257,7 @@ void THISCLASS::M4VClose() {
 	printf("close\n");
 	if (mM4VHandle) {
 		xvid_encore(mM4VHandle, XVID_ENC_DESTROY, 0, 0);
-		mM4VHandle=0;
+		mM4VHandle = 0;
 	}
 }
 

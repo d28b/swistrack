@@ -16,28 +16,54 @@
 #include "ConfigurationParameterGigECameraList.h"
 
 ConfigurationParameter *THISCLASS::Create(const wxString &type, wxWindow* parent) {
-	wxString typelc=type.Lower();
+	wxString typelc = type.Lower();
 
 	// Basic data types
-	if (typelc==wxT("integer")) {return new ConfigurationParameterInteger(parent);}
-	if (typelc==wxT("double")) {return new ConfigurationParameterDouble(parent);}
-	if (typelc==wxT("string")) {return new ConfigurationParameterString(parent);}
-	if (typelc==wxT("checkbox")) {return new ConfigurationParameterCheckBox(parent);}
-	if (typelc==wxT("button")) {return new ConfigurationParameterButton(parent);}
-	if (typelc==wxT("dropdownlist")) {return new ConfigurationParameterDropdownList(parent);}
-	if (typelc==wxT("color")) {return new ConfigurationParameterColor(parent);}
+	if (typelc == wxT("integer")) {
+		return new ConfigurationParameterInteger(parent);
+	}
+	if (typelc == wxT("double")) {
+		return new ConfigurationParameterDouble(parent);
+	}
+	if (typelc == wxT("string")) {
+		return new ConfigurationParameterString(parent);
+	}
+	if (typelc == wxT("checkbox")) {
+		return new ConfigurationParameterCheckBox(parent);
+	}
+	if (typelc == wxT("button")) {
+		return new ConfigurationParameterButton(parent);
+	}
+	if (typelc == wxT("dropdownlist")) {
+		return new ConfigurationParameterDropdownList(parent);
+	}
+	if (typelc == wxT("color")) {
+		return new ConfigurationParameterColor(parent);
+	}
 
 	// Files
-	if (typelc==wxT("file")) {return new ConfigurationParameterFile(parent);}
-	if (typelc==wxT("image")) {return new ConfigurationParameterImage(parent);}
+	if (typelc == wxT("file")) {
+		return new ConfigurationParameterFile(parent);
+	}
+	if (typelc == wxT("image")) {
+		return new ConfigurationParameterImage(parent);
+	}
 
 	// Points
-	if (typelc==wxT("pointinteger")) {return new ConfigurationParameterPointInteger(parent);}
-	if (typelc==wxT("pointdouble")) {return new ConfigurationParameterPointDouble(parent);}
+	if (typelc == wxT("pointinteger")) {
+		return new ConfigurationParameterPointInteger(parent);
+	}
+	if (typelc == wxT("pointdouble")) {
+		return new ConfigurationParameterPointDouble(parent);
+	}
 
 	// Special types
-	if (typelc==wxT("angle")) {return new ConfigurationParameterAngle(parent);}
-	if (typelc==wxT("gigecameralist")) {return new ConfigurationParameterGigECameraList(parent);}
+	if (typelc == wxT("angle")) {
+		return new ConfigurationParameterAngle(parent);
+	}
+	if (typelc == wxT("gigecameralist")) {
+		return new ConfigurationParameterGigECameraList(parent);
+	}
 
 	return 0;
 }

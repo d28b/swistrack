@@ -6,81 +6,103 @@
 
 THISCLASS::ComponentEditor(Component *c): mComponent(0) {
 	// Try to enter edit mode (this will always work for components)
-	if (! c->IncrementEditLocks()) {return;}
+	if (! c->IncrementEditLocks()) {
+		return;
+	}
 
 	// Setup the editor; for safety reasons, the Component object is not set if we couldn't acquire an edit lock
-	mComponent=c;
+	mComponent = c;
 }
 
 THISCLASS::~ComponentEditor() {
-	if (! mComponent) {return;}
+	if (! mComponent) {
+		return;
+	}
 	mComponent->DecrementEditLocks();
 }
 
 void THISCLASS::ConfigurationReadXML(wxXmlNode *configuration, ErrorList *xmlerr) {
-	if (! mComponent) {return;}
-	
+	if (! mComponent) {
+		return;
+	}
+
 	// Default settings
 	mComponent->mConfiguration.clear();
-	mComponent->mEnabled=true;
+	mComponent->mEnabled = true;
 
 	// Read all nodes of the XML node belonging to the component
-	wxXmlNode *node=configuration->GetChildren();
+	wxXmlNode *node = configuration->GetChildren();
 	while (node) {
-		if (node->GetName()==wxT("enabled")) {
-			wxString value=wxT("true");
-			wxXmlProperty *prop=node->GetProperties();
+		if (node->GetName() == wxT("enabled")) {
+			wxString value = wxT("true");
+			wxXmlProperty *prop = node->GetProperties();
 			while (prop) {
-				if (prop->GetName()==wxT("value")) {value=prop->GetValue();}
-				prop=prop->GetNext();
+				if (prop->GetName() == wxT("value")) {
+					value = prop->GetValue();
+				}
+				prop = prop->GetNext();
 			}
-			mComponent->mEnabled=(value==wxT("false") ? false : true);  // TODO: replace this by wxStringToBool(value, mComponent->mEnabled)
-		} else if (node->GetName()==wxT("parameter")) {
-			wxString name=wxT("");
-			wxString value=wxT("");
-			wxXmlProperty *prop=node->GetProperties();
+			mComponent->mEnabled = (value == wxT("false") ? false : true);  // TODO: replace this by wxStringToBool(value, mComponent->mEnabled)
+		} else if (node->GetName() == wxT("parameter")) {
+			wxString name = wxT("");
+			wxString value = wxT("");
+			wxXmlProperty *prop = node->GetProperties();
 			while (prop) {
-				if (prop->GetName()==wxT("name")) {name=prop->GetValue();}
-				if (prop->GetName()==wxT("value")) {value=prop->GetValue();}
-				prop=prop->GetNext();
+				if (prop->GetName() == wxT("name")) {
+					name = prop->GetValue();
+				}
+				if (prop->GetName() == wxT("value")) {
+					value = prop->GetValue();
+				}
+				prop = prop->GetNext();
 			}
-			if ((name.Len()==0) && (value.Len()==0)) {
+			if ((name.Len() == 0) && (value.Len() == 0)) {
 				xmlerr->Add(wxT("A parameter of the component \'") + mComponent->mName + wxT("\' was ignored because either the attribute \'name\' or \'value\' are missing."), 0);  // The current wxXml implementation doesn\'t care about line numbers.
 			} else {
-				mComponent->mConfiguration[name]=value;
+				mComponent->mConfiguration[name] = value;
 			}
 		}
 
-		node=node->GetNext();
+		node = node->GetNext();
 	}
 }
 
 bool THISCLASS::SetEnabled(bool value) {
-	if (! mComponent) {return false;}
-	mComponent->mEnabled=value;
+	if (! mComponent) {
+		return false;
+	}
+	mComponent->mEnabled = value;
 	return true;
 }
 
 bool THISCLASS::SetConfigurationBool(const wxString &key, bool value) {
-	if (! mComponent) {return false;}
-	mComponent->mConfiguration[key]=ConfigurationConversion::Bool(value);
+	if (! mComponent) {
+		return false;
+	}
+	mComponent->mConfiguration[key] = ConfigurationConversion::Bool(value);
 	return true;
 }
 
 bool THISCLASS::SetConfigurationInt(const wxString &key, int value) {
-	if (! mComponent) {return false;}
-	mComponent->mConfiguration[key]=ConfigurationConversion::Int(value);
+	if (! mComponent) {
+		return false;
+	}
+	mComponent->mConfiguration[key] = ConfigurationConversion::Int(value);
 	return true;
 }
 
 bool THISCLASS::SetConfigurationDouble(const wxString &key, double value) {
-	if (! mComponent) {return false;}
-	mComponent->mConfiguration[key]=ConfigurationConversion::Double(value);
+	if (! mComponent) {
+		return false;
+	}
+	mComponent->mConfiguration[key] = ConfigurationConversion::Double(value);
 	return true;
 }
 
 bool THISCLASS::SetConfigurationString(const wxString &key, const wxString &value) {
-	if (! mComponent) {return false;}
-	mComponent->mConfiguration[key]=value;
+	if (! mComponent) {
+		return false;
+	}
+	mComponent->mConfiguration[key] = value;
 	return true;
 }

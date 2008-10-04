@@ -10,7 +10,7 @@ class CommunicationNMEAInterface {
 
 private:
 	int mState;							//!< The current parser state.
-	static const int mBufferSize=1024;	//!< The size of the input buffer in number of chars. Messages longer than this will be cut.
+	static const int mBufferSize = 1024;	//!< The size of the input buffer in number of chars. Messages longer than this will be cut.
 	char mBuffer[mBufferSize];			//!< The buffer holding unprocessed characters.
 	int mBufferPos;						//!< The current position in mBuffer.
 	int mChecksum;						//!< The current checksum.

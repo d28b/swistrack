@@ -2,34 +2,34 @@
 #define THISCLASS ImageConversion
 
 IplImage *THISCLASS::ToRGB(IplImage *src) {
-	if (src->nChannels==1) {
-		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	if (src->nChannels == 1) {
+		IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_GRAY2RGB);
 		return dest;
-	} else if (memcmp(src->channelSeq, "RGB", 3)==0) {
+	} else if (memcmp(src->channelSeq, "RGB", 3) == 0) {
 		return src;
-	} else if (memcmp(src->channelSeq, "BGR", 3)==0) {
-		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	} else if (memcmp(src->channelSeq, "BGR", 3) == 0) {
+		IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_BGR2RGB);
 		return dest;
-	} else if (memcmp(src->channelSeq, "HSV", 3)==0) {
-		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	} else if (memcmp(src->channelSeq, "HSV", 3) == 0) {
+		IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_HSV2RGB);
 		return dest;
-	} else if (memcmp(src->channelSeq, "HLS", 3)==0) {
-		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	} else if (memcmp(src->channelSeq, "HLS", 3) == 0) {
+		IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_HLS2RGB);
 		return dest;
-	} else if (memcmp(src->channelSeq, "YCC", 3)==0) {
-		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	} else if (memcmp(src->channelSeq, "YCC", 3) == 0) {
+		IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_YCrCb2RGB);
 		return dest;
-	} else if (memcmp(src->channelSeq, "XYZ", 3)==0) {
-		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	} else if (memcmp(src->channelSeq, "XYZ", 3) == 0) {
+		IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_XYZ2RGB);
 		return dest;
-	} else if (memcmp(src->channelSeq, "Lab", 3)==0) {
-		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	} else if (memcmp(src->channelSeq, "Lab", 3) == 0) {
+		IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_Lab2RGB);
 		return dest;
 	} else {
@@ -38,34 +38,34 @@ IplImage *THISCLASS::ToRGB(IplImage *src) {
 }
 
 IplImage *THISCLASS::ToBGR(IplImage *src) {
-	if (src->nChannels==1) {
-		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	if (src->nChannels == 1) {
+		IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_GRAY2BGR);
 		return dest;
-	} else if (memcmp(src->channelSeq, "BGR", 3)==0) {
+	} else if (memcmp(src->channelSeq, "BGR", 3) == 0) {
 		return src;
-	} else if (memcmp(src->channelSeq, "RGB", 3)==0) {
-		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	} else if (memcmp(src->channelSeq, "RGB", 3) == 0) {
+		IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_RGB2BGR);
 		return dest;
-	} else if (memcmp(src->channelSeq, "HSV", 3)==0) {
-		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	} else if (memcmp(src->channelSeq, "HSV", 3) == 0) {
+		IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_HSV2BGR);
 		return dest;
-	} else if (memcmp(src->channelSeq, "HLS", 3)==0) {
-		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	} else if (memcmp(src->channelSeq, "HLS", 3) == 0) {
+		IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_HLS2BGR);
 		return dest;
-	} else if (memcmp(src->channelSeq, "YCC", 3)==0) {
-		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	} else if (memcmp(src->channelSeq, "YCC", 3) == 0) {
+		IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_YCrCb2BGR);
 		return dest;
-	} else if (memcmp(src->channelSeq, "XYZ", 3)==0) {
-		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	} else if (memcmp(src->channelSeq, "XYZ", 3) == 0) {
+		IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_XYZ2BGR);
 		return dest;
-	} else if (memcmp(src->channelSeq, "Lab", 3)==0) {
-		IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	} else if (memcmp(src->channelSeq, "Lab", 3) == 0) {
+		IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 		cvCvtColor(src, dest, CV_Lab2BGR);
 		return dest;
 	} else {
@@ -75,16 +75,16 @@ IplImage *THISCLASS::ToBGR(IplImage *src) {
 
 IplImage *THISCLASS::SwitchChannels(IplImage *src, char *order) {
 	// Create a new image of the same size
-	IplImage* dest=cvCreateImage(cvGetSize(src), src->depth, 3);
+	IplImage* dest = cvCreateImage(cvGetSize(src), src->depth, 3);
 
 	// Copy the channels to their desired position
-	for (int srci=0; srci<3; srci++) {
-		for (int desti=0; desti<3; desti++) {
-			if (order[desti]==src->channelSeq[srci]) {
-				dest->channelSeq[desti]=order[desti];
+	for (int srci = 0; srci < 3; srci++) {
+		for (int desti = 0; desti < 3; desti++) {
+			if (order[desti] == src->channelSeq[srci]) {
+				dest->channelSeq[desti] = order[desti];
 
-				cvSetImageCOI(src, srci+1);
-				cvSetImageCOI(dest, desti+1);
+				cvSetImageCOI(src, srci + 1);
+				cvSetImageCOI(dest, desti + 1);
 				cvCopy(dest, src);
 				break;
 			}
@@ -98,16 +98,20 @@ IplImage *THISCLASS::SwitchChannels(IplImage *src, char *order) {
 }
 
 void THISCLASS::CvtYUV422ToBGR(IplImage *inputimage, IplImage *outputimage) {
-	unsigned char *crl=(unsigned char *)inputimage->imageData;
-	unsigned char *cwl=(unsigned char *)outputimage->imageData;
-	for (int y=0; y<inputimage->height; y++) {
-		unsigned char *cr=crl;
-		unsigned char *cw=cwl;
-		for (int x=0; x<inputimage->width; x+=2) {
-			int u=(int)*cr; cr++;
-			int y1=(int)*cr; cr++;
-			int v=(int)*cr; cr++;
-			int y2=(int)*cr; cr++;
+	unsigned char *crl = (unsigned char *)inputimage->imageData;
+	unsigned char *cwl = (unsigned char *)outputimage->imageData;
+	for (int y = 0; y < inputimage->height; y++) {
+		unsigned char *cr = crl;
+		unsigned char *cw = cwl;
+		for (int x = 0; x < inputimage->width; x += 2) {
+			int u = (int) * cr;
+			cr++;
+			int y1 = (int) * cr;
+			cr++;
+			int v = (int) * cr;
+			cr++;
+			int y2 = (int) * cr;
+			cr++;
 
 			// Pixel 1
 			int c = y1 - 16;
@@ -125,9 +129,12 @@ void THISCLASS::CvtYUV422ToBGR(IplImage *inputimage, IplImage *outputimage) {
 			if (g < 0) g = 0;
 			if (b < 0) b = 0;
 
-			*cw=(unsigned char)b; cw++;
-			*cw=(unsigned char)g; cw++;
-			*cw=(unsigned char)r; cw++;
+			*cw = (unsigned char)b;
+			cw++;
+			*cw = (unsigned char)g;
+			cw++;
+			*cw = (unsigned char)r;
+			cw++;
 
 			// Pixel 2
 			c = y2 - 16;
@@ -143,32 +150,39 @@ void THISCLASS::CvtYUV422ToBGR(IplImage *inputimage, IplImage *outputimage) {
 			if (g < 0) g = 0;
 			if (b < 0) b = 0;
 
-			*cw=(unsigned char)b; cw++;
-			*cw=(unsigned char)g; cw++;
-			*cw=(unsigned char)r; cw++;
+			*cw = (unsigned char)b;
+			cw++;
+			*cw = (unsigned char)g;
+			cw++;
+			*cw = (unsigned char)r;
+			cw++;
 		}
-		crl+=inputimage->widthStep;
-		cwl+=outputimage->widthStep;
+		crl += inputimage->widthStep;
+		cwl += outputimage->widthStep;
 	}
-	outputimage->dataOrder=0;
+	outputimage->dataOrder = 0;
 }
 
 void THISCLASS::CvtYUV422ToGray(IplImage *inputimage, IplImage *outputimage) {
-	unsigned char *crl=(unsigned char *)inputimage->imageData;
-	unsigned char *cwl=(unsigned char *)outputimage->imageData;
-	for (int y=0; y<inputimage->height; y++) {
-		unsigned char *cr=crl;
-		unsigned char *cw=cwl;
-		for (int x=0; x<inputimage->width; x+=2) {
+	unsigned char *crl = (unsigned char *)inputimage->imageData;
+	unsigned char *cwl = (unsigned char *)outputimage->imageData;
+	for (int y = 0; y < inputimage->height; y++) {
+		unsigned char *cr = crl;
+		unsigned char *cw = cwl;
+		for (int x = 0; x < inputimage->width; x += 2) {
 			cr++;
-			int y1=(int)*cr; cr++;
+			int y1 = (int) * cr;
 			cr++;
-			int y2=(int)*cr; cr++;
+			cr++;
+			int y2 = (int) * cr;
+			cr++;
 
-			*cw=y1; cw++;
-			*cw=y2; cw++;
+			*cw = y1;
+			cw++;
+			*cw = y2;
+			cw++;
 		}
-		crl+=inputimage->widthStep;
-		cwl+=outputimage->widthStep;
+		crl += inputimage->widthStep;
+		cwl += outputimage->widthStep;
 	}
 }

@@ -21,7 +21,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentIDReaderRing(mCore);}
+	Component *Create() {
+		return new ComponentIDReaderRing(mCore);
+	}
 
 private:
 	float mRingRadiusInner;	//!< (configuration) The squared inner radius of the ring.

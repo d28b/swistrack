@@ -16,7 +16,9 @@ public:
 	~ComponentEditor();
 
 	//! Returns whether the Component object is editable or not.
-	bool IsEditable() {return (mComponent!=0);}
+	bool IsEditable() {
+		return (mComponent != 0);
+	}
 
 	//! Reads the configuration from an XML element.
 	void ConfigurationReadXML(wxXmlNode *element, ErrorList *xmlerr);

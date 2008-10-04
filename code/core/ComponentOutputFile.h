@@ -22,8 +22,10 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentOutputFile(mCore);}
-	
+	Component *Create() {
+		return new ComponentOutputFile(mCore);
+	}
+
 
 private:
 	struct structOutputFile
@@ -34,10 +36,10 @@ private:
 	};
 	typedef std::vector<structOutputFile*> filesVector;
 	void writeData(structOutputFile *outputFile);
-	void writeHeader(structOutputFile *outputFile);	
+	void writeHeader(structOutputFile *outputFile);
 	wxString mDirectoryName;			//!< Name of the directory to save
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
-	filesVector mFilesVector;			//!< Vector containing the FileName	
+	filesVector mFilesVector;			//!< Vector containing the FileName
 };
 
 #endif

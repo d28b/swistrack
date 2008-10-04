@@ -25,9 +25,13 @@ public:
 	void OnIdle();
 
 	//! Actives or deactivates the trigger.
-	void SetActive(bool active) {mActive=active;}
+	void SetActive(bool active) {
+		mActive = active;
+	}
 	//! Actives or deactivates the trigger.
-	bool GetActive() const {return mActive;}
+	bool GetActive() const {
+		return mActive;
+	}
 
 	// SwisTrackCoreInterface methods
 	void OnAfterStart(bool productionmode);

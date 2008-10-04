@@ -10,7 +10,7 @@ THISCLASS::ComponentBlobSelection(SwisTrackCore *stc):
 		mDisplayOutput(wxT("Output"), wxT("After Blob Selection")) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryPreprocessingBinary);
+	mCategory = &(mCore->mCategoryPreprocessingBinary);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);
@@ -28,18 +28,18 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mMinArea=GetConfigurationInt(wxT("MinArea"), 1);
-	mMaxArea=GetConfigurationInt(wxT("MaxArea"), 1000);
-	mAreaSelection=GetConfigurationBool(wxT("AreaBool"),false);
-	mMinCompactness=GetConfigurationDouble(wxT("MinCompactness"), 1);
-	mMaxCompactness=GetConfigurationDouble(wxT("MaxCompactness"), 1000);
-	mCompactnessSelection=GetConfigurationBool(wxT("CompactnessBool"),false);
-	mMinOrientation=GetConfigurationDouble(wxT("MinOrientation"), -90);
-	mMaxOrientation=GetConfigurationDouble(wxT("MaxOrientation"), 90);
-	mOrientationSelection=GetConfigurationBool(wxT("OrientationBool"),false);
+	mMinArea = GetConfigurationInt(wxT("MinArea"), 1);
+	mMaxArea = GetConfigurationInt(wxT("MaxArea"), 1000);
+	mAreaSelection = GetConfigurationBool(wxT("AreaBool"), false);
+	mMinCompactness = GetConfigurationDouble(wxT("MinCompactness"), 1);
+	mMaxCompactness = GetConfigurationDouble(wxT("MaxCompactness"), 1000);
+	mCompactnessSelection = GetConfigurationBool(wxT("CompactnessBool"), false);
+	mMinOrientation = GetConfigurationDouble(wxT("MinOrientation"), -90);
+	mMaxOrientation = GetConfigurationDouble(wxT("MaxOrientation"), 90);
+	mOrientationSelection = GetConfigurationBool(wxT("OrientationBool"), false);
 }
 
-void THISCLASS::OnStep() 
+void THISCLASS::OnStep()
 {
 	// This is the image we want to treat
 	IplImage* inputimage = mCore->mDataStructureImageBinary.mImage;
@@ -50,16 +50,16 @@ void THISCLASS::OnStep()
 
 	// Prepare mOutputImage
 	if (! mOutputImage) {
-		mOutputImage=cvCreateImage(cvSize(inputimage->width,inputimage->height),inputimage->depth,1);
+		mOutputImage = cvCreateImage(cvSize(inputimage->width, inputimage->height), inputimage->depth, 1);
 	}
 	// If no computation is needed
-	if ((mAreaSelection==false)&&(mCompactnessSelection==false)&&(mOrientationSelection==false)) {
+	if ((mAreaSelection == false) && (mCompactnessSelection == false) && (mOrientationSelection == false)) {
 		// Take a copy of the input image
 		cvCopy(inputimage, mOutputImage);
 		// Let the DisplayImage know about our image
 		DisplayEditor de(&mDisplayOutput);
 		if (de.IsActive()) {
-				de.SetMainImage(mCore->mDataStructureImageBinary.mImage);
+			de.SetMainImage(mCore->mDataStructureImageBinary.mImage);
 		}
 		return;
 	}
@@ -80,7 +80,7 @@ void THISCLASS::OnStep()
 	CvSeq* contour = 0;
 
 	// Init blob extraxtion
-	CvContourScanner blobs = cvStartFindContours(inputimage,storage,sizeof(CvContour),CV_RETR_LIST,CV_CHAIN_APPROX_NONE);
+	CvContourScanner blobs = cvStartFindContours(inputimage, storage, sizeof(CvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
 
 	// This is used to correct the position in case of ROI
 	CvRect rectROI;
@@ -92,43 +92,43 @@ void THISCLASS::OnStep()
 	}
 
 
-	while ((contour=cvFindNextContour(blobs))!=NULL) {
+	while ((contour = cvFindNextContour(blobs)) != NULL) {
 		//A priori, we don't want to remove the blob
-		drawBlobBool=true;
+		drawBlobBool = true;
 		// Computing the moments
 		cvMoments(contour, &moments);
 
 		// Computing particle area
-		contourArea=moments.m00;
+		contourArea = moments.m00;
 
 		// Selection based on area
 		if (mAreaSelection) {
-			if ((contourArea<mMinArea) || (contourArea>mMaxArea)) {
-				drawBlobBool=false;
+			if ((contourArea < mMinArea) || (contourArea > mMaxArea)) {
+				drawBlobBool = false;
 			}
 		}
 		// Selection based on compactness
 		if (mCompactnessSelection) {
 			double l = cvArcLength(contour, CV_WHOLE_SEQ, 1);
-			contourCompactness=fabs(12.56*contourArea/(l*l));
-			if ((contourCompactness<mMinCompactness) || (contourCompactness>mMaxCompactness)) {
-				drawBlobBool=false;
+			contourCompactness = fabs(12.56 * contourArea / (l * l));
+			if ((contourCompactness < mMinCompactness) || (contourCompactness > mMaxCompactness)) {
+				drawBlobBool = false;
 			}
 		}
 		if (mOrientationSelection) {
-			double tempValue=cvGetCentralMoment(&moments,2,0)-cvGetCentralMoment(&moments,0,2);
-			contourOrientation=atan(2*cvGetCentralMoment(&moments,1,1)/(tempValue+sqrt(tempValue*tempValue+4*cvGetCentralMoment(&moments,1,1)*cvGetCentralMoment(&moments,1,1))));
+			double tempValue = cvGetCentralMoment(&moments, 2, 0) - cvGetCentralMoment(&moments, 0, 2);
+			contourOrientation = atan(2 * cvGetCentralMoment(&moments, 1, 1) / (tempValue + sqrt(tempValue * tempValue + 4 * cvGetCentralMoment(&moments, 1, 1) * cvGetCentralMoment(&moments, 1, 1))));
 			//Transforming in degrees (between -90 and 90
-			contourOrientation=contourOrientation*57.29577951;
-			if (!(((contourOrientation>mMinOrientation)&&(contourOrientation<mMaxOrientation))||((contourOrientation>mMinOrientation+180)&&(contourOrientation<mMaxOrientation+180))||((contourOrientation>mMinOrientation-180)&&(contourOrientation<mMaxOrientation-180)))) {
-				drawBlobBool=false;
+			contourOrientation = contourOrientation * 57.29577951;
+			if (!(((contourOrientation > mMinOrientation) && (contourOrientation < mMaxOrientation)) || ((contourOrientation > mMinOrientation + 180) && (contourOrientation < mMaxOrientation + 180)) || ((contourOrientation > mMinOrientation - 180) && (contourOrientation < mMaxOrientation - 180)))) {
+				drawBlobBool = false;
 			}
 		}
-			
+
 		//If we keep the contour, we paint it in white
 		if (drawBlobBool) {
 			//Paint the kept contours in white
-			cvDrawContours(mOutputImage,contour,cvScalarAll(255),cvScalarAll(255),0,CV_FILLED);
+			cvDrawContours(mOutputImage, contour, cvScalarAll(255), cvScalarAll(255), 0, CV_FILLED);
 		}
 
 		cvRelease((void**)&contour);
@@ -137,7 +137,7 @@ void THISCLASS::OnStep()
 
 	cvRelease((void**)&contour);
 	cvReleaseMemStorage(&storage);
-	mCore->mDataStructureImageBinary.mImage=mOutputImage;
+	mCore->mDataStructureImageBinary.mImage = mOutputImage;
 
 	// Let the DisplayImage know about our image
 	DisplayEditor de(&mDisplayOutput);
@@ -149,6 +149,6 @@ void THISCLASS::OnStep()
 void THISCLASS::OnStepCleanup() {
 }
 
-void THISCLASS::OnStop() 
+void THISCLASS::OnStop()
 {
 }

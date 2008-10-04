@@ -11,7 +11,7 @@ public:
 	wxString mDisplayName;	//!< The name that is displayed to the user.
 
 	//! Constructor.
-	DataStructure(const wxString &name=wxT(""), const wxString &displayname=wxT("")): mName(name), mDisplayName(displayname) {}
+	DataStructure(const wxString &name = wxT(""), const wxString &displayname = wxT("")): mName(name), mDisplayName(displayname) {}
 	//! Destructor.
 	virtual ~DataStructure() {}
 };

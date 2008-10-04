@@ -4,7 +4,7 @@
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
-	#include <wx/wx.h>
+#include <wx/wx.h>
 #endif
 
 class TCPServerConnection;
@@ -33,7 +33,9 @@ public:
 	bool SendMessage(CommunicationMessage *m);
 
 	//! Returns whether this object is still in use or not.
-	bool IsActive() {return (mSocket!=0);}
+	bool IsActive() {
+		return (mSocket != 0);
+	}
 
 protected:
 	enum {

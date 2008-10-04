@@ -9,7 +9,7 @@ THISCLASS::ComponentTrigger(Component *c):
 }
 
 void THISCLASS::SetReady(bool ready) {
-	mIsReady=ready;
+	mIsReady = ready;
 
 	if (mIsReady) {
 		wxCommandEvent newevent(wxEVT_SWISTRACKCORE_TRIGGER);
@@ -18,5 +18,5 @@ void THISCLASS::SetReady(bool ready) {
 }
 
 void THISCLASS::ClearReady() {
-	mIsReady=false;
+	mIsReady = false;
 }

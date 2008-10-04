@@ -13,8 +13,8 @@ class Display;
 
 //! The class holding all information necessary to provide a nice image of an intermediate step to the user.
 class Display {
-friend class DisplayEditor;
-friend class SwisTrackCore;
+	friend class DisplayEditor;
+	friend class SwisTrackCore;
 
 public:
 	//! The list type of subscribers.
@@ -41,7 +41,7 @@ public:
 	double mImagePixelSize;			//!< The size of a pixel in the image. (not implemented and probably not needed)
 	IplImage *mMainImage;			//!< The main image. This is always assumed to be at position (0, 0).
 	IplImage *mMaskImage;			//!< The mask image, if any.
-	
+
 	// Particles
 	DataStructureParticles::tParticleVector mParticles;			//!< The particles in pixel coordinates.
 	DataStructureParticles::tParticleVector mParticlesWorld;	//!< The particles in world coordinates.
@@ -60,7 +60,9 @@ public:
 	void Unsubscribe(DisplaySubscriberInterface *disi);
 
 	//! Returns if the this display is active (i.e. someone wants its contents).
-	void SetActive() {mActive=true;}
+	void SetActive() {
+		mActive = true;
+	}
 
 protected:
 	bool mActive;	//<! Whether the display is active or not. (A display needs to be activated in the OnDisplayBeforeStep method.)

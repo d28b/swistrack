@@ -18,7 +18,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentOutputMarkFrameManual(mCore);}
+	Component *Create() {
+		return new ComponentOutputMarkFrameManual(mCore);
+	}
 
 private:
 	wxString mMarkerName;

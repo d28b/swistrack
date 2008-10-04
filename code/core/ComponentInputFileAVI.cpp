@@ -10,7 +10,7 @@ THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
 		mDisplayOutput(wxT("Output"), wxT("AVI File: Unprocessed Frame")) {
 
 	// Data structure relations
-	mCategory=&(mCore->mCategoryInput);
+	mCategory = &(mCore->mCategoryInput);
 	AddDataStructureWrite(&(mCore->mDataStructureInput));
 	AddDisplay(&mDisplayOutput);
 
@@ -19,14 +19,16 @@ THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
 }
 
 THISCLASS::~ComponentInputFileAVI() {
-	if (mCapture) {cvReleaseCapture(&mCapture);}
+	if (mCapture) {
+		cvReleaseCapture(&mCapture);
+	}
 }
 
 void THISCLASS::OnStart() {
 	// Open file
-	wxString filename=GetConfigurationString(wxT("File"), wxT(""));
+	wxString filename = GetConfigurationString(wxT("File"), wxT(""));
 	mCapture = cvCaptureFromFile(filename.mb_str(wxConvISO8859_1));
-	
+
 	// Error? Check whether the file exists or not, to give an appropriate error message to the user
 	if (mCapture == NULL) {
 		std::fstream f;
@@ -49,12 +51,14 @@ void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
-	if (! mCapture) {return;}	
+	if (! mCapture) {
+		return;
+	}
 
 	// Read the next frame
-	int framenumber=(int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES);
-	int framescount=(int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_FRAME_COUNT);
-	mOutputImage=cvQueryFrame(mCapture);
+	int framenumber = (int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES);
+	int framescount = (int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_FRAME_COUNT);
+	mOutputImage = cvQueryFrame(mCapture);
 	if (! mOutputImage) {
 		AddError(wxT("Could not read frame from AVI file."));
 		return;
@@ -64,9 +68,9 @@ void THISCLASS::OnStep() {
 	cvFlip(mOutputImage, 0);
 
 	// Set DataStructureImage
-	mCore->mDataStructureInput.mImage=mOutputImage;
-	mCore->mDataStructureInput.mFrameNumber=framenumber;
-	mCore->mDataStructureInput.mFramesCount=framescount;
+	mCore->mDataStructureInput.mImage = mOutputImage;
+	mCore->mDataStructureInput.mFrameNumber = framenumber;
+	mCore->mDataStructureInput.mFramesCount = framescount;
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
@@ -76,30 +80,40 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureInput.mImage=0;
+	mCore->mDataStructureInput.mImage = 0;
 	//mOutputImage should not be released here, as this is handled by the HighGUI library
 }
 
 void THISCLASS::OnStop() {
-	if (mCapture) {cvReleaseCapture(&mCapture);}
+	if (mCapture) {
+		cvReleaseCapture(&mCapture);
+	}
 }
 
 double THISCLASS::GetProgressPercent() {
-	if (! mCapture) {return 0;}
+	if (! mCapture) {
+		return 0;
+	}
 	return cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_AVI_RATIO);
 }
 
 double THISCLASS::GetProgressMSec() {
-	if (! mCapture) {return 0;}
+	if (! mCapture) {
+		return 0;
+	}
 	return cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_MSEC);
 }
 
 int THISCLASS::GetProgressFrameNumber() {
-	if (! mCapture) {return 0;}
+	if (! mCapture) {
+		return 0;
+	}
 	return (int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES);
 }
 
 double THISCLASS::GetFPS() {
-	if (! mCapture) {return 0;}	
+	if (! mCapture) {
+		return 0;
+	}
 	return cvGetCaptureProperty(mCapture, CV_CAP_PROP_FPS);
 }

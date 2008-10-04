@@ -20,7 +20,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentBlobDetectionMinMax(mCore);}
+	Component *Create() {
+		return new ComponentBlobDetectionMinMax(mCore);
+	}
 
 private:
 	int mMinArea;	//!< (configuration) The minimum area of a blob.

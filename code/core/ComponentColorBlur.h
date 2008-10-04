@@ -19,7 +19,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentColorBlur(mCore);}
+	Component *Create() {
+		return new ComponentColorBlur(mCore);
+	}
 
 private:
 	int mBlurType;						//!< (configuration) The type of blur to apply.

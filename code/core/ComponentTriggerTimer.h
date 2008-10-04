@@ -20,21 +20,25 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentTriggerTimer(mCore);}
+	Component *Create() {
+		return new ComponentTriggerTimer(mCore);
+	}
 
 private:
 	//! An overwritten wxTimer.
-	class Timer: public wxTimer {
+class Timer: public wxTimer {
 	public:
 		ComponentTriggerTimer *mComponentTriggerTimer;		//!< The associated component.
-		
+
 		//! Constructor.
 		Timer(ComponentTriggerTimer *ctt): wxTimer(), mComponentTriggerTimer(ctt) {}
 		//! Destructor.
 		~Timer() {}
 
 		// wxTimer methods
-		void Notify() {mComponentTriggerTimer->mTrigger->SetReady();}
+		void Notify() {
+			mComponentTriggerTimer->mTrigger->SetReady();
+		}
 	};
 
 	Timer *mTimer;		//!< The associated timer.

@@ -44,11 +44,11 @@ private:
 		Display mDisplayBinary;		//!< The Display showing the thresholded image.
 
 		cColor(int color, const wxString &display_name_color, const wxString &display_title_color, const wxString &display_name_binary, const wxString &display_title_binary):
-			mColor(color), mThresholdR(32), mThresholdG(32), mThresholdB(32),
-			mSelectionByArea(false), mAreaMin(0), mAreaMax(1000),
-			mSelectionByCompactness(false), mCompactnessMin(0), mCompactnessMax(1000),
-			mParticles(),
-			mDisplayColor(display_name_color, display_title_color), mDisplayBinary(display_name_binary, display_title_binary) {};
+				mColor(color), mThresholdR(32), mThresholdG(32), mThresholdB(32),
+				mSelectionByArea(false), mAreaMin(0), mAreaMax(1000),
+				mSelectionByCompactness(false), mCompactnessMin(0), mCompactnessMax(1000),
+				mParticles(),
+				mDisplayColor(display_name_color, display_title_color), mDisplayBinary(display_name_binary, display_title_binary) {};
 	};
 
 	unsigned int mMaxNumberOfParticles;	//!< (configuration) The maximum number of blobs that are to detect.

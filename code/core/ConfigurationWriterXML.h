@@ -23,7 +23,9 @@ public:
 	bool Save(const wxString &filename);
 
 	//! Returns the XML document. (This function is not needed unless the application needs to access the XML document in a different way.)
-	wxXmlDocument *GetDocument() {return &mDocument;}
+	wxXmlDocument *GetDocument() {
+		return &mDocument;
+	}
 
 	//! Writes the components.
 	void WriteComponents(SwisTrackCore *stc);

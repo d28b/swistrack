@@ -8,18 +8,22 @@ void THISCLASS::AddCommandHandler(CommunicationCommandHandler *ch) {
 
 void THISCLASS::RemoveCommandHandler(CommunicationCommandHandler *ch) {
 	tCommandHandlerList::iterator it = find(mCommandHandlerList.begin(), mCommandHandlerList.end(), ch);
-	if (it != mCommandHandlerList.end()) {mCommandHandlerList.erase(it);}
+	if (it != mCommandHandlerList.end()) {
+		mCommandHandlerList.erase(it);
+	}
 }
 
 bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
-	bool ok=false;
+	bool ok = false;
 
-	tCommandHandlerList::iterator it=mCommandHandlerList.begin();
-	while (it!=mCommandHandlerList.end()) {
-		bool res=(*it)->OnCommunicationCommand(m);
-		if (res) {ok=true;}
+	tCommandHandlerList::iterator it = mCommandHandlerList.begin();
+	while (it != mCommandHandlerList.end()) {
+		bool res = (*it)->OnCommunicationCommand(m);
+		if (res) {
+			ok = true;
+		}
 		it++;
 	}
-	
+
 	return ok;
 }

@@ -19,7 +19,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentAdaptiveBackgroundSubtractionColor(mCore);}
+	Component *Create() {
+		return new ComponentAdaptiveBackgroundSubtractionColor(mCore);
+	}
 
 private:
 	enum eMode {

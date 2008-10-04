@@ -84,12 +84,12 @@ void THISCLASS::OnTextEnter(wxCommandEvent& event) {
 }
 
 void THISCLASS::OnKillFocus(wxFocusEvent& event) {
-	wxColour color=wxColour(mTextCtrl->GetValue());
+	wxColour color = wxColour(mTextCtrl->GetValue());
 	mNewValue = ColorToInt(color);
 	ValidateNewValue();
 	SetNewValue();
 }
 
 int THISCLASS::ColorToInt(wxColour &color) {
-	return color.Red()+(color.Green()<<8)+(color.Blue()<<16);
+	return color.Red() + (color.Green() << 8) + (color.Blue() << 16);
 }

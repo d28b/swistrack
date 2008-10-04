@@ -24,9 +24,9 @@ public:
 
 	//! Returns a double with a gaussian distribution.
 	double Normal() {
-		long hz=mRandomMersenneTwister->randInt();
-		unsigned long iz=hz & 127;
-		return ((unsigned long)abs(hz)<kn[iz]) ? hz*wn[iz] : nfix(hz, iz);
+		long hz = mRandomMersenneTwister->randInt();
+		unsigned long iz = hz & 127;
+		return ((unsigned long)abs(hz) < kn[iz]) ? hz*wn[iz] : nfix(hz, iz);
 	}
 };
 

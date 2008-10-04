@@ -11,7 +11,7 @@ class ComponentCategory {
 public:
 	//! Category types.
 	enum eCategoryType {
-		sTypeAny=0,		//!< The user can choose any number of these components.
+		sTypeAny = 0,		//!< The user can choose any number of these components.
 		sTypeOne,		//!< The user should choose exactly one component of this category.
 		sTypeAuto
 	};
@@ -22,7 +22,7 @@ public:
 	eCategoryType mType;		//!< The type.
 
 	//! Constructor.
-	ComponentCategory(const wxString &name, const wxString &displayname, int order, eCategoryType type=sTypeAny): mName(name), mDisplayName(displayname), mOrder(order), mType(type) {}
+	ComponentCategory(const wxString &name, const wxString &displayname, int order, eCategoryType type = sTypeAny): mName(name), mDisplayName(displayname), mOrder(order), mType(type) {}
 	//! Destructor.
 	~ComponentCategory() {}
 };

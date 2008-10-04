@@ -19,7 +19,9 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {return new ComponentBinaryErosion(mCore);}
+	Component *Create() {
+		return new ComponentBinaryErosion(mCore);
+	}
 
 private:
 	int mIterations;					//!< (configuration) The number of erosions to apply to the binary image.

@@ -22,14 +22,18 @@ THISCLASS::~SwisTrackCoreTrigger() {
 }
 
 void THISCLASS::OnTrigger(wxCommandEvent &event) {
-	if (mStepPerformed) {return;}
-	if (! mActive) {return;}
+	if (mStepPerformed) {
+		return;
+	}
+	if (! mActive) {
+		return;
+	}
 
 	// Return if at least one trigger component isn't ready
-	const SwisTrackCore::tComponentList *deployedcomponents=mSwisTrackCore->GetDeployedComponents();
-	SwisTrackCore::tComponentList::const_iterator it=deployedcomponents->begin();
-	while (it!=deployedcomponents->end()) {
-		ComponentTrigger *ct=(*it)->mTrigger;
+	const SwisTrackCore::tComponentList *deployedcomponents = mSwisTrackCore->GetDeployedComponents();
+	SwisTrackCore::tComponentList::const_iterator it = deployedcomponents->begin();
+	while (it != deployedcomponents->end()) {
+		ComponentTrigger *ct = (*it)->mTrigger;
 		if (ct) {
 			if (! ct->IsReady()) {
 				return;
@@ -39,9 +43,9 @@ void THISCLASS::OnTrigger(wxCommandEvent &event) {
 	}
 
 	// Clear the component trigger flags
-	it=deployedcomponents->begin();
-	while (it!=deployedcomponents->end()) {
-		ComponentTrigger *ct=(*it)->mTrigger;
+	it = deployedcomponents->begin();
+	while (it != deployedcomponents->end()) {
+		ComponentTrigger *ct = (*it)->mTrigger;
 		if (ct) {
 			ct->ClearReady();
 		}
@@ -49,7 +53,7 @@ void THISCLASS::OnTrigger(wxCommandEvent &event) {
 	}
 
 	// Add a trigger clear event at the end of the event queue, to discard pending trigger events (for this step) in the queue
-	mStepPerformed=true;
+	mStepPerformed = true;
 	wxCommandEvent newevent(wxEVT_SWISTRACKCORE_TRIGGER_CLEAR);
 	AddPendingEvent(newevent);
 
@@ -58,7 +62,7 @@ void THISCLASS::OnTrigger(wxCommandEvent &event) {
 }
 
 void THISCLASS::OnTriggerClear(wxCommandEvent &event) {
-	mStepPerformed=false;
+	mStepPerformed = false;
 }
 
 void THISCLASS::OnIdle() {
@@ -69,5 +73,5 @@ void THISCLASS::OnIdle() {
 }
 
 void THISCLASS::OnAfterStart(bool productionmode) {
-	mStepPerformed=false;
+	mStepPerformed = false;
 }

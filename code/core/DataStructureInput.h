@@ -11,7 +11,9 @@ public:
 	double mFramesPerSecond;	//!< Frames per second.
 
 	//! Constructor.
-	DataStructureInput(): DataStructureImage(wxT("Input"), wxT("Input")), mFrameNumber(-1), mFramesCount(-1), mFramesPerSecond(-1) {mDisplayName=wxT("Input");}
+	DataStructureInput(): DataStructureImage(wxT("Input"), wxT("Input")), mFrameNumber(-1), mFramesCount(-1), mFramesPerSecond(-1) {
+		mDisplayName = wxT("Input");
+	}
 	//! Destructor.
 	~DataStructureInput() {}
 };
