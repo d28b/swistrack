@@ -5,7 +5,7 @@ static const char *bitmap_preview_xpm[] = {
 "  c black",
 ". c cyan",
 "X c #808080",
-"o c opaque",
+"o c none",
 "O c white",
 /* pixels */
 "         ooooooo",

@@ -5,7 +5,7 @@ static const char *bitmap_open_xpm[] = {
 "  c black",
 ". c #bfbf00",
 "X c yellow",
-"o c opaque",
+"o c none",
 "O c white",
 /* pixels */
 "oooooooooooooooo",

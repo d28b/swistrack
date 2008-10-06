@@ -2,7 +2,7 @@
 static const char *icon_gui_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 7 1",
-"  c opaque",
+"  c white",
 ". c #008000",
 "X c #800000",
 "o c red",

@@ -9,7 +9,7 @@ static const char *bitmap_minus_xpm[] = {
 "O c navy",
 "+ c #800080",
 "@ c #008080",
-"# c opaque",
+"# c none",
 "$ c #808080",
 "% c red",
 "& c green",

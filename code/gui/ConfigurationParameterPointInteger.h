@@ -42,9 +42,9 @@ private:
 	int mNewValueY;				//!< The new value for Y.
 
 	//! Textbox IDs
-	enum {
-		sID_X,
-		sID_Y,
+	enum eID {
+		cID_X,
+		cID_Y,
 	};
 
 	// ConfigurationParameter methods

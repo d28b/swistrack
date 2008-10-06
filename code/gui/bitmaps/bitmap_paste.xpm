@@ -6,7 +6,7 @@ static const char *bitmap_paste_xpm[] = {
 ". c navy",
 "X c yellow",
 "o c #808080",
-"O c opaque",
+"O c none",
 "+ c white",
 /* pixels */
 "OOOOOOOOOOOOOOOO",

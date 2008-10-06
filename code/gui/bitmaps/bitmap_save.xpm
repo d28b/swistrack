@@ -5,7 +5,7 @@ static const char *bitmap_save_xpm[] = {
 "  c #000000",
 ". c #808000",
 "X c #808080",
-"o c opaque",
+"o c none",
 /* pixels */
 "oooooooooooooooo",
 "o              o",

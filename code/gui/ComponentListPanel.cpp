@@ -112,7 +112,7 @@ void THISCLASS::Update() {
 	mList->DeleteAllItems();
 
 	// Needed to keep selection visible
-	int selecteditemid = 0;
+	int selecteditemid = -1;
 
 	// Add all components
 	int row = 0;
@@ -174,7 +174,9 @@ void THISCLASS::Update() {
 	}
 
 	// Make the selection visible
-	mList->EnsureVisible(selecteditemid);
+	if (selecteditemid>-1) {
+		mList->EnsureVisible(selecteditemid);
+	}
 
 	// Update the status messages
 	UpdateStatus();

@@ -4,7 +4,7 @@ static const char *bitmap_colours_xpm[] = {
 "4 1 4 1",
 "  c black",
 ". c #808080",
-"X c opaque",
+"X c none",
 "o c white",
 /* pixels */
 " .Xo"

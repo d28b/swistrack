@@ -47,9 +47,9 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	wxStaticText *dummyy = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scIndentWidth, -1), wxST_NO_AUTORESIZE);
 	wxStaticText *labelx = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("labelx"), wxT("X")), wxDefaultPosition, wxSize(scLabelWidth - scIndentWidth, -1), wxST_NO_AUTORESIZE);
 	wxStaticText *labely = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("labely"), wxT("Y")), wxDefaultPosition, wxSize(scLabelWidth - scIndentWidth, -1), wxST_NO_AUTORESIZE);
-	mTextCtrlX = new wxTextCtrl(this, sID_X, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT | wxTE_PROCESS_ENTER);
+	mTextCtrlX = new wxTextCtrl(this, cID_X, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT | wxTE_PROCESS_ENTER);
 	mTextCtrlX->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
-	mTextCtrlY = new wxTextCtrl(this, sID_Y, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT | wxTE_PROCESS_ENTER);
+	mTextCtrlY = new wxTextCtrl(this, cID_Y, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT | wxTE_PROCESS_ENTER);
 	mTextCtrlY->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
 	wxStaticText *unitx = new wxStaticText(this, wxID_ANY, wxT(" ") + config->ReadString(wxT("unitx"), wxT("")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
 	wxStaticText *unity = new wxStaticText(this, wxID_ANY, wxT(" ") + config->ReadString(wxT("unity"), wxT("")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
@@ -150,7 +150,7 @@ void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	if (CompareNewValue()) {
 		return;
 	}
-	if (event.GetId() == sID_X) {
+	if (event.GetId() == cID_X) {
 		SetNewValue(mTextCtrlX);
 	} else {
 		SetNewValue(mTextCtrlY);

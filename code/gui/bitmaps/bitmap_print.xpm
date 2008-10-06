@@ -5,7 +5,7 @@ static const char *bitmap_print_xpm[] = {
 "  c black",
 ". c #808000",
 "X c yellow",
-"o c opaque",
+"o c none",
 "O c white",
 /* pixels */
 "oooooooooooooooo",

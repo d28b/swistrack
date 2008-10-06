@@ -10,7 +10,7 @@ static const char *bitmap_production_xpm[] = {
 "+ c #800080",
 "@ c #008080",
 "# c #808080",
-"$ c opaque",
+"$ c none",
 "% c red",
 "& c green",
 "* c yellow",

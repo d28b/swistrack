@@ -15,13 +15,13 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 	EVT_RIGHT_DOWN(THISCLASS::OnMouseRightDown)
 	EVT_MOUSEWHEEL(THISCLASS::OnMouseWheel)
 	EVT_MOTION(THISCLASS::OnMouseMove)
-	EVT_MENU(sID_TriggerAuto10, THISCLASS::OnMenuTrigger)
-	EVT_MENU(sID_TriggerAuto1, THISCLASS::OnMenuTrigger)
-	EVT_MENU(sID_TriggerManual, THISCLASS::OnMenuTrigger)
-	EVT_MENU(sID_ViewReset, THISCLASS::OnMenuView)
-	EVT_MENU(sID_ViewZoomIn, THISCLASS::OnMenuView)
-	EVT_MENU(sID_ViewZoomOut, THISCLASS::OnMenuView)
-	EVT_MENU(sID_SaveTimeline, THISCLASS::OnMenuSaveTimeline)
+	EVT_MENU(cID_TriggerAuto10, THISCLASS::OnMenuTrigger)
+	EVT_MENU(cID_TriggerAuto1, THISCLASS::OnMenuTrigger)
+	EVT_MENU(cID_TriggerManual, THISCLASS::OnMenuTrigger)
+	EVT_MENU(cID_ViewReset, THISCLASS::OnMenuView)
+	EVT_MENU(cID_ViewZoomIn, THISCLASS::OnMenuView)
+	EVT_MENU(cID_ViewZoomOut, THISCLASS::OnMenuView)
+	EVT_MENU(cID_SaveTimeline, THISCLASS::OnMenuSaveTimeline)
 END_EVENT_TABLE()
 
 THISCLASS::TimelinePanel(wxWindow *parent, SwisTrack *st):
@@ -33,15 +33,15 @@ THISCLASS::TimelinePanel(wxWindow *parent, SwisTrack *st):
 	SetMinSize(wxSize(20, 20));
 
 	// Create the popup menu
-	mPopupMenu.AppendCheckItem(sID_TriggerAuto10, wxT("Update every 10 seconds"));
-	mPopupMenu.AppendCheckItem(sID_TriggerAuto1, wxT("Update every second"));
-	mPopupMenu.AppendCheckItem(sID_TriggerManual, wxT("Update manually (double click)"));
+	mPopupMenu.AppendCheckItem(cID_TriggerAuto10, wxT("Update every 10 seconds"));
+	mPopupMenu.AppendCheckItem(cID_TriggerAuto1, wxT("Update every second"));
+	mPopupMenu.AppendCheckItem(cID_TriggerManual, wxT("Update manually (double click)"));
 	mPopupMenu.AppendSeparator();
-	mPopupMenu.AppendCheckItem(sID_ViewReset, wxT("Reset view"));
-	mPopupMenu.AppendCheckItem(sID_ViewZoomIn, wxT("Zoom in"));
-	mPopupMenu.AppendCheckItem(sID_ViewZoomOut, wxT("Zoom out"));
+	mPopupMenu.AppendCheckItem(cID_ViewReset, wxT("Reset view"));
+	mPopupMenu.AppendCheckItem(cID_ViewZoomIn, wxT("Zoom in"));
+	mPopupMenu.AppendCheckItem(cID_ViewZoomOut, wxT("Zoom out"));
 	mPopupMenu.AppendSeparator();
-	mPopupMenu.Append(sID_SaveTimeline, wxT("Save timeline as ..."));
+	mPopupMenu.Append(cID_SaveTimeline, wxT("Save timeline as ..."));
 
 	// Set non-bold font
 	wxFont f = GetFont();
@@ -412,9 +412,9 @@ void THISCLASS::OnMouseMove(wxMouseEvent &event) {
 
 void THISCLASS::OnMouseRightDown(wxMouseEvent &event) {
 	// Set the checkmarks
-	mPopupMenu.Check(sID_TriggerAuto10, (mTimer.IsRunning() && (mTimer.GetInterval() == 10000)));
-	mPopupMenu.Check(sID_TriggerAuto1, (mTimer.IsRunning() && (mTimer.GetInterval() == 1000)));
-	mPopupMenu.Check(sID_TriggerManual, (mTimer.IsRunning() == false));
+	mPopupMenu.Check(cID_TriggerAuto10, (mTimer.IsRunning() && (mTimer.GetInterval() == 10000)));
+	mPopupMenu.Check(cID_TriggerAuto1, (mTimer.IsRunning() && (mTimer.GetInterval() == 1000)));
+	mPopupMenu.Check(cID_TriggerManual, (mTimer.IsRunning() == false));
 
 	// Store the mouse position
 	mMoveStartPoint = event.GetX();
@@ -435,9 +435,9 @@ void THISCLASS::OnSize(wxSizeEvent &event) {
 }
 
 void THISCLASS::OnMenuView(wxCommandEvent& event) {
-	if (event.GetId() == sID_ViewZoomOut) {
+	if (event.GetId() == cID_ViewZoomOut) {
 		SetViewScale(mViewScale / 2, mMoveStartPoint);
-	} else if (event.GetId() == sID_ViewZoomIn) {
+	} else if (event.GetId() == cID_ViewZoomIn) {
 		SetViewScale(mViewScale*2, mMoveStartPoint);
 	} else {
 		// Reset
@@ -484,9 +484,9 @@ void THISCLASS::OnMenuTrigger(wxCommandEvent& event) {
 	if (mTimer.IsRunning()) {
 		mTimer.Stop();
 	}
-	if (event.GetId() == sID_TriggerAuto10) {
+	if (event.GetId() == cID_TriggerAuto10) {
 		mTimer.Start(10000, false);
-	} else if (event.GetId() == sID_TriggerAuto1) {
+	} else if (event.GetId() == cID_TriggerAuto1) {
 		mTimer.Start(1000, false);
 	} else {
 		// Manual mode, do nothing

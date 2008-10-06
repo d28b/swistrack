@@ -49,13 +49,13 @@ class EventRecorderResetTimer: public wxTimer {
 
 	//! Component IDs.
 	enum eID {
-		sID_TriggerAuto10,
-		sID_TriggerAuto1,
-		sID_TriggerManual,
-		sID_ViewReset,
-		sID_ViewZoomIn,
-		sID_ViewZoomOut,
-		sID_SaveTimeline
+		cID_TriggerAuto10=1,
+		cID_TriggerAuto1,
+		cID_TriggerManual,
+		cID_ViewReset,
+		cID_ViewZoomIn,
+		cID_ViewZoomOut,
+		cID_SaveTimeline
 	};
 
 	Component *mSelectedComponent;	//!< The selected component.

@@ -4,7 +4,7 @@ static const char *bitmap_cut_xpm[] = {
 "16 15 3 1",
 "  c black",
 ". c navy",
-"X c opaque",
+"X c none",
 /* pixels */
 "XXXXXXXXXXXXXXXX",
 "XXXXX XXX XXXXXX",

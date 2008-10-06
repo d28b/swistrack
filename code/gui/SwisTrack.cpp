@@ -36,22 +36,22 @@
 #endif
 
 BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
-	EVT_MENU(sID_New, THISCLASS::OnFileNew)
-	EVT_MENU(sID_Open, THISCLASS::OnFileOpen)
-	EVT_MENU(sID_Save, THISCLASS::OnFileSave)
-	EVT_MENU(sID_SaveAs, THISCLASS::OnFileSaveAs)
-	EVT_MENU(sID_Quit,  THISCLASS::OnFileQuit)
-	EVT_MENU(sID_Control_ProductionMode, THISCLASS::OnControlProductionMode)
-	EVT_MENU(sID_Control_Run, THISCLASS::OnControlRun)
-	EVT_MENU(sID_Control_Step, THISCLASS::OnControlStep)
-	EVT_MENU(sID_Control_Reset, THISCLASS::OnControlReset)
-	EVT_MENU(sID_View_ComponentList, THISCLASS::OnViewComponentList)
-	EVT_MENU(sID_View_NewDisplay, THISCLASS::OnViewNewDisplay)
-	EVT_MENU(sID_Tools_TCPServer, THISCLASS::OnToolsTCPServer)
-	EVT_MENU(sID_Help, THISCLASS::OnHelp)
-	EVT_MENU(sID_About, THISCLASS::OnHelpAbout)
-	EVT_MENU(sID_DeveloperUtilityTest, THISCLASS::OnDeveloperUtilityTest)
-	EVT_MENU(sID_DeveloperUtilityExportComponentsTable, THISCLASS::OnDeveloperUtilityExportComponentsTable)
+	EVT_MENU(cID_New, THISCLASS::OnFileNew)
+	EVT_MENU(cID_Open, THISCLASS::OnFileOpen)
+	EVT_MENU(cID_Save, THISCLASS::OnFileSave)
+	EVT_MENU(cID_SaveAs, THISCLASS::OnFileSaveAs)
+	EVT_MENU(cID_Quit,  THISCLASS::OnFileQuit)
+	EVT_MENU(cID_Control_ProductionMode, THISCLASS::OnControlProductionMode)
+	EVT_MENU(cID_Control_Run, THISCLASS::OnControlRun)
+	EVT_MENU(cID_Control_Step, THISCLASS::OnControlStep)
+	EVT_MENU(cID_Control_Reset, THISCLASS::OnControlReset)
+	EVT_MENU(cID_View_ComponentList, THISCLASS::OnViewComponentList)
+	EVT_MENU(cID_View_NewDisplay, THISCLASS::OnViewNewDisplay)
+	EVT_MENU(cID_Tools_TCPServer, THISCLASS::OnToolsTCPServer)
+	EVT_MENU(cID_Help, THISCLASS::OnHelp)
+	EVT_MENU(cID_About, THISCLASS::OnHelpAbout)
+	EVT_MENU(cID_DeveloperUtilityTest, THISCLASS::OnDeveloperUtilityTest)
+	EVT_MENU(cID_DeveloperUtilityExportComponentsTable, THISCLASS::OnDeveloperUtilityExportComponentsTable)
 
 	EVT_IDLE(THISCLASS::OnIdle)
 END_EVENT_TABLE()
@@ -128,33 +128,33 @@ void THISCLASS::BuildMenuBar() {
 	// Create menus
 	wxMenu *menufile = new wxMenu;
 	GetMenuBar()->Append(menufile, _T("&File"));
-	menufile->Append(sID_New, _T("&New\tCtrl-C"), _T("Creates a new file"));
-	menufile->Append(sID_Open, _T("&Open\tCtrl-O"), _T("Opens a file"));
-	menufile->Append(sID_Save, _T("&Save\tCtrl-S"), _T("Saves the current file"));
-	menufile->Append(sID_SaveAs, _T("&Save as ..."), _T("Saves the file with another name"));
+	menufile->Append(cID_New, _T("&New\tCtrl-C"), _T("Creates a new file"));
+	menufile->Append(cID_Open, _T("&Open\tCtrl-O"), _T("Opens a file"));
+	menufile->Append(cID_Save, _T("&Save\tCtrl-S"), _T("Saves the current file"));
+	menufile->Append(cID_SaveAs, _T("&Save as ..."), _T("Saves the file with another name"));
 	menufile->AppendSeparator();
-	menufile->Append(sID_Quit, _T("E&xit\tAlt-F4"), _T("Quit this program"));
-	menufile->Enable(sID_Save, FALSE);
+	menufile->Append(cID_Quit, _T("E&xit\tAlt-F4"), _T("Quit this program"));
+	menufile->Enable(cID_Save, FALSE);
 
 	wxMenu *menuview = new wxMenu;
 	GetMenuBar()->Append(menuview, _T("&View"));
-	menuview->Append(sID_View_ComponentList, _T("Component list"), _T("Displays or hides the component list"), wxITEM_CHECK);
+	menuview->Append(cID_View_ComponentList, _T("Component list"), _T("Displays or hides the component list"), wxITEM_CHECK);
 	//menuview->AppendSeparator();
-	menuview->Append(sID_View_NewDisplay, _T("New display"), _T("Opens a display in a new window"));
-	menuview->Check(sID_View_ComponentList, true);
+	menuview->Append(cID_View_NewDisplay, _T("New display"), _T("Opens a display in a new window"));
+	menuview->Check(cID_View_ComponentList, true);
 
 	wxMenu *menuoutput = new wxMenu;
 	GetMenuBar()->Append(menuoutput, _T("&Output"));
-	menuoutput->Append(sID_Tools_TCPServer, _T("TCP Server ..."), _T("TCP server settings"));
+	menuoutput->Append(cID_Tools_TCPServer, _T("TCP Server ..."), _T("TCP server settings"));
 
 	wxMenu *menudeveloperutilities = new wxMenu;
-	menudeveloperutilities->Append(sID_DeveloperUtilityTest, _T("&Test"), _T("A free menu item for developers to do quick tests while developing"));
-	menudeveloperutilities->Append(sID_DeveloperUtilityExportComponentsTable, _T("&Export components table"), _T("Exports the components in wiki format"));
+	menudeveloperutilities->Append(cID_DeveloperUtilityTest, _T("&Test"), _T("A free menu item for developers to do quick tests while developing"));
+	menudeveloperutilities->Append(cID_DeveloperUtilityExportComponentsTable, _T("&Export components table"), _T("Exports the components in wiki format"));
 
 	wxMenu *menuhelp = new wxMenu;
 	GetMenuBar()->Append(menuhelp, _T("&Help"));
-	menuhelp->Append(sID_Help, _T("&Manual"), _T("Opens the online manual"));
-	menuhelp->Append(sID_About, _T("&About ...\tF1"), _T("Shows the about dialog"));
+	menuhelp->Append(cID_Help, _T("&Manual"), _T("Opens the online manual"));
+	menuhelp->Append(cID_About, _T("&About ...\tF1"), _T("Shows the about dialog"));
 	menuhelp->AppendSeparator();
 	menuhelp->Append(new wxMenuItem(menuhelp, wxID_ANY, _T("&Developer utilities"), _T("Developer utilities"), wxITEM_NORMAL, menudeveloperutilities));
 }
@@ -167,15 +167,15 @@ void THISCLASS::BuildToolBar() {
 
 	// Create toolbar
 	toolbar = CreateToolBar(wxTB_FLAT | wxTB_DOCKABLE | wxTB_TEXT);
-	toolbar->AddTool(sID_New, _T("New"), wxBITMAP(bitmap_new), _T("New"));
-	toolbar->AddTool(sID_Open, _T("Open"), wxBITMAP(bitmap_open), _T("Open"));
-	toolbar->AddTool(sID_Save, _T("Save"), wxBITMAP(bitmap_save), _T("Save"));
+	toolbar->AddTool(cID_New, _T("New"), wxBITMAP(bitmap_new), _T("New"));
+	toolbar->AddTool(cID_Open, _T("Open"), wxBITMAP(bitmap_open), _T("Open"));
+	toolbar->AddTool(cID_Save, _T("Save"), wxBITMAP(bitmap_save), _T("Save"));
 	toolbar->AddSeparator();
-	toolbar->AddTool(sID_Control_ProductionMode, _T("Production"), wxBITMAP(bitmap_production), _T("Run in production mode"), wxITEM_CHECK);
-	toolbar->AddTool(sID_Control_Run, _T("Run"), wxBITMAP(bitmap_play), _T("Run automatically"), wxITEM_CHECK);
+	toolbar->AddTool(cID_Control_ProductionMode, _T("Production"), wxBITMAP(bitmap_production), _T("Run in production mode"), wxITEM_CHECK);
+	toolbar->AddTool(cID_Control_Run, _T("Run"), wxBITMAP(bitmap_play), _T("Run automatically"), wxITEM_CHECK);
 	toolbar->AddSeparator();
-	toolbar->AddTool(sID_Control_Step, _T("Step"), wxBITMAP(bitmap_singlestep), _T("Processes one image"));
-	toolbar->AddTool(sID_Control_Reset, _T("Reset"), wxBITMAP(bitmap_singlestep), _T("Stops the execution. It will be started upon the next step."));
+	toolbar->AddTool(cID_Control_Step, _T("Step"), wxBITMAP(bitmap_singlestep), _T("Processes one image"));
+	toolbar->AddTool(cID_Control_Reset, _T("Reset"), wxBITMAP(bitmap_singlestep), _T("Stops the execution. It will be started upon the next step."));
 	toolbar->AddSeparator();
 
 	toolbar->Realize();
@@ -252,8 +252,8 @@ void THISCLASS::Control_StartProductionMode() {
 		return;
 	}
 	mSwisTrackCore->Stop();
-	GetToolBar()->ToggleTool(sID_Control_ProductionMode, true);
-	GetToolBar()->EnableTool(sID_Control_Reset, false);
+	GetToolBar()->ToggleTool(cID_Control_ProductionMode, true);
+	GetToolBar()->EnableTool(cID_Control_Reset, false);
 	mSwisTrackCore->Start(true);
 }
 
@@ -263,23 +263,23 @@ void THISCLASS::Control_StopProductionMode() {
 		return;
 	}
 	mSwisTrackCore->Stop();
-	GetToolBar()->ToggleTool(sID_Control_ProductionMode, false);
-	GetToolBar()->EnableTool(sID_Control_Reset, true);
+	GetToolBar()->ToggleTool(cID_Control_ProductionMode, false);
+	GetToolBar()->EnableTool(cID_Control_Reset, true);
 	mSwisTrackCore->Start(false);
 }
 
 void THISCLASS::Control_StartRunMode() {
 	// Activate the automatic trigger
-	GetToolBar()->ToggleTool(sID_Control_Run, true);
-	GetToolBar()->EnableTool(sID_Control_Step, false);
+	GetToolBar()->ToggleTool(cID_Control_Run, true);
+	GetToolBar()->EnableTool(cID_Control_Step, false);
 	mSwisTrackCore->TriggerStart();
 	mSwisTrackCore->Start(false);
 }
 
 void THISCLASS::Control_StopRunMode() {
 	// Deactivate the automatic trigger
-	GetToolBar()->ToggleTool(sID_Control_Run, false);
-	GetToolBar()->EnableTool(sID_Control_Step, true);
+	GetToolBar()->ToggleTool(cID_Control_Run, false);
+	GetToolBar()->EnableTool(cID_Control_Step, true);
 	mSwisTrackCore->TriggerStop();
 }
 

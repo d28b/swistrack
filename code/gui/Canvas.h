@@ -40,8 +40,8 @@ public:
 	wxSize GetMaximumSize();
 
 private:
-	enum {
-		cID_SaveViewImageAs,
+	enum eID {
+		cID_SaveViewImageAs=1,
 		cID_SaveOriginalImageAs,
 		cID_FlipVertically,
 		cID_FlipHorizontally,

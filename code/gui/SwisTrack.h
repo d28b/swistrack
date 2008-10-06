@@ -80,22 +80,22 @@ protected:
 
 	//! IDs for the controls and the menu commands
 	enum eID {
-		sID_New,
-		sID_Open,
-		sID_Save,
-		sID_SaveAs,
-		sID_Quit,
-		sID_Control_ProductionMode,
-		sID_Control_Run,
-		sID_Control_Step,
-		sID_Control_Reset,
-		sID_View_ComponentList,
-		sID_View_NewDisplay,
-		sID_Tools_TCPServer,
-		sID_Help,
-		sID_DeveloperUtilityTest,
-		sID_DeveloperUtilityExportComponentsTable,
-		sID_About = wxID_ABOUT   // this must be wxID_ABOUT to put it in the Mac OS X "Apple" menu
+		cID_New=1,
+		cID_Open,
+		cID_Save,
+		cID_SaveAs,
+		cID_Quit,
+		cID_Control_ProductionMode,
+		cID_Control_Run,
+		cID_Control_Step,
+		cID_Control_Reset,
+		cID_View_ComponentList,
+		cID_View_NewDisplay,
+		cID_Tools_TCPServer,
+		cID_Help,
+		cID_DeveloperUtilityTest,
+		cID_DeveloperUtilityExportComponentsTable,
+		cID_About = wxID_ABOUT   // this must be wxID_ABOUT to put it in the Mac OS X "Apple" menu
 	};
 
 	//! Creates the menu.

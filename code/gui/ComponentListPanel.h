@@ -41,7 +41,7 @@ public:
 private:
 	//! GUI constants.
 	enum eConstants {
-		cID_ButtonAdd,
+		cID_ButtonAdd=1,
 		cID_ButtonRemove,
 		cID_ButtonUp,
 		cID_ButtonDown,
