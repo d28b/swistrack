@@ -66,9 +66,9 @@ void THISCLASS::StartRecording() {
 
 	double stepdistance = mSwisTrack->mSwisTrackCore->mEventRecorder->GetStepDistance();
 	if (stepdistance == 0) {
-		mSwisTrack->SetStatusText(wxT(""), SwisTrack::sStatusField_Timeline);
+		mSwisTrack->SetStatusText(wxT(""), SwisTrack::cStatusField_Timeline);
 	} else {
-		mSwisTrack->SetStatusText(wxString::Format(wxT("%0.2f fps (%0.0f ms)"), 1 / stepdistance, stepdistance*1000), SwisTrack::sStatusField_Timeline);
+		mSwisTrack->SetStatusText(wxString::Format(wxT("%0.2f fps (%0.0f ms)"), 1 / stepdistance, stepdistance*1000), SwisTrack::cStatusField_Timeline);
 	}
 }
 

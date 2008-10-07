@@ -120,7 +120,7 @@ void THISCLASS::OnDisplayChanged(Display *display) {
 	if (display->mFramesCount >= 0) {
 		str += wxString::Format(wxT(" / %d"), display->mFramesCount);
 	}
-	str += wxString::Format(wxT(", %dx%d, %s"), display->mSize.width, display->mSize.height, display->mTime.FormatTime());
+	str += wxString::Format(wxT(", %dx%d, %s"), display->mSize.width, display->mSize.height, display->mTime.FormatTime().c_str());
 	mCanvasAnnotation->SetText(str, display->mAnnotation);
 
 	// Move the children

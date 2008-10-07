@@ -28,9 +28,9 @@ class SwisTrack: public wxFrame, public CommunicationCommandHandler {
 public:
 	//! Status field IDs
 	enum eStatusField {
-		sStatusField_Messages = 0,
-		sStatusField_ServerPort = 1,
-		sStatusField_Timeline = 2,
+		cStatusField_Messages = 0,
+		cStatusField_ServerPort = 1,
+		cStatusField_Timeline = 2,
 	};
 
 	SwisTrackCore *mSwisTrackCore;	//!< The SwisTrackCore object.

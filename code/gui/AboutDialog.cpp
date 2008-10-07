@@ -7,12 +7,12 @@
 #include "bitmaps/icon_gui.xpm"
 
 THISCLASS::AboutDialog(wxWindow *parent):
-		wxDialog(parent, -1, wxT("About SwisTrack"), wxDefaultPosition, wxSize(400, 200), wxDEFAULT_DIALOG_STYLE)	{
+		wxDialog(parent, -1, wxT("About SwisTrack"), wxDefaultPosition, wxSize(400, 250), wxDEFAULT_DIALOG_STYLE)	{
 
 	wxPanel *p = new wxPanel(this, wxID_ANY);
 
 	wxBoxSizer *pvs = new wxBoxSizer(wxVERTICAL);
-	wxStaticText *title = new wxStaticText(p, -1, wxT("SWISTrack 4.1"));
+	wxStaticText *title = new wxStaticText(p, -1, wxT("SwisTrack 4.1"));
 	wxFont f = title->GetFont();
 	f.SetWeight(wxFONTWEIGHT_BOLD);
 	title->SetFont(f);

@@ -190,9 +190,9 @@ void THISCLASS::BuildStatusBar() {
 	CreateStatusBar(n);
 	SetStatusWidths(n, w);
 
-	SetStatusText(_T("Welcome to SwisTrack!"), sStatusField_Messages);
-	SetStatusText(_T("Closed"), sStatusField_ServerPort);
-	SetStatusText(_T(""), sStatusField_Timeline);
+	SetStatusText(_T("Welcome to SwisTrack!"), cStatusField_Messages);
+	SetStatusText(_T("Closed"), cStatusField_ServerPort);
+	SetStatusText(_T(""), cStatusField_Timeline);
 #endif // wxUSE_STATUSBAR
 }
 
@@ -367,10 +367,10 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	cr.SelectRootNode();
 	cr.SelectChildNode(wxT("server"));
 	mTCPServer->SetPort(cr.ReadInt(wxT("port"), 3000));
-	SetStatusText(wxString::Format(wxT("TCP: %d"), mTCPServer->GetPort()), sStatusField_ServerPort);
+	SetStatusText(wxString::Format(wxT("TCP: %d"), mTCPServer->GetPort()), cStatusField_ServerPort);
 
 	// Set the status text
-	SetStatusText(filename + wxT(" opened!"), sStatusField_Messages);
+	SetStatusText(filename + wxT(" opened!"), cStatusField_Messages);
 
 	// Show errors if there are any
 	if (cr.mErrorList.mList.empty()) {
@@ -450,7 +450,7 @@ void THISCLASS::SaveFile(const wxString &filename) {
 	SetFileName(filename);
 
 	// Set the status text
-	SetStatusText(filename + wxT(" saved!"), sStatusField_Messages);
+	SetStatusText(filename + wxT(" saved!"), cStatusField_Messages);
 }
 
 void SwisTrack::OnFileQuit(wxCommandEvent& WXUNUSED(event)) {
