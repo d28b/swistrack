@@ -9,7 +9,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxDialog)
 END_EVENT_TABLE()
 
 THISCLASS::ErrorListDialog(wxWindow *parent, ErrorList *el, const wxString &title, const wxString &text):
-		wxDialog(parent, -1, title, wxDefaultPosition, wxSize(500, 300), wxDEFAULT_DIALOG_STYLE), mErrorList(el) {
+		wxDialog(parent, -1, title, wxDefaultPosition, wxSize(500, 300), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER), mErrorList(el) {
 
 	// Create list control
 	mList = new wxListCtrl(this, wxID_ANY);
