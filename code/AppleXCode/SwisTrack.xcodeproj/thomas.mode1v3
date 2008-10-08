@@ -267,17 +267,15 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateExpansionKey</key>
 							<array>
 								<string>E99BCE7B0E9AD93D0017989E</string>
-								<string>E99BCFD70E9AF0530017989E</string>
 								<string>E99BCE940E9AD9A10017989E</string>
 								<string>1C37FBAC04509CD000000102</string>
 								<string>1C37FAAC04509CD000000102</string>
+								<string>1C08E77C0454961000C914BD</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>3</integer>
-									<integer>2</integer>
-									<integer>0</integer>
+									<integer>11</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
@@ -330,7 +328,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>E9EEAC730E9AF558004B0CE6</string>
+										<string>E958EEEE0E9BF21400902526</string>
 										<key>history</key>
 										<array>
 											<string>E99BD10E0E9AF40B0017989E</string>
@@ -355,7 +353,7 @@
 											<string>E99BD1210E9AF40B0017989E</string>
 											<string>E99BD1220E9AF40B0017989E</string>
 											<string>E99BD1230E9AF40B0017989E</string>
-											<string>E99BD1410E9AF40B0017989E</string>
+											<string>E9EEAC730E9AF558004B0CE6</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -437,9 +435,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>E9EEAC740E9AF558004B0CE6</string>
+				<string>E958EEEB0E9BF0BD00902526</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>E9EEAC750E9AF558004B0CE6</string>
+				<string>E958EEEC0E9BF0BD00902526</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -573,8 +571,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C78EAAD065D492600B07095</string>
-		<string>1CD10A99069EF8BA00B06720</string>
 		<string>E99BCFA20E9ADDD90017989E</string>
 		<string>/Users/thomas/svn/swistrack/code/AppleXCode/SwisTrack.xcodeproj</string>
 	</array>
@@ -656,7 +652,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>E99BCFA20E9ADDD90017989E</string>
-				<string>E9EEAC760E9AF558004B0CE6</string>
+				<string>E958EEED0E9BF0BD00902526</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

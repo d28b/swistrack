@@ -1,5 +1,15 @@
 // !$*UTF8*$!
 {
+	E958EEEE0E9BF21400902526 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = E99BD0440E9AF0530017989E /* SwisTrack.h */;
+		name = "SwisTrack.h: 39";
+		rLen = 0;
+		rLoc = 794;
+		rType = 0;
+		vrLen = 1239;
+		vrLoc = 498;
+	};
 	E99BCE7D0E9AD93D0017989E /* Project object */ = {
 		activeArchitecture = i386;
 		activeBuildConfigurationName = Debug;
@@ -34,8 +44,8 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXErrorsWarningsDataSource_LocationID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					300,
-					296,
+					383,
+					526,
 				);
 				PBXFileTableDataSourceColumnsKey = (
 					PBXErrorsWarningsDataSource_TypeID,
@@ -137,10 +147,11 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 245036270;
-			PBXWorkspaceStateSaveDate = 245036270;
+			PBXPerProjectTemplateStateSaveDate = 245100694;
+			PBXWorkspaceStateSaveDate = 245100694;
 		};
 		perUserProjectItems = {
+			E958EEEE0E9BF21400902526 /* PBXTextBookmark */ = E958EEEE0E9BF21400902526 /* PBXTextBookmark */;
 			E99BD10E0E9AF40B0017989E /* PBXTextBookmark */ = E99BD10E0E9AF40B0017989E /* PBXTextBookmark */;
 			E99BD10F0E9AF40B0017989E /* PBXTextBookmark */ = E99BD10F0E9AF40B0017989E /* PBXTextBookmark */;
 			E99BD1100E9AF40B0017989E /* PBXTextBookmark */ = E99BD1100E9AF40B0017989E /* PBXTextBookmark */;
@@ -184,7 +195,6 @@
 			E99BD13E0E9AF40B0017989E /* PBXTextBookmark */ = E99BD13E0E9AF40B0017989E /* PBXTextBookmark */;
 			E99BD13F0E9AF40B0017989E /* PBXTextBookmark */ = E99BD13F0E9AF40B0017989E /* PBXTextBookmark */;
 			E99BD1400E9AF40B0017989E /* PBXTextBookmark */ = E99BD1400E9AF40B0017989E /* PBXTextBookmark */;
-			E99BD1410E9AF40B0017989E /* PBXTextBookmark */ = E99BD1410E9AF40B0017989E /* PBXTextBookmark */;
 			E9EEAC730E9AF558004B0CE6 /* PBXTextBookmark */ = E9EEAC730E9AF558004B0CE6 /* PBXTextBookmark */;
 		};
 		sourceControlManager = E99BCE810E9AD93D0017989E /* Source Control */;
@@ -416,8 +426,8 @@
 	};
 	E99BD0440E9AF0530017989E /* SwisTrack.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {897, 2030}}";
-			sepNavSelRange = "{0, 0}";
+			sepNavIntBoundsRect = "{{0, 0}, {897, 2058}}";
+			sepNavSelRange = "{794, 0}";
 			sepNavVisRange = "{498, 1239}";
 		};
 	};
@@ -864,16 +874,6 @@
 		rType = 0;
 		vrLen = 308;
 		vrLoc = 0;
-	};
-	E99BD1410E9AF40B0017989E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = E99BD0440E9AF0530017989E /* SwisTrack.h */;
-		name = "SwisTrack.h: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 1241;
-		vrLoc = 498;
 	};
 	E9EEAC730E9AF558004B0CE6 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;

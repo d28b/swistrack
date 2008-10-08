@@ -197,11 +197,10 @@ bool THISCLASS::DrawTrajectories(ErrorList *errors) {
 		// Color for this track
 		CvScalar color = cvScalar((it->mID * 50) % 255, (it->mID * 50) % 255, (it->mID * 50) % 255);
 
-		// draw every single point
+		// Draw trajectory polyline
 		std::vector<CvPoint2D32f>::iterator p = it->trajectory.begin();
 		int xprev = (int)floor((*p).x * mScalingFactor + 0.5);
 		int yprev = (int)floor((*p).y * mScalingFactor + 0.5);
-		p++;
 		while (p != it->trajectory.end()) {
 			int x = (int)floor((*p).x * mScalingFactor + 0.5);
 			int y = (int)floor((*p).y * mScalingFactor + 0.5);
