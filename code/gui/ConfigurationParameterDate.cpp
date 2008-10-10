@@ -3,13 +3,14 @@
 
 #include <wx/sizer.h>
 #include <wx/stattext.h>
-#include <wx/dateevt.h>
 #include <algorithm>
 #include "SwisTrackCoreEditor.h"
 #include "ComponentEditor.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
        EVT_DATE_CHANGED(wxID_ANY, THISCLASS::OnDateChanged)
+       EVT_COMBOBOX(wxID_ANY, THISCLASS::OnAmPmChanged)
+       EVT_SPINCTRL(wxID_ANY, THISCLASS::OnHourMinuteChanged)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterDate(wxWindow* parent):
@@ -29,12 +30,25 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 
 	// Create the controls
 	wxStaticText *label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
-	mDateCtrl = new wxDatePickerCtrl(this, wxID_ANY, mValueDefault, wxDefaultPosition, wxSize(scParameterWidth - 25, -1), wxTE_PROCESS_ENTER);
-	mDateCtrl->Connect(wxID_ANY, wxEVT_DATE_CHANGED, wxDateEventHandler(THISCLASS::OnDateChanged), 0, this);
+	mDateCtrl = new wxDatePickerCtrl(this, wxID_ANY, mValueDefault, wxDefaultPosition, wxSize(scParameterWidth - 50, -1), wxTE_PROCESS_ENTER);
+	//	mDateCtrl->Connect(wxID_ANY, wxEVT_DATE_CHANGED, wxDateEventHandler(THISCLASS::OnDateChanged), 0, this);
+
+	mHourCtrl = new wxSpinCtrl(this, wxID_ANY, wxT("10"), wxDefaultPosition, wxSize(50, -1));
+	mHourCtrl->SetRange(1, 12);
+
+	mMinuteCtrl = new wxSpinCtrl(this, wxID_ANY, wxT("0"), wxDefaultPosition, wxSize(50, -1));
+	mMinuteCtrl->SetRange(0, 59);
+
+	mAmPmCtrl = new wxComboBox(this, wxID_ANY, wxT("AM"), wxDefaultPosition, wxSize(50, -1));
+	mAmPmCtrl->Insert(wxT("AM"), 0);
+	mAmPmCtrl->Insert(wxT("PM"), 0);
 
 	// Layout the controls
 	wxBoxSizer *hs = new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(mDateCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
+	hs->Add(mHourCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
+	hs->Add(mMinuteCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
+	hs->Add(mAmPmCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
 
 	wxBoxSizer *vs = new wxBoxSizer(wxVERTICAL);
 	vs->Add(label, 0, wxBOTTOM, 2);
@@ -64,8 +78,16 @@ void THISCLASS::OnSetNewValue() {
 	ce.SetConfigurationDate(mName, mNewValue);
 }
 
-
+void THISCLASS::UpdateDate() {
+        printf("date updated\n");
+}
 void THISCLASS::OnDateChanged(wxDateEvent& event) {
-	wxCommandEvent ev;
-	printf("Date changed\n");
+        UpdateDate();
+}
+
+void THISCLASS::OnHourMinuteChanged(wxSpinEvent& event) {
+        UpdateDate();
+}
+void THISCLASS::OnAmPmChanged(wxCommandEvent& event) {
+        UpdateDate();
 }
