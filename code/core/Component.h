@@ -84,6 +84,8 @@ public:
 	double GetConfigurationDouble(const wxString &key, double defvalue);
 	//! Returns a string from the configuration.
 	wxString GetConfigurationString(const wxString &key, const wxString &defvalue);
+	//! Returns a timestamp from the configuration.
+	wxDateTime GetConfigurationDate(const wxString &key, const wxDateTime &defvalue);
 
 	//! Clears the status list
 	void ClearStatus();

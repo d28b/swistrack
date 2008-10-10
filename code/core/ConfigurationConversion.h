@@ -31,6 +31,8 @@ public:
 	//! Converts a boolean value into a configuration value.
 	static wxString Double(double value);
 
+	static wxString Date(wxDateTime value);
+	static wxDateTime Date(const wxString &str, const wxDateTime &defvalue);
 };
 
 #endif

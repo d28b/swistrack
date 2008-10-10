@@ -106,3 +106,12 @@ bool THISCLASS::SetConfigurationString(const wxString &key, const wxString &valu
 	mComponent->mConfiguration[key] = value;
 	return true;
 }
+
+
+bool THISCLASS::SetConfigurationDate(const wxString &key, const wxDateTime &value) {
+	if (! mComponent) {
+		return false;
+	}
+	mComponent->mConfiguration[key] = ConfigurationConversion::Date(value);
+	return true;
+}

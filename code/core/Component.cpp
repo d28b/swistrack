@@ -105,6 +105,10 @@ double THISCLASS::GetConfigurationDouble(const wxString &key, double defvalue) {
 	return ConfigurationConversion::Double(GetConfigurationString(key, wxT("")), defvalue);
 }
 
+wxDateTime THISCLASS::GetConfigurationDate(const wxString &key, const wxDateTime &defvalue) {
+	return ConfigurationConversion::Date(GetConfigurationString(key, wxT("")), defvalue);
+}
+
 wxString THISCLASS::GetConfigurationString(const wxString &key, const wxString &defvalue) {
 	// If the key is available in the configuration, return its value
 	tConfigurationMap::const_iterator it = mConfiguration.find(key);

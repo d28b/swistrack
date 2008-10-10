@@ -53,3 +53,15 @@ wxString THISCLASS::Double(double value) {
 	return wxString::Format(wxT("%f"), value);
 }
 
+wxString THISCLASS::Date(wxDateTime value) {
+        return value.Format();
+}
+
+wxDateTime THISCLASS::Date(const wxString &str, const wxDateTime &defvalue) {
+	if (str.Len() == 0) {
+		return defvalue;
+	}
+	wxDateTime retval = wxDateTime();
+	retval.ParseDate(str);
+	return retval;
+}

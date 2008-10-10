@@ -34,6 +34,8 @@ public:
 	bool SetConfigurationDouble(const wxString &key, double value);
 	//! Sets a string in the configuration.
 	bool SetConfigurationString(const wxString &key, const wxString &value);
+	//! Sets a date in the configuration.
+	bool SetConfigurationDate(const wxString &key, const wxDateTime &value);
 
 private:
 	Component *mComponent;		//!< The associated Component object.
