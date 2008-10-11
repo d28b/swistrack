@@ -5,7 +5,8 @@
 #include "Component.h"
 #include "DataStructureParticles.h"
 
-//! A component that detects blobs that have a certain size and stores them as particles in DataStructureParticle.
+//! A basic tracking component that takes pre-filtered particales and
+// adds them to the nearest track.
 class ComponentNearestNeighborTracking: public Component {
 
 public:
