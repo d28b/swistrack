@@ -387,10 +387,11 @@ void THISCLASS::OnListLeftDoubleClick(wxMouseEvent& event) {
 }
 
 void THISCLASS::OnListMouseRightDown(wxMouseEvent& event) {
-	mPopupMenu.Check(cID_PopupMenu_Enabled, mSelectedComponent->GetEnabled());
-	mPopupMenu.Enable(cID_PopupMenu_Enabled, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
-
-	PopupMenu(&mPopupMenu);
+  if (mSelectedComponent) {
+    mPopupMenu.Check(cID_PopupMenu_Enabled, mSelectedComponent->GetEnabled());
+    mPopupMenu.Enable(cID_PopupMenu_Enabled, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
+    PopupMenu(&mPopupMenu);
+  }
 }
 
 void THISCLASS::OnPopupMenuEnabled(wxCommandEvent& event) {
