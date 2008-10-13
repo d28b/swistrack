@@ -150,7 +150,17 @@ void THISCLASS::writeData(structOutputFile *outputFile)
 			//Orientation
 			<< it->mOrientation << "\t"
 			//Compactness
-			<< it->mCompactness << std::endl;
+			<< it->mCompactness;
+			if (mCore->mDataStructureInput.mFrameTimestamp != wxInvalidDateTime) {
+			  wxString date;
+			  wxString millis;
+			  millis << mCore->mDataStructureInput.mFrameTimestamp.GetMillisecond();
+			  millis.Pad(3 - millis.Length(), '0', false);
+			  outputFile->fileStream
+			    << "\t" << mCore->mDataStructureInput.mFrameTimestamp.GetTicks() 
+			    << millis.ToAscii();
+			} 
+			outputFile->fileStream << std::endl;
 			return;
 		}
 		it++;
