@@ -33,6 +33,7 @@
 #include "ComponentBlobDetectionTwoColors.h"
 #include "ComponentTracking.h"
 #include "ComponentNearestNeighborTracking.h"
+#include "ComponentTrackSmoothing.h"
 #include "ComponentIDReaderRing.h"
 #include "ComponentSimulationParticles.h"
 #include "ComponentCalibrationLinear.h"
@@ -104,6 +105,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentCalibrationTSAI(this));
 	mAvailableComponents.push_back(new ComponentTracking(this));
 	mAvailableComponents.push_back(new ComponentNearestNeighborTracking(this));
+	mAvailableComponents.push_back(new ComponentTrackSmoothing(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentOutputFileM4V(this));

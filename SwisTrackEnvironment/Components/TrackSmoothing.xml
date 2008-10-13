@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Track Smoothing (NOT FINISHED)</friendlyname>
+	<description>Smooths tracks by averaging points in a sliding window. </description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/TrackSmoothing</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+		<parameter type="integer">
+		    <name>WindowSize</name>
+			<label>Window Size</label>
+			<unit>Individuals</unit>
+			<default>3</default>
+		</parameter>
+	</configuration>
+</swistrackcomponent>
