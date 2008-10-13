@@ -242,7 +242,12 @@ void      cc_compute_U ()
     }
 
     if (solve_system (M, a, b)) {
-    fprintf (stderr, "cc compute U: unable to solve system  Ma=b\n");
+      fprintf (stderr, "cc compute U: unable to solve system  Ma=b\n");
+      fprintf (stderr, "printing matrixes\n");
+      print_mat(M);
+      print_mat(a);
+      print_mat(b);
+      fprintf (stderr, "exiting\n");
     exit (-1);
     }
 

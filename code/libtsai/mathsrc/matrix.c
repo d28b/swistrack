@@ -42,7 +42,7 @@ void      print_mat (mat)
 */
 void print_mat (dmat mat)
 {
-/*
+
     int       i,
               j;
 
@@ -57,7 +57,7 @@ void print_mat (dmat mat)
        fprintf (stdout, "  %7.2lf", mat.el[j][i]);
    fprintf (stdout, "\n");
     }
-*/
+
 }
 
 
