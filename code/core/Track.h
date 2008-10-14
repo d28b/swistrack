@@ -22,6 +22,7 @@ public:
 	Track(int idnumber, int n_objects);
 	/** Add a point to the current track (max track) */
 	void AddPoint(CvPoint2D32f p);
+	void SetMaxLength(int length);
 
 	/** Destructor */
 	~Track();

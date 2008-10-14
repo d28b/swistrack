@@ -32,6 +32,10 @@ void Track::AddPoint(CvPoint2D32f p) {
 		trajectory.erase(trajectory.begin());
 }
 
+void Track::SetMaxLength(int length) {
+  maxlength = length;
+}
+
 void Track::SetCritPoint(CvPoint2D32f *p) {
 	critpoint.x = p->x;
 	critpoint.y = p->y;
