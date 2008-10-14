@@ -8,7 +8,7 @@ using namespace std;
 
 THISCLASS::ComponentTrackSmoothing(SwisTrackCore *stc):
 		Component(stc, wxT("TrackSmoothing")),
-		mDisplayOutput(wxT("Output"), wxT("Tracking"))
+		mDisplayOutput(wxT("Output"), wxT("Smoothing"))
 {
 	// Data structure relations
 	mCategory = &(mCore->mCategoryTracking);
@@ -78,7 +78,6 @@ void THISCLASS::OnStep()
 	while (it != tracks->end())
 	{
 	  Track & window = WindowForTrack(it->mID);
-	  cout << "Got track " << window.mID << endl;
 	  //Search for the corresponding particle
 	
 	  
@@ -88,8 +87,6 @@ void THISCLASS::OnStep()
 	      //Correct ID is found
 	      if (window.mID == it2->mID) 
 		{
-		  cout << "adding points " << it2->mCenter.x << " " <<
-		       it2->mCenter.y << endl;
 		  window.AddPoint(it2->mCenter);
 
 		}
@@ -107,8 +104,6 @@ void THISCLASS::OnStep()
 	    std::vector<CvPoint2D32f>::iterator it3 = window.trajectory.begin();
 
 	    while (it3 != window.trajectory.end()) {
-	      cout << "adding points " << it3->x << " " <<
-		it3->y << endl;
 	      point.x += it3->x;
 	      point.y += it3->y;
 	      it3++;
