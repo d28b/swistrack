@@ -48,6 +48,7 @@ Track& THISCLASS::WindowForTrack(int id)
 void THISCLASS::OnStart()
 {
 	mWindowSize = GetConfigurationInt(wxT("WindowSize"), 3);
+	mWindows.clear();
 	mMaxNumber = GetConfigurationInt(wxT("MaxNumber"), 10);
 	if (mOutputTracks.size()) mOutputTracks.clear();      
 	for (int i = 0; i < mMaxNumber; i++) // initiate mMaxNumber Tracks
