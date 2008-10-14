@@ -8,7 +8,7 @@
 //! A component that detects blobs that have a certain size and stores them as particles in DataStructureParticle.
 class ComponentTrackSmoothing: public Component {
 
-public:
+ public:
 	//! Constructor.
 	ComponentTrackSmoothing(SwisTrackCore *stc);
 	//! Destructor.
@@ -26,14 +26,14 @@ public:
 
 private:
 	Track& WindowForTrack(int id);
-	DataStructureParticles::tParticleVector *particles;
+	DataStructureParticles::tParticleVector mParticles;
 	double** distanceArray;
 	int maxParticles;
 	int mMaxNumber;
 
 	// Parameters
 	unsigned int mWindowSize;		//!< (configuration) The maximum number of objects that are to track.
-	DataStructureTracks::tTrackVector mInputTracks;
+	//	DataStructureTracks::tTrackVector mInputTracks;
 	DataStructureTracks::tTrackVector mOutputTracks;
 	DataStructureTracks::tTrackVector mWindows;
 	

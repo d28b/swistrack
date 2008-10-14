@@ -21,9 +21,6 @@ THISCLASS::ComponentTrackSmoothing(SwisTrackCore *stc):
 
 THISCLASS::~ComponentTrackSmoothing()
 {
-  if (mInputTracks.size()) {
-    mInputTracks.clear();
-  }
   if (mOutputTracks.size()) {
     mOutputTracks.clear();
   }
@@ -95,7 +92,7 @@ void THISCLASS::OnStep()
 	    }
 	  it++;
 	}
-
+	mParticles.clear();
 	DataStructureTracks::tTrackVector::iterator outputIterator = mOutputTracks.begin();
 	while (outputIterator != mOutputTracks.end()) {
 	  Track & window = WindowForTrack(outputIterator->mID);
@@ -111,8 +108,17 @@ void THISCLASS::OnStep()
 	    }
 	    point.x = point.x / mWindowSize;
 	    point.y = point.y / mWindowSize;
-	    if (particles->size() != 0) {
+	    if (window.trajectory.size() != 0) {
 	      outputIterator->AddPoint(point);
+	      Particle p;
+	      p.mCenter.x = point.x;
+	      p.mCenter.y = point.y;
+	      p.mID = outputIterator->mID;
+	      p.mArea = -1;
+	      p.mCompactness = -1;
+	      p.mOrientation = -1;
+	      p.mIDCovariance = -1;
+	      mParticles.push_back(p);
 	    }
 	  } else if (window.trajectory.size() > mWindowSize) {
 	    AddError(wxT("Too many points in the window."));
@@ -120,6 +126,7 @@ void THISCLASS::OnStep()
 	  outputIterator++;
 	}
 	mCore->mDataStructureTracks.mTracks = &mOutputTracks;
+	mCore->mDataStructureParticles.mParticles = &mParticles;
 	// Let the DisplayImage know about our image
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
