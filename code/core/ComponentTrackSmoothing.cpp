@@ -40,6 +40,7 @@ Track& THISCLASS::WindowForTrack(int id)
   }
 
   mWindows.push_back(Track(id, -1));
+  mWindows.back().SetMaxLength(mWindowSize);
   return mWindows.back();
 
 
@@ -47,6 +48,13 @@ Track& THISCLASS::WindowForTrack(int id)
 void THISCLASS::OnStart()
 {
 	mWindowSize = GetConfigurationInt(wxT("WindowSize"), 3);
+	mMaxNumber = GetConfigurationInt(wxT("MaxNumber"), 10);
+	if (mOutputTracks.size()) mOutputTracks.clear();      
+	for (int i = 0; i < mMaxNumber; i++) // initiate mMaxNumber Tracks
+	{
+		mOutputTracks.push_back(Track(i,		// id number
+					      mMaxNumber));
+	}
 }
 
 void THISCLASS::OnStep()
@@ -58,14 +66,69 @@ void THISCLASS::OnStep()
 		AddError(wxT("No Track"));
 		return;
 	}
-
+	DataStructureParticles::tParticleVector *particles = mCore->mDataStructureParticles.mParticles;
+	if (! particles)
+	  {
+	    AddError(wxT("There are no particles"));
+	    return;
+	  }
+	
 	//For each track, write data in the corresponding output file
 	DataStructureTracks::tTrackVector::iterator it = tracks->begin();
 	while (it != tracks->end())
 	{
 	  Track & window = WindowForTrack(it->mID);
 	  cout << "Got track " << window.mID << endl;
+	  //Search for the corresponding particle
+	
+	  
+	  DataStructureParticles::tParticleVector::iterator it2 = particles->begin();
+	  while (it2 != particles->end())
+	    {
+	      //Correct ID is found
+	      if (window.mID == it2->mID) 
+		{
+		  cout << "adding points " << it2->mCenter.x << " " <<
+		       it2->mCenter.y << endl;
+		  window.AddPoint(it2->mCenter);
+
+		}
+	      it2++;
+	    }
 	  it++;
+	}
+
+	DataStructureTracks::tTrackVector::iterator outputIterator = mOutputTracks.begin();
+	while (outputIterator != mOutputTracks.end()) {
+	  Track & window = WindowForTrack(outputIterator->mID);
+
+	  if (window.trajectory.size() == mWindowSize) {
+	    CvPoint2D32f point = cvPoint2D32f(0, 0);
+	    std::vector<CvPoint2D32f>::iterator it3 = window.trajectory.begin();
+
+	    while (it3 != window.trajectory.end()) {
+	      cout << "adding points " << it3->x << " " <<
+		it3->y << endl;
+	      point.x += it3->x;
+	      point.y += it3->y;
+	      it3++;
+	    }
+	    point.x = point.x / mWindowSize;
+	    point.y = point.y / mWindowSize;
+	    if (particles->size() != 0) {
+	      outputIterator->AddPoint(point);
+	    }
+	  } else if (window.trajectory.size() > mWindowSize) {
+	    AddError(wxT("Too many points in the window."));
+	  }
+	  outputIterator++;
+	}
+	mCore->mDataStructureTracks.mTracks = &mOutputTracks;
+	// Let the DisplayImage know about our image
+	DisplayEditor de(&mDisplayOutput);
+	if (de.IsActive()) {
+		de.SetMainImage(mCore->mDataStructureInput.mImage);
+		de.SetTrajectories(true);
 	}
 }
 

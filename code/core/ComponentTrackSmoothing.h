@@ -29,9 +29,10 @@ private:
 	DataStructureParticles::tParticleVector *particles;
 	double** distanceArray;
 	int maxParticles;
+	int mMaxNumber;
 
 	// Parameters
-	int mWindowSize;		//!< (configuration) The maximum number of objects that are to track.
+	unsigned int mWindowSize;		//!< (configuration) The maximum number of objects that are to track.
 	DataStructureTracks::tTrackVector mInputTracks;
 	DataStructureTracks::tTrackVector mOutputTracks;
 	DataStructureTracks::tTrackVector mWindows;
