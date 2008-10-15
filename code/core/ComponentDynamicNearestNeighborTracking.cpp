@@ -35,6 +35,7 @@ void THISCLASS::OnStart()
 	if (mMaxNumber < 1)
 		AddError(wxT("Max number of tracks must be greater or equal to 1"));
 
+	cout << " restarting " << endl;
 	if (mTracks.size()) mTracks.clear();	// handle reset properly
 	for (int i = 0;i < mMaxNumber;i++)		// initiate mMaxNumber Track classes
 	{
@@ -53,6 +54,8 @@ void THISCLASS::OnReloadConfiguration()
 {
 	mMaxDistance = GetConfigurationDouble(wxT("MaxDistance"), 10);
 	mMaxDistance *= mMaxDistance;
+	mMinNewTrackDistance = 
+	  GetConfigurationDouble(wxT("MinNewTrackDistance"), 10);
 }
 
 void THISCLASS::OnStep()
@@ -76,6 +79,7 @@ void THISCLASS::OnStep()
 
 	// update the tracks store locally to this component
 	mCore->mDataStructureTracks.mTracks = &mTracks;
+	cout << "Updating tracks " << mTracks.size() << endl;
 
 	// Let the DisplayImage know about our image
 	DisplayEditor de(&mDisplayOutput);
@@ -139,14 +143,20 @@ void THISCLASS::DataAssociation()
 		//If the distance between track and particle is too big, make a new track
 		Track * track = NULL;
 		if (minDistance > mMaxDistance) {
-		  mTracks.push_back(Track(mNextTrackId++, mMaxNumber));
-		  track = &mTracks.back();
-		  cout << " Making a new track!" << track->mID << endl;
+		  if (minDistance  >= mMinNewTrackDistance) {
+		    mTracks.push_back(Track(mNextTrackId++, mMaxNumber));
+		    distanceArray.push_back(new double[maxParticles]);
+		    track = &mTracks.at(mTracks.size() - 1);
+		    cout << " Making a new track:  " << track->mID << endl;
+		  } else {
+		    break;
+		  }
 		} else {
 		  track = &mTracks.at(trackIndexes[minDistanceI]);
 		}
 		    
 		(particles->at(particleIndexes[minDistanceJ])).mID = track->mID;
+		cout << " Adding point " << endl;
 		AddPoint(track->mID, 
 			 particles->at(particleIndexes[minDistanceJ]).mCenter);
 
@@ -187,6 +197,8 @@ double THISCLASS::GetCost(int id, CvPoint2D32f p)
 */
 void THISCLASS::AddPoint(int i, CvPoint2D32f p){
   Track & track = mTracks.at(i);
+  cout << " adding point " << p.x <<"," << p.y << endl;
+  cout << " track " << track.mID << endl;
   assert(i == track.mID);
   track.AddPoint(p);
 }

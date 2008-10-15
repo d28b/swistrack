@@ -21,5 +21,14 @@
 			<slider>true</slider>
 			<reloadable>true</reloadable>
 		</parameter>
+		<parameter type="double">
+			<name>MinNewTrackDistance</name>
+			<label>Minimum Distance</label>
+			<min>0</min>
+			<max>1000</max>
+			<default>100</default>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
 	</configuration>
 </swistrackcomponent>
