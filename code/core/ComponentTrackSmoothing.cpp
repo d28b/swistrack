@@ -38,6 +38,7 @@ Track& THISCLASS::WindowForTrack(int id)
 
   mWindows.push_back(Track(id, -1));
   mWindows.back().SetMaxLength(mWindowSize);
+  mOutputTracks.push_back(Track(id, -1));
   return mWindows.back();
 
 
@@ -46,13 +47,7 @@ void THISCLASS::OnStart()
 {
 	mWindowSize = GetConfigurationInt(wxT("WindowSize"), 3);
 	mWindows.clear();
-	mMaxNumber = GetConfigurationInt(wxT("MaxNumber"), 10);
 	if (mOutputTracks.size()) mOutputTracks.clear();      
-	for (int i = 0; i < mMaxNumber; i++) // initiate mMaxNumber Tracks
-	{
-		mOutputTracks.push_back(Track(i,		// id number
-					      mMaxNumber));
-	}
 }
 
 void THISCLASS::OnStep()
