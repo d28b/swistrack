@@ -23,7 +23,7 @@
 		</parameter>
 		<parameter type="double">
 			<name>MinNewTrackDistance</name>
-			<label>Minimum Distance</label>
+			<label>Minimum Distance for track creation</label>
 			<min>0</min>
 			<max>1000</max>
 			<default>100</default>

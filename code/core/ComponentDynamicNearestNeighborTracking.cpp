@@ -8,7 +8,7 @@ using namespace std;
 
 THISCLASS::ComponentDynamicNearestNeighborTracking(SwisTrackCore *stc):
 		Component(stc, wxT("DynamicNearestNeighborTracking")),
-		mNextTrackId(0), mMaxNumber(10),
+		mNextTrackId(0),
 		mDisplayOutput(wxT("Output"), wxT("Dynamic Tracking"))
 {
 	// Data structure relations
@@ -28,25 +28,11 @@ THISCLASS::~ComponentDynamicNearestNeighborTracking()
 
 void THISCLASS::OnStart()
 {
-	mMaxNumber = GetConfigurationInt(wxT("MaxNumber"), 10);
 	maxParticles = 10;
-
-	// Check for stupid configurations
-	if (mMaxNumber < 1)
-		AddError(wxT("Max number of tracks must be greater or equal to 1"));
 
 	cout << " restarting " << endl;
 	if (mTracks.size()) mTracks.clear();	// handle reset properly
-	for (int i = 0;i < mMaxNumber;i++)		// initiate mMaxNumber Track classes
-	{
-		mTracks.push_back(Track(mNextTrackId++,	// id number
-		                        mMaxNumber));
-		//mTracks.at(i).AddPoint(cvPoint2D32f(320,240));
-	}
-	distanceArray = vector<double*>();
-	for (int i = 0;i < mMaxNumber;i++) {
-                 distanceArray.push_back(new double[maxParticles]);
-	}
+
 	THISCLASS::OnReloadConfiguration();
 }
 
@@ -54,6 +40,8 @@ void THISCLASS::OnReloadConfiguration()
 {
 	mMaxDistance = GetConfigurationDouble(wxT("MaxDistance"), 10);
 	mMaxDistance *= mMaxDistance;
+	mTracks.push_back(Track(mNextTrackId++, -1));
+	distanceArray.push_back(new double[maxParticles]);
 	mMinNewTrackDistance = 
 	  GetConfigurationDouble(wxT("MinNewTrackDistance"), 10);
 }
@@ -64,7 +52,7 @@ void THISCLASS::OnStep()
 	if (mCore->mDataStructureParticles.mParticles->size() > maxParticles)
 	{
 		maxParticles = mCore->mDataStructureParticles.mParticles->size();
-		for (int i = 0;i < mMaxNumber;i++)
+		for (unsigned int i = 0; i < distanceArray.size(); i++) 
 		{
 			delete[] distanceArray[i];
 			distanceArray[i] = new double[maxParticles];
@@ -106,7 +94,7 @@ void THISCLASS::DataAssociation()
 	for (DataStructureParticles::tParticleVector::iterator pIt = particles->begin();pIt != particles->end();pIt++, p++)
 	{
 		assert(pIt->mID == -1);			// (particle should not be associated)
-		for (int t = 0; t < mMaxNumber; t++)	// compare to all existing tracks
+		for (unsigned int t = 0; t < distanceArray.size(); t++)	// compare to all existing tracks
 		{
 			distanceArray[t][p] = GetCost(t, pIt->mCenter);
 		}
@@ -118,8 +106,10 @@ void THISCLASS::DataAssociation()
 	std::vector<int> particleIndexes;
 	for (unsigned int i = 0;i < particles->size();i++)
 		particleIndexes.push_back(i);
-	for (int i = 0;i < mMaxNumber;i++)
-		trackIndexes.push_back(i);
+	for (DataStructureTracks::tTrackVector::iterator i = mTracks.begin();
+	     i != mTracks.end(); i++) {
+	  trackIndexes.push_back(i->mID);
+	}
 	//Search for the minimalDistance
 	while ((!trackIndexes.empty()) && (!particleIndexes.empty()))
 	{
@@ -144,7 +134,7 @@ void THISCLASS::DataAssociation()
 		Track * track = NULL;
 		if (minDistance > mMaxDistance) {
 		  if (minDistance  >= mMinNewTrackDistance) {
-		    mTracks.push_back(Track(mNextTrackId++, mMaxNumber));
+		    mTracks.push_back(Track(mNextTrackId++, -1));
 		    distanceArray.push_back(new double[maxParticles]);
 		    track = &mTracks.at(mTracks.size() - 1);
 		    cout << " Making a new track:  " << track->mID << endl;
