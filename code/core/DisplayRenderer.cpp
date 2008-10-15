@@ -195,7 +195,9 @@ bool THISCLASS::DrawTrajectories(ErrorList *errors) {
 	DataStructureTracks::tTrackVector::iterator it = tracks->begin();
 	while (it != tracks->end()) {
 		// Color for this track
-		CvScalar color = cvScalar((it->mID * 50) % 255, (it->mID * 50) % 255, (it->mID * 50) % 255);
+		CvScalar color = cvScalar((it->mID * 50) % 255, 
+					  (it->mID * 50) % 255, 
+					  255);
 
 		// Draw trajectory polyline
 		std::vector<CvPoint2D32f>::iterator p = it->trajectory.begin();
