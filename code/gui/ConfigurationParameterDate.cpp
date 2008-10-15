@@ -80,6 +80,16 @@ void THISCLASS::OnSetNewValue() {
 
 void THISCLASS::UpdateDate() {
         printf("date updated\n");
+	mNewValue = mDateCtrl->GetValue();
+	int hour = mHourCtrl->GetValue();
+	if (mAmPmCtrl->GetValue() == wxT("PM")) {
+	  hour += 12;
+	}
+	mNewValue.SetHour(hour);
+	mNewValue.SetMinute(mMinuteCtrl->GetValue());
+	SetNewValue(mDateCtrl);
+
+	
 }
 void THISCLASS::OnDateChanged(wxDateEvent& event) {
         UpdateDate();

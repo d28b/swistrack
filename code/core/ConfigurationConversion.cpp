@@ -62,6 +62,6 @@ wxDateTime THISCLASS::Date(const wxString &str, const wxDateTime &defvalue) {
 		return defvalue;
 	}
 	wxDateTime retval = wxDateTime();
-	retval.ParseDate(str);
+	retval.ParseFormat(str);
 	return retval;
 }
