@@ -30,7 +30,10 @@ void THISCLASS::OnStart() {
 	wxXmlDocument document;
 	bool isopen = document.Load(filename);
 	if (! isopen) {
-		AddError(wxT("Could not open or parse the XML file!"));
+	  wxString msg;
+                msg << wxT("Could not open or parse the XML file: ") 
+		    << filename;
+		AddError(msg);
 		return;
 	}
 
