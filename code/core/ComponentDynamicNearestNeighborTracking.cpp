@@ -6,7 +6,7 @@
 THISCLASS::ComponentDynamicNearestNeighborTracking(SwisTrackCore *stc):
 		Component(stc, wxT("DynamicNearestNeighborTracking")),
 		mMaxNumber(10),
-		mDisplayOutput(wxT("Output"), wxT("Tracking"))
+		mDisplayOutput(wxT("Output"), wxT("Dynamic Tracking"))
 {
 	// Data structure relations
 	mCategory = &(mCore->mCategoryTracking);
