@@ -62,6 +62,13 @@ void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 	}
 	wxDateTime value = mComponent->GetConfigurationDate(mName, mValueDefault);
 	mDateCtrl->SetValue(value);
+	mHourCtrl->SetValue(value.GetHour() % 12);
+	mMinuteCtrl->SetValue(value.GetMinute());
+	if (value.GetHour() <= 12) {
+	  mAmPmCtrl->SetValue(wxT("AM"));
+	} else {
+	  mAmPmCtrl->SetValue(wxT("PM"));
+	}
 }
 
 bool THISCLASS::ValidateNewValue() {
