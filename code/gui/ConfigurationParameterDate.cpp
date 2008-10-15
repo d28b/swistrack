@@ -86,7 +86,6 @@ void THISCLASS::OnSetNewValue() {
 }
 
 void THISCLASS::UpdateDate() {
-        printf("date updated\n");
 	mNewValue = mDateCtrl->GetValue();
 	int hour = mHourCtrl->GetValue();
 	if (mAmPmCtrl->GetValue() == wxT("PM")) {
