@@ -1,11 +1,14 @@
 #include "ComponentDynamicNearestNeighborTracking.h"
 #define THISCLASS ComponentDynamicNearestNeighborTracking
 
+using namespace std;
+#include <iostream>
+
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentDynamicNearestNeighborTracking(SwisTrackCore *stc):
 		Component(stc, wxT("DynamicNearestNeighborTracking")),
-		mMaxNumber(10),
+		mNextTrackId(0), mMaxNumber(10),
 		mDisplayOutput(wxT("Output"), wxT("Dynamic Tracking"))
 {
 	// Data structure relations
@@ -35,13 +38,14 @@ void THISCLASS::OnStart()
 	if (mTracks.size()) mTracks.clear();	// handle reset properly
 	for (int i = 0;i < mMaxNumber;i++)		// initiate mMaxNumber Track classes
 	{
-		mTracks.push_back(Track(i,		// id number
+		mTracks.push_back(Track(mNextTrackId++,	// id number
 		                        mMaxNumber));
 		//mTracks.at(i).AddPoint(cvPoint2D32f(320,240));
 	}
-	distanceArray = new double*[mMaxNumber];
-	for (int i = 0;i < mMaxNumber;i++)
-		distanceArray[i] = new double[maxParticles];
+	distanceArray = vector<double*>();
+	for (int i = 0;i < mMaxNumber;i++) {
+                 distanceArray.push_back(new double[maxParticles]);
+	}
 	THISCLASS::OnReloadConfiguration();
 }
 
@@ -87,7 +91,7 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-	for (int i;i = 0;i++)
+        for (int i;(i = 0);i++)
 		delete[] distanceArray[i];
 }
 
@@ -108,7 +112,7 @@ void THISCLASS::DataAssociation()
 	//Register the existing indexes
 	std::vector<int> trackIndexes;
 	std::vector<int> particleIndexes;
-	for (int i = 0;i < particles->size();i++)
+	for (unsigned int i = 0;i < particles->size();i++)
 		particleIndexes.push_back(i);
 	for (int i = 0;i < mMaxNumber;i++)
 		trackIndexes.push_back(i);
@@ -120,9 +124,9 @@ void THISCLASS::DataAssociation()
 		minDistanceI = 0;
 		minDistanceJ = 0;
 		minDistance = distanceArray[trackIndexes[0]][particleIndexes[0]];
-		for (int i = 0;i < trackIndexes.size();i++)
+		for (unsigned int i = 0;i < trackIndexes.size();i++)
 		{
-			for (int j = 0;j < particleIndexes.size();j++)
+			for (unsigned int j = 0;j < particleIndexes.size();j++)
 			{
 				if (distanceArray[trackIndexes[i]][particleIndexes[j]] < minDistance)
 				{
@@ -132,17 +136,27 @@ void THISCLASS::DataAssociation()
 				}
 			}
 		}
-		//If the distance between track and particle is too big, allocate nothing.
-		if (minDistance > mMaxDistance)
-			break;
-		//The smallest distance into the array is for i,j
-		(particles->at(particleIndexes[minDistanceJ])).mID = trackIndexes[minDistanceI];
-		AddPoint(trackIndexes[minDistanceI], (particles->at(particleIndexes[minDistanceJ])).mCenter);
+		//If the distance between track and particle is too big, make a new track
+		Track * track = NULL;
+		if (minDistance > mMaxDistance) {
+		  mTracks.push_back(Track(mNextTrackId++, mMaxNumber));
+		  track = &mTracks.back();
+		  cout << " Making a new track!" << track->mID << endl;
+		} else {
+		  track = &mTracks.at(trackIndexes[minDistanceI]);
+		}
+		    
+		(particles->at(particleIndexes[minDistanceJ])).mID = track->mID;
+		AddPoint(track->mID, 
+			 particles->at(particleIndexes[minDistanceJ]).mCenter);
+
 		//Suppress the indexes in the vectors
 		trackIndexes.erase(trackIndexes.begin() + minDistanceI);
 		particleIndexes.erase(particleIndexes.begin() + minDistanceJ);
 	}
 }
+
+
 
 /** Calculates cost for two points to be associated.
 * Here: cost is distance.
@@ -172,5 +186,7 @@ double THISCLASS::GetCost(int id, CvPoint2D32f p)
 * \param p : Point to add to trajectory i (subpixel accuracy)
 */
 void THISCLASS::AddPoint(int i, CvPoint2D32f p){
-	mTracks.at(i).AddPoint(p);
+  Track & track = mTracks.at(i);
+  assert(i == track.mID);
+  track.AddPoint(p);
 }

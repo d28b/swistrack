@@ -31,8 +31,9 @@ private:
 	void AddPoint(int i, CvPoint2D32f p);
 
 	DataStructureParticles::tParticleVector *particles;
-	double** distanceArray;
-	int maxParticles;
+	std::vector<double*> distanceArray;
+	unsigned int maxParticles;
+	int mNextTrackId;
 
 	// Parameters
 	double mMaxDistance; //!< (configuration) The maximum distance between a track and a particle to attach
