@@ -193,6 +193,9 @@ bool THISCLASS::DrawTrajectories(ErrorList *errors) {
 	// Draw trajectories
 	DataStructureTracks::tTrackVector *tracks = mDisplay->mComponent->GetSwisTrackCore()->mDataStructureTracks.mTracks;
 	DataStructureTracks::tTrackVector::iterator it = tracks->begin();
+	CvFont font;
+	cvInitFont(&font, CV_FONT_HERSHEY_PLAIN,1.0, 1.0);
+
 	while (it != tracks->end()) {
 		// Color for this track
 		CvScalar color = cvScalar((it->mID * 50) % 255, 
@@ -213,6 +216,10 @@ bool THISCLASS::DrawTrajectories(ErrorList *errors) {
 		}
 
 		cvRectangle(mImage, cvPoint(xprev - 2, yprev - 2), cvPoint(xprev + 2, yprev + 2), color, 1);
+		wxString text;
+		text << it->mID;
+		cvPutText(mImage, text.ToAscii(), cvPoint(xprev + 3, yprev + 3),
+			  &font, color);
 		it++;
 	}
 
