@@ -47,14 +47,18 @@ void THISCLASS::InitializeTracks()
 
 void THISCLASS::OnReloadConfiguration()
 {
-	mMaxDistance = GetConfigurationDouble(wxT("MaxDistance"), 10);
-	mMaxDistance *= mMaxDistance;
+	mMaxDistanceSquared = GetConfigurationDouble(wxT("MaxDistance"), 10);
+	mMaxDistanceSquared *= mMaxDistanceSquared;
 	
-	mMinNewTrackDistance = 
-	  GetConfigurationDouble(wxT("MinNewTrackDistance"), 10);
+	mMinNewTrackDistanceSquared = 
+	  pow(GetConfigurationDouble(wxT("MinNewTrackDistance"), 10), 2);
 
 	mFrameKillThreshold = 
 	  GetConfigurationDouble(wxT("FrameKillThreshold"), 10);
+	mTrackDistanceKillThresholdSquared = 
+	  pow(GetConfigurationDouble(wxT("TrackDistanceKillThreshold"), 10), 2);
+
+
 	InitializeTracks();
 }
 
@@ -115,20 +119,42 @@ void THISCLASS::OnStop() {
 }
 void THISCLASS::FilterTracks() 
 {
-  set<Track *> tracksToDelete;
+  
   for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
        i != mTracks.end(); i++) {
-
     Track & track = i->second;
-    cout << "Filtering track " << track.mID  
-	 << " size " << track.trajectory.size() 
-	 << " threshold " << mFrameKillThreshold << endl;
     if (mCore->mDataStructureInput.mFrameNumber - track.LastUpdateFrame() >= mFrameKillThreshold) {
-      cout << " Deleting track " << endl;
+      cout << "Erasing " << track.mID;
       mTracks.erase(i);
+
     }
   }
-  cout << "Ending filter loop" << endl;
+
+  set<int> trackIdsToErase;
+  for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
+       i != mTracks.end(); i++) {
+    Track & track1 = i->second;
+    for (DataStructureTracks::tTrackMap::iterator j = mTracks.begin();
+	 j != mTracks.end(); j++) {
+      Track & track2 = j->second;
+      double cost = squareDistance(track1.trajectory.back(), track2.trajectory.back());
+      if (track1.mID != track2.mID && cost < mTrackDistanceKillThresholdSquared) {
+	// kill a track - keep the older one
+	if (track1.mID < track2.mID) {
+	  trackIdsToErase.insert(track2.mID);
+	} else {
+	  trackIdsToErase.insert(track1.mID);
+	  break;
+	}
+      }
+    }
+  }
+  for (set<int>::iterator i = trackIdsToErase.begin();
+       i != trackIdsToErase.end(); i++) {
+    cout << "Erasing " << *i << endl;
+    mTracks.erase(*i);
+  }
+  
 }
 
 void THISCLASS::DataAssociation()
@@ -178,14 +204,14 @@ void THISCLASS::DataAssociation()
 		}
 		//If the distance between track and particle is too big, make a new track
 		Track * track = NULL;
-		if (minDistance > mMaxDistance) {
-		  if (minDistance  >= mMinNewTrackDistance) {
+		if (minDistance > mMaxDistanceSquared) {
+		  if (minDistance  >= mMinNewTrackDistanceSquared) {
 		    int id = mNextTrackId++;
 		    mTracks[id] =  Track(id);
 
 		    track = &mTracks[id];
 		    distanceArray[track->mID] = new double[maxParticles];
-		    cout << " Making a new track:  " << track->mID << endl;
+		    cout << " Making a new track:  " << track->mID << " distance " << minDistance << endl;
 		  } else {
 		    break;
 		  }
@@ -221,9 +247,7 @@ double THISCLASS::GetCost(const Track & track, CvPoint2D32f p)
 		return -1;
 	else
 	{
-		double dx = track.trajectory.back().x - p.x;
-		double dy = track.trajectory.back().y - p.y;
-		return dx*dx + dy*dy;
+                return squareDistance(track.trajectory.back(), p);
 	}
 }
 
@@ -236,4 +260,11 @@ void THISCLASS::AddPoint(int i, CvPoint2D32f p){
   Track & track = mTracks.at(i);
   assert(i == track.mID);
   track.AddPoint(p, mCore->mDataStructureInput.mFrameNumber);
+}
+
+double squareDistance(CvPoint2D32f p1, CvPoint2D32f p2)
+ {
+  double dx = p1.x - p2.x;
+  double dy = p1.y - p2.y;
+  return dx*dx + dy*dy;
 }

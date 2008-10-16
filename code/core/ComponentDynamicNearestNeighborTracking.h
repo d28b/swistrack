@@ -5,6 +5,10 @@
 #include "Component.h"
 #include "DataStructureParticles.h"
 
+
+double squareDistance(CvPoint2D32f p1, CvPoint2D32f p2);
+
+
 //! A basic tracking component that takes pre-filtered particales and
 // adds them to the nearest track.
 class ComponentDynamicNearestNeighborTracking: public Component {
@@ -42,9 +46,10 @@ private:
 	int mNextTrackId;
 
 	// Parameters
-	double mMaxDistance; //!< (configuration) The maximum distance between a track and a particle to attach
-	double mMinNewTrackDistance; //!< (configuration) The minimum distance between new tracks
+	double mMaxDistanceSquared; //!< (configuration) The maximum distance between a track and a particle to attach
+	double mMinNewTrackDistanceSquared; //!< (configuration) The minimum distance between new tracks
 	int mFrameKillThreshold; //!< (configuration) The number of frames a point doesn't get updated before it gets destroyed. 
+	int mTrackDistanceKillThresholdSquared; //!< (configuration) The distance between tracks before one should be dropped. 
 	DataStructureTracks::tTrackMap mTracks;
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 
