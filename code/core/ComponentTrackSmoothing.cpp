@@ -28,18 +28,18 @@ THISCLASS::~ComponentTrackSmoothing()
 }
 Track& THISCLASS::WindowForTrack(int id) 
 {
-  DataStructureTracks::tTrackVector::iterator it = mWindows.begin();
+  DataStructureTracks::tTrackMap::iterator it = mWindows.begin();
   while (it != mWindows.end()) {
-    if (it->mID == id) {
-      return *it;
+    if (it->first == id) {
+      return it->second;
     }
     it++;
   }
 
-  mWindows.push_back(Track(id));
-  mWindows.back().SetMaxLength(mWindowSize);
-  mOutputTracks.push_back(Track(id));
-  return mWindows.back();
+  mWindows[id] = Track(id);
+  mWindows[id].SetMaxLength(mWindowSize);
+  mOutputTracks[id] = Track(id);
+  return mWindows[id];
 
 
 }
@@ -52,7 +52,7 @@ void THISCLASS::OnStart()
 
 void THISCLASS::OnStep()
 {
-  DataStructureTracks::tTrackVector *tracks = 
+  DataStructureTracks::tTrackMap *tracks = 
     mCore->mDataStructureTracks.mTracks;
 	if (! tracks)
 	{
@@ -67,10 +67,10 @@ void THISCLASS::OnStep()
 	  }
 	
 	//For each track, write data in the corresponding output file
-	DataStructureTracks::tTrackVector::iterator it = tracks->begin();
+	DataStructureTracks::tTrackMap::iterator it = tracks->begin();
 	while (it != tracks->end())
 	{
-	  Track & window = WindowForTrack(it->mID);
+	  Track & window = WindowForTrack(it->first);
 	  //Search for the corresponding particle
 	
 	  
@@ -89,9 +89,9 @@ void THISCLASS::OnStep()
 	  it++;
 	}
 	mParticles.clear();
-	DataStructureTracks::tTrackVector::iterator outputIterator = mOutputTracks.begin();
+	DataStructureTracks::tTrackMap::iterator outputIterator = mOutputTracks.begin();
 	while (outputIterator != mOutputTracks.end()) {
-	  Track & window = WindowForTrack(outputIterator->mID);
+	  Track & window = WindowForTrack(outputIterator->first);
 	  if (window.trajectory.size() == mWindowSize &&
 	      window.LastUpdateFrame() == mCore->mDataStructureInput.mFrameNumber) 
 	    {
@@ -106,12 +106,12 @@ void THISCLASS::OnStep()
 	    point.x = point.x / mWindowSize;
 	    point.y = point.y / mWindowSize;
 	    if (window.trajectory.size() != 0) {
-	      outputIterator->AddPoint(point, 
-				       mCore->mDataStructureInput.mFrameNumber);
+	      outputIterator->second.AddPoint(point, 
+					      mCore->mDataStructureInput.mFrameNumber);
 	      Particle p;
 	      p.mCenter.x = point.x;
 	      p.mCenter.y = point.y;
-	      p.mID = outputIterator->mID;
+	      p.mID = outputIterator->first;
 	      p.mArea = -1;
 	      p.mCompactness = -1;
 	      p.mOrientation = -1;

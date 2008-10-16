@@ -43,7 +43,7 @@ private:
 	/** Vector containing the id number of objects competing for tracks */
 	std::vector<int> competitors;
 	/** Potential trajectories */
-	DataStructureTracks::tTrackVector ptargets;
+	DataStructureTracks::tTrackMap ptargets;
 
 	std::vector<int> oldshared;
 	std::vector<int> sharedage;
@@ -57,7 +57,7 @@ private:
 	int mShareTrajectories; //!< If set to one, trajectories can share a particle, otherwise not (suitable for marker based tracking)
 	int mMaxNumber;		//!< (configuration) The maximum number of objects that are to track.
 	double mDistanceGate; //!< (configuration) The maximum distance a particle can move during one step.
-	DataStructureTracks::tTrackVector mTracks;
+	DataStructureTracks::tTrackMap mTracks;
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 };
 

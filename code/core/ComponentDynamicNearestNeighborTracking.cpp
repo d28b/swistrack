@@ -40,8 +40,9 @@ void THISCLASS::OnStart()
 
 void THISCLASS::InitializeTracks() 
 {
-  mTracks.push_back(Track(mNextTrackId++));
-  distanceArray[mTracks.back().mID] = new double[maxParticles];
+  int id = mNextTrackId++;
+  mTracks[id] = Track(id);
+  distanceArray[id] = new double[maxParticles];
 }
 
 void THISCLASS::OnReloadConfiguration()
@@ -65,10 +66,10 @@ void THISCLASS::OnStep()
 		maxParticles = mCore->mDataStructureParticles.mParticles->size();
 		ClearDistanceArray();
 
-		for (DataStructureTracks::tTrackVector::iterator i = mTracks.begin();
+		for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
 		     i != mTracks.end(); i++) 
 		{
-			distanceArray[i->mID] = new double[maxParticles];
+		  distanceArray[i->first] = new double[maxParticles];
 		}
 	}
 	// get the particles as input to component
@@ -115,16 +116,16 @@ void THISCLASS::OnStop() {
 void THISCLASS::FilterTracks() 
 {
   set<Track *> tracksToDelete;
-  for (DataStructureTracks::tTrackVector::iterator i = mTracks.begin();
-       i < mTracks.end(); i++) {
+  for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
+       i != mTracks.end(); i++) {
 
-    Track & track = *i;
+    Track & track = i->second;
     cout << "Filtering track " << track.mID  
 	 << " size " << track.trajectory.size() 
 	 << " threshold " << mFrameKillThreshold << endl;
     if (mCore->mDataStructureInput.mFrameNumber - track.LastUpdateFrame() >= mFrameKillThreshold) {
       cout << " Deleting track " << endl;
-      i = mTracks.erase(i);
+      mTracks.erase(i);
     }
   }
   cout << "Ending filter loop" << endl;
@@ -137,10 +138,10 @@ void THISCLASS::DataAssociation()
 	for (DataStructureParticles::tParticleVector::iterator pIt = particles->begin();pIt != particles->end();pIt++, p++)
 	{
 		assert(pIt->mID == -1);			// (particle should not be associated)
-		for (DataStructureTracks::tTrackVector::iterator i = mTracks.begin();
+		for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
 		     i != mTracks.end(); i++)
 		{
-			distanceArray[i->mID][p] = GetCost(*i, pIt->mCenter);
+			distanceArray[i->first][p] = GetCost(i->second, pIt->mCenter);
 		}
 		//  Compute distance from each particle to each track
 	}
@@ -148,11 +149,12 @@ void THISCLASS::DataAssociation()
 	//Register the existing indexes
 	std::vector<int> trackIndexes;
 	std::vector<int> particleIndexes;
-	for (unsigned int i = 0;i < particles->size();i++)
+	for (unsigned int i = 0;i < particles->size();i++) {
 		particleIndexes.push_back(i);
-	for (DataStructureTracks::tTrackVector::iterator i = mTracks.begin();
+	}
+	for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
 	     i != mTracks.end(); i++) {
-	  trackIndexes.push_back(i->mID);
+	  trackIndexes.push_back(i->first);
 	}
 	//Search for the minimalDistance
 	while ((!trackIndexes.empty()) && (!particleIndexes.empty()))
@@ -178,9 +180,10 @@ void THISCLASS::DataAssociation()
 		Track * track = NULL;
 		if (minDistance > mMaxDistance) {
 		  if (minDistance  >= mMinNewTrackDistance) {
-		    mTracks.push_back(Track(mNextTrackId++));
+		    int id = mNextTrackId++;
+		    mTracks[id] =  Track(id);
 
-		    track = &mTracks.at(mTracks.size() - 1);
+		    track = &mTracks[id];
 		    distanceArray[track->mID] = new double[maxParticles];
 		    cout << " Making a new track:  " << track->mID << endl;
 		  } else {

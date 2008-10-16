@@ -45,7 +45,7 @@ private:
 	double mMaxDistance; //!< (configuration) The maximum distance between a track and a particle to attach
 	double mMinNewTrackDistance; //!< (configuration) The minimum distance between new tracks
 	int mFrameKillThreshold; //!< (configuration) The number of frames a point doesn't get updated before it gets destroyed. 
-	DataStructureTracks::tTrackVector mTracks;
+	DataStructureTracks::tTrackMap mTracks;
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 
 };

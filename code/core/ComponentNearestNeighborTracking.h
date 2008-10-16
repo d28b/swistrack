@@ -37,7 +37,7 @@ private:
 	// Parameters
 	double mMaxDistance; //!< (configuration) The maximum distance between a track and a particle to attach
 	int mMaxNumber;		//!< (configuration) The maximum number of objects that are to track.
-	DataStructureTracks::tTrackVector mTracks;
+	DataStructureTracks::tTrackMap mTracks;
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 };
 

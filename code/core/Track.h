@@ -21,6 +21,7 @@ public:
 	CvPoint2D32f critpoint;
 	/** Constructor - id number id*/
 	Track(int idnumber);
+	Track();
 	/** Add a point to the current track (max track) */
 	void AddPoint(CvPoint2D32f p, int lastUpdateFrame);
 	void SetMaxLength(int length);

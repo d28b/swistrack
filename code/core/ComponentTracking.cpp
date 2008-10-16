@@ -42,7 +42,7 @@ void THISCLASS::OnStart() {
 		sharedage.push_back(0);
 		oldshared.push_back(0);
 		restingtraj.push_back(0);
-		mTracks.push_back(Track(i));
+		mTracks[i] = Track(i);
 		mTracks.at(i).AddPoint(cvPoint2D32f(320, 240),
 				       mCore->mDataStructureInput.mFrameNumber);
 
@@ -140,12 +140,12 @@ void THISCLASS::DataAssociation()
 	for (p = particles->begin();p != particles->end();p++) // assign particles to existing noise trajectories
 	{
 		double min_dist = 1000000;
-		std::vector<Track>::iterator min_dist_id = ptargets.begin();
+		std::map<int, Track>::iterator min_dist_id = ptargets.begin();
 
 
-		for (std::vector<Track>::iterator t = ptargets.begin(); t != ptargets.end(); t++)
+		for (std::map<int, Track>::iterator t = ptargets.begin(); t != ptargets.end(); t++)
 		{
-			double dist = GetDist(&(t->trajectory.back()), &(p->mCenter));
+			double dist = GetDist(&(t->second.trajectory.back()), &(p->mCenter));
 			//		printf("%0.2f %0.2f %0.2f %0.2f %0.2f\n",p->mCenter.x,p->mCenter.y,t->trajectory.back().x,t->trajectory.back().y,dist);
 			if (dist < min_dist)
 			{
@@ -157,8 +157,8 @@ void THISCLASS::DataAssociation()
 		// the closest track 'min_dist_id' has distance 'min_dist' now
 
 		if (sqrt(min_dist) < mDistanceGate && p->mID == -1){ // if good enough (threshold) take it, otherwise reject
-			p->mID = min_dist_id->mID; // associate best particle with object id
-			min_dist_id->AddPoint(p->mCenter, mCore->mDataStructureInput.mFrameNumber);
+			p->mID = min_dist_id->first; // associate best particle with object id
+			min_dist_id->second.AddPoint(p->mCenter, mCore->mDataStructureInput.mFrameNumber);
 		}
 		else{
 			if (min_dist_id != ptargets.begin()) ptargets.erase(min_dist_id); // erase noise trajectories that did not find anyone
@@ -170,9 +170,9 @@ void THISCLASS::DataAssociation()
 		if (p->mID == -1){
 			//			printf("Create new noise trajectory (%d)\n",id);
 			//Track* tmpTrack = new Track(id,trackingimg,mMaxNumber);
-			ptargets.push_back(Track(id));
+			ptargets[id] = Track(id);
 			//delete tmpTrack;
-			ptargets.back().AddPoint(p->mCenter, mCore->mDataStructureInput.mFrameNumber);
+			ptargets[id].AddPoint(p->mCenter, mCore->mDataStructureInput.mFrameNumber);
 			p->mID = id;
 			id++;
 		}
@@ -181,9 +181,9 @@ void THISCLASS::DataAssociation()
 	int found = 0;
 	while (!found){ // this loop goes until all particles/trajectories are known
 		found = 1;
-		for (std::vector<Track>::iterator t = ptargets.begin(); t != ptargets.end(); t++){ // delete noise trajectories that are not assigned
+		for (std::map<int, Track>::iterator t = ptargets.begin(); t != ptargets.end(); t++){ // delete noise trajectories that are not assigned
 			found = 0;
-			for (p = particles->begin();p != particles->end();p++) if (p->mID == t->mID) found = 1;
+			for (p = particles->begin();p != particles->end();p++) if (p->mID == t->first) found = 1;
 			if (!found){
 				ptargets.erase(t);
 				break;
@@ -194,9 +194,9 @@ void THISCLASS::DataAssociation()
 	///////////// If a noise trajectory seems to be reasonable, swap with the closest shared trajectory ///////////////////
 
 	found = 0;
-	for (std::vector<Track>::iterator t = ptargets.begin(); t != ptargets.end(); t++){
-		double dist = GetDist(&t->trajectory.front(), &t->trajectory.back());
-		if (dist > avg_speed * avg_speed && t->trajectory.size() > 5){
+	for (std::map<int, Track>::iterator t = ptargets.begin(); t != ptargets.end(); t++){
+		double dist = GetDist(&t->second.trajectory.front(), &t->second.trajectory.back());
+		if (dist > avg_speed * avg_speed && t->second.trajectory.size() > 5){
 			//			printf("Found promising noise trajectory (%0.2f)\n",sqrt(dist));
 			// A promising trajectory must have a certain length + certain age to avoid to track on noise bursts
 			double min_dist = 1000000;
@@ -204,7 +204,7 @@ void THISCLASS::DataAssociation()
 
 			for (id = 0; id < mMaxNumber; id++){
 				if (shared.at(id)){
-					double dist = GetDist(GetPos(id), &t->trajectory.back());
+					double dist = GetDist(GetPos(id), &t->second.trajectory.back());
 					if (dist < min_dist){
 						min_dist = dist;
 						min_dist_id = id;
@@ -214,7 +214,7 @@ void THISCLASS::DataAssociation()
 					//printf("Found candidate to swap with!\n");
 					shared.at(min_dist_id) = 0;
 					mTracks.at(min_dist_id).trajectory.pop_back();
-					AddPoint(min_dist_id, t->trajectory.back());
+					AddPoint(min_dist_id, t->second.trajectory.back());
 					ptargets.erase(t);
 					found = 1; // do only one at a time
 					break;

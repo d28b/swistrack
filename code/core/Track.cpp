@@ -1,5 +1,8 @@
 #include "Track.h"
 
+Track::Track() {
+}
+
 /** \brief Constructor - id number id*/
 Track::Track(int idnumber) : trajectory(0){
 	maxlength = 50; // maximum length of trajectory to store

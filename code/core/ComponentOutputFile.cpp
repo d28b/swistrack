@@ -33,7 +33,7 @@ void THISCLASS::OnReloadConfiguration()
 void THISCLASS::OnStep()
 {
 	//If there is no track, stop
-	DataStructureTracks::tTrackVector *mTracks;
+	DataStructureTracks::tTrackMap *mTracks;
 	mTracks = mCore->mDataStructureTracks.mTracks;
 	if (! mTracks)
 	{
@@ -42,7 +42,7 @@ void THISCLASS::OnStep()
 	}
 
 	//For each track, write data in the corresponding output file
-	DataStructureTracks::tTrackVector::iterator it = mTracks->begin();
+	DataStructureTracks::tTrackMap::iterator it = mTracks->begin();
 	while (it != mTracks->end())
 	{
 		bool noCorrespondingFile = true;
@@ -50,7 +50,7 @@ void THISCLASS::OnStep()
 		while (it2 != mFilesVector.end())
 		{
 			//There is an existing file opened
-			if (it->mID == (*it2)->trackID)
+			if (it->first == (*it2)->trackID)
 			{
 				//Write the data to the file
 				writeData(*it2);
@@ -63,9 +63,9 @@ void THISCLASS::OnStep()
 		if (noCorrespondingFile)
 		{
 			structOutputFile *newOutputFile = new structOutputFile;
-			newOutputFile->trackID = it->mID;
+			newOutputFile->trackID = it->first;
 			wxString tmpFileName = mDirectoryName;
-			tmpFileName += wxString::Format(wxT("track_%08d.txt"), it->mID);
+			tmpFileName += wxString::Format(wxT("track_%08d.txt"), it->first);
 			(newOutputFile->fileStream).open(tmpFileName.mb_str(wxConvISO8859_1), std::fstream::out | std::fstream::trunc);
 
 			if (!(newOutputFile->fileStream).is_open())
@@ -138,9 +138,6 @@ void THISCLASS::writeData(structOutputFile *outputFile)
 		//Correct ID is found
 		if (it->mID == outputFile->trackID)
 		{
-		  if (it->mID == 8) {
-		    cout << "Writing for 8 " << endl;
-		  }
 			//Write the needed data to the file
 			outputFile->fileStream
 			//Frame number

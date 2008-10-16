@@ -191,22 +191,22 @@ bool THISCLASS::DrawTrajectories(ErrorList *errors) {
 	}
 
 	// Draw trajectories
-	DataStructureTracks::tTrackVector *tracks = mDisplay->mComponent->GetSwisTrackCore()->mDataStructureTracks.mTracks;
-	DataStructureTracks::tTrackVector::iterator it = tracks->begin();
+	DataStructureTracks::tTrackMap *tracks = mDisplay->mComponent->GetSwisTrackCore()->mDataStructureTracks.mTracks;
+	DataStructureTracks::tTrackMap::iterator it = tracks->begin();
 	CvFont font;
 	cvInitFont(&font, CV_FONT_HERSHEY_PLAIN,1.0, 1.0);
 
 	while (it != tracks->end()) {
 		// Color for this track
-		CvScalar color = cvScalar((it->mID * 50) % 255, 
-					  (it->mID * 50) % 255, 
+		CvScalar color = cvScalar((it->first * 50) % 255, 
+					  (it->first * 50) % 255, 
 					  255);
 
 		// Draw trajectory polyline
-		std::vector<CvPoint2D32f>::iterator p = it->trajectory.begin();
+		std::vector<CvPoint2D32f>::iterator p = it->second.trajectory.begin();
 		int xprev = (int)floor((*p).x * mScalingFactor + 0.5);
 		int yprev = (int)floor((*p).y * mScalingFactor + 0.5);
-		while (p != it->trajectory.end()) {
+		while (p != it->second.trajectory.end()) {
 			int x = (int)floor((*p).x * mScalingFactor + 0.5);
 			int y = (int)floor((*p).y * mScalingFactor + 0.5);
 			cvLine(mImage, cvPoint(xprev, yprev), cvPoint(x, y), color);
@@ -217,7 +217,7 @@ bool THISCLASS::DrawTrajectories(ErrorList *errors) {
 
 		cvRectangle(mImage, cvPoint(xprev - 2, yprev - 2), cvPoint(xprev + 2, yprev + 2), color, 1);
 		wxString text;
-		text << it->mID;
+		text << it->first;
 		cvPutText(mImage, text.ToAscii(), cvPoint(xprev + 3, yprev + 3),
 			  &font, color);
 		it++;

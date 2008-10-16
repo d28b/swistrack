@@ -1,7 +1,7 @@
 #ifndef HEADER_DataStructureTracks
 #define HEADER_DataStructureTracks
 
-#include <vector>
+#include <map>
 #include <cv.h>
 #include "DataStructure.h"
 #include "Track.h"
@@ -11,10 +11,10 @@ class DataStructureTracks: public DataStructure {
 
 
 public:
-	//! Particle vector type.
-	typedef std::vector<Track> tTrackVector;
+	//! Track vector type.
+        typedef std::map<int, Track> tTrackMap;
 
-	tTrackVector *mTracks;	//!< Vector of tracks.
+	tTrackMap *mTracks;	//!< Vector of tracks.
 
 	//! Constructor.
 	DataStructureTracks(): DataStructure(wxT("Tracks"), wxT("Tracks")), mTracks(0) {}
