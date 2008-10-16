@@ -64,7 +64,7 @@ void THISCLASS::OnStep()
 			structOutputFile *newOutputFile = new structOutputFile;
 			newOutputFile->trackID = it->mID;
 			wxString tmpFileName = mDirectoryName;
-			tmpFileName += wxString::Format(wxT("track_%d.txt"), it->mID);
+			tmpFileName += wxString::Format(wxT("track_%08d.txt"), it->mID);
 			(newOutputFile->fileStream).open(tmpFileName.mb_str(wxConvISO8859_1), std::fstream::out | std::fstream::trunc);
 
 			if (!(newOutputFile->fileStream).is_open())
