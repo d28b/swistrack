@@ -1,6 +1,7 @@
 #include "ComponentOutputFile.h"
 #define THISCLASS ComponentOutputFile
-
+using namespace std;
+#include <iostream>
 #include <fstream>
 #include "DisplayEditor.h"
 
@@ -137,6 +138,9 @@ void THISCLASS::writeData(structOutputFile *outputFile)
 		//Correct ID is found
 		if (it->mID == outputFile->trackID)
 		{
+		  if (it->mID == 8) {
+		    cout << "Writing for 8 " << endl;
+		  }
 			//Write the needed data to the file
 			outputFile->fileStream
 			//Frame number

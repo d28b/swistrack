@@ -10,7 +10,8 @@ class Track {
 private:
 	int maxlength;     //!< Stores the maximum length of the trajectory to plot
 	double GetDist(CvPoint2D32f *p1, CvPoint2D32f *p2);
-	CvScalar color;
+	//CvScalar color;
+	int mLastUpdateFrame;
 
 public:
 	void SetCritPoint(CvPoint2D32f* p);
@@ -19,10 +20,13 @@ public:
 	/** Critical point */
 	CvPoint2D32f critpoint;
 	/** Constructor - id number id*/
-	Track(int idnumber, int n_objects);
+	Track(int idnumber);
 	/** Add a point to the current track (max track) */
-	void AddPoint(CvPoint2D32f p);
+	void AddPoint(CvPoint2D32f p, int lastUpdateFrame);
 	void SetMaxLength(int length);
+	int LastUpdateFrame() {
+	  return mLastUpdateFrame;
+	}
 
 	/** Destructor */
 	~Track();

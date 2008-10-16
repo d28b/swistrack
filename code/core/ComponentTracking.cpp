@@ -42,9 +42,10 @@ void THISCLASS::OnStart() {
 		sharedage.push_back(0);
 		oldshared.push_back(0);
 		restingtraj.push_back(0);
-		mTracks.push_back(Track(i,					// id number
-		                        mMaxNumber));
-		mTracks.at(i).AddPoint(cvPoint2D32f(320, 240));
+		mTracks.push_back(Track(i));
+		mTracks.at(i).AddPoint(cvPoint2D32f(320, 240),
+				       mCore->mDataStructureInput.mFrameNumber);
+
 	}
 }
 
@@ -157,7 +158,7 @@ void THISCLASS::DataAssociation()
 
 		if (sqrt(min_dist) < mDistanceGate && p->mID == -1){ // if good enough (threshold) take it, otherwise reject
 			p->mID = min_dist_id->mID; // associate best particle with object id
-			min_dist_id->AddPoint(p->mCenter);
+			min_dist_id->AddPoint(p->mCenter, mCore->mDataStructureInput.mFrameNumber);
 		}
 		else{
 			if (min_dist_id != ptargets.begin()) ptargets.erase(min_dist_id); // erase noise trajectories that did not find anyone
@@ -169,9 +170,9 @@ void THISCLASS::DataAssociation()
 		if (p->mID == -1){
 			//			printf("Create new noise trajectory (%d)\n",id);
 			//Track* tmpTrack = new Track(id,trackingimg,mMaxNumber);
-			ptargets.push_back(Track(id, mMaxNumber));
+			ptargets.push_back(Track(id));
 			//delete tmpTrack;
-			ptargets.back().AddPoint(p->mCenter);
+			ptargets.back().AddPoint(p->mCenter, mCore->mDataStructureInput.mFrameNumber);
 			p->mID = id;
 			id++;
 		}
@@ -270,7 +271,8 @@ void THISCLASS::OnStep() {
 * \param p : Point to add to trajectory i (subpixel accuracy)
 */
 void THISCLASS::AddPoint(int i, CvPoint2D32f p){
-	mTracks.at(i).AddPoint(p);
+        mTracks.at(i).AddPoint(p, mCore->mDataStructureInput.mFrameNumber);
+
 }
 
 

@@ -26,20 +26,28 @@ public:
 	}
 
 private:
+	/**
+	 * Filter tracks we aren't using any more. 
+	 */
+	void FilterTracks();
 	void DataAssociation();
-	double GetCost(int id, CvPoint2D32f p);
+	void ClearDistanceArray();
+	void InitializeTracks();
+	double GetCost(const Track & track, CvPoint2D32f p);
 	void AddPoint(int i, CvPoint2D32f p);
 
 	DataStructureParticles::tParticleVector *particles;
-	std::vector<double*> distanceArray;
+	std::map<int, double*> distanceArray;
 	unsigned int maxParticles;
 	int mNextTrackId;
 
 	// Parameters
 	double mMaxDistance; //!< (configuration) The maximum distance between a track and a particle to attach
 	double mMinNewTrackDistance; //!< (configuration) The minimum distance between new tracks
+	int mFrameKillThreshold; //!< (configuration) The number of frames a point doesn't get updated before it gets destroyed. 
 	DataStructureTracks::tTrackVector mTracks;
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
+
 };
 
 #endif

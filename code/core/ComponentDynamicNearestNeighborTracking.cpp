@@ -3,6 +3,7 @@
 
 using namespace std;
 #include <iostream>
+#include <set>
 
 #include "DisplayEditor.h"
 
@@ -23,7 +24,8 @@ THISCLASS::ComponentDynamicNearestNeighborTracking(SwisTrackCore *stc):
 
 THISCLASS::~ComponentDynamicNearestNeighborTracking()
 {
-	if (mTracks.size()) mTracks.clear();
+	mTracks.clear();
+	ClearDistanceArray();
 }
 
 void THISCLASS::OnStart()
@@ -31,19 +33,28 @@ void THISCLASS::OnStart()
 	maxParticles = 10;
 
 	cout << " restarting " << endl;
-	if (mTracks.size()) mTracks.clear();	// handle reset properly
+	mTracks.clear();	// handle reset properly
 
 	THISCLASS::OnReloadConfiguration();
+}
+
+void THISCLASS::InitializeTracks() 
+{
+  mTracks.push_back(Track(mNextTrackId++));
+  distanceArray[mTracks.back().mID] = new double[maxParticles];
 }
 
 void THISCLASS::OnReloadConfiguration()
 {
 	mMaxDistance = GetConfigurationDouble(wxT("MaxDistance"), 10);
 	mMaxDistance *= mMaxDistance;
-	mTracks.push_back(Track(mNextTrackId++, -1));
-	distanceArray.push_back(new double[maxParticles]);
+	
 	mMinNewTrackDistance = 
 	  GetConfigurationDouble(wxT("MinNewTrackDistance"), 10);
+
+	mFrameKillThreshold = 
+	  GetConfigurationDouble(wxT("FrameKillThreshold"), 10);
+	InitializeTracks();
 }
 
 void THISCLASS::OnStep()
@@ -52,22 +63,29 @@ void THISCLASS::OnStep()
 	if (mCore->mDataStructureParticles.mParticles->size() > maxParticles)
 	{
 		maxParticles = mCore->mDataStructureParticles.mParticles->size();
-		for (unsigned int i = 0; i < distanceArray.size(); i++) 
+		ClearDistanceArray();
+
+		for (DataStructureTracks::tTrackVector::iterator i = mTracks.begin();
+		     i != mTracks.end(); i++) 
 		{
-			delete[] distanceArray[i];
-			distanceArray[i] = new double[maxParticles];
+			distanceArray[i->mID] = new double[maxParticles];
 		}
 	}
 	// get the particles as input to component
 	//	(pointer modifies data in place!)
 	particles = mCore->mDataStructureParticles.mParticles;
+	if (mTracks.size() == 0) {
+	  InitializeTracks();
+	}
 
 	// associate all points with the nearest track
 	DataAssociation();
 
+	// get rid of the tracks that have died.
+	FilterTracks();
+
 	// update the tracks store locally to this component
 	mCore->mDataStructureTracks.mTracks = &mTracks;
-	cout << "Updating tracks " << mTracks.size() << endl;
 
 	// Let the DisplayImage know about our image
 	DisplayEditor de(&mDisplayOutput);
@@ -82,9 +100,34 @@ void THISCLASS::OnStepCleanup() {
 	mCore->mDataStructureParticles.mParticles = 0;
 }
 
+void THISCLASS::ClearDistanceArray() {
+  for (map<int, double*>::iterator pos = distanceArray.begin();
+       pos != distanceArray.end(); ++pos) {
+    delete[] pos->second;
+  }
+  distanceArray.clear();
+}
+
 void THISCLASS::OnStop() {
-        for (int i;(i = 0);i++)
-		delete[] distanceArray[i];
+  ClearDistanceArray();
+
+}
+void THISCLASS::FilterTracks() 
+{
+  set<Track *> tracksToDelete;
+  for (DataStructureTracks::tTrackVector::iterator i = mTracks.begin();
+       i < mTracks.end(); i++) {
+
+    Track & track = *i;
+    cout << "Filtering track " << track.mID  
+	 << " size " << track.trajectory.size() 
+	 << " threshold " << mFrameKillThreshold << endl;
+    if (mCore->mDataStructureInput.mFrameNumber - track.LastUpdateFrame() >= mFrameKillThreshold) {
+      cout << " Deleting track " << endl;
+      i = mTracks.erase(i);
+    }
+  }
+  cout << "Ending filter loop" << endl;
 }
 
 void THISCLASS::DataAssociation()
@@ -94,9 +137,10 @@ void THISCLASS::DataAssociation()
 	for (DataStructureParticles::tParticleVector::iterator pIt = particles->begin();pIt != particles->end();pIt++, p++)
 	{
 		assert(pIt->mID == -1);			// (particle should not be associated)
-		for (unsigned int t = 0; t < distanceArray.size(); t++)	// compare to all existing tracks
+		for (DataStructureTracks::tTrackVector::iterator i = mTracks.begin();
+		     i != mTracks.end(); i++)
 		{
-			distanceArray[t][p] = GetCost(t, pIt->mCenter);
+			distanceArray[i->mID][p] = GetCost(*i, pIt->mCenter);
 		}
 		//  Compute distance from each particle to each track
 	}
@@ -134,9 +178,10 @@ void THISCLASS::DataAssociation()
 		Track * track = NULL;
 		if (minDistance > mMaxDistance) {
 		  if (minDistance  >= mMinNewTrackDistance) {
-		    mTracks.push_back(Track(mNextTrackId++, -1));
-		    distanceArray.push_back(new double[maxParticles]);
+		    mTracks.push_back(Track(mNextTrackId++));
+
 		    track = &mTracks.at(mTracks.size() - 1);
+		    distanceArray[track->mID] = new double[maxParticles];
 		    cout << " Making a new track:  " << track->mID << endl;
 		  } else {
 		    break;
@@ -146,7 +191,6 @@ void THISCLASS::DataAssociation()
 		}
 		    
 		(particles->at(particleIndexes[minDistanceJ])).mID = track->mID;
-		cout << " Adding point " << endl;
 		AddPoint(track->mID, 
 			 particles->at(particleIndexes[minDistanceJ]).mCenter);
 
@@ -168,14 +212,14 @@ void THISCLASS::DataAssociation()
 * \todo The cost function used here is very simple. One could imagine to take also other
 * attributes, for instance the speed of the object into account.
 */
-double THISCLASS::GetCost(int id, CvPoint2D32f p)
+double THISCLASS::GetCost(const Track & track, CvPoint2D32f p)
 {
-	if (mTracks.at(id).trajectory.size() == 0)
+	if (track.trajectory.size() == 0)
 		return -1;
 	else
 	{
-		double dx = mTracks.at(id).trajectory.back().x - p.x;
-		double dy = mTracks.at(id).trajectory.back().y - p.y;
+		double dx = track.trajectory.back().x - p.x;
+		double dy = track.trajectory.back().y - p.y;
 		return dx*dx + dy*dy;
 	}
 }
@@ -187,8 +231,6 @@ double THISCLASS::GetCost(int id, CvPoint2D32f p)
 */
 void THISCLASS::AddPoint(int i, CvPoint2D32f p){
   Track & track = mTracks.at(i);
-  cout << " adding point " << p.x <<"," << p.y << endl;
-  cout << " track " << track.mID << endl;
   assert(i == track.mID);
-  track.AddPoint(p);
+  track.AddPoint(p, mCore->mDataStructureInput.mFrameNumber);
 }

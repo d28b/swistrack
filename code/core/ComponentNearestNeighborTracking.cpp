@@ -35,8 +35,7 @@ void THISCLASS::OnStart()
 	if (mTracks.size()) mTracks.clear();	// handle reset properly
 	for (int i = 0;i < mMaxNumber;i++)		// initiate mMaxNumber Track classes
 	{
-		mTracks.push_back(Track(i,		// id number
-		                        mMaxNumber));
+		mTracks.push_back(Track(i));
 		//mTracks.at(i).AddPoint(cvPoint2D32f(320,240));
 	}
 	distanceArray = new double*[mMaxNumber];
@@ -172,5 +171,5 @@ double THISCLASS::GetCost(int id, CvPoint2D32f p)
 * \param p : Point to add to trajectory i (subpixel accuracy)
 */
 void THISCLASS::AddPoint(int i, CvPoint2D32f p){
-	mTracks.at(i).AddPoint(p);
+       mTracks.at(i).AddPoint(p, mCore->mDataStructureInput.mFrameNumber);
 }

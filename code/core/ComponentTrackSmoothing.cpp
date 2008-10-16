@@ -36,9 +36,9 @@ Track& THISCLASS::WindowForTrack(int id)
     it++;
   }
 
-  mWindows.push_back(Track(id, -1));
+  mWindows.push_back(Track(id));
   mWindows.back().SetMaxLength(mWindowSize);
-  mOutputTracks.push_back(Track(id, -1));
+  mOutputTracks.push_back(Track(id));
   return mWindows.back();
 
 
@@ -80,7 +80,8 @@ void THISCLASS::OnStep()
 	      //Correct ID is found
 	      if (window.mID == it2->mID) 
 		{
-		  window.AddPoint(it2->mCenter);
+		  window.AddPoint(it2->mCenter, 
+				  mCore->mDataStructureInput.mFrameNumber);
 
 		}
 	      it2++;
@@ -91,8 +92,9 @@ void THISCLASS::OnStep()
 	DataStructureTracks::tTrackVector::iterator outputIterator = mOutputTracks.begin();
 	while (outputIterator != mOutputTracks.end()) {
 	  Track & window = WindowForTrack(outputIterator->mID);
-
-	  if (window.trajectory.size() == mWindowSize) {
+	  if (window.trajectory.size() == mWindowSize &&
+	      window.LastUpdateFrame() == mCore->mDataStructureInput.mFrameNumber) 
+	    {
 	    CvPoint2D32f point = cvPoint2D32f(0, 0);
 	    std::vector<CvPoint2D32f>::iterator it3 = window.trajectory.begin();
 
@@ -104,7 +106,8 @@ void THISCLASS::OnStep()
 	    point.x = point.x / mWindowSize;
 	    point.y = point.y / mWindowSize;
 	    if (window.trajectory.size() != 0) {
-	      outputIterator->AddPoint(point);
+	      outputIterator->AddPoint(point, 
+				       mCore->mDataStructureInput.mFrameNumber);
 	      Particle p;
 	      p.mCenter.x = point.x;
 	      p.mCenter.y = point.y;
@@ -129,6 +132,7 @@ void THISCLASS::OnStep()
 		de.SetTrajectories(true);
 	}
 }
+
 
 void THISCLASS::OnStepCleanup() {
 	mCore->mDataStructureParticles.mParticles = 0;
