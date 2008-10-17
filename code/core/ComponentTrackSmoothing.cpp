@@ -69,8 +69,8 @@ void THISCLASS::OnStep()
 	     i != mWindows.end(); i++)
 	  {
 	    if (tracks->find(i->first) == tracks->end()) {
-	      mWindows.erase(i);
 	      mOutputTracks.erase(i->first);
+	      mWindows.erase(i++);
 	    }
 	  }
 
