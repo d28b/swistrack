@@ -117,7 +117,7 @@ void THISCLASS::OnStep()
 	}
 	cvCvtColor(thisFrame, mThisFrame, CV_BGR2GRAY);
 	
-	IplImage * mLastFrame;
+
 	if (mOutputFrame == NULL) {
 	  mOutputFrame = cvCreateImage(cvSize(mThisFrame->width, 
 					      mThisFrame->height), 
@@ -128,6 +128,7 @@ void THISCLASS::OnStep()
 					    mThisFrame->height), 
 				     mThisFrame->depth, mThisFrame->nChannels);
 	  cvCopy(mThisFrame, mLastFrame);
+	  cout << "Bailing because last frame is null." << mLastFrame << endl;
 	  return;
 	}
 
@@ -142,7 +143,8 @@ void THISCLASS::OnStep()
 	cvGoodFeaturesToTrack(mThisFrame, eig_image, tmp_image,
 			      mCorners,
 			      &mCornerCount, 
-			      0.01, 5.0, 0, 3, 0, 0.04); // copied from O'Reilly
+			      0.01, 5.0, 0, 3, 0, 0.04); 
+	cout << "Got " << mCornerCount << " corners." << endl;
 	cvFindCornerSubPix(mLastFrame, mCorners, mCornerCount,
 			   cvSize(mWinSize, mWinSize),
 			   cvSize(-1, -1),
@@ -157,7 +159,7 @@ void THISCLASS::OnStep()
 	if (pyrB == NULL) {
 	  pyrB = cvCreateImage(pyr_size, IPL_DEPTH_32F, 1);
 	}
-
+	cout << "Flowing " << endl;
 	cvCalcOpticalFlowPyrLK(mLastFrame, mThisFrame,
 			       pyrA, pyrB, 
 			       mCorners, mCornersB,
@@ -184,12 +186,13 @@ void THISCLASS::OnStep()
 	  }
 	  
 	}
-			       
+	mCore->mDataStructureTracks.mTracks = &mTracks;	       
 	cvCopy(mThisFrame, mLastFrame);
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
-		de.SetMainImage(mOutputFrame);
-		de.SetTrajectories(true);
+	  cout << " Sending output frame " << endl;
+	  de.SetMainImage(mOutputFrame);
+	  de.SetTrajectories(true);
 	}
 }
 
