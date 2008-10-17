@@ -9,11 +9,15 @@ using namespace std;
 
 THISCLASS::ComponentOpticalFlowPyrLKTracking(SwisTrackCore *stc):
 		Component(stc, wxT("OpticalFlowPyrLK")),
+		mLastFrame(0), mOutputFrame(0),
+		mCorners(0), mCornersB(0), eig_image(0), tmp_image(0),
+		pyrA(0), pyrB(0),
 		mNextTrackId(0),
-		mDisplayOutput(wxT("Output"), wxT("Dynamic Tracking"))
+		mDisplayOutput(wxT("Output"), wxT("Optical Flow PyrLKT Tracking"))
 {
 	// Data structure relations
 	mCategory = &(mCore->mCategoryTracking);
+
 	AddDataStructureRead(&(mCore->mDataStructureParticles));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 	AddDataStructureWrite(&(mCore->mDataStructureTracks));
@@ -24,6 +28,37 @@ THISCLASS::ComponentOpticalFlowPyrLKTracking(SwisTrackCore *stc):
 
 THISCLASS::~ComponentOpticalFlowPyrLKTracking()
 {
+  if (eig_image) {
+    cvReleaseImage(&eig_image);
+  }
+  if (tmp_image) {
+    cvReleaseImage(&tmp_image);
+  } 
+  if (mLastFrame) {
+    cvReleaseImage(&mLastFrame);
+  }
+  if (mOutputFrame) {
+    cvReleaseImage(&mOutputFrame);
+  }
+  if (mFeaturesFound) {
+    free(mFeaturesFound);
+    mFeaturesFound = NULL;
+  }
+  if (mFeatureErrors) {
+    free(mFeatureErrors);
+    mFeatureErrors = NULL;
+  }
+  if (mCorners) {
+    delete[] mCorners;
+    mCorners = 0;
+  }
+  if (mCornersB) {
+    delete[] mCorners;
+    mCorners = 0;
+  }
+     
+  if (mFeaturesFound) {
+  }
 	mTracks.clear();
 	ClearDistanceArray();
 }
@@ -58,45 +93,102 @@ void THISCLASS::OnReloadConfiguration()
 	mTrackDistanceKillThresholdSquared = 
 	  pow(GetConfigurationDouble(wxT("TrackDistanceKillThreshold"), 10), 2);
 
+	mMaxCorners = 500;
+	mCornerCount = mMaxCorners;
+	mWinSize = 10;
+	mCorners = new CvPoint2D32f[mMaxCorners];
+	mCornersB = new CvPoint2D32f[mMaxCorners];
+
+	mFeaturesFound = (char *) malloc(sizeof(char *) * mMaxCorners);
+	mFeatureErrors = (float *) malloc(sizeof(float *) * mMaxCorners);
+
+	
 
 	InitializeTracks();
 }
 
 void THISCLASS::OnStep()
 {
-	//distance array is too small, release and recreate
-	if (mCore->mDataStructureParticles.mParticles->size() > maxParticles)
-	{
-		maxParticles = mCore->mDataStructureParticles.mParticles->size();
-		ClearDistanceArray();
-
-		for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
-		     i != mTracks.end(); i++) 
-		{
-		  distanceArray[i->first] = new double[maxParticles];
-		}
+  	IplImage *thisFrame = mCore->mDataStructureImageColor.mImage;
+	if (mThisFrame == NULL) {
+	  mThisFrame = cvCreateImage(cvSize(thisFrame->width,
+					    thisFrame->height),
+				     thisFrame->depth, 1);
 	}
-	// get the particles as input to component
-	//	(pointer modifies data in place!)
-	particles = mCore->mDataStructureParticles.mParticles;
-	if (mTracks.size() == 0) {
-	  InitializeTracks();
+	cvCvtColor(thisFrame, mThisFrame, CV_BGR2GRAY);
+	
+	IplImage * mLastFrame;
+	if (mOutputFrame == NULL) {
+	  mOutputFrame = cvCreateImage(cvSize(mThisFrame->width, 
+					      mThisFrame->height), 
+				       mThisFrame->depth, mThisFrame->nChannels);
+	}
+	if (mLastFrame == NULL) {
+	  mLastFrame = cvCreateImage(cvSize(mThisFrame->width, 
+					    mThisFrame->height), 
+				     mThisFrame->depth, mThisFrame->nChannels);
+	  cvCopy(mThisFrame, mLastFrame);
+	  return;
 	}
 
-	// associate all points with the nearest track
-	DataAssociation();
+	if (eig_image == NULL) {
+	  eig_image = cvCreateImage(cvGetSize(mThisFrame), IPL_DEPTH_32F, 1);
+	}
+	if (tmp_image == NULL) {
+	  eig_image = cvCreateImage(cvGetSize(mThisFrame), IPL_DEPTH_32F, 1);
+	}
 
-	// get rid of the tracks that have died.
-	FilterTracks();
 
-	// update the tracks store locally to this component
-	mCore->mDataStructureTracks.mTracks = &mTracks;
+	cvGoodFeaturesToTrack(mThisFrame, eig_image, tmp_image,
+			      mCorners,
+			      &mCornerCount, 
+			      0.01, 5.0, 0, 3, 0, 0.04); // copied from O'Reilly
+	cvFindCornerSubPix(mLastFrame, mCorners, mCornerCount,
+			   cvSize(mWinSize, mWinSize),
+			   cvSize(-1, -1),
+			   cvTermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS,
+					  20, 0.03));
+					  
+	CvSize pyr_size = cvSize(mThisFrame->width + 8, mThisFrame->height / 3);
+	
+	if (pyrA == NULL) {
+	  pyrA = cvCreateImage(pyr_size, IPL_DEPTH_32F, 1);
+	}
+	if (pyrB == NULL) {
+	  pyrB = cvCreateImage(pyr_size, IPL_DEPTH_32F, 1);
+	}
 
-	// Let the DisplayImage know about our image
+	cvCalcOpticalFlowPyrLK(mLastFrame, mThisFrame,
+			       pyrA, pyrB, 
+			       mCorners, mCornersB,
+			       mCornerCount, 
+			       cvSize(mWinSize, mWinSize),
+			       5,
+			       mFeaturesFound,
+			       mFeatureErrors,
+			       cvTermCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS,
+					      20, 0.3),
+			       0);
+	cvCopy(mThisFrame, mOutputFrame);
+	for (int i = 0; i < mCornerCount; i++) {
+	  if (mFeaturesFound[i] == 0 || mFeatureErrors[i] > 550) {
+	    printf("Error is %f\n", mFeatureErrors[i]);
+	  } else {
+	    printf("Got point\n");
+	    CvPoint p0 = cvPoint(cvRound(mCorners[i].x),
+				 cvRound(mCorners[i].y));
+	    CvPoint p1 = cvPoint(cvRound(mCornersB[i].x),
+				 cvRound(mCornersB[i].y));
+	    cvLine(mOutputFrame, p0, p1, CV_RGB(255, 255, 255), 2);
+	      
+	  }
+	  
+	}
+			       
+	cvCopy(mThisFrame, mLastFrame);
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
-		//de.SetParticles(particles);	//TODO: what was this?
-		de.SetMainImage(mCore->mDataStructureInput.mImage);
+		de.SetMainImage(mOutputFrame);
 		de.SetTrajectories(true);
 	}
 }

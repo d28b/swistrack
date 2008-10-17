@@ -30,6 +30,28 @@ public:
 	}
 
 private:
+
+	int mMaxCorners;
+	int mWinSize;
+	IplImage * mLastFrame;
+	IplImage * mThisFrame;
+	IplImage * mOutputFrame;
+
+	int mCornerCount;
+
+	CvPoint2D32f* mCorners;
+	CvPoint2D32f* mCornersB;
+
+	IplImage * eig_image;
+	IplImage * tmp_image;
+
+	char * mFeaturesFound;
+	float * mFeatureErrors;
+	IplImage * pyrA;
+	IplImage * pyrB;
+
+
+
 	/**
 	 * Filter tracks we aren't using any more. 
 	 */
