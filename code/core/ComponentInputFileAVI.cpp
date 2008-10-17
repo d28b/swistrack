@@ -60,7 +60,8 @@ void THISCLASS::OnStep() {
 	int framescount = (int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_FRAME_COUNT);
 	mOutputImage = cvQueryFrame(mCapture);
 	if (! mOutputImage) {
-		AddError(wxT("Could not read frame from AVI file."));
+		AddError(wxT("Finished reading AVI file."));
+		mCore->TriggerStop();
 		return;
 	}
 
