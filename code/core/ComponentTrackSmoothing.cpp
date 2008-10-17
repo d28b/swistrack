@@ -65,7 +65,15 @@ void THISCLASS::OnStep()
 	    AddError(wxT("There are no particles"));
 	    return;
 	  }
-	
+	for (DataStructureTracks::tTrackMap::iterator i = mWindows.begin();
+	     i != mWindows.end(); i++)
+	  {
+	    if (tracks->find(i->first) == tracks->end()) {
+	      mWindows.erase(i);
+	      mOutputTracks.erase(i->first);
+	    }
+	  }
+
 	//For each track, write data in the corresponding output file
 	DataStructureTracks::tTrackMap::iterator it = tracks->begin();
 	while (it != tracks->end())
