@@ -117,7 +117,6 @@ void THISCLASS::OnStep()
 	}
 	cvCvtColor(thisFrame, mThisFrame, CV_BGR2GRAY);
 	
-
 	if (mOutputFrame == NULL) {
 	  mOutputFrame = cvCreateImage(cvSize(mThisFrame->width, 
 					      mThisFrame->height), 
@@ -176,7 +175,6 @@ void THISCLASS::OnStep()
 	  if (mFeaturesFound[i] == 0 || mFeatureErrors[i] > 550) {
 	    printf("Error is %f\n", mFeatureErrors[i]);
 	  } else {
-	    printf("Got point\n");
 	    CvPoint p0 = cvPoint(cvRound(mCorners[i].x),
 				 cvRound(mCorners[i].y));
 	    CvPoint p1 = cvPoint(cvRound(mCornersB[i].x),
