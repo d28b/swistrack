@@ -124,7 +124,7 @@ void THISCLASS::FilterTracks()
        i != mTracks.end(); i++) {
     Track & track = i->second;
     if (mCore->mDataStructureInput.mFrameNumber - track.LastUpdateFrame() >= mFrameKillThreshold) {
-      cout << "Erasing " << track.mID;
+      cout << "Erasing (updated)" << track.mID << endl; 
       mTracks.erase(i);
 
     }
@@ -142,8 +142,10 @@ void THISCLASS::FilterTracks()
 	// kill a track - keep the older one
 	if (track1.mID < track2.mID) {
 	  trackIdsToErase.insert(track2.mID);
+	  cout << "Erasing (close to " << track1.mID << ")" << track2.mID << endl;
 	} else {
 	  trackIdsToErase.insert(track1.mID);
+	  cout << "Erasing (close to " << track2.mID << ")" << track1.mID << endl;
 	  break;
 	}
       }
@@ -151,7 +153,7 @@ void THISCLASS::FilterTracks()
   }
   for (set<int>::iterator i = trackIdsToErase.begin();
        i != trackIdsToErase.end(); i++) {
-    cout << "Erasing " << *i << endl;
+
     mTracks.erase(*i);
   }
   
