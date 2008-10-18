@@ -155,12 +155,12 @@ void THISCLASS::DataAssociation()
 */
 double THISCLASS::GetCost(int id, CvPoint2D32f p)
 {
-	if (mTracks.at(id).trajectory.size() == 0)
+	if (mTracks[id].trajectory.size() == 0)
 		return -1;
 	else
 	{
-		double dx = mTracks.at(id).trajectory.back().x - p.x;
-		double dy = mTracks.at(id).trajectory.back().y - p.y;
+		double dx = mTracks[id].trajectory.back().x - p.x;
+		double dy = mTracks[id].trajectory.back().y - p.y;
 		return dx*dx + dy*dy;
 	}
 }
@@ -171,5 +171,5 @@ double THISCLASS::GetCost(int id, CvPoint2D32f p)
 * \param p : Point to add to trajectory i (subpixel accuracy)
 */
 void THISCLASS::AddPoint(int i, CvPoint2D32f p){
-       mTracks.at(i).AddPoint(p, mCore->mDataStructureInput.mFrameNumber);
+       mTracks[i].AddPoint(p, mCore->mDataStructureInput.mFrameNumber);
 }

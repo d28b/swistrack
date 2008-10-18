@@ -311,7 +311,7 @@ void THISCLASS::DataAssociation()
 		    break;
 		  }
 		} else {
-		  track = &mTracks.at(trackIndexes[minDistanceI]);
+		  track = &mTracks[trackIndexes[minDistanceI]];
 		}
 		    
 		(particles->at(particleIndexes[minDistanceJ])).mID = track->mID;
@@ -352,7 +352,7 @@ double THISCLASS::GetCost(const Track & track, CvPoint2D32f p)
 * \param p : Point to add to trajectory i (subpixel accuracy)
 */
 void THISCLASS::AddPoint(int i, CvPoint2D32f p){
-  Track & track = mTracks.at(i);
+  Track & track = mTracks[i];
   assert(i == track.mID);
   track.AddPoint(p, mCore->mDataStructureInput.mFrameNumber);
 }

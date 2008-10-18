@@ -27,7 +27,7 @@ SRCS       = $(CSRCS) $(CXXSRCS)
 OBJS       = $(addsuffix .o, $(basename $(SRCS)))
 DEPS       = $(addsuffix .d, $(basename $(SRCS)))
 
-INCL_DIRS  = /usr/include /usr/include/opencv $(SUBDIRS)
+INCL_DIRS  = /usr/include /usr/include/opencv /opt/local/include/opencv $(SUBDIRS)
 LD_LIBS    = m stdc++ cv cxcore highgui
 
 ifneq ($(XVID_PREFIX),)
@@ -44,7 +44,7 @@ CXXFLAGS   = -g -Wall
 INCL_CMD   = $(patsubst %,-I%,$(INCL_DIRS))
 CPPFLAGS   = $(INCL_CMD) `wx-config --cxxflags`
 LD_CMD     = $(patsubst %,-l%,$(LD_LIBS))
-LDFLAGS    = -g $(LD_CMD) `wx-config --libs`
+LDFLAGS    = -g $(LD_CMD) `wx-config --libs` -L/opt/local/lib
 
 ifeq ($(MAKECMDGOALS),debug)
 CXXFLAGS  += -DDEBUG -DVERBOSITY=0

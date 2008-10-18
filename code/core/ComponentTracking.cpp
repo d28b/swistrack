@@ -43,7 +43,7 @@ void THISCLASS::OnStart() {
 		oldshared.push_back(0);
 		restingtraj.push_back(0);
 		mTracks[i] = Track(i);
-		mTracks.at(i).AddPoint(cvPoint2D32f(320, 240),
+		mTracks[i].AddPoint(cvPoint2D32f(320, 240),
 				       mCore->mDataStructureInput.mFrameNumber);
 
 	}
@@ -213,7 +213,7 @@ void THISCLASS::DataAssociation()
 				if (min_dist_id != -1 && dist < (avg_speed + mDistanceGate)*(avg_speed + mDistanceGate)){
 					//printf("Found candidate to swap with!\n");
 					shared.at(min_dist_id) = 0;
-					mTracks.at(min_dist_id).trajectory.pop_back();
+					mTracks[min_dist_id].trajectory.pop_back();
 					AddPoint(min_dist_id, t->second.trajectory.back());
 					ptargets.erase(t);
 					found = 1; // do only one at a time
@@ -239,11 +239,11 @@ void THISCLASS::DataAssociation()
 double THISCLASS::GetCost(int id, CvPoint2D32f p){
 
 	return(
-	          (mTracks.at(id).trajectory.back().x -p.x)*
-	          (mTracks.at(id).trajectory.back().x - p.x)
+	          (mTracks[id].trajectory.back().x -p.x)*
+	          (mTracks[id].trajectory.back().x - p.x)
 	          +
-	          (mTracks.at(id).trajectory.back().y - p.y)*
-	          (mTracks.at(id).trajectory.back().y - p.y)
+	          (mTracks[id].trajectory.back().y - p.y)*
+	          (mTracks[id].trajectory.back().y - p.y)
 	      );
 }
 
@@ -271,7 +271,7 @@ void THISCLASS::OnStep() {
 * \param p : Point to add to trajectory i (subpixel accuracy)
 */
 void THISCLASS::AddPoint(int i, CvPoint2D32f p){
-        mTracks.at(i).AddPoint(p, mCore->mDataStructureInput.mFrameNumber);
+        mTracks[i].AddPoint(p, mCore->mDataStructureInput.mFrameNumber);
 
 }
 
@@ -340,7 +340,7 @@ void THISCLASS::AssociateParticlesToCompetitors(int max_speed){
 
 		if (sqrt(min_dist) < max_speed)
 		{ // take a particle that is not to far away
-			mTracks.at(*min_dist_id).trajectory.pop_back(); // Remove the oldest trajectory point of the trajectory history
+			mTracks[*min_dist_id].trajectory.pop_back(); // Remove the oldest trajectory point of the trajectory history
 			AddPoint(*min_dist_id, p->mCenter); // Add the current point to the trajectory history
 			good_competitor_found = true; // In this case say we have found the good competitor
 		}
@@ -399,13 +399,13 @@ int THISCLASS::CountSharedTrajectories(std::vector<int>* shared)
 
 void THISCLASS::SetCritPoint(int id)
 {
-	mTracks.at(id).SetCritPoint(&mTracks.at(id).trajectory.back());
+	mTracks[id].SetCritPoint(&mTracks[id].trajectory.back());
 }
 
 
 CvPoint2D32f* THISCLASS::GetCritPoint(int id)
 {
-	return(&mTracks.at(id).critpoint);
+	return(&mTracks[id].critpoint);
 }
 
 double THISCLASS::GetDist(CvPoint2D32f *p1, CvPoint2D32f *p2)
@@ -426,9 +426,9 @@ double THISCLASS::GetDist(CvPoint2D32f *p1, CvPoint2D32f *p2)
 */
 CvPoint2D32f* THISCLASS::GetPos(int id)
 {
-	//printf("%f %f\n",mTracks.at(0).trajectory.at(0).x,mTracks.at(0).trajectory.at(0).y);
+	//printf("%f %f\n",mTracks[0].trajectory.at(0).x,mTracks.at(0).trajectory.at(0).y);
 	//	printf("Size %d\n",mTracks.at(id).trajectory.size());
-	return(&mTracks.at(id).trajectory.back());
+	return(&mTracks[id].trajectory.back());
 }
 
 void THISCLASS::OnStepCleanup() {
