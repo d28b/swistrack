@@ -1,6 +1,7 @@
 #include "Application.h"
 #define THISCLASS Application
-
+using namespace std;
+#include <iostream>
 #include <wx/app.h>
 #include <wx/image.h>
 #include <wx/filefn.h>
@@ -32,15 +33,31 @@ bool THISCLASS::OnInit() {
 		mSwisTrack->OpenFile(mApplicationFolder + wxT("/default.swistrack"), false, true);
 	}
 
+	// Show
+	mSwisTrack->Show(TRUE);
+	SetTopWindow(mSwisTrack);
+	if (argc == 3) {
+	  SwisTrackCore & core = *mSwisTrack->mSwisTrackCore;
+	  if (wxString(argv[2]) == wxT("--batch")) {
+	    cout << "Starting batch processing " << endl;
+	    core.TriggerStart();
+	    while (core.IsTriggerActive()) {
+	      core.Step();
+	    }
+	    core.Stop();
+	    exit(0);
+	  }
+	}
+	
+
+
 #if defined(__WIN16__) || defined(__WXMOTIF__)
 	int width, height;
 	frame->GetSize(&width, &height);
 	frame->SetSize(-1, -1, width, height);
 #endif
 
-	// Show
-	mSwisTrack->Show(TRUE);
-	SetTopWindow(mSwisTrack);
+
 	return TRUE;
 }
 
