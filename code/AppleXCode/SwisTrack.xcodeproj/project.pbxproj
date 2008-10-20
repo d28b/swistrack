@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E91A15E60EAD20ED009B8232 /* ComponentTrackSmoothing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91A15E40EAD20ED009B8232 /* ComponentTrackSmoothing.cpp */; };
+		E91A15EA0EAD2116009B8232 /* ConfigurationParameterDate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91A15E80EAD2116009B8232 /* ConfigurationParameterDate.cpp */; };
+		E91A15ED0EAD2136009B8232 /* ComponentOpticalFlowPyrLKTracking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91A15EB0EAD2136009B8232 /* ComponentOpticalFlowPyrLKTracking.cpp */; };
+		E91A15F00EAD2143009B8232 /* ComponentDynamicNearestNeighborTracking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91A15EE0EAD2143009B8232 /* ComponentDynamicNearestNeighborTracking.cpp */; };
 		E99BCF450E9ADAB90017989E /* CommunicationCommandHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCE9F0E9ADAB80017989E /* CommunicationCommandHandler.cpp */; };
 		E99BCF460E9ADAB90017989E /* CommunicationInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEA10E9ADAB80017989E /* CommunicationInterface.cpp */; };
 		E99BCF470E9ADAB90017989E /* CommunicationMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEA30E9ADAB80017989E /* CommunicationMessage.cpp */; };
@@ -135,6 +139,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E91A15E40EAD20ED009B8232 /* ComponentTrackSmoothing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentTrackSmoothing.cpp; sourceTree = "<group>"; };
+		E91A15E50EAD20ED009B8232 /* ComponentTrackSmoothing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentTrackSmoothing.h; sourceTree = "<group>"; };
+		E91A15E80EAD2116009B8232 /* ConfigurationParameterDate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConfigurationParameterDate.cpp; sourceTree = "<group>"; };
+		E91A15E90EAD2116009B8232 /* ConfigurationParameterDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigurationParameterDate.h; sourceTree = "<group>"; };
+		E91A15EB0EAD2136009B8232 /* ComponentOpticalFlowPyrLKTracking.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentOpticalFlowPyrLKTracking.cpp; sourceTree = "<group>"; };
+		E91A15EC0EAD2136009B8232 /* ComponentOpticalFlowPyrLKTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentOpticalFlowPyrLKTracking.h; sourceTree = "<group>"; };
+		E91A15EE0EAD2143009B8232 /* ComponentDynamicNearestNeighborTracking.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentDynamicNearestNeighborTracking.cpp; sourceTree = "<group>"; };
+		E91A15EF0EAD2143009B8232 /* ComponentDynamicNearestNeighborTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentDynamicNearestNeighborTracking.h; sourceTree = "<group>"; };
 		E99BCE930E9AD9A10017989E /* SwisTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwisTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E99BCE960E9AD9A10017989E /* SwisTrack-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SwisTrack-Info.plist"; sourceTree = "<group>"; };
 		E99BCE9F0E9ADAB80017989E /* CommunicationCommandHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = CommunicationCommandHandler.cpp; path = ../core/CommunicationCommandHandler.cpp; sourceTree = SOURCE_ROOT; };
@@ -416,6 +428,12 @@
 		E99BCE9E0E9ADAB80017989E /* core */ = {
 			isa = PBXGroup;
 			children = (
+				E91A15EE0EAD2143009B8232 /* ComponentDynamicNearestNeighborTracking.cpp */,
+				E91A15EF0EAD2143009B8232 /* ComponentDynamicNearestNeighborTracking.h */,
+				E91A15EB0EAD2136009B8232 /* ComponentOpticalFlowPyrLKTracking.cpp */,
+				E91A15EC0EAD2136009B8232 /* ComponentOpticalFlowPyrLKTracking.h */,
+				E91A15E40EAD20ED009B8232 /* ComponentTrackSmoothing.cpp */,
+				E91A15E50EAD20ED009B8232 /* ComponentTrackSmoothing.h */,
 				E99BCE9F0E9ADAB80017989E /* CommunicationCommandHandler.cpp */,
 				E99BCEA00E9ADAB80017989E /* CommunicationCommandHandler.h */,
 				E99BCEA10E9ADAB80017989E /* CommunicationInterface.cpp */,
@@ -585,6 +603,8 @@
 		E99BCFD70E9AF0530017989E /* gui */ = {
 			isa = PBXGroup;
 			children = (
+				E91A15E80EAD2116009B8232 /* ConfigurationParameterDate.cpp */,
+				E91A15E90EAD2116009B8232 /* ConfigurationParameterDate.h */,
 				E99BCFD80E9AF0530017989E /* AboutDialog.cpp */,
 				E99BCFD90E9AF0530017989E /* AboutDialog.h */,
 				E99BCFDA0E9AF0530017989E /* Application.cpp */,
@@ -904,6 +924,10 @@
 				E99BD0EA0E9AF08B0017989E /* cal_tran.c in Sources */,
 				E99BD0EC0E9AF08B0017989E /* cal_util.c in Sources */,
 				E99BD0EE0E9AF08B0017989E /* ecalmain.c in Sources */,
+				E91A15E60EAD20ED009B8232 /* ComponentTrackSmoothing.cpp in Sources */,
+				E91A15EA0EAD2116009B8232 /* ConfigurationParameterDate.cpp in Sources */,
+				E91A15ED0EAD2136009B8232 /* ComponentOpticalFlowPyrLKTracking.cpp in Sources */,
+				E91A15F00EAD2143009B8232 /* ComponentDynamicNearestNeighborTracking.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

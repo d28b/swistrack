@@ -44,7 +44,6 @@ public:
 
 	// Particles
 	DataStructureParticles::tParticleVector mParticles;			//!< The particles in pixel coordinates.
-	DataStructureParticles::tParticleVector mParticlesWorld;	//!< The particles in world coordinates.
 
 	// Trajectories
 	bool mTrajectories;				//!< Whether to draw the trajectories in this image. The current trajectories will be drawn.
