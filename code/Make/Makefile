@@ -27,7 +27,7 @@ SRCS       = $(CSRCS) $(CXXSRCS)
 OBJS       = $(addsuffix .o, $(basename $(SRCS)))
 DEPS       = $(addsuffix .d, $(basename $(SRCS)))
 
-INCL_DIRS  = /usr/include /usr/include/opencv /opt/local/include/opencv $(SUBDIRS)
+INCL_DIRS  = /usr/include /usr/include/opencv /opt/local/include/opencv /opt/local/include $(SUBDIRS)
 LD_LIBS    = m stdc++ cv cxcore highgui
 
 ifneq ($(XVID_PREFIX),)
