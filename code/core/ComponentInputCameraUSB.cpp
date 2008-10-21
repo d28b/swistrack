@@ -25,15 +25,12 @@ THISCLASS::~ComponentInputCameraUSB() {
 }
 
 void THISCLASS::OnStart() {
-	mCapture = cvCaptureFromCAM(-1);
+	int camera_number = GetConfigurationInt(wxT("CameraNumber"), 0);
+	if (camera_number<-1) {camera_number=-1; AddWarning(wxT("Using -1 as camera number."));}
+
+	mCapture = cvCaptureFromCAM(camera_number);
 	if (! mCapture) {
 		AddError(wxT("Could not open USB camera."));
-		return;
-	}
-
-	mOutputImage = cvQueryFrame(mCapture);
-	if (! mOutputImage) {
-		AddError(wxT("Could not retrieve image from USB camera."));
 		return;
 	}
 }
