@@ -56,6 +56,10 @@ endif
 .PHONY: all
 all: $(TARGET)
 
+SwisTrack.app: $(TARGET)
+	cd $(OUTPUTDIR) && tar xzf $(PROJROOT)/code/AppleXCode/SwisTrack.app.skeleton.tar.gz
+	cp $(OUTPUTDIR)/$(TARGET) $(OUTPUTDIR)/SwisTrack.app/Contents/MacOS/
+
 $(TARGET): $(OBJS)
 	$(CXX) $(OBJS) $(LDFLAGS) $(LDLIBS) -o $(OUTPUTDIR)/$(TARGET)
 
