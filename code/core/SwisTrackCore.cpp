@@ -208,8 +208,10 @@ bool THISCLASS::Start(bool productionmode) {
 	}
 
 	// Notify the clients
-	CommunicationMessage mstart(wxT("START"));
-	mCommunicationInterface->Send(&mstart);
+	if (mCommunicationInterface) {
+	  CommunicationMessage mstart(wxT("START"));
+	  mCommunicationInterface->Send(&mstart);
+	}
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterStart);
@@ -255,8 +257,10 @@ bool THISCLASS::Stop() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mstop(wxT("STOP"));
-	mCommunicationInterface->Send(&mstop);
+	if (mCommunicationInterface) {
+	  CommunicationMessage mstop(wxT("STOP"));
+	  mCommunicationInterface->Send(&mstop);
+	}
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterStop);
@@ -291,8 +295,10 @@ bool THISCLASS::Step() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mstart(wxT("STEP_START"));
-	mCommunicationInterface->Send(&mstart);
+	if (mCommunicationInterface) {
+	  CommunicationMessage mstart(wxT("STEP_START"));
+	  mCommunicationInterface->Send(&mstart);
+	}
 
 	// Reset the step durations
 	it = mDeployedComponents.begin();
@@ -343,8 +349,10 @@ bool THISCLASS::Step() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mstop(wxT("STEP_STOP"));
-	mCommunicationInterface->Send(&mstop);
+	if (mCommunicationInterface) {
+	  CommunicationMessage mstop(wxT("STEP_STOP"));
+	  mCommunicationInterface->Send(&mstop);
+	}
 
 	// Notify the displays (OnAfterStep)
 	it = mDeployedComponents.begin();
@@ -420,8 +428,10 @@ void THISCLASS::TriggerStart() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mstart(wxT("TRIGGER_START"));
-	mCommunicationInterface->Send(&mstart);
+	if (mCommunicationInterface) {
+	  CommunicationMessage mstart(wxT("TRIGGER_START"));
+	  mCommunicationInterface->Send(&mstart);
+	}
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterTriggerStart);
@@ -453,8 +463,10 @@ void THISCLASS::TriggerStop() {
 	}
 
 	// Notify the clients
-	CommunicationMessage mstop(wxT("TRIGGER_STOP"));
-	mCommunicationInterface->Send(&mstop);
+	if (mCommunicationInterface) {
+	  CommunicationMessage mstop(wxT("TRIGGER_STOP"));
+	  mCommunicationInterface->Send(&mstop);
+	}
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterTriggerStop);
