@@ -25,6 +25,7 @@
 #include "ComponentThresholdGray.h"
 #include "ComponentThresholdColorCommon.h"
 #include "ComponentThresholdColorIndependent.h"
+#include "ComponentAdaptiveThreshold.h"
 #include "ComponentBinaryDilation.h"
 #include "ComponentBinaryErosion.h"
 #include "ComponentBinaryMask.h"
@@ -95,6 +96,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentThresholdColorCommon(this));
 	mAvailableComponents.push_back(new ComponentThresholdColorIndependent(this));
 	mAvailableComponents.push_back(new ComponentDoubleThresholdColorIndependent(this));
+	mAvailableComponents.push_back(new ComponentAdaptiveThreshold(this));
 	mAvailableComponents.push_back(new ComponentBinaryDilation(this));
 	mAvailableComponents.push_back(new ComponentBinaryErosion(this));
 	mAvailableComponents.push_back(new ComponentBinaryMask(this));
