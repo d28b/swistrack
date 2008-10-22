@@ -19,86 +19,86 @@ void usage() {
   cout << "  ./SwisTrack something.swistrack" << endl;
   cout << "  ./SwisTrack --batch something.swistrack" << endl;
 }
+int runBatch(char * filename) {
+  cout << "Starting batch processing " << endl;
+  SwisTrackCore * core = new SwisTrackCore(wxT("./Components"));
+  wxFileName fn(wxString::FromAscii(filename));
+  wxFileName::SetCwd(wxT(".."));
+  if (! fn.IsFileReadable()) {
+    cout << "Could not read " << fn.GetFullPath().ToAscii() << endl;
+    return -1;
+  }
+  ConfigurationReaderXML cr;
+  if (! cr.Open(fn.GetFullPath())) {
+    cout << "Could not read " << fn.GetFullPath().ToAscii() << " Syntax error? " << endl;
+    return -1;
+  }
+  cr.ReadComponents(core);
+  ErrorList & errors = cr.mErrorList;
+  for (ErrorList::tList::iterator it = errors.mList.begin(); it != errors.mList.end(); it++) {
+    cout << "Error " << it->mLineNumber << ": " << it->mMessage << endl; 
+  }
+  if (errors.mList.size() != 0) {
+    return -1;
+  }
+  for (std::list<Component*>::const_iterator it = core->GetDeployedComponents()->begin();
+       it != core->GetDeployedComponents()->end(); it++) {
+    Component * component = *it;
+    cout << "Comp: " <<  component->mDisplayName.ToAscii() << endl;
+    if (component->mStatusHasError) {
+      cout << "Has an error" << endl;
+      return -1;
+    }
+    if (component->mStatusHasWarning) {
+      cout << "Has a warning" << endl;
+      return -1;
+    }
+  }
+  if (core->GetDeployedComponents()->size() == 0) {
+    cout << "No available components." << endl;
+    return -1;
+  }
+  cout << "Running with " << core->GetDeployedComponents()->size() << " components." << endl;
+  core->TriggerStart();
+  core->Start(false);
+  for (std::list<Component*>::const_iterator it = core->GetDeployedComponents()->begin();
+       it != core->GetDeployedComponents()->end(); it++) {
+    Component * component = *it;
+    if (!component->mStarted) {
+      cout << component->mDisplayName.ToAscii() << " not started." << endl;
+    }
+    
+    for (std::list<StatusItem>::iterator it = component->mStatus.begin(); 
+	 it != component->mStatus.end(); it++) {
+      StatusItem & item = *it;
+      cout <<"Error: " << item.mMessage.ToAscii() << endl;
+    }
+    if (component->mStatusHasError) {
+      cout << "Has an error" << endl;
+      return -1;
+    }
+    if (component->mStatusHasWarning) {
+      cout << "Has a warning" << endl;
+    }
+  }
+  
+  while (core->IsTriggerActive()) {
+    core->Step();
+  }
+  core->Stop();
+  exit(0);
+}
 int main( int argc, char **argv) {
   if (argc <= 2) {
     return wxEntry(argc, argv);
-  } else if (argc == 3) {
-    if (wxString::FromAscii(argv[1]) == wxT("--batch")) {
-      cout << "Starting batch processing " << endl;
-      SwisTrackCore * core = new SwisTrackCore(wxT("./Components"));
-      wxFileName fn(wxString::FromAscii(argv[2]));
-      if (! fn.IsFileReadable()) {
-	cout << "Could not read " << fn.GetFullPath().ToAscii() << endl;
-	return -1;
-      }
-      ConfigurationReaderXML cr;
-      if (! cr.Open(fn.GetFullPath())) {
-	cout << "Could not read " << fn.GetFullPath().ToAscii() << " Syntax error? " << endl;
-	return -1;
-      }
-      cr.ReadComponents(core);
-      ErrorList & errors = cr.mErrorList;
-      for (ErrorList::tList::iterator it = errors.mList.begin(); it != errors.mList.end(); it++) {
-	cout << "Error " << it->mLineNumber << ": " << it->mMessage << endl; 
-      }
-      if (errors.mList.size() != 0) {
-	return -1;
-      }
-      for (std::list<Component*>::const_iterator it = core->GetDeployedComponents()->begin();
-	   it != core->GetDeployedComponents()->end(); it++) {
-	Component * component = *it;
-	cout << "Comp: " <<  component->mDisplayName.ToAscii() << endl;
-	if (component->mStatusHasError) {
-	  cout << "Has an error" << endl;
-	  return -1;
-	}
-	if (component->mStatusHasWarning) {
-	  cout << "Has a warning" << endl;
-	  return -1;
-	}
-      }
-      if (core->GetDeployedComponents()->size() == 0) {
-	cout << "No available components." << endl;
-	return -1;
-      }
-      cout << "Running with " << core->GetDeployedComponents()->size() << " components." << endl;
-      core->TriggerStart();
-      core->Start(false);
-      for (std::list<Component*>::const_iterator it = core->GetDeployedComponents()->begin();
-	   it != core->GetDeployedComponents()->end(); it++) {
-	Component * component = *it;
-	if (!component->mStarted) {
-	  cout << component->mDisplayName.ToAscii() << " not started." << endl;
-	}
-
-	for (std::list<StatusItem>::iterator it = component->mStatus.begin(); 
-	     it != component->mStatus.end(); it++) {
-	  StatusItem & item = *it;
-	  cout <<"Error: " << item.mMessage.ToAscii() << endl;
-	}
-	if (component->mStatusHasError) {
-	  cout << "Has an error" << endl;
-	  return -1;
-	}
-	if (component->mStatusHasWarning) {
-	  cout << "Has a warning" << endl;
-	}
-      }
-
-      while (core->IsTriggerActive()) {
-	core->Step();
-      }
-      core->Stop();
-      exit(0);
-    } else {
-      usage();
-      return -1;
-    }
+  } else if ((argc == 3) && 
+	     (wxString::FromAscii(argv[1]) == wxT("--batch"))) {
+    runBatch(argv[2]);
   } else {
     usage();
     return -1;
   }
-}
+  }
 
 bool THISCLASS::OnInit() {
 	// Set some main application parameters.
