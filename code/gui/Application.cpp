@@ -23,7 +23,6 @@ int runBatch(char * filename) {
   cout << "Starting batch processing " << endl;
   SwisTrackCore * core = new SwisTrackCore(wxT("./Components"));
   wxFileName fn(wxString::FromAscii(filename));
-  wxFileName::SetCwd(wxT(".."));
   if (! fn.IsFileReadable()) {
     cout << "Could not read " << fn.GetFullPath().ToAscii() << endl;
     return -1;
@@ -33,6 +32,7 @@ int runBatch(char * filename) {
     cout << "Could not read " << fn.GetFullPath().ToAscii() << " Syntax error? " << endl;
     return -1;
   }
+  wxFileName::SetCwd(wxT(".."));
   cr.ReadComponents(core);
   ErrorList & errors = cr.mErrorList;
   for (ErrorList::tList::iterator it = errors.mList.begin(); it != errors.mList.end(); it++) {
