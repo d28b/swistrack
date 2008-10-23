@@ -86,6 +86,8 @@ void THISCLASS::OnStep()
     if (closestTrack == NULL || minSquareDist > mMinNewTrackDistanceSquared) {
       int id = mNextTrackId++;
       mTracks[id] = Track(id);
+      mTracks[id].AddPoint(pIt->mCenter, 
+			   mCore->mDataStructureInput.mFrameNumber);
       mTrackers[id] = camshift();
       createTracker(&mTrackers[id], inputImage);
       setVmin(&mTrackers[id], mVmin);
