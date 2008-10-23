@@ -6,6 +6,7 @@ using namespace std;
 #include <set>
 
 #include "DisplayEditor.h"
+#include "utils.h"
 
 THISCLASS::ComponentDynamicNearestNeighborTracking(SwisTrackCore *stc):
 		Component(stc, wxT("DynamicNearestNeighborTracking")),
@@ -260,9 +261,3 @@ void THISCLASS::AddPoint(int i, CvPoint2D32f p){
   track.AddPoint(p, mCore->mDataStructureInput.mFrameNumber);
 }
 
-double squareDistance(CvPoint2D32f p1, CvPoint2D32f p2)
- {
-  double dx = p1.x - p2.x;
-  double dy = p1.y - p2.y;
-  return dx*dx + dy*dy;
-}

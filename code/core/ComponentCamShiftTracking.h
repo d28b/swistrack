@@ -30,8 +30,14 @@ public:
 	}
 
 private:
+	int mNextTrackId;
 	camshift cs;
-	DataStructureParticles::tParticleVector *particles;
+	DataStructureParticles::tParticleVector mParticles;
+	DataStructureTracks::tTrackMap mTracks;
+	std::map<int, camshift> mTrackers;  // track id to tracker
+	
+	
+
 	double** distanceArray;
 	int maxParticles;
 
@@ -42,7 +48,6 @@ private:
 	// Parameters
 	unsigned int mWindowSize; //!< (configuration) The size of the window to cache
 	int mMaxNumber;		//!< (configuration) The maximum number of objects that are to track.
-	DataStructureTracks::tTrackMap mTracks;
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 };
 

@@ -5,6 +5,8 @@ using namespace std;
 
 #include "DisplayEditor.h"
 
+#include "utils.h"
+
 THISCLASS::ComponentCamShiftTracking(SwisTrackCore *stc):
 		Component(stc, wxT("CamShiftTracking")),
 		mOutputImage(0),
@@ -49,23 +51,36 @@ void THISCLASS::OnStep()
     AddError(wxT("No input image."));
     return;
   }
-
+  if (mCore->mDataStructureParticles.mParticles == NULL) {
+    AddError(wxT("No input particles!"));
+    return;
+  }
+  const DataStructureParticles::tParticleVector & particles = *mCore->mDataStructureParticles.mParticles;
+  for (DataStructureParticles::tParticleVector::const_iterator pIt = 
+	 particles.begin();
+       pIt != particles.end(); pIt++) {
+    assert(pIt->mID == -1); // (particle should not be associated)
+    float minSquareDist = std::numeric_limits<float>::max();
+    Track * closestTrack = NULL;
+    for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
+	 i != mTracks.end(); i++) {
+      float distance = squareDistance(i->second.trajectory.back(), 
+				      pIt->mCenter);
+      if (distance < minSquareDist) {
+	minSquareDist = distance;
+	closestTrack = &i->second;
+      }
+    }
+  }  
   if (mOutputImage == 0) {
     //CvRect start = cvRect(452, 493, 75, 110);
     CvRect start = cvRect(452, 493, 20, 20);
+    cout << "Restarting tracking." << endl;
     createTracker(&cs, inputImage);
     startTracking(&cs, inputImage, &start);
   }
 
   CvBox2D box = track(&cs, inputImage);
-  /*
-  if (!mTracker.track_object(inputImage)) {
-    AddError(wxT("Couldn't track."));
-  }
-  if (!mTracker.update_histogram(inputImage)) {
-    AddError(wxT("Couldn't update histogram."));
-    }*/
-
   // update the tracks store locally to this component
   //mCore->mDataStructureTracks.mTracks = &mTracks;
 
