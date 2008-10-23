@@ -39,6 +39,7 @@ void THISCLASS::OnStart()
 
 void THISCLASS::OnReloadConfiguration()
 {
+  OnStop();
 }
 
 void THISCLASS::OnStep()
