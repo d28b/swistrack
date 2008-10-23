@@ -36,6 +36,7 @@
 #include "ComponentNearestNeighborTracking.h"
 #include "ComponentDynamicNearestNeighborTracking.h"
 #include "ComponentOpticalFlowPyrLKTracking.h"
+#include "ComponentCamShiftTracking.h"
 #include "ComponentTrackSmoothing.h"
 #include "ComponentIDReaderRing.h"
 #include "ComponentSimulationParticles.h"
@@ -111,6 +112,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentNearestNeighborTracking(this));
 	mAvailableComponents.push_back(new ComponentDynamicNearestNeighborTracking(this));
 	mAvailableComponents.push_back(new ComponentOpticalFlowPyrLKTracking(this));
+	mAvailableComponents.push_back(new ComponentCamShiftTracking(this));
 	mAvailableComponents.push_back(new ComponentTrackSmoothing(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));

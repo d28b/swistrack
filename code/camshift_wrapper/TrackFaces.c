@@ -34,7 +34,7 @@ void captureVideoFrame();
 //////////////////////////////////
 // main()
 //
-void main( int argc, char** argv )
+void main1( int argc, char** argv )
 {
 	CvRect * pFaceRect = 0;
 	if( !initAll() ) exitProgram(-1);

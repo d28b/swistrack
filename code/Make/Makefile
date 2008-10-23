@@ -7,6 +7,7 @@
 TARGET     = SwisTrack
 PROJROOT   = ..
 SUBDIRS    = $(PROJROOT)/core \
+	$(PROJROOT)/camshift_wrapper \
 	$(PROJROOT)/libtsai \
 	$(PROJROOT)/libtsai/tsaisrc \
 	$(PROJROOT)/libtsai/mathsrc \
