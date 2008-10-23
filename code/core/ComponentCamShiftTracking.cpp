@@ -53,16 +53,7 @@ void THISCLASS::UpdateTrackers(IplImage * inputImage)
 			       mCore->mDataStructureInput.mFrameNumber);
   }
 }
-void THISCLASS::OnStep()
-{	
-  IplImage *inputImage = mCore->mDataStructureImageColor.mImage;
-  if (! inputImage) {
-    AddError(wxT("No input image."));
-    return;
-  }
-
-  UpdateTrackers(inputImage);
-
+void THISCLASS::AddNewTracks(IplImage * inputImage) {
   if (mCore->mDataStructureParticles.mParticles == NULL) {
     AddError(wxT("No input particles!"));
     return;
@@ -98,7 +89,19 @@ void THISCLASS::OnStep()
       startTracking(&mTrackers[id], inputImage, &start);
     }
   }
+}
 
+void THISCLASS::OnStep()
+{	
+  IplImage *inputImage = mCore->mDataStructureImageColor.mImage;
+  if (! inputImage) {
+    AddError(wxT("No input image."));
+    return;
+  }
+
+  UpdateTrackers(inputImage);
+  
+  AddNewTracks(inputImage);
 
   // update the tracks store locally to this component
   mCore->mDataStructureTracks.mTracks = &mTracks;
