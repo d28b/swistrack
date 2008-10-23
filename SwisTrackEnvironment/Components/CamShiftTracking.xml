@@ -20,5 +20,21 @@
 	    <default>50</default>
 	    <reloadable>false</reloadable>
 	  </parameter>
+	  <parameter type="integer">
+	    <name>InitialWindowSize</name>
+	    <label>Initial Window Size when making new tracks</label>
+	    <unit></unit>
+	    <default>100</default>
+	    <reloadable>false</reloadable>
+	  </parameter>
+	  <parameter type="double">
+	    <name>MinNewTrackDistance</name>
+	    <label>Minimum Distance for track creation</label>
+	    <min>0</min>
+	    <max>1000</max>
+	    <default>100</default>
+	    <slider>true</slider>
+	    <reloadable>true</reloadable>
+	  </parameter>
 	</configuration>
 </swistrackcomponent>

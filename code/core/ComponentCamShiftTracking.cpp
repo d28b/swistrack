@@ -29,19 +29,20 @@ THISCLASS::~ComponentCamShiftTracking()
 
 void THISCLASS::OnStart()
 {
-  
+  THISCLASS::OnReloadConfiguration(); 
 
-  setVmin(&cs, GetConfigurationInt(wxT("VMin"), 60));
-  setSmin(&cs, GetConfigurationInt(wxT("SMin"), 50));
-  //mTracker.set_window(cvRect(452, 493, 75, 110));
-  //int hist_sizes[] = {30, 32, 50};
-  //mTracker.set_hist_dims(1, hist_sizes);
-  //mTracker.set_hist_bin_range(0, 0, 180);
 }
 
 void THISCLASS::OnReloadConfiguration()
 {
-  OnStop();
+
+  mVmin = GetConfigurationInt(wxT("VMin"), 60);
+  mSmin = GetConfigurationInt(wxT("SMin"), 50);
+  mInitialWindowSize = GetConfigurationInt(wxT("InitialWindowSize"), 60);
+
+  mMinNewTrackDistanceSquared = 
+    pow(GetConfigurationDouble(wxT("MinNewTrackDistance"), 100), 2);
+
 }
 void THISCLASS::UpdateTrackers(IplImage * inputImage)
 {
@@ -82,27 +83,20 @@ void THISCLASS::OnStep()
 	closestTrack = &i->second;
       }
     }
-    if (closestTrack == NULL || minSquareDist < mMinNewTrackDistanceSquared) {
+    if (closestTrack == NULL || minSquareDist > mMinNewTrackDistanceSquared) {
       int id = mNextTrackId++;
       mTracks[id] = Track(id);
       mTrackers[id] = camshift();
       createTracker(&mTrackers[id], inputImage);
+      setVmin(&mTrackers[id], mVmin);
+      setSmin(&mTrackers[id], mSmin);
       CvRect start = rectByCenter(pIt->mCenter.x, 
 				  pIt->mCenter.y,
-				  100, 100);
+				  mInitialWindowSize, mInitialWindowSize);
       startTracking(&mTrackers[id], inputImage, &start);
-      cout << "Adding track " << id << endl;
     }
   }
-  if (mOutputImage == 0) {
-    //CvRect start = cvRect(452, 493, 75, 110);
-    CvRect start = cvRect(452, 493, 20, 20);
-    cout << "Restarting tracking." << endl;
-    createTracker(&cs, inputImage);
-    startTracking(&cs, inputImage, &start);
-  }
 
-  CvBox2D box = track(&cs, inputImage);
 
   // update the tracks store locally to this component
   mCore->mDataStructureTracks.mTracks = &mTracks;
@@ -117,14 +111,9 @@ void THISCLASS::OnStep()
 
     for (std::map<int, camshift>::iterator i = mTrackers.begin();
 	 i != mTrackers.end(); i++) {    
-      cout << "Drawing the track " << 
-	i->second.faceBox.center.x << "," << 
-	i->second.faceBox.center.y << endl;
       cvEllipseBox(mOutputImage, i->second.faceBox,
 		   CV_RGB(255,0,0), 3, CV_AA, 0 );
     }
-    cvEllipseBox(mOutputImage, box,
-		 CV_RGB(255,0,0), 3, CV_AA, 0 );
 
     de.SetMainImage(mOutputImage);
     de.SetTrajectories(true);
@@ -136,8 +125,12 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-   releaseTracker(&cs);
    cvReleaseImage(&mOutputImage);
+   mTracks.clear();
+   for (std::map<int, camshift>::iterator i = mTrackers.begin();
+	i != mTrackers.end(); i++) {    
+     releaseTracker(&i->second);
+   }
    mOutputImage = 0;
 }
 
