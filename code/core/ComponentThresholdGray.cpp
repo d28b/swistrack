@@ -33,6 +33,7 @@ void THISCLASS::OnReloadConfiguration() {
 void THISCLASS::OnStep() {
 	IplImage *inputimage = mCore->mDataStructureImageGray.mImage;
 	if (! inputimage) {
+		AddError(wxT("No input image."));
 		return;
 	}
 
