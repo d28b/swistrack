@@ -29,8 +29,8 @@ void THISCLASS::OnStart()
 {
   
 
-  setVmin(GetConfigurationInt(wxT("VMin"), 60));
-  setSmin(GetConfigurationInt(wxT("SMin"), 50));
+  setVmin(&cs, GetConfigurationInt(wxT("VMin"), 60));
+  setSmin(&cs, GetConfigurationInt(wxT("SMin"), 50));
   //mTracker.set_window(cvRect(452, 493, 75, 110));
   //int hist_sizes[] = {30, 32, 50};
   //mTracker.set_hist_dims(1, hist_sizes);
@@ -53,11 +53,11 @@ void THISCLASS::OnStep()
   if (mOutputImage == 0) {
     //CvRect start = cvRect(452, 493, 75, 110);
     CvRect start = cvRect(452, 493, 20, 20);
-    createTracker(inputImage);
-    startTracking(inputImage, &start);
+    createTracker(&cs, inputImage);
+    startTracking(&cs, inputImage, &start);
   }
 
-  CvBox2D box = track(inputImage);
+  CvBox2D box = track(&cs, inputImage);
   /*
   if (!mTracker.track_object(inputImage)) {
     AddError(wxT("Couldn't track."));
@@ -100,7 +100,7 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-   releaseTracker();
+   releaseTracker(&cs);
    cvReleaseImage(&mOutputImage);
    mOutputImage = 0;
 }

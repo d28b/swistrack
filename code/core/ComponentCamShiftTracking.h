@@ -30,7 +30,7 @@ public:
 	}
 
 private:
-
+	camshift cs;
 	DataStructureParticles::tParticleVector *particles;
 	double** distanceArray;
 	int maxParticles;

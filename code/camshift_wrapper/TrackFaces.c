@@ -26,8 +26,8 @@ IplImage  * pVideoFrameCopy = 0;
 
 
 //// Function definitions
-int initAll();
-void exitProgram(int code);
+int initAll(camshift * cs);
+void exitProgram(camshift * cs, int code);
 void captureVideoFrame();
 
 
@@ -36,8 +36,9 @@ void captureVideoFrame();
 //
 void main1( int argc, char** argv )
 {
+  camshift cs;
 	CvRect * pFaceRect = 0;
-	if( !initAll() ) exitProgram(-1);
+	if( !initAll(&cs) ) exitProgram(&cs, -1);
 
 	// Capture and display video frames until a face
 	// is detected
@@ -49,14 +50,14 @@ void main1( int argc, char** argv )
 
 		// Show the display image
 		cvShowImage( DISPLAY_WINDOW, pVideoFrameCopy );
-		if( (char)27==cvWaitKey(1) ) exitProgram(0);
+		if( (char)27==cvWaitKey(1) ) exitProgram(&cs, 0);
 
 		// exit loop when a face is detected
 		if(pFaceRect) break;
 	}
 
 	// initialize tracking
-	startTracking(pVideoFrameCopy, pFaceRect);
+	startTracking(&cs, pVideoFrameCopy, pFaceRect);
 
 	// Track the detected face using CamShift
 	while( 1 )
@@ -67,7 +68,7 @@ void main1( int argc, char** argv )
 		captureVideoFrame();
 
 		// track the face in the new video frame
-		faceBox = track(pVideoFrameCopy);
+		faceBox = track(&cs, pVideoFrameCopy);
 
 		// outline face ellipse
 		cvEllipseBox(pVideoFrameCopy, faceBox,
@@ -76,14 +77,14 @@ void main1( int argc, char** argv )
 		if( (char)27==cvWaitKey(1) ) break;
 	}
 
-	exitProgram(0);
+	exitProgram(&cs, 0);
 }
 
 
 //////////////////////////////////
 // initAll()
 //
-int initAll()
+int initAll(camshift * cs)
 {
 	if( !initCapture() ) return 0;
 	if( !initFaceDet(OPENCV_ROOT
@@ -103,11 +104,11 @@ int initAll()
 
 	// Initialize tracker
 	captureVideoFrame();
-	if( !createTracker(pVideoFrameCopy) ) return 0;
+	if( !createTracker(cs, pVideoFrameCopy) ) return 0;
 
 	// Set Camshift parameters
-	setVmin(60);
-	setSmin(50);
+	setVmin(cs, 60);
+	setSmin(cs, 50);
 
 	return 1;
 }
@@ -116,7 +117,7 @@ int initAll()
 //////////////////////////////////
 // exitProgram()
 //
-void exitProgram(int code)
+void exitProgram(camshift * cs, int code)
 {
 	// Release resources allocated in this file
 	cvDestroyWindow( DISPLAY_WINDOW );
@@ -125,7 +126,7 @@ void exitProgram(int code)
 	// Release resources allocated in other project files
 	closeCapture();
 	closeFaceDet();
-	releaseTracker();
+	releaseTracker(cs);
 
 	exit(code);
 }
@@ -134,11 +135,11 @@ void exitProgram(int code)
 //////////////////////////////////
 // captureVideoFrame()
 //
-void captureVideoFrame()
+void captureVideoFrame(camshift * cs)
 {
 	// Capture the next frame
 	IplImage  * pVideoFrame = nextVideoFrame();
-	if( !pVideoFrame ) exitProgram(-1);
+	if( !pVideoFrame ) exitProgram(cs, -1);
 
 	// Copy it to the display image, inverting it if needed
 	if( !pVideoFrameCopy )

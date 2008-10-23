@@ -8,44 +8,30 @@
 #include <stdio.h>
 #include "camshift_wrapper.h"
 
-
-// Parameters
-int   nHistBins = 30;                 // number of histogram bins
-float rangesArr[] = {0,180};          // histogram range
-int vmin = 65, vmax = 256, smin = 55; // limits for calculating hue
-
-
-// File-level variables
-IplImage * pHSVImg  = 0; // the input image converted to HSV color mode
-IplImage * pHueImg  = 0; // the Hue channel of the HSV image
-IplImage * pMask    = 0; // this image is used for masking pixels
-IplImage * pProbImg = 0; // the face probability estimates for each pixel
-CvHistogram * pHist = 0; // histogram of hue in the original face image
-
-CvRect prevFaceRect;  // location of face in previous frame
-CvBox2D faceBox;      // current face-location estimate
-
-
-int nFrames = 0;
-
-
 // Declarations for internal functions
-void updateHueImage(const IplImage * pImg);
+void updateHueImage(camshift * cs, const IplImage * pImg);
 
 
 //////////////////////////////////
 // createTracker()
 //
-int createTracker(const IplImage * pImg)
+int createTracker(camshift * cs, const IplImage * pImg)
 {
 	// Allocate the main data structures ahead of time
-	float * pRanges = rangesArr;
-	pHSVImg  = cvCreateImage( cvGetSize(pImg), 8, 3 );
-	pHueImg  = cvCreateImage( cvGetSize(pImg), 8, 1 );
-	pMask    = cvCreateImage( cvGetSize(pImg), 8, 1 );
-	pProbImg = cvCreateImage( cvGetSize(pImg), 8, 1 );
+	float * pRanges = cs->rangesArr;
+	cs->nHistBins = 30;
+	cs->rangesArr[0] = 0;
+	cs->rangesArr[1] = 180;
+	cs->vmin = 65;
+	cs->vmax = 256;
+	cs->smin = 55;
+	cs->nFrames = 0;
+	cs->pHSVImg  = cvCreateImage( cvGetSize(pImg), 8, 3 );
+	cs->pHueImg  = cvCreateImage( cvGetSize(pImg), 8, 1 );
+	cs->pMask    = cvCreateImage( cvGetSize(pImg), 8, 1 );
+	cs->pProbImg = cvCreateImage( cvGetSize(pImg), 8, 1 );
 
-	pHist = cvCreateHist( 1, &nHistBins, CV_HIST_ARRAY, &pRanges, 1 );
+	cs->pHist = cvCreateHist( 1, &cs->nHistBins, CV_HIST_ARRAY, &pRanges, 1 );
 
 	return 1;
 }
@@ -54,100 +40,101 @@ int createTracker(const IplImage * pImg)
 //////////////////////////////////
 // releaseTracker()
 //
-void releaseTracker()
+void releaseTracker(camshift * cs)
 {
 	// Release all tracker resources
-	cvReleaseImage( &pHSVImg );
-	cvReleaseImage( &pHueImg );
-	cvReleaseImage( &pMask );
-	cvReleaseImage( &pProbImg );
+	cvReleaseImage( &cs->pHSVImg );
+	cvReleaseImage( &cs->pHueImg );
+	cvReleaseImage( &cs->pMask );
+	cvReleaseImage( &cs->pProbImg );
 
-	cvReleaseHist( &pHist );
+	cvReleaseHist( &cs->pHist );
 }
 
 
 //////////////////////////////////
 // startTracking()
 //
-void startTracking(IplImage * pImg, CvRect * pFaceRect)
+void startTracking(camshift * cs, IplImage * pImg, CvRect * pFaceRect)
 {
 	float maxVal = 0.f;
 
 	// Make sure internal data structures have been allocated
-	if( !pHist ) createTracker(pImg);
+	if( !cs->pHist ) createTracker(cs, pImg);
 
 	// Create a new hue image
-	updateHueImage(pImg);
+	updateHueImage(cs, pImg);
 
 	// Create a histogram representation for the face
-    cvSetImageROI( pHueImg, *pFaceRect );
-    cvSetImageROI( pMask,   *pFaceRect );
-    cvCalcHist( &pHueImg, pHist, 0, pMask );
-    cvGetMinMaxHistValue( pHist, 0, &maxVal, 0, 0 );
-    cvConvertScale( pHist->bins, pHist->bins, maxVal? 255.0/maxVal : 0, 0 );
-    cvResetImageROI( pHueImg );
-    cvResetImageROI( pMask );
+    cvSetImageROI( cs->pHueImg, *pFaceRect );
+    cvSetImageROI( cs->pMask,   *pFaceRect );
+    cvCalcHist( &cs->pHueImg, cs->pHist, 0, cs->pMask );
+    cvGetMinMaxHistValue( cs->pHist, 0, &maxVal, 0, 0 );
+    cvConvertScale( cs->pHist->bins, cs->pHist->bins, 
+		    maxVal? 255.0/maxVal : 0, 0 );
+    cvResetImageROI( cs->pHueImg );
+    cvResetImageROI( cs->pMask );
 
 	// Store the previous face location
-	prevFaceRect = *pFaceRect;
+	cs->prevFaceRect = *pFaceRect;
 }
 
 
 //////////////////////////////////
 // track()
 //
-CvBox2D track(IplImage * pImg)
+CvBox2D track(camshift * cs, IplImage * pImg)
 {
 	CvConnectedComp components;
 
 	// Create a new hue image
-	updateHueImage(pImg);
+	updateHueImage(cs, pImg);
 
 	// Create a probability image based on the face histogram
-	cvCalcBackProject( &pHueImg, pProbImg, pHist );
-    cvAnd( pProbImg, pMask, pProbImg, 0 );
+	cvCalcBackProject( &cs->pHueImg, cs->pProbImg, cs->pHist );
+    cvAnd( cs->pProbImg, cs->pMask, cs->pProbImg, 0 );
 
 	// Use CamShift to find the center of the new face probability
-    cvCamShift( pProbImg, prevFaceRect,
+    cvCamShift( cs->pProbImg, cs->prevFaceRect,
                 cvTermCriteria( CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 10, 1 ),
-                &components, &faceBox );
+                &components, &cs->faceBox );
 
 	// Update face location and angle
-    prevFaceRect = components.rect;
-	faceBox.angle = -faceBox.angle;
+    cs->prevFaceRect = components.rect;
+	cs->faceBox.angle = -cs->faceBox.angle;
 
-	return faceBox;
+	return cs->faceBox;
 }
 
 
 //////////////////////////////////
 // updateHueImage()
 //
-void updateHueImage(const IplImage * pImg)
+void updateHueImage(camshift * cs, const IplImage * pImg)
 {
 	// Convert to HSV color model
-	cvCvtColor( pImg, pHSVImg, CV_BGR2HSV );
+	cvCvtColor( pImg, cs->pHSVImg, CV_BGR2HSV );
 
 	// Mask out-of-range values
-	cvInRangeS( pHSVImg, cvScalar(0, smin, MIN(vmin,vmax), 0),
-	            cvScalar(180, 256, MAX(vmin,vmax) ,0), pMask );
+	cvInRangeS( cs->pHSVImg, cvScalar(0, cs->smin, MIN(cs->vmin,cs->vmax), 0),
+	            cvScalar(180, 256, MAX(cs->vmin,cs->vmax) ,0), cs->pMask );
 
 	// Extract the hue channel
-	cvSplit( pHSVImg, pHueImg, 0, 0, 0 );
+	cvSplit( cs->pHSVImg, cs->pHueImg, 0, 0, 0 );
 }
 
 
 //////////////////////////////////
 // setVmin()
 //
-void setVmin(int _vmin)
-{ vmin = _vmin; }
+void setVmin(camshift * cs, int _vmin)
+{ cs->vmin = _vmin; }
 
 
 //////////////////////////////////
 // setSmin()
 //
-void setSmin(int _smin)
-{ smin = _smin; }
+void setSmin(camshift * cs, int _smin)
+{ cs->smin = _smin; }
 
 
