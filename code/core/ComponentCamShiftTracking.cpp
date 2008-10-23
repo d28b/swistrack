@@ -28,6 +28,9 @@ THISCLASS::~ComponentCamShiftTracking()
 void THISCLASS::OnStart()
 {
   
+
+  setVmin(GetConfigurationInt(wxT("VMin"), 60));
+  setSmin(GetConfigurationInt(wxT("SMin"), 50));
   //mTracker.set_window(cvRect(452, 493, 75, 110));
   //int hist_sizes[] = {30, 32, 50};
   //mTracker.set_hist_dims(1, hist_sizes);
@@ -49,7 +52,7 @@ void THISCLASS::OnStep()
   if (mOutputImage == 0) {
     //CvRect start = cvRect(452, 493, 75, 110);
     CvRect start = cvRect(452, 493, 20, 20);
-
+    createTracker(inputImage);
     startTracking(inputImage, &start);
   }
 
@@ -96,6 +99,8 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-    
+   releaseTracker();
+   cvReleaseImage(&mOutputImage);
+   mOutputImage = 0;
 }
 

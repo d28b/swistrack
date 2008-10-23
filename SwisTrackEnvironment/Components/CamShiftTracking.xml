@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Cam Shift Tracking</friendlyname>
+	<description>Uses CvCamShiftTracker from cvaux
+	</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/CamShiftTracking</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+	  <parameter type="integer">
+	    <name>VMin</name>
+	    <label>VMin</label>
+	    <unit></unit>
+	    <default>60</default>
+	    <reloadable>false</reloadable>
+	  </parameter>
+	  <parameter type="integer">
+	    <name>SMin</name>
+	    <label>SMin</label>
+	    <unit></unit>
+	    <default>50</default>
+	    <reloadable>false</reloadable>
+	  </parameter>
+	</configuration>
+</swistrackcomponent>
