@@ -30,24 +30,17 @@ public:
 	}
 
 private:
+	void UpdateTrackers(IplImage * inputImage);
 	int mNextTrackId;
 	camshift cs;
 	DataStructureParticles::tParticleVector mParticles;
 	DataStructureTracks::tTrackMap mTracks;
 	std::map<int, camshift> mTrackers;  // track id to tracker
 	
-	
-
-	double** distanceArray;
-	int maxParticles;
-
-	//CvCamShiftTracker mTracker;
+	double mMinNewTrackDistanceSquared; //!< (configuration) The minimum distance between new tracks
 
 	IplImage * mOutputImage;
 
-	// Parameters
-	unsigned int mWindowSize; //!< (configuration) The size of the window to cache
-	int mMaxNumber;		//!< (configuration) The maximum number of objects that are to track.
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 };
 

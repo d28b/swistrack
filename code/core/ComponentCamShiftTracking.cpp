@@ -43,7 +43,15 @@ void THISCLASS::OnReloadConfiguration()
 {
   OnStop();
 }
-
+void THISCLASS::UpdateTrackers(IplImage * inputImage)
+{
+  for (std::map<int, camshift>::iterator i = mTrackers.begin();
+       i != mTrackers.end(); i++) {
+    CvBox2D box = track(&i->second, inputImage);
+    mTracks[i->first].AddPoint(box.center, 
+			       mCore->mDataStructureInput.mFrameNumber);
+  }
+}
 void THISCLASS::OnStep()
 {	
   IplImage *inputImage = mCore->mDataStructureImageColor.mImage;
@@ -51,6 +59,9 @@ void THISCLASS::OnStep()
     AddError(wxT("No input image."));
     return;
   }
+
+  UpdateTrackers(inputImage);
+
   if (mCore->mDataStructureParticles.mParticles == NULL) {
     AddError(wxT("No input particles!"));
     return;
@@ -71,7 +82,18 @@ void THISCLASS::OnStep()
 	closestTrack = &i->second;
       }
     }
-  }  
+    if (closestTrack == NULL || minSquareDist < mMinNewTrackDistanceSquared) {
+      int id = mNextTrackId++;
+      mTracks[id] = Track(id);
+      mTrackers[id] = camshift();
+      createTracker(&mTrackers[id], inputImage);
+      CvRect start = rectByCenter(pIt->mCenter.x, 
+				  pIt->mCenter.y,
+				  10, 10);
+      startTracking(&mTrackers[id], inputImage, &start);
+      cout << "Adding track " << id << endl;
+    }
+  }
   if (mOutputImage == 0) {
     //CvRect start = cvRect(452, 493, 75, 110);
     CvRect start = cvRect(452, 493, 20, 20);
@@ -81,32 +103,31 @@ void THISCLASS::OnStep()
   }
 
   CvBox2D box = track(&cs, inputImage);
-  // update the tracks store locally to this component
-  //mCore->mDataStructureTracks.mTracks = &mTracks;
 
+  // update the tracks store locally to this component
+  mCore->mDataStructureTracks.mTracks = &mTracks;
   // Let the DisplayImage know about our image
   DisplayEditor de(&mDisplayOutput);
   if (de.IsActive()) {
-    //de.SetParticles(particles);	//TODO: what was this?
-    //cvRectangle(mOutputImage, mTracker.get_window());
-    //cvCopy(inputImage, mOutputImage);
     if (mOutputImage != NULL) {
       cvReleaseImage(&mOutputImage);
     }
     mOutputImage = cvCloneImage(inputImage);
-    //mOutputImage = cvCloneImage(mTracker.get_back_project());
-    //cvCopy(mTracker.get_back_project(), mOutputImage);
+    
+
+    for (std::map<int, camshift>::iterator i = mTrackers.begin();
+	 i != mTrackers.end(); i++) {    
+      cout << "Drawing the track " << 
+	i->second.faceBox.center.x << "," << 
+	i->second.faceBox.center.y << endl;
+      cvEllipseBox(mOutputImage, i->second.faceBox,
+		   CV_RGB(255,0,0), 3, CV_AA, 0 );
+    }
     cvEllipseBox(mOutputImage, box,
 		 CV_RGB(255,0,0), 3, CV_AA, 0 );
 
-    /*cvRectangle(mOutputImage, 
-		cvPoint(box.rect.x, box.rect.y),
-		cvPoint(box.rect.x + box.rect.width,
-			box.rect.y + box.rect.height),
-			cvScalar(255,255,255));*/
-		
-    
     de.SetMainImage(mOutputImage);
+    de.SetTrajectories(true);
   }
 }
 

@@ -6,3 +6,10 @@ double squareDistance(CvPoint2D32f p1, CvPoint2D32f p2)
   double dy = p1.y - p2.y;
   return dx*dx + dy*dy;
 }
+
+CvRect rectByCenter(int centerX, int centerY, int width, int height) 
+{
+  int lowerLeftx = centerX - width / 2;
+  int lowerLefty = centerY - width / 2;
+  return cvRect(lowerLeftx, lowerLefty, width, height);
+}
