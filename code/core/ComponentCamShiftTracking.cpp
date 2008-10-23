@@ -89,7 +89,7 @@ void THISCLASS::OnStep()
       createTracker(&mTrackers[id], inputImage);
       CvRect start = rectByCenter(pIt->mCenter.x, 
 				  pIt->mCenter.y,
-				  10, 10);
+				  100, 100);
       startTracking(&mTrackers[id], inputImage, &start);
       cout << "Adding track " << id << endl;
     }

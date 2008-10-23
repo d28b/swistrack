@@ -39,6 +39,8 @@ private:
 	
 	double mMinNewTrackDistanceSquared; //!< (configuration) The minimum distance between new tracks
 
+	int mInitialWindowRadius; //!< (configuration) The size of the initial window when you initialize a new tracker.
+
 	IplImage * mOutputImage;
 
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
