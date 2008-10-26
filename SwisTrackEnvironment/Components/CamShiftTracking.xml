@@ -36,5 +36,24 @@
 	    <slider>true</slider>
 	    <reloadable>true</reloadable>
 	  </parameter>
+	  
+	  <parameter type="double">
+	    <name>FrameKillThreshold</name>
+	    <label>Frames to wait before stopping the track.</label>
+	    <min>3</min>
+	    <max>1000</max>
+	    <default>100</default>
+	    <slider>true</slider>
+	    <reloadable>true</reloadable>
+	  </parameter>
+	  <parameter type="integer">
+	    <name>TrackDistanceKillThreshold</name>
+	    <label>Mininum distance between tracks before dropping tracks.</label>
+	    <min>3</min>
+	    <max>1000</max>
+	    <default>100</default>
+	    <slider>true</slider>
+	    <reloadable>true</reloadable>
+	  </parameter>
 	</configuration>
 </swistrackcomponent>
