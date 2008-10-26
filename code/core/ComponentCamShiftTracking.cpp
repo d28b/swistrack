@@ -2,6 +2,7 @@
 #define THISCLASS ComponentCamShiftTracking
 using namespace std;
 #include <iostream>
+#include <set>
 
 #include "DisplayEditor.h"
 
@@ -9,7 +10,7 @@ using namespace std;
 
 THISCLASS::ComponentCamShiftTracking(SwisTrackCore *stc):
 		Component(stc, wxT("CamShiftTracking")),
-		mOutputImage(0),
+		mNextTrackId(0), mOutputImage(0), 
 		mDisplayOutput(wxT("Output"), wxT("Tracking"))
 {
 	// Data structure relations
@@ -39,9 +40,14 @@ void THISCLASS::OnReloadConfiguration()
   mVmin = GetConfigurationInt(wxT("VMin"), 60);
   mSmin = GetConfigurationInt(wxT("SMin"), 50);
   mInitialWindowSize = GetConfigurationInt(wxT("InitialWindowSize"), 60);
+  mFrameKillThreshold = GetConfigurationInt(wxT("FrameKillThreshold"), 10);
+
 
   mMinNewTrackDistanceSquared = 
     pow(GetConfigurationDouble(wxT("MinNewTrackDistance"), 100), 2);
+  mTrackDistanceKillThresholdSquared = 
+    pow(GetConfigurationDouble(wxT("TrackDistanceKillThreshold"), 10), 2);
+
 
 }
 void THISCLASS::UpdateTrackers(IplImage * inputImage)
@@ -49,11 +55,31 @@ void THISCLASS::UpdateTrackers(IplImage * inputImage)
   for (std::map<int, camshift>::iterator i = mTrackers.begin();
        i != mTrackers.end(); i++) {
     CvBox2D box = track(&i->second, inputImage);
-    mTracks[i->first].AddPoint(box.center, 
-			       mCore->mDataStructureInput.mFrameNumber);
+    // if the new point is too close to the old point, don't add it.
+    // if the tracker stops moving significantly, it will get deleted.
+    if (squareDistance(box.center, mTracks[i->first].trajectory.back()) >
+	pow(5, (float) 2)) {
+      float dist = squareDistance(mTracks[i->first].trajectory.back(),
+				  box.center);
+      if (squareDistance(mTracks[i->first].trajectory.back(),
+			 box.center) > 1) {
+	cout << "adding point " << i->first << ": " << dist << endl;
+	mTracks[i->first].AddPoint(box.center, 
+				   mCore->mDataStructureInput.mFrameNumber);
+	Particle p;
+	p.mCenter = box.center;
+	p.mID = i->first;
+	p.mArea = -1;
+	p.mCompactness = -1;
+	p.mOrientation = -1;
+	mParticles.push_back(p);
+      }
+
+    }
   }
 }
 void THISCLASS::AddNewTracks(IplImage * inputImage) {
+
   if (mCore->mDataStructureParticles.mParticles == NULL) {
     AddError(wxT("No input particles!"));
     return;
@@ -79,6 +105,14 @@ void THISCLASS::AddNewTracks(IplImage * inputImage) {
       mTracks[id] = Track(id);
       mTracks[id].AddPoint(pIt->mCenter, 
 			   mCore->mDataStructureInput.mFrameNumber);
+      Particle p;
+      p.mCenter = pIt->mCenter;
+      p.mID = id;
+      p.mArea = pIt->mArea;
+      p.mCompactness = pIt->mCompactness;
+      p.mOrientation = pIt->mOrientation;
+      mParticles.push_back(p);
+      
       mTrackers[id] = camshift();
       createTracker(&mTrackers[id], inputImage);
       setVmin(&mTrackers[id], mVmin);
@@ -86,10 +120,57 @@ void THISCLASS::AddNewTracks(IplImage * inputImage) {
       CvRect start = rectByCenter(pIt->mCenter.x, 
 				  pIt->mCenter.y,
 				  mInitialWindowSize, mInitialWindowSize);
+      float dist = pow(minSquareDist,(float) 0.5);
+      cout << "Adding a new track " << id << ": " << dist << endl;
       startTracking(&mTrackers[id], inputImage, &start);
     }
   }
 }
+
+void THISCLASS::FilterTracks() 
+{
+  
+  for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
+       i != mTracks.end(); i++) {
+    Track & track = i->second;
+    int frameDifference = mCore->mDataStructureInput.mFrameNumber - track.LastUpdateFrame();
+    cout << "Frame: " << i->first << endl;;
+    cout << "Frame difference: " << frameDifference << endl; 
+    cout << "Threshold: " << mFrameKillThreshold << endl << endl;
+
+    if ( frameDifference >= mFrameKillThreshold) {
+      EraseTrack(i->first);
+      cout << "Erasing " << i->first << endl;
+    }
+  }
+
+  set<int> trackIdsToErase;
+  for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
+       i != mTracks.end(); i++) {
+    Track & track1 = i->second;
+    for (DataStructureTracks::tTrackMap::iterator j = mTracks.begin();
+	 j != mTracks.end(); j++) {
+      Track & track2 = j->second;
+      double cost = squareDistance(track1.trajectory.back(), track2.trajectory.back());
+      if (track1.mID != track2.mID && cost < mTrackDistanceKillThresholdSquared) {
+	// kill a track - keep the older one
+	if (track1.mID < track2.mID) {
+	  trackIdsToErase.insert(track2.mID);
+	} else {
+	  trackIdsToErase.insert(track1.mID);
+	  break;
+	}
+      }
+    }
+  }
+  for (set<int>::iterator i = trackIdsToErase.begin();
+       i != trackIdsToErase.end(); i++) {
+    cout << "Erasing " << *i << endl;
+    EraseTrack(*i);
+  }
+  
+}
+
 
 void THISCLASS::OnStep()
 {	
@@ -98,13 +179,15 @@ void THISCLASS::OnStep()
     AddError(wxT("No input image."));
     return;
   }
-
+  mParticles.clear();
   UpdateTrackers(inputImage);
   
   AddNewTracks(inputImage);
+  FilterTracks();
 
   // update the tracks store locally to this component
   mCore->mDataStructureTracks.mTracks = &mTracks;
+  mCore->mDataStructureParticles.mParticles = &mParticles;
   // Let the DisplayImage know about our image
   DisplayEditor de(&mDisplayOutput);
   if (de.IsActive()) {
@@ -139,3 +222,7 @@ void THISCLASS::OnStop() {
    mOutputImage = 0;
 }
 
+void THISCLASS::EraseTrack(int id) {
+  mTracks.erase(id);
+  mTrackers.erase(id);
+}

@@ -30,8 +30,10 @@ public:
 	}
 
 private:
+	void EraseTrack(int id);
 	void UpdateTrackers(IplImage * inputImage);
 	void AddNewTracks(IplImage * inputImage);
+	void FilterTracks();
 	int mNextTrackId;
 	DataStructureParticles::tParticleVector mParticles;
 	DataStructureTracks::tTrackMap mTracks;
@@ -45,6 +47,8 @@ private:
 	int mSmin; //!< (configuration)  Parameter for camshift
 	
 	IplImage * mOutputImage;
+	int mFrameKillThreshold; 
+	int mTrackDistanceKillThresholdSquared; 
 
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 };
