@@ -61,9 +61,7 @@ void THISCLASS::UpdateTrackers(IplImage * inputImage)
 	pow(5, (float) 2)) {
       float dist = squareDistance(mTracks[i->first].trajectory.back(),
 				  box.center);
-      if (squareDistance(mTracks[i->first].trajectory.back(),
-			 box.center) > 1) {
-	cout << "adding point " << i->first << ": " << dist << endl;
+      if (dist > 1) {
 	mTracks[i->first].AddPoint(box.center, 
 				   mCore->mDataStructureInput.mFrameNumber);
 	Particle p;
@@ -125,8 +123,6 @@ void THISCLASS::AddNewTracks(IplImage * inputImage) {
       CvRect start = rectByCenter(pIt->mCenter.x, 
 				  pIt->mCenter.y,
 				  mInitialWindowSize, mInitialWindowSize);
-      float dist = pow(minSquareDist,(float) 0.5);
-      cout << "Adding a new track " << id << ": " << dist << endl;
       startTracking(&mTrackers[id], inputImage, &start);
     }
   }
@@ -139,13 +135,8 @@ void THISCLASS::FilterTracks()
        i != mTracks.end(); i++) {
     Track & track = i->second;
     int frameDifference = mCore->mDataStructureInput.mFrameNumber - track.LastUpdateFrame();
-    cout << "Frame: " << i->first << endl;;
-    cout << "Frame difference: " << frameDifference << endl; 
-    cout << "Threshold: " << mFrameKillThreshold << endl << endl;
-
     if ( frameDifference >= mFrameKillThreshold) {
       EraseTrack(i->first);
-      cout << "Erasing " << i->first << endl;
     }
   }
 
@@ -170,7 +161,6 @@ void THISCLASS::FilterTracks()
   }
   for (set<int>::iterator i = trackIdsToErase.begin();
        i != trackIdsToErase.end(); i++) {
-    cout << "Erasing " << *i << endl;
     EraseTrack(*i);
   }
   
@@ -219,15 +209,17 @@ void THISCLASS::OnStepCleanup() {
 
 void THISCLASS::OnStop() {
    cvReleaseImage(&mOutputImage);
+   mOutputImage = 0;
    mTracks.clear();
    for (std::map<int, camshift>::iterator i = mTrackers.begin();
 	i != mTrackers.end(); i++) {    
      releaseTracker(&i->second);
    }
-   mOutputImage = 0;
+
 }
 
 void THISCLASS::EraseTrack(int id) {
   mTracks.erase(id);
+  releaseTracker(&mTrackers[id]);
   mTrackers.erase(id);
 }
