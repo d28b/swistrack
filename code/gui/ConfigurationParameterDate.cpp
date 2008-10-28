@@ -62,13 +62,23 @@ void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 	}
 	wxDateTime value = mComponent->GetConfigurationDate(mName, mValueDefault);
 	mDateCtrl->SetValue(value);
-	mHourCtrl->SetValue(value.GetHour() % 12);
-	mMinuteCtrl->SetValue(value.GetMinute());
-	if (value.GetHour() <= 12) {
+
+	if (value.GetHour() == 0) {
+	  mHourCtrl->SetValue(12);
 	  mAmPmCtrl->SetValue(wxT("AM"));
-	} else {
+	} else if (value.GetHour() == 12) {
+	  mHourCtrl->SetValue(12);
 	  mAmPmCtrl->SetValue(wxT("PM"));
+	} else {
+	  if (value.GetHour() > 12) {
+	    mHourCtrl->SetValue(value.GetHour() % 12);
+	    mAmPmCtrl->SetValue(wxT("PM"));
+	  } else {
+	    mHourCtrl->SetValue(value.GetHour());
+	    mAmPmCtrl->SetValue(wxT("AM"));
+	  }
 	}
+	mMinuteCtrl->SetValue(value.GetMinute());
 }
 
 bool THISCLASS::ValidateNewValue() {
@@ -89,7 +99,13 @@ void THISCLASS::UpdateDate() {
 	mNewValue = mDateCtrl->GetValue();
 	int hour = mHourCtrl->GetValue();
 	if (mAmPmCtrl->GetValue() == wxT("PM")) {
-	  hour += 12;
+	  if (hour != 12) {
+	    hour += 12;
+	  }
+	} else {
+	  if (hour == 12) {
+	    hour = 0;
+	  }
 	}
 	mNewValue.SetHour(hour);
 	mNewValue.SetMinute(mMinuteCtrl->GetValue());
