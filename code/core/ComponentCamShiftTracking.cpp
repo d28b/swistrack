@@ -130,17 +130,17 @@ void THISCLASS::AddNewTracks(IplImage * inputImage) {
 
 void THISCLASS::FilterTracks() 
 {
-  
+  set<int> trackIdsToErase;  
   for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
        i != mTracks.end(); i++) {
     Track & track = i->second;
     int frameDifference = mCore->mDataStructureInput.mFrameNumber - track.LastUpdateFrame();
     if ( frameDifference >= mFrameKillThreshold) {
-      EraseTrack(i->first);
+	  trackIdsToErase.insert(i->first);
     }
   }
 
-  set<int> trackIdsToErase;
+
   for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
        i != mTracks.end(); i++) {
     Track & track1 = i->second;
