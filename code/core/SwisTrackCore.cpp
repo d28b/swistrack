@@ -38,6 +38,7 @@
 #include "ComponentOpticalFlowPyrLKTracking.h"
 #include "ComponentCamShiftTracking.h"
 #include "ComponentTrackSmoothing.h"
+#include "ComponentKalmanFilterTrack.h"
 #include "ComponentIDReaderRing.h"
 #include "ComponentSimulationParticles.h"
 #include "ComponentCalibrationLinear.h"
@@ -114,6 +115,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentOpticalFlowPyrLKTracking(this));
 	mAvailableComponents.push_back(new ComponentCamShiftTracking(this));
 	mAvailableComponents.push_back(new ComponentTrackSmoothing(this));
+	mAvailableComponents.push_back(new ComponentKalmanFilterTrack(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentOutputFileM4V(this));
