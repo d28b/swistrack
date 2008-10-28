@@ -53,6 +53,12 @@ Track& THISCLASS::GetOrMakeTrack(int id, CvPoint2D32f p)
     cvSetIdentity(mKalman[id]->measurement_noise_cov, cvRealScalar(1e-1));
     cvSetIdentity(mKalman[id]->error_cov_post, cvRealScalar(1));
 
+    CvRandState rng;
+    cvRandInit(&rng, 0, 1, -1, CV_RAND_UNI);
+    cvRandSetRange(&rng, 0, 0.1, 0);
+    rng.disttype = CV_RAND_NORMAL;
+    cvRand(&rng, mKalman[id]->state_post);
+
     return mOutputTracks[id];
   }
 
@@ -66,7 +72,10 @@ CvPoint2D32f THISCLASS::StepFilter(int id, CvPoint2D32f newMeasurement) {
   
   const CvMat * y_k = cvKalmanPredict(mKalman[id], 0);
 
-  cvMatMulAdd(mKalman[id]->measurement_matrix, mX_k[id], mZ_k[id], mZ_k[id]);
+
+  cvSetReal1D(mZ_k[id], 0, newMeasurement.x);
+  cvSetReal1D(mZ_k[id], 1, newMeasurement.y);
+
   cvKalmanCorrect(mKalman[id], mZ_k[id]);
   return cvPoint2D32f(cvGetReal1D(y_k, 0), cvGetReal1D(y_k, 1));
 }
@@ -129,14 +138,10 @@ void THISCLASS::OnStep()
 	    if (it->first == it2->mID) {
 	      Track & t = GetOrMakeTrack(it->first, it2->mCenter);
 	      CvPoint2D32f newPoint = StepFilter(t.mID, it2->mCenter);
-
-	      cout << "Got point: " << newPoint.x << "," << newPoint.y << endl;
-	      // add the point after we run the filter. 
 	      Particle p = *it2;
 	      p.mCenter = newPoint;
 	      t.AddPoint(newPoint, mCore->mDataStructureInput.mFrameNumber);
 	      mParticles.push_back(p);
-	      
 	      
 	    }
 	  }
