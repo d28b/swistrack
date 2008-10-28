@@ -27,8 +27,6 @@ class ComponentTrackSmoothing: public Component {
 private:
 	Track& WindowForTrack(int id);
 	DataStructureParticles::tParticleVector mParticles;
-	double** distanceArray;
-	int maxParticles;
 
 	// Parameters
 	unsigned int mWindowSize;		//!< (configuration) The maximum number of objects that are to track.
