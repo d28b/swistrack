@@ -7,7 +7,6 @@
 #include "cv.h"
 #include <stdio.h>
 #include "camshift_wrapper.h"
-
 // Declarations for internal functions
 void updateHueImage(camshift * cs, const IplImage * pImg);
 
@@ -95,6 +94,28 @@ CvBox2D track(camshift * cs, IplImage * pImg)
     cvAnd( cs->pProbImg, cs->pMask, cs->pProbImg, 0 );
 
 	// Use CamShift to find the center of the new face probability
+    CvSize size = cvGetSize(cs->pProbImg);
+    if (cs->prevFaceRect.x < 0) {
+      cs->prevFaceRect.x = 0;
+    }
+    if (cs->prevFaceRect.x >= size.width) {
+      cs->prevFaceRect.x = size.width - 1;
+    }
+    if (cs->prevFaceRect.y < 0) {
+      cs->prevFaceRect.y = 0;
+    }
+    if (cs->prevFaceRect.y >= size.height) {
+      cs->prevFaceRect.y = size.height - 1;
+    }
+
+    if (cs->prevFaceRect.x + cs->prevFaceRect.width > size.width) {
+      cs->prevFaceRect.width = size.width - cs->prevFaceRect.x;
+    }
+    if (cs->prevFaceRect.y + cs->prevFaceRect.height > size.height) {
+      cs->prevFaceRect.height = size.height - cs->prevFaceRect.y;
+    }
+
+
     cvCamShift( cs->pProbImg, cs->prevFaceRect,
                 cvTermCriteria( CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 10, 1 ),
                 &components, &cs->faceBox );
