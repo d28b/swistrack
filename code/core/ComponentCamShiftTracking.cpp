@@ -48,7 +48,7 @@ void THISCLASS::OnReloadConfiguration()
   mTrackDistanceKillThresholdSquared = 
     pow(GetConfigurationDouble(wxT("TrackDistanceKillThreshold"), 10), 2);
 
-
+  mMaximumNumberOfTrackers = GetConfigurationInt(wxT("MaximumNumberOfTrackers"), 4);
 }
 void THISCLASS::UpdateTrackers(IplImage * inputImage)
 {
@@ -79,6 +79,11 @@ void THISCLASS::UpdateTrackers(IplImage * inputImage)
   }
 }
 void THISCLASS::AddNewTracks(IplImage * inputImage) {
+
+  if (mTracks.size() >= mMaximumNumberOfTrackers) {
+    // already have enough trackers, so punt. 
+    return;
+  }
 
   if (mCore->mDataStructureParticles.mParticles == NULL) {
     AddError(wxT("No input particles!"));

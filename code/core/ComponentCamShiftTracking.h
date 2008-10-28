@@ -45,6 +45,7 @@ private:
 
 	int mVmin; //!< (configuration)  Parameter for camshift
 	int mSmin; //!< (configuration)  Parameter for camshift
+	int mMaximumNumberOfTrackers;
 	
 	IplImage * mOutputImage;
 	int mFrameKillThreshold; 

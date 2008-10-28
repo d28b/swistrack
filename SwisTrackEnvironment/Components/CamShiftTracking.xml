@@ -55,5 +55,16 @@
 	    <slider>true</slider>
 	    <reloadable>true</reloadable>
 	  </parameter>
+
+	  <parameter type="integer">
+	    <name>MaximumNumberOfTrackers</name>
+	    <label>The maximum number of trackers allows to run at any
+	    given time.</label>
+	    <min>1</min>
+	    <max>100</max>
+	    <default>4</default>
+	    <slider>true</slider>
+	    <reloadable>true</reloadable>
+	  </parameter>
 	</configuration>
 </swistrackcomponent>
