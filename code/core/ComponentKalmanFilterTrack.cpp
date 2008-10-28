@@ -16,7 +16,8 @@ THISCLASS::ComponentKalmanFilterTrack(SwisTrackCore *stc):
 	AddDataStructureWrite(&(mCore->mDataStructureTracks));
 	AddDisplay(&mDisplayOutput);
 
-	Initialize();						// Read the XML configuration file
+	Initialize(); // Read the XML configuration file
+
 }
 
 THISCLASS::~ComponentKalmanFilterTrack()
@@ -24,31 +25,75 @@ THISCLASS::~ComponentKalmanFilterTrack()
   if (mOutputTracks.size()) {
     mOutputTracks.clear();
   }
-  
 }
-Track& THISCLASS::WindowForTrack(int id) 
+Track& THISCLASS::GetOrMakeTrack(int id, CvPoint2D32f p) 
 {
-  DataStructureTracks::tTrackMap::iterator it = mWindows.begin();
-  while (it != mWindows.end()) {
-    if (it->first == id) {
-      return it->second;
-    }
-    it++;
+  if (mOutputTracks.find(id) != mOutputTracks.end()) {
+    return mOutputTracks[id];
+  } else {
+    mOutputTracks[id] = Track(id);
+    mOutputTracks[id].SetMaxLength(mWindowSize);
+    mOutputTracks[id] = Track(id);
+    
+    mKalman[id] = cvCreateKalman(4, 2, 0);
+    mX_k[id] = cvCreateMat(4, 1, CV_32FC1); // x,y,vx,vy
+    cvSetReal1D(mX_k[id], 0, p.x);
+    cvSetReal1D(mX_k[id], 1, p.y);
+    cvSetReal1D(mX_k[id], 2, 0);
+    cvSetReal1D(mX_k[id], 3, 0);
+
+
+    mZ_k[id] = cvCreateMat(2, 1, CV_32FC1); // measurments
+    cvZero(mZ_k[id]);
+    mF[id] = cvCreateMat(4, 4, CV_32FC1);
+    cvSetIdentity(mF[id], cvRealScalar(1));
+
+    cvSetIdentity(mKalman[id]->measurement_matrix, cvRealScalar(1));
+    cvSetIdentity(mKalman[id]->process_noise_cov, cvRealScalar(1e-5));
+    cvSetIdentity(mKalman[id]->measurement_noise_cov, cvRealScalar(1e-1));
+    cvSetIdentity(mKalman[id]->error_cov_post, cvRealScalar(1));
+
+    return mOutputTracks[id];
   }
 
-  mWindows[id] = Track(id);
-  mWindows[id].SetMaxLength(mWindowSize);
-  mOutputTracks[id] = Track(id);
-  return mWindows[id];
-
 
 }
+
+CvPoint2D32f THISCLASS::StepFilter(int id, CvPoint2D32f newMeasurement) {
+  wxTimeSpan dt = mCore->mDataStructureInput.mFrameTimestamp - mLastTs;
+  cvSetReal2D(mF[id], 0, 2, dt.GetMilliseconds().ToDouble() * 1000.0);
+  cvSetReal2D(mF[id], 1, 3, dt.GetMilliseconds().ToDouble() * 1000.0);
+  
+  const CvMat * y_k = cvKalmanPredict(mKalman[id], 0);
+
+  cvMatMulAdd(mKalman[id]->measurement_matrix, mX_k[id], mZ_k[id], mZ_k[id]);
+  cvKalmanCorrect(mKalman[id], mZ_k[id]);
+  return cvPoint2D32f(cvGetReal1D(y_k, 0), cvGetReal1D(y_k, 1));
+}
+
 void THISCLASS::OnStart()
 {
-	mWindowSize = GetConfigurationInt(wxT("WindowSize"), 3);
-	mWindows.clear();
-	if (mOutputTracks.size()) mOutputTracks.clear();      
+  mWindowSize = GetConfigurationInt(wxT("WindowSize"), 3);
+  mOutputTracks.clear();      
+
 }
+
+void THISCLASS::EraseTrack(int id) {
+  mOutputTracks.erase(id);
+  
+cvReleaseKalman(&mKalman[id]);
+  mKalman.erase(id);
+
+  cvReleaseMat(&mX_k[id]);
+  mX_k.erase(id);
+
+  cvReleaseMat(&mZ_k[id]);
+  mZ_k.erase(id);
+
+  cvReleaseMat(&mF[id]);
+  mF.erase(id);
+}
+
 
 void THISCLASS::OnStep()
 {
@@ -65,72 +110,39 @@ void THISCLASS::OnStep()
 	    AddError(wxT("There are no particles"));
 	    return;
 	  }
-	for (DataStructureTracks::tTrackMap::iterator i = mWindows.begin();
-	     i != mWindows.end(); i++)
+	for (DataStructureTracks::tTrackMap::iterator i = mOutputTracks.begin();
+	     i != mOutputTracks.end(); i++)
 	  {
 	    if (tracks->find(i->first) == tracks->end()) {
-	      mOutputTracks.erase(i->first);
-	      mWindows.erase(i);
+
+	      EraseTrack(i->first);
+	      mOutputTracks.erase(i);
 	    }
 	  }
-
-	//For each track, write data in the corresponding output file
-	DataStructureTracks::tTrackMap::iterator it = tracks->begin();
-	while (it != tracks->end())
-	{
-	  Track & window = WindowForTrack(it->first);
-	  //Search for the corresponding particle
-	
-	  
-	  DataStructureParticles::tParticleVector::iterator it2 = particles->begin();
-	  while (it2 != particles->end())
-	    {
-	      //Correct ID is found
-	      if (window.mID == it2->mID) 
-		{
-		  window.AddPoint(it2->mCenter, 
-				  mCore->mDataStructureInput.mFrameNumber);
-
-		}
-	      it2++;
-	    }
-	  it++;
-	}
 	mParticles.clear();
-	DataStructureTracks::tTrackMap::iterator outputIterator = mOutputTracks.begin();
-	while (outputIterator != mOutputTracks.end()) {
-	  Track & window = WindowForTrack(outputIterator->first);
-	  if (window.trajectory.size() == mWindowSize &&
-	      window.LastUpdateFrame() == mCore->mDataStructureInput.mFrameNumber) 
-	    {
-	    CvPoint2D32f point = cvPoint2D32f(0, 0);
-	    std::vector<CvPoint2D32f>::iterator it3 = window.trajectory.begin();
+	//For each track, write data in the corresponding output file
+	for (DataStructureTracks::tTrackMap::iterator it = tracks->begin();
+	     it != tracks->end(); it++) {
 
-	    while (it3 != window.trajectory.end()) {
-	      point.x += it3->x;
-	      point.y += it3->y;
-	      it3++;
-	    }
-	    point.x = point.x / mWindowSize;
-	    point.y = point.y / mWindowSize;
-	    if (window.trajectory.size() != 0) {
-	      outputIterator->second.AddPoint(point, 
-					      mCore->mDataStructureInput.mFrameNumber);
-	      Particle p;
-	      p.mCenter.x = point.x;
-	      p.mCenter.y = point.y;
-	      p.mID = outputIterator->first;
-	      p.mArea = -1;
-	      p.mCompactness = -1;
-	      p.mOrientation = -1;
-	      p.mIDCovariance = -1;
+	  //Search for the corresponding particle
+	  for (DataStructureParticles::tParticleVector::iterator it2 = particles->begin();
+	       it2 != particles->end(); it2++) {
+	    if (it->first == it2->mID) {
+	      Track & t = GetOrMakeTrack(it->first, it2->mCenter);
+	      StepFilter(t.mID, it2->mCenter);
+
+	      
+	      // add the point after we run the filter. 
+	      Particle p = *it2;
+	      //t.AddPoint(it2->mCenter, 
+	      //mCore->mDataStructureInput.mFrameNumber);
 	      mParticles.push_back(p);
+	      
+	      
 	    }
-	  } else if (window.trajectory.size() > mWindowSize) {
-	    AddError(wxT("Too many points in the window."));
 	  }
-	  outputIterator++;
 	}
+
 	mCore->mDataStructureTracks.mTracks = &mOutputTracks;
 	mCore->mDataStructureParticles.mParticles = &mParticles;
 	// Let the DisplayImage know about our image
@@ -139,6 +151,8 @@ void THISCLASS::OnStep()
 		de.SetMainImage(mCore->mDataStructureInput.mImage);
 		de.SetTrajectories(true);
 	}
+
+	mLastTs = mCore->mDataStructureInput.mFrameTimestamp;
 }
 
 

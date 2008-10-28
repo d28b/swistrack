@@ -2,8 +2,13 @@
 #define HEADER_ComponentKalmanFilterTrack
 
 #include <cv.h>
+using namespace std;
+#include <vector>
+
 #include "Component.h"
 #include "DataStructureParticles.h"
+
+
 
 //! A component that detects blobs that have a certain size and stores them as particles in DataStructureParticle.
 class ComponentKalmanFilterTrack: public Component {
@@ -25,18 +30,22 @@ class ComponentKalmanFilterTrack: public Component {
 	}
 
 private:
-	Track& WindowForTrack(int id);
+	Track& GetOrMakeTrack(int id, CvPoint2D32f p);
+	void EraseTrack(int id);
+	CvPoint2D32f StepFilter(int trackID, CvPoint2D32f newMeasurement);
 	DataStructureParticles::tParticleVector mParticles;
-	double** distanceArray;
-	int maxParticles;
-
-	// Parameters
-	unsigned int mWindowSize;		//!< (configuration) The maximum number of objects that are to track.
-	//	DataStructureTracks::tTrackVector mInputTracks;
+	map<int, CvKalman *> mKalman;
+	map<int, CvMat *> mX_k; // state.  position, velocity
+	map<int, CvMat *> mZ_k; // measurement.  position (x,y)
+	map<int, CvMat *> mF;
 	DataStructureTracks::tTrackMap mOutputTracks;
-	DataStructureTracks::tTrackMap mWindows;
+
+	wxDateTime mLastTs;
+
+	unsigned int mWindowSize; //!< (configuration) The maximum number of objects that are to track.
+
 	
-	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
+	Display mDisplayOutput;	//!< The Display showing the last acquired image and the particles.
 };
 
 #endif
