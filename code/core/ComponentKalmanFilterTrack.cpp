@@ -116,7 +116,6 @@ void THISCLASS::OnStep()
 	    if (tracks->find(i->first) == tracks->end()) {
 
 	      EraseTrack(i->first);
-	      mOutputTracks.erase(i);
 	    }
 	  }
 	mParticles.clear();
@@ -129,13 +128,13 @@ void THISCLASS::OnStep()
 	       it2 != particles->end(); it2++) {
 	    if (it->first == it2->mID) {
 	      Track & t = GetOrMakeTrack(it->first, it2->mCenter);
-	      StepFilter(t.mID, it2->mCenter);
+	      CvPoint2D32f newPoint = StepFilter(t.mID, it2->mCenter);
 
-	      
+	      cout << "Got point: " << newPoint.x << "," << newPoint.y << endl;
 	      // add the point after we run the filter. 
 	      Particle p = *it2;
-	      //t.AddPoint(it2->mCenter, 
-	      //mCore->mDataStructureInput.mFrameNumber);
+	      p.mCenter = newPoint;
+	      t.AddPoint(newPoint, mCore->mDataStructureInput.mFrameNumber);
 	      mParticles.push_back(p);
 	      
 	      
