@@ -36,12 +36,6 @@ Track& THISCLASS::GetOrMakeTrack(int id, CvPoint2D32f p)
     mOutputTracks[id] = Track(id);
     
     mKalman[id] = cvCreateKalman(4, 2, 0);
-    mX_k[id] = cvCreateMat(4, 1, CV_32FC1); // x,y,vx,vy
-    cvSetReal1D(mX_k[id], 0, p.x);
-    cvSetReal1D(mX_k[id], 1, p.y);
-    cvSetReal1D(mX_k[id], 2, 0);
-    cvSetReal1D(mX_k[id], 3, 0);
-
 
     mZ_k[id] = cvCreateMat(2, 1, CV_32FC1); // measurments
     cvZero(mZ_k[id]);
@@ -49,7 +43,7 @@ Track& THISCLASS::GetOrMakeTrack(int id, CvPoint2D32f p)
     cvSetIdentity(mF[id], cvRealScalar(1));
 
     cvSetIdentity(mKalman[id]->measurement_matrix, cvRealScalar(1));
-    cvSetIdentity(mKalman[id]->process_noise_cov, cvRealScalar(1e-5));
+    cvSetIdentity(mKalman[id]->process_noise_cov, cvRealScalar(1e-1));
     cvSetIdentity(mKalman[id]->measurement_noise_cov, cvRealScalar(1e-1));
     cvSetIdentity(mKalman[id]->error_cov_post, cvRealScalar(1));
 
@@ -57,8 +51,14 @@ Track& THISCLASS::GetOrMakeTrack(int id, CvPoint2D32f p)
     cvRandInit(&rng, 0, 1, -1, CV_RAND_UNI);
     cvRandSetRange(&rng, 0, 0.1, 0);
     rng.disttype = CV_RAND_NORMAL;
-    cvRand(&rng, mKalman[id]->state_post);
+    //cvRand(&rng, mKalman[id]->state_post);
+    cvSetReal1D(mKalman[id]->state_post, 0, p.x);
+    cvSetReal1D(mKalman[id]->state_post, 1, p.y);
+    cvSetReal1D(mKalman[id]->state_post, 2, 0);
+    cvSetReal1D(mKalman[id]->state_post, 3, 0);
 
+
+    
     return mOutputTracks[id];
   }
 
@@ -75,7 +75,14 @@ CvPoint2D32f THISCLASS::StepFilter(int id, CvPoint2D32f newMeasurement) {
 
   cvSetReal1D(mZ_k[id], 0, newMeasurement.x);
   cvSetReal1D(mZ_k[id], 1, newMeasurement.y);
+  
+  cout << "Position: " << 
+    cvGetReal1D(mKalman[id]->state_post, 0)  << ", " <<
+    cvGetReal1D(mKalman[id]->state_post, 1)  << endl;
 
+  cout << "Velocity: " << 
+    cvGetReal1D(mKalman[id]->state_post, 2)  << ", " <<
+    cvGetReal1D(mKalman[id]->state_post, 3)  << endl;
   cvKalmanCorrect(mKalman[id], mZ_k[id]);
   return cvPoint2D32f(cvGetReal1D(y_k, 0), cvGetReal1D(y_k, 1));
 }
@@ -93,8 +100,6 @@ void THISCLASS::EraseTrack(int id) {
 cvReleaseKalman(&mKalman[id]);
   mKalman.erase(id);
 
-  cvReleaseMat(&mX_k[id]);
-  mX_k.erase(id);
 
   cvReleaseMat(&mZ_k[id]);
   mZ_k.erase(id);

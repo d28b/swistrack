@@ -35,7 +35,6 @@ private:
 	CvPoint2D32f StepFilter(int trackID, CvPoint2D32f newMeasurement);
 	DataStructureParticles::tParticleVector mParticles;
 	map<int, CvKalman *> mKalman;
-	map<int, CvMat *> mX_k; // state.  position, velocity
 	map<int, CvMat *> mZ_k; // measurement.  position (x,y)
 	map<int, CvMat *> mF;
 	DataStructureTracks::tTrackMap mOutputTracks;
