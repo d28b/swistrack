@@ -77,13 +77,13 @@ CvPoint2D32f THISCLASS::StepFilter(int id, CvPoint2D32f newMeasurement, CvPoint2
     cvSetReal1D(mZ_k[id], 3, (newMeasurement.y - lastMeasurement->y) / dt);
   }
   
-  cout << "Position: " << 
-    cvGetReal1D(mKalman[id]->state_post, 0)  << ", " <<
-    cvGetReal1D(mKalman[id]->state_post, 1)  << endl;
+  //  cout << "Position: " << 
+  //cvGetReal1D(mKalman[id]->state_post, 0)  << ", " <<
+  //cvGetReal1D(mKalman[id]->state_post, 1)  << endl;
 
-  cout << "Velocity: " << 
-    cvGetReal1D(mKalman[id]->state_post, 2)  << ", " <<
-    cvGetReal1D(mKalman[id]->state_post, 3)  << endl;
+  //  cout << "Velocity: " << 
+  //cvGetReal1D(mKalman[id]->state_post, 2)  << ", " <<
+  //cvGetReal1D(mKalman[id]->state_post, 3)  << endl;
   cvKalmanCorrect(mKalman[id], mZ_k[id]);
   return cvPoint2D32f(cvGetReal1D(y_k, 0), cvGetReal1D(y_k, 1));
 }
