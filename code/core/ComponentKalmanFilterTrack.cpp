@@ -96,9 +96,8 @@ void THISCLASS::OnStart()
 }
 
 void THISCLASS::EraseTrack(int id) {
-  mOutputTracks.erase(id);
   
-cvReleaseKalman(&mKalman[id]);
+  cvReleaseKalman(&mKalman[id]);
   mKalman.erase(id);
 
 
@@ -129,8 +128,8 @@ void THISCLASS::OnStep()
 	     i != mOutputTracks.end(); i++)
 	  {
 	    if (tracks->find(i->first) == tracks->end()) {
-
 	      EraseTrack(i->first);
+	      mOutputTracks.erase(i); // os x doesn't like when we erase by index in EraseTracks.
 	    }
 	  }
 	mParticles.clear();
