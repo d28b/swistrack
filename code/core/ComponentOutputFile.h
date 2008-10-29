@@ -2,6 +2,7 @@
 #define HEADER_ComponentOutputFile
 
 #include <vector>
+#include <map>
 #include <cv.h>
 #include <highgui.h>
 #include <fstream>
@@ -34,12 +35,12 @@ private:
 		int trackID;
 
 	};
-	typedef std::vector<structOutputFile*> filesVector;
+	typedef std::map<int, structOutputFile*> filesMap;
 	void writeData(structOutputFile *outputFile);
 	void writeHeader(structOutputFile *outputFile);
 	wxString mDirectoryName;			//!< Name of the directory to save
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
-	filesVector mFilesVector;			//!< Vector containing the FileName
+	filesMap mFiles;			//!< Vector containing the FileName
 };
 
 #endif

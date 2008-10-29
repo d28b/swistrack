@@ -45,23 +45,10 @@ void THISCLASS::OnStep()
 	DataStructureTracks::tTrackMap::iterator it = mTracks->begin();
 	while (it != mTracks->end())
 	{
-		bool noCorrespondingFile = true;
-		filesVector::iterator it2 = mFilesVector.begin();
-		while (it2 != mFilesVector.end())
-		{
-			//There is an existing file opened
-			if (it->first == (*it2)->trackID)
-			{
-				//Write the data to the file
-				writeData(*it2);
-				noCorrespondingFile = false;
-				break;
-			}
-			it2++;
-		}
-		//There was no open filed to write the data, create a file
-		if (noCorrespondingFile)
-		{
+	  if (mFiles.find(it->first) != mFiles.end()) {
+	    //Write the data to the file
+	    writeData(mFiles[it->first]);
+	  } else {
 			structOutputFile *newOutputFile = new structOutputFile;
 			newOutputFile->trackID = it->first;
 			wxString tmpFileName = mDirectoryName;
@@ -73,11 +60,22 @@ void THISCLASS::OnStep()
 				AddError(wxT("Unable to open one of the output file"));
 				return;
 			}
-			mFilesVector.push_back(newOutputFile);
+			mFiles[it->first] = newOutputFile;
 			writeHeader(newOutputFile);
 			writeData(newOutputFile);
 		}
 		it++;
+	}
+
+	// if a track disappeared, close the file.   Otherwise 
+	// we run out of open files eventually.
+	for (std::map<int, structOutputFile*>::iterator i = mFiles.begin(); 
+	     i != mFiles.end(); i++) {
+	  if (mTracks->find(i->first) == mTracks->end()) {
+	    mFiles[i->first]->fileStream.close();
+	    delete mFiles[i->first];
+	    mFiles.erase(i->first);
+	  }
 	}
 	// Set the display
 	/*
@@ -95,12 +93,14 @@ void THISCLASS::OnStepCleanup()
 void THISCLASS::OnStop()
 {
 	//close all the files
-	filesVector::iterator it = mFilesVector.begin();
-	while (it != mFilesVector.end())
+	filesMap::iterator it = mFiles.begin();
+	while (it != mFiles.end())
 	{
-		((*it)->fileStream).close();
+		((it->second)->fileStream).close();
+		delete it->second;
 		it++;
 	}
+	mFiles.clear();
 }
 
 void THISCLASS::writeHeader(structOutputFile *outputFile)
