@@ -133,15 +133,16 @@ CvBox2D track(camshift * cs, IplImage * pImg)
 //
 void updateHueImage(camshift * cs, const IplImage * pImg)
 {
-	// Convert to HSV color model
-	cvCvtColor( pImg, cs->pHSVImg, CV_BGR2HSV );
-
-	// Mask out-of-range values
-	cvInRangeS( cs->pHSVImg, cvScalar(0, cs->smin, MIN(cs->vmin,cs->vmax), 0),
-	            cvScalar(180, 256, MAX(cs->vmin,cs->vmax) ,0), cs->pMask );
-
-	// Extract the hue channel
-	cvSplit( cs->pHSVImg, cs->pHueImg, 0, 0, 0 );
+  // Convert to HSV color model
+  cvCvtColor( pImg, cs->pHSVImg, CV_BGR2HSV );
+  
+  // Mask out-of-range values
+    cvInRangeS( cs->pHSVImg, cvScalar(0, cs->smin, MIN(cs->vmin,cs->vmax), 0),
+		cvScalar(180, 256, MAX(cs->vmin,cs->vmax) ,0), cs->pMask );
+    // Extract the hue channel
+    cvSplit( cs->pHSVImg, cs->pHueImg, 0, 0, 0 );
+  
+    cvCvtColor(pImg, cs->pHueImg, CV_BGR2GRAY);
 }
 
 
