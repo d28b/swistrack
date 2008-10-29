@@ -4,7 +4,7 @@ Track::Track() {
 }
 
 /** \brief Constructor - id number id*/
-Track::Track(int idnumber) : trajectory(0){
+Track::Track(int idnumber) : trajectory(0), mLastUpdateFrame(0) {
 	maxlength = 50; // maximum length of trajectory to store
 	//printf("%f %f\n",trajectory.at(0).x,trajectory.at(0).y);
 	mID = idnumber;
