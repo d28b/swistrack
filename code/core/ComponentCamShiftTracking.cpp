@@ -201,8 +201,11 @@ void THISCLASS::OnStep()
 
     for (std::map<int, camshift>::iterator i = mTrackers.begin();
 	 i != mTrackers.end(); i++) {    
-      cvEllipseBox(mOutputImage, i->second.faceBox,
-		   CV_RGB(255,0,0), 3, CV_AA, 0 );
+      if (i->second.faceBox.size.height >= 0 &&
+	  i->second.faceBox.size.width >= 0) {
+	cvEllipseBox(mOutputImage, i->second.faceBox,
+		     CV_RGB(255,0,0), 3, CV_AA, 0 );
+      }
     }
 
     de.SetMainImage(mOutputImage);
