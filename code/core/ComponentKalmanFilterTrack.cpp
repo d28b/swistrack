@@ -35,9 +35,9 @@ Track& THISCLASS::GetOrMakeTrack(int id, CvPoint2D32f p)
     mOutputTracks[id].SetMaxLength(mWindowSize);
     mOutputTracks[id] = Track(id);
     
-    mKalman[id] = cvCreateKalman(4, 2, 0);
+    mKalman[id] = cvCreateKalman(4, 4, 0);
 
-    mZ_k[id] = cvCreateMat(2, 1, CV_32FC1); // measurments
+    mZ_k[id] = cvCreateMat(4, 1, CV_32FC1); // measurments
     cvZero(mZ_k[id]);
     mF[id] = cvCreateMat(4, 4, CV_32FC1);
     cvSetIdentity(mF[id], cvRealScalar(1));
@@ -47,11 +47,6 @@ Track& THISCLASS::GetOrMakeTrack(int id, CvPoint2D32f p)
     cvSetIdentity(mKalman[id]->measurement_noise_cov, cvRealScalar(1e-1));
     cvSetIdentity(mKalman[id]->error_cov_post, cvRealScalar(1));
 
-    CvRandState rng;
-    cvRandInit(&rng, 0, 1, -1, CV_RAND_UNI);
-    cvRandSetRange(&rng, 0, 0.1, 0);
-    rng.disttype = CV_RAND_NORMAL;
-    //cvRand(&rng, mKalman[id]->state_post);
     cvSetReal1D(mKalman[id]->state_post, 0, p.x);
     cvSetReal1D(mKalman[id]->state_post, 1, p.y);
     cvSetReal1D(mKalman[id]->state_post, 2, 0);
@@ -65,16 +60,22 @@ Track& THISCLASS::GetOrMakeTrack(int id, CvPoint2D32f p)
 
 }
 
-CvPoint2D32f THISCLASS::StepFilter(int id, CvPoint2D32f newMeasurement) {
-  wxTimeSpan dt = mCore->mDataStructureInput.mFrameTimestamp - mLastTs;
-  cvSetReal2D(mF[id], 0, 2, dt.GetMilliseconds().ToDouble() * 1000.0);
-  cvSetReal2D(mF[id], 1, 3, dt.GetMilliseconds().ToDouble() * 1000.0);
+CvPoint2D32f THISCLASS::StepFilter(int id, CvPoint2D32f newMeasurement, CvPoint2D32f * lastMeasurement) {
+  wxTimeSpan frameInterval = mCore->mDataStructureInput.mFrameTimestamp - mLastTs;
+  double dt = frameInterval.GetMilliseconds().ToDouble() * 1000.0;
+  cvSetReal2D(mF[id], 0, 2, dt);
+  cvSetReal2D(mF[id], 1, 3, dt);
   
   const CvMat * y_k = cvKalmanPredict(mKalman[id], 0);
 
 
   cvSetReal1D(mZ_k[id], 0, newMeasurement.x);
   cvSetReal1D(mZ_k[id], 1, newMeasurement.y);
+
+  if (lastMeasurement != NULL) {
+    cvSetReal1D(mZ_k[id], 2, (newMeasurement.x - lastMeasurement->x) / dt);
+    cvSetReal1D(mZ_k[id], 3, (newMeasurement.y - lastMeasurement->y) / dt);
+  }
   
   cout << "Position: " << 
     cvGetReal1D(mKalman[id]->state_post, 0)  << ", " <<
@@ -142,7 +143,11 @@ void THISCLASS::OnStep()
 	       it2 != particles->end(); it2++) {
 	    if (it->first == it2->mID) {
 	      Track & t = GetOrMakeTrack(it->first, it2->mCenter);
-	      CvPoint2D32f newPoint = StepFilter(t.mID, it2->mCenter);
+	      CvPoint2D32f * lastPoint = NULL;
+	      if (t.trajectory.size() != 0) {
+		lastPoint = &t.trajectory.back();
+	      }
+	      CvPoint2D32f newPoint = StepFilter(t.mID, it2->mCenter, lastPoint);
 	      Particle p = *it2;
 	      p.mCenter = newPoint;
 	      t.AddPoint(newPoint, mCore->mDataStructureInput.mFrameNumber);

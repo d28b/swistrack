@@ -189,8 +189,15 @@ void THISCLASS::OnStep()
     if (mOutputImage != NULL) {
       cvReleaseImage(&mOutputImage);
     }
-    mOutputImage = cvCloneImage(inputImage);
-    
+
+    if (mTrackers.size() == 0) {
+      mOutputImage = cvCloneImage(inputImage);
+    } else {
+      //mOutputImage = cvCloneImage(mTrackers.begin()->second.pHueImg);
+      mOutputImage = cvCloneImage(inputImage);
+      cvCvtColor(mTrackers.begin()->second.pHueImg, mOutputImage, CV_GRAY2BGR);
+
+    }
 
     for (std::map<int, camshift>::iterator i = mTrackers.begin();
 	 i != mTrackers.end(); i++) {    

@@ -32,7 +32,7 @@ class ComponentKalmanFilterTrack: public Component {
 private:
 	Track& GetOrMakeTrack(int id, CvPoint2D32f p);
 	void EraseTrack(int id);
-	CvPoint2D32f StepFilter(int trackID, CvPoint2D32f newMeasurement);
+	CvPoint2D32f StepFilter(int trackID, CvPoint2D32f newMeasurement, CvPoint2D32f * lastMeasurement);
 	DataStructureParticles::tParticleVector mParticles;
 	map<int, CvKalman *> mKalman;
 	map<int, CvMat *> mZ_k; // measurement.  position (x,y)
