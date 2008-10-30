@@ -94,6 +94,17 @@ CvBox2D track(camshift * cs, IplImage * pImg)
     cvAnd( cs->pProbImg, cs->pMask, cs->pProbImg, 0 );
 
 	// Use CamShift to find the center of the new face probability
+
+    cvCamShift( cs->pProbImg, cs->prevFaceRect,
+                cvTermCriteria( CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 10, 1 ),
+                &components, &cs->faceBox );
+
+
+
+	// Update face location and angle
+    cs->prevFaceRect = components.rect;
+	cs->faceBox.angle = -cs->faceBox.angle;
+
     CvSize size = cvGetSize(cs->pProbImg);
     if (cs->prevFaceRect.x < 0) {
       cs->prevFaceRect.x = 0;
@@ -116,13 +127,6 @@ CvBox2D track(camshift * cs, IplImage * pImg)
     }
 
 
-    cvCamShift( cs->pProbImg, cs->prevFaceRect,
-                cvTermCriteria( CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 10, 1 ),
-                &components, &cs->faceBox );
-
-	// Update face location and angle
-    cs->prevFaceRect = components.rect;
-	cs->faceBox.angle = -cs->faceBox.angle;
 
 	return cs->faceBox;
 }
