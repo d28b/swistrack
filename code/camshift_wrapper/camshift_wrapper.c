@@ -141,12 +141,12 @@ void updateHueImage(camshift * cs, const IplImage * pImg)
   cvCvtColor( pImg, cs->pHSVImg, CV_BGR2HSV );
   
   // Mask out-of-range values
-    cvInRangeS( cs->pHSVImg, cvScalar(0, cs->smin, MIN(cs->vmin,cs->vmax), 0),
-		cvScalar(180, 256, MAX(cs->vmin,cs->vmax) ,0), cs->pMask );
-    // Extract the hue channel
-    cvSplit( cs->pHSVImg, cs->pHueImg, 0, 0, 0 );
+  cvInRangeS( cs->pHSVImg, cvScalar(0, cs->smin, MIN(cs->vmin,cs->vmax), 0),
+	      cvScalar(180, 256, MAX(cs->vmin,cs->vmax) ,0), cs->pMask );
+  // Extract the hue channel
+  //cvSplit( cs->pHSVImg, cs->pHueImg, 0, 0, 0 );
   
-    cvCvtColor(pImg, cs->pHueImg, CV_BGR2GRAY);
+  cvCvtColor(pImg, cs->pHueImg, CV_BGR2GRAY);
 }
 
 
