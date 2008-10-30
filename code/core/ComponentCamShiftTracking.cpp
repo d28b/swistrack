@@ -186,15 +186,15 @@ void THISCLASS::OnStep()
   // Let the DisplayImage know about our image
   DisplayEditor de(&mDisplayOutput);
   if (de.IsActive()) {
-    if (mOutputImage != NULL) {
-      cvReleaseImage(&mOutputImage);
+    if (mOutputImage == NULL) {
+      mOutputImage = cvCloneImage(inputImage);
     }
 
     if (mTrackers.size() == 0) {
-      mOutputImage = cvCloneImage(inputImage);
+      cvCopy(inputImage, mOutputImage);
     } else {
       //mOutputImage = cvCloneImage(mTrackers.begin()->second.pHueImg);
-      mOutputImage = cvCloneImage(inputImage);
+      //cvCopy(inputImage, mOutputImage);
       cvCvtColor(mTrackers.begin()->second.pHueImg, mOutputImage, CV_GRAY2BGR);
 
     }
