@@ -137,8 +137,11 @@ CvBox2D track(camshift * cs, IplImage * pImg)
 //
 void updateHueImage(camshift * cs, const IplImage * pImg)
 {
+  
   // Convert to HSV color model
-  cvCvtColor( pImg, cs->pHSVImg, CV_BGR2HSV );
+  //cvCvtColor( pImg, img, CV_BGR2HSV );
+  //cvCvtColor( pImg, cs->pHSVImg, CV_BGR2HSV );
+  cvCopyImage(pImg, cs->pHSVImg);
   
   // Mask out-of-range values
   cvInRangeS( cs->pHSVImg, cvScalar(0, cs->smin, MIN(cs->vmin,cs->vmax), 0),
@@ -147,6 +150,7 @@ void updateHueImage(camshift * cs, const IplImage * pImg)
   //cvSplit( cs->pHSVImg, cs->pHueImg, 0, 0, 0 );
   
   cvCvtColor(pImg, cs->pHueImg, CV_BGR2GRAY);
+  //cvReleaseImage(&img);
 }
 
 
