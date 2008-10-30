@@ -39,6 +39,11 @@ void THISCLASS::OnReloadConfiguration()
 
   mVmin = GetConfigurationInt(wxT("VMin"), 60);
   mSmin = GetConfigurationInt(wxT("SMin"), 50);
+  for (std::map<int, camshift>::iterator i = mTrackers.begin();
+       i != mTrackers.end(); i++) {
+    setVmin(&i->second, mVmin);
+    setSmin(&i->second, mSmin);
+  }
   mInitialWindowSize = GetConfigurationInt(wxT("InitialWindowSize"), 60);
   mFrameKillThreshold = GetConfigurationInt(wxT("FrameKillThreshold"), 10);
 
@@ -195,7 +200,9 @@ void THISCLASS::OnStep()
     } else {
       //mOutputImage = cvCloneImage(mTrackers.begin()->second.pHueImg);
       //cvCopy(inputImage, mOutputImage);
-      cvCvtColor(mTrackers.begin()->second.pHueImg, mOutputImage, CV_GRAY2BGR);
+      //cvCvtColor(mTrackers.begin()->second.pMask, mOutputImage, CV_GRAY2BGR);
+      //cvCvtColor(mTrackers.begin()->second.pMask, mOutputImage, CV_GRAY2BGR);
+      cvCopy(inputImage, mOutputImage);
 
     }
 
@@ -225,6 +232,7 @@ void THISCLASS::OnStop() {
 	i != mTrackers.end(); i++) {    
      releaseTracker(&i->second);
    }
+   mTrackers.clear();
 
 }
 
