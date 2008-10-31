@@ -6,7 +6,8 @@
 
 THISCLASS::ComponentAdaptiveBackgroundSubtractionColor(SwisTrackCore *stc):
 		Component(stc, wxT("AdaptiveBackgroundSubtractionColor")),
-		mBackgroundImageMean(cvScalarAll(0)), mCorrectMean(true), mUpdateProportion(0), mMode(sMode_AbsDiff),
+		mOutputImage(0),
+		mBackgroundImageMean(cvScalarAll(0)), mCorrectMean(true), mUpdateProportion(0), mMode(sMode_AbsDiff), 
 		mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
@@ -27,6 +28,10 @@ void THISCLASS::OnStart() {
 
 	//Force the copy of the input in the background in the first step
 	mBackgroundImage = NULL;
+	if (mOutputImage != NULL) {
+	  cvReleaseImage(&mOutputImage);
+	}
+	mOutputImage = NULL;
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -65,41 +70,46 @@ void THISCLASS::OnStep() {
 	}
 
 	// Check and update the background
+	if (! mOutputImage) {
+	  mOutputImage = cvCloneImage(inputimage);
+	} else {
+	  cvCopyImage(inputimage, mOutputImage);
+	}
 	if (! mBackgroundImage) {
-		mBackgroundImage = cvCloneImage(inputimage);
+		mBackgroundImage = cvCloneImage(mOutputImage);
 	} else if (mUpdateProportion > 0) {
-		if ((cvGetSize(inputimage).height != cvGetSize(mBackgroundImage).height) || (cvGetSize(inputimage).width != cvGetSize(mBackgroundImage).width)) {
+		if ((cvGetSize(mOutputImage).height != cvGetSize(mBackgroundImage).height) || (cvGetSize(mOutputImage).width != cvGetSize(mBackgroundImage).width)) {
 			AddError(wxT("Input and background images do not have the same size."));
 			return;
 		}
 
-		cvAddWeighted(inputimage, mUpdateProportion, mBackgroundImage, 1.0 - mUpdateProportion, 0, mBackgroundImage);
+		cvAddWeighted(mOutputImage, mUpdateProportion, mBackgroundImage, 1.0 - mUpdateProportion, 0, mBackgroundImage);
 	}
 
 	try {
 		// Correct the tmpImage with the difference in image mean
 		if (mCorrectMean) {
 			mBackgroundImageMean = cvAvg(mBackgroundImage);
-			CvScalar tmpScalar = cvAvg(inputimage);
-			cvAddS(inputimage, cvScalar(mBackgroundImageMean.val[0] - tmpScalar.val[0], mBackgroundImageMean.val[1] - tmpScalar.val[1], mBackgroundImageMean.val[2] - tmpScalar.val[2]), inputimage);
+			CvScalar tmpScalar = cvAvg(mOutputImage);
+			cvAddS(mOutputImage, cvScalar(mBackgroundImageMean.val[0] - tmpScalar.val[0], mBackgroundImageMean.val[1] - tmpScalar.val[1], mBackgroundImageMean.val[2] - tmpScalar.val[2]), mOutputImage);
 		}
 
 		// Background subtraction
 		if (mMode == sMode_SubImageBackground) {
-			cvSub(inputimage, mBackgroundImage, inputimage);
+			cvSub(mOutputImage, mBackgroundImage, mOutputImage);
 		} else if (mMode == sMode_SubBackgroundImage) {
-			cvSub(mBackgroundImage, inputimage, inputimage);
+			cvSub(mBackgroundImage, mOutputImage, mOutputImage);
 		} else {
-			cvAbsDiff(inputimage, mBackgroundImage, inputimage);
+			cvAbsDiff(mOutputImage, mBackgroundImage, mOutputImage);
 		}
 	} catch (...) {
 		AddError(wxT("Background subtraction failed."));
 	}
-
+	mCore->mDataStructureImageColor.mImage = mOutputImage;
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
-		de.SetMainImage(inputimage);
+		de.SetMainImage(mOutputImage);
 	}
 }
 

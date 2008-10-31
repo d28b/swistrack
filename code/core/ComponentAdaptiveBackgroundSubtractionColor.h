@@ -30,6 +30,7 @@ private:
 		sMode_SubBackgroundImage,
 	};
 
+	IplImage *mOutputImage;
 	IplImage *mBackgroundImage;		//!< The background image.
 	CvScalar mBackgroundImageMean;	//!< The mean of the background image.
 	bool mCorrectMean;				//!< (configuration) Whether to correct for the mean or not.
