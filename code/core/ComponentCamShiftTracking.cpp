@@ -66,7 +66,7 @@ void THISCLASS::UpdateTrackers(IplImage * inputImage)
 	pow(5, (float) 2)) {
       float dist = squareDistance(mTracks[i->first].trajectory.back(),
 				  box.center);
-      if (dist > 1) {
+      if (dist > 0.01) {
 	mTracks[i->first].AddPoint(box.center, 
 				   mCore->mDataStructureInput.mFrameNumber);
 	Particle p;
@@ -196,14 +196,13 @@ void THISCLASS::OnStep()
     }
 
     if (mTrackers.size() == 0) {
-      cvCopy(inputImage, mOutputImage);
+      cvCopy(mCore->mDataStructureInput.mImage, mOutputImage);
     } else {
       //mOutputImage = cvCloneImage(mTrackers.begin()->second.pHueImg);
       //cvCopy(inputImage, mOutputImage);
       //cvCvtColor(mTrackers.begin()->second.pMask, mOutputImage, CV_GRAY2BGR);
       //cvCvtColor(mTrackers.begin()->second.pMask, mOutputImage, CV_GRAY2BGR);
-      cvCopy(inputImage, mOutputImage);
-
+      cvCopy(mCore->mDataStructureInput.mImage, mOutputImage);
     }
 
     for (std::map<int, camshift>::iterator i = mTrackers.begin();
