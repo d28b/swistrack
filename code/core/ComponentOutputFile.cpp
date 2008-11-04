@@ -152,7 +152,7 @@ void THISCLASS::writeData(structOutputFile *outputFile)
 			<< it->mOrientation << "\t"
 			//Compactness
 			<< it->mCompactness;
-			if (mCore->mDataStructureInput.mFrameTimestamp != wxInvalidDateTime) {
+			if (mCore->mDataStructureInput.mFrameTimestamp.IsValid()) {
 			  wxString date;
 			  wxString millis;
 			  millis << mCore->mDataStructureInput.mFrameTimestamp.GetMillisecond();
