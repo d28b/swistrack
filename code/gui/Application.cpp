@@ -36,7 +36,7 @@ int runBatch(char * filename) {
   cr.ReadComponents(core);
   ErrorList & errors = cr.mErrorList;
   for (ErrorList::tList::iterator it = errors.mList.begin(); it != errors.mList.end(); it++) {
-    cout << "Error " << it->mLineNumber << ": " << it->mMessage << endl; 
+    cout << "Error " << it->mLineNumber << ": " << it->mMessage.ToAscii() << endl; 
   }
   if (errors.mList.size() != 0) {
     return -1;
