@@ -78,6 +78,37 @@ void startTracking(camshift * cs, IplImage * pImg, CvRect * pFaceRect)
 	cs->prevFaceRect = *pFaceRect;
 }
 
+void ensureSizeBounds(camshift *cs, CvSize size) {
+  if (cs->prevFaceRect.x < 0) {
+    cs->prevFaceRect.x = 0;
+  }
+  if (cs->prevFaceRect.y < 0) {
+    cs->prevFaceRect.y = 0;
+  }
+  // -1 because the box has to be 1x1 pixels. 
+  if (cs->prevFaceRect.x  >= size.width - 1) {
+    cs->prevFaceRect.x = size.width - 2;
+  }
+  if (cs->prevFaceRect.y >= size.height - 1) {
+    cs->prevFaceRect.y = size.height - 2;
+  }
+  
+  if (cs->prevFaceRect.x + cs->prevFaceRect.width >= size.width) {
+    cs->prevFaceRect.width = size.width - cs->prevFaceRect.x - 1;
+  }
+  if (cs->prevFaceRect.y + cs->prevFaceRect.height >= size.height) {
+    cs->prevFaceRect.height = size.height - cs->prevFaceRect.y - 1;
+  }
+  if (isnan(cs->faceBox.size.height) ||
+      isnan(cs->faceBox.size.width) ||
+      isnan(cs->prevFaceRect.width) ||
+      isnan(cs->prevFaceRect.height))  {
+    cs->faceBox.size.height = 1;
+    cs->faceBox.size.width = 1;
+    cs->prevFaceRect.height = 1;
+    cs->prevFaceRect.width = 1;
+  }
+}
 
 //////////////////////////////////
 // track()
@@ -85,6 +116,7 @@ void startTracking(camshift * cs, IplImage * pImg, CvRect * pFaceRect)
 CvBox2D track(camshift * cs, IplImage * pImg)
 {
 	CvConnectedComp components;
+	ensureSizeBounds(cs, cvGetSize(cs->pProbImg));
 
 	// Create a new hue image
 	updateHueImage(cs, pImg);
@@ -104,28 +136,6 @@ CvBox2D track(camshift * cs, IplImage * pImg)
 	// Update face location and angle
     cs->prevFaceRect = components.rect;
 	cs->faceBox.angle = -cs->faceBox.angle;
-
-    CvSize size = cvGetSize(cs->pProbImg);
-    if (cs->prevFaceRect.x < 0) {
-      cs->prevFaceRect.x = 0;
-    }
-    if (cs->prevFaceRect.x >= size.width) {
-      cs->prevFaceRect.x = size.width - 1;
-    }
-    if (cs->prevFaceRect.y < 0) {
-      cs->prevFaceRect.y = 0;
-    }
-    if (cs->prevFaceRect.y >= size.height) {
-      cs->prevFaceRect.y = size.height - 1;
-    }
-
-    if (cs->prevFaceRect.x + cs->prevFaceRect.width > size.width) {
-      cs->prevFaceRect.width = size.width - cs->prevFaceRect.x;
-    }
-    if (cs->prevFaceRect.y + cs->prevFaceRect.height > size.height) {
-      cs->prevFaceRect.height = size.height - cs->prevFaceRect.y;
-    }
-
 
 
 	return cs->faceBox;
