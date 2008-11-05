@@ -13,7 +13,7 @@ public:
 	wxDateTime mFrameTimestamp; //!< The time the frame was recorded (wxInvalidDateTime if not availabe)
 
 	//! Constructor.
-	  DataStructureInput(): DataStructureImage(wxT("Input"), wxT("Input")), mFrameNumber(-1), mFramesCount(-1), mFramesPerSecond(-1), mFrameTimestamp(wxInvalidDateTime) {
+	  DataStructureInput(): DataStructureImage(wxT("Input"), wxT("Input")), mFrameNumber(0), mFramesCount(-1), mFramesPerSecond(-1), mFrameTimestamp(wxInvalidDateTime) {
 		mDisplayName = wxT("Input");
 	}
 	//! Destructor.
