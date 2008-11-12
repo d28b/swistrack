@@ -9,8 +9,8 @@ using namespace std;
 
 THISCLASS::ComponentOpticalFlowPyrLKTracking(SwisTrackCore *stc):
 		Component(stc, wxT("OpticalFlowPyrLK")),
-		mLastFrame(0), mOutputFrame(0),
-		mCorners(0), mCornersB(0), eig_image(0), tmp_image(0),
+		mLastFrame(0), mOutputFrame(0), 
+		mCorners(0), mCornersB(0), eig_image(0), tmp_image(0), mFeaturesFound(0), mFeatureErrors(0), 
 		pyrA(0), pyrB(0),
 		mNextTrackId(0),
 		mDisplayOutput(wxT("Output"), wxT("Optical Flow PyrLKT Tracking"))
