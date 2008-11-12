@@ -42,6 +42,7 @@ THISCLASS::Canvas(CanvasPanel *cp):
 	mPopupMenu.AppendSeparator();
 	mPopupMenu.Append(cID_SaveViewImageAs, wxT("Save displayed image as ..."));
 	mPopupMenu.Append(cID_SaveOriginalImageAs, wxT("Save original image as ..."));
+	mWriter.Open(wxT("displayOutput.avi"));
 
 	// Set non-bold font
 	wxFont f = GetFont();
@@ -49,6 +50,7 @@ THISCLASS::Canvas(CanvasPanel *cp):
 }
 
 THISCLASS::~Canvas() {
+  mWriter.Close();
 }
 
 void THISCLASS::SetDisplay(Display *display) {
@@ -102,6 +104,7 @@ bool THISCLASS::OnPaintImage(wxPaintDC &dc) {
 		return false;
 	}
 
+	//mWriter.WriteFrame(img);
 	// Create an image that has the size of the DC
 	wxSize dcsize = dc.GetSize();
 	int dw = dcsize.GetWidth();

@@ -12,6 +12,7 @@ class Canvas;
 #include <wx/dcbuffer.h>
 #include "SwisTrack.h"
 #include "DisplayRenderer.h"
+#include "WriteAvi.h"
 #include <cv.h>
 
 /** \class Canvas
@@ -58,6 +59,8 @@ private:
 
 	bool mMoveStarted;					//!< True while we are in move mode.
 	wxPoint mMoveStartPoint;			//!< The starting point when moving the image.
+
+	WriteAvi mWriter;
 
 	//! Paints the image in the canvas.
 	bool OnPaintImage(wxPaintDC &dc);
