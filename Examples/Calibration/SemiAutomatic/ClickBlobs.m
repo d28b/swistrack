@@ -27,6 +27,7 @@ L=bwlabel(BW);
 %imagesc(L);
 
 % Let the user click on the blobs and calculate their centers
+disp('Click on the blobs in the image!');
 for i=1:blobs_count
 	% Retrieve the blob on which the user clicked
 	while 1
