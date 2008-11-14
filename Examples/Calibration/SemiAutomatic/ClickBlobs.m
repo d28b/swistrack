@@ -14,40 +14,45 @@ function [blobs] = ClickBlobs(image, blobs_count, level)
 % François Rey, 2007-01-05, francois.rey@epfl.ch
 
 % Convert the image to black and white
-BW = im2bw(I, level);
+BW = im2bw(image, level);
 BW = -(BW-ones(size(BW)));
 
 % Show the image on the screen
-imshow(BW);
+imagesc(BW);
+axis equal;
 hold on;
 
 % Find label on images
 L=bwlabel(BW);
+%imagesc(L);
 
 % Let the user click on the blobs and calculate their centers
 for i=1:blobs_count
 	% Retrieve the blob on which the user clicked
 	while 1
-	    blobs=ginput(1);
-    	nBlobs = L(cast(blobs(1,2),'int16'), cast(blobs(1,1),'int16'));
+	    user_click=ginput(1);
+    	nBlobs = L(cast(user_click(1, 2),'int16'), cast(user_click(1, 1),'int16'));
     	if nBlobs>0, break; end
-        warning('You must click on a blob')
+        warning('You must click on a blob!')
     end
 
 	% Get the center of the blob
     centerX=0;
     centerY=0;
     count=0;
-    for x=1:size(L,2)
-        for y=1:size(L,1)
-            if L(ordonnee,abscisse)==nBlobs
+    for x=1:size(L, 2)
+        for y=1:size(L, 1)
+            if L(y, x)==nBlobs
                 centerX=centerX+x;
                 centerY=centerY+y;
                 count=count+1;
             end
         end
     end
-    blobs(i,:)=[centerX, centerY]/count;
+    centerX=centerX/count;
+    centerY=centerY/count;
+    disp(['Blob at ' num2str(centerX) ' ' num2str(centerY)])
+    blobs(i, :)=[centerX, centerY];
 
 	% Draw the point
     plot(blobs(i, 1), blobs(i, 2), 'LineStyle', 'none', 'LineWidth', 2, 'Marker', '+', 'MarkerFaceColor', 'g', 'MarkerSize', 6);
