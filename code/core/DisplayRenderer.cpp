@@ -209,7 +209,7 @@ bool THISCLASS::DrawTrajectories(ErrorList *errors) {
 		while (p != it->second.trajectory.end()) {
 			int x = (int)floor((*p).x * mScalingFactor + 0.5);
 			int y = (int)floor((*p).y * mScalingFactor + 0.5);
-			cvLine(mImage, cvPoint(xprev, yprev), cvPoint(x, y), color);
+			cvLine(mImage, cvPoint(xprev, yprev), cvPoint(x, y), color, 3);
 			xprev = x;
 			yprev = y;
 			p++;
