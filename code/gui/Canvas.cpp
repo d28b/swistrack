@@ -103,7 +103,11 @@ bool THISCLASS::OnPaintImage(wxPaintDC &dc) {
 	if (! img) {
 		return false;
 	}
-
+	// Uncomment to write to an AVI file.
+	// It would be nice if this was a gui, but it's not.
+	// It writes the contents of the display, so it includes all
+	// tracks and everything. 
+	// The filename is hardcoded and specified above. 
 	//mWriter.WriteFrame(img);
 	// Create an image that has the size of the DC
 	wxSize dcsize = dc.GetSize();
