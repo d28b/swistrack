@@ -61,7 +61,7 @@ Track& THISCLASS::GetOrMakeTrack(int id, CvPoint2D32f p)
 }
 
 CvPoint2D32f THISCLASS::StepFilter(int id, CvPoint2D32f newMeasurement, CvPoint2D32f * lastMeasurement) {
-  wxTimeSpan frameInterval = mCore->mDataStructureInput.mFrameTimestamp - mLastTs;
+  wxTimeSpan frameInterval = mCore->mDataStructureInput.FrameTimestamp() - mLastTs;
   double dt = frameInterval.GetMilliseconds().ToDouble() * 1000.0;
   cvSetReal2D(mF[id], 0, 2, dt);
   cvSetReal2D(mF[id], 1, 3, dt);
@@ -165,7 +165,7 @@ void THISCLASS::OnStep()
 		de.SetTrajectories(true);
 	}
 
-	mLastTs = mCore->mDataStructureInput.mFrameTimestamp;
+	mLastTs = mCore->mDataStructureInput.FrameTimestamp();
 }
 
 

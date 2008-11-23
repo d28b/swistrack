@@ -34,6 +34,7 @@ private:
 	void UpdateTrackers(IplImage * inputImage);
 	void AddNewTracks(IplImage * inputImage);
 	void FilterTracks();
+	void ClearTracks();
 	int mNextTrackId;
 	DataStructureParticles::tParticleVector mParticles;
 	DataStructureTracks::tTrackMap mTracks;

@@ -152,13 +152,13 @@ void THISCLASS::writeData(structOutputFile *outputFile)
 			<< it->mOrientation << "\t"
 			//Compactness
 			<< it->mCompactness;
-			if (mCore->mDataStructureInput.mFrameTimestamp.IsValid()) {
+			if (mCore->mDataStructureInput.FrameTimestamp().IsValid()) {
 			  wxString date;
 			  wxString millis;
-			  millis << mCore->mDataStructureInput.mFrameTimestamp.GetMillisecond();
+			  millis << mCore->mDataStructureInput.FrameTimestamp().GetMillisecond();
 			  millis.Pad(3 - millis.Length(), '0', false);
 			  outputFile->fileStream
-			    << "\t" << mCore->mDataStructureInput.mFrameTimestamp.GetTicks() 
+			    << "\t" << mCore->mDataStructureInput.FrameTimestamp().GetTicks() 
 			    << millis.ToAscii();
 			} 
 			outputFile->fileStream << std::endl;

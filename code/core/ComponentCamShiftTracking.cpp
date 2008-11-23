@@ -174,6 +174,11 @@ void THISCLASS::FilterTracks()
 
 void THISCLASS::OnStep()
 {	
+  wxTimeSpan timeSinceLastFrame = mCore->mDataStructureInput.TimeSinceLastFrame();
+  if (timeSinceLastFrame.IsLongerThan(wxTimeSpan::Seconds(5))) {
+    cout << "Clearing tracks because there was a gap: " << timeSinceLastFrame.Format().ToAscii() << endl;
+    ClearTracks();
+  }
   IplImage *inputImage = mCore->mDataStructureImageColor.mImage;
   if (! inputImage) {
     AddError(wxT("No input image."));
@@ -226,7 +231,11 @@ void THISCLASS::OnStepCleanup() {
 void THISCLASS::OnStop() {
    cvReleaseImage(&mOutputImage);
    mOutputImage = 0;
-   mTracks.clear();
+   ClearTracks();
+}
+
+void THISCLASS::ClearTracks() {
+  mTracks.clear();
    for (std::map<int, camshift>::iterator i = mTrackers.begin();
 	i != mTrackers.end(); i++) {    
      releaseTracker(&i->second);
@@ -234,7 +243,6 @@ void THISCLASS::OnStop() {
    mTrackers.clear();
 
 }
-
 void THISCLASS::EraseTrack(int id) {
   mTracks.erase(id);
   releaseTracker(&mTrackers[id]);
