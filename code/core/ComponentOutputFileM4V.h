@@ -85,7 +85,7 @@ public:
 		AddError(wxT("XVID support was not compiled into this executable."));
 	}
 	void OnReloadConfiguration() {
-		AddError(wxT("GigE support was not compiled into this executable."));
+		AddError(wxT("XVID support was not compiled into this executable."));
 	}
 	void OnStep() {
 		AddError(wxT("XVID support was not compiled into this executable."));
