@@ -22,6 +22,7 @@
 #include <wx/valgen.h>
 #include <wx/textdlg.h>
 #include <wx/minifram.h>
+#include <wx/splitter.h>
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
 #include "bitmaps/icon_gui.xpm"
@@ -73,9 +74,11 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	BuildMenuBar();
 	BuildToolBar();
 	BuildStatusBar();
-
+	wxSplitterWindow * window = new wxSplitterWindow(this);
+	wxPanel * top = new wxPanel(window);
+	wxPanel * bottom = new wxPanel(window);
 	// The canvas panel
-	mCanvasPanel = new CanvasPanel(this, this);
+	mCanvasPanel = new CanvasPanel(top, this);
 
 	// SwisTrackCore
 	wxFileName filename(wxGetApp().mApplicationFolder, wxT(""), wxT(""));
@@ -87,24 +90,38 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	mSwisTrackCore->mCommunicationInterface = mTCPServer;
 	mTCPServer->AddCommandHandler(this);
 
-	// List
-	mComponentListPanel = new ComponentListPanel(this, this);
-
 	// Configuration panel
-	mConfigurationPanel = new ConfigurationPanel(this, this, 0);
+	mConfigurationPanel = new ConfigurationPanel(top, this, 0);
 
 	// Timeline panel
-	mTimelinePanel = new TimelinePanel(this, this);
+	mTimelinePanel = new TimelinePanel(bottom, this);
 
 	// Setup frame contents
 	mHorizontalSizer = new wxBoxSizer(wxHORIZONTAL);
 	mHorizontalSizer->Add(mCanvasPanel, 1, wxALL | wxEXPAND | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL, 10);
 	mHorizontalSizer->Add(mConfigurationPanel, 0, wxEXPAND, 0);
+	
+	
 
+
+	wxBoxSizer *vsTop = new wxBoxSizer(wxVERTICAL);
+	vsTop->Add(mHorizontalSizer, 3, wxEXPAND, 0);
+	top->SetSizer(vsTop);
+
+
+	wxBoxSizer *vsBottom = new wxBoxSizer(wxVERTICAL);
+	// List
+	mComponentListPanel = new ComponentListPanel(bottom, this);
+
+
+	vsBottom->Add(mComponentListPanel, 1, wxEXPAND, 0);
+	vsBottom->Add(mTimelinePanel, 0, wxEXPAND, 0);
+	bottom->SetSizer(vsBottom);
+
+	window->SplitHorizontally(top, bottom);
+	window->SetSashPosition(500);
 	wxBoxSizer *vs = new wxBoxSizer(wxVERTICAL);
-	vs->Add(mHorizontalSizer, 3, wxEXPAND, 0);
-	vs->Add(mComponentListPanel, 1, wxEXPAND, 0);
-	vs->Add(mTimelinePanel, 0, wxEXPAND, 0);
+	vs->Add(window, 1, wxEXPAND);
 	SetSizer(vs);
 }
 
