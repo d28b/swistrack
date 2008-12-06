@@ -170,7 +170,7 @@ void THISCLASS::Update() {
 
 	// Set optimal column widths of all DataStructure columns
 	for (int i = 1; i < mColumnMessages - 1; i++) {
-		mList->SetColumnWidth(i, wxLIST_AUTOSIZE);
+		mList->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
 	}
 
 	// Make the selection visible
