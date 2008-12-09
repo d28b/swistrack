@@ -3,6 +3,10 @@
 
 #include <sstream>
 
+#ifdef WIN32
+#define snprintf sprintf_s
+#endif
+
 void THISCLASS::NMEAProcessData(const char *data, int len) {
 	for (int i = 0; i < len; i++) {
 		char inchar = data[i];

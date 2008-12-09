@@ -884,6 +884,22 @@
 				Name="9 Tracking"
 				>
 				<File
+					RelativePath="..\ComponentCamShiftTracking.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentCamShiftTracking.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentKalmanFilterTrack.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentKalmanFilterTrack.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentNearestNeighborTracking.cpp"
 					>
 				</File>
@@ -1202,6 +1218,22 @@
 			</File>
 			<File
 				RelativePath="..\ImageConversion.h"
+				>
+			</File>
+			<File
+				RelativePath="..\utils.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\utils.h"
+				>
+			</File>
+			<File
+				RelativePath="..\WriteAvi.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\WriteAvi.h"
 				>
 			</File>
 		</Filter>

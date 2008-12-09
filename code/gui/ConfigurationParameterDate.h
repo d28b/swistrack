@@ -23,11 +23,10 @@ public:
 	//! Destructor.
 	~ConfigurationParameterDate();
 
-
-
-
 private:
+#ifdef wxUSE_DATEPICKCTRL
 	wxDatePickerCtrl *mDateCtrl;		//!< The corresponding GUI widget.
+#endif
 	wxSpinCtrl *mHourCtrl;
 	wxSpinCtrl *mMinuteCtrl;
 	wxComboBox *mAmPmCtrl;
