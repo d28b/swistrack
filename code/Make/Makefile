@@ -43,9 +43,9 @@ CXX        = c++
 CFLAGS     = -g -Wall
 CXXFLAGS   = -g -Wall
 INCL_CMD   = $(patsubst %,-I%,$(INCL_DIRS))
-CPPFLAGS   = $(INCL_CMD) `wx-config --cxxflags`
+CPPFLAGS   = $(INCL_CMD) `wx-config --version=2.8 --cxxflags`
 LD_CMD     = $(patsubst %,-l%,$(LD_LIBS))
-LDFLAGS    = -g $(LD_CMD) `wx-config --libs` -L/opt/local/lib
+LDFLAGS    = -g $(LD_CMD) `wx-config --version=2.8 --libs` -L/opt/local/lib
 
 ifeq ($(MAKECMDGOALS),debug)
 CXXFLAGS  += -DDEBUG -DVERBOSITY=0
