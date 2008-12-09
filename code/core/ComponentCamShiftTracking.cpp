@@ -8,6 +8,8 @@ using namespace std;
 
 #include "utils.h"
 
+#include <limits>
+
 THISCLASS::ComponentCamShiftTracking(SwisTrackCore *stc):
 		Component(stc, wxT("CamShiftTracking")),
 		mNextTrackId(0), mOutputImage(0), 
