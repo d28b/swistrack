@@ -14,7 +14,7 @@ THISCLASS::ComponentMotionTemplateTracking(SwisTrackCore *stc):
 		Component(stc, wxT("MotionTemplateTracking")),
 		mNextTrackId(0), mParticles(), mOutputImage(0), 
 		MHI_DURATION(1), MAX_TIME_DELTA(0.5),
-		MIN_TIME_DELTA(0.05), N(4), buf(0), mhi(0),
+		MIN_TIME_DELTA(0.05), N(4), buf(0), last(0), mhi(0),
 		orient(0), mask(0), segmask(0), storage(0), firstTimestamp(-1),
 		mDisplayOutput(wxT("Output"), wxT("Tracking"))
 		
