@@ -6,5 +6,12 @@
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/MotionTemplateTracking</url>
 	<displayimage>Output</displayimage>
 	<configuration>
+	  <parameter type="integer">
+	    <name>DiffThreshold</name>
+	    <label>DiffThreshold</label>
+	    <unit></unit>
+	    <default>30</default>
+	    <reloadable>false</reloadable>
+	  </parameter>
 	</configuration>
 </swistrackcomponent>

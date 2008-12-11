@@ -40,7 +40,8 @@ private:
 	DataStructureTracks::tTrackMap mTracks;
 	std::map<int, camshift> mTrackers;  // track id to tracker
 
-	void  update_mhi( IplImage* img, IplImage* dst, int diff_threshold );
+	void  update_mhi( IplImage* img, IplImage* dst, double timestamp,
+			  int diff_threshold );
 	
 	int mDiffThreshold; //!< (configuration) The diff_threshold parameter.
 
@@ -62,6 +63,7 @@ private:
 	// number of cyclic frame buffer used for motion detection
 	// (should, probably, depend on FPS)
 	const int N;
+
 	// ring image buffer
 	IplImage **buf;
 	int last;
@@ -70,7 +72,7 @@ private:
 	IplImage *mask; // valid orientation mask
 	IplImage *segmask; // motion segmentation map
 	CvMemStorage* storage; // temporary storage
-
+	double firstTimestamp;
 
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 };

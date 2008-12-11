@@ -12,10 +12,10 @@ using namespace std;
 
 THISCLASS::ComponentMotionTemplateTracking(SwisTrackCore *stc):
 		Component(stc, wxT("MotionTemplateTracking")),
-		mNextTrackId(0), mOutputImage(0), 
+		mNextTrackId(0), mParticles(), mOutputImage(0), 
 		MHI_DURATION(1), MAX_TIME_DELTA(0.5),
 		MIN_TIME_DELTA(0.05), N(4), buf(0), mhi(0),
-		orient(0), mask(0), segmask(0), storage(0),
+		orient(0), mask(0), segmask(0), storage(0), firstTimestamp(-1),
 		mDisplayOutput(wxT("Output"), wxT("Tracking"))
 		
 {
@@ -23,7 +23,7 @@ THISCLASS::ComponentMotionTemplateTracking(SwisTrackCore *stc):
 	mCategory = &(mCore->mCategoryTracking);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
-	AddDataStructureWrite(&(mCore->mDataStructureTracks));
+	//AddDataStructureWrite(&(mCore->mDataStructureTracks));
 	AddDisplay(&mDisplayOutput);
 
 	Initialize();						// Read the XML configuration file
@@ -52,6 +52,8 @@ void THISCLASS::OnReloadConfiguration()
     pow(GetConfigurationDouble(wxT("TrackDistanceKillThreshold"), 10), 2);
 
   mMaximumNumberOfTrackers = GetConfigurationInt(wxT("MaximumNumberOfTrackers"), 4);
+
+  mDiffThreshold = GetConfigurationInt(wxT("DiffThreshold"), 30);
 }
 void THISCLASS::AddNewTracks(IplImage * inputImage) {
 
@@ -168,17 +170,20 @@ void THISCLASS::OnStep()
   mCore->mDataStructureParticles.mParticles = &mParticles;
   // Let the DisplayImage know about our image
   */
-  
+  if (mOutputImage == NULL) {
+    mOutputImage = cvCreateImage( cvSize(inputImage->width,
+					 inputImage->height), 8, 3 );
+    cvZero( mOutputImage );
+    mOutputImage->origin = inputImage->origin;
+  }  
+  wxDateTime ts = mCore->mDataStructureInput.FrameTimestamp();
+  double timestamp = ts.GetTicks() + ts.GetMillisecond() / 1000.0;
+  update_mhi(inputImage, mOutputImage, timestamp, mDiffThreshold);
+  mCore->mDataStructureParticles.mParticles = &mParticles;
   DisplayEditor de(&mDisplayOutput);
   if (de.IsActive()) {
 
-    if (mOutputImage == NULL) {
-      mOutputImage = cvCreateImage( cvSize(inputImage->width,
-					   inputImage->height), 8, 3 );
-      cvZero( mOutputImage );
-      mOutputImage->origin = inputImage->origin;
-    }
-    update_mhi(inputImage, mOutputImage, 30);
+
 
     de.SetMainImage(mOutputImage);
 
@@ -215,9 +220,17 @@ void THISCLASS::EraseTrack(int id) {
 //  img - input video frame
 //  dst - resultant motion picture
 //  args - optional parameters
-void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, int diff_threshold )
+void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, double timestampIn,
+			     int diff_threshold )
 {
-    double timestamp = (double)clock()/CLOCKS_PER_SEC; // get current time in seconds
+  //double timestamp = (double)clock()/CLOCKS_PER_SEC; // get current time in seconds
+  if (firstTimestamp == -1) {
+    firstTimestamp = timestampIn - 0.01;
+  }
+  double timestamp = timestampIn - firstTimestamp;
+  printf("ts: %.3f\n", timestamp);
+  //double timestamp = timestampIn;
+  
     CvSize size = cvSize(img->width,img->height); // get current frame size
     int i, idx1 = last, idx2;
     IplImage* silh;
@@ -285,6 +298,9 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, int diff_threshold )
 
     // iterate through the motion components,
     // One more iteration (i == -1) corresponds to the whole image (global motion)
+    mParticles.clear();
+    Particle tmpParticle; // Used to put the calculated value in memory
+
     for( i = -1; i < seq->total; i++ ) {
 
         if( i < 0 ) { // case of the whole image
@@ -324,6 +340,12 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, int diff_threshold )
         // draw a clock with arrow indicating the direction
         center = cvPoint( (comp_rect.x + comp_rect.width/2),
                           (comp_rect.y + comp_rect.height/2) );
+	
+	tmpParticle.mArea = comp_rect.width * comp_rect.height;
+	tmpParticle.mCenter.x = center.x;
+	tmpParticle.mCenter.y = center.y;
+	mParticles.push_back(tmpParticle);
+	
 
         cvCircle( dst, center, cvRound(magnitude*1.2), color, 3, CV_AA, 0 );
         cvLine( dst, center, cvPoint( cvRound( center.x + magnitude*cos(angle*CV_PI/180)),
