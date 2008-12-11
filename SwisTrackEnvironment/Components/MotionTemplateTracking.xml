@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Motion Template Tracking</friendlyname>
+	<description>Uses motempl.c from the opencv book.
+	</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/MotionTemplateTracking</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+	</configuration>
+</swistrackcomponent>
