@@ -36,6 +36,7 @@ private:
 	void FilterTracks();
 	void DataAssociation();
 	void ClearDistanceArray();
+	void ClearTracks();
 	void InitializeTracks();
 	double GetCost(const Track & track, CvPoint2D32f p);
 	void AddPoint(int i, CvPoint2D32f p);

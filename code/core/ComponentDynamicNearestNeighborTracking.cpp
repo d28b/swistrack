@@ -65,6 +65,12 @@ void THISCLASS::OnReloadConfiguration()
 
 void THISCLASS::OnStep()
 {
+  wxTimeSpan timeSinceLastFrame = mCore->mDataStructureInput.TimeSinceLastFrame();
+  if (timeSinceLastFrame.IsLongerThan(wxTimeSpan::Seconds(5))) {
+    cout << "Clearing tracks because there was a gap: " << timeSinceLastFrame.Format().ToAscii() << endl;
+    ClearTracks();
+  }
+
 	//distance array is too small, release and recreate
 	if (mCore->mDataStructureParticles.mParticles->size() > maxParticles)
 	{
@@ -261,3 +267,7 @@ void THISCLASS::AddPoint(int i, CvPoint2D32f p){
   track.AddPoint(p, mCore->mDataStructureInput.mFrameNumber);
 }
 
+
+void THISCLASS::ClearTracks() {
+  mTracks.clear();
+}
