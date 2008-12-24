@@ -1,0 +1,8 @@
+# -*- debian-mr-copyright -*-
+# http://wiki.debian.org/Proposals/CopyrightFormat
+Format-Specification: http://wiki.debian.org/Proposals/CopyrightFormat?action=recall&rev=196
+
+Files: calibrationFileTools/* code/* Examples/* installer/* SwisTrackEnvironment/*
+Copyright: ??
+License: Adaptive Public License (??)
+ (hopefully will be clarified soon)
