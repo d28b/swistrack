@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>E941A62A0EAE56570002633D</string>
+						<string>E941A6300EAE58F90002633D</string>
 						<key>history</key>
 						<array>
 							<string>E941A61C0EAE53DC0002633D</string>
@@ -320,8 +320,9 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>175</integer>
-									<integer>174</integer>
+									<integer>159</integer>
+									<integer>3</integer>
+									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
@@ -360,7 +361,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>ComponentInputCameraUSB.cpp</string>
+								<string>SwisTrackCore.cpp</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -368,11 +369,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>ComponentInputCameraUSB.cpp</string>
+										<string>SwisTrackCore.cpp</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>E941A6270EAE56570002633D</string>
+										<string>E941A62F0EAE58F90002633D</string>
 										<key>history</key>
 										<array>
 											<string>E99BD10E0E9AF40B0017989E</string>
@@ -401,7 +402,8 @@
 											<string>E941A6200EAE56570002633D</string>
 											<string>E941A6210EAE56570002633D</string>
 											<string>E941A6220EAE56570002633D</string>
-											<string>E941A6230EAE56570002633D</string>
+											<string>E941A62C0EAE58F90002633D</string>
+											<string>E941A62D0EAE58F90002633D</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -432,6 +434,7 @@
 											<string>E941A6240EAE56570002633D</string>
 											<string>E941A6250EAE56570002633D</string>
 											<string>E941A6260EAE56570002633D</string>
+											<string>E941A62E0EAE58F90002633D</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
