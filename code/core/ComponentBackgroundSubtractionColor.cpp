@@ -25,7 +25,7 @@ THISCLASS::~ComponentBackgroundSubtractionColor() {
 void THISCLASS::OnStart() {
 	wxString filename = GetConfigurationString(wxT("BackgroundImage"), wxT(""));
 	if (filename != wxT("")) {
-		mBackgroundImage = cvLoadImage(filename.mb_str(wxConvISO8859_1), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
+		mBackgroundImage = cvLoadImage(filename.mb_str(wxConvFile), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
 	}
 	if (! mBackgroundImage) {
 		AddError(wxT("Cannot open background image."));

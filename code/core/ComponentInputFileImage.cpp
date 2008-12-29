@@ -25,7 +25,7 @@ void THISCLASS::OnStart() {
 	// Load the image
 	wxString filename = GetConfigurationString(wxT("File"), wxT(""));
 	if (filename != wxT("")) {
-		mOutputImage = cvLoadImage(filename.mb_str(wxConvISO8859_1), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
+		mOutputImage = cvLoadImage(filename.mb_str(wxConvFile), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
 	}
 	if (! mOutputImage) {
 		AddError(wxT("Cannot open image file."));

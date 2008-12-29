@@ -63,9 +63,9 @@ void THISCLASS::OnStep() {
 	// Create the Writer
 	if (! mWriter) {
 		if (inputimage->nChannels == 3) {
-			mWriter = cvCreateVideoWriter(mFilename.mb_str(wxConvISO8859_1), -1, mFrameRate, cvGetSize(inputimage));
+			mWriter = cvCreateVideoWriter(mFilename.mb_str(wxConvFile), -1, mFrameRate, cvGetSize(inputimage));
 		} else if (inputimage->nChannels == 1) {
-			mWriter = cvCreateVideoWriter(mFilename.mb_str(wxConvISO8859_1), -1, mFrameRate, cvGetSize(inputimage), 0);
+			mWriter = cvCreateVideoWriter(mFilename.mb_str(wxConvFile), -1, mFrameRate, cvGetSize(inputimage), 0);
 		} else {
 			AddError(wxT("Input image must have 1 or 3 channels"));
 			return;

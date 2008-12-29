@@ -53,7 +53,7 @@ void THISCLASS::OnStep()
 			newOutputFile->trackID = it->first;
 			wxString tmpFileName = mDirectoryName;
 			tmpFileName += wxString::Format(wxT("track_%08d.txt"), it->first);
-			(newOutputFile->fileStream).open(tmpFileName.mb_str(wxConvISO8859_1), std::fstream::out | std::fstream::trunc);
+			(newOutputFile->fileStream).open(tmpFileName.mb_str(wxConvFile), std::fstream::out | std::fstream::trunc);
 
 			if (!(newOutputFile->fileStream).is_open())
 			{
@@ -67,9 +67,9 @@ void THISCLASS::OnStep()
 		it++;
 	}
 
-	// if a track disappeared, close the file.   Otherwise 
+	// if a track disappeared, close the file.   Otherwise
 	// we run out of open files eventually.
-	for (std::map<int, structOutputFile*>::iterator i = mFiles.begin(); 
+	for (std::map<int, structOutputFile*>::iterator i = mFiles.begin();
 	     i != mFiles.end(); i++) {
 	  if (mTracks->find(i->first) == mTracks->end()) {
 	    mFiles[i->first]->fileStream.close();
@@ -158,9 +158,9 @@ void THISCLASS::writeData(structOutputFile *outputFile)
 			  millis << mCore->mDataStructureInput.FrameTimestamp().GetMillisecond();
 			  millis.Pad(3 - millis.Length(), '0', false);
 			  outputFile->fileStream
-			    << "\t" << mCore->mDataStructureInput.FrameTimestamp().GetTicks() 
+			    << "\t" << mCore->mDataStructureInput.FrameTimestamp().GetTicks()
 			    << millis.ToAscii();
-			} 
+			}
 			outputFile->fileStream << std::endl;
 			return;
 		}

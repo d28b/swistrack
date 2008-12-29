@@ -24,17 +24,17 @@ void THISCLASS::WriteFrame(IplImage * image) {
   if (size.width == 960) {
     if (! mWriter) {
       //CV_FOURCC('P','I','M','1')
-      mWriter = cvCreateVideoWriter(mFilename.mb_str(wxConvISO8859_1), 0, 10, cvGetSize(image));
-      //mWriter = cvCreateVideoWriter(mFilename.mb_str(wxConvISO8859_1), -1, 10, cvGetSize(image));
+      mWriter = cvCreateVideoWriter(mFilename.mb_str(wxConvFile), 0, 10, cvGetSize(image));
+      //mWriter = cvCreateVideoWriter(mFilename.mb_str(wxConvFile), -1, 10, cvGetSize(image));
     }
-    
+
     IplImage *rgbImage = cvCreateImage(cvGetSize(image), 8, 3);
     cvCvtColor(image, rgbImage, CV_BGR2RGB);
     cvWriteFrame(mWriter, rgbImage);
     cvReleaseImage(&rgbImage);
   }
 }
-  
+
 void THISCLASS::Close() {
   if (mWriter) {
     cvReleaseVideoWriter(&mWriter);

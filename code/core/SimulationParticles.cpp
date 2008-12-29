@@ -16,7 +16,7 @@ THISCLASS::SimulationParticles(const wxString &filename):
 	// Open file
 	mFile = new std::ifstream();
 	mFile->clear();
-	mFile->open(filename.mb_str(wxConvISO8859_1), std::ios::in);
+	mFile->open(filename.mb_str(wxConvFile), std::ios::in);
 }
 
 THISCLASS::~SimulationParticles() {
