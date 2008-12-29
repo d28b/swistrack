@@ -67,7 +67,7 @@ void THISCLASS::OnSetNewValue() {
 }
 
 void THISCLASS::OnButtonClicked(wxCommandEvent& event) {
-	wxFileDialog dlg(this, wxT("Select file"), wxT(""), mTextCtrl->GetValue(), wxT("All known formats|*.bmp;*.dib;*.jpeg;*.jpg;*.jpe;*.png;*.pmb;*.pgm;*.ppm;*.sr;*.ras;*.tiff;*.tif;*.exr;*.jp2|Windows bitmaps|*.bmp;*.dib|JPEG files|*.jpeg;*.jpg;*.jpe|PNG|*.png|Portable image format|*.pmb;*.pgm;*.ppm|Sun raster format|*.sr;*.ras|TIFF files|*.tiff;*.tif|OpenEXR HDR images|*.exr|JPEG 2000 images|*.jp2|All files|*.*"), wxFD_OPEN);
+	wxFileDialog dlg(this, wxT("Select file"), wxT(""), mTextCtrl->GetValue(), wxT("All known formats|*.bmp;*.dib;*.jpeg;*.jpg;*.jpe;*.png;*.pmb;*.pgm;*.ppm;*.sr;*.ras;*.tiff;*.tif;*.exr;*.jp2|Windows bitmaps|*.bmp;*.dib|JPEG files|*.jpeg;*.jpg;*.jpe|PNG|*.png|Portable image format|*.pmb;*.pgm;*.ppm|Sun raster format|*.sr;*.ras|TIFF files|*.tiff;*.tif|OpenEXR HDR images|*.exr|JPEG 2000 images|*.jp2|All files|*.*"), wxFD_OPEN | wxFD_PREVIEW);
 	if (dlg.ShowModal() != wxID_OK) {
 		return;
 	}
