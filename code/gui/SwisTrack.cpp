@@ -100,8 +100,6 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	mHorizontalSizer = new wxBoxSizer(wxHORIZONTAL);
 	mHorizontalSizer->Add(mCanvasPanel, 1, wxALL | wxEXPAND | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL, 10);
 	mHorizontalSizer->Add(mConfigurationPanel, 0, wxEXPAND, 0);
-	
-	
 
 
 	wxBoxSizer *vsTop = new wxBoxSizer(wxVERTICAL);
@@ -330,6 +328,10 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 }
 
 void SwisTrack::OnFileNew(wxCommandEvent& WXUNUSED(event)) {
+	wxMessageDialog dlg(this, wxT("This will destroy your current session. Are you sure?"), wxT("Destroy current session?"), wxOK | wxCANCEL | wxICON_ERROR);
+	if (dlg.ShowModal() != wxID_OK){
+		return; // user canceled
+	}
 	OpenFile(wxGetApp().mApplicationFolder + wxT("/default.swistrack"), false, true);
 }
 
