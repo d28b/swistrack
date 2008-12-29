@@ -106,8 +106,8 @@ bool THISCLASS::OnPaintImage(wxPaintDC &dc) {
 	// Uncomment to write to an AVI file.
 	// It would be nice if this was a gui, but it's not.
 	// It writes the contents of the display, so it includes all
-	// tracks and everything. 
-	// The filename is hardcoded and specified above. 
+	// tracks and everything.
+	// The filename is hardcoded and specified above.
 	//mWriter.WriteFrame(img);
 	// Create an image that has the size of the DC
 	wxSize dcsize = dc.GetSize();
@@ -295,7 +295,7 @@ void THISCLASS::OnMenuSaveOriginalImageAs(wxCommandEvent& event) {
 	}
 
 	// Show the file save dialog
-	wxFileDialog *dlg = new wxFileDialog(this, wxT("Save original image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp"), wxSAVE, wxDefaultPosition);
+	wxFileDialog *dlg = new wxFileDialog(this, wxT("Save original image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
 	if (dlg->ShowModal() != wxID_OK) {
 		return;
 	}
@@ -324,7 +324,7 @@ void THISCLASS::OnMenuSaveViewImageAs(wxCommandEvent& event) {
 	}
 
 	// Show the file save dialog
-	wxFileDialog *dlg = new wxFileDialog(this, wxT("Save displayed image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp"), wxSAVE, wxDefaultPosition);
+	wxFileDialog *dlg = new wxFileDialog(this, wxT("Save displayed image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
 	if (dlg->ShowModal() != wxID_OK) {
 		return;
 	}

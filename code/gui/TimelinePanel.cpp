@@ -505,7 +505,7 @@ void THISCLASS::OnMenuSaveTimeline(wxCommandEvent& event) {
 	SwisTrackCoreEventRecorder::Timeline timelinecopy = *timeline;
 
 	// Show the file save dialog
-	wxFileDialog dlg(this, wxT("Save timeline"), wxT(""), wxT(""), wxT("Text (*.txt)|*.txt"), wxSAVE, wxDefaultPosition);
+	wxFileDialog dlg(this, wxT("Save timeline"), wxT(""), wxT(""), wxT("Text (*.txt)|*.txt"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
 	if (dlg.ShowModal() != wxID_OK) {
 		return;
 	}
