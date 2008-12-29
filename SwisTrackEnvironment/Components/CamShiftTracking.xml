@@ -25,7 +25,7 @@
 	    <label>Initial Window Size when making new tracks</label>
 	    <unit></unit>
 	    <default>100</default>
-	    <reloadable>false</reloadable>
+	    <reloadable>true</reloadable>
 	  </parameter>
 	  <parameter type="double">
 	    <name>MinNewTrackDistance</name>

@@ -38,15 +38,8 @@ void THISCLASS::OnStart() {
 		return;
 	}
 
-	// Whether to correct the mean or not
-	mCorrectMean = GetConfigurationBool(wxT("CorrectMean"), true);
-
-	// We always calculate the background average, so we can select if we use the moving threshold during the segmentation
-	if (mCorrectMean) {
-		mBackgroundImageMean = cvAvg(mBackgroundImage);
-	} else {
-		mBackgroundImageMean = cvScalarAll(0);
-	}
+	// load other parameters:
+	OnReloadConfiguration();
 }
 
 void THISCLASS::OnReloadConfiguration()

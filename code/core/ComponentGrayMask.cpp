@@ -23,11 +23,6 @@ THISCLASS::~ComponentGrayMask() {
 }
 
 void THISCLASS::OnStart() {
-	OnReloadConfiguration();
-	return;
-}
-
-void THISCLASS::OnReloadConfiguration() {
 	// Load mask image
 	wxString filename = GetConfigurationString(wxT("MaskImage"), wxT(""));
 	if (filename != wxT("")) {
@@ -55,6 +50,12 @@ void THISCLASS::OnReloadConfiguration() {
 		mMaskImage = img;
 	}
 
+	// load other parameters:
+	OnReloadConfiguration();
+	return;
+}
+
+void THISCLASS::OnReloadConfiguration() {
 	// Mask mode
 	wxString mode = GetConfigurationString(wxT("Mode"), wxT("black-black"));
 	if (mode == wxT("white-white")) {

@@ -20,6 +20,7 @@
 				<x>0</x>
 				<y>0</y>
 			</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="angle">
 			<name>CameraRotation</name>
@@ -27,12 +28,14 @@
 			<min>0</min>
 			<max>6.2831853</max>
 			<default>0</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
 			<name>CameraPixelSize</name>
 			<label>Pixel size</label>
 			<unit>m</unit>
 			<default>1</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="pointDouble">
 			<name>CameraSize</name>
@@ -42,6 +45,7 @@
 				<x>1</x>
 				<y>1</y>
 			</default>
+			<reloadable>true</reloadable>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

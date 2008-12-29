@@ -9,6 +9,7 @@
 			<name>CorrectMean</name>
 			<label>Correct Mean</label>
 			<default>1</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
 			<name>UpdateProportion</name>
@@ -19,6 +20,7 @@
 			<reloadable>true</reloadable>
 			<default>0.1</default>
 			<sliderstep>0.01</sliderstep>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>Mode</name>

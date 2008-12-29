@@ -15,6 +15,7 @@
 				<item key="2">Green</item>
 				<item key="1">Blue</item>
 			</items>
+			<reloadable>true</reloadable>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

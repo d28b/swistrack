@@ -29,7 +29,7 @@ void THISCLASS::Initialize(SwisTrack *st, Component *c, ConfigurationXML *config
 	mName = config->ReadString(wxT("name"), wxT(""));
 	mLabel = config->ReadString(wxT("label"), wxT(""));
 	mDisplay = config->ReadString(wxT("display"), wxT(""));
-	mReloadable = config->ReadBool(wxT("reloadable"), true);
+	mReloadable = config->ReadBool(wxT("reloadable"), false);
 
 	// Initializes the parameter
 	OnInitialize(config, errorlist);

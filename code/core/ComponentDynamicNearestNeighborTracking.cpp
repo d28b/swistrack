@@ -31,7 +31,7 @@ THISCLASS::~ComponentDynamicNearestNeighborTracking()
 
 void THISCLASS::OnStart()
 {
-	maxParticles = 10;
+	maxParticles = GetConfigurationInt(wxT("MaxNumber"), 10);
 
 	cout << " restarting " << endl;
 	mTracks.clear();	// handle reset properly
@@ -39,7 +39,7 @@ void THISCLASS::OnStart()
 	THISCLASS::OnReloadConfiguration();
 }
 
-void THISCLASS::InitializeTracks() 
+void THISCLASS::InitializeTracks()
 {
   int id = mNextTrackId++;
   mTracks[id] = Track(id);
@@ -50,13 +50,13 @@ void THISCLASS::OnReloadConfiguration()
 {
 	mMaxDistanceSquared = GetConfigurationDouble(wxT("MaxDistance"), 10);
 	mMaxDistanceSquared *= mMaxDistanceSquared;
-	
-	mMinNewTrackDistanceSquared = 
+
+	mMinNewTrackDistanceSquared =
 	  pow(GetConfigurationDouble(wxT("MinNewTrackDistance"), 10), 2);
 
-	mFrameKillThreshold = 
+	mFrameKillThreshold =
 	  GetConfigurationDouble(wxT("FrameKillThreshold"), 10);
-	mTrackDistanceKillThresholdSquared = 
+	mTrackDistanceKillThresholdSquared =
 	  pow(GetConfigurationDouble(wxT("TrackDistanceKillThreshold"), 10), 2);
 
 
@@ -78,7 +78,7 @@ void THISCLASS::OnStep()
 		ClearDistanceArray();
 
 		for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
-		     i != mTracks.end(); i++) 
+		     i != mTracks.end(); i++)
 		{
 		  distanceArray[i->first] = new double[maxParticles];
 		}
@@ -124,9 +124,9 @@ void THISCLASS::OnStop() {
   ClearDistanceArray();
 
 }
-void THISCLASS::FilterTracks() 
+void THISCLASS::FilterTracks()
 {
-  
+
   for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
        i != mTracks.end(); i++) {
     Track & track = i->second;
@@ -160,7 +160,7 @@ void THISCLASS::FilterTracks()
 
     mTracks.erase(*i);
   }
-  
+
 }
 
 void THISCLASS::DataAssociation()
@@ -223,9 +223,9 @@ void THISCLASS::DataAssociation()
 		} else {
 		  track = &mTracks[trackIndexes[minDistanceI]];
 		}
-		    
+
 		(particles->at(particleIndexes[minDistanceJ])).mID = track->mID;
-		AddPoint(track->mID, 
+		AddPoint(track->mID,
 			 particles->at(particleIndexes[minDistanceJ]).mCenter);
 
 		//Suppress the indexes in the vectors

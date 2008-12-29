@@ -11,6 +11,7 @@
 			<label>Coefficient 1</label>
 			<unit></unit>
 			<default>0.3</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>Channel1</name>
@@ -22,6 +23,7 @@
 				<item key="1">Blue</item>
 			</items>
 			<default>3</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>Op1</name>
@@ -30,15 +32,17 @@
 				<item key="0">+</item>
 				<item key="3">-</item>
 				<item key="2">*</item>
-                <item key="1">/</item>
+				<item key="1">/</item>
 			</items>
 			<default>0</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
 			<name>Coeff2</name>
 			<label>Coefficient 2</label>
 			<unit></unit>
 			<default>0.59</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>Channel2</name>
@@ -50,6 +54,7 @@
 				<item key="1">Blue</item>
 			</items>
 			<default>2</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>Op2</name>
@@ -58,15 +63,17 @@
 				<item key="0">+</item>
 				<item key="3">-</item>
 				<item key="2">*</item>
-                <item key="1">/</item>
+				<item key="1">/</item>
 			</items>
 			<default>0</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
 			<name>Coeff3</name>
 			<label>Coefficient 3</label>
 			<unit></unit>
 			<default>0.11</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>Channel3</name>
@@ -78,6 +85,7 @@
 				<item key="1">Blue</item>
 			</items>
 			<default>1</default>
+			<reloadable>true</reloadable>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

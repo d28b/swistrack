@@ -12,7 +12,7 @@ using namespace std;
 
 THISCLASS::ComponentCamShiftTracking(SwisTrackCore *stc):
 		Component(stc, wxT("CamShiftTracking")),
-		mNextTrackId(0), mOutputImage(0), 
+		mNextTrackId(0), mOutputImage(0),
 		mDisplayOutput(wxT("Output"), wxT("Tracking"))
 {
 	// Data structure relations
@@ -32,27 +32,27 @@ THISCLASS::~ComponentCamShiftTracking()
 
 void THISCLASS::OnStart()
 {
-  THISCLASS::OnReloadConfiguration(); 
+	  mVmin = GetConfigurationInt(wxT("VMin"), 60);
+	  mSmin = GetConfigurationInt(wxT("SMin"), 50);
+	  for (std::map<int, camshift>::iterator i = mTrackers.begin();
+	       i != mTrackers.end(); i++) {
+	    setVmin(&i->second, mVmin);
+	    setSmin(&i->second, mSmin);
+	  }
 
+	  // load other parameters:
+	  OnReloadConfiguration();
 }
 
 void THISCLASS::OnReloadConfiguration()
 {
-
-  mVmin = GetConfigurationInt(wxT("VMin"), 60);
-  mSmin = GetConfigurationInt(wxT("SMin"), 50);
-  for (std::map<int, camshift>::iterator i = mTrackers.begin();
-       i != mTrackers.end(); i++) {
-    setVmin(&i->second, mVmin);
-    setSmin(&i->second, mSmin);
-  }
   mInitialWindowSize = GetConfigurationInt(wxT("InitialWindowSize"), 60);
   mFrameKillThreshold = GetConfigurationInt(wxT("FrameKillThreshold"), 10);
 
 
-  mMinNewTrackDistanceSquared = 
+  mMinNewTrackDistanceSquared =
     pow(GetConfigurationDouble(wxT("MinNewTrackDistance"), 100), 2);
-  mTrackDistanceKillThresholdSquared = 
+  mTrackDistanceKillThresholdSquared =
     pow(GetConfigurationDouble(wxT("TrackDistanceKillThreshold"), 10), 2);
 
   mMaximumNumberOfTrackers = GetConfigurationInt(wxT("MaximumNumberOfTrackers"), 4);
@@ -69,7 +69,7 @@ void THISCLASS::UpdateTrackers(IplImage * inputImage)
       float dist = squareDistance(mTracks[i->first].trajectory.back(),
 				  box.center);
       if (dist > 0.01) {
-	mTracks[i->first].AddPoint(box.center, 
+	mTracks[i->first].AddPoint(box.center,
 				   mCore->mDataStructureInput.mFrameNumber);
 	Particle p;
 	p.mCenter = box.center;
@@ -86,7 +86,7 @@ void THISCLASS::UpdateTrackers(IplImage * inputImage)
 void THISCLASS::AddNewTracks(IplImage * inputImage) {
 
   if (mTracks.size() >= mMaximumNumberOfTrackers) {
-    // already have enough trackers, so punt. 
+    // already have enough trackers, so punt.
     return;
   }
 
@@ -95,7 +95,7 @@ void THISCLASS::AddNewTracks(IplImage * inputImage) {
     return;
   }
   const DataStructureParticles::tParticleVector & particles = *mCore->mDataStructureParticles.mParticles;
-  for (DataStructureParticles::tParticleVector::const_iterator pIt = 
+  for (DataStructureParticles::tParticleVector::const_iterator pIt =
 	 particles.begin();
        pIt != particles.end(); pIt++) {
     assert(pIt->mID == -1); // (particle should not be associated)
@@ -103,7 +103,7 @@ void THISCLASS::AddNewTracks(IplImage * inputImage) {
     Track * closestTrack = NULL;
     for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
 	 i != mTracks.end(); i++) {
-      float distance = squareDistance(i->second.trajectory.back(), 
+      float distance = squareDistance(i->second.trajectory.back(),
 				      pIt->mCenter);
       if (distance < minSquareDist) {
 	minSquareDist = distance;
@@ -113,7 +113,7 @@ void THISCLASS::AddNewTracks(IplImage * inputImage) {
     if (closestTrack == NULL || minSquareDist > mMinNewTrackDistanceSquared) {
       int id = mNextTrackId++;
       mTracks[id] = Track(id);
-      mTracks[id].AddPoint(pIt->mCenter, 
+      mTracks[id].AddPoint(pIt->mCenter,
 			   mCore->mDataStructureInput.mFrameNumber);
       Particle p;
       p.mCenter = pIt->mCenter;
@@ -122,12 +122,12 @@ void THISCLASS::AddNewTracks(IplImage * inputImage) {
       p.mCompactness = pIt->mCompactness;
       p.mOrientation = pIt->mOrientation;
       mParticles.push_back(p);
-      
+
       mTrackers[id] = camshift();
       createTracker(&mTrackers[id], inputImage);
       setVmin(&mTrackers[id], mVmin);
       setSmin(&mTrackers[id], mSmin);
-      CvRect start = rectByCenter(pIt->mCenter.x, 
+      CvRect start = rectByCenter(pIt->mCenter.x,
 				  pIt->mCenter.y,
 				  mInitialWindowSize, mInitialWindowSize);
       startTracking(&mTrackers[id], inputImage, &start);
@@ -135,9 +135,9 @@ void THISCLASS::AddNewTracks(IplImage * inputImage) {
   }
 }
 
-void THISCLASS::FilterTracks() 
+void THISCLASS::FilterTracks()
 {
-  set<int> trackIdsToErase;  
+  set<int> trackIdsToErase;
   for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
        i != mTracks.end(); i++) {
     Track & track = i->second;
@@ -170,12 +170,12 @@ void THISCLASS::FilterTracks()
        i != trackIdsToErase.end(); i++) {
     EraseTrack(*i);
   }
-  
+
 }
 
 
 void THISCLASS::OnStep()
-{	
+{
   wxTimeSpan timeSinceLastFrame = mCore->mDataStructureInput.TimeSinceLastFrame();
   if (timeSinceLastFrame.IsLongerThan(wxTimeSpan::Seconds(5))) {
     cout << "Clearing tracks because there was a gap: " << timeSinceLastFrame.Format().ToAscii() << endl;
@@ -188,7 +188,7 @@ void THISCLASS::OnStep()
   }
   mParticles.clear();
   UpdateTrackers(inputImage);
-  
+
   AddNewTracks(inputImage);
   FilterTracks();
 
@@ -213,7 +213,7 @@ void THISCLASS::OnStep()
     }
 
     for (std::map<int, camshift>::iterator i = mTrackers.begin();
-	 i != mTrackers.end(); i++) {    
+	 i != mTrackers.end(); i++) {
       if (i->second.faceBox.size.height >= 0 &&
 	  i->second.faceBox.size.width >= 0) {
 	cvEllipseBox(mOutputImage, i->second.faceBox,
@@ -239,7 +239,7 @@ void THISCLASS::OnStop() {
 void THISCLASS::ClearTracks() {
   mTracks.clear();
    for (std::map<int, camshift>::iterator i = mTrackers.begin();
-	i != mTrackers.end(); i++) {    
+	i != mTrackers.end(); i++) {
      releaseTracker(&i->second);
    }
    mTrackers.clear();

@@ -14,6 +14,7 @@
 			<item key="2">RG</item>
 			<item key="3">GR</item>
 		</items>
+		<reloadable>true</reloadable>
 	</parameter>
 	</configuration>
 </swistrackcomponent>

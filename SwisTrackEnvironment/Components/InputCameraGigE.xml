@@ -49,6 +49,7 @@
 			<max>1000</max>
 			<default>400</default>
 			<slider>true</slider>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
 			<name>AnalogGain</name>
@@ -57,6 +58,7 @@
 			<max>1023</max>
 			<default>500</default>
 			<slider>true</slider>
+			<reloadable>true</reloadable>
 		</parameter>
 		<title>Area of Interest</title>
 		<parameter type="pointInteger">

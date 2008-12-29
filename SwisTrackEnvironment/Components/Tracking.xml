@@ -10,6 +10,7 @@
 			<label>Max. Number</label>
 			<unit>Individuals</unit>
 			<default>10</default>
+			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="double">
 			<name>DistanceGate</name>
@@ -17,11 +18,13 @@
 			<unit>pixels</unit>
 			<slider>true</slider>
 			<default>100</default>
+			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="checkbox">
 			<name>ShareTrajectories</name>
 			<label>Share Trajectories</label>
 			<default>true</default>
+			<reloadable>false</reloadable>
 		</parameter>
 
 	</configuration>

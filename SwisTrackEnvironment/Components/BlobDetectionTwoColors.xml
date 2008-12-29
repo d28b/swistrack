@@ -14,6 +14,7 @@
 			<default>10</default>
 			<unit>blobs</unit>
 			<slider>true</slider>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
 			<name>MaxDistance</name>
@@ -24,12 +25,14 @@
 			<unit>pixels</unit>
 			<slider>true</slider>
 			<sliderstep>1</sliderstep>
+			<reloadable>true</reloadable>
 		</parameter>
 		<line />
 		<parameter type="color">
 			<name>Color1_Color</name>
 			<label>Color 1</label>
 			<default>#ff0000</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
 			<name>Color1_ThresholdR</name>
@@ -37,6 +40,7 @@
 			<min>0</min>
 			<max>255</max>
 			<default>32</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
 			<name>Color1_ThresholdG</name>
@@ -44,6 +48,7 @@
 			<min>0</min>
 			<max>255</max>
 			<default>32</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
 			<name>Color1_ThresholdB</name>
@@ -51,11 +56,13 @@
 			<min>0</min>
 			<max>255</max>
 			<default>32</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="checkbox">
 			<name>Color1_SelectionByArea</name>
 			<label>Selection by area</label>
 			<default>0</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
 			<name>Color1_AreaMin</name>
@@ -63,6 +70,7 @@
 			<min>0</min>
 			<default>10</default>
 			<unit>pixels</unit>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
 			<name>Color1_AreaMax</name>
@@ -70,11 +78,13 @@
 			<min>0</min>
 			<default>100</default>
 			<unit>pixels</unit>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="checkbox">
 			<name>Color1_SelectionByCompactness</name>
 			<label>Selection by compactness</label>
 			<default>0</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
 			<name>Color1_CompactnessMin</name>
@@ -84,6 +94,7 @@
 			<max>1</max>
 			<slider>true</slider>
 			<sliderstep>0.01</sliderstep>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
 			<name>Color1_CompactnessMax</name>
@@ -93,12 +104,14 @@
 			<max>1</max>
 			<slider>true</slider>
 			<sliderstep>0.01</sliderstep>
+			<reloadable>true</reloadable>
 		</parameter>
 		<line />
 		<parameter type="color">
 			<name>Color2_Color</name>
 			<label>Color 2</label>
 			<default>#0000ff</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
 			<name>Color2_ThresholdR</name>
@@ -106,6 +119,7 @@
 			<min>0</min>
 			<max>255</max>
 			<default>32</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
 			<name>Color2_ThresholdG</name>
@@ -113,6 +127,7 @@
 			<min>0</min>
 			<max>255</max>
 			<default>32</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
 			<name>Color2_ThresholdB</name>
@@ -120,11 +135,13 @@
 			<min>0</min>
 			<max>255</max>
 			<default>32</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="checkbox">
 			<name>Color2_SelectionByArea</name>
 			<label>Selection by area</label>
 			<default>0</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
 			<name>Color2_AreaMin</name>
@@ -132,6 +149,7 @@
 			<min>0</min>
 			<default>10</default>
 			<unit>pixels</unit>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
 			<name>Color2_AreaMax</name>
@@ -139,11 +157,13 @@
 			<min>0</min>
 			<default>100</default>
 			<unit>pixels</unit>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="checkbox">
 			<name>Color2_SelectionByCompactness</name>
 			<label>Selection by compactness</label>
 			<default>0</default>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
 			<name>Color2_CompactnessMin</name>
@@ -153,6 +173,7 @@
 			<max>1</max>
 			<slider>true</slider>
 			<sliderstep>0.01</sliderstep>
+			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
 			<name>Color2_CompactnessMax</name>
@@ -162,6 +183,7 @@
 			<max>1</max>
 			<slider>true</slider>
 			<sliderstep>0.01</sliderstep>
+			<reloadable>true</reloadable>
 		</parameter>
 	</configuration>
 </swistrackcomponent>
