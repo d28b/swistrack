@@ -27,6 +27,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	config->SelectRootNode();
 	mValueDefault = config->ReadString(wxT("default"), wxT(""));
 	mFileFilter = config->ReadString(wxT("filefilter"), wxT("All files|*.*"));
+	mIsInput = config->ReadBool(wxT("isinput"), true);
 
 	// Create the controls
 	wxStaticText *label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
@@ -68,11 +69,20 @@ void THISCLASS::OnSetNewValue() {
 }
 
 void THISCLASS::OnButtonClicked(wxCommandEvent& event) {
-	wxFileDialog dlg(this, wxT("Select file"), wxT(""), mTextCtrl->GetValue(), mFileFilter, wxFD_OPEN);
+	long dialogStyle;
+	if (mIsInput){
+		// show dialog asking for input file, thus use an Open dialog:
+		dialogStyle = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
+	} else {
+		// show dialog asking for output file, thus use a Save dialog:
+		dialogStyle = wxFD_SAVE | wxFD_OVERWRITE_PROMPT;
+	}
+	wxFileDialog dlg(this, wxT("Select file"), wxT(""), mTextCtrl->GetValue(), mFileFilter, dialogStyle);
 	if (dlg.ShowModal() != wxID_OK) {
 		return;
 	}
 	mNewValue = dlg.GetPath();
+
 	ValidateNewValue();
 	SetNewValue();
 }

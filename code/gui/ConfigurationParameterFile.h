@@ -31,6 +31,7 @@ private:
 	wxButton *mButton;			//!< The corresponding GUI widget.
 	wxString mValueDefault;		//!< The default value.
 	wxString mFileFilter;		//!< The file filter shown in the file selection dialog box.
+	bool mIsInput;		//!< Specifies whether the file is read or written by the component.
 	wxString mNewValue;			//!< The new value.
 
 	// ConfigurationParameter methods

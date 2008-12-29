@@ -10,6 +10,7 @@
 			<name>File</name>
 			<label>AVI File</label>
 			<reloadable>false</reloadable>
+			<isinput>false</isinput>
 		</parameter>
 		<parameter type="integer">
 			<name>FrameRate</name>
