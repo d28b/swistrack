@@ -11,6 +11,9 @@ class ConfigurationParameterImage;
 
 #include "ConfigurationParameter.h"
 
+/**
+ * Specifies a filename to an image. The image will be read with cvLoadImage() so any image that can handle is acceptable.
+ */
 class ConfigurationParameterImage: public ConfigurationParameter {
 
 public:
