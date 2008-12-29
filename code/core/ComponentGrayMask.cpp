@@ -31,7 +31,7 @@ void THISCLASS::OnReloadConfiguration() {
 	// Load mask image
 	wxString filename = GetConfigurationString(wxT("MaskImage"), wxT(""));
 	if (filename != wxT("")) {
-		mMaskImage = cvLoadImage(filename.mb_str(wxConvISO8859_1), -1);
+		mMaskImage = cvLoadImage(filename.mb_str(wxConvISO8859_1), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
 	}
 	if (! mMaskImage) {
 		AddError(wxT("Cannot open mask file."));
