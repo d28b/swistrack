@@ -128,6 +128,7 @@ void THISCLASS::Update() {
 		li.SetColumn(col++);
 		li.SetText((*it)->mDisplayName);
 		li.SetTextColour(*wxBLACK);
+		li.SetFont((*it)->GetEnabled() ? *wxNORMAL_FONT : *wxITALIC_FONT);
 		li.SetData((void*)(*it));
 		if (mSelectedComponent == (*it)) {
 			li.SetState(wxLIST_STATE_SELECTED);
@@ -402,7 +403,7 @@ void THISCLASS::OnPopupMenuEnabled(wxCommandEvent& event) {
 	// Set the enabled flag
 	ComponentEditor ce(mSelectedComponent);
 	ce.SetEnabled(event.IsChecked());
-
+	Update(); // update ComponentList, in case enabled-ness changed
 	// Restart
 	mSwisTrack->mSwisTrackCore->Stop();
 	mSwisTrack->mSwisTrackCore->Start(false);
