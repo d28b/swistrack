@@ -30,6 +30,7 @@
 #include "bitmaps/bitmap_open.xpm"
 #include "bitmaps/bitmap_save.xpm"
 #include "bitmaps/bitmap_play.xpm"
+#include "bitmaps/bitmap_stop.xpm"
 //#include "bitmaps/bitmap_finger.xpm"
 //#include "bitmaps/bitmap_pause.xpm"
 #include "bitmaps/bitmap_singlestep.xpm"
@@ -44,6 +45,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 	EVT_MENU(cID_Quit,  THISCLASS::OnFileQuit)
 	EVT_MENU(cID_Control_ProductionMode, THISCLASS::OnControlProductionMode)
 	EVT_MENU(cID_Control_Run, THISCLASS::OnControlRun)
+	EVT_MENU(cID_Control_Stop, THISCLASS::OnControlRun)
 	EVT_MENU(cID_Control_Step, THISCLASS::OnControlStep)
 	EVT_MENU(cID_Control_Reset, THISCLASS::OnControlReset)
 	EVT_MENU(cID_View_ComponentList, THISCLASS::OnViewComponentList)
@@ -181,20 +183,28 @@ void THISCLASS::BuildToolBar() {
 	SetToolBar(NULL);
 
 	// Create toolbar
+	hiddenStartStopTool = NULL;
 	toolbar = CreateToolBar(wxTB_FLAT | wxTB_DOCKABLE | wxTB_TEXT);
 	toolbar->AddTool(cID_New, _T("New"), wxBITMAP(bitmap_new), _T("New"));
 	toolbar->AddTool(cID_Open, _T("Open"), wxBITMAP(bitmap_open), _T("Open"));
 	toolbar->AddTool(cID_Save, _T("Save"), wxBITMAP(bitmap_save), _T("Save"));
 	toolbar->AddSeparator();
 	toolbar->AddTool(cID_Control_ProductionMode, _T("Production"), wxBITMAP(bitmap_production), _T("Run in production mode"), wxITEM_CHECK);
-	toolbar->AddTool(cID_Control_Run, _T("Run"), wxBITMAP(bitmap_play), _T("Run automatically"), wxITEM_CHECK);
+	// We are going to add both 'start' and 'stop' tools here, then immediately remove the 'stop' one.
+	// This is just to construct the 'stop' tool. That will be hidden: removed from the toolbar and stored in hiddenStartStopTool.
+	toolbar->AddTool(cID_Control_Run, _T("Run"), wxBITMAP(bitmap_play), _T("Run automatically"));
+	toolbar->AddTool(cID_Control_Stop, _T("Stop"), wxBITMAP(bitmap_stop), _T("Stop running"));
 	toolbar->AddSeparator();
 	toolbar->AddTool(cID_Control_Step, _T("Step"), wxBITMAP(bitmap_singlestep), _T("Processes one image"));
 	toolbar->AddTool(cID_Control_Reset, _T("Reset"), wxBITMAP(bitmap_singlestep), _T("Stops the execution. It will be started upon the next step."));
 	toolbar->AddSeparator();
 
 	toolbar->Realize();
+	hiddenStartStopTool = GetToolBar()->RemoveTool(cID_Control_Stop);
+	toolbar->Realize();
+
 	toolbar->SetRows(1 ? 1 : 10 / 1);
+
 }
 
 void THISCLASS::BuildStatusBar() {
@@ -284,16 +294,35 @@ void THISCLASS::Control_StopProductionMode() {
 }
 
 void THISCLASS::Control_StartRunMode() {
+	// switch start to stop button, by removing one and adding the other one.
+	// Store removed tool in hiddenStartStopTool
+	int pos = GetToolBar()->GetToolPos(cID_Control_Run);
+	if ( pos != wxNOT_FOUND){
+		wxToolBarToolBase *temp = GetToolBar()->RemoveTool(cID_Control_Run);
+		GetToolBar()->InsertTool(pos, hiddenStartStopTool);
+		hiddenStartStopTool = temp;
+		GetToolBar()->Realize();
+	}
+
 	// Activate the automatic trigger
-	GetToolBar()->ToggleTool(cID_Control_Run, true);
 	GetToolBar()->EnableTool(cID_Control_Step, false);
 	mSwisTrackCore->TriggerStart();
 	mSwisTrackCore->Start(false);
+
 }
 
 void THISCLASS::Control_StopRunMode() {
+	// switch stop to start button, by removing one and adding the other one.
+	// Store removed tool in hiddenStartStopTool
+	int pos = GetToolBar()->GetToolPos(cID_Control_Stop);
+	if ( pos != wxNOT_FOUND){ // need to check because starting SwisTrack will trigger a call to this method, even though app is in 'stopped' mode
+		wxToolBarToolBase *temp = GetToolBar()->RemoveTool(cID_Control_Stop);
+		GetToolBar()->InsertTool(pos, hiddenStartStopTool);
+		hiddenStartStopTool = temp;
+		GetToolBar()->Realize();
+	}
+
 	// Deactivate the automatic trigger
-	GetToolBar()->ToggleTool(cID_Control_Run, false);
 	GetToolBar()->EnableTool(cID_Control_Step, true);
 	mSwisTrackCore->TriggerStop();
 }
