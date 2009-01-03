@@ -365,7 +365,7 @@ void SwisTrack::OnFileNew(wxCommandEvent& WXUNUSED(event)) {
 }
 
 void THISCLASS::OnFileOpen(wxCommandEvent& WXUNUSED(event)) {
-	wxFileDialog dlg(this, wxT("Open Configuration"), wxT(""), wxT(""), wxT("SwisTrack Configurations (*.swistrack)|*.swistrack"), wxFD_OPEN);
+	wxFileDialog dlg(this, wxT("Open Configuration"), wxT(""), wxT(""), wxT("SwisTrack Configurations (*.swistrack)|*.swistrack|All files|*.*"), wxFD_OPEN);
 	if (dlg.ShowModal() != wxID_OK) {
 		return;
 	}
@@ -452,7 +452,7 @@ void THISCLASS::SetFileName(const wxString &filename) {
 }
 
 void THISCLASS::OnFileSaveAs(wxCommandEvent& WXUNUSED(event)) {
-	wxFileDialog dlg(this, wxT("Save a configuration"), wxT(""), wxT(""), wxT("Configurations (*.swistrack)|*.swistrack"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
+	wxFileDialog dlg(this, wxT("Save a configuration"), wxT(""), wxT(""), wxT("Configurations (*.swistrack)|*.swistrack|All files|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
 	if (dlg.ShowModal() != wxID_OK) {
 		return;
 	}
@@ -578,7 +578,7 @@ void THISCLASS::OnDeveloperUtilityTest(wxCommandEvent& WXUNUSED(event)) {
 
 void THISCLASS::OnDeveloperUtilityExportComponentsTable(wxCommandEvent& WXUNUSED(event)) {
 	// Show the file save dialog
-	wxFileDialog dlg(this, wxT("Export components table"), wxT(""), wxT(""), wxT("Text (*.txt)|*.txt"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
+	wxFileDialog dlg(this, wxT("Export components table"), wxT(""), wxT(""), wxT("Text (*.txt)|*.txt|All files|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
 	if (dlg.ShowModal() != wxID_OK) {
 		return;
 	}

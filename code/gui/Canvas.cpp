@@ -295,7 +295,7 @@ void THISCLASS::OnMenuSaveOriginalImageAs(wxCommandEvent& event) {
 	}
 
 	// Show the file save dialog
-	wxFileDialog *dlg = new wxFileDialog(this, wxT("Save original image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
+	wxFileDialog *dlg = new wxFileDialog(this, wxT("Save original image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp|All files|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
 	if (dlg->ShowModal() != wxID_OK) {
 		return;
 	}
@@ -324,7 +324,7 @@ void THISCLASS::OnMenuSaveViewImageAs(wxCommandEvent& event) {
 	}
 
 	// Show the file save dialog
-	wxFileDialog *dlg = new wxFileDialog(this, wxT("Save displayed image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
+	wxFileDialog *dlg = new wxFileDialog(this, wxT("Save displayed image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp|All files|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
 	if (dlg->ShowModal() != wxID_OK) {
 		return;
 	}
