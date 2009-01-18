@@ -51,7 +51,7 @@
 				FavorSizeOrSpeed="1"
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="../../core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include"
+				AdditionalIncludeDirectories="..\..\core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WINDOWS__;__WXMSW__;__WIN95__;__WIN32__"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -81,7 +81,7 @@
 				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\core\lib;L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib"
+				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib"
 				IgnoreDefaultLibraryNames=""
 				DelayLoadDLLs=""
 				SubSystem="2"
@@ -156,7 +156,7 @@
 				ExecutionBucket="5"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include"
+				AdditionalIncludeDirectories="..\..\core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -194,7 +194,7 @@
 				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\core\lib;L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib"
+				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="libci.lib;msvcrt.lib;libc.lib"
 				GenerateDebugInformation="true"
@@ -273,7 +273,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../core;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;"
+				AdditionalIncludeDirectories="..\..\core;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1;USE_CAMERA_PYLON_GIGE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -376,7 +376,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../core;../../calibration/include;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include"
+				AdditionalIncludeDirectories="..\..\core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -410,7 +410,7 @@
 				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\core\lib;L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\1394camera\lib;L:\opencv\lib"
+				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\1394camera\lib;L:\opencv\lib"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames="libci.lib;msvcrt.lib;libc.lib"
 				GenerateDebugInformation="true"
@@ -485,7 +485,7 @@
 				FavorSizeOrSpeed="1"
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="../../core;../../calibration/include;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;"
+				AdditionalIncludeDirectories="..\..\core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WINDOWS__;__WXMSW__;__WIN95__;__WIN32__;USE_CAMERA_PYLON_GIGE"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -515,7 +515,7 @@
 				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\core\lib;L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;&quot;L:\Basler\Pylon 1.0\pylon\lib&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\lib\win32_i86&quot;"
+				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;&quot;L:\Basler\Pylon 1.0\pylon\lib&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\lib\win32_i86&quot;"
 				IgnoreDefaultLibraryNames=""
 				DelayLoadDLLs=""
 				SubSystem="2"
@@ -589,7 +589,7 @@
 				FavorSizeOrSpeed="1"
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="../../core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include"
+				AdditionalIncludeDirectories="..\..\core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WINDOWS__;__WXMSW__;__WIN95__;__WIN32__"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -619,7 +619,7 @@
 				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\core\lib;L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;L:\1394camera\lib"
+				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;L:\1394camera\lib"
 				IgnoreDefaultLibraryNames=""
 				DelayLoadDLLs=""
 				SubSystem="2"
@@ -658,6 +658,10 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{D010B136-96BD-4D44-B4F0-30388FB460B7}"
+			RelativePathToProject="..\core\MSVisualStudio\SwisTrack-Core.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -1052,6 +1056,14 @@
 			</File>
 			<File
 				RelativePath="..\ConfigurationParameterColor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ConfigurationParameterDate.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ConfigurationParameterDate.h"
 				>
 			</File>
 			<File

@@ -257,10 +257,10 @@ void THISCLASS::OnStepCleanup() {
 	try {
 		mStreamGrabber->QueueBuffer(mCurrentResult.Handle(), mCurrentResult.Context());
 	} catch (GenICam::GenericException &e) {
-		AddError(wxString::Format(wxT("Failed to requeue buffer: %s", e.GetDescription()));
-	         }
+		AddError(wxString::Format(wxT("Failed to requeue buffer: %s"), e.GetDescription()));
+	}
 
-	         // Prepare the trigger for the next frame
+	// Prepare the trigger for the next frame
 	if (mTriggerMode == sTrigger_Software) {
 		// When using the software trigger, we are immediately ready to read the next image
 		mTrigger->SetReady();

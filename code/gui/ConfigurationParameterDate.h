@@ -5,14 +5,14 @@
 
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
-#include <wx/datectrl.h>
-#include <wx/dateevt.h>
-#include <wx/spinctrl.h>
-#include <wx/combobox.h>
 #endif
 
 class ConfigurationParameterDate;
 
+#include <wx/datectrl.h>
+#include <wx/dateevt.h>
+#include <wx/spinctrl.h>
+#include <wx/combobox.h>
 #include "ConfigurationParameter.h"
 
 class ConfigurationParameterDate: public ConfigurationParameter {

@@ -44,7 +44,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include;..\..\libtsai\INCLUDE"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;..\..\libtsai\INCLUDE;..\..\camshift_wrapper"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -122,7 +122,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="0"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 0.9\pylon\include&quot;;&quot;L:\Basler\Pylon 0.9\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 0.9\pylon\include&quot;;&quot;L:\Basler\Pylon 0.9\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE;..\..\camshift_wrapper"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -197,7 +197,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE;L:\xvidcore\src"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE;L:\xvidcore\src;..\..\camshift_wrapper"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;USE_CAMERA_PYLON_GIGE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -274,7 +274,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include;..\..\libtsai\INCLUDE"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;..\..\libtsai\INCLUDE;..\..\camshift_wrapper"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;USE_CAMERA_CMU_1394"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -352,7 +352,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="0"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\OpenCV\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE;..\..\camshift_wrapper"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;USE_CAMERA_PYLON_GIGE"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -430,7 +430,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="0"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;..\..\..\LPM_VISLIB\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 0.9\pylon\include&quot;;&quot;L:\Basler\Pylon 0.9\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 0.9\pylon\include&quot;;&quot;L:\Basler\Pylon 0.9\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE;..\..\camshift_wrapper"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;USE_CAMERA_CMU_1394"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -479,6 +479,14 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{A10316DB-E1C4-4338-9777-4C2EB07179A6}"
+			RelativePathToProject="..\libtsai\libtsai.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{DAFAE4ED-D59E-4657-8DAB-18A2185D9458}"
+			RelativePathToProject="..\camshift_wrapper\MSVisualStudio\camshift_wrapper.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -892,11 +900,27 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentDynamicNearestNeighborTracking.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentDynamicNearestNeighborTracking.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentKalmanFilterTrack.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\ComponentKalmanFilterTrack.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMotionTemplateTracking.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMotionTemplateTracking.h"
 					>
 				</File>
 				<File
@@ -908,6 +932,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentOpticalFlowPyrLKTracking.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOpticalFlowPyrLKTracking.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentTracking.cpp"
 					>
 				</File>
@@ -915,10 +947,26 @@
 					RelativePath="..\ComponentTracking.h"
 					>
 				</File>
+				<File
+					RelativePath="..\ComponentTrackSmoothing.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentTrackSmoothing.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="5 Thresholding"
 				>
+				<File
+					RelativePath="..\ComponentAdaptiveThreshold.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentAdaptiveThreshold.h"
+					>
+				</File>
 				<File
 					RelativePath="..\ComponentDoubleThresholdColorIndependent.cpp"
 					>
@@ -1184,6 +1232,14 @@
 		<Filter
 			Name="Configuration"
 			>
+			<File
+				RelativePath="..\ConfigurationConversion.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ConfigurationConversion.h"
+				>
+			</File>
 			<File
 				RelativePath="..\ConfigurationReaderXML.cpp"
 				>
