@@ -16,10 +16,9 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			>
@@ -53,9 +52,7 @@
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\..\core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WINDOWS__;__WXMSW__;__WIN95__;__WIN32__"
-				StringPooling="true"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
 				AssemblerListingLocation="$(IntDir)\"
 				ObjectFile="$(IntDir)\"
@@ -84,7 +81,6 @@
 				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib"
 				IgnoreDefaultLibraryNames=""
 				DelayLoadDLLs=""
-				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
@@ -120,10 +116,9 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			>
@@ -158,8 +153,6 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
@@ -201,7 +194,6 @@
 				ProgramDatabaseFile="$(IntDir)\debug/swistrack.pdb"
 				GenerateMapFile="false"
 				MapExports="false"
-				SubSystem="2"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -241,10 +233,9 @@
 		</Configuration>
 		<Configuration
 			Name="Debug - GigaBit Camera|Win32"
-			OutputDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			>
@@ -275,14 +266,9 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\core;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1;USE_CAMERA_PYLON_GIGE"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="2"
+				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
-				AssemblerListingLocation="$(IntDir)\"
-				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(IntDir)\"
 				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -311,7 +297,6 @@
 				ProgramDatabaseFile="$(IntDir)\debug/swistrack.pdb"
 				GenerateMapFile="false"
 				MapExports="false"
-				SubSystem="2"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -344,10 +329,9 @@
 		</Configuration>
 		<Configuration
 			Name="Debug - FireWire Camera|Win32"
-			OutputDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			>
@@ -378,8 +362,6 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
@@ -417,7 +399,6 @@
 				ProgramDatabaseFile="$(IntDir)\debug/swistrack.pdb"
 				GenerateMapFile="false"
 				MapExports="false"
-				SubSystem="2"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -450,7 +431,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release - GigaBit Camera|Win32"
-			OutputDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -487,9 +468,7 @@
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\..\core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WINDOWS__;__WXMSW__;__WIN95__;__WIN32__;USE_CAMERA_PYLON_GIGE"
-				StringPooling="true"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
 				AssemblerListingLocation="$(IntDir)\"
 				ObjectFile="$(IntDir)\"
@@ -518,7 +497,6 @@
 				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;&quot;L:\Basler\Pylon 1.0\pylon\lib&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\lib\win32_i86&quot;"
 				IgnoreDefaultLibraryNames=""
 				DelayLoadDLLs=""
-				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
@@ -554,10 +532,9 @@
 		</Configuration>
 		<Configuration
 			Name="Release - FireWire Camera|Win32"
-			OutputDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			>
@@ -591,9 +568,7 @@
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="..\..\core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WINDOWS__;__WXMSW__;__WIN95__;__WIN32__"
-				StringPooling="true"
 				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
 				AssemblerListingLocation="$(IntDir)\"
 				ObjectFile="$(IntDir)\"
@@ -622,7 +597,6 @@
 				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;L:\1394camera\lib"
 				IgnoreDefaultLibraryNames=""
 				DelayLoadDLLs=""
-				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
@@ -658,10 +632,6 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<ProjectReference
-			ReferencedProjectIdentifier="{D010B136-96BD-4D44-B4F0-30388FB460B7}"
-			RelativePathToProject="..\core\MSVisualStudio\SwisTrack-Core.vcproj"
-		/>
 	</References>
 	<Files>
 		<Filter

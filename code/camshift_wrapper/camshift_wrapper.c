@@ -7,9 +7,13 @@
 #include "cv.h"
 #include <stdio.h>
 #include "camshift_wrapper.h"
+
+#ifdef _WIN32
+#define isnan(x) _isnan(x)
+#endif
+
 // Declarations for internal functions
 void updateHueImage(camshift * cs, const IplImage * pImg);
-
 
 //////////////////////////////////
 // createTracker()

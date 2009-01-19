@@ -36,6 +36,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\OpenCV\otherlibs\cvcam\include"
+				RuntimeLibrary="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -90,6 +92,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\OpenCV\otherlibs\cvcam\include"
+				RuntimeLibrary="2"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
