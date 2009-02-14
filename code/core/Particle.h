@@ -16,7 +16,7 @@ public:
 	CvPoint2D32f mWorldCenter; //!< Particle center after calibration [m].
 
 	//! Constructor.
-	Particle(): mID(-1), mCenter(), mOrientation(0), mArea(0), mCompactness(0) {}
+ Particle(): mID(-1), mCenter(), mOrientation(0), mArea(0), mCompactness(0),mWorldCenter() {}
 	//! Destructor.
 	~Particle() {}
 };
