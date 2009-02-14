@@ -13,5 +13,33 @@
 	    <default>30</default>
 	    <reloadable>false</reloadable>
 	  </parameter>
+	  <parameter type="double">
+	    <name>SegmentThreshold</name>
+	    <label>SegmentThreshold</label>
+	    <unit></unit>
+	    <default>1.5</default>
+	    <reloadable>false</reloadable>
+	  </parameter>
+	  <parameter type="double">
+	    <name>MhiDuration</name>
+	    <label>MhiDuration</label>
+	    <unit></unit>
+	    <default>1</default>
+	    <reloadable>false</reloadable>
+	  </parameter>
+	  <parameter type="double">
+	    <name>MaxTimeDelta</name>
+	    <label>MaxTimeDelta</label>
+	    <unit></unit>
+	    <default>0.5</default>
+	    <reloadable>false</reloadable>
+	  </parameter>
+	  <parameter type="double">
+	    <name>MinTimeDelta</name>
+	    <label>MinTimeDelta</label>
+	    <unit></unit>
+	    <default>0.05</default>
+	    <reloadable>false</reloadable>
+	  </parameter>
 	</configuration>
 </swistrackcomponent>

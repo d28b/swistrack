@@ -57,9 +57,10 @@ private:
 	// motion template variables
 
 	// various tracking parameters (in seconds)
-	const double MHI_DURATION;
-	const double MAX_TIME_DELTA;
-	const double MIN_TIME_DELTA;
+	double mMhiDuration;
+	double mSegmentThreshold;
+	double mMaxTimeDelta;
+	double mMinTimeDelta;
 	// number of cyclic frame buffer used for motion detection
 	// (should, probably, depend on FPS)
 	const int N;

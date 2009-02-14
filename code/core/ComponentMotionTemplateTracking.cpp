@@ -13,8 +13,8 @@ using namespace std;
 THISCLASS::ComponentMotionTemplateTracking(SwisTrackCore *stc):
 		Component(stc, wxT("MotionTemplateTracking")),
 		mNextTrackId(0), mParticles(), mOutputImage(0), 
-		MHI_DURATION(1), MAX_TIME_DELTA(0.5),
-		MIN_TIME_DELTA(0.05), N(4), buf(0), last(0), mhi(0),
+		mMhiDuration(1), mMaxTimeDelta(0.5),
+		mMinTimeDelta(0.05), N(4), buf(0), last(0), mhi(0),
 		orient(0), mask(0), segmask(0), storage(0), firstTimestamp(-1),
 		mDisplayOutput(wxT("Output"), wxT("Tracking"))
 		
@@ -45,6 +45,11 @@ void THISCLASS::OnReloadConfiguration()
 
   mInitialWindowSize = GetConfigurationInt(wxT("InitialWindowSize"), 60);
   mFrameKillThreshold = GetConfigurationInt(wxT("FrameKillThreshold"), 10);
+
+  mMhiDuration = GetConfigurationDouble(wxT("MhiDuration"), 1);
+  mSegmentThreshold = GetConfigurationDouble(wxT("SegmentThreshold"), 0.5);
+  mMaxTimeDelta = GetConfigurationDouble(wxT("MaxTimeDelta"), 0.5);
+  mMinTimeDelta = GetConfigurationDouble(wxT("MaxTimeDelta"), 0.05);
 
   mMinNewTrackDistanceSquared = 
     pow(GetConfigurationDouble(wxT("MinNewTrackDistance"), 100), 2);
@@ -276,16 +281,16 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, double timestampIn,
     cvAbsDiff( buf[idx1], buf[idx2], silh ); // get difference between frames
     
     cvThreshold( silh, silh, diff_threshold, 1, CV_THRESH_BINARY ); // and threshold it
-    cvUpdateMotionHistory( silh, mhi, timestamp, MHI_DURATION ); // update MHI
+    cvUpdateMotionHistory( silh, mhi, timestamp, mMhiDuration ); // update MHI
 
     // convert MHI to blue 8u image
-    cvCvtScale( mhi, mask, 255./MHI_DURATION,
-                (MHI_DURATION - timestamp)*255./MHI_DURATION );
+    cvCvtScale( mhi, mask, 255./mMhiDuration,
+                (mMhiDuration - timestamp)*255./mMhiDuration );
     cvZero( dst );
     cvCvtPlaneToPix( mask, 0, 0, 0, dst );
 
     // calculate motion gradient orientation and valid orientation mask
-    cvCalcMotionGradient( mhi, mask, orient, MAX_TIME_DELTA, MIN_TIME_DELTA, 3 );
+    cvCalcMotionGradient( mhi, mask, orient, mMaxTimeDelta, mMinTimeDelta, 3 );
     
     if( !storage )
         storage = cvCreateMemStorage(0);
@@ -294,7 +299,7 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, double timestampIn,
     
     // segment motion: get sequence of motion components
     // segmask is marked motion components map. It is not used further
-    seq = cvSegmentMotion( mhi, segmask, storage, timestamp, MAX_TIME_DELTA );
+    seq = cvSegmentMotion( mhi, segmask, storage, timestamp, mSegmentThreshold );
 
     // iterate through the motion components,
     // One more iteration (i == -1) corresponds to the whole image (global motion)
@@ -323,7 +328,7 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, double timestampIn,
         cvSetImageROI( mask, comp_rect );
 
         // calculate orientation
-        angle = cvCalcGlobalOrientation( orient, mask, mhi, timestamp, MHI_DURATION);
+        angle = cvCalcGlobalOrientation( orient, mask, mhi, timestamp, mMhiDuration);
         angle = 360.0 - angle;  // adjust for images with top-left origin
 
         count = cvNorm( silh, 0, CV_L1, 0 ); // calculate number of points within silhouette ROI
