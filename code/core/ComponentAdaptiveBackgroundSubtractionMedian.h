@@ -26,17 +26,8 @@ public:
 	}
 
 private:
-
-	void AddSample(IplImage * inputImage);
-	wxTimeSpan mTimeSinceLastSample;
-
-	unsigned int mBufferSize;
-	std::vector<IplImage * > mBuffer;
 	IplImage * mBackgroundModel;
-	IplImage * mBackgroundDistances;
-
 	IplImage *mOutputImage;
-
 	Display mDisplayOutput;			//!< The DisplayImage showing the output of this component.
 };
 

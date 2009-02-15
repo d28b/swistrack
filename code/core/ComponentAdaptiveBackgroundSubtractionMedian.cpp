@@ -18,7 +18,7 @@ int LInfDistance(CvScalar p1, CvScalar p2) {
 
 THISCLASS::ComponentAdaptiveBackgroundSubtractionMedian(SwisTrackCore *stc):
   Component(stc, wxT("AdaptiveBackgroundSubtractionMedian")),
-  mBufferSize(7), mBuffer(), mBackgroundModel(0), mBackgroundDistances(0), mOutputImage(0), 
+  mBackgroundModel(0), mOutputImage(0), 
   mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
@@ -36,9 +36,6 @@ THISCLASS::~ComponentAdaptiveBackgroundSubtractionMedian() {
 
 void THISCLASS::OnStart() {
 	OnReloadConfiguration();
-
-	cvReleaseImage(&mBackgroundModel);
-	cvReleaseImage(&mOutputImage);
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -59,13 +56,9 @@ void THISCLASS::OnStep() {
 	if (!mBackgroundModel) {
 	  mBackgroundModel = cvCloneImage(inputImage);
 	}
-	if (!mBackgroundDistances) {
-	  mBackgroundDistances = cvCreateImage(cvGetSize(inputImage), IPL_DEPTH_32F, 1);
-	}
+
 	if (! mOutputImage) {
 	  mOutputImage = cvCloneImage(inputImage);
-	} else {
-	  cvCopyImage(inputImage, mOutputImage);
 	}
 
 	for (int y = 0; y < mBackgroundModel->height; y++) {
