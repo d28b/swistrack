@@ -21,7 +21,7 @@ FILES_D   := $(FILES_CPP:.cpp=.d)
 # Flags
 INCLUDE   := -I/usr/include -I/usr/include/opencv `wx-config --cppflags` -I../libtsai/include -I../camshift_wrapper
 CXXFLAGS  := -g -Wall
-CPPFLAGS  := -DUNIX $(INCLUDE)
+CPPFLAGS  := $(INCLUDE)
 
 # Build
 .PHONY: all

@@ -7,11 +7,12 @@
 #include <wx/wx.h>
 #endif
 
+#include <wx/socket.h>
+#include <list>
+
 class TCPServer;
 class SwisTrack;
 
-#include <wx/socket.h>
-#include <list>
 #include "CommunicationInterface.h"
 #include "TCPServerConnection.h"
 

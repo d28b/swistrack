@@ -7,12 +7,13 @@
 #include <wx/wx.h>
 #endif
 
+#include <wx/socket.h>
+#include <list>
+
 class TCPServerConnection;
 
 #include "TCPServer.h"
 #include "CommunicationNMEAInterface.h"
-#include <list>
-#include <wx/socket.h>
 
 class TCPServerConnection: public wxEvtHandler, public CommunicationNMEAInterface {
 

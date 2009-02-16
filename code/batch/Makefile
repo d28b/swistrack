@@ -21,7 +21,7 @@ FILES_D   := $(FILES_CPP:.cpp=.d)
 # Flags
 INCLUDE   := -I/usr/include -I/usr/include/opencv -I../core
 CXXFLAGS  := -g -Wall `wx-config --cxxflags`
-CPPFLAGS  := -DUNIX $(INCLUDE) `wx-config --cppflags`
+CPPFLAGS  := $(INCLUDE) `wx-config --cppflags`
 LDLIBS    := -lm -lcv -lcxcore -lhighgui `wx-config --libs`
 LDFLAGS   :=
 

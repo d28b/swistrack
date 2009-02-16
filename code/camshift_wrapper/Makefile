@@ -21,7 +21,7 @@ FILES_D   := $(FILES_C:.c=.d)
 # Flags
 INCLUDE   := -I/usr/include -I/usr/include/opencv
 CFLAGS    := -g -Wall
-CPPFLAGS  := -DUNIX $(INCLUDE)
+CPPFLAGS  := $(INCLUDE)
 
 # Build
 .PHONY: all

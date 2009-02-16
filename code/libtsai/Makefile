@@ -20,7 +20,7 @@ FILES_O   := $(FILES_C:.c=.o)
 # Flags
 INCLUDE    = -I/usr/include -Itsaisrc -Imathsrc -Imathsrc/minpack -Iinclude
 CFLAGS    := -g -Wall
-CPPFLAGS  := -DUNIX $(INCLUDE)
+CPPFLAGS  := $(INCLUDE)
 
 # Build
 .PHONY: all
