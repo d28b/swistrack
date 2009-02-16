@@ -27,8 +27,8 @@ CXXSRCS    = $(wildcard $(patsubst %,%/*.cpp, $(SUBDIRS)))
 SRCS       = $(CSRCS) $(CXXSRCS)
 OBJS       = $(addsuffix .o, $(basename $(SRCS)))
 DEPS       = $(addsuffix .d, $(basename $(SRCS)))
-
-INCL_DIRS  = /usr/include /usr/include/opencv /opt/local/include/opencv /opt/local/include $(SUBDIRS)
+3RDPARTY   = $(PROJROOT)/../3rdParty
+INCL_DIRS  = /usr/include /usr/include/opencv /opt/local/include/opencv /opt/local/include $(3RDPARTY)/cvblobslib_v6p1/ $(SUBDIRS)
 LD_LIBS    = m stdc++ cv cxcore highgui
 
 ifneq ($(XVID_PREFIX),)
@@ -45,7 +45,7 @@ CXXFLAGS   = -g -Wall
 INCL_CMD   = $(patsubst %,-I%,$(INCL_DIRS))
 CPPFLAGS   = $(INCL_CMD) `wx-config --version=2.8 --cxxflags`
 LD_CMD     = $(patsubst %,-l%,$(LD_LIBS))
-LDFLAGS    = -g $(LD_CMD) `wx-config --version=2.8 --libs` -L/opt/local/lib
+LDFLAGS    = -g $(LD_CMD) `wx-config --version=2.8 --libs` $(3RDPARTY)/cvblobslib_v6p1/libblob.a -L/opt/local/lib
 
 ifeq ($(MAKECMDGOALS),debug)
 CXXFLAGS  += -DDEBUG -DVERBOSITY=0
