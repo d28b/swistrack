@@ -4,8 +4,7 @@
 ##
 
 # Configuration
-PROJECT_ROOT  = ..
-TARGET        = $(PROJECT_ROOT)/camshift_wrapper.a
+TARGET        = camshift_wrapper.a
 
 # Toolchain (compiler, linker)
 SHELL      = /bin/sh
@@ -14,8 +13,8 @@ CTAGS      = ctags
 #AR         = ar
 
 # Files
-FILES_C   := $(wildcard $(PROJECT_ROOT)/*.c)
-FILES_H   := $(wildcard $(PROJECT_ROOT)/*.h)
+FILES_C   := $(wildcard *.c)
+FILES_H   := $(wildcard *.h)
 FILES_O   := $(FILES_C:.c=.o)
 FILES_D   := $(FILES_C:.c=.d)
 
