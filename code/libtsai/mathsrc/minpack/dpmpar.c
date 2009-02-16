@@ -13,7 +13,7 @@ integer *i;
 	integer e_1[6];
 	doublereal fill_2[1];
 	doublereal e_3;
-	} equiv_2 = { 1018167296, 0, 1048576, 0, 2146435071, -1, {0}, 0. };
+	} equiv_2 = { {1018167296, 0, 1048576, 0, 2146435071, -1}, {0}, 0. };
 
 
     /* System generated locals */
