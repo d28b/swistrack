@@ -4,7 +4,7 @@
 ##
 
 # Configuration
-TARGET    := core.a
+TARGET    := libSwistrackCore.a
 
 # Toolchain (compiler, linker)
 SHELL     := /bin/sh
