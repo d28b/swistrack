@@ -4,7 +4,7 @@
 ##
 
 # Configuration
-TARGET    := camshift_wrapper.a
+TARGET    := libCamshiftWrapper.a
 
 # Toolchain (compiler, linker)
 SHELL     := /bin/sh
