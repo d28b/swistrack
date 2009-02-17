@@ -19,7 +19,7 @@ FILES_O   := $(FILES_CPP:.cpp=.o)
 FILES_D   := $(FILES_CPP:.cpp=.d)
 
 # Flags
-INCLUDE   := -I/usr/include -I/usr/include/opencv `wx-config --cppflags` -I../libtsai/include -I../camshift_wrapper
+INCLUDE   := -I/usr/include -I/usr/include/opencv `wx-config --cppflags` -I../libtsai/include -I../camshift_wrapper -I../../3rdParty/cvblobslib_v6p1/	
 CXXFLAGS  := -g -Wall
 CPPFLAGS  := $(INCLUDE)
 
