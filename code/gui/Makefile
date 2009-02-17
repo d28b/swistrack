@@ -23,7 +23,7 @@ FILES_D   := $(FILES_CPP:.cpp=.d)
 INCLUDE   := -I/usr/include -I/usr/include/opencv -I../core
 CXXFLAGS  := -g -Wall `wx-config --cxxflags`
 CPPFLAGS  := $(INCLUDE) `wx-config --cppflags`
-LDLIBS    := -lm -lcv -lcxcore -lhighgui `wx-config --libs` ../core/libSwistrackCore.a ../../3rdParty/cvblobslib_v6p1/libblob.a ../libtsai/libtsai.a
+LDLIBS    := -lm -lcv -lcxcore -lhighgui `wx-config --libs` ../core/libSwistrackCore.a ../../3rdParty/cvblobslib_v6p1/libblob.a ../libtsai/libtsai.a ../camshift_wrapper/*.o
 LDFLAGS   :=
 
 # Build
