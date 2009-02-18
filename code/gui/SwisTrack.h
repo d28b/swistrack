@@ -80,7 +80,7 @@ protected:
 	wxToolBarToolBase *hiddenStartStopTool; //!< the hidden tool, either start or stop. (I.e if start is shown, this is the stop.)
 	//! IDs for the controls and the menu commands
 	enum eID {
-		cID_New=1,
+		cID_New = 1,
 		cID_Open,
 		cID_Save,
 		cID_SaveAs,

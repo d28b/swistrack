@@ -18,24 +18,22 @@ FILES_CPP := $(wildcard *.cpp)
 FILES_H   := $(wildcard *.h)
 FILES_O   := $(FILES_CPP:.cpp=.o)
 FILES_D   := $(FILES_CPP:.cpp=.d)
+FILES_A   := ../core/libSwistrackCore.a ../../3rdParty/cvblobslib_v6p1/libCVBlobs.a ../../3rdParty/libtsai/libtsai.a ../../3rdParty/camshift_wrapper/libCamshiftWrapper.a
 
 # Flags
-INCLUDE   := -I/usr/include -I/usr/include/opencv -I../core
+INCLUDE   := -I/usr/include `pkg-config --cflags opencv` -I../core
 CXXFLAGS  := -g -Wall `wx-config --cxxflags`
 CPPFLAGS  := $(INCLUDE) `wx-config --cppflags`
-LDLIBS    := -lm -lcv -lcxcore -lhighgui `wx-config --libs` ../core/libSwistrackCore.a ../../3rdParty/cvblobslib_v6p1/libblob.a ../libtsai/libtsai.a ../camshift_wrapper/*.o
+LDLIBS    := `pkg-config --libs opencv` `wx-config --libs`
 LDFLAGS   :=
 
 # Build
 .PHONY: all
 all: $(TARGET)
 
-$(TARGET): $(FILES_O)
-	$(MAKE) -C ../libtsai
-	$(MAKE) -C ../camshift_wrapper
-	$(MAKE) -C ../core
+$(TARGET): $(FILES_O) $(FILES_A)
 	@echo "=== Building $@"
-	$(CC) $(LDFLAGS) $(FILES_O) $(LDLIBS) -o $@
+	$(CC) $(LDFLAGS) $(FILES_O) $(FILES_A) $(LDLIBS) -o $@
 
 .PHONY: osxbundle
 osxbundle: $(TARGET)

@@ -76,11 +76,16 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	BuildMenuBar();
 	BuildToolBar();
 	BuildStatusBar();
-	wxSplitterWindow * window = new wxSplitterWindow(this);
-	wxPanel * top = new wxPanel(window);
-	wxPanel * bottom = new wxPanel(window);
+
+	// Splitter window
+	wxSplitterWindow *splitter_window = new wxSplitterWindow(this);
+	wxPanel *panel_top = new wxPanel(splitter_window);
+	wxPanel *panel_bottom = new wxPanel(splitter_window);
+	splitter_window->SplitHorizontally(panel_top, panel_bottom);
+	splitter_window->SetSashPosition(500);
+
 	// The canvas panel
-	mCanvasPanel = new CanvasPanel(top, this);
+	mCanvasPanel = new CanvasPanel(panel_top, this);
 
 	// SwisTrackCore
 	wxFileName filename(wxGetApp().mApplicationFolder, wxT(""), wxT(""));
@@ -92,36 +97,31 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	mSwisTrackCore->mCommunicationInterface = mTCPServer;
 	mTCPServer->AddCommandHandler(this);
 
-	// Configuration panel
-	mConfigurationPanel = new ConfigurationPanel(top, this, 0);
-
-	// Timeline panel
-	mTimelinePanel = new TimelinePanel(bottom, this);
-
-	// Setup frame contents
+	// Top part: horizontal separation
 	mHorizontalSizer = new wxBoxSizer(wxHORIZONTAL);
-	mHorizontalSizer->Add(mCanvasPanel, 1, wxALL | wxEXPAND | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL, 10);
+	panel_top->SetSizer(mHorizontalSizer);
+
+	// Canvas (main display)
+	mHorizontalSizer->Add(mCanvasPanel, 1, wxALL | wxEXPAND | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL, 0);
+
+	// Configuration panel
+	mConfigurationPanel = new ConfigurationPanel(panel_top, this, 0);
 	mHorizontalSizer->Add(mConfigurationPanel, 0, wxEXPAND, 0);
 
-
-	wxBoxSizer *vsTop = new wxBoxSizer(wxVERTICAL);
-	vsTop->Add(mHorizontalSizer, 3, wxEXPAND, 0);
-	top->SetSizer(vsTop);
-
-
+	// Bottom part: vertical separation
 	wxBoxSizer *vsBottom = new wxBoxSizer(wxVERTICAL);
+	panel_bottom->SetSizer(vsBottom);
+
 	// List
-	mComponentListPanel = new ComponentListPanel(bottom, this);
-
-
+	mComponentListPanel = new ComponentListPanel(panel_bottom, this);
 	vsBottom->Add(mComponentListPanel, 1, wxEXPAND, 0);
-	vsBottom->Add(mTimelinePanel, 0, wxEXPAND, 0);
-	bottom->SetSizer(vsBottom);
 
-	window->SplitHorizontally(top, bottom);
-	window->SetSashPosition(500);
+	// Timeline panel
+	mTimelinePanel = new TimelinePanel(panel_bottom, this);
+	vsBottom->Add(mTimelinePanel, 0, wxEXPAND, 0);
+
 	wxBoxSizer *vs = new wxBoxSizer(wxVERTICAL);
-	vs->Add(window, 1, wxEXPAND);
+	vs->Add(splitter_window, 1, wxEXPAND);
 	SetSizer(vs);
 }
 

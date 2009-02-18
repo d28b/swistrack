@@ -23,8 +23,8 @@ public:
 	//! Reads the configuration from an XML element.
 	void ConfigurationReadXML(wxXmlNode *element, ErrorList *xmlerr);
 
-	//! Sets the enabled flag of the component.
-	bool SetEnabled(bool value);
+	//! Sets the enabled interval of the component.
+	bool SetEnabledInterval(int value);
 
 	//! Sets a boolean value in the configuration.
 	bool SetConfigurationBool(const wxString &key, bool value);

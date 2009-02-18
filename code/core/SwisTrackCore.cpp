@@ -74,7 +74,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 		mDataStructureImageBinary(wxT("ImageBinary"), wxT("Binary image")),
 		mDataStructureParticles(),
 		mDataStructureTracks(),
-		mStarted(false), mProductionMode(false), mEditLocks(0), mDeployedComponents() {
+		mStarted(false), mProductionMode(false), mStepCounter(0), mEditLocks(0), mDeployedComponents() {
 
 	// Initialize the list of available components
 	mAvailableComponents.push_back(new ComponentTriggerTimer(this));
@@ -197,18 +197,17 @@ bool THISCLASS::Start(bool productionmode) {
 	// Update the flags
 	mStarted = true;
 	mProductionMode = productionmode;
+	mStepCounter = 0;
 
 	// Start all components (until first error)
 	tComponentList::iterator it = mDeployedComponents.begin();
 	while (it != mDeployedComponents.end()) {
-		if ((*it)->GetEnabled()) {
-			(*it)->ClearStatus();
-			(*it)->OnStart();
-			if ((*it)->mStatusHasError) {
-				break;
-			}
-			(*it)->mStarted = true;
+		(*it)->ClearStatus();
+		(*it)->OnStart();
+		if ((*it)->mStatusHasError) {
+			break;
 		}
+		(*it)->mStarted = true;
 		it++;
 	}
 
@@ -221,8 +220,8 @@ bool THISCLASS::Start(bool productionmode) {
 
 	// Notify the clients
 	if (mCommunicationInterface) {
-	  CommunicationMessage mstart(wxT("START"));
-	  mCommunicationInterface->Send(&mstart);
+		CommunicationMessage mstart(wxT("START"));
+		mCommunicationInterface->Send(&mstart);
 	}
 
 	// Event recorder
@@ -270,8 +269,8 @@ bool THISCLASS::Stop() {
 
 	// Notify the clients
 	if (mCommunicationInterface) {
-	  CommunicationMessage mstop(wxT("STOP"));
-	  mCommunicationInterface->Send(&mstop);
+		CommunicationMessage mstop(wxT("STOP"));
+		mCommunicationInterface->Send(&mstop);
 	}
 
 	// Event recorder
@@ -308,8 +307,8 @@ bool THISCLASS::Step() {
 
 	// Notify the clients
 	if (mCommunicationInterface) {
-	  CommunicationMessage mstart(wxT("STEP_START"));
-	  mCommunicationInterface->Send(&mstart);
+		CommunicationMessage mstart(wxT("STEP_START"));
+		mCommunicationInterface->Send(&mstart);
 	}
 
 	// Reset the step durations
@@ -322,7 +321,8 @@ bool THISCLASS::Step() {
 	// Run until first error, or until the end (all started components)
 	it = mDeployedComponents.begin();
 	while (it != mDeployedComponents.end()) {
-		if ((*it)->mStarted) {
+		int enabledinterval = (*it)->GetEnabledInterval();
+		if (((*it)->mStarted) && (enabledinterval > 0) && (mStepCounter % enabledinterval == 0)) {
 			// Event recorder
 			SwisTrackCoreEventRecorder::Event starttime;
 			mEventRecorder->LapTime(&starttime, SwisTrackCoreEventRecorder::sType_StepStart, (*it));
@@ -362,8 +362,8 @@ bool THISCLASS::Step() {
 
 	// Notify the clients
 	if (mCommunicationInterface) {
-	  CommunicationMessage mstop(wxT("STEP_STOP"));
-	  mCommunicationInterface->Send(&mstop);
+		CommunicationMessage mstop(wxT("STEP_STOP"));
+		mCommunicationInterface->Send(&mstop);
 	}
 
 	// Notify the displays (OnAfterStep)
@@ -387,6 +387,7 @@ bool THISCLASS::Step() {
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepStop);
 
+	mStepCounter++;
 	return true;
 }
 
@@ -441,8 +442,8 @@ void THISCLASS::TriggerStart() {
 
 	// Notify the clients
 	if (mCommunicationInterface) {
-	  CommunicationMessage mstart(wxT("TRIGGER_START"));
-	  mCommunicationInterface->Send(&mstart);
+		CommunicationMessage mstart(wxT("TRIGGER_START"));
+		mCommunicationInterface->Send(&mstart);
 	}
 
 	// Event recorder
@@ -476,8 +477,8 @@ void THISCLASS::TriggerStop() {
 
 	// Notify the clients
 	if (mCommunicationInterface) {
-	  CommunicationMessage mstop(wxT("TRIGGER_STOP"));
-	  mCommunicationInterface->Send(&mstop);
+		CommunicationMessage mstop(wxT("TRIGGER_STOP"));
+		mCommunicationInterface->Send(&mstop);
 	}
 
 	// Event recorder

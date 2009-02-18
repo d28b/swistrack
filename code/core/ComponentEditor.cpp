@@ -28,21 +28,19 @@ void THISCLASS::ConfigurationReadXML(wxXmlNode *configuration, ErrorList *xmlerr
 
 	// Default settings
 	mComponent->mConfiguration.clear();
-	mComponent->mEnabled = true;
+	mComponent->mEnabledInterval = 1;
 
 	// Read all nodes of the XML node belonging to the component
 	wxXmlNode *node = configuration->GetChildren();
 	while (node) {
-		if (node->GetName() == wxT("enabled")) {
-			wxString value = wxT("true");
+		if (node->GetName() == wxT("enabledinterval")) {
 			wxXmlProperty *prop = node->GetProperties();
 			while (prop) {
 				if (prop->GetName() == wxT("value")) {
-					value = prop->GetValue();
+					mComponent->mEnabledInterval = ConfigurationConversion::Int(prop->GetValue(), mComponent->mEnabledInterval);
 				}
 				prop = prop->GetNext();
 			}
-			mComponent->mEnabled = (value == wxT("false") ? false : true);  // TODO: replace this by wxStringToBool(value, mComponent->mEnabled)
 		} else if (node->GetName() == wxT("parameter")) {
 			wxString name = wxT("");
 			wxString value = wxT("");
@@ -67,11 +65,12 @@ void THISCLASS::ConfigurationReadXML(wxXmlNode *configuration, ErrorList *xmlerr
 	}
 }
 
-bool THISCLASS::SetEnabled(bool value) {
+bool THISCLASS::SetEnabledInterval(int value) {
 	if (! mComponent) {
 		return false;
 	}
-	mComponent->mEnabled = value;
+
+	mComponent->mEnabledInterval = value;
 	return true;
 }
 
@@ -106,7 +105,6 @@ bool THISCLASS::SetConfigurationString(const wxString &key, const wxString &valu
 	mComponent->mConfiguration[key] = value;
 	return true;
 }
-
 
 bool THISCLASS::SetConfigurationDate(const wxString &key, const wxDateTime &value) {
 	if (! mComponent) {

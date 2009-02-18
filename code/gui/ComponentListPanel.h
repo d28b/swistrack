@@ -41,17 +41,27 @@ public:
 private:
 	//! GUI constants.
 	enum eConstants {
-		cID_ButtonAdd=1,
+		cID_ButtonAdd = 1,
 		cID_ButtonRemove,
 		cID_ButtonUp,
 		cID_ButtonDown,
 		cID_List,
-		cID_PopupMenu_Enabled,
+		cID_PopupMenu_EnabledInterval0,
+		cID_PopupMenu_EnabledInterval1,
+		cID_PopupMenu_EnabledInterval2,
+		cID_PopupMenu_EnabledInterval3,
+		cID_PopupMenu_EnabledInterval4,
+		cID_PopupMenu_EnabledInterval5,
+		cID_PopupMenu_EnabledInterval10,
+		cID_PopupMenu_EnabledInterval20,
+		cID_PopupMenu_EnabledInterval50,
+		cID_PopupMenu_EnabledInterval100,
 	};
 
 	wxMenu mPopupMenu;					//!< The popup menu.
 	wxListCtrl *mList;					//!< The corresponding GUI widget.
 	int mColumnMessages;				//!< The column number of the messages.
+	int mColumnEnabledInterval;			//!< The column number of the enabled interval.
 	int mColumnStepDuration;			//!< The column number of the step duration.
 	wxBitmapButton *mButtonAdd;			//!< The corresponding GUI widget.
 	wxBitmapButton *mButtonRemove;		//!< The corresponding GUI widget.
@@ -77,7 +87,7 @@ private:
 	//! Handles the corresponding GUI event.
 	void OnListMouseRightDown(wxMouseEvent& event);
 	//! The corresponding GUI event handler.
-	void OnPopupMenuEnabled(wxCommandEvent& event);
+	void OnPopupMenuEnabledInterval(wxCommandEvent& event);
 
 	DECLARE_EVENT_TABLE()
 };

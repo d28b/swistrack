@@ -19,7 +19,7 @@ FILES_O   := $(FILES_C:.c=.o)
 FILES_D   := $(FILES_C:.c=.d)
 
 # Flags
-INCLUDE   := -I/usr/include -I/usr/include/opencv
+INCLUDE   := -I/usr/include `pkg-config --cflags opencv`
 CFLAGS    := -g -Wall
 CPPFLAGS  := $(INCLUDE)
 

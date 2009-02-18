@@ -116,6 +116,7 @@ public:
 protected:
 	bool mStarted;			//!< Whether the components have been started or not.
 	bool mProductionMode;	//!< Whether the components are running in production mode or not. Note that this is only valid if mStarted=true.
+	int mStepCounter;		//!< The number of steps processed since the last start of the pipeline.
 	int mEditLocks;			//!< The number of edit locks.
 
 	tComponentList mDeployedComponents;						//!< The list of deployed components.

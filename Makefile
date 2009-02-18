@@ -1,12 +1,25 @@
 
+.PHONY: all
 all:
-	cd 3rdParty/ && tar xf cs2-4.4.tar
-	cd 3rdParty/cs2-4.4/ && make
-	cd code/gui && make
+	$(MAKE) -C 3rdParty/libtsai
+	$(MAKE) -C 3rdParty/camshift_wrapper
+	$(MAKE) -C 3rdParty/cvblobslib_v6p1
+	$(MAKE) -C code/core
+	$(MAKE) -C code/gui
 
+.PHONY: batch
+batch:
+	$(MAKE) -C 3rdParty/libtsai
+	$(MAKE) -C 3rdParty/camshift_wrapper
+	$(MAKE) -C 3rdParty/cvblobslib_v6p1
+	$(MAKE) -C code/core
+	$(MAKE) -C code/batch
+
+.PHONY: clean
 clean:
-	cd code/batch && make clean
-	cd code/camshift_wrapper && make clean
-	cd code/core && make clean
-	cd code/gui && make clean
-	cd code/libtsai && make clean
+	$(MAKE) -C 3rdParty/camshift_wrapper clean
+	$(MAKE) -C 3rdParty/libtsai clean
+	$(MAKE) -C 3rdParty/cvblobslib_v6p1 clean
+	$(MAKE) -C code/core clean
+	$(MAKE) -C code/gui clean
+	$(MAKE) -C code/batch clean

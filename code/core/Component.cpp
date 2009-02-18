@@ -9,11 +9,11 @@
 #define THISCLASS Component
 
 THISCLASS::Component(SwisTrackCore *stc, const wxString &name):
-		mStatus(), mStatusHasError(false), mStatusHasWarning(false), mStarted(false),
+		mStatus(), mStatusHasError(false), mStatusHasWarning(false), mTimeCritical(false), mStarted(false),
 		mName(name), mDisplayName(name), mDescription(), mHelpURL(), mCategory(0), mDefaultDisplay(), mTrigger(0),
 		mInitializationErrors(), mStepDuration(-1),
 		mDataStructureRead(), mDataStructureWrite(), mDisplays(),
-		mCore(stc), mConfiguration(), mConfigurationDefault(), mEditLocks(0) {
+		mCore(stc), mConfiguration(), mConfigurationDefault(), mEnabledInterval(1), mEditLocks(0) {
 
 }
 
@@ -74,9 +74,9 @@ Display *THISCLASS::GetDisplayByName(const wxString &name) {
 
 void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmlerr) {
 	// Write enabled flag
-	wxXmlNode *node = new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("enabled"));
+	wxXmlNode *node = new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("enabledinterval"));
 	configuration->AddChild(node);
-	node->AddProperty(wxT("value"), ConfigurationConversion::Bool(mEnabled));
+	node->AddProperty(wxT("value"), ConfigurationConversion::Int(mEnabledInterval));
 
 	// Write configuration
 	tConfigurationMap::iterator it = mConfiguration.begin();
@@ -89,8 +89,8 @@ void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmler
 	}
 }
 
-bool THISCLASS::GetEnabled() {
-	return mEnabled;
+int THISCLASS::GetEnabledInterval() {
+	return mEnabledInterval;
 }
 
 bool THISCLASS::GetConfigurationBool(const wxString &key, bool defvalue) {
