@@ -16,11 +16,10 @@ FILES_D   := $(FILES_CPP:.cpp=.d)
 FILES_A   := ../core/libSwisTrackCore.a ../../3rdParty/cvblobslib_v6p1/libCVBlobs.a ../../3rdParty/libtsai/libtsai.a ../../3rdParty/camshift_wrapper/libCamshiftWrapper.a
 
 # Flags
-INCLUDE   := -I/usr/include -I/usr/include/opencv -I../core
-CXXFLAGS  := -g -Wall `wx-config --cxxflags`
-CPPFLAGS  := $(INCLUDE) `wx-config --cppflags`
-LDLIBS    := -lm -lcxcore -lcv -lhighgui -lcvaux -lml `wx-config --libs`
-LDFLAGS   :=
+CXXFLAGS  := -g -Wall $(CXXFLAGS_ADD)
+CPPFLAGS  := $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -I/usr/include -I../core $(CPPFLAGS_ADD)
+LDLIBS    := $(OPENCV_LDLIBS) $(WXWIDGETS_LDLIBS) -lm $(LDLIBS_ADD)
+LDFLAGS   := $(LDFLAGS_ADD)
 
 # Build
 .PHONY: all

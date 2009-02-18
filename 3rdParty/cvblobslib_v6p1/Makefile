@@ -15,9 +15,8 @@ FILES_O   := $(FILES_CPP:.cpp=.o)
 FILES_D   := $(FILES_CPP:.cpp=.d)
 
 # Flags
-INCLUDE   := -I/usr/include -I/usr/include/opencv
 CXXFLAGS  := -g -Wall
-CPPFLAGS  := $(INCLUDE)
+CPPFLAGS  := $(OPENCV_CPPFLAGS) -I/usr/include
 
 # Build
 .PHONY: all
