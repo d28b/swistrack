@@ -1,16 +1,12 @@
 ##
 ##  Makefile for camshift_wrapper (as part of SwisTrack)
-##  T. Lochmatter 2009-02-16
 ##
+
+SWISTRACK_ROOT := ../..
+include $(SWISTRACK_ROOT)/Makefile.inc
 
 # Configuration
 TARGET    := libCVBlobs.a
-
-# Toolchain (compiler, linker)
-SHELL     := /bin/sh
-CTAGS     := ctags
-#CXX       := g++
-#AR        := ar
 
 # Files
 FILES_CPP := $(wildcard *.cpp)
@@ -19,7 +15,7 @@ FILES_O   := $(FILES_CPP:.cpp=.o)
 FILES_D   := $(FILES_CPP:.cpp=.d)
 
 # Flags
-INCLUDE   := -I/usr/include `pkg-config --cflags opencv`
+INCLUDE   := -I/usr/include -I/usr/include/opencv
 CXXFLAGS  := -g -Wall
 CPPFLAGS  := $(INCLUDE)
 

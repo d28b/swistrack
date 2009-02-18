@@ -1,40 +1,34 @@
 ##
-##  Makefile for gui (as part of SwisTrack)
-##  T. Lochmatter 2009-02-16
+##  Makefile for batch (as part of SwisTrack)
 ##
 
-# Configuration
-TARGET    := ../../SwisTrackEnvironment/SwisTrack-batch
+SWISTRACK_ROOT := ../..
+include $(SWISTRACK_ROOT)/Makefile.inc
 
-# Toolchain (compiler, linker)
-SHELL     := /bin/sh
-CTAGS     := ctags
-#CC        := cc
-#AR        := ar
+# Configuration
+TARGET    := $(TARGET_FOLDER)/SwisTrack-batch
 
 # Files
 FILES_CPP := $(wildcard *.cpp)
 FILES_H   := $(wildcard *.h)
 FILES_O   := $(FILES_CPP:.cpp=.o)
 FILES_D   := $(FILES_CPP:.cpp=.d)
+FILES_A   := ../core/libSwistrackCore.a ../../3rdParty/cvblobslib_v6p1/libCVBlobs.a ../../3rdParty/libtsai/libtsai.a ../../3rdParty/camshift_wrapper/libCamshiftWrapper.a
 
 # Flags
 INCLUDE   := -I/usr/include -I/usr/include/opencv -I../core
 CXXFLAGS  := -g -Wall `wx-config --cxxflags`
 CPPFLAGS  := $(INCLUDE) `wx-config --cppflags`
-LDLIBS    := -lm -lcv -lcxcore -lhighgui `wx-config --libs`
+LDLIBS    := -lm -lcxcore -lcv -lhighgui -lcvaux -lml `wx-config --libs`
 LDFLAGS   :=
 
 # Build
 .PHONY: all
 all: $(TARGET)
 
-$(TARGET): $(FILES_O)
-	$(MAKE) -C ../libtsai
-	$(MAKE) -C ../camshift_wrapper
-	$(MAKE) -C ../core
+$(TARGET): $(FILES_O) $(FILES_A)
 	@echo "=== Building $@"
-	$(CC) $(LDFLAGS) $(FILES_O) ../core/core.a ../libtsai/libtsai.a ../camshift_wrapper/camshift_wrapper.a $(LDLIBS) -o $@
+	$(CXX) $(LDFLAGS) $(FILES_O) $(FILES_A) $(LDLIBS) -o $@
 
 $(FILES_O): %.o: %.cpp
 	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@

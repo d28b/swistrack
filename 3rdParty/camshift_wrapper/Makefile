@@ -1,12 +1,12 @@
 ##
 ##  Makefile for camshift_wrapper (as part of SwisTrack)
-##  T. Lochmatter 2009-02-16
 ##
+
+SWISTRACK_ROOT := ../..
+include $(SWISTRACK_ROOT)/Makefile.inc
 
 # Configuration
 TARGET    := libCamshiftWrapper.a
-
-include ../../Makefile.inc
 
 # Files
 FILES_C   := $(wildcard *.c)
@@ -15,7 +15,7 @@ FILES_O   := $(FILES_C:.c=.o)
 FILES_D   := $(FILES_C:.c=.d)
 
 # Flags
-INCLUDE   := -I/usr/include `pkg-config --cflags opencv`
+INCLUDE   := -I/usr/include -I/usr/include/opencv
 CFLAGS    := -g -Wall
 CPPFLAGS  := $(INCLUDE)
 

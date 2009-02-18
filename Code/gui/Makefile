@@ -1,26 +1,25 @@
 ##
 ##  Makefile for gui (as part of SwisTrack)
-##  T. Lochmatter 2009-02-16
 ##
 
-# Configuration
-TARGET_FOLDER := ../../SwisTrackEnvironment
-TARGET        := $(TARGET_FOLDER)/SwisTrack
+SWISTRACK_ROOT := ../..
+include $(SWISTRACK_ROOT)/Makefile.inc
 
-include ../../Makefile.inc
+# Configuration
+TARGET    := $(TARGET_FOLDER)/SwisTrack
 
 # Files
 FILES_CPP := $(wildcard *.cpp)
 FILES_H   := $(wildcard *.h)
 FILES_O   := $(FILES_CPP:.cpp=.o)
 FILES_D   := $(FILES_CPP:.cpp=.d)
-FILES_A   := ../core/libSwistrackCore.a ../../3rdParty/cvblobslib_v6p1/libCVBlobs.a ../../3rdParty/libtsai/libtsai.a ../../3rdParty/camshift_wrapper/libCamshiftWrapper.a
+FILES_A   := ../core/libSwisTrackCore.a ../../3rdParty/cvblobslib_v6p1/libCVBlobs.a ../../3rdParty/libtsai/libtsai.a ../../3rdParty/camshift_wrapper/libCamshiftWrapper.a
 
 # Flags
-INCLUDE   := -I/usr/include `pkg-config --cflags opencv` -I../core
+INCLUDE   := -I/usr/include -I/usr/include/opencv -I../core
 CXXFLAGS  := -g -Wall `wx-config --cxxflags`
 CPPFLAGS  := $(INCLUDE) `wx-config --cppflags`
-LDLIBS    := `pkg-config --libs opencv` `wx-config --libs` --lstdc++
+LDLIBS    := -lm -lcxcore -lcv -lhighgui -lcvaux -lml `wx-config --libs`
 LDFLAGS   :=
 
 # Build
@@ -33,7 +32,7 @@ $(TARGET): $(FILES_O) $(FILES_A)
 
 .PHONY: osxbundle
 osxbundle: $(TARGET)
-	cd $(TARGET_FOLDER) && tar xfz ../AppleXCode/SwisTrack.app.skeleton.tar.gz
+	cd $(TARGET_FOLDER) && tar xfz ../Code/AppleXCode/SwisTrack.app.skeleton.tar.gz
 	cp $(TARGET) $(TARGET_FOLDER)/SwisTrack.app/Contents/MacOS/
 
 $(FILES_O): %.o: %.cpp

@@ -1,13 +1,12 @@
 ##
 ##  Makefile for libtsai (as part of SwisTrack)
-##  T. Lochmatter 2009-02-16
 ##
 
+SWISTRACK_ROOT := ../..
+include $(SWISTRACK_ROOT)/Makefile.inc
+
 # Configuration
-TARGET        = libtsai.a
-
-include ../../Makefile.inc
-
+TARGET    := libtsai.a
 
 # Files
 FILES_C   := $(wildcard tsaisrc/*.c) $(wildcard mathsrc/*.c) $(wildcard mathsrc/minpack/*.c) $(wildcard include/*.c)
