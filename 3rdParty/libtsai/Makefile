@@ -6,11 +6,8 @@
 # Configuration
 TARGET        = libtsai.a
 
-# Toolchain (compiler, linker)
-SHELL      = /bin/sh
-CTAGS      = ctags
-#CC         = cc
-#AR         = ar
+include ../../Makefile.inc
+
 
 # Files
 FILES_C   := $(wildcard tsaisrc/*.c) $(wildcard mathsrc/*.c) $(wildcard mathsrc/minpack/*.c) $(wildcard include/*.c)

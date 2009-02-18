@@ -6,11 +6,7 @@
 # Configuration
 TARGET    := libSwistrackCore.a
 
-# Toolchain (compiler, linker)
-SHELL     := /bin/sh
-CTAGS     := ctags
-#CXX       := c++
-#AR        := ar
+include ../../Makefile.inc
 
 # Files
 FILES_CPP := $(wildcard *.cpp)
@@ -19,7 +15,7 @@ FILES_O   := $(FILES_CPP:.cpp=.o)
 FILES_D   := $(FILES_CPP:.cpp=.d)
 
 # Flags
-INCLUDE   := -I/usr/include `pkg-config --cflags opencv` `wx-config --cppflags` -I../../3rdParty/libtsai/include -I../../3rdParty/camshift_wrapper -I../../3rdParty/cvblobslib_v6p1/ -I.
+INCLUDE   := -I/usr/include `pkg-config --cflags opencv` `wx-config --cppflags` -I../../3rdParty/libtsai/include -I../../3rdParty/camshift_wrapper -I../../3rdParty/cvblobslib_v6p1/ -I. -I../../../src
 CXXFLAGS  := -g -Wall $(SWISTRACK_CORE_CXXFLAGS_ADD)
 CPPFLAGS  := $(INCLUDE) $(SWISTRACK_CORE_CPPFLAGS_ADD)
 

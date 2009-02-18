@@ -6,11 +6,7 @@
 # Configuration
 TARGET    := libCamshiftWrapper.a
 
-# Toolchain (compiler, linker)
-SHELL     := /bin/sh
-CTAGS     := ctags
-#CC        := cc
-#AR        := ar
+include ../../Makefile.inc
 
 # Files
 FILES_C   := $(wildcard *.c)
