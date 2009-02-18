@@ -1,12 +1,12 @@
 #include "ComponentDynamicNearestNeighborTracking.h"
 #define THISCLASS ComponentDynamicNearestNeighborTracking
 
-using namespace std;
+#include "DisplayEditor.h"
+#include "Utility.h"
 #include <iostream>
 #include <set>
 
-#include "DisplayEditor.h"
-#include "utils.h"
+using namespace std;
 
 THISCLASS::ComponentDynamicNearestNeighborTracking(SwisTrackCore *stc):
 		Component(stc, wxT("DynamicNearestNeighborTracking")),
@@ -41,9 +41,9 @@ void THISCLASS::OnStart()
 
 void THISCLASS::InitializeTracks()
 {
-  int id = mNextTrackId++;
-  mTracks[id] = Track(id);
-  distanceArray[id] = new double[maxParticles];
+	int id = mNextTrackId++;
+	mTracks[id] = Track(id);
+	distanceArray[id] = new double[maxParticles];
 }
 
 void THISCLASS::OnReloadConfiguration()
@@ -52,12 +52,12 @@ void THISCLASS::OnReloadConfiguration()
 	mMaxDistanceSquared *= mMaxDistanceSquared;
 
 	mMinNewTrackDistanceSquared =
-	  pow(GetConfigurationDouble(wxT("MinNewTrackDistance"), 10), 2);
+	    pow(GetConfigurationDouble(wxT("MinNewTrackDistance"), 10), 2);
 
 	mFrameKillThreshold =
-	  GetConfigurationDouble(wxT("FrameKillThreshold"), 10);
+	    GetConfigurationDouble(wxT("FrameKillThreshold"), 10);
 	mTrackDistanceKillThresholdSquared =
-	  pow(GetConfigurationDouble(wxT("TrackDistanceKillThreshold"), 10), 2);
+	    pow(GetConfigurationDouble(wxT("TrackDistanceKillThreshold"), 10), 2);
 
 
 	InitializeTracks();
@@ -65,11 +65,11 @@ void THISCLASS::OnReloadConfiguration()
 
 void THISCLASS::OnStep()
 {
-  wxTimeSpan timeSinceLastFrame = mCore->mDataStructureInput.TimeSinceLastFrame();
-  if (timeSinceLastFrame.IsLongerThan(wxTimeSpan::Seconds(5))) {
-    cout << "Clearing tracks because there was a gap: " << timeSinceLastFrame.Format().ToAscii() << endl;
-    ClearTracks();
-  }
+	wxTimeSpan timeSinceLastFrame = mCore->mDataStructureInput.TimeSinceLastFrame();
+	if (timeSinceLastFrame.IsLongerThan(wxTimeSpan::Seconds(5))) {
+		cout << "Clearing tracks because there was a gap: " << timeSinceLastFrame.Format().ToAscii() << endl;
+		ClearTracks();
+	}
 
 	//distance array is too small, release and recreate
 	if (mCore->mDataStructureParticles.mParticles->size() > maxParticles)
@@ -78,16 +78,16 @@ void THISCLASS::OnStep()
 		ClearDistanceArray();
 
 		for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
-		     i != mTracks.end(); i++)
+		        i != mTracks.end(); i++)
 		{
-		  distanceArray[i->first] = new double[maxParticles];
+			distanceArray[i->first] = new double[maxParticles];
 		}
 	}
 	// get the particles as input to component
 	//	(pointer modifies data in place!)
 	particles = mCore->mDataStructureParticles.mParticles;
 	if (mTracks.size() == 0) {
-	  InitializeTracks();
+		InitializeTracks();
 	}
 
 	// associate all points with the nearest track
@@ -113,53 +113,53 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::ClearDistanceArray() {
-  for (map<int, double*>::iterator pos = distanceArray.begin();
-       pos != distanceArray.end(); ++pos) {
-    delete[] pos->second;
-  }
-  distanceArray.clear();
+	for (map<int, double*>::iterator pos = distanceArray.begin();
+	        pos != distanceArray.end(); ++pos) {
+		delete[] pos->second;
+	}
+	distanceArray.clear();
 }
 
 void THISCLASS::OnStop() {
-  ClearDistanceArray();
+	ClearDistanceArray();
 
 }
 void THISCLASS::FilterTracks()
 {
 
-  for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
-       i != mTracks.end(); i++) {
-    Track & track = i->second;
-    if (mCore->mDataStructureInput.mFrameNumber - track.LastUpdateFrame() >= mFrameKillThreshold) {
-      mTracks.erase(i);
+	for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
+	        i != mTracks.end(); i++) {
+		Track & track = i->second;
+		if (mCore->mDataStructureInput.mFrameNumber - track.LastUpdateFrame() >= mFrameKillThreshold) {
+			mTracks.erase(i);
 
-    }
-  }
-
-  set<int> trackIdsToErase;
-  for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
-       i != mTracks.end(); i++) {
-    Track & track1 = i->second;
-    for (DataStructureTracks::tTrackMap::iterator j = mTracks.begin();
-	 j != mTracks.end(); j++) {
-      Track & track2 = j->second;
-      double cost = squareDistance(track1.trajectory.back(), track2.trajectory.back());
-      if (track1.mID != track2.mID && cost < mTrackDistanceKillThresholdSquared) {
-	// kill a track - keep the older one
-	if (track1.mID < track2.mID) {
-	  trackIdsToErase.insert(track2.mID);
-	} else {
-	  trackIdsToErase.insert(track1.mID);
-	  break;
+		}
 	}
-      }
-    }
-  }
-  for (set<int>::iterator i = trackIdsToErase.begin();
-       i != trackIdsToErase.end(); i++) {
 
-    mTracks.erase(*i);
-  }
+	set<int> trackIdsToErase;
+	for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
+	        i != mTracks.end(); i++) {
+		Track & track1 = i->second;
+		for (DataStructureTracks::tTrackMap::iterator j = mTracks.begin();
+		        j != mTracks.end(); j++) {
+			Track & track2 = j->second;
+			double cost = Utility::SquareDistance(track1.trajectory.back(), track2.trajectory.back());
+			if (track1.mID != track2.mID && cost < mTrackDistanceKillThresholdSquared) {
+				// kill a track - keep the older one
+				if (track1.mID < track2.mID) {
+					trackIdsToErase.insert(track2.mID);
+				} else {
+					trackIdsToErase.insert(track1.mID);
+					break;
+				}
+			}
+		}
+	}
+	for (set<int>::iterator i = trackIdsToErase.begin();
+	        i != trackIdsToErase.end(); i++) {
+
+		mTracks.erase(*i);
+	}
 
 }
 
@@ -171,7 +171,7 @@ void THISCLASS::DataAssociation()
 	{
 		assert(pIt->mID == -1);			// (particle should not be associated)
 		for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
-		     i != mTracks.end(); i++)
+		        i != mTracks.end(); i++)
 		{
 			distanceArray[i->first][p] = GetCost(i->second, pIt->mCenter);
 		}
@@ -185,8 +185,8 @@ void THISCLASS::DataAssociation()
 		particleIndexes.push_back(i);
 	}
 	for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
-	     i != mTracks.end(); i++) {
-	  trackIndexes.push_back(i->first);
+	        i != mTracks.end(); i++) {
+		trackIndexes.push_back(i->first);
 	}
 	//Search for the minimalDistance
 	while ((!trackIndexes.empty()) && (!particleIndexes.empty()))
@@ -211,22 +211,22 @@ void THISCLASS::DataAssociation()
 		//If the distance between track and particle is too big, make a new track
 		Track * track = NULL;
 		if (minDistance > mMaxDistanceSquared) {
-		  if (minDistance  >= mMinNewTrackDistanceSquared) {
-		    int id = mNextTrackId++;
-		    mTracks[id] =  Track(id);
+			if (minDistance  >= mMinNewTrackDistanceSquared) {
+				int id = mNextTrackId++;
+				mTracks[id] =  Track(id);
 
-		    track = &mTracks[id];
-		    distanceArray[track->mID] = new double[maxParticles];
-		  } else {
-		    break;
-		  }
+				track = &mTracks[id];
+				distanceArray[track->mID] = new double[maxParticles];
+			} else {
+				break;
+			}
 		} else {
-		  track = &mTracks[trackIndexes[minDistanceI]];
+			track = &mTracks[trackIndexes[minDistanceI]];
 		}
 
 		(particles->at(particleIndexes[minDistanceJ])).mID = track->mID;
 		AddPoint(track->mID,
-			 particles->at(particleIndexes[minDistanceJ]).mCenter);
+		         particles->at(particleIndexes[minDistanceJ]).mCenter);
 
 		//Suppress the indexes in the vectors
 		trackIndexes.erase(trackIndexes.begin() + minDistanceI);
@@ -252,7 +252,7 @@ double THISCLASS::GetCost(const Track & track, CvPoint2D32f p)
 		return -1;
 	else
 	{
-                return squareDistance(track.trajectory.back(), p);
+		return Utility::SquareDistance(track.trajectory.back(), p);
 	}
 }
 
@@ -262,12 +262,12 @@ double THISCLASS::GetCost(const Track & track, CvPoint2D32f p)
 * \param p : Point to add to trajectory i (subpixel accuracy)
 */
 void THISCLASS::AddPoint(int i, CvPoint2D32f p){
-  Track & track = mTracks[i];
-  assert(i == track.mID);
-  track.AddPoint(p, mCore->mDataStructureInput.mFrameNumber);
+	Track & track = mTracks[i];
+	assert(i == track.mID);
+	track.AddPoint(p, mCore->mDataStructureInput.mFrameNumber);
 }
 
 
 void THISCLASS::ClearTracks() {
-  mTracks.clear();
+	mTracks.clear();
 }

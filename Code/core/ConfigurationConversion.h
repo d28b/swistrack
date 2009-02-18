@@ -24,15 +24,17 @@ public:
 	static int Int(const wxString &str, int defvalue);
 	//! Converts a configuration value into a double value.
 	static double Double(const wxString &str, double defvalue);
+	//! Converts a configuration value into a date.
+	static wxDateTime Date(const wxString &str, const wxDateTime &defvalue);
+
 	//! Converts a boolean value into a configuration value.
 	static wxString Bool(bool value);
-	//! Converts a boolean value into a configuration value.
+	//! Converts a int value into a configuration value.
 	static wxString Int(int value);
-	//! Converts a boolean value into a configuration value.
+	//! Converts a double value into a configuration value.
 	static wxString Double(double value);
-
+	//! Converts a date into a configuration value.
 	static wxString Date(wxDateTime value);
-	static wxDateTime Date(const wxString &str, const wxDateTime &defvalue);
 };
 
 #endif

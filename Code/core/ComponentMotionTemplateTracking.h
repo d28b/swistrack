@@ -41,17 +41,17 @@ private:
 	std::map<int, camshift> mTrackers;  // track id to tracker
 
 	void  update_mhi( IplImage* img, IplImage* dst, double timestamp,
-			  int diff_threshold );
-	
+	                  int diff_threshold );
+
 	int mDiffThreshold; //!< (configuration) The diff_threshold parameter.
 
 	int mInitialWindowSize; //!< (configuration) The size of the initial window when you initialize a new tracker.
 
 	unsigned int mMaximumNumberOfTrackers;
-	
+
 	IplImage * mOutputImage;
-	int mFrameKillThreshold; 
-	int mTrackDistanceKillThresholdSquared; 
+	int mFrameKillThreshold;
+	int mTrackDistanceKillThresholdSquared;
 	int mMinNewTrackDistanceSquared;
 
 	// motion template variables

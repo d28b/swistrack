@@ -39,7 +39,7 @@ private:
 	DataStructureParticles::tParticleVector mParticles;
 	DataStructureTracks::tTrackMap mTracks;
 	std::map<int, camshift> mTrackers;  // track id to tracker
-	
+
 	double mMinNewTrackDistanceSquared; //!< (configuration) The minimum distance between new tracks
 
 	int mInitialWindowSize; //!< (configuration) The size of the initial window when you initialize a new tracker.
@@ -47,10 +47,10 @@ private:
 	int mVmin; //!< (configuration)  Parameter for camshift
 	int mSmin; //!< (configuration)  Parameter for camshift
 	unsigned int mMaximumNumberOfTrackers;
-	
+
 	IplImage * mOutputImage;
-	int mFrameKillThreshold; 
-	int mTrackDistanceKillThresholdSquared; 
+	int mFrameKillThreshold;
+	int mTrackDistanceKillThresholdSquared;
 
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 };

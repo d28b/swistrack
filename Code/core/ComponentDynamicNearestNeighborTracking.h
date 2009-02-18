@@ -31,7 +31,7 @@ public:
 
 private:
 	/**
-	 * Filter tracks we aren't using any more. 
+	 * Filter tracks we aren't using any more.
 	 */
 	void FilterTracks();
 	void DataAssociation();
@@ -49,8 +49,8 @@ private:
 	// Parameters
 	double mMaxDistanceSquared; //!< (configuration) The maximum distance between a track and a particle to attach
 	double mMinNewTrackDistanceSquared; //!< (configuration) The minimum distance between new tracks
-	int mFrameKillThreshold; //!< (configuration) The number of frames a point doesn't get updated before it gets destroyed. 
-	int mTrackDistanceKillThresholdSquared; //!< (configuration) The distance between tracks before one should be dropped. 
+	int mFrameKillThreshold; //!< (configuration) The number of frames a point doesn't get updated before it gets destroyed.
+	int mTrackDistanceKillThresholdSquared; //!< (configuration) The distance between tracks before one should be dropped.
 	DataStructureTracks::tTrackMap mTracks;
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 
