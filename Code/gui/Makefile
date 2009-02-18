@@ -7,11 +7,7 @@
 TARGET_FOLDER := ../../SwisTrackEnvironment
 TARGET        := $(TARGET_FOLDER)/SwisTrack
 
-# Toolchain (compiler, linker)
-SHELL     := /bin/sh
-CTAGS     := ctags
-#CC        := cc
-#AR        := ar
+include ../../Makefile.inc
 
 # Files
 FILES_CPP := $(wildcard *.cpp)
@@ -24,7 +20,7 @@ FILES_A   := ../core/libSwistrackCore.a ../../3rdParty/cvblobslib_v6p1/libCVBlob
 INCLUDE   := -I/usr/include `pkg-config --cflags opencv` -I../core
 CXXFLAGS  := -g -Wall `wx-config --cxxflags`
 CPPFLAGS  := $(INCLUDE) `wx-config --cppflags`
-LDLIBS    := `pkg-config --libs opencv` `wx-config --libs`
+LDLIBS    := `pkg-config --libs opencv` `wx-config --libs` --lstdc++
 LDFLAGS   :=
 
 # Build
@@ -33,7 +29,7 @@ all: $(TARGET)
 
 $(TARGET): $(FILES_O) $(FILES_A)
 	@echo "=== Building $@"
-	$(CC) $(LDFLAGS) $(FILES_O) $(FILES_A) $(LDLIBS) -o $@
+	$(CXX) $(LDFLAGS) $(FILES_O) $(FILES_A) $(LDLIBS) -o $@
 
 .PHONY: osxbundle
 osxbundle: $(TARGET)
