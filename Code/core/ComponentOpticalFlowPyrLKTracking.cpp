@@ -4,7 +4,7 @@
 using namespace std;
 #include <iostream>
 #include <set>
-
+#include "Utility.h"
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentOpticalFlowPyrLKTracking(SwisTrackCore *stc):
@@ -230,7 +230,7 @@ void THISCLASS::FilterTracks()
     for (DataStructureTracks::tTrackMap::iterator j = mTracks.begin();
 	 j != mTracks.end(); j++) {
       Track & track2 = j->second;
-      double cost = squareDistance(track1.trajectory.back(), track2.trajectory.back());
+      double cost = Utility::SquareDistance(track1.trajectory.back(), track2.trajectory.back());
       if (track1.mID != track2.mID && cost < mTrackDistanceKillThresholdSquared) {
 	// kill a track - keep the older one
 	if (track1.mID < track2.mID) {
@@ -342,7 +342,7 @@ double THISCLASS::GetCost(const Track & track, CvPoint2D32f p)
 		return -1;
 	else
 	{
-                return squareDistance(track.trajectory.back(), p);
+	  return Utility::SquareDistance(track.trajectory.back(), p);
 	}
 }
 

@@ -6,7 +6,7 @@
 #include "DataStructureParticles.h"
 
 
-double squareDistance(CvPoint2D32f p1, CvPoint2D32f p2);
+
 
 
 //! A basic tracking component that takes pre-filtered particales and
