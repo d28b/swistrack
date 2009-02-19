@@ -13,10 +13,10 @@ THISCLASS::ConfigurationReaderXML():
 THISCLASS::~ConfigurationReaderXML() {
 }
 
-bool THISCLASS::Open(const wxString &filename) {
+bool THISCLASS::Open(const wxFileName &filename) {
 	// Read the file
 	wxLogNull log;
-	mIsOpen = mDocument.Load(filename);
+	mIsOpen = mDocument.Load(filename.GetFullPath());
 	if (! mIsOpen) {
 		mDocument.SetRoot(new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("swistrack")));
 		SelectRootNode();

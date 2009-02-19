@@ -29,13 +29,13 @@ bool THISCLASS::OnInit() {
 
 	// Open a file
 	if (argc > 1) {
-		mSwisTrack->OpenFile(argv[1], true, false);
+		mSwisTrack->OpenFile(wxFileName(argv[1]), true, false);
 	} else {
-		mSwisTrack->OpenFile(mApplicationFolder + wxT("/default.swistrack"), false, true);
+		mSwisTrack->NewFile();
 	}
 
 	// Show
-	mSwisTrack->Show(TRUE);
+	mSwisTrack->Show(true);
 	SetTopWindow(mSwisTrack);
 
 #if defined(__WIN16__) || defined(__WXMOTIF__)
@@ -44,7 +44,7 @@ bool THISCLASS::OnInit() {
 	frame->SetSize(-1, -1, width, height);
 #endif
 
-	return TRUE;
+	return true;
 }
 
 int THISCLASS::OnExit() {

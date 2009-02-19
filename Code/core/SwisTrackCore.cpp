@@ -171,12 +171,66 @@ THISCLASS::~SwisTrackCore() {
 	delete mEventRecorder;
 }
 
+void THISCLASS::SetFileName(const wxFileName &filename) {
+	mFileName = filename;
+}
+
+wxFileName THISCLASS::GetProjectFileName(const wxString &filetitle) {
+	wxFileName filename(mFileName);
+	if (mFileName.IsOk()) {
+		filename.SetFullName(filetitle);
+	}
+	return filename;
+}
+
+wxFileName THISCLASS::GetRunFileName(const wxString &filetitle) {
+	wxFileName filename(mFileName);
+	if (mFileName.IsOk()) {
+		filename.AppendDir(mRunTitle);
+		filename.SetFullName(filetitle);
+	}
+	return filename;
+}
+
 bool THISCLASS::Start(bool productionmode) {
 	if (mStarted) {
 		return false;
 	}
 	if (mEditLocks > 0) {
 		return false;
+	}
+
+	// Timestamp of start
+	wxDateTime now = wxDateTime::Now();
+
+	// Prepare the run folder
+	if (productionmode) {
+		// Find a run folder which does not exist yet
+		int unique_id=1;
+		wxString runtitlebase=now.Format(wxT("%Y-%m-%d-%H-%M-%S"));
+		mRunTitle=runtitlebase;
+		while (1) {
+			wxFileName filename_output=GetRunFileName(wxT("output"));
+			if (! filename_output.IsOk()) {
+				break;
+			}
+			if (! filename_output.DirExists()) {
+				break;
+			}
+			unique_id++;
+			mRunTitle=runtitlebase+wxString::Format(wxT("-%d"), unique_id);
+		}
+	} else {
+		// Always use the folder "testing"
+		mRunTitle=wxT("testing");
+	}
+
+	// Create the run folder and open the main output file
+	wxFileName filename_output=GetRunFileName(wxT("output"));
+	if (filename_output.IsOk()) {
+		filename_output.Mkdir(0777, wxPATH_MKDIR_FULL);
+		wxFFile file_output(filename_output.GetFullPath(), wxT("w"));
+		file_output.Write(wxT("$TIMESTAMP,")+now.Format()+wxT("\n"));
 	}
 
 	// Event recorder
@@ -275,6 +329,9 @@ bool THISCLASS::Stop() {
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterStop);
+
+	// Reset the run folder
+	mRunTitle=wxT("");
 
 	return true;
 }

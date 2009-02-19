@@ -49,13 +49,12 @@ private:
 		cID_PopupMenu_EnabledInterval0,
 		cID_PopupMenu_EnabledInterval1,
 		cID_PopupMenu_EnabledInterval2,
-		cID_PopupMenu_EnabledInterval3,
 		cID_PopupMenu_EnabledInterval4,
-		cID_PopupMenu_EnabledInterval5,
-		cID_PopupMenu_EnabledInterval10,
-		cID_PopupMenu_EnabledInterval20,
-		cID_PopupMenu_EnabledInterval50,
-		cID_PopupMenu_EnabledInterval100,
+		cID_PopupMenu_EnabledInterval8,
+		cID_PopupMenu_EnabledInterval16,
+		cID_PopupMenu_EnabledInterval32,
+		cID_PopupMenu_EnabledInterval64,
+		cID_PopupMenu_EnabledInterval128,
 	};
 
 	wxMenu mPopupMenu;					//!< The popup menu.

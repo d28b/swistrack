@@ -18,25 +18,26 @@ class SwisTrack;
 #include "ConfigurationPanel.h"
 #include "TimelinePanel.h"
 #include <wx/timer.h>
+#include <wx/filename.h>
 
 //! Main application window.
 /*!
-	Description ...
+	This class implementes the main window of SwisTrack.
 */
 class SwisTrack: public wxFrame, public CommunicationCommandHandler {
 
 public:
 	//! Status field IDs
 	enum eStatusField {
-		cStatusField_Messages = 0,
-		cStatusField_ServerPort = 1,
-		cStatusField_Timeline = 2,
+		cStatusField_FileFullPath = 0,
+		cStatusField_RunTitle = 1,
+		cStatusField_ServerPort = 2,
+		cStatusField_Timeline = 3,
 	};
 
 	SwisTrackCore *mSwisTrackCore;	//!< The SwisTrackCore object.
 	TCPServer *mTCPServer;			//!< The TCPServer object.
 
-	wxString mFileName;				//!< The current configuration file.
 	bool mChanged;					//!< Whether the file has been modified. This flag is currently ignored.
 
 	CanvasPanel *mCanvasPanel;					//!< The panel in the center displaying the current image.
@@ -49,10 +50,12 @@ public:
 	//! Destructor.
 	~SwisTrack();
 
+	//! Creates a new file.
+	void NewFile();
 	//! Opens a file.
-	void OpenFile(const wxString &filename, bool breakonerror, bool astemplate);
+	void OpenFile(const wxFileName &filename, bool breakonerror, bool astemplate);
 	//! Saves a file.
-	void SaveFile(const wxString &filename);
+	void SaveFile(const wxFileName &filename);
 
 	//! Sets the configuration panel on the right side.
 	void SetConfigurationPanel(Component *c);
@@ -70,14 +73,7 @@ public:
 	//! Stops the automatic trigger and switches to manual trigger.
 	void Control_StopRunMode();
 
-#ifdef MULTITHREAD
-	// Critical section used to synchronize the main and auxiliary threads
-	wxCriticalSection* mCriticalSection;
-#endif
-
 protected:
-	wxBoxSizer *mHorizontalSizer;				//!< The horizonal sizer containing the canvas panel and the component configuration panel.
-	wxToolBarToolBase *hiddenStartStopTool; //!< the hidden tool, either start or stop. (I.e if start is shown, this is the stop.)
 	//! IDs for the controls and the menu commands
 	enum eID {
 		cID_New = 1,
@@ -99,6 +95,9 @@ protected:
 		cID_About = wxID_ABOUT   // this must be wxID_ABOUT to put it in the Mac OS X "Apple" menu
 	};
 
+	wxBoxSizer *mHorizontalSizer;				//!< The horizonal sizer containing the canvas panel and the component configuration panel.
+	wxToolBarToolBase *mHiddenStartStopTool; 	//!< the hidden tool, either start or stop. (I.e if start is shown, this is the stop.)
+
 	//! Creates the menu.
 	void BuildMenuBar();
 	//! Creates the toolbar.
@@ -106,7 +105,7 @@ protected:
 	//! Creates the status bar.
 	void BuildStatusBar();
 	//! Sets the filename, updates the window title and sets the CWD.
-	void SetFileName(const wxString &filename);
+	void SetFileName(const wxFileName &filename);
 
 	// CommuncationCommandHandler methods
 	bool OnCommunicationCommand(CommunicationMessage *m);

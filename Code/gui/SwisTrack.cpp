@@ -62,13 +62,9 @@ END_EVENT_TABLE()
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
 		wxFrame(NULL, -1, title, pos, size, style),
 		CommunicationCommandHandler(),
-		mSwisTrackCore(0), mTCPServer(0), mFileName(wxT("")),
+		mSwisTrackCore(0), mTCPServer(0), mChanged(false),
 		mCanvasPanel(0), mComponentListPanel(0),
 		mConfigurationPanel(0), mTimelinePanel(0), mHorizontalSizer(0) {
-
-#ifdef MULTITHREAD
-	criticalSection = new wxCriticalSection();
-#endif
 
 	// General initialization
 	SetBackgroundColour(wxColour(128, 128, 128));
@@ -82,7 +78,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	wxPanel *panel_top = new wxPanel(splitter_window);
 	wxPanel *panel_bottom = new wxPanel(splitter_window);
 	splitter_window->SplitHorizontally(panel_top, panel_bottom);
-	splitter_window->SetSashPosition(500);
+	splitter_window->SetSashPosition(450);
 
 	// The canvas panel
 	mCanvasPanel = new CanvasPanel(panel_top, this);
@@ -144,36 +140,36 @@ void THISCLASS::BuildMenuBar() {
 
 	// Create menus
 	wxMenu *menufile = new wxMenu;
-	GetMenuBar()->Append(menufile, _T("&File"));
-	menufile->Append(cID_New, _T("&New\tCtrl-C"), _T("Creates a new file"));
-	menufile->Append(cID_Open, _T("&Open\tCtrl-O"), _T("Opens a file"));
-	menufile->Append(cID_Save, _T("&Save\tCtrl-S"), _T("Saves the current file"));
-	menufile->Append(cID_SaveAs, _T("&Save as ..."), _T("Saves the file with another name"));
+	GetMenuBar()->Append(menufile, wxT("&File"));
+	menufile->Append(cID_New, wxT("&New\tCtrl-C"), wxT("Creates a new file"));
+	menufile->Append(cID_Open, wxT("&Open\tCtrl-O"), wxT("Opens a file"));
+	menufile->Append(cID_Save, wxT("&Save\tCtrl-S"), wxT("Saves the current file"));
+	menufile->Append(cID_SaveAs, wxT("&Save as ..."), wxT("Saves the file with another name"));
 	menufile->AppendSeparator();
-	menufile->Append(cID_Quit, _T("E&xit\tAlt-F4"), _T("Quit this program"));
+	menufile->Append(cID_Quit, wxT("E&xit\tAlt-F4"), wxT("Quit this program"));
 	menufile->Enable(cID_Save, FALSE);
 
 	wxMenu *menuview = new wxMenu;
-	GetMenuBar()->Append(menuview, _T("&View"));
-	menuview->Append(cID_View_ComponentList, _T("Component list"), _T("Displays or hides the component list"), wxITEM_CHECK);
+	GetMenuBar()->Append(menuview, wxT("&View"));
+	menuview->Append(cID_View_ComponentList, wxT("Component list"), wxT("Displays or hides the component list"), wxITEM_CHECK);
 	//menuview->AppendSeparator();
-	menuview->Append(cID_View_NewDisplay, _T("New display"), _T("Opens a display in a new window"));
+	menuview->Append(cID_View_NewDisplay, wxT("New display"), wxT("Opens a display in a new window"));
 	menuview->Check(cID_View_ComponentList, true);
 
 	wxMenu *menuoutput = new wxMenu;
-	GetMenuBar()->Append(menuoutput, _T("&Output"));
-	menuoutput->Append(cID_Tools_TCPServer, _T("TCP Server ..."), _T("TCP server settings"));
+	GetMenuBar()->Append(menuoutput, wxT("&Output"));
+	menuoutput->Append(cID_Tools_TCPServer, wxT("TCP Server ..."), wxT("TCP server settings"));
 
 	wxMenu *menudeveloperutilities = new wxMenu;
-	menudeveloperutilities->Append(cID_DeveloperUtilityTest, _T("&Test"), _T("A free menu item for developers to do quick tests while developing"));
-	menudeveloperutilities->Append(cID_DeveloperUtilityExportComponentsTable, _T("&Export components table"), _T("Exports the components in wiki format"));
+	menudeveloperutilities->Append(cID_DeveloperUtilityTest, wxT("&Test"), wxT("A free menu item for developers to do quick tests while developing"));
+	menudeveloperutilities->Append(cID_DeveloperUtilityExportComponentsTable, wxT("&Export components table"), wxT("Exports the components in wiki format"));
 
 	wxMenu *menuhelp = new wxMenu;
-	GetMenuBar()->Append(menuhelp, _T("&Help"));
-	menuhelp->Append(cID_Help, _T("&Manual"), _T("Opens the online manual"));
-	menuhelp->Append(cID_About, _T("&About ...\tF1"), _T("Shows the about dialog"));
+	GetMenuBar()->Append(menuhelp, wxT("&Help"));
+	menuhelp->Append(cID_Help, wxT("&Manual"), wxT("Opens the online manual"));
+	menuhelp->Append(cID_About, wxT("&About ...\tF1"), wxT("Shows the about dialog"));
 	menuhelp->AppendSeparator();
-	menuhelp->Append(new wxMenuItem(menuhelp, wxID_ANY, _T("&Developer utilities"), _T("Developer utilities"), wxITEM_NORMAL, menudeveloperutilities));
+	menuhelp->Append(new wxMenuItem(menuhelp, wxID_ANY, wxT("&Developer utilities"), wxT("Developer utilities"), wxITEM_NORMAL, menudeveloperutilities));
 }
 
 void THISCLASS::BuildToolBar() {
@@ -183,24 +179,24 @@ void THISCLASS::BuildToolBar() {
 	SetToolBar(NULL);
 
 	// Create toolbar
-	hiddenStartStopTool = NULL;
+	mHiddenStartStopTool = NULL;
 	toolbar = CreateToolBar(wxTB_FLAT | wxTB_DOCKABLE | wxTB_TEXT);
-	toolbar->AddTool(cID_New, _T("New"), wxBITMAP(bitmap_new), _T("New"));
-	toolbar->AddTool(cID_Open, _T("Open"), wxBITMAP(bitmap_open), _T("Open"));
-	toolbar->AddTool(cID_Save, _T("Save"), wxBITMAP(bitmap_save), _T("Save"));
+	toolbar->AddTool(cID_New, wxT("New"), wxBITMAP(bitmap_new), wxT("New"));
+	toolbar->AddTool(cID_Open, wxT("Open"), wxBITMAP(bitmap_open), wxT("Open"));
+	toolbar->AddTool(cID_Save, wxT("Save"), wxBITMAP(bitmap_save), wxT("Save"));
 	toolbar->AddSeparator();
-	toolbar->AddTool(cID_Control_ProductionMode, _T("Production"), wxBITMAP(bitmap_production), _T("Run in production mode"), wxITEM_CHECK);
+	toolbar->AddTool(cID_Control_ProductionMode, wxT("Production"), wxBITMAP(bitmap_production), wxT("Run in production mode"), wxITEM_CHECK);
 	// We are going to add both 'start' and 'stop' tools here, then immediately remove the 'stop' one.
-	// This is just to construct the 'stop' tool. That will be hidden: removed from the toolbar and stored in hiddenStartStopTool.
-	toolbar->AddTool(cID_Control_Run, _T("Run"), wxBITMAP(bitmap_play), _T("Run automatically"));
-	toolbar->AddTool(cID_Control_Stop, _T("Stop"), wxBITMAP(bitmap_stop), _T("Stop running"));
+	// This is just to construct the 'stop' tool. That will be hidden: removed from the toolbar and stored in mHiddenStartStopTool.
+	toolbar->AddTool(cID_Control_Run, wxT("Run"), wxBITMAP(bitmap_play), wxT("Run automatically"));
+	toolbar->AddTool(cID_Control_Stop, wxT("Stop"), wxBITMAP(bitmap_stop), wxT("Stop running"));
 	toolbar->AddSeparator();
-	toolbar->AddTool(cID_Control_Step, _T("Step"), wxBITMAP(bitmap_singlestep), _T("Processes one image"));
-	toolbar->AddTool(cID_Control_Reset, _T("Reset"), wxBITMAP(bitmap_singlestep), _T("Stops the execution. It will be started upon the next step."));
+	toolbar->AddTool(cID_Control_Step, wxT("Step"), wxBITMAP(bitmap_singlestep), wxT("Processes one image"));
+	toolbar->AddTool(cID_Control_Reset, wxT("Reset"), wxBITMAP(bitmap_singlestep), wxT("Stops the execution. It will be started upon the next step."));
 	toolbar->AddSeparator();
 
 	toolbar->Realize();
-	hiddenStartStopTool = GetToolBar()->RemoveTool(cID_Control_Stop);
+	mHiddenStartStopTool = GetToolBar()->RemoveTool(cID_Control_Stop);
 	toolbar->Realize();
 
 	toolbar->SetRows(1 ? 1 : 10 / 1);
@@ -209,15 +205,16 @@ void THISCLASS::BuildToolBar() {
 
 void THISCLASS::BuildStatusBar() {
 #if wxUSE_STATUSBAR
-	int n = 3;
-	int w[3] = { -1, 120, 120};
+	int n = 4;
+	int w[4] = { -1, 200, 120, 120};
 
 	CreateStatusBar(n);
 	SetStatusWidths(n, w);
 
-	SetStatusText(_T("Welcome to SwisTrack!"), cStatusField_Messages);
-	SetStatusText(_T("Closed"), cStatusField_ServerPort);
-	SetStatusText(_T(""), cStatusField_Timeline);
+	SetStatusText(wxT("No file"), cStatusField_FileFullPath);
+	SetStatusText(wxT(""), cStatusField_RunTitle);
+	SetStatusText(wxT("Closed"), cStatusField_ServerPort);
+	SetStatusText(wxT(""), cStatusField_Timeline);
 #endif // wxUSE_STATUSBAR
 }
 
@@ -280,6 +277,9 @@ void THISCLASS::Control_StartProductionMode() {
 	GetToolBar()->ToggleTool(cID_Control_ProductionMode, true);
 	GetToolBar()->EnableTool(cID_Control_Reset, false);
 	mSwisTrackCore->Start(true);
+
+	// Update the status text
+	SetStatusText(mSwisTrackCore->GetRunTitle(), cStatusField_RunTitle);
 }
 
 void THISCLASS::Control_StopProductionMode() {
@@ -291,16 +291,18 @@ void THISCLASS::Control_StopProductionMode() {
 	GetToolBar()->ToggleTool(cID_Control_ProductionMode, false);
 	GetToolBar()->EnableTool(cID_Control_Reset, true);
 	mSwisTrackCore->Start(false);
+
+	// Update the status text
+	SetStatusText(mSwisTrackCore->GetRunTitle(), cStatusField_RunTitle);
 }
 
 void THISCLASS::Control_StartRunMode() {
-	// switch start to stop button, by removing one and adding the other one.
-	// Store removed tool in hiddenStartStopTool
+	// Switch start to stop button (by removing one and adding the other one) and store removed tool in mHiddenStartStopTool
 	int pos = GetToolBar()->GetToolPos(cID_Control_Run);
 	if ( pos != wxNOT_FOUND){
 		wxToolBarToolBase *temp = GetToolBar()->RemoveTool(cID_Control_Run);
-		GetToolBar()->InsertTool(pos, hiddenStartStopTool);
-		hiddenStartStopTool = temp;
+		GetToolBar()->InsertTool(pos, mHiddenStartStopTool);
+		mHiddenStartStopTool = temp;
 		GetToolBar()->Realize();
 	}
 
@@ -309,22 +311,26 @@ void THISCLASS::Control_StartRunMode() {
 	mSwisTrackCore->TriggerStart();
 	mSwisTrackCore->Start(false);
 
+	// Update the status text
+	SetStatusText(mSwisTrackCore->GetRunTitle(), cStatusField_RunTitle);
 }
 
 void THISCLASS::Control_StopRunMode() {
-	// switch stop to start button, by removing one and adding the other one.
-	// Store removed tool in hiddenStartStopTool
+	// Switch stop to start button (by removing one and adding the other one) and store removed tool in mHiddenStartStopTool
 	int pos = GetToolBar()->GetToolPos(cID_Control_Stop);
 	if ( pos != wxNOT_FOUND){ // need to check because starting SwisTrack will trigger a call to this method, even though app is in 'stopped' mode
 		wxToolBarToolBase *temp = GetToolBar()->RemoveTool(cID_Control_Stop);
-		GetToolBar()->InsertTool(pos, hiddenStartStopTool);
-		hiddenStartStopTool = temp;
+		GetToolBar()->InsertTool(pos, mHiddenStartStopTool);
+		mHiddenStartStopTool = temp;
 		GetToolBar()->Realize();
 	}
 
 	// Deactivate the automatic trigger
 	GetToolBar()->EnableTool(cID_Control_Step, true);
 	mSwisTrackCore->TriggerStop();
+
+	// Update the status text
+	SetStatusText(mSwisTrackCore->GetRunTitle(), cStatusField_RunTitle);
 }
 
 bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
@@ -361,7 +367,7 @@ void SwisTrack::OnFileNew(wxCommandEvent& WXUNUSED(event)) {
 	if (dlg.ShowModal() != wxID_OK){
 		return; // user canceled
 	}
-	OpenFile(wxGetApp().mApplicationFolder + wxT("/default.swistrack"), false, true);
+	NewFile();
 }
 
 void THISCLASS::OnFileOpen(wxCommandEvent& WXUNUSED(event)) {
@@ -373,12 +379,16 @@ void THISCLASS::OnFileOpen(wxCommandEvent& WXUNUSED(event)) {
 	OpenFile(dlg.GetPath(), true, false);
 }
 
-void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astemplate) {
+void THISCLASS::NewFile() {
+	wxFileName file_template(wxGetApp().mApplicationFolder + wxT("/default.swistrack"));
+	OpenFile(file_template, false, true);
+}
+
+void THISCLASS::OpenFile(const wxFileName &filename, bool breakonerror, bool astemplate) {
 	// Check if file exists and is readable
 	if (breakonerror) {
-		wxFileName fn(filename);
-		if (! fn.IsFileReadable()) {
-			wxMessageDialog dlg(this, wxT("Unable to read \n\n") + filename, wxT("Open Configuration"), wxOK);
+		if (! filename.IsFileReadable()) {
+			wxMessageDialog dlg(this, wxT("Unable to read \n\n") + filename.GetFullPath(), wxT("Open Configuration"), wxOK);
 			dlg.ShowModal();
 			return;
 		}
@@ -388,25 +398,32 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	ConfigurationReaderXML cr;
 	if (! cr.Open(filename)) {
 		if (breakonerror) {
-			wxMessageDialog dlg(this, wxT("The file \n\n") + filename + wxT(" \n\ncould not be loaded. Syntax error?"), wxT("Open Configuration"), wxOK);
+			wxMessageDialog dlg(this, wxT("The file \n\n") + filename.GetFullPath() + wxT(" \n\ncould not be loaded. Syntax error?"), wxT("Open Configuration"), wxOK);
 			dlg.ShowModal();
 			return;
 		}
 	}
 
-	// At this point, we consider the SwisTrack configuration to be valid. The next few lines close the current configuration and read the configuration.
+	// At this point, we consider the SwisTrack configuration to be valid and we will attempt to close the old file and use the new one. The user may still cancel the operation.
+
+	// TODO: If necessary, ask the user whether he'd like to save the changes
+	//if (mChanged) {
+		// return false;
+	//}
 
 	// Close the current configuration
 	Control_StopProductionMode();
 	Control_StopRunMode();
 	SetConfigurationPanel(0);
-	if (mChanged) {
-		// TODO if necessary, ask the user whether he'd like to save the changes
-		// return false;
-	}
 
-	// Set the new file name
-	SetFileName(filename);
+	// At this point, we definitively switch to the new file.
+
+	// Set the new file and update the GUI
+	if (astemplate) {
+		SetFileName(wxFileName());
+	} else {
+		SetFileName(filename);
+	}
 
 	// Read the components
 	cr.ReadComponents(mSwisTrackCore);
@@ -417,38 +434,27 @@ void THISCLASS::OpenFile(const wxString &filename, bool breakonerror, bool astem
 	mTCPServer->SetPort(cr.ReadInt(wxT("port"), 3000));
 	SetStatusText(wxString::Format(wxT("TCP: %d"), mTCPServer->GetPort()), cStatusField_ServerPort);
 
-	// Set the status text
-	SetStatusText(filename + wxT(" opened!"), cStatusField_Messages);
-
 	// Show errors if there are any
 	if (cr.mErrorList.mList.empty()) {
 		return;
 	}
-	ErrorListDialog eld(this, &(cr.mErrorList), wxT("Open File"), wxString::Format(wxT("The following errors occurred while reading the file '%s':"), filename.c_str()));
+	ErrorListDialog eld(this, &(cr.mErrorList), wxT("Open File"), wxString::Format(wxT("The following errors occurred while reading the file '%s':"), filename.GetFullPath().c_str()));
 	eld.ShowModal();
 }
 
-void THISCLASS::SetFileName(const wxString &filename) {
-	mFileName = filename;
-	if (filename == wxT("")) {
-		// Set the frame title
-		SetTitle(wxT("SwisTrack"));
+void THISCLASS::SetFileName(const wxFileName &filename) {
+	mSwisTrackCore->SetFileName(wxFileName(filename));
 
-		// Change the CWD to the application folder
-		wxFileName::SetCwd(wxGetApp().mApplicationFolder);
+	wxFileName new_filename=mSwisTrackCore->GetFileName();
+	if (new_filename.IsOk()) {
+		SetTitle(new_filename.GetName() + wxT(" - SwisTrack"));
+		SetStatusText(new_filename.GetFullPath(), cStatusField_FileFullPath);
 	} else {
-		// Split the filename
-		wxString path;
-		wxString name;
-		wxString extension;
-		wxFileName::SplitPath(mFileName, &path, &name, &extension);
-
-		// Set the frame title
-		SetTitle(name + wxT(" - SwisTrack"));
-
-		// Change the CWD
-		wxFileName::SetCwd(path);
+		SetTitle(wxT("SwisTrack"));
+		SetStatusText(wxT("New file - no output will be written until you save it!"), cStatusField_FileFullPath);
 	}
+
+	SetStatusText(mSwisTrackCore->GetRunTitle(), cStatusField_RunTitle);
 }
 
 void THISCLASS::OnFileSaveAs(wxCommandEvent& WXUNUSED(event)) {
@@ -457,20 +463,19 @@ void THISCLASS::OnFileSaveAs(wxCommandEvent& WXUNUSED(event)) {
 		return;
 	}
 
-	mFileName = dlg.GetPath();
-	SaveFile(mFileName);
+	SaveFile(dlg.GetPath());
 }
 
 void THISCLASS::OnFileSave(wxCommandEvent& event) {
-	if (mFileName == wxT("")) {
+	wxFileName filename=mSwisTrackCore->GetFileName();
+	if (filename.IsOk()) {
+		SaveFile(filename);
+	} else {
 		OnFileSaveAs(event);
-		return;
 	}
-
-	SaveFile(mFileName);
 }
 
-void THISCLASS::SaveFile(const wxString &filename) {
+void THISCLASS::SaveFile(const wxFileName &filename) {
 	// Check if can write to that file
 	/*wxFileName fn(filename);
 	if (! fn.IsFileWritable()) {
@@ -489,16 +494,13 @@ void THISCLASS::SaveFile(const wxString &filename) {
 	cw.WriteInt(wxT("port"), mTCPServer->GetPort());
 
 	if (! cw.Save(filename)) {
-		wxMessageDialog dlg(this, wxT("There was an error writing to \n\n") + filename + wxT("\n\nThe file may be incomplete."), wxT("Save File"), wxOK);
+		wxMessageDialog dlg(this, wxT("There was an error writing to \n\n") + filename.GetFullPath() + wxT("\n\nThe file may be incomplete."), wxT("Save File"), wxOK);
 		dlg.ShowModal();
 		return;
 	}
 
 	// Set the (new) filename
-	SetFileName(filename);
-
-	// Set the status text
-	SetStatusText(filename + wxT(" saved!"), cStatusField_Messages);
+	SetFileName(wxFileName(filename));
 }
 
 void SwisTrack::OnFileQuit(wxCommandEvent& WXUNUSED(event)) {

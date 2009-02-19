@@ -4,6 +4,7 @@
 class ConfigurationWriterXML;
 
 #include <wx/xml/xml.h>
+#include <wx/filename.h>
 #include "SwisTrackCore.h"
 #include "ErrorList.h"
 #include "ConfigurationXML.h"
@@ -20,7 +21,7 @@ public:
 	~ConfigurationWriterXML();
 
 	//! Opens an XML document. If this function returns true, the document can be read.
-	bool Save(const wxString &filename);
+	bool Save(const wxFileName &filename);
 
 	//! Returns the XML document. (This function is not needed unless the application needs to access the XML document in a different way.)
 	wxXmlDocument *GetDocument() {

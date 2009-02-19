@@ -16,6 +16,6 @@ void THISCLASS::WriteComponents(SwisTrackCore *stc) {
 	stc->ConfigurationWriteXML(node, &mErrorList);
 }
 
-bool THISCLASS::Save(const wxString &filename) {
-	return mDocument.Save(filename);
+bool THISCLASS::Save(const wxFileName &filename) {
+	return mDocument.Save(filename.GetFullPath());
 }

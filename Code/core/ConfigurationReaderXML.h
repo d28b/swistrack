@@ -4,6 +4,7 @@
 class ConfigurationReaderXML;
 
 #include <wx/xml/xml.h>
+#include <wx/filename.h>
 #include "SwisTrackCore.h"
 #include "ConfigurationXML.h"
 
@@ -22,7 +23,7 @@ public:
 	~ConfigurationReaderXML();
 
 	//! Opens an XML document. If this function returns true, the document can be read.
-	bool Open(const wxString &filename);
+	bool Open(const wxFileName &filename);
 	//! Returns whether a document is open.
 	bool IsOpen() {
 		return mIsOpen;

@@ -5,6 +5,8 @@ class SwisTrackCore;
 
 #include <list>
 #include <wx/xml/xml.h>
+#include <wx/filename.h>
+#include <wx/ffile.h>
 #include "Component.h"
 #include "ComponentCategory.h"
 #include "CommunicationInterface.h"
@@ -68,6 +70,17 @@ public:
 	//! Destructor.
 	~SwisTrackCore();
 
+	//! Sets the file. Note that this is used to determine the project and run folders only. The file itself is not opened or read (and does not even need to exist).
+	void SetFileName(const wxFileName &filename);
+	//! Sets the file. Note that this is used to determine the project and run folders only. The file itself is not opened or read (and does not even need to exist).
+	wxFileName GetFileName() {return mFileName;}
+	//! Returns the current run title.
+	wxString GetRunTitle() {return mRunTitle;}
+	//! Returns a path to a file in the project folder.
+	wxFileName GetProjectFileName(const wxString &filetitle);
+	//! Returns a path to a file in the run folder.
+	wxFileName GetRunFileName(const wxString &filetitle);
+
 	//! Starts all the components. This may only be called if IsStarted()==false.
 	bool Start(bool productionmode);
 	//! Performs one complete step, including cleanup. This may only be called if IsStarted()==true.
@@ -114,12 +127,16 @@ public:
 	void OnIdle();
 
 protected:
-	bool mStarted;			//!< Whether the components have been started or not.
-	bool mProductionMode;	//!< Whether the components are running in production mode or not. Note that this is only valid if mStarted=true.
-	int mStepCounter;		//!< The number of steps processed since the last start of the pipeline.
-	int mEditLocks;			//!< The number of edit locks.
+	bool mStarted;				//!< Whether the components have been started or not.
+	bool mProductionMode;		//!< Whether the components are running in production mode or not. Note that this is only valid if mStarted=true.
+	int mStepCounter;			//!< The number of steps processed since the last start of the pipeline.
+	int mEditLocks;				//!< The number of edit locks.
+	wxFileName mFileName;		//!< The full path and name of the .swistrack file.
+	wxString mFileTitle;		//!< The title of the file (usually derived from mFile).
+	wxString mProjectFolder;	//!< The project folder (usually derived from mFile).
+	wxString mRunTitle;			//!< The title of the run.
 
-	tComponentList mDeployedComponents;						//!< The list of deployed components.
+	tComponentList mDeployedComponents;			//!< The list of deployed components.
 
 	//! Increments the edit locks.
 	bool IncrementEditLocks();

@@ -22,13 +22,12 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_MENU(cID_PopupMenu_EnabledInterval0, THISCLASS::OnPopupMenuEnabledInterval)
 	EVT_MENU(cID_PopupMenu_EnabledInterval1, THISCLASS::OnPopupMenuEnabledInterval)
 	EVT_MENU(cID_PopupMenu_EnabledInterval2, THISCLASS::OnPopupMenuEnabledInterval)
-	EVT_MENU(cID_PopupMenu_EnabledInterval3, THISCLASS::OnPopupMenuEnabledInterval)
 	EVT_MENU(cID_PopupMenu_EnabledInterval4, THISCLASS::OnPopupMenuEnabledInterval)
-	EVT_MENU(cID_PopupMenu_EnabledInterval5, THISCLASS::OnPopupMenuEnabledInterval)
-	EVT_MENU(cID_PopupMenu_EnabledInterval10, THISCLASS::OnPopupMenuEnabledInterval)
-	EVT_MENU(cID_PopupMenu_EnabledInterval20, THISCLASS::OnPopupMenuEnabledInterval)
-	EVT_MENU(cID_PopupMenu_EnabledInterval50, THISCLASS::OnPopupMenuEnabledInterval)
-	EVT_MENU(cID_PopupMenu_EnabledInterval100, THISCLASS::OnPopupMenuEnabledInterval)
+	EVT_MENU(cID_PopupMenu_EnabledInterval8, THISCLASS::OnPopupMenuEnabledInterval)
+	EVT_MENU(cID_PopupMenu_EnabledInterval16, THISCLASS::OnPopupMenuEnabledInterval)
+	EVT_MENU(cID_PopupMenu_EnabledInterval32, THISCLASS::OnPopupMenuEnabledInterval)
+	EVT_MENU(cID_PopupMenu_EnabledInterval64, THISCLASS::OnPopupMenuEnabledInterval)
+	EVT_MENU(cID_PopupMenu_EnabledInterval128, THISCLASS::OnPopupMenuEnabledInterval)
 END_EVENT_TABLE()
 
 THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
@@ -43,13 +42,12 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 	// Create the popup menu
 	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval1, wxT("Enabled for every frame"));
 	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval2, wxT("Enabled for every 2nd frame"));
-	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval3, wxT("Enabled for every 3rd frame"));
 	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval4, wxT("Enabled for every 4th frame"));
-	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval5, wxT("Enabled for every 5th frame"));
-	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval10, wxT("Enabled for every 10th frame"));
-	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval20, wxT("Enabled for every 20th frame"));
-	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval50, wxT("Enabled for every 50th frame"));
-	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval100, wxT("Enabled for every 100th frame"));
+	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval8, wxT("Enabled for every 8th frame"));
+	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval16, wxT("Enabled for every 16th frame"));
+	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval32, wxT("Enabled for every 32th frame"));
+	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval64, wxT("Enabled for every 64th frame"));
+	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval128, wxT("Enabled for every 128th frame"));
 	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval0, wxT("Disabled"));
 
 	// Create List
@@ -430,25 +428,23 @@ void THISCLASS::OnListMouseRightDown(wxMouseEvent& event) {
 	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval0, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
 	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval1, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
 	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval2, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
-	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval3, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
 	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval4, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
-	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval5, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
-	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval10, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
-	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval20, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
-	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval50, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
-	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval100, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
+	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval8, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
+	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval16, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
+	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval32, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
+	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval64, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
+	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval128, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
 
 	int enabledinterval = mSelectedComponent->GetEnabledInterval();
 	mPopupMenu.Check(cID_PopupMenu_EnabledInterval0, (enabledinterval == 0));
 	mPopupMenu.Check(cID_PopupMenu_EnabledInterval1, (enabledinterval == 1));
 	mPopupMenu.Check(cID_PopupMenu_EnabledInterval2, (enabledinterval == 2));
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval3, (enabledinterval == 3));
 	mPopupMenu.Check(cID_PopupMenu_EnabledInterval4, (enabledinterval == 4));
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval5, (enabledinterval == 5));
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval10, (enabledinterval == 10));
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval20, (enabledinterval == 20));
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval50, (enabledinterval == 50));
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval100, (enabledinterval == 100));
+	mPopupMenu.Check(cID_PopupMenu_EnabledInterval8, (enabledinterval == 8));
+	mPopupMenu.Check(cID_PopupMenu_EnabledInterval16, (enabledinterval == 16));
+	mPopupMenu.Check(cID_PopupMenu_EnabledInterval32, (enabledinterval == 32));
+	mPopupMenu.Check(cID_PopupMenu_EnabledInterval64, (enabledinterval == 64));
+	mPopupMenu.Check(cID_PopupMenu_EnabledInterval128, (enabledinterval == 128));
 
 	PopupMenu(&mPopupMenu);
 }
@@ -463,20 +459,18 @@ void THISCLASS::OnPopupMenuEnabledInterval(wxCommandEvent& event) {
 
 	if (event.GetId() == cID_PopupMenu_EnabledInterval2) {
 		ce.SetEnabledInterval(2);
-	} else if (event.GetId() == cID_PopupMenu_EnabledInterval3) {
-		ce.SetEnabledInterval(3);
 	} else if (event.GetId() == cID_PopupMenu_EnabledInterval4) {
 		ce.SetEnabledInterval(4);
-	} else if (event.GetId() == cID_PopupMenu_EnabledInterval5) {
-		ce.SetEnabledInterval(5);
-	} else if (event.GetId() == cID_PopupMenu_EnabledInterval10) {
-		ce.SetEnabledInterval(10);
-	} else if (event.GetId() == cID_PopupMenu_EnabledInterval20) {
-		ce.SetEnabledInterval(20);
-	} else if (event.GetId() == cID_PopupMenu_EnabledInterval50) {
-		ce.SetEnabledInterval(50);
-	} else if (event.GetId() == cID_PopupMenu_EnabledInterval100) {
-		ce.SetEnabledInterval(100);
+	} else if (event.GetId() == cID_PopupMenu_EnabledInterval8) {
+		ce.SetEnabledInterval(8);
+	} else if (event.GetId() == cID_PopupMenu_EnabledInterval16) {
+		ce.SetEnabledInterval(16);
+	} else if (event.GetId() == cID_PopupMenu_EnabledInterval32) {
+		ce.SetEnabledInterval(32);
+	} else if (event.GetId() == cID_PopupMenu_EnabledInterval64) {
+		ce.SetEnabledInterval(64);
+	} else if (event.GetId() == cID_PopupMenu_EnabledInterval128) {
+		ce.SetEnabledInterval(128);
 	} else if (event.GetId() == cID_PopupMenu_EnabledInterval0) {
 		ce.SetEnabledInterval(0);
 	} else {
