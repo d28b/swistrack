@@ -23,9 +23,10 @@ THISCLASS::~ComponentInputFileImage() {
 
 void THISCLASS::OnStart() {
 	// Load the image
-	wxString filename = GetConfigurationString(wxT("File"), wxT(""));
-	if (filename != wxT("")) {
-		mOutputImage = cvLoadImage(filename.mb_str(wxConvFile), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
+	wxString filename_string = GetConfigurationString(wxT("File"), wxT(""));
+	wxFileName filename = mCore->GetProjectFileName(filename_string);
+	if (filename.IsOk()) {
+		mOutputImage = cvLoadImage(filename.GetFullPath().mb_str(wxConvFile), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
 	}
 	if (! mOutputImage) {
 		AddError(wxT("Cannot open image file."));

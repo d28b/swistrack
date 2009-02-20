@@ -2,6 +2,7 @@
 #define HEADER_SimulationParticles
 
 #include <wx/string.h>
+#include <wx/filename.h>
 #include <list>
 #include <fstream>
 #include "DataStructureParticles.h"
@@ -25,12 +26,12 @@ public:
 	Frame mFrameRead;			//!< The frame that is currently being read.
 
 	//! Constructor.
-	SimulationParticles(const wxString &filename);
+	SimulationParticles(const wxFileName &filename);
 	//! Destructor.
 	~SimulationParticles();
 
 	//! Returns the file name of the current simulation.
-	wxString GetFileName() {
+	wxFileName GetFileName() {
 		return mFileName;
 	}
 	//! Returns true if the file could be opened.
@@ -48,7 +49,7 @@ public:
 	Frame *GetFutureFrameByNumber(int number);
 
 protected:
-	wxString mFileName;				//!< The name of the file currently open.
+	wxFileName mFileName;				//!< The name of the currently open file.
 	std::ifstream *mFile;				//!< The file.
 	tFrameList::iterator mCurrentFrame;	//!< The current frame.
 	Frame mEmptyFrame;					//!< Used if a frame was not available in the simulation file.

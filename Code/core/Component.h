@@ -134,7 +134,6 @@ protected:
 	//! Decrements the edit locks.
 	void DecrementEditLocks();
 
-
 private:
 	//! Reads the configuration section of the XML file belonging to the component.
 	void InitializeReadConfiguration(wxXmlNode *configurationnode);

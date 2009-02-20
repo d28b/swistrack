@@ -4,7 +4,7 @@
 #include <fstream>
 #include <algorithm>
 
-THISCLASS::SimulationParticles(const wxString &filename):
+THISCLASS::SimulationParticles(const wxFileName &filename):
 		mFrames(), mFrameRead(), mFileName(filename), mFile(0),
 		mCurrentFrame(mFrames.end()), mEmptyFrame() {
 
@@ -16,7 +16,7 @@ THISCLASS::SimulationParticles(const wxString &filename):
 	// Open file
 	mFile = new std::ifstream();
 	mFile->clear();
-	mFile->open(filename.mb_str(wxConvFile), std::ios::in);
+	mFile->open(filename.GetFullPath().mb_str(wxConvFile), std::ios::in);
 }
 
 THISCLASS::~SimulationParticles() {

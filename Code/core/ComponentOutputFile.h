@@ -29,18 +29,22 @@ public:
 
 
 private:
-	struct structOutputFile
-	{
+	struct structOutputFile {
 		std::fstream fileStream;
 		int trackID;
-
 	};
-	typedef std::map<int, structOutputFile*> filesMap;
-	void writeData(structOutputFile *outputFile);
-	void writeHeader(structOutputFile *outputFile);
-	wxString mDirectoryName;			//!< Name of the directory to save
-	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
-	filesMap mFiles;			//!< Vector containing the FileName
+
+	// Map track ID -> file.
+	typedef std::map<int, structOutputFile*> tFilesMap;
+
+	wxString mDirectoryName;		//!< Name of the directory to save
+	Display mDisplayOutput;			//!< The DisplayImage showing the output of this component.
+	tFilesMap mFiles;				//!< Vector containing the FileName
+
+	//! Writes the file header.
+	void WriteHeader(structOutputFile *outputFile);
+	//! Writes one data record.
+	void WriteData(structOutputFile *outputFile);
 };
 
 #endif

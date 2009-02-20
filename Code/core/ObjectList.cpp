@@ -6,14 +6,14 @@
 #include <wx/log.h>
 #include "ConfigurationConversion.h"
 
-THISCLASS::ObjectList(const wxString &filename):
+THISCLASS::ObjectList(const wxFileName &filename):
 		ConfigurationXML(0, true),
 		mObjects(), mError(), mFileName(filename) {
 
 	// Read the file
 	wxLogNull log;
 	wxXmlDocument document;
-	bool isopen = document.Load(filename);
+	bool isopen = document.Load(filename.GetFullPath());
 	if (! isopen) {
 		mError = wxT("Could not open or parse the XML file!");
 		return;

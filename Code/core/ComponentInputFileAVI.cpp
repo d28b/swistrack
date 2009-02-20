@@ -26,13 +26,16 @@ THISCLASS::~ComponentInputFileAVI() {
 
 void THISCLASS::OnStart() {
 	// Open file
-	wxString filename = GetConfigurationString(wxT("File"), wxT(""));
-	mCapture = cvCaptureFromFile(filename.mb_str(wxConvFile));
+	wxString filename_string = GetConfigurationString(wxT("File"), wxT(""));
+	wxFileName filename = mCore->GetProjectFileName(filename_string);
+	if (filename.IsOk()) {
+		mCapture = cvCaptureFromFile(filename.GetFullPath().mb_str(wxConvFile));
+	}
 
 	// Error? Check whether the file exists or not, to give an appropriate error message to the user
 	if (mCapture == NULL) {
 		std::fstream f;
-		f.open(filename.mb_str(wxConvFile));
+		f.open(filename.GetFullPath().mb_str(wxConvFile));
 		if (f.is_open()) {
 			f.close();
 			AddError(wxT("Cannot open AVI file: codec problem, VFW codec required, not DirectShow."));

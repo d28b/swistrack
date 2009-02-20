@@ -24,9 +24,10 @@ THISCLASS::~ComponentColorMask() {
 
 void THISCLASS::OnStart() {
 	// Load mask image
-	wxString filename = GetConfigurationString(wxT("MaskImage"), wxT(""));
-	if (filename != wxT("")) {
-		mMaskImage = cvLoadImage(filename.mb_str(wxConvFile), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
+	wxString filename_string = GetConfigurationString(wxT("MaskImage"), wxT(""));
+	wxFileName filename = mCore->GetProjectFileName(filename_string);
+	if (filename.IsOk()) {
+		mMaskImage = cvLoadImage(filename.GetFullPath().mb_str(wxConvFile), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
 	}
 	if (! mMaskImage) {
 		AddError(wxT("Cannot open mask file."));

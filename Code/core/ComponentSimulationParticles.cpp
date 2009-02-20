@@ -27,14 +27,15 @@ void THISCLASS::OnStart() {
 	bool production = mCore->IsStartedInProductionMode();
 
 	// Read the file (if the filename changed or if we are in production mode)
-	wxString filename = GetConfigurationString(wxT("File"), wxT(""));
+	wxString filename_string = GetConfigurationString(wxT("File"), wxT(""));
+	wxFileName filename = mCore->GetProjectFileName(filename_string);
 	if (production || (mSimulationParticles == 0) || (mSimulationParticles->GetFileName() != filename)) {
 		delete mSimulationParticles;
 		mSimulationParticles = new SimulationParticles(filename);
 		if (! mSimulationParticles->IsOpen()) {
-			AddError(wxT("The file \'") + filename + wxT("\' could not be read."));
+			AddError(wxT("The file \'") + filename.GetFullPath() + wxT("\' could not be read."));
 		} else {
-			AddInfo(wxT("File \'") + mSimulationParticles->GetFileName() + wxT("\' loaded."));
+			AddInfo(wxT("File \'") + mSimulationParticles->GetFileName().GetFullPath() + wxT("\' loaded."));
 		}
 	}
 

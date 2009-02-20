@@ -24,7 +24,8 @@ THISCLASS::~ComponentOutputFileAVI() {
 }
 
 void THISCLASS::OnStart() {
-	mFilename = GetConfigurationString(wxT("File"), wxT(""));
+	wxString filename_string = GetConfigurationString(wxT("File"), wxT(""));
+	mFileName=mCore->GetRunFileName(filename_string);
 	mFrameRate = GetConfigurationInt(wxT("FrameRate"), 15);
 	BufferedFrames_Allocate(GetConfigurationInt(wxT("FrameBufferCount"), 1));
 	OnReloadConfiguration();
@@ -63,9 +64,9 @@ void THISCLASS::OnStep() {
 	// Create the Writer
 	if (! mWriter) {
 		if (inputimage->nChannels == 3) {
-			mWriter = cvCreateVideoWriter(mFilename.mb_str(wxConvFile), -1, mFrameRate, cvGetSize(inputimage));
+			mWriter = cvCreateVideoWriter(mFileName.GetFullPath().mb_str(wxConvFile), -1, mFrameRate, cvGetSize(inputimage));
 		} else if (inputimage->nChannels == 1) {
-			mWriter = cvCreateVideoWriter(mFilename.mb_str(wxConvFile), -1, mFrameRate, cvGetSize(inputimage), 0);
+			mWriter = cvCreateVideoWriter(mFileName.GetFullPath().mb_str(wxConvFile), -1, mFrameRate, cvGetSize(inputimage), 0);
 		} else {
 			AddError(wxT("Input image must have 1 or 3 channels"));
 			return;

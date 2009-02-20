@@ -27,17 +27,17 @@ public:
 	wxString mError;			//!< The first error that occured.
 
 	//! Constructor.
-	ObjectList(const wxString &filename);
+	ObjectList(const wxFileName &filename);
 	//! Destructor.
 	~ObjectList();
 
 	//! Returns the file name of the current simulation.
-	wxString GetFileName() {
+	wxFileName GetFileName() {
 		return mFileName;
 	}
 
 private:
-	wxString mFileName;		//!< The name of the currently open file.
+	wxFileName mFileName;		//!< The name of the currently open file.
 
 	//! Reads one object from the file.
 	void ReadObject(wxXmlNode *node);

@@ -23,9 +23,10 @@ THISCLASS::~ComponentBackgroundSubtractionColor() {
 }
 
 void THISCLASS::OnStart() {
-	wxString filename = GetConfigurationString(wxT("BackgroundImage"), wxT(""));
-	if (filename != wxT("")) {
-		mBackgroundImage = cvLoadImage(filename.mb_str(wxConvFile), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
+	wxString filename_string = GetConfigurationString(wxT("BackgroundImage"), wxT(""));
+	wxFileName filename = mCore->GetProjectFileName(filename_string);
+	if (filename.IsOk()) {
+		mBackgroundImage = cvLoadImage(filename.GetFullPath().mb_str(wxConvFile), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
 	}
 	if (! mBackgroundImage) {
 		AddError(wxT("Cannot open background image."));
