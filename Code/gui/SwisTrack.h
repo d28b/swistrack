@@ -17,6 +17,8 @@ class SwisTrack;
 #include "ComponentListPanel.h"
 #include "ConfigurationPanel.h"
 #include "TimelinePanel.h"
+#include "CommunicationCommandHandler.h"
+#include "SwisTrackCoreInterface.h"
 #include <wx/timer.h>
 #include <wx/filename.h>
 
@@ -24,7 +26,7 @@ class SwisTrack;
 /*!
 	This class implementes the main window of SwisTrack.
 */
-class SwisTrack: public wxFrame, public CommunicationCommandHandler {
+class SwisTrack: public wxFrame, public CommunicationCommandHandler, public SwisTrackCoreInterface {
 
 public:
 	//! Status field IDs
@@ -55,7 +57,7 @@ public:
 	//! Opens a file.
 	void OpenFile(const wxFileName &filename, bool breakonerror, bool astemplate);
 	//! Saves a file.
-	void SaveFile(const wxFileName &filename);
+	void SaveFile(const wxFileName &filename, bool breakonerror, bool ascopy);
 
 	//! Sets the configuration panel on the right side.
 	void SetConfigurationPanel(Component *c);
@@ -109,6 +111,9 @@ protected:
 
 	// CommuncationCommandHandler methods
 	bool OnCommunicationCommand(CommunicationMessage *m);
+
+	// SwisTrackCoreInterface methods
+	void OnBeforeStart(bool productionmode);
 
 	// Event handlers
 	void OnFileNew(wxCommandEvent& WXUNUSED(event));

@@ -30,7 +30,7 @@ public:
 	int mFrameNumber;				//!< The frame number.
 	int mFramesCount;				//!< The number of frames.
 	wxDateTime mTime;				//!< The time when the displayed image was updated.
-	wxString mAnnotation;		//!< Annotation, usually displayed below the image.
+	wxString mAnnotation;			//!< Annotation, usually displayed below the image.
 	ErrorList mErrors;				//!< This holds more information display errors (e.g. wrong image format, ...).
 
 	// Display window

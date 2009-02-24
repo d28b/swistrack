@@ -1,5 +1,5 @@
-#include "ConfigurationParameterFile.h"
-#define THISCLASS ConfigurationParameterFile
+#include "ConfigurationParameterOutputFile.h"
+#define THISCLASS ConfigurationParameterOutputFile
 
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -9,36 +9,31 @@
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_TEXT_ENTER (wxID_ANY, THISCLASS::OnTextEnter)
-	EVT_BUTTON (wxID_ANY, THISCLASS::OnButtonClicked)
 END_EVENT_TABLE()
 
-THISCLASS::ConfigurationParameterFile(wxWindow* parent):
+THISCLASS::ConfigurationParameterOutputFile(wxWindow* parent):
 		ConfigurationParameter(parent),
-		mTextCtrl(0), mButton(0),
+		mTextCtrl(0),
 		mValueDefault(wxT("")) {
 
 }
 
-THISCLASS::~ConfigurationParameterFile() {
+THISCLASS::~ConfigurationParameterOutputFile() {
 }
 
 void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
 	mValueDefault = config->ReadString(wxT("default"), wxT(""));
-	mFileFilter = config->ReadString(wxT("filefilter"), wxT("All files|*.*"));
-	mIsInput = config->ReadBool(wxT("isinput"), true);
 
 	// Create the controls
 	wxStaticText *label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
 	mTextCtrl = new wxTextCtrl(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scParameterWidth - 25, -1), wxTE_PROCESS_ENTER);
 	mTextCtrl->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
-	mButton = new wxButton(this, wxID_ANY, wxT("..."), wxDefaultPosition, wxSize(25, -1), wxST_NO_AUTORESIZE);
 
 	// Layout the controls
 	wxBoxSizer *hs = new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(mTextCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
-	hs->Add(mButton, 0, wxALIGN_CENTER_VERTICAL, 0);
 
 	wxBoxSizer *vs = new wxBoxSizer(wxVERTICAL);
 	vs->Add(label, 0, wxBOTTOM, 2);
@@ -66,25 +61,6 @@ bool THISCLASS::CompareNewValue() {
 void THISCLASS::OnSetNewValue() {
 	ComponentEditor ce(mComponent);
 	ce.SetConfigurationString(mName, mNewValue);
-}
-
-void THISCLASS::OnButtonClicked(wxCommandEvent& event) {
-	long dialogStyle;
-	if (mIsInput){
-		// show dialog asking for input file, thus use an Open dialog:
-		dialogStyle = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
-	} else {
-		// show dialog asking for output file, thus use a Save dialog:
-		dialogStyle = wxFD_SAVE | wxFD_OVERWRITE_PROMPT;
-	}
-	wxFileDialog dlg(this, wxT("Select file"), wxT(""), mTextCtrl->GetValue(), mFileFilter, dialogStyle);
-	if (dlg.ShowModal() != wxID_OK) {
-		return;
-	}
-	mNewValue = dlg.GetPath();
-
-	ValidateNewValue();
-	SetNewValue();
 }
 
 void THISCLASS::OnTextEnter(wxCommandEvent& event) {

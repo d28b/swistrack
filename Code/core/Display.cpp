@@ -61,11 +61,6 @@ void THISCLASS::OnAfterStep() {
 		return;
 	}
 
-	// Quick fix to display only every second frame
-	if (this->mFrameNumber % 2 != 0) {
-		return;
-	}
-
 	// Otherwise, let the subscribers know that we have a new image
 	tSubscriberList::iterator it = mSubscribers.begin();
 	while (it != mSubscribers.end()) {

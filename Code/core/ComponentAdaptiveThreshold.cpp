@@ -7,7 +7,7 @@ using namespace std;
 
 THISCLASS::ComponentAdaptiveThreshold(SwisTrackCore *stc):
 		Component(stc, wxT("AdaptiveThreshold")),
-		mOutputImage(0),mThisFrame(0),
+		mThisFrame(0), mOutputImage(0),
 		mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
 
 	// Data structure relations

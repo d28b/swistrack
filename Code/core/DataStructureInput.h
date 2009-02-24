@@ -7,36 +7,33 @@
 class DataStructureInput: public DataStructureImage {
 
 public:
-	int mFrameNumber;			//!< Frame number (-1 if not available).
-	int mFramesCount;			//!< The total number of frames (-1 if not available).
-	double mFramesPerSecond;	//!< Frames per second.
-
-	wxDateTime & FrameTimestamp() {
-	  return mFrameTimestamp;
-	}
-	wxTimeSpan & TimeSinceLastFrame() {
-	  return mTimeSinceLastFrame;
-	}
-	void SetFrameTimestamp(wxDateTime d) {
-	  if (mFrameTimestamp.IsValid()) {
-	    mTimeSinceLastFrame = d - mFrameTimestamp;
-	  }
-	  mFrameTimestamp = d;
-	}
-
+	int mFrameNumber;			//!< Frame number.
+	int mFramesCount;			//!< The total number of frames available (if available).
 
 	//! Constructor.
- DataStructureInput(): DataStructureImage(wxT("Input"), wxT("Input")), mFrameNumber(0), mFramesCount(-1), mFramesPerSecond(-1), mFrameTimestamp(wxInvalidDateTime), mTimeSinceLastFrame() {
+	DataStructureInput(): DataStructureImage(wxT("Input"), wxT("Input")), mFrameNumber(0), mFramesCount(-1), mFrameTimestamp(wxInvalidDateTime), mTimeSinceLastFrame() {
 		mDisplayName = wxT("Input");
 	}
 	//! Destructor.
 	~DataStructureInput() {}
 
- private:
-	wxDateTime mFrameTimestamp; //!< The time the frame was recorded (wxInvalidDateTime if not availabe)
-	wxTimeSpan mTimeSinceLastFrame;
+	//! Sets the time stamp of the current frame.
+	void SetFrameTimestamp(wxDateTime d);
 
-	
+	//! Returns the frame time stamp.
+	wxDateTime & FrameTimestamp() {
+		return mFrameTimestamp;
+	}
+
+	//! Returns the time difference between the last frame and the current frame.
+	wxTimeSpan & TimeSinceLastFrame() {
+		return mTimeSinceLastFrame;
+	}
+
+private:
+	wxDateTime mFrameTimestamp;		//!< The time the frame was recorded (wxInvalidDateTime if not availabe).
+	wxTimeSpan mTimeSinceLastFrame;	//!< The time difference from the last frame to the current frame.
+
 };
 
 #endif

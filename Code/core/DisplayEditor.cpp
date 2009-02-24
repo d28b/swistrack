@@ -38,7 +38,11 @@ THISCLASS::~DisplayEditor() {
 
 	// Set frame number and time
 	SwisTrackCore *core = mDisplay->mComponent->GetSwisTrackCore();
-	mDisplay->mFrameNumber = core->mDataStructureInput.mFrameNumber;
+	if (core->mDataStructureInput.mFrameNumber >= 0) {
+		mDisplay->mFrameNumber = core->mDataStructureInput.mFrameNumber;
+	} else {
+		mDisplay->mFrameNumber = core->GetStepCounter();
+	}
 	mDisplay->mFramesCount = core->mDataStructureInput.mFramesCount;
 	mDisplay->mTime = wxDateTime::UNow();
 }

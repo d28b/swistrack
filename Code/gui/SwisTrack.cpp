@@ -62,6 +62,7 @@ END_EVENT_TABLE()
 SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
 		wxFrame(NULL, -1, title, pos, size, style),
 		CommunicationCommandHandler(),
+		SwisTrackCoreInterface(),
 		mSwisTrackCore(0), mTCPServer(0), mChanged(false),
 		mCanvasPanel(0), mComponentListPanel(0),
 		mConfigurationPanel(0), mTimelinePanel(0), mHorizontalSizer(0) {
@@ -119,6 +120,9 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	wxBoxSizer *vs = new wxBoxSizer(wxVERTICAL);
 	vs->Add(splitter_window, 1, wxEXPAND);
 	SetSizer(vs);
+
+	// Add SwisTrackCoreInterface
+	mSwisTrackCore->AddInterface(this);
 }
 
 SwisTrack::~SwisTrack(){
@@ -362,6 +366,14 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 	return false;
 }
 
+void THISCLASS::OnBeforeStart(bool productionmode) {
+	// In production mode, save the current configuration as configuration.swistrack in the run folder
+	if (productionmode) {
+		std::cout << "TTTT" << std::endl;
+		SaveFile(mSwisTrackCore->GetRunFileName(wxT("configuration.swistrack")), false, true);
+	}
+}
+
 void SwisTrack::OnFileNew(wxCommandEvent& WXUNUSED(event)) {
 	wxMessageDialog dlg(this, wxT("This will destroy your current session. Are you sure?"), wxT("Destroy current session?"), wxOK | wxCANCEL | wxICON_ERROR);
 	if (dlg.ShowModal() != wxID_OK){
@@ -408,7 +420,7 @@ void THISCLASS::OpenFile(const wxFileName &filename, bool breakonerror, bool ast
 
 	// TODO: If necessary, ask the user whether he'd like to save the changes
 	//if (mChanged) {
-		// return false;
+	// return false;
 	//}
 
 	// Close the current configuration
@@ -445,7 +457,7 @@ void THISCLASS::OpenFile(const wxFileName &filename, bool breakonerror, bool ast
 void THISCLASS::SetFileName(const wxFileName &filename) {
 	mSwisTrackCore->SetFileName(wxFileName(filename));
 
-	wxFileName new_filename=mSwisTrackCore->GetFileName();
+	wxFileName new_filename = mSwisTrackCore->GetFileName();
 	if (new_filename.IsOk()) {
 		SetTitle(new_filename.GetName() + wxT(" - SwisTrack"));
 		SetStatusText(new_filename.GetFullPath(), cStatusField_FileFullPath);
@@ -463,19 +475,19 @@ void THISCLASS::OnFileSaveAs(wxCommandEvent& WXUNUSED(event)) {
 		return;
 	}
 
-	SaveFile(dlg.GetPath());
+	SaveFile(dlg.GetPath(), true, false);
 }
 
 void THISCLASS::OnFileSave(wxCommandEvent& event) {
-	wxFileName filename=mSwisTrackCore->GetFileName();
+	wxFileName filename = mSwisTrackCore->GetFileName();
 	if (filename.IsOk()) {
-		SaveFile(filename);
+		SaveFile(filename, true, false);
 	} else {
 		OnFileSaveAs(event);
 	}
 }
 
-void THISCLASS::SaveFile(const wxFileName &filename) {
+void THISCLASS::SaveFile(const wxFileName &filename, bool breakonerror, bool ascopy) {
 	// Check if can write to that file
 	/*wxFileName fn(filename);
 	if (! fn.IsFileWritable()) {
@@ -494,13 +506,17 @@ void THISCLASS::SaveFile(const wxFileName &filename) {
 	cw.WriteInt(wxT("port"), mTCPServer->GetPort());
 
 	if (! cw.Save(filename)) {
-		wxMessageDialog dlg(this, wxT("There was an error writing to \n\n") + filename.GetFullPath() + wxT("\n\nThe file may be incomplete."), wxT("Save File"), wxOK);
-		dlg.ShowModal();
-		return;
+		if (breakonerror) {
+			wxMessageDialog dlg(this, wxT("There was an error writing to \n\n") + filename.GetFullPath() + wxT("\n\nThe file may be incomplete."), wxT("Save File"), wxOK);
+			dlg.ShowModal();
+			return;
+		}
 	}
 
 	// Set the (new) filename
-	SetFileName(wxFileName(filename));
+	if (! ascopy) {
+		SetFileName(wxFileName(filename));
+	}
 }
 
 void SwisTrack::OnFileQuit(wxCommandEvent& WXUNUSED(event)) {

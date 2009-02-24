@@ -14,9 +14,11 @@ class TCPServer;
 class SwisTrack;
 
 #include "CommunicationInterface.h"
+#include "SwisTrackCoreInterface.h"
+#include "NMEALog.h"
 #include "TCPServerConnection.h"
 
-class TCPServer: public wxEvtHandler, public CommunicationInterface {
+class TCPServer: public wxEvtHandler, public CommunicationInterface, public SwisTrackCoreInterface {
 
 public:
 	TCPServer(SwisTrack* swistrack);
@@ -39,6 +41,10 @@ public:
 	// CommuncationInterface methods.
 	bool Send(CommunicationMessage *m);
 
+	// SwisTrackCoreInterface methods
+	void OnBeforeStart(bool productionmode);
+	void OnAfterStop();
+
 protected:
 	enum eServerID {
 		SERVER_ID = 100
@@ -54,6 +60,8 @@ private:
 	//! The list of all connected clients.
 	typedef std::list<TCPServerConnection*> tConnections;
 	tConnections mConnections;
+	//! The log.
+	NMEALog *mNMEALog;
 
 	//! Starts listening.
 	void Open();

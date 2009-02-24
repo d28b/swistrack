@@ -84,7 +84,7 @@ void THISCLASS::NMEASendMessage(CommunicationMessage *m) {
 	len += snprintf(buffer + len, 1024 - len, "%s", (const char*)(m->mCommand.mb_str(wxConvISO8859_1)));
 	CommunicationMessage::tParameters::iterator it = m->mParameters.begin();
 	while (it != m->mParameters.end()) {
-		len += snprintf(buffer + len, 1024 - len, "%s,", (const char *)(m->mCommand.mb_str(wxConvISO8859_1)));
+		len += snprintf(buffer + len, 1024 - len, ",%s", (const char *)((*it).mb_str(wxConvISO8859_1)));
 		it++;
 	}
 

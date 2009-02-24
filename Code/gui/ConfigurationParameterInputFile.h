@@ -1,5 +1,5 @@
-#ifndef HEADER_ConfigurationParameterFile
-#define HEADER_ConfigurationParameterFile
+#ifndef HEADER_ConfigurationParameterInputFile
+#define HEADER_ConfigurationParameterInputFile
 
 #include <wx/wxprec.h>
 
@@ -7,17 +7,17 @@
 #include <wx/wx.h>
 #endif
 
-class ConfigurationParameterFile;
+class ConfigurationParameterInputFile;
 
 #include "ConfigurationParameter.h"
 
-class ConfigurationParameterFile: public ConfigurationParameter {
+class ConfigurationParameterInputFile: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterFile(wxWindow* parent);
+	ConfigurationParameterInputFile(wxWindow* parent);
 	//! Destructor.
-	~ConfigurationParameterFile();
+	~ConfigurationParameterInputFile();
 
 	//! Handles the corresponding GUI event.
 	void OnTextEnter(wxCommandEvent& event);
@@ -31,7 +31,6 @@ private:
 	wxButton *mButton;			//!< The corresponding GUI widget.
 	wxString mValueDefault;		//!< The default value.
 	wxString mFileFilter;		//!< The file filter shown in the file selection dialog box.
-	bool mIsInput;		//!< Specifies whether the file is read or written by the component.
 	wxString mNewValue;			//!< The new value.
 
 	// ConfigurationParameter methods

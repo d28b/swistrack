@@ -82,9 +82,9 @@ public:
 		return mRunTitle;
 	}
 	//! Returns a path to a file in the project folder.
-	wxFileName GetProjectFileName(const wxString &filetitle);
+	wxFileName GetProjectFileName(const wxString &filename_str);
 	//! Returns a path to a file in the run folder.
-	wxFileName GetRunFileName(const wxString &filetitle);
+	wxFileName GetRunFileName(const wxString &filename_str);
 
 	//! Starts all the components. This may only be called if IsStarted()==false.
 	bool Start(bool productionmode);
@@ -121,6 +121,10 @@ public:
 	//! Returns whether the automatic trigger is active.
 	bool IsTriggerActive() {
 		return mTrigger->GetActive();
+	}
+	//! Returns the value of the step counter.
+	bool GetStepCounter() {
+		return mStepCounter;
 	}
 
 	//! Adds an object to the list of interfaces. Objects on this list will be informed upon changes.

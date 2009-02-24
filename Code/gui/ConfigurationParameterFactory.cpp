@@ -8,9 +8,10 @@
 #include "ConfigurationParameterButton.h"
 #include "ConfigurationParameterDropdownList.h"
 #include "ConfigurationParameterColor.h"
-#include "ConfigurationParameterFile.h"
-#include "ConfigurationParameterDate.h"
+#include "ConfigurationParameterInputFile.h"
+#include "ConfigurationParameterOutputFile.h"
 #include "ConfigurationParameterImage.h"
+#include "ConfigurationParameterDate.h"
 #include "ConfigurationParameterPointInteger.h"
 #include "ConfigurationParameterPointDouble.h"
 #include "ConfigurationParameterAngle.h"
@@ -43,15 +44,17 @@ ConfigurationParameter *THISCLASS::Create(const wxString &type, wxWindow* parent
 	}
 
 	// Files
-	if (typelc == wxT("file")) {
-		return new ConfigurationParameterFile(parent);
+	if (typelc == wxT("inputfile")) {
+		return new ConfigurationParameterInputFile(parent);
+	}
+	if (typelc == wxT("outputfile")) {
+		return new ConfigurationParameterOutputFile(parent);
 	}
 	if (typelc == wxT("image")) {
 		return new ConfigurationParameterImage(parent);
 	}
-
 	if (typelc == wxT("date")) {
-                return new ConfigurationParameterDate(parent);
+		return new ConfigurationParameterDate(parent);
 	}
 
 	// Points

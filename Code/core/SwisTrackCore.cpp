@@ -175,20 +175,37 @@ void THISCLASS::SetFileName(const wxFileName &filename) {
 	mFileName = filename;
 }
 
-wxFileName THISCLASS::GetProjectFileName(const wxString &filetitle) {
-	wxFileName filename(mFileName);
-	if (mFileName.IsOk()) {
-		filename.SetFullName(filetitle);
+wxFileName THISCLASS::GetProjectFileName(const wxString &filename_str) {
+	if (! mFileName.IsOk()) {
+		return wxFileName();
 	}
+
+	// Check filename
+	wxFileName filename(filename_str);
+	if (! filename.IsOk()) {
+		return wxFileName();
+	}
+
+	// Normalize with respect to project folder
+	filename.Normalize(wxPATH_NORM_ENV_VARS | wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE | wxPATH_NORM_TILDE, mFileName.GetPath());
 	return filename;
 }
 
-wxFileName THISCLASS::GetRunFileName(const wxString &filetitle) {
-	wxFileName filename(mFileName);
-	if (mFileName.IsOk()) {
-		filename.AppendDir(mRunTitle);
-		filename.SetFullName(filetitle);
+wxFileName THISCLASS::GetRunFileName(const wxString &filename_str) {
+	if (! mFileName.IsOk()) {
+		return wxFileName();
 	}
+
+	// Check filename
+	wxFileName filename(filename_str);
+	if (! filename.IsOk()) {
+		return wxFileName();
+	}
+
+	// Normalize with respect to run folder
+	wxFileName run_folder(mFileName);
+	run_folder.AppendDir(mRunTitle);
+	filename.Normalize(wxPATH_NORM_ENV_VARS | wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE | wxPATH_NORM_TILDE, run_folder.GetPath());
 	return filename;
 }
 
@@ -229,8 +246,8 @@ bool THISCLASS::Start(bool productionmode) {
 	wxFileName filename_output = GetRunFileName(wxT("output"));
 	if (filename_output.IsOk()) {
 		filename_output.Mkdir(0777, wxPATH_MKDIR_FULL);
-		wxFFile file_output(filename_output.GetFullPath(), wxT("w"));
-		file_output.Write(wxT("$TIMESTAMP,") + now.Format() + wxT("\n"));
+		//wxFFile file_output(filename_output.GetFullPath(), wxT("w"));
+		//file_output.Write(wxT("$TIMESTAMP,") + now.Format() + wxT("\n"));
 	}
 
 	// Event recorder
@@ -265,17 +282,18 @@ bool THISCLASS::Start(bool productionmode) {
 		it++;
 	}
 
+	// Notify the clients
+	if (mCommunicationInterface) {
+		CommunicationMessage mstart(wxT("START"));
+		mstart.AddString(now.Format());
+		mCommunicationInterface->Send(&mstart);
+	}
+
 	// Notify the interfaces
 	iti = mSwisTrackCoreInterfaces.begin();
 	while (iti != mSwisTrackCoreInterfaces.end()) {
 		(*iti)->OnAfterStart(productionmode);
 		iti++;
-	}
-
-	// Notify the clients
-	if (mCommunicationInterface) {
-		CommunicationMessage mstart(wxT("START"));
-		mCommunicationInterface->Send(&mstart);
 	}
 
 	// Event recorder
@@ -314,17 +332,19 @@ bool THISCLASS::Stop() {
 	mStarted = false;
 	mProductionMode = false;
 
+	// Notify the clients
+	if (mCommunicationInterface) {
+		wxDateTime now = wxDateTime::Now();
+		CommunicationMessage mstop(wxT("STOP"));
+		mstop.AddString(now.Format());
+		mCommunicationInterface->Send(&mstop);
+	}
+
 	// Notify the interfaces
 	iti = mSwisTrackCoreInterfaces.begin();
 	while (iti != mSwisTrackCoreInterfaces.end()) {
 		(*iti)->OnAfterStop();
 		iti++;
-	}
-
-	// Notify the clients
-	if (mCommunicationInterface) {
-		CommunicationMessage mstop(wxT("STOP"));
-		mCommunicationInterface->Send(&mstop);
 	}
 
 	// Event recorder
