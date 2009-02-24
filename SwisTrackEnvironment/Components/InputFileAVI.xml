@@ -6,7 +6,7 @@
 	<displayimage>Output</displayimage>
 
 	<configuration>
-		<parameter type="file">
+		<parameter type="inputfile">
 			<name>File</name>
 			<label>AVI File</label>
 			<reloadable>false</reloadable>

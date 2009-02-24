@@ -6,7 +6,7 @@
 	<displayimage>Output</displayimage>
 
 	<configuration>
-		<parameter type="file">
+		<parameter type="inputfile">
 			<name>CalibrationPoints</name>
 			<label>Calib. Points</label>
 		</parameter>

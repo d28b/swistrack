@@ -6,11 +6,10 @@
 	<displayimage>Output</displayimage>
 
 	<configuration>
-		<parameter type="file">
-			<name>File</name>
+		<parameter type="outputfile">
+			<name>FileTitle</name>
 			<label>AVI File</label>
 			<reloadable>false</reloadable>
-			<isinput>false</isinput>
 		</parameter>
 		<parameter type="integer">
 			<name>FrameRate</name>

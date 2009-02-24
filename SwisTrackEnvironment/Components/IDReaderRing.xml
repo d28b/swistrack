@@ -25,7 +25,7 @@
 			<unit>pixels</unit>
 			<reloadable>true</reloadable>
 		</parameter>
-		<parameter type="file">
+		<parameter type="inputfile">
 			<name>ObjectListFileName</name>
 			<label>Objects and codes</label>
 			<default></default>

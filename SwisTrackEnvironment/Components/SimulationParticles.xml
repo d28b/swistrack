@@ -6,7 +6,7 @@
 	<display>Output</display>
 
 	<configuration>
-		<parameter type="file">
+		<parameter type="inputfile">
 			<name>File</name>
 			<label>Simulation file</label>
 			<filter>NMEA 0183 data file|*.*</filter>
