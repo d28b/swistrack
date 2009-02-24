@@ -9,6 +9,7 @@ BEGIN_EVENT_TABLE(TCPServer, wxEvtHandler)
 END_EVENT_TABLE()
 
 THISCLASS::TCPServer(SwisTrack* swistrack):
+		CommunicationInterface(),
 		mServer(0), mPort(0), mSwisTrack(swistrack), mConnections() {
 }
 
@@ -97,7 +98,7 @@ void THISCLASS::CleanupConnections() {
 		tConnections::iterator next = it;
 		next++;
 
-		// If the socket is 0, this means that connection has been closed in between
+		// If the socket is 0, this means that connection has been closed in the meantime
 		if (! (*it)->IsActive()) {
 			delete *it;
 			mConnections.erase(it);

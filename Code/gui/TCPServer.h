@@ -40,7 +40,7 @@ public:
 	bool Send(CommunicationMessage *m);
 
 protected:
-	enum {
+	enum eServerID {
 		SERVER_ID = 100
 	};
 

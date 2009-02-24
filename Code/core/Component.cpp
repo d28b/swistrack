@@ -9,7 +9,7 @@
 #define THISCLASS Component
 
 THISCLASS::Component(SwisTrackCore *stc, const wxString &name):
-		mStatus(), mStatusHasError(false), mStatusHasWarning(false), mTimeCritical(false), mStarted(false),
+		mStatus(), mStatusHasError(false), mStatusHasWarning(false), mStarted(false),
 		mName(name), mDisplayName(name), mDescription(), mHelpURL(), mCategory(0), mDefaultDisplay(), mTrigger(0),
 		mInitializationErrors(), mStepDuration(-1),
 		mDataStructureRead(), mDataStructureWrite(), mDisplays(),

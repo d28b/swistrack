@@ -32,7 +32,6 @@ public:
 	tStatusItemList mStatus;			//!< The status item list (mostly list of errors).
 	bool mStatusHasError;				//!< Whether there is an error in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)
 	bool mStatusHasWarning;				//!< Whether there is a warning in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)
-	bool mTimeCritical;					//!< Whether the component would like more time. False by default. If set to true, unimportant tasks (such as displaying the current frame) will be skipped.
 	bool mStarted;						//!< Tells whether the component is started. This flag is set and reset by the SwisTrackCore class and should not be used by the components.
 	wxString mName;					//!< The internal name of the component (used to save configuration).
 	wxString mDisplayName;			//!< The name that is displayed to the user.

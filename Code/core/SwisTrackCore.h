@@ -42,6 +42,7 @@ public:
 	CommunicationInterface *mCommunicationInterface;		//!< The associated communication interface.
 	SwisTrackCoreTrigger *mTrigger;							//!< The associated trigger.
 	SwisTrackCoreEventRecorder *mEventRecorder;				//!< The associated event recorder.
+	bool mTimeCritical;										//!< Whether one or more components would like more time. (writable by components, readable by the UI)
 
 	// Component categories
 	ComponentCategory mCategoryTrigger;
@@ -73,9 +74,13 @@ public:
 	//! Sets the file. Note that this is used to determine the project and run folders only. The file itself is not opened or read (and does not even need to exist).
 	void SetFileName(const wxFileName &filename);
 	//! Sets the file. Note that this is used to determine the project and run folders only. The file itself is not opened or read (and does not even need to exist).
-	wxFileName GetFileName() {return mFileName;}
+	wxFileName GetFileName() {
+		return mFileName;
+	}
 	//! Returns the current run title.
-	wxString GetRunTitle() {return mRunTitle;}
+	wxString GetRunTitle() {
+		return mRunTitle;
+	}
 	//! Returns a path to a file in the project folder.
 	wxFileName GetProjectFileName(const wxString &filetitle);
 	//! Returns a path to a file in the run folder.
