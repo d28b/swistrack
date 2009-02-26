@@ -84,8 +84,9 @@ void THISCLASS::OnDisplayBeforeStep(Display *display) {
 	}
 
 	// Count to mUpdateRate from the last displayed image (the counter is reset in OnDisplayChanged)
-	mUpdateStepCounter++;
-	if (mUpdateStepCounter < mUpdateRate) {
+	//mUpdateStepCounter++;
+	SwisTrackCore *stc = mSwisTrack->mSwisTrackCore;
+	if ((stc->GetStepCounter() % mUpdateRate) != 0) {
 		return;
 	}
 
@@ -94,7 +95,7 @@ void THISCLASS::OnDisplayBeforeStep(Display *display) {
 		return;
 	}
 
-	// Activate the display
+	// Activate the display (such that OnDisplayChanged is called)
 	display->SetActive();
 }
 
@@ -104,7 +105,7 @@ void THISCLASS::OnDisplayChanged(Display *display) {
 	}
 
 	// Reset the counter
-	mUpdateStepCounter = 0;
+	//mUpdateStepCounter = 0;
 
 	// Do nothing if the canvas is invisible
 	if (! mCanvas->IsShown()) {
@@ -116,9 +117,9 @@ void THISCLASS::OnDisplayChanged(Display *display) {
 
 	// Update title and annotation
 	mCanvasTitle->SetText(display->mDisplayName, wxT(""));
-	wxString str = wxString::Format(wxT("Frame %d"), display->mFrameNumber);
+	wxString str = wxString::Format(wxT("Step %d"), display->mStepCounter);
 	if (display->mFramesCount >= 0) {
-		str += wxString::Format(wxT(" / %d"), display->mFramesCount);
+		str += wxString::Format(wxT(" (Frame %d / %d)"), display->mFrameNumber, display->mFramesCount);
 	}
 	str += wxString::Format(wxT(", %dx%d, %s"), display->mSize.width, display->mSize.height, display->mTime.FormatTime().c_str());
 	mCanvasAnnotation->SetText(str, display->mAnnotation);

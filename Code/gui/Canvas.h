@@ -42,7 +42,7 @@ public:
 
 private:
 	enum eID {
-		cID_SaveViewImageAs=1,
+		cID_SaveViewImageAs = 1,
 		cID_SaveOriginalImageAs,
 		cID_FlipVertically,
 		cID_FlipHorizontally,
@@ -51,7 +51,16 @@ private:
 		cID_Zoom50,
 		cID_Zoom25,
 		cID_Zoom10,
-		cID_ZoomFit
+		cID_ZoomFit,
+		cID_UpdateRate0,
+		cID_UpdateRate1,
+		cID_UpdateRate2,
+		cID_UpdateRate4,
+		cID_UpdateRate8,
+		cID_UpdateRate16,
+		cID_UpdateRate32,
+		cID_UpdateRate64,
+		cID_UpdateRate128,
 	};
 
 	wxMenu mPopupMenu;					//!< The popup menu.
@@ -77,6 +86,8 @@ private:
 	void OnMenuFlipHorizontally(wxCommandEvent& event);
 	//! The corresponding GUI event handler.
 	void OnMenuZoom(wxCommandEvent& event);
+	//! The corresponding GUI event handler.
+	void OnMenuUpdateRate(wxCommandEvent& event);
 
 	//! Overwritten to avoid painting the background.
 	void OnEraseBackground(wxEraseEvent& event);

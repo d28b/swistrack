@@ -19,6 +19,15 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 	EVT_MENU(cID_Zoom25, THISCLASS::OnMenuZoom)
 	EVT_MENU(cID_Zoom10, THISCLASS::OnMenuZoom)
 	EVT_MENU(cID_ZoomFit, THISCLASS::OnMenuZoom)
+	EVT_MENU(cID_UpdateRate0, THISCLASS::OnMenuUpdateRate)
+	EVT_MENU(cID_UpdateRate1, THISCLASS::OnMenuUpdateRate)
+	EVT_MENU(cID_UpdateRate2, THISCLASS::OnMenuUpdateRate)
+	EVT_MENU(cID_UpdateRate4, THISCLASS::OnMenuUpdateRate)
+	EVT_MENU(cID_UpdateRate8, THISCLASS::OnMenuUpdateRate)
+	EVT_MENU(cID_UpdateRate16, THISCLASS::OnMenuUpdateRate)
+	EVT_MENU(cID_UpdateRate32, THISCLASS::OnMenuUpdateRate)
+	EVT_MENU(cID_UpdateRate64, THISCLASS::OnMenuUpdateRate)
+	EVT_MENU(cID_UpdateRate128, THISCLASS::OnMenuUpdateRate)
 	EVT_MENU(cID_SaveViewImageAs, THISCLASS::OnMenuSaveViewImageAs)
 	EVT_MENU(cID_SaveOriginalImageAs, THISCLASS::OnMenuSaveOriginalImageAs)
 END_EVENT_TABLE()
@@ -37,6 +46,16 @@ THISCLASS::Canvas(CanvasPanel *cp):
 	mPopupMenu.AppendCheckItem(cID_Zoom10, wxT("Zoom: 10 %"));
 	mPopupMenu.AppendCheckItem(cID_ZoomFit, wxT("Fit zoom"));
 	mPopupMenu.AppendSeparator();
+	mPopupMenu.AppendCheckItem(cID_UpdateRate1, wxT("Show every frame"));
+	mPopupMenu.AppendCheckItem(cID_UpdateRate2, wxT("Show every 2nd frame"));
+	mPopupMenu.AppendCheckItem(cID_UpdateRate4, wxT("Show every 4th frame"));
+	mPopupMenu.AppendCheckItem(cID_UpdateRate8, wxT("Show every 8th frame"));
+	mPopupMenu.AppendCheckItem(cID_UpdateRate16, wxT("Show every 16th frame"));
+	mPopupMenu.AppendCheckItem(cID_UpdateRate32, wxT("Show every 32th frame"));
+	mPopupMenu.AppendCheckItem(cID_UpdateRate64, wxT("Show every 64th frame"));
+	mPopupMenu.AppendCheckItem(cID_UpdateRate128, wxT("Show every 128th frame"));
+	mPopupMenu.AppendCheckItem(cID_UpdateRate0, wxT("Don't update display"));
+	mPopupMenu.AppendSeparator();
 	mPopupMenu.AppendCheckItem(cID_FlipVertically, wxT("Flip vertically"));
 	mPopupMenu.AppendCheckItem(cID_FlipHorizontally, wxT("Flip horizontally"));
 	mPopupMenu.AppendSeparator();
@@ -50,7 +69,7 @@ THISCLASS::Canvas(CanvasPanel *cp):
 }
 
 THISCLASS::~Canvas() {
-  mWriter.Close();
+	mWriter.Close();
 }
 
 void THISCLASS::SetDisplay(Display *display) {
@@ -270,6 +289,16 @@ void THISCLASS::OnMouseRightDown(wxMouseEvent &event) {
 	mPopupMenu.Check(cID_Zoom100, (mDisplayRenderer.GetScalingFactor() == 1));
 	mPopupMenu.Check(cID_Zoom50, (mDisplayRenderer.GetScalingFactor() == 0.5));
 
+	mPopupMenu.Check(cID_UpdateRate0, (mCanvasPanel->mUpdateRate == 0));
+	mPopupMenu.Check(cID_UpdateRate1, (mCanvasPanel->mUpdateRate == 1));
+	mPopupMenu.Check(cID_UpdateRate2, (mCanvasPanel->mUpdateRate == 2));
+	mPopupMenu.Check(cID_UpdateRate4, (mCanvasPanel->mUpdateRate == 4));
+	mPopupMenu.Check(cID_UpdateRate8, (mCanvasPanel->mUpdateRate == 8));
+	mPopupMenu.Check(cID_UpdateRate16, (mCanvasPanel->mUpdateRate == 16));
+	mPopupMenu.Check(cID_UpdateRate32, (mCanvasPanel->mUpdateRate == 32));
+	mPopupMenu.Check(cID_UpdateRate64, (mCanvasPanel->mUpdateRate == 64));
+	mPopupMenu.Check(cID_UpdateRate128, (mCanvasPanel->mUpdateRate == 128));
+
 	PopupMenu(&mPopupMenu);
 }
 
@@ -361,4 +390,26 @@ void THISCLASS::OnMenuZoom(wxCommandEvent& event) {
 		mDisplayRenderer.SetScalingFactorMax(cvSize(mCanvasPanel->mAvailableSpace.GetWidth(), mCanvasPanel->mAvailableSpace.GetHeight()));
 	}
 	UpdateView();
+}
+
+void THISCLASS::OnMenuUpdateRate(wxCommandEvent& event) {
+	if (event.GetId() == cID_UpdateRate0) {
+		mCanvasPanel->mUpdateRate = 0;
+	} else if (event.GetId() == cID_UpdateRate2) {
+		mCanvasPanel->mUpdateRate = 2;
+	} else if (event.GetId() == cID_UpdateRate4) {
+		mCanvasPanel->mUpdateRate = 4;
+	} else if (event.GetId() == cID_UpdateRate8) {
+		mCanvasPanel->mUpdateRate = 8;
+	} else if (event.GetId() == cID_UpdateRate16) {
+		mCanvasPanel->mUpdateRate = 16;
+	} else if (event.GetId() == cID_UpdateRate32) {
+		mCanvasPanel->mUpdateRate = 32;
+	} else if (event.GetId() == cID_UpdateRate64) {
+		mCanvasPanel->mUpdateRate = 64;
+	} else if (event.GetId() == cID_UpdateRate128) {
+		mCanvasPanel->mUpdateRate = 128;
+	} else {
+		mCanvasPanel->mUpdateRate = 1;
+	}
 }

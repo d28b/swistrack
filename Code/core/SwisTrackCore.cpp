@@ -176,36 +176,50 @@ void THISCLASS::SetFileName(const wxFileName &filename) {
 }
 
 wxFileName THISCLASS::GetProjectFileName(const wxString &filename_str) {
-	if (! mFileName.IsOk()) {
-		return wxFileName();
-	}
-
 	// Check filename
 	wxFileName filename(filename_str);
 	if (! filename.IsOk()) {
 		return wxFileName();
 	}
 
-	// Normalize with respect to project folder
-	filename.Normalize(wxPATH_NORM_ENV_VARS | wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE | wxPATH_NORM_TILDE, mFileName.GetPath());
+	// Normalize
+	if (filename.IsAbsolute()) {
+		filename.Normalize(wxPATH_NORM_ENV_VARS | wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE | wxPATH_NORM_TILDE);
+	} else {
+		// If there is no valid project folder (i.e. the project has not been saved yet), we give up
+		if (! mFileName.IsOk()) {
+			return wxFileName();
+		}
+
+		// Normalize with respect to project folder
+		filename.Normalize(wxPATH_NORM_ENV_VARS | wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE | wxPATH_NORM_TILDE, mFileName.GetPath());
+	}
+
 	return filename;
 }
 
 wxFileName THISCLASS::GetRunFileName(const wxString &filename_str) {
-	if (! mFileName.IsOk()) {
-		return wxFileName();
-	}
-
 	// Check filename
 	wxFileName filename(filename_str);
 	if (! filename.IsOk()) {
 		return wxFileName();
 	}
 
-	// Normalize with respect to run folder
-	wxFileName run_folder(mFileName);
-	run_folder.AppendDir(mRunTitle);
-	filename.Normalize(wxPATH_NORM_ENV_VARS | wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE | wxPATH_NORM_TILDE, run_folder.GetPath());
+	// Normalize
+	if (filename.IsAbsolute()) {
+		filename.Normalize(wxPATH_NORM_ENV_VARS | wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE | wxPATH_NORM_TILDE);
+	} else {
+		// If there is no valid project folder (i.e. the project has not been saved yet), we give up
+		if (! mFileName.IsOk()) {
+			return wxFileName();
+		}
+
+		// Normalize with respect to run folder
+		wxFileName run_folder(mFileName);
+		run_folder.AppendDir(mRunTitle);
+		filename.Normalize(wxPATH_NORM_ENV_VARS | wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE | wxPATH_NORM_TILDE, run_folder.GetPath());
+	}
+
 	return filename;
 }
 

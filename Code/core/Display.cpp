@@ -4,7 +4,7 @@
 #include <algorithm>
 
 THISCLASS::Display(const wxString &name, const wxString &displayname):
-		mComponent(0), mName(name), mDisplayName(displayname), mSubscribers(),
+		mComponent(0), mName(name), mDisplayName(displayname), mSubscribers(), mStepCounter(-1),
 		mFrameNumber(-1), mFramesCount(-1), mTime(wxDateTime::UNow()), mAnnotation(), mErrors(),
 		mTopLeft(cvPoint(0, 0)), mSize(cvSize(0, 0)),
 		mMainImage(0), mMaskImage(0), mParticles(), mTrajectories(false),

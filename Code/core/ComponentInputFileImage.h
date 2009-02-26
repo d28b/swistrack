@@ -27,7 +27,6 @@ public:
 
 private:
 	IplImage* mOutputImage;				//!< The image.
-	int mFrameNumber;					//!< The frame number.
 
 	Display mDisplayOutput;				//!< The Display showing the output of this component.
 };

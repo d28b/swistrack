@@ -5,7 +5,7 @@
 
 THISCLASS::ComponentInputFileImage(SwisTrackCore *stc):
 		Component(stc, wxT("InputFileImage")),
-		mOutputImage(0), mFrameNumber(0),
+		mOutputImage(0),
 		mDisplayOutput(wxT("Output"), wxT("Input image")) {
 
 	// Data structure relations
@@ -25,16 +25,15 @@ void THISCLASS::OnStart() {
 	// Load the image
 	wxString filename_string = GetConfigurationString(wxT("File"), wxT(""));
 	wxFileName filename = mCore->GetProjectFileName(filename_string);
-	if (filename.IsOk()) {
-		mOutputImage = cvLoadImage(filename.GetFullPath().mb_str(wxConvFile), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
+	if (! filename.IsOk()) {
+		AddError(wxT("Invalid image file path/filename."));
+		return;
 	}
+	mOutputImage = cvLoadImage(filename.GetFullPath().mb_str(wxConvFile), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
 	if (! mOutputImage) {
 		AddError(wxT("Cannot open image file."));
 		return;
 	}
-
-	// Set the frame number to 0
-	mFrameNumber = 0;
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -45,11 +44,8 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
-	mFrameNumber++;
-
 	// Set DataStructureImage
 	mCore->mDataStructureInput.mImage = mOutputImage;
-	mCore->mDataStructureInput.mFrameNumber = mFrameNumber;
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);

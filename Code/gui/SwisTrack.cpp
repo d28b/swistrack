@@ -125,7 +125,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	mSwisTrackCore->AddInterface(this);
 }
 
-SwisTrack::~SwisTrack(){
+SwisTrack::~SwisTrack() {
 	Control_StopRunMode();
 	Control_StopProductionMode();
 
@@ -184,7 +184,7 @@ void THISCLASS::BuildToolBar() {
 
 	// Create toolbar
 	mHiddenStartStopTool = NULL;
-	toolbar = CreateToolBar(wxTB_FLAT | wxTB_DOCKABLE | wxTB_TEXT);
+	toolbar = CreateToolBar(wxTB_FLAT | wxTB_TEXT);
 	toolbar->AddTool(cID_New, wxT("New"), wxBITMAP(bitmap_new), wxT("New"));
 	toolbar->AddTool(cID_Open, wxT("Open"), wxBITMAP(bitmap_open), wxT("Open"));
 	toolbar->AddTool(cID_Save, wxT("Save"), wxBITMAP(bitmap_save), wxT("Save"));
@@ -199,12 +199,11 @@ void THISCLASS::BuildToolBar() {
 	toolbar->AddTool(cID_Control_Reset, wxT("Reset"), wxBITMAP(bitmap_singlestep), wxT("Stops the execution. It will be started upon the next step."));
 	toolbar->AddSeparator();
 
-	toolbar->Realize();
+	//toolbar->Realize();
 	mHiddenStartStopTool = GetToolBar()->RemoveTool(cID_Control_Stop);
 	toolbar->Realize();
 
 	toolbar->SetRows(1 ? 1 : 10 / 1);
-
 }
 
 void THISCLASS::BuildStatusBar() {
@@ -303,7 +302,7 @@ void THISCLASS::Control_StopProductionMode() {
 void THISCLASS::Control_StartRunMode() {
 	// Switch start to stop button (by removing one and adding the other one) and store removed tool in mHiddenStartStopTool
 	int pos = GetToolBar()->GetToolPos(cID_Control_Run);
-	if ( pos != wxNOT_FOUND){
+	if ( pos != wxNOT_FOUND) {
 		wxToolBarToolBase *temp = GetToolBar()->RemoveTool(cID_Control_Run);
 		GetToolBar()->InsertTool(pos, mHiddenStartStopTool);
 		mHiddenStartStopTool = temp;
@@ -322,7 +321,7 @@ void THISCLASS::Control_StartRunMode() {
 void THISCLASS::Control_StopRunMode() {
 	// Switch stop to start button (by removing one and adding the other one) and store removed tool in mHiddenStartStopTool
 	int pos = GetToolBar()->GetToolPos(cID_Control_Stop);
-	if ( pos != wxNOT_FOUND){ // need to check because starting SwisTrack will trigger a call to this method, even though app is in 'stopped' mode
+	if ( pos != wxNOT_FOUND) { // need to check because starting SwisTrack will trigger a call to this method, even though app is in 'stopped' mode
 		wxToolBarToolBase *temp = GetToolBar()->RemoveTool(cID_Control_Stop);
 		GetToolBar()->InsertTool(pos, mHiddenStartStopTool);
 		mHiddenStartStopTool = temp;
@@ -369,14 +368,13 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 void THISCLASS::OnBeforeStart(bool productionmode) {
 	// In production mode, save the current configuration as configuration.swistrack in the run folder
 	if (productionmode) {
-		std::cout << "TTTT" << std::endl;
 		SaveFile(mSwisTrackCore->GetRunFileName(wxT("configuration.swistrack")), false, true);
 	}
 }
 
 void SwisTrack::OnFileNew(wxCommandEvent& WXUNUSED(event)) {
 	wxMessageDialog dlg(this, wxT("This will destroy your current session. Are you sure?"), wxT("Destroy current session?"), wxOK | wxCANCEL | wxICON_ERROR);
-	if (dlg.ShowModal() != wxID_OK){
+	if (dlg.ShowModal() != wxID_OK) {
 		return; // user canceled
 	}
 	NewFile();

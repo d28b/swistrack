@@ -42,7 +42,7 @@ public:
 	}
 
 private:
-	wxString mCameraFullName;						//!< (configuration) Full name of the camera (as returned by Pylon::DeviceInfo::GetFullName()).
+	wxString mCameraFullName;							//!< (configuration) Full name of the camera (as returned by Pylon::DeviceInfo::GetFullName()).
 	bool mColor;										//!< (configuration) Whether to acquire color or mono images.
 	eTriggerMode mTriggerMode;							//!< (configuration) The trigger source.
 	double mTriggerTimerFPS;							//!< (configuration) The FPS of the trigger timer.
@@ -60,7 +60,7 @@ private:
 	IplImage *mOutputImage;								//!< The current output image (only used for color acquisition, for mono acquision one of the mInputBufferImages is used).
 
 	//! The thread waiting for new images (in case of external trigger).
-class Thread: public wxThread {
+	class Thread: public wxThread {
 	public:
 		ComponentInputCameraGigE *mComponent;		//!< The associated component.
 

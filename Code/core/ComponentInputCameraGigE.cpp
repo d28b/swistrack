@@ -44,6 +44,7 @@ void THISCLASS::OnStart() {
 	mTriggerMode = (eTriggerMode)GetConfigurationInt(wxT("TriggerMode"), 0);
 	mTriggerTimerFPS = GetConfigurationInt(wxT("TriggerTimerFPS"), 10);
 	mInputBufferSize = GetConfigurationInt(wxT("InputBufferSize"), 8);
+	mFrameNumber = 0;
 
 	// Check the maximum amount of buffers
 	if (mInputBufferSize < 1) {

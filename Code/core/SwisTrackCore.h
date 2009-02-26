@@ -123,7 +123,7 @@ public:
 		return mTrigger->GetActive();
 	}
 	//! Returns the value of the step counter.
-	bool GetStepCounter() {
+	int GetStepCounter() {
 		return mStepCounter;
 	}
 

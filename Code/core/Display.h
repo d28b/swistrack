@@ -22,11 +22,12 @@ public:
 
 	// Internal display information
 	Component *mComponent;			//!< The associated component
-	wxString mName;				//!< The internal name of this display.
-	wxString mDisplayName;		//!< The name displayed to the user.
+	wxString mName;					//!< The internal name of this display.
+	wxString mDisplayName;			//!< The name displayed to the user.
 	tSubscriberList mSubscribers;	//!< The list of subscribers.
 
 	// General information
+	int mStepCounter;				//!< The value of the step counter.
 	int mFrameNumber;				//!< The frame number.
 	int mFramesCount;				//!< The number of frames.
 	wxDateTime mTime;				//!< The time when the displayed image was updated.
