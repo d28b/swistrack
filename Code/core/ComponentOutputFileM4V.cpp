@@ -6,7 +6,7 @@
 
 THISCLASS::ComponentOutputFileM4V(SwisTrackCore *stc):
 		Component(stc, wxT("OutputFileM4V")),
-		mM4VHandle(0), mM4VBuffer(0), mFrameRate(15), mInputChannel(0),
+		mM4VHandle(0), mM4VBuffer(0), mFrameRate(15), mInputChannel(cInputChannel_None),
 		mDisplayOutput(wxT("Output"), wxT("M4V File: Unprocessed Frame")) {
 
 	// Data structure relations
@@ -24,7 +24,8 @@ THISCLASS::~ComponentOutputFileM4V() {
 }
 
 void THISCLASS::OnStart() {
-	mFilename = GetConfigurationString(wxT("Filename"), wxT(""));
+	wxString filename_string = GetConfigurationString(wxT("FileName"), wxT(""));
+	mFileName=mCore->GetRunFileName(filename_string);
 	mFrameRate = GetConfigurationInt(wxT("FrameRate"), 15);
 
 	wxString keepinmemory = GetConfigurationString(wxT("WriteMode"), wxT(""));
@@ -40,7 +41,7 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	wxString inputchannel = GetConfigurationInt(wxT("InputChannel"), wxT(""));
+	wxString inputchannel = GetConfigurationString(wxT("InputChannel"), wxT(""));
 	if (inputchannel == wxT("color")) {
 		mInputChannel = cInputChannel_Color;
 	} else if (inputchannel == wxT("grayscale")) {
@@ -55,14 +56,15 @@ void THISCLASS::OnReloadConfiguration() {
 void THISCLASS::OnStep() {
 	// Get the input image
 	IplImage* inputimage = 0;
-	if (mInputChannel == sInputChannel_Grayscale) {
+	if (mInputChannel == cInputChannel_Grayscale) {
 		inputimage = mCore->mDataStructureImageGray.mImage;
-	} else if (mInputChannel == sInputChannel_Color) {
+	} else if (mInputChannel == cInputChannel_Color) {
 		inputimage = mCore->mDataStructureImageColor.mImage;
-	} else if (mInputChannel == sInputChannel_Binary) {
+	} else if (mInputChannel == cInputChannel_Binary) {
 		inputimage = mCore->mDataStructureImageBinary.mImage;
 	} else {
 		AddError(wxT("No input channel selected."));
+		return;
 	}
 
 	// Do nothing if no image is available
@@ -104,7 +106,7 @@ void THISCLASS::M4VOpen(IplImage* image) {
 	xvid_enc_create_t xvid_enc_create;
 
 	// Open the output file
-	mFile.Open(mFilename, wxFile::write);
+	mFile.Open(mFileName.GetFullPath(), wxFile::write);
 	if (mFile.IsOpened() == false) {
 		AddError(wxT("Error while opening the output file."));
 		return;
@@ -174,6 +176,7 @@ void THISCLASS::M4VOpen(IplImage* image) {
 	// I use a small value here, since will not encode whole movies, but short clips
 	printf("open\n");
 	int error = xvid_encore(0, XVID_ENC_CREATE, &xvid_enc_create, 0);
+	printf("open error %d\n", error);
 	if (error) {
 		AddError(wxT("Error while opening the encoder."));
 		return;

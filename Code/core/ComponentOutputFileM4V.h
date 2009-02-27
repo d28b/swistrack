@@ -51,14 +51,14 @@ private:
 
 	void *mM4VHandle;					//!< M4V handle.
 	unsigned char *mM4VBuffer;			//!< The memory buffer with the compressed frames.
-	wxFile mFile;
+	wxFile mFile;						//!< The video file.
 
 	int mFrameRate;						//!< (configuration) The frame rate of the output file.
 	enum eInputChannel mInputChannel;	//!< (configuration) Selected input channel.
 	enum eKeepInMemory mKeepInMemory;	//!< (configuration) Keep in memory feature.
 	int mKeepInMemoryFrameCount;		//!< (configuration) Number of uncompressed frames to keep in memory (raw mode).
 	int mKeepInMemoryBufferSize;		//!< (configuration) Size of the memory buffer in bytes (compressed mode).
-	wxString mFilename;				//!< (configuration) Output file name.
+	wxFileName mFileName;				//!< (configuration) Output file name.
 
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 
