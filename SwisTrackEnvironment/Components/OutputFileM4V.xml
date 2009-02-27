@@ -7,7 +7,7 @@
 
 	<configuration>
 		<parameter type="outputfile">
-			<name>FileTitle</name>
+			<name>FileName</name>
 			<label>M4V File</label>
 			<reloadable>false</reloadable>
 		</parameter>
@@ -18,12 +18,12 @@
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="dropdownlist">
-			<name>InputImage</name>
-			<label>Input Image</label>
+			<name>InputChannel</name>
+			<label>Input Channel</label>
 			<items>
-				<item key="0">Gray</item>
-				<item key="1">Color</item>
-				<item key="2">Binary</item>
+				<item key="grayscale">Gray</item>
+				<item key="color">Color</item>
+				<item key="binary">Binary</item>
 			</items>
 			<default>0</default>
 			<reloadable>true</reloadable>
