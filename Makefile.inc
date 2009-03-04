@@ -15,8 +15,8 @@ OPENCV_LDLIBS   := `pkg-config --libs opencv`
 #OPENCV_LDLIBS   := -lcxcore -lcv -lhighgui -lcvaux -lml
 
 # wxWidgets
-WXWIDGETS_CPPFLAGS := `wx-config --cppflags`
-WXWIDGETS_LDLIBS   := `wx-config --libs`
+WXWIDGETS_CPPFLAGS := `wx-config --version=2.8 --cppflags`
+WXWIDGETS_LDLIBS   := `wx-config --version=2.8 --libs`
 
 # GiGE Camera Component (activate the following lines to compile with this component)
 #CPPFLAGS_ADD := -I/opt/pylon/include -I/opt/pylon/include/genicam -DUSE_CAMERA_PYLON_GIGE
