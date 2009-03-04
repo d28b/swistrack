@@ -14,7 +14,7 @@ FILES_D   := $(FILES_CPP:.cpp=.d)
 FILES_COBJ:= $(FILES_C:.c=.o)
 
 CPPFLAGS  := $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -I/usr/include -I../../3rdParty/libtsai/include -I../../3rdParty/camshift_wrapper -I../../3rdParty/cvblobslib_v6p1 $(CPPFLAGS_ADD) -I$(SWISTRACK_ROOT)/Code/core
-LDFLAGS   := $(LDFLAGS_ADD)
+LDFLAGS   := $(LDFLAGS_ADD) $(LDLIBS_ADD)
 
 %_wrap.cxx: %.i $(FILES_H)
 	swig -Wall -python -c++ $(CPPFLAGS) $<
