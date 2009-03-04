@@ -13,6 +13,7 @@ FILES_O   := $(FILES_CPP:.cpp=.o)
 FILES_D   := $(FILES_CPP:.cpp=.d)
 FILES_COBJ:= $(FILES_C:.c=.o)
 FILES_A   := ../core/libSwisTrackCore.a ../../3rdParty/cvblobslib_v6p1/libCVBlobs.a ../../3rdParty/libtsai/libtsai.a ../../3rdParty/camshift_wrapper/libCamshiftWrapper.a
+FILES_A += $(SWISTRACK_ROOT)/../src/libCogmac.a
 
 CPPFLAGS  := $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -I/usr/include -I../../3rdParty/libtsai/include -I../../3rdParty/camshift_wrapper -I../../3rdParty/cvblobslib_v6p1 $(CPPFLAGS_ADD) -I$(SWISTRACK_ROOT)/Code/core
 LDFLAGS   := $(OPENCV_LDLIBS) $(WXWIDGETS_LDLIBS) -lm $(LDLIBS_ADD)$(LDFLAGS_ADD)

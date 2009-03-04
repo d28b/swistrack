@@ -1,10 +1,9 @@
 import unittest
 
 class SwigTestCase(unittest.TestCase):
-    def testImport(self):
-        import swistrack
-    
     def testBackgroundSubtraction(self):
+        import swistrack
+        core = swistrack.SwisTrackCore("../../SwisTrackEnvironment")
         subtractor = swistrack.ComponentBackgroundSubtractionCheungKamath()
         
 if __name__ == "__main__":
