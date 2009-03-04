@@ -45,9 +45,8 @@ void THISCLASS::Open() {
 
 	// Check whether the server is listening.
 	if (! mServer->Ok()) {
-		wxString str;
-		str.Printf(wxT("Could not listen on port %d."), mPort);
-		mSwisTrack->SetStatusText(str);
+		wxString str = wxString::Format(wxT("%d ERR"), mPort);
+		mSwisTrack->SetStatusText(str, SwisTrack::cStatusField_ServerPort);
 
 		mServer->Destroy();
 		mServer = 0;
@@ -58,6 +57,10 @@ void THISCLASS::Open() {
 	mServer->SetEventHandler(*this, SERVER_ID);
 	mServer->SetNotify(wxSOCKET_CONNECTION_FLAG);
 	mServer->Notify(true);
+
+	// Update the status bar
+	wxString str = wxString::Format(wxT("%d"), mPort);
+	mSwisTrack->SetStatusText(str, SwisTrack::cStatusField_ServerPort);
 }
 
 void THISCLASS::Close() {
@@ -66,6 +69,9 @@ void THISCLASS::Close() {
 	}
 	mServer->Destroy();
 	mServer = 0;
+
+	// Update the status bar
+	mSwisTrack->SetStatusText(wxT("Closed"), SwisTrack::cStatusField_ServerPort);
 }
 
 void THISCLASS::OnServerEvent(wxSocketEvent& event) {
@@ -92,8 +98,6 @@ void THISCLASS::OnServerEvent(wxSocketEvent& event) {
 	// Notify the user with a status message
 	wxIPV4address addr;
 	sock->GetPeer(addr);
-	wxString str = wxString::Format(wxT("Connection with %s:%s established."), addr.Hostname().c_str(), addr.IPAddress().c_str());
-	mSwisTrack->SetStatusText(str);
 }
 
 void THISCLASS::CleanupConnections() {

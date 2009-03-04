@@ -442,7 +442,6 @@ void THISCLASS::OpenFile(const wxFileName &filename, bool breakonerror, bool ast
 	cr.SelectRootNode();
 	cr.SelectChildNode(wxT("server"));
 	mTCPServer->SetPort(cr.ReadInt(wxT("port"), 3000));
-	SetStatusText(wxString::Format(wxT("TCP: %d"), mTCPServer->GetPort()), cStatusField_ServerPort);
 
 	// Show errors if there are any
 	if (cr.mErrorList.mList.empty()) {

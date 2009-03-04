@@ -46,6 +46,8 @@ void THISCLASS::OnStart() {
 	mInputBufferSize = GetConfigurationInt(wxT("InputBufferSize"), 8);
 	mFrameNumber = 0;
 
+	printf("OnStart 1\n");
+
 	// Check the maximum amount of buffers
 	if (mInputBufferSize < 1) {
 		mInputBufferSize = 1;
@@ -56,9 +58,10 @@ void THISCLASS::OnStart() {
 		AddWarning(wxString::Format(wxT("Using %d input buffers."), mInputBufferSize));
 	}
 
+	printf("OnStart 2\n");
 	// Get the transport layer
 	Pylon::CTlFactory& tlfactory = Pylon::CTlFactory::GetInstance();
-
+	printf("OnStart 3\n");
 	try {
 		if (mCameraFullName.Len() == 0) {
 			Pylon::DeviceInfoList_t devices;
@@ -78,7 +81,7 @@ void THISCLASS::OnStart() {
 				return;
 			}
 		}
-
+		printf("OnStart 4\n");
 		// Open the camera object
 		mCamera->Open();
 	} catch (GenICam::GenericException &e) {
@@ -87,14 +90,14 @@ void THISCLASS::OnStart() {
 		mCamera = 0;
 		return;
 	}
-
+	printf("OnStart 5\n");
 	// Pixel format: color or mono
 	if (mColor) {
 		mCamera->PixelFormat.SetValue(Basler_GigECameraParams::PixelFormat_YUV422Packed);
 	} else {
 		mCamera->PixelFormat.SetValue(Basler_GigECameraParams::PixelFormat_Mono8);
 	}
-
+	printf("OnStart 6\n");
 	// Area of interest
 	int cameraw = mCamera->Width.GetMax();
 	int camerah = mCamera->Height.GetMax();
@@ -115,17 +118,18 @@ void THISCLASS::OnStart() {
 		aoih = camerah - aoiy;
 	}
 	aoiw = aoiw ^ (aoiw & 0x3);	// The image width must currently be a multiple of 4, for alignment reasons.
+	aoih = aoih ^ (aoih & 0x1);	// The image height must currently be a multiple of 2.
 	if (aoiw < 4) {
 		aoiw = 4;
 	}
-	if (aoih < 1) {
-		aoih = 1;
+	if (aoih < 2) {
+		aoih = 2;
 	}
 	mCamera->OffsetX.SetValue(aoix);
 	mCamera->OffsetY.SetValue(aoiy);
 	mCamera->Width.SetValue(aoiw);
 	mCamera->Height.SetValue(aoih);
-
+	printf("OnStart 7\n");
 	// Continuous mode
 	mCamera->AcquisitionMode.SetValue(Basler_GigECameraParams::AcquisitionMode_Continuous);
 
@@ -155,17 +159,19 @@ void THISCLASS::OnStart() {
 
 	// Configure reloadable values
 	OnReloadConfiguration();
-
+	printf("OnStart 8\n");
 	// Get and open a stream grabber
-	mStreamGrabber = dynamic_cast<Pylon::CBaslerGigEStreamGrabber*>(mCamera->GetStreamGrabber(0));
+	mCamera->GetStreamGrabber(0);
+	mStreamGrabber = new Pylon::CBaslerGigECamera::StreamGrabber_t(mCamera->GetStreamGrabber(0));
+	printf("OnStart 8.1 %d\n", mStreamGrabber);
 	mStreamGrabber->Open();
-
+	printf("OnStart 8.2\n");
 	// Parameterize the stream grabber
 	const int buffersize = mCamera->PayloadSize.GetValue();
 	mStreamGrabber->MaxBufferSize = buffersize;
 	mStreamGrabber->MaxNumBuffer = mInputBufferSize;
 	mStreamGrabber->PrepareGrab();
-
+	printf("OnStart 9\n");
 	// Allocate and register image buffers, put them into the grabber's input queue
 	try {
 		int channels = (mColor ? 2 : 1);
@@ -183,7 +189,7 @@ void THISCLASS::OnStart() {
 		mCamera = 0;
 		return;
 	}
-
+	printf("OnStart 10\n");
 	// Start image acquisition
 	mCamera->AcquisitionStart.Execute();
 
@@ -204,12 +210,13 @@ void THISCLASS::OnReloadConfiguration() {
 		return;
 	}
 
+	printf("OnReloadConfiguration 1\n");
 	try {
 		// Configure exposure time and mode
 		int exposuretime = GetConfigurationInt(wxT("ExposureTime"), 100);
 		mCamera->ExposureMode.SetValue(Basler_GigECameraParams::ExposureMode_Timed);
 		mCamera->ExposureTimeRaw.SetValue(exposuretime);
-
+		printf("OnReloadConfiguration 2\n");
 		// Configure analog gain
 		int analoggain = GetConfigurationInt(wxT("AnalogGain"), 500);
 		mCamera->GainRaw.SetValue(analoggain);
@@ -224,7 +231,7 @@ void THISCLASS::OnStep() {
 	if (! mCamera) {
 		return;
 	}
-
+	printf("OnStep 1\n");
 	// Get the image
 	if (mTriggerMode == sTrigger_Software) {
 		// Send the software trigger
@@ -268,7 +275,7 @@ void THISCLASS::OnStepCleanup() {
 	if (! mCamera) {
 		return;
 	}
-
+	printf("OnStepCleanup 1\n");
 	// Requeue the used image
 	try {
 		mStreamGrabber->QueueBuffer(mCurrentResult.Handle(), mCurrentResult.Context());
@@ -292,13 +299,13 @@ void THISCLASS::OnStop() {
 	if (! mCamera) {
 		return;
 	}
-
+	printf("OnStop 1\n");
 	// The camera is in continuous mode, stop image acquisition
 	mCamera->AcquisitionStop.Execute();
 
 	// Flush the input queue, grabbing may have failed
 	mStreamGrabber->CancelGrab();
-
+	printf("OnStop 2\n");
 	// Wait for the thread to quit
 	wxCriticalSectionLocker csl(mThreadCriticalSection);
 
@@ -307,27 +314,32 @@ void THISCLASS::OnStop() {
 	while (mStreamGrabber->GetWaitObject().Wait(0)) {
 		mStreamGrabber->RetrieveResult(result);
 	}
-
+	printf("OnStop 3\n");
 	// Deregister and free buffers
 	for (int i = 0; i < mInputBufferSize; ++i) {
 		mStreamGrabber->DeregisterBuffer(mInputBufferHandles[i]);
 		cvReleaseImage(&mInputBufferImages[i]);
 	}
-
+	printf("OnStop 4\n");
 	// Clean up
 	mStreamGrabber->FinishGrab();
+	printf("OnStop 4.1\n");
 	mStreamGrabber->Close();
+	printf("OnStop 4.2\n");
 	mStreamGrabber = 0;
+	printf("OnStop 4.3\n");
 	mCamera->Close();
+	printf("OnStop 4.4\n");
 	Pylon::CTlFactory& tlfactory = Pylon::CTlFactory::GetInstance();
+	printf("OnStop 4.5\n");
 	tlfactory.DestroyDevice(mCamera->GetDevice());
-	delete mCamera;
+	printf("OnStop 4.7\n");
 	mCamera = 0;
 }
 
 wxThread::ExitCode THISCLASS::Thread::Entry() {
 	wxCriticalSectionLocker csl(mComponent->mThreadCriticalSection);
-
+	printf("Thread::Entry 1\n");
 	// Wait for the grabbed image
 	while (! mComponent->mStreamGrabber->GetWaitObject().Wait(3000)) {
 		// This is intentionally left empty

@@ -8,6 +8,7 @@
 void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
 	try {
 		// Get the list of all cameras
+		printf("FillList 1\n");
 		Pylon::CTlFactory& tlfactory = Pylon::CTlFactory::GetInstance();
 		Pylon::DeviceInfoList_t devices;
 		if (tlfactory.EnumerateDevices(devices) == 0) {
@@ -16,6 +17,7 @@ void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
 		}
 
 		// Fill in the list
+		printf("FillList 2\n");
 		Pylon::DeviceInfoList_t::iterator it = devices.begin();
 		while (it != devices.end()) {
 			wxString name(it->GetFullName().c_str(), wxConvLocal);
@@ -23,12 +25,14 @@ void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
 			AddItem(name, value);
 			it++;
 		}
+		printf("FillList 3\n");
 	} catch (GenICam::GenericException &e) {
 		AddItem(wxT(""), wxString::Format(wxT("%s"), e.GetDescription()));
 		return;
 	}
 
 	// Add the "Any" entry
+	printf("FillList 4\n");
 	AddItem(wxT(""), wxT("Any"));
 }
 
