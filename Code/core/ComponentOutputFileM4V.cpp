@@ -25,7 +25,7 @@ THISCLASS::~ComponentOutputFileM4V() {
 
 void THISCLASS::OnStart() {
 	wxString filename_string = GetConfigurationString(wxT("FileName"), wxT(""));
-	mFileName=mCore->GetRunFileName(filename_string);
+	mFileName = mCore->GetRunFileName(filename_string);
 	mFrameRate = GetConfigurationInt(wxT("FrameRate"), 15);
 
 	wxString keepinmemory = GetConfigurationString(wxT("WriteMode"), wxT(""));
@@ -130,8 +130,8 @@ void THISCLASS::M4VOpen(IplImage* image) {
 	xvid_enc_create.version = XVID_VERSION;
 
 	// Width and Height of input frames
-	xvid_enc_create.width = image->width;
-	xvid_enc_create.height = image->height;
+	xvid_enc_create.width = image->width - (image->width & 1);
+	xvid_enc_create.height = image->height - (image->height & 1);
 	xvid_enc_create.profile = XVID_PROFILE_AS_L4;
 
 	// Allocate memory for the compressed frame
@@ -174,9 +174,8 @@ void THISCLASS::M4VOpen(IplImage* image) {
 	xvid_enc_create.global = 0;
 
 	// I use a small value here, since will not encode whole movies, but short clips
-	printf("open\n");
+	printf("XVID open\n");
 	int error = xvid_encore(0, XVID_ENC_CREATE, &xvid_enc_create, 0);
-	printf("open error %d\n", error);
 	if (error) {
 		AddError(wxT("Error while opening the encoder."));
 		return;
@@ -245,7 +244,7 @@ void THISCLASS::M4VWriteFrame(IplImage* image) {
 	xvid_enc_frame.quant_inter_matrix = 0;
 
 	// Encode the frame
-	printf("write\n");
+	printf("XVID write frame\n");
 	int size = xvid_encore(mM4VHandle, XVID_ENC_ENCODE, &xvid_enc_frame, &xvid_enc_stats);
 	if (size < 0) {
 		AddError(wxT("Error while encoding a frame."));
@@ -257,7 +256,7 @@ void THISCLASS::M4VWriteFrame(IplImage* image) {
 
 void THISCLASS::M4VClose() {
 	mFile.Close();
-	printf("close\n");
+	printf("XVID close\n");
 	if (mM4VHandle) {
 		xvid_encore(mM4VHandle, XVID_ENC_DESTROY, 0, 0);
 		mM4VHandle = 0;

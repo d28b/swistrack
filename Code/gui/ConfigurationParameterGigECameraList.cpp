@@ -11,18 +11,20 @@ void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
 		Pylon::CTlFactory& tlfactory = Pylon::CTlFactory::GetInstance();
 		Pylon::DeviceInfoList_t devices;
 		if (tlfactory.EnumerateDevices(devices) == 0) {
-			AddItem(wxT("error"), wxT("No GigE cameras found!"));
+			AddItem(wxT(""), wxT("No GigE cameras found!"));
 			return;
 		}
 
 		// Fill in the list
 		Pylon::DeviceInfoList_t::iterator it = devices.begin();
 		while (it != devices.end()) {
-			AddItem(it->GetFullName().c_str(), it->GetFriendlyName().c_str());
+			wxString name(it->GetFullName().c_str(), wxConvLocal);
+			wxString value(it->GetFriendlyName().c_str(), wxConvLocal);
+			AddItem(name, value);
 			it++;
 		}
 	} catch (GenICam::GenericException &e) {
-		AddItem(wxT("error"), e.GetDescription());
+		AddItem(wxT(""), wxString::Format(wxT("%s"), e.GetDescription()));
 		return;
 	}
 
@@ -33,7 +35,7 @@ void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
 #else
 
 void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
-	AddItem(wxT("error"), wxT("No GigE support."));
+	AddItem(wxT(""), wxT("No GigE support."));
 }
 
 #endif // USE_CAMERA_PYLON_GIGE

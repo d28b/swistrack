@@ -16,12 +16,12 @@ class ComponentInputCameraGigE: public Component {
 
 public:
 	enum eTriggerMode {
-		sTrigger_Timer = 0,		//!< Use the internal camera timer to start acquisition.
+		sTrigger_Timer = 0,			//!< Use the internal camera timer to start acquisition.
 		sTrigger_InputLine1 = 1,	//!< Use input line 1 to start acquisition.
 		sTrigger_InputLine2 = 2,	//!< Use input line 2 to start acquisition.
 		sTrigger_InputLine3 = 3,	//!< Use input line 3 to start acquisition.
 		sTrigger_InputLine4 = 4,	//!< Use input line 4 to start acquisition.
-		sTrigger_Software = 5,	//!< Send a packet over the ethernet cable to start acquisition.
+		sTrigger_Software = 5,		//!< Send a packet over the ethernet cable to start acquisition.
 	};
 
 	//! Constructor.
@@ -60,7 +60,7 @@ private:
 	IplImage *mOutputImage;								//!< The current output image (only used for color acquisition, for mono acquision one of the mInputBufferImages is used).
 
 	//! The thread waiting for new images (in case of external trigger).
-	class Thread: public wxThread {
+class Thread: public wxThread {
 	public:
 		ComponentInputCameraGigE *mComponent;		//!< The associated component.
 

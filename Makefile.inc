@@ -9,15 +9,21 @@ CXX       := g++
 AR        := ar
 
 # OpenCV (activate the second set of lines in case you don't have pkg-config)
-OPENCV_CPPFLAGS := `pkg-config --cflags opencv`
-OPENCV_LDLIBS   := `pkg-config --libs opencv`
-#OPENCV_CPPFLAGS := -I/usr/include/opencv
-#OPENCV_LDLIBS   := -lcxcore -lcv -lhighgui -lcvaux -lml
+OPENCV_CPPFLAGS    := `pkg-config --cflags opencv`
+OPENCV_LDLIBS      := `pkg-config --libs opencv`
+#OPENCV_CPPFLAGS    := -I/usr/include/opencv
+#OPENCV_LDLIBS      := -lcxcore -lcv -lhighgui -lcvaux -lml
 
 # wxWidgets
 WXWIDGETS_CPPFLAGS := `wx-config --version=2.8 --cppflags`
 WXWIDGETS_LDLIBS   := `wx-config --version=2.8 --libs`
 
 # GiGE Camera Component (activate the following lines to compile with this component)
-#CPPFLAGS_ADD := -I/opt/pylon/include -I/opt/pylon/include/genicam -DUSE_CAMERA_PYLON_GIGE
-#LDLIBS_ADD := -lpylon
+#PYLON_ROOT         := /opt/pylon
+#GENICAM_ROOT_V1_1  := /opt/pylon
+#CPPFLAGS_ADD       += -I$(PYLON_ROOT)/include -I$(GENICAM_ROOT_V1_1)/include/genicam -DUSE_CAMERA_PYLON_GIGE
+#LDLIBS_ADD         += -L$(PYLON_ROOT)/lib -L$(GENICAM_ROOT_V1_1)/lib -lpylonbase
+
+# XVID component (activate the following lines to compile with this component)
+#CPPFLAGS_ADD       += -DUSE_XVID
+#LDLIBS_ADD         += -lxvidcore

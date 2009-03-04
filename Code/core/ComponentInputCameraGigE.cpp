@@ -67,11 +67,12 @@ void THISCLASS::OnStart() {
 				return;
 			}
 			mCore->mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepLapTime, this);
-			mCamera = dynamic_cast<Pylon::CBaslerGigECamera*>(tlfactory.CreateDevice(devices[0]));
+			mCamera = new Pylon::CBaslerGigECamera(tlfactory.CreateDevice(devices[0]));
 			mCore->mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepLapTime, this);
 		} else {
 			// Create a camera object and cast to the camera class
-			mCamera = dynamic_cast<Pylon::CBaslerGigECamera*>(tlfactory.CreateDevice(mCameraFullName.mb_str(wxConvISO8859_1)));
+			GenICam::gcstring camera_full_name = GenICam::gcstring(mCameraFullName.mb_str());
+			mCamera = new Pylon::CBaslerGigECamera(tlfactory.CreateDevice(camera_full_name));
 			if (! mCamera) {
 				AddError(wxT("Camera not found!"));
 				return;
@@ -81,7 +82,8 @@ void THISCLASS::OnStart() {
 		// Open the camera object
 		mCamera->Open();
 	} catch (GenICam::GenericException &e) {
-		AddError(e.GetDescription());
+		printf("%s\n", e.GetDescription());
+		AddError(wxT("Error while opening the camera."));
 		mCamera = 0;
 		return;
 	}
@@ -96,10 +98,10 @@ void THISCLASS::OnStart() {
 	// Area of interest
 	int cameraw = mCamera->Width.GetMax();
 	int camerah = mCamera->Height.GetMax();
-	int aoix = GetConfigurationInt("AOIOffset.x", 0);
-	int aoiy = GetConfigurationInt("AOIOffset.y", 0);
-	int aoiw = GetConfigurationInt("AOISize.x", 64);
-	int aoih = GetConfigurationInt("AOISize.y", 64);
+	int aoix = GetConfigurationInt(wxT("AOIOffset.x"), 0);
+	int aoiy = GetConfigurationInt(wxT("AOIOffset.y"), 0);
+	int aoiw = GetConfigurationInt(wxT("AOISize.x"), 64);
+	int aoih = GetConfigurationInt(wxT("AOISize.y"), 64);
 	if (aoix > cameraw - 1) {
 		aoix = cameraw - 1;
 	}
@@ -174,7 +176,7 @@ void THISCLASS::OnStart() {
 		}
 	} catch (GenICam::GenericException &e) {
 		printf("%s\n", e.GetDescription());
-		AddError(e.GetDescription());
+		AddError(wxT("Error while registering image buffers."));
 		mStreamGrabber->Close();
 		mStreamGrabber = 0;
 		mCamera->Close();
@@ -198,6 +200,10 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
+	if (! mCamera) {
+		return;
+	}
+
 	try {
 		// Configure exposure time and mode
 		int exposuretime = GetConfigurationInt(wxT("ExposureTime"), 100);
@@ -208,12 +214,17 @@ void THISCLASS::OnReloadConfiguration() {
 		int analoggain = GetConfigurationInt(wxT("AnalogGain"), 500);
 		mCamera->GainRaw.SetValue(analoggain);
 	} catch (GenICam::GenericException &e) {
-		AddError(e.GetDescription());
+		printf("%s\n", e.GetDescription());
+		AddError(wxT("Error while setting camera parameters."));
 		return;
 	}
 }
 
 void THISCLASS::OnStep() {
+	if (! mCamera) {
+		return;
+	}
+
 	// Get the image
 	if (mTriggerMode == sTrigger_Software) {
 		// Send the software trigger
@@ -232,7 +243,7 @@ void THISCLASS::OnStep() {
 	// Get an item from the grabber's output queue
 	mStreamGrabber->RetrieveResult(mCurrentResult);
 	if (! mCurrentResult.Succeeded()) {
-		AddError(wxString::Format(wxT("Failed to retrieve an item from the output queue: %s"), mCurrentResult.GetErrorDescription()));
+		AddError(wxString::Format(wxT("Failed to retrieve an item from the output queue: %s"), mCurrentResult.GetErrorDescription().c_str()));
 		return;
 	}
 
@@ -254,6 +265,10 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
+	if (! mCamera) {
+		return;
+	}
+
 	// Requeue the used image
 	try {
 		mStreamGrabber->QueueBuffer(mCurrentResult.Handle(), mCurrentResult.Context());
@@ -274,6 +289,10 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
+	if (! mCamera) {
+		return;
+	}
+
 	// The camera is in continuous mode, stop image acquisition
 	mCamera->AcquisitionStop.Execute();
 
@@ -301,7 +320,8 @@ void THISCLASS::OnStop() {
 	mStreamGrabber = 0;
 	mCamera->Close();
 	Pylon::CTlFactory& tlfactory = Pylon::CTlFactory::GetInstance();
-	tlfactory.DestroyDevice(mCamera);
+	tlfactory.DestroyDevice(mCamera->GetDevice());
+	delete mCamera;
 	mCamera = 0;
 }
 
@@ -310,6 +330,7 @@ wxThread::ExitCode THISCLASS::Thread::Entry() {
 
 	// Wait for the grabbed image
 	while (! mComponent->mStreamGrabber->GetWaitObject().Wait(3000)) {
+		// This is intentionally left empty
 	}
 
 	mComponent->mTrigger->SetReady();
