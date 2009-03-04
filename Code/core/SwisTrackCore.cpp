@@ -46,11 +46,14 @@
 #include "ComponentSimulationParticles.h"
 #include "ComponentCalibrationLinear.h"
 #include "ComponentCalibrationTSAI.h"
-#include "ComponentOutputParticles.h"
-#include "ComponentOutputFileAVI.h"
 #include "ComponentOutputFile.h"
+#include "ComponentOutputFileAVI.h"
 #include "ComponentOutputFileM4V.h"
+#include "ComponentOutputImageStatisticsBinary.h"
+#include "ComponentOutputImageStatisticsColor.h"
+#include "ComponentOutputImageStatisticsGray.h"
 #include "ComponentOutputMarkFrameManual.h"
+#include "ComponentOutputParticles.h"
 #include "ComponentDoubleThresholdColorIndependent.h"
 
 THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
@@ -122,11 +125,14 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentMotionTemplateTracking(this));
 	mAvailableComponents.push_back(new ComponentTrackSmoothing(this));
 	mAvailableComponents.push_back(new ComponentKalmanFilterTrack(this));
-	mAvailableComponents.push_back(new ComponentOutputParticles(this));
+	mAvailableComponents.push_back(new ComponentOutputFile(this));
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentOutputFileM4V(this));
+	mAvailableComponents.push_back(new ComponentOutputImageStatisticsBinary(this));
+	mAvailableComponents.push_back(new ComponentOutputImageStatisticsColor(this));
+	mAvailableComponents.push_back(new ComponentOutputImageStatisticsGray(this));
 	mAvailableComponents.push_back(new ComponentOutputMarkFrameManual(this));
-	mAvailableComponents.push_back(new ComponentOutputFile(this));
+	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 
 	// Initialize the available components
 	tComponentList::iterator ita = mAvailableComponents.begin();
