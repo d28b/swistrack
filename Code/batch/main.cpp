@@ -25,7 +25,6 @@ int runBatch(char *filename_str) {
 
 	// Initialize the core
 	SwisTrackCore *core = new SwisTrackCore(wxT("./Components"));
-	core->mCommunicationInterface = new NMEALog();
 
 	// Open the file
 	wxFileName filename(wxString::FromAscii(filename_str));

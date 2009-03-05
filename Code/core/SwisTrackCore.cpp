@@ -55,7 +55,7 @@
 #include "ComponentOutputMarkFrameManual.h"
 #include "ComponentOutputParticles.h"
 #include "ComponentDoubleThresholdColorIndependent.h"
-
+#include "NMEALog.h"
 THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 		mAvailableComponents(), mDataStructures(), mSwisTrackCoreInterfaces(), mComponentConfigurationFolder(componentconfigurationfolder),
 		mComponentCategories(), mCommunicationInterface(0), mTrigger(new SwisTrackCoreTrigger(this)), mEventRecorder(new SwisTrackCoreEventRecorder(this)),
@@ -78,7 +78,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 		mDataStructureParticles(),
 		mDataStructureTracks(),
 		mStarted(false), mProductionMode(false), mStepCounter(0), mEditLocks(0), mDeployedComponents() {
-
+  	mCommunicationInterface = new NMEALog();
 	// Initialize the list of available components
 	mAvailableComponents.push_back(new ComponentTriggerTimer(this));
 	mAvailableComponents.push_back(new ComponentTriggerCounter(this));
