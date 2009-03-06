@@ -14,11 +14,12 @@
 #include "ErrorList.h"
 #include "ErrorListItem.h"
 #include "StatusItem.h"
+#include "Utility.h"
 %}
 
 
 %import typemapsWxPython.i
-//% asdf asdfa sdfasdfoaisudfimport typemapsOpenCv.i 
+//%import typemapsOpenCv.i 
 %include std_list.i
 
 namespace std {
@@ -39,3 +40,4 @@ namespace std {
 %include ErrorList.h
 %include ErrorListItem.h
 %include StatusItem.h
+%include Utility.h
