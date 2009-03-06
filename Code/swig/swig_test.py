@@ -22,13 +22,15 @@ class SwigTestCase(unittest.TestCase):
                 print "item", item.mMessage
                 self.fail()
         i = 0
+        component = core.GetComponentByName("BackgroundSubtractionCheungKamath")
+        print "component", component
         while core.IsTriggerActive():
             core.Step()
             for component in core.GetDeployedComponents():
                 for item in component.mStatus:
                     print "item", item.mMessage
                     self.fail()
-            image = core.mDataStructureImageColor.mImage
+            image = core.mDataStructureInput.mImage
             print "image", image
             if i > 10:
                 cvSaveImage("test.jpg", image)

@@ -18,7 +18,7 @@
 
 
 %import typemapsWxPython.i
-%import typemapsOpenCv.i 
+//% asdf asdfa sdfasdfoaisudfimport typemapsOpenCv.i 
 %include std_list.i
 
 namespace std {
