@@ -1,49 +1,18 @@
 import unittest
-import os
+from os.path import abspath
 from opencv.highgui import *
-
+import swistrackPipeline
+components = abspath("../../SwisTrackEnvironment/Components/")
 class SwigTestCase(unittest.TestCase):
-    def testBackgroundSubtraction(self):
+    def testPipeline(self):
         import swistrack
-        core = swistrack.SwisTrackCore("/home/stefie10/dev/cogmac/tfs/slimd/3rdParty/swistrack/swistrack/SwisTrackEnvironment/Components/")
-        cr = swistrack.ConfigurationReaderXML()
-        if not cr.Open("backgroundSubtraction.swistrack"):
-            print "Couldn't read file."
-            self.fail()
+        pipeline = swistrackPipeline.Pipeline(components, 
+                                              "backgroundSubtraction.swistrack")
 
-	cr.ReadComponents(core)
-        for x in cr.mErrorList.mList:
-            print "x", x.mMessage
-        print "running with", len(core.GetDeployedComponents()), "components."
-	core.TriggerStart();
-	core.Start(False)
-        for component in core.GetDeployedComponents():
-            for item in component.mStatus:
-                print "item", item.mMessage
-                self.fail()
-        i = 0
-        component = core.GetComponentByName("BackgroundSubtractionCheungKamath")
-        print "component", component
-        while core.IsTriggerActive():
-            core.Step()
-            for component in core.GetDeployedComponents():
-                for item in component.mStatus:
-                    print "item", item.mMessage
-                    self.fail()
-            image = core.mDataStructureImageBinary.mImage
-            if i > 10:
-                cvSaveImage("test.jpg", image)
-            i += 1
-            
-        #subtractor = swistrack.ComponentBackgroundSubtractionCheungKamath(core)
-        #from opencv.highgui import cvLoadImage
-        #image = cvLoadImage("earth-horizon.jpg")
-        #ipImage = cvGetImage(image)
-        #core.mDataStructureInput.mImage = image
-
-        #subtractor.OnStart()
-        #subtractor.OnStep()
-        #subtractor.OnStep()
+        for i in range(0,10):
+            pipeline.step()
+        image = pipeline.core.mDataStructureImageBinary.mImage        
+        cvSaveImage("test.jpg", image)        
 
         
         
