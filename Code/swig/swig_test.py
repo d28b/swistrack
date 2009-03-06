@@ -11,7 +11,8 @@ class SwigTestCase(unittest.TestCase):
 
 	cr.ReadComponents(core)
         for x in cr.mErrorList.mList:
-            print "x", x
+            print "x", x.mMessage
+            
 	core.TriggerStart();
 	core.Start(False)
         i = 0

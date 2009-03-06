@@ -12,6 +12,7 @@
 #include "wx/wxPython/wxPython.h"
 #include "wx/wxPython/pyclasses.h"
 #include "ErrorList.h"
+#include "ErrorListItem.h"
 %}
 
 
@@ -33,3 +34,4 @@ namespace std {
 %include ConfigurationXML.h
 %include ConfigurationReaderXML.h
 %include ErrorList.h
+%include ErrorListItem.h
