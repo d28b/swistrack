@@ -30,8 +30,7 @@ class SwigTestCase(unittest.TestCase):
                 for item in component.mStatus:
                     print "item", item.mMessage
                     self.fail()
-            image = core.mDataStructureInput.mImage
-            print "image", image
+            image = core.mDataStructureImageBinary.mImage
             if i > 10:
                 cvSaveImage("test.jpg", image)
             i += 1
