@@ -1,6 +1,7 @@
 %module swistrack
 %{
 #include "SwisTrackCore.h"
+#include "ConfigurationXML.h"
 #include "ConfigurationReaderXML.h"
 #include "DataStructure.h"
 #include "DataStructureInput.h"
@@ -10,12 +11,17 @@
 #include "ComponentCategory.h"
 #include "wx/wxPython/wxPython.h"
 #include "wx/wxPython/pyclasses.h"
-#include "NMEALog.h"
+#include "ErrorList.h"
 %}
 
 
 %import my_typemaps.i
 %import typemaps.i 
+%include std_list.i
+
+namespace std {
+	  %template(tList) list<ErrorListItem>;
+}
 
 %include SwisTrackCore.h
 %include Component.h
@@ -24,5 +30,6 @@
 %include DataStructure.h
 %include DataStructureImage.h
 %include DataStructureInput.h
+%include ConfigurationXML.h
 %include ConfigurationReaderXML.h
-%include NMEALog.h
+%include ErrorList.h

@@ -1,5 +1,7 @@
 import unittest
 
+from opencv.highgui import *
+
 class SwigTestCase(unittest.TestCase):
     def testBackgroundSubtraction(self):
         import swistrack
@@ -8,11 +10,18 @@ class SwigTestCase(unittest.TestCase):
         cr.Open("backgroundSubtraction.swistrack")
 
 	cr.ReadComponents(core)
+        for x in cr.mErrorList.mList:
+            print "x", x
 	core.TriggerStart();
-	core.Start(false)
-
+	core.Start(False)
+        i = 0
         while core.IsTriggerActive():
             core.Step()
+            image = core.mDataStructureImageBinary.mImage
+            print "image", image
+            if i > 10:
+                cvSaveImage("test.jpg", image)
+            i += 1
             
         #subtractor = swistrack.ComponentBackgroundSubtractionCheungKamath(core)
         #from opencv.highgui import cvLoadImage
