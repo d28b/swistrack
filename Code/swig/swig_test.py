@@ -5,10 +5,11 @@ from opencv.highgui import *
 class SwigTestCase(unittest.TestCase):
     def testBackgroundSubtraction(self):
         import swistrack
-        os.chdir("../../SwisTrackEnvironment")
-        core = swistrack.SwisTrackCore("./Components")
+        core = swistrack.SwisTrackCore("/home/stefie10/dev/cogmac/tfs/slimd/3rdParty/swistrack/swistrack/SwisTrackEnvironment/Components/")
         cr = swistrack.ConfigurationReaderXML()
-        cr.Open("backgroundSubtraction.swistrack")
+        if not cr.Open("backgroundSubtraction.swistrack"):
+            print "Couldn't read file."
+            self.fail()
 
 	cr.ReadComponents(core)
         for x in cr.mErrorList.mList:
