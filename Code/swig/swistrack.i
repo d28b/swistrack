@@ -13,6 +13,7 @@
 #include "wx/wxPython/pyclasses.h"
 #include "ErrorList.h"
 #include "ErrorListItem.h"
+#include "StatusItem.h"
 %}
 
 
@@ -22,6 +23,8 @@
 
 namespace std {
 	  %template(tList) list<ErrorListItem>;
+	  %template(tComponentList) list<Component*>;
+	  %template(tStatusItemList) list<StatusItem>;
 }
 
 %include SwisTrackCore.h
@@ -35,3 +38,4 @@ namespace std {
 %include ConfigurationReaderXML.h
 %include ErrorList.h
 %include ErrorListItem.h
+%include StatusItem.h

@@ -14,9 +14,13 @@ class SwigTestCase(unittest.TestCase):
 	cr.ReadComponents(core)
         for x in cr.mErrorList.mList:
             print "x", x.mMessage
-            
+        print "running with", len(core.GetDeployedComponents()), "components."
 	core.TriggerStart();
 	core.Start(False)
+        for component in core.GetDeployedComponents():
+            for item in component.mStatus:
+                print "item", item.mMessage
+                self.fail()
         i = 0
         while core.IsTriggerActive():
             core.Step()
