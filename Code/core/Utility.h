@@ -19,6 +19,11 @@ public:
 	static double SquareDistance(CvPoint2D32f p1, CvPoint2D32f p2);
 	//! Creates a rectangle from center, width and height.
 	static CvRect RectByCenter(int center_x, int center_xy, int width, int height);
+	static CvMat * IpImageToCvMat(IplImage * image) {
+	  CvMat * mat = (CvMat *) cvAlloc(sizeof(CvMat));
+	  mat = cvGetMat(image, mat);
+	  return mat;
+	}
 };
 
 #endif
