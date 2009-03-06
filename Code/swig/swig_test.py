@@ -24,7 +24,11 @@ class SwigTestCase(unittest.TestCase):
         i = 0
         while core.IsTriggerActive():
             core.Step()
-            image = core.mDataStructureImageBinary.mImage
+            for component in core.GetDeployedComponents():
+                for item in component.mStatus:
+                    print "item", item.mMessage
+                    self.fail()
+            image = core.mDataStructureImageColor.mImage
             print "image", image
             if i > 10:
                 cvSaveImage("test.jpg", image)

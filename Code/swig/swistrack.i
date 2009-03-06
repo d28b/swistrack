@@ -17,8 +17,8 @@
 %}
 
 
-%import my_typemaps.i
-%import typemaps.i 
+%import typemapsWxPython.i
+%import typemapsOpenCv.i 
 %include std_list.i
 
 namespace std {
