@@ -24,6 +24,9 @@ public:
 
 	//! Opens an XML document. If this function returns true, the document can be read.
 	bool Open(const wxFileName &filename);
+	bool Open(const wxString &filename) {
+	  return Open(wxFileName(filename));
+	}
 	//! Returns whether a document is open.
 	bool IsOpen() {
 		return mIsOpen;
