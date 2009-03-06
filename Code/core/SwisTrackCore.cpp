@@ -78,7 +78,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 		mDataStructureParticles(),
 		mDataStructureTracks(),
 		mStarted(false), mProductionMode(false), mStepCounter(0), mEditLocks(0), mDeployedComponents() {
-  	mCommunicationInterface = new NMEALog();
+        mCommunicationInterface = new NMEALog(wxT("swistrack.log"));
 	// Initialize the list of available components
 	mAvailableComponents.push_back(new ComponentTriggerTimer(this));
 	mAvailableComponents.push_back(new ComponentTriggerCounter(this));

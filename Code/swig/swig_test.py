@@ -7,7 +7,13 @@ class SwigTestCase(unittest.TestCase):
         cr = swistrack.ConfigurationReaderXML()
         cr.Open("backgroundSubtraction.swistrack")
 
-        
+	cr.ReadComponents(core)
+	core.TriggerStart();
+	core.Start(false)
+
+        while core.IsTriggerActive():
+            core.Step()
+            
         #subtractor = swistrack.ComponentBackgroundSubtractionCheungKamath(core)
         #from opencv.highgui import cvLoadImage
         #image = cvLoadImage("earth-horizon.jpg")

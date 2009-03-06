@@ -129,7 +129,7 @@ bool THISCLASS::Send(CommunicationMessage *m) {
 
 	// Write to LOG file (if any)
 	if (mNMEALog) {
-		bool cursent = mNMEALog->SendMessage(m);
+		bool cursent = mNMEALog->Send(m);
 		sent |= cursent;
 	}
 
