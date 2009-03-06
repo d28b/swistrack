@@ -24,11 +24,11 @@ LDFLAGS   := $(OPENCV_LDLIBS) $(WXWIDGETS_LDLIBS) -lm $(LDLIBS_ADD)$(LDFLAGS_ADD
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS)  -c $< `python2.5-config --cflags`
 
 
-_%.so: %_wrap.o
+_%.so: %_wrap.o $(FILES_A)
 ifeq ($(OS), Darwin)
-	$(CXX) -Wall -dynamiclib  $< $(LDFLAGS) -L.  -lStefieSquintReader `python2.5-config --ldflags` -o $@ $(FILES_A)
+	$(CXX) -Wall -dynamiclib  $< $(LDFLAGS) -L.   `python2.5-config --ldflags` -o $@ $(FILES_A)
 else
-	$(CXX) -Wall -shared  $< $(LDFLAGS) -L.  -lStefieSquintReader `python2.5-config --ldflags` -o $@ $(FILES_A)
+	$(CXX) -Wall -shared  $< $(LDFLAGS) -L. `python2.5-config --ldflags` -o $@ $(FILES_A)
 endif
 
 .PHONY: all
