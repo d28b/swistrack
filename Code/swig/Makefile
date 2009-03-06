@@ -7,6 +7,7 @@ include $(SWISTRACK_ROOT)/Makefile.inc
 
 
 FILES_C   := $(wildcard *.c) 
+FILES_I   := $(wildcard *.i) 
 FILES_CPP := $(wildcard *.cpp)
 FILES_H   := $(wildcard *.h)
 FILES_O   := $(FILES_CPP:.cpp=.o)
@@ -17,7 +18,7 @@ FILES_A   := ../core/libSwisTrackCore.a ../../3rdParty/cvblobslib_v6p1/libCVBlob
 CPPFLAGS  := $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -I/usr/include -I../../3rdParty/libtsai/include -I../../3rdParty/camshift_wrapper -I../../3rdParty/cvblobslib_v6p1 $(CPPFLAGS_ADD) -I$(SWISTRACK_ROOT)/Code/core
 LDFLAGS   := $(OPENCV_LDLIBS) $(WXWIDGETS_LDLIBS) -lm $(LDLIBS_ADD)$(LDFLAGS_ADD)
 
-%_wrap.cxx: %.i $(FILES_H)
+%_wrap.cxx: %.i $(FILES_I) $(FILES_H)
 	swig -Wall -python -c++ $(CPPFLAGS) $<
 %_wrap.o: %_wrap.cxx
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS)  -c $< `python2.5-config --cflags`
