@@ -1,11 +1,12 @@
 import unittest
-
+import os
 from opencv.highgui import *
 
 class SwigTestCase(unittest.TestCase):
     def testBackgroundSubtraction(self):
         import swistrack
-        core = swistrack.SwisTrackCore("../../SwisTrackEnvironment")
+        os.chdir("../../SwisTrackEnvironment")
+        core = swistrack.SwisTrackCore("./Components")
         cr = swistrack.ConfigurationReaderXML()
         cr.Open("backgroundSubtraction.swistrack")
 
