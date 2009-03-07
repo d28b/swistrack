@@ -1,3 +1,15 @@
+swistrack (4.0-20090305) hardy; urgency=low
+
+  * rebuild with different build setup
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Thu, 05 Mar 2009 14:46:50 +0100
+
+swistrack (4.0-20090304) hardy; urgency=low
+
+  * rebuild with svn trunk; many changes
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Wed, 04 Mar 2009 15:46:23 +0100
+
 swistrack (4.0-8) hardy; urgency=low
 
   * again

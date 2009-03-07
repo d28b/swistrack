@@ -1,0 +1,12 @@
+#! /bin/bash
+# move all $1_* files to ./build/new; to make place, move new/ to timestamp/
+set -e
+TIMESTAMP=`date "++%Y.%m.%d.%H.%M.%S"`
+if [ -d ./build/new ]
+then
+    mv ./build/new ./build/$TIMESTAMP
+fi
+mkdir -p ./build/new
+
+mv $1* ./build/new/
+mv *.deb ./build/new/ || echo "above error is shown for all single-binary-package packages -- ignored";
