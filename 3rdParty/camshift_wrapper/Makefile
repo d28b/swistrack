@@ -15,8 +15,8 @@ FILES_O   := $(FILES_C:.c=.o)
 FILES_D   := $(FILES_C:.c=.d)
 
 # Flags
-CFLAGS    := -g -Wall
-CPPFLAGS  := $(OPENCV_CPPFLAGS) -I/usr/include
+override CFLAGS    += -g -Wall
+override CPPFLAGS  += $(OPENCV_CPPFLAGS) -I/usr/include
 
 # Build
 .PHONY: all

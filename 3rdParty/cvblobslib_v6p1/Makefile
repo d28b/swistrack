@@ -15,8 +15,8 @@ FILES_O   := $(FILES_CPP:.cpp=.o)
 FILES_D   := $(FILES_CPP:.cpp=.d)
 
 # Flags
-CXXFLAGS  := -g -Wall
-CPPFLAGS  := $(OPENCV_CPPFLAGS) -I/usr/include
+override CXXFLAGS  += -g -Wall
+override CPPFLAGS  += $(OPENCV_CPPFLAGS) -I/usr/include
 
 # Build
 .PHONY: all
