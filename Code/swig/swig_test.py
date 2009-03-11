@@ -2,11 +2,12 @@ import unittest
 from os.path import abspath
 from opencv.highgui import *
 from opencv import *
-import swistrackPipeline
+
 
 components = abspath("../../SwisTrackEnvironment/Components/")
 class SwigTestCase(unittest.TestCase):
     def testPipeline(self):
+        import swistrackPipeline
         import swistrack
         pipeline = swistrackPipeline.Pipeline(components, 
                                               "backgroundSubtraction.swistrack")
