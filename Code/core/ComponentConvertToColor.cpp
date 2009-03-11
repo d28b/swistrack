@@ -62,7 +62,6 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureImageColor.mImage = 0;
 }
 
 void THISCLASS::OnStop() {

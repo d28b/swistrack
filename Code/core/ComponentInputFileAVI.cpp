@@ -84,7 +84,7 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureInput.mImage = 0;
+  //	mCore->mDataStructureInput.mImage = 0;
 	//mOutputImage should not be released here, as this is handled by the HighGUI library
 }
 
