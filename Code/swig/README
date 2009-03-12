@@ -8,3 +8,6 @@ trouble converting it to something that Qt could display.  Qt4.5 is
 going to read RGB 888, which is the default format of an IplImage but
 4.3 doesn't do it yet.  It's tricky because a QImage is a SIP python
 object, while everything else in the universe uses Swig.
+
+It does *not* yet support writing swistrack plugins in python.  It
+lets you call swistrack from python, but not python from swistrack. 
