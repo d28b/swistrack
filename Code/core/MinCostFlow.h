@@ -1,3 +1,5 @@
+#include <iostream>
+#include <stdio.h>
 #include <string.h>
 #include <boost/config.hpp>
 #include <iostream>
@@ -7,7 +9,9 @@
 #include <boost/graph/read_dimacs.hpp>
 #include <boost/graph/graph_utility.hpp>
 using namespace boost;
+using namespace std;
 class MinCostFlow {
+ public:
   struct VertexProps {
     std::string name;
   };
@@ -16,5 +20,9 @@ class MinCostFlow {
     int flow;
   };
   typedef adjacency_list < listS, vecS, bidirectionalS, 
-    VertexProps, EdgeProps > Graph;
+    VertexProps, EdgeProps > MinCostFlowGraph;
+
+  void minCostFlow(MinCostFlowGraph graph) {
+    cout << "Comput min cost flow." << endl;
+  }
 };
