@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Minimum Cost Flow Tracking (UNFINISHED)</friendlyname>
+	<description>A tracker based on the algorithm described in
+	Zhang, Li and Nevatia (Global Data Association for
+	Multi-Object Tracking Using Network Flows.
+	</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/MinCostFlowTracking</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+	</configuration>
+</swistrackcomponent>
