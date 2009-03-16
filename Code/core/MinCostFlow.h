@@ -37,6 +37,9 @@ class MinCostFlow {
     // flow is capacity - residual_capacity
   };
 
+  typedef pair<MinCostFlowGraph::vertex_descriptor, 
+    MinCostFlowGraph::vertex_descriptor> VertexPair;
+
   void addReversedEdges(MinCostFlowGraph * pGraph) {
     MinCostFlowGraph & graph = *pGraph;
     
@@ -68,13 +71,56 @@ class MinCostFlow {
     
   }
 
+  VertexPair addSourceAndSink(MinCostFlowGraph * pGraph) {
+    MinCostFlowGraph & graph = *pGraph;
+    MinCostFlowGraph::vertex_descriptor sourceVertex, sinkVertex;
+    
+    
+    
+    struct MinCostFlow::VertexProps vProps;
+
+    vProps.name = "source";
+    vProps.net_supply = 0;
+    sourceVertex = add_vertex(vProps, graph);
+
+    vProps.name = "sink";
+    vProps.net_supply = 0;
+    sinkVertex = add_vertex(vProps, graph);
+
+    EdgeProps eProps;
+    eProps.cost = 0;
+
+    MinCostFlowGraph::vertex_iterator vi, vi_end;
+    for (tie(vi, vi_end) = vertices(graph); vi != vi_end; vi++) {
+      int supply = graph[*vi].net_supply;
+      if (supply > 0) {
+	eProps.capacity = supply;
+	add_edge(sourceVertex, *vi, eProps, graph);
+      } else if (supply < 0) {
+	eProps.capacity = -supply;
+	add_edge(*vi, sinkVertex, eProps, graph);
+      } else {
+	// do nothing if it equals zero.
+      }
+    }
+    VertexPair pair(sourceVertex, sinkVertex);
+    return pair;
+  }
 
   void minCostFlow(MinCostFlowGraph graph, 
 		   MinCostFlowGraph::vertex_descriptor sourceVertex,
 		   MinCostFlowGraph::vertex_descriptor sinkVertex) {
     cout << "Computing min cost flow." << endl;
-    MinCostFlowGraph::vertex_descriptor v  = * vertices(graph).first;
+
+
+    VertexPair sourceAndSink = addSourceAndSink(&graph);
+    
     addReversedEdges(&graph);
+
+
+
+
+    MinCostFlowGraph::vertex_descriptor v  = * vertices(graph).first;
     
     vector<double> distances(num_vertices(graph));
     cout << "name: " << graph[v].name << endl;
