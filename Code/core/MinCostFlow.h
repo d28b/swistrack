@@ -26,28 +26,36 @@ class MinCostFlow {
     double cost;
     int capacity;
   };
-  typedef adjacency_list < listS, vecS, bidirectionalS, 
+  typedef adjacency_list < listS, vecS, directedS, 
     VertexProps,
     EdgeProps > MinCostFlowGraph;
 
   void minCostFlow(MinCostFlowGraph graph) {
+    cout << "Computing min cost flow." << endl;
 
     MinCostFlowGraph::vertex_descriptor v  = * vertices(graph).first;
     
     
     vector<double> distances(num_vertices(graph));
-    
-    bellman_ford_shortest_paths(graph, v, 
-				weight_map(get(&EdgeProps::cost, graph)).
-				distance_map(make_iterator_property_map
-					     (distances.begin(), 
-					      get(vertex_index, graph))));
-    
-    for (unsigned int i = 0; i < num_vertices(graph); ++i) {
-      cout << "Vertex: " << graph[i].name << endl;
+    cout << "name: " << graph[v].name << endl;
+    bool r = bellman_ford_shortest_paths
+      (graph,
+       weight_map(get(&EdgeProps::cost, graph)).
+       distance_map(make_iterator_property_map
+		    (distances.begin(), 
+		     get(vertex_index, graph))).
+       root_vertex(v)
+       );
+    if (r) {
+      for (unsigned int i = 0; i < num_vertices(graph); ++i) {
+	cout << "Vertex: " << graph[i].name << " ";
+	cout << distances[i] << endl;
+      }
+    } else {
+      cout << "Negative cycle." << endl;
     }
 
-    cout << "Comput min cost flow." << endl;
+
   }
 };
 
