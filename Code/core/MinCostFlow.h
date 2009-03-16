@@ -20,6 +20,11 @@ using namespace std;
 
 void testFlow();
 
+/**
+ *
+ * Implemented following
+ * http://www.topcoder.com/tc?module=Static&d1=tutorials&d2=minimumCostFlow1
+ */
 class MinCostFlow {
  public:
   struct VertexProps;
