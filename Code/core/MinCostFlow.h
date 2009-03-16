@@ -71,6 +71,13 @@ class MinCostFlow {
     
   }
 
+  void zeroFlows(MinCostFlowGraph * pGraph) {
+    MinCostFlowGraph & graph = *pGraph;
+    graph_traits < MinCostFlowGraph >::edge_iterator ei, ei_end;
+    for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei) {
+      graph[*ei].residual_capacity = graph[*ei].capacity;
+    }
+  }
   VertexPair addSourceAndSink(MinCostFlowGraph * pGraph) {
     MinCostFlowGraph & graph = *pGraph;
     MinCostFlowGraph::vertex_descriptor sourceVertex, sinkVertex;
@@ -119,21 +126,31 @@ class MinCostFlow {
     MinCostFlowGraph::vertex_descriptor sinkVertex = sourceAndSink.second;
     addReversedEdges(&graph);
 
+    zeroFlows(&graph);
 
 
 
-    MinCostFlowGraph::vertex_descriptor v  = * vertices(graph).first;
     
     vector<double> distances(num_vertices(graph));
-    cout << "name: " << graph[v].name << endl;
+    vector<MinCostFlowGraph::vertex_descriptor> 
+      predecessors(num_vertices(graph));
+    
     bool r = bellman_ford_shortest_paths
       (graph,
-       weight_map(get(&EdgeProps::cost, graph)).
+       weight_map(get(&EdgeProps::residual_capacity, graph)).
        distance_map(make_iterator_property_map
 		    (distances.begin(), 
 		     get(vertex_index, graph))).
-       root_vertex(v)
-       );
+       root_vertex(sourceVertex).
+       predecessor_map(&predecessors[0])
+      );
+
+    MinCostFlowGraph::vertex_descriptor v  = predecessors[sinkVertex];
+    while (v != sourceVertex) {
+      cout << "Vertex: " << graph[v].name << endl;
+      v = predecessors[v];
+    }
+
     if (r) {
       for (unsigned int i = 0; i < num_vertices(graph); ++i) {
 	cout << "Vertex: " << graph[i].name << " ";
