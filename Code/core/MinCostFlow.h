@@ -1,5 +1,6 @@
 #ifndef HEADER_MinCostFlow
 #define HEADER_MinCostFlow
+#include <limits.h>
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
@@ -7,11 +8,13 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <boost/graph/graph_traits.hpp>
 #include <boost/graph/push_relabel_max_flow.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/read_dimacs.hpp>
 #include <boost/graph/graph_utility.hpp>
 #include <boost/graph/bellman_ford_shortest_paths.hpp>
+#include <boost/graph/dijkstra_shortest_paths.hpp>
 using namespace boost;
 using namespace std;
 
@@ -32,7 +35,8 @@ class MinCostFlow {
   struct EdgeProps {
     double cost;
     int capacity;
-    int residual_capacity;
+    //int residual_capacity;
+    int flow;
     MinCostFlowGraph::edge_descriptor reverse;
     // flow is capacity - residual_capacity
   };
@@ -54,7 +58,7 @@ class MinCostFlow {
     struct MinCostFlow::EdgeProps eProps;
     eProps.capacity = 0;
     eProps.cost = 0;
-    eProps.residual_capacity = 0;
+    eProps.flow = 0;
     
     for (vector<MinCostFlowGraph::edge_descriptor>::iterator i = 
 	   cachedEdges.begin();
@@ -75,7 +79,7 @@ class MinCostFlow {
     MinCostFlowGraph & graph = *pGraph;
     graph_traits < MinCostFlowGraph >::edge_iterator ei, ei_end;
     for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei) {
-      graph[*ei].residual_capacity = graph[*ei].capacity;
+      graph[*ei].flow = 0;
     }
   }
   VertexPair addSourceAndSink(MinCostFlowGraph * pGraph) {
@@ -135,15 +139,14 @@ class MinCostFlow {
     vector<MinCostFlowGraph::vertex_descriptor> 
       predecessors(num_vertices(graph));
     
-    bool r = bellman_ford_shortest_paths
-      (graph,
-       weight_map(get(&EdgeProps::residual_capacity, graph)).
+    dijkstra_shortest_paths //bellman_ford_shortest_paths
+      (graph, sourceVertex,
+       weight_map(get(&EdgeProps::flow, graph)).
        distance_map(make_iterator_property_map
 		    (distances.begin(), 
 		     get(vertex_index, graph))).
-       root_vertex(sourceVertex).
        predecessor_map(&predecessors[0])
-      );
+       );
 
     MinCostFlowGraph::vertex_descriptor v  = predecessors[sinkVertex];
     while (v != sourceVertex) {
@@ -151,19 +154,12 @@ class MinCostFlow {
       v = predecessors[v];
     }
 
-    if (r) {
-      for (unsigned int i = 0; i < num_vertices(graph); ++i) {
-	cout << "Vertex: " << graph[i].name << " ";
-	cout << distances[i] << endl;
-      }
-    } else {
-      cout << "Negative cycle." << endl;
-    }
+    
 
     property_map<MinCostFlowGraph, edge_reverse_t>::type 
       rev = get(edge_reverse, graph);
 
-    
+    /*(    
     long flow = push_relabel_max_flow
       (graph, sourceVertex, sinkVertex,
        capacity_map(get(&EdgeProps::capacity, graph)).
@@ -176,7 +172,7 @@ class MinCostFlow {
       cout << "Flow in node: " << graph[source(*ei, graph)].name << 
 	" to " << graph[target(*ei, graph)].name << ": ";
       cout << (graph[*ei].capacity - graph[*ei].residual_capacity) << endl;
-    }
+      }*/
 
 
   }
