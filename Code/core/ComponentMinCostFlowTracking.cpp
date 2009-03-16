@@ -5,6 +5,7 @@
 #include "Utility.h"
 #include <iostream>
 #include <set>
+#include "MinCostFlow.h"
 
 using namespace std;
 
@@ -18,6 +19,9 @@ THISCLASS::ComponentMinCostFlowTracking(SwisTrackCore *stc):
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 	AddDataStructureWrite(&(mCore->mDataStructureTracks));
 	AddDisplay(&mDisplayOutput);
+
+	testFlow();
+	exit(-1);
 }
 
 THISCLASS::~ComponentMinCostFlowTracking()
@@ -35,7 +39,7 @@ void THISCLASS::OnReloadConfiguration()
 
 void THISCLASS::OnStep()
 {
-  
+
 }
 
 void THISCLASS::OnStepCleanup() {
