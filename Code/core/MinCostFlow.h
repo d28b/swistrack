@@ -37,16 +37,11 @@ class MinCostFlow {
     // flow is capacity - residual_capacity
   };
 
-
-  void minCostFlow(MinCostFlowGraph graph, 
-		   MinCostFlowGraph::vertex_descriptor sourceVertex,
-		   MinCostFlowGraph::vertex_descriptor sinkVertex) {
-    cout << "Computing min cost flow." << endl;
-
+  void addReversedEdges(MinCostFlowGraph * pGraph) {
+    MinCostFlowGraph & graph = *pGraph;
+    
     graph_traits < MinCostFlowGraph >::edge_iterator ei, ei_end;
-    MinCostFlowGraph::vertex_descriptor v  = * vertices(graph).first;
-    typedef  pair < MinCostFlowGraph::vertex_descriptor,
-      MinCostFlowGraph::vertex_descriptor > EdgePair;
+
     vector<MinCostFlowGraph::edge_descriptor> cachedEdges;
       
     for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei) {
@@ -70,6 +65,16 @@ class MinCostFlow {
       graph[*i].reverse = newEdge.first;
     }
     
+    
+  }
+
+
+  void minCostFlow(MinCostFlowGraph graph, 
+		   MinCostFlowGraph::vertex_descriptor sourceVertex,
+		   MinCostFlowGraph::vertex_descriptor sinkVertex) {
+    cout << "Computing min cost flow." << endl;
+    MinCostFlowGraph::vertex_descriptor v  = * vertices(graph).first;
+    addReversedEdges(&graph);
     
     vector<double> distances(num_vertices(graph));
     cout << "name: " << graph[v].name << endl;
@@ -101,7 +106,7 @@ class MinCostFlow {
        vertex_index_map(identity_property_map()).
        reverse_edge_map(get(&EdgeProps::reverse, graph)));
     cout << "Flow: " << flow << endl;
-    
+    graph_traits < MinCostFlowGraph >::edge_iterator ei, ei_end;    
     for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei) {
       cout << "Flow in node: " << graph[source(*ei, graph)].name << 
 	" to " << graph[target(*ei, graph)].name << ": ";
