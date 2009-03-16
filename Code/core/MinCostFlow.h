@@ -35,9 +35,8 @@ class MinCostFlow {
   struct EdgeProps {
     double cost;
     int capacity;
-    //int residual_capacity;
     int flow;
-    MinCostFlowGraph::edge_descriptor reverse;
+    //MinCostFlowGraph::edge_descriptor reverse;
     // flow is capacity - residual_capacity
   };
 
@@ -93,10 +92,10 @@ class MinCostFlow {
       
       MinCostFlowGraph::vertex_descriptor s = source(*i, graph);
       MinCostFlowGraph::vertex_descriptor t = target(*i, graph);
-      eProps.reverse = *i;
+      //eProps.reverse = *i;
       pair<MinCostFlowGraph::edge_descriptor, bool> newEdge 
 	= add_edge(t, s, eProps, graph);
-      graph[*i].reverse = newEdge.first;
+      //graph[*i].reverse = newEdge.first;
     }
     
     

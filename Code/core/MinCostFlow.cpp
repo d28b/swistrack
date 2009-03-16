@@ -38,35 +38,35 @@ void testFlow()
   vertex_descriptor v6 = add_vertex(vProps, graph);
 
   // outgoing 1
-  eProps.cost = 3;
-  eProps.capacity = 4;
+  eProps.capacity = 3;
+  eProps.cost = 4;
   add_edge(v1, v3, eProps, graph);
 
-  eProps.cost = 3;
-  eProps.capacity = 1;
+  eProps.capacity = 3;
+  eProps.cost = 1;
   add_edge(v1, v2, eProps, graph);
   
   // outgoing 2
-  eProps.cost = 7;
-  eProps.capacity = 2;
+  eProps.capacity = 7;
+  eProps.cost = 2;
   add_edge(v2, v3, eProps, graph);
 
   // outgoing 3
-  eProps.cost = 1;
-  eProps.capacity = 8;
+  eProps.capacity = 1;
+  eProps.cost = 8;
   add_edge(v3, v6, eProps, graph);
 
-  eProps.cost = 7;
-  eProps.capacity = 5;
+  eProps.capacity = 7;
+  eProps.cost = 5;
   add_edge(v3, v5, eProps, graph);
 
-  eProps.cost = 5;
-  eProps.capacity = 2;
+  eProps.capacity = 5;
+  eProps.cost = 2;
   add_edge(v3, v4, eProps, graph);
 
   // outgoing 4
-  eProps.cost = 3;
-  eProps.capacity = 1;
+  eProps.capacity = 3;
+  eProps.cost = 1;
   add_edge(v4, v5, eProps, graph);
 
   // no outgoing 5
