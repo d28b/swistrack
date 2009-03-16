@@ -45,7 +45,8 @@ class MinCostFlow {
     MinCostFlowGraph result;
     MinCostFlowGraph::vertex_iterator vi, vi_end;
     for (tie(vi, vi_end) = vertices(graph); vi != vi_end; vi++) {
-      add_vertex(graph[*vi], result);
+      MinCostFlowGraph::vertex_descriptor d = add_vertex(graph[*vi], result);
+      cout << "Descriptor: " << d << " " << *vi << " " << graph[d].name << endl;
     }
     struct MinCostFlow::EdgeProps eProps;
     graph_traits < MinCostFlowGraph >::edge_iterator ei, ei_end;
@@ -53,11 +54,15 @@ class MinCostFlow {
 
       eProps.cost = graph[*ei].cost;
       eProps.capacity = graph[*ei].capacity - graph[*ei].flow;
-      add_edge(source(*ei, graph), target(*ei, graph), eProps, result);
+      if (eProps.capacity > 0) {
+	add_edge(source(*ei, graph), target(*ei, graph), eProps, result);
+      }
 
       eProps.cost = -graph[*ei].cost;
       eProps.capacity =  graph[*ei].flow;
-      add_edge(target(*ei, graph), source(*ei, graph), eProps, result);
+      if (eProps.capacity > 0) {
+	add_edge(target(*ei, graph), source(*ei, graph), eProps, result);
+      }
     }
 
     return result;
@@ -177,27 +182,32 @@ class MinCostFlow {
 	 );
 
       cout << "Augmenting flow." << endl;
-      if (!r) {
+      if (predecessors[sinkVertex] == sinkVertex) {
+	cout << "No shortest path, so done." << endl;
 	break; // we're done, no more paths.
       } else {
 	MinCostFlowGraph::vertex_descriptor v  = sinkVertex;
 	MinCostFlowGraph::edge_descriptor e = edge(predecessors[v], v, residuals).first;
 	int minCapacity = residuals[e].capacity;
+	int i = 0;
 	while (v != sourceVertex) {
+	  cout << "Processing: " << graph[v].name << endl;
 	  e = edge(predecessors[v], v, residuals).first;
-	  if (residuals[e].capacity <= minCapacity) {
+	  if (residuals[e].capacity < minCapacity) {
 	    minCapacity = residuals[e].capacity;
 	  }
 	  v = predecessors[v];
+	  i++;
 	}
 	v  = sinkVertex;
 	while (v != sourceVertex) {
 	  MinCostFlowGraph::edge_descriptor e = edge(predecessors[v], v, 
-						     residuals).first;
+						     graph).first;
 	  graph[e].flow += minCapacity;
 	  v = predecessors[v];
 	}	
       }
+
     }
     cout << "Printing results." << endl;
     graph_traits < MinCostFlowGraph >::edge_iterator ei, ei_end;
