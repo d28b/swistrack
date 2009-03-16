@@ -93,12 +93,15 @@ class MinCostFlow {
     MinCostFlowGraph::vertex_iterator vi, vi_end;
     for (tie(vi, vi_end) = vertices(graph); vi != vi_end; vi++) {
       int supply = graph[*vi].net_supply;
+      
       if (supply > 0) {
 	eProps.capacity = supply;
 	add_edge(sourceVertex, *vi, eProps, graph);
+	graph[sourceVertex].net_supply += supply;
       } else if (supply < 0) {
 	eProps.capacity = -supply;
 	add_edge(*vi, sinkVertex, eProps, graph);
+	graph[sinkVertex].net_supply += supply;
       } else {
 	// do nothing if it equals zero.
       }
@@ -107,14 +110,13 @@ class MinCostFlow {
     return pair;
   }
 
-  void minCostFlow(MinCostFlowGraph graph, 
-		   MinCostFlowGraph::vertex_descriptor sourceVertex,
-		   MinCostFlowGraph::vertex_descriptor sinkVertex) {
+  void minCostFlow(MinCostFlowGraph graph) {
     cout << "Computing min cost flow." << endl;
 
 
     VertexPair sourceAndSink = addSourceAndSink(&graph);
-    
+    MinCostFlowGraph::vertex_descriptor sourceVertex = sourceAndSink.first;
+    MinCostFlowGraph::vertex_descriptor sinkVertex = sourceAndSink.second;
     addReversedEdges(&graph);
 
 

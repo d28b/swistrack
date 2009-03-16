@@ -74,7 +74,7 @@ void testFlow()
   // no outgoing 6
 
   
-  flow.minCostFlow(graph, v1, v4);
+  flow.minCostFlow(graph);
 
 }
 
