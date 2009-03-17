@@ -1,6 +1,6 @@
 #ifndef HEADER_Particle
 #define HEADER_Particle
-
+#include <wx/datetime.h>
 #include <cv.h>
 
 //! A particle.
@@ -15,10 +15,15 @@ public:
 	double mCompactness;	//!< The contour's compactness (area/circumference ratio).
 	CvPoint2D32f mWorldCenter; //!< Particle center after calibration [m].
 
+	CvHistogram * mColorModel;
+
+	wxDateTime mTimestamp;
+
 	//! Constructor.
- Particle(): mID(-1), mCenter(), mOrientation(0), mArea(0), mCompactness(0),mWorldCenter() {}
+ Particle(): mID(-1), mCenter(), mOrientation(0), mArea(0), mCompactness(0),mWorldCenter(), mColorModel(0), mTimestamp() {}
 	//! Destructor.
-	~Particle() {}
+	~Particle() {
+	}
 };
 
 #endif
