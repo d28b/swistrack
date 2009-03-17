@@ -8,7 +8,6 @@
 
 #include "MinCostFlow.h"
 
-
 //! A basic tracking component that takes pre-filtered particales and
 // adds them to the nearest track.
 class ComponentMinCostFlowTracking: public Component {
@@ -31,8 +30,31 @@ public:
 
 private:
 	DataStructureTracks::tTrackMap mTracks;
+	wxDateTime mStartTimestamp;
+
+	map<MinCostFlow::Graph::vertex_descriptor, Particle> 
+	  mObservations;
 	Display mDisplayOutput;	
 	
+	MinCostFlow::Graph mGraph;
+	MinCostFlow::Graph::vertex_descriptor sourceVertex, sinkVertex;
+
+	double p_entr;
+	double p_exit;
+	double beta_i;
+
+	double mMinSquareDistanceForSameTrack;
+
+	double mWindowSizeSeconds;
+
+	double p_link(Particle x_i, Particle x_j);
+
+	void ProcessWindow();
+	void AddTransitionEdges();
+	
+
+
+
 
 };
 

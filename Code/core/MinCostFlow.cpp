@@ -3,7 +3,7 @@
 void testFlow() 
 {
   MinCostFlow flow;
-  MinCostFlow::MinCostFlowGraph graph;
+  MinCostFlow::Graph graph;
   
   //enum {v1, v2, v3, v4, v5};
   
@@ -11,7 +11,7 @@ void testFlow()
   struct MinCostFlow::VertexProps vProps;
 
 
-  typedef MinCostFlow::MinCostFlowGraph::vertex_descriptor vertex_descriptor;
+  typedef MinCostFlow::Graph::vertex_descriptor vertex_descriptor;
   
   vProps.name = "1";
   vProps.net_supply = 5;
@@ -74,7 +74,17 @@ void testFlow()
   // no outgoing 6
 
   
-  flow.minCostFlow(graph);
+  flow.minCostFlow(&graph);
+
+  // example from http://www.topcoder.com/tc?module=Static&d1=tutorials&d2=minimumCostFlow2
+  assert(graph[edge(v1, v3, graph).first].flow == 2);
+  assert(graph[edge(v1, v2, graph).first].flow == 3);
+
+  assert(graph[edge(v3, v6, graph).first].flow == 1);
+  assert(graph[edge(v3, v5, graph).first].flow == 1);
+  assert(graph[edge(v3, v4, graph).first].flow == 5);
+  
+  assert(graph[edge(v4, v5, graph).first].flow == 3);
 
 }
 
