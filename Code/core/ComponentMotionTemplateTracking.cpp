@@ -15,16 +15,18 @@ THISCLASS::ComponentMotionTemplateTracking(SwisTrackCore *stc):
 		mMhiDuration(1),
 		N(4), buf(0), last(0), mhi(0),
 		orient(0), mask(0), segmask(0), storage(0), firstTimestamp(-1),
+		mForegroundMask(0),
 		mDisplayOutput(wxT("Output"), wxT("Tracking"))
 
 {
 	// Data structure relations
 	mCategory = &(mCore->mCategoryParticleDetection);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
+	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 	//AddDataStructureWrite(&(mCore->mDataStructureTracks));
 	AddDisplay(&mDisplayOutput);
-
+	memset(mInputChannels, 0, 3);
 	Initialize();						// Read the XML configuration file
 }
 
@@ -61,6 +63,10 @@ void THISCLASS::OnStep()
 		AddError(wxT("No input image."));
 		return;
 	}
+
+	if (mForegroundMask == NULL) {
+	  mForegroundMask = cvCreateImage(cvGetSize(inputImage), IPL_DEPTH_8U, 1);
+	}
 	mParticles.clear();
 	/*UpdateTrackers(inputImage);
 
@@ -81,15 +87,11 @@ void THISCLASS::OnStep()
 	wxDateTime ts = mCore->mDataStructureInput.FrameTimestamp();
 	double timestamp = ts.GetTicks() + ts.GetMillisecond() / 1000.0;
 	
-	update_mhi(inputImage, mOutputImage, timestamp, mDiffThreshold);
+	update_mhi(inputImage, mOutputImage, mCore->mDataStructureImageBinary.mImage, timestamp, mDiffThreshold);
 	mCore->mDataStructureParticles.mParticles = &mParticles;
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
-
-
-
-		de.SetMainImage(mOutputImage);
-
+	  de.SetMainImage(mOutputImage);
 	}
 }
 
@@ -108,7 +110,7 @@ void THISCLASS::OnStop() {
 //  img - input video frame
 //  dst - resultant motion picture
 //  args - optional parameters
-void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, double timestampIn,
+void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, IplImage * foregroundMask, double timestampIn,
                              int diff_threshold )
 {
 	//double timestamp = (double)clock()/CLOCKS_PER_SEC; // get current time in seconds
@@ -147,6 +149,9 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, double timestampIn,
 		cvReleaseImage( &orient );
 		cvReleaseImage( &segmask );
 		cvReleaseImage( &mask );
+		for (int i = 0; i < 3; i++) {
+		  mInputChannels[i] = cvCreateImage( size, IPL_DEPTH_8U, 1 );
+		}
 
 		mhi = cvCreateImage( size, IPL_DEPTH_32F, 1 );
 		cvZero( mhi ); // clear MHI at the beginning
@@ -229,9 +234,28 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, double timestampIn,
 		center = cvPoint( (comp_rect.x + comp_rect.width / 2),
 		                  (comp_rect.y + comp_rect.height / 2) );
 
-		tmpParticle.mArea = comp_rect.width * comp_rect.height;
+		//tmpParticle.mArea = comp_rect.width * comp_rect.height;
+		
 		tmpParticle.mCenter.x = center.x;
 		tmpParticle.mCenter.y = center.y;
+
+		int histSizes[] = {100,100,100};
+		tmpParticle.mColorModel = cvCreateHist(3, histSizes, CV_HIST_ARRAY);
+		cvZero(mForegroundMask);
+		cvRectangle(mForegroundMask, 
+			    cvPoint(comp_rect.x, comp_rect.y),
+			    cvPoint(comp_rect.x + comp_rect.width,
+				    comp_rect.y + comp_rect.height),
+			    cvScalar(255),
+			    CV_FILLED);
+		
+		cvAnd(mForegroundMask, foregroundMask, mForegroundMask);
+		cvSplit(img, mInputChannels[0], mInputChannels[1], mInputChannels[2], NULL);
+		cvCalcHist(mInputChannels, tmpParticle.mColorModel);
+		cvSet(dst, cvScalar(255,255,255), mForegroundMask);
+
+		tmpParticle.mArea = cvCountNonZero(mForegroundMask);  // only look at foreground pixels.
+		
 		mParticles.push_back(tmpParticle);
 
 

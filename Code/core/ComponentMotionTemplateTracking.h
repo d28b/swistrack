@@ -34,8 +34,9 @@ private:
 
 
 
-	void  update_mhi( IplImage* img, IplImage* dst, double timestamp,
-	                  int diff_threshold );
+	void update_mhi( IplImage* img, IplImage* dst, IplImage * foregroundMask, double timestampIn,
+			 int diff_threshold );
+
 
 
 	IplImage * mOutputImage;
@@ -61,6 +62,10 @@ private:
 	IplImage *segmask; // motion segmentation map
 	CvMemStorage* storage; // temporary storage
 	double firstTimestamp;
+
+	IplImage *mForegroundMask; // MHI
+
+	IplImage * mInputChannels[3];
 
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 };
