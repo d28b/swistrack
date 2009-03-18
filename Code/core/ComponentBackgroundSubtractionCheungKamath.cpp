@@ -189,7 +189,7 @@ void THISCLASS::OnStep() {
   }
 
     
-  mCore->mDataStructureImageColor.mImage = mOutputImage;
+  mCore->mDataStructureImageBinary.mImage = mOutputImage;
   // Set the display
   DisplayEditor de(&mDisplayOutput);
   if (de.IsActive()) {

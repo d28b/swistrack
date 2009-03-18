@@ -11,15 +11,15 @@ using namespace std;
 
 THISCLASS::ComponentMotionTemplateTracking(SwisTrackCore *stc):
 		Component(stc, wxT("MotionTemplateTracking")),
-		mNextTrackId(0), mParticles(), mOutputImage(0),
-		mMhiDuration(1), mMaxTimeDelta(0.5),
-		mMinTimeDelta(0.05), N(4), buf(0), last(0), mhi(0),
+		mParticles(), mOutputImage(0),
+		mMhiDuration(1),
+		N(4), buf(0), last(0), mhi(0),
 		orient(0), mask(0), segmask(0), storage(0), firstTimestamp(-1),
 		mDisplayOutput(wxT("Output"), wxT("Tracking"))
 
 {
 	// Data structure relations
-	mCategory = &(mCore->mCategoryTracking);
+	mCategory = &(mCore->mCategoryParticleDetection);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 	//AddDataStructureWrite(&(mCore->mDataStructureTracks));
@@ -42,121 +42,20 @@ void THISCLASS::OnStart()
 void THISCLASS::OnReloadConfiguration()
 {
 
-	mInitialWindowSize = GetConfigurationInt(wxT("InitialWindowSize"), 60);
-	mFrameKillThreshold = GetConfigurationInt(wxT("FrameKillThreshold"), 10);
 
-	mMhiDuration = GetConfigurationDouble(wxT("MhiDuration"), 1);
-	mSegmentThreshold = GetConfigurationDouble(wxT("SegmentThreshold"), 0.5);
-	mMaxTimeDelta = GetConfigurationDouble(wxT("MaxTimeDelta"), 0.5);
-	mMinTimeDelta = GetConfigurationDouble(wxT("MaxTimeDelta"), 0.05);
-
-	mMinNewTrackDistanceSquared =
-	    pow(GetConfigurationDouble(wxT("MinNewTrackDistance"), 100), 2);
-	mTrackDistanceKillThresholdSquared =
-	    pow(GetConfigurationDouble(wxT("TrackDistanceKillThreshold"), 10), 2);
-
-	mMaximumNumberOfTrackers = GetConfigurationInt(wxT("MaximumNumberOfTrackers"), 4);
-
-	mDiffThreshold = GetConfigurationInt(wxT("DiffThreshold"), 30);
-}
-void THISCLASS::AddNewTracks(IplImage * inputImage) {
-
-	if (mTracks.size() >= mMaximumNumberOfTrackers) {
-		// already have enough trackers, so punt.
-		return;
-	}
-
-	if (mCore->mDataStructureParticles.mParticles == NULL) {
-		AddError(wxT("No input particles!"));
-		return;
-	}
-	const DataStructureParticles::tParticleVector & particles = *mCore->mDataStructureParticles.mParticles;
-	for (DataStructureParticles::tParticleVector::const_iterator pIt =
-	            particles.begin();
-	        pIt != particles.end(); pIt++) {
-		assert(pIt->mID == -1); // (particle should not be associated)
-		float minSquareDist = std::numeric_limits<float>::max();
-		Track * closestTrack = NULL;
-		for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
-		        i != mTracks.end(); i++) {
-			float distance = Utility::SquareDistance(i->second.trajectory.back(), pIt->mCenter);
-			if (distance < minSquareDist) {
-				minSquareDist = distance;
-				closestTrack = &i->second;
-			}
-		}
-		if (closestTrack == NULL || minSquareDist > mMinNewTrackDistanceSquared) {
-			int id = mNextTrackId++;
-			mTracks[id] = Track(id);
-			mTracks[id].AddPoint(pIt->mCenter,
-			                     mCore->mDataStructureInput.mFrameNumber);
-			Particle p;
-			p.mCenter = pIt->mCenter;
-			p.mID = id;
-			p.mArea = pIt->mArea;
-			p.mCompactness = pIt->mCompactness;
-			p.mOrientation = pIt->mOrientation;
-			mParticles.push_back(p);
-
-			//mTrackers[id] = camshift();
-			//createTracker(&mTrackers[id], inputImage);
-			//setVmin(&mTrackers[id], mVmin);
-			//setSmin(&mTrackers[id], mSmin);
-			//CvRect start = rectByCenter(pIt->mCenter.x,
-			//pIt->mCenter.y,
-			//mInitialWindowSize, mInitialWindowSize);
-			//startTracking(&mTrackers[id], inputImage, &start);
-		}
-	}
-}
-
-void THISCLASS::FilterTracks()
-{
-	set<int> trackIdsToErase;
-	for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
-	        i != mTracks.end(); i++) {
-		Track & track = i->second;
-		int frameDifference = mCore->mDataStructureInput.mFrameNumber - track.LastUpdateFrame();
-		if ( frameDifference >= mFrameKillThreshold) {
-			trackIdsToErase.insert(i->first);
-		}
-	}
-
-
-	for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
-	        i != mTracks.end(); i++) {
-		Track & track1 = i->second;
-		for (DataStructureTracks::tTrackMap::iterator j = mTracks.begin();
-		        j != mTracks.end(); j++) {
-			Track & track2 = j->second;
-			double cost = Utility::SquareDistance(track1.trajectory.back(), track2.trajectory.back());
-			if (track1.mID != track2.mID && cost < mTrackDistanceKillThresholdSquared) {
-				// kill a track - keep the older one
-				if (track1.mID < track2.mID) {
-					trackIdsToErase.insert(track2.mID);
-				} else {
-					trackIdsToErase.insert(track1.mID);
-					break;
-				}
-			}
-		}
-	}
-	for (set<int>::iterator i = trackIdsToErase.begin();
-	        i != trackIdsToErase.end(); i++) {
-		EraseTrack(*i);
-	}
+  mDiffThreshold = GetConfigurationInt(wxT("DiffThreshold"), 30);
+  mMhiDuration = GetConfigurationDouble(wxT("MhiDuration"), 1);
+  mSegmentThreshold = GetConfigurationDouble(wxT("SegmentThreshold"), 0.5);
+  mMaxTimeDelta = GetConfigurationDouble(wxT("MaxTimeDelta"), 0.5);
+  mMinTimeDelta = GetConfigurationDouble(wxT("MaxTimeDelta"), 0.05);
 
 }
-
 
 void THISCLASS::OnStep()
 {
 
 	wxTimeSpan timeSinceLastFrame = mCore->mDataStructureInput.TimeSinceLastFrame();
-	if (timeSinceLastFrame.IsLongerThan(wxTimeSpan::Seconds(5))) {
-		cout << "Clearing tracks because there was a gap: " << timeSinceLastFrame.Format().ToAscii() << endl;
-		ClearTracks();
-	}
+
 	IplImage *inputImage = mCore->mDataStructureImageColor.mImage;
 	if (! inputImage) {
 		AddError(wxT("No input image."));
@@ -181,6 +80,7 @@ void THISCLASS::OnStep()
 	}
 	wxDateTime ts = mCore->mDataStructureInput.FrameTimestamp();
 	double timestamp = ts.GetTicks() + ts.GetMillisecond() / 1000.0;
+	
 	update_mhi(inputImage, mOutputImage, timestamp, mDiffThreshold);
 	mCore->mDataStructureParticles.mParticles = &mParticles;
 	DisplayEditor de(&mDisplayOutput);
@@ -200,23 +100,8 @@ void THISCLASS::OnStepCleanup() {
 void THISCLASS::OnStop() {
 	cvReleaseImage(&mOutputImage);
 	mOutputImage = 0;
-	ClearTracks();
 }
 
-void THISCLASS::ClearTracks() {
-	mTracks.clear();
-	for (std::map<int, camshift>::iterator i = mTrackers.begin();
-	        i != mTrackers.end(); i++) {
-		releaseTracker(&i->second);
-	}
-	mTrackers.clear();
-
-}
-void THISCLASS::EraseTrack(int id) {
-	mTracks.erase(id);
-	releaseTracker(&mTrackers[id]);
-	mTrackers.erase(id);
-}
 
 
 // parameters:
@@ -353,5 +238,10 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, double timestampIn,
 		cvCircle( dst, center, cvRound(magnitude*1.2), color, 3, CV_AA, 0 );
 		cvLine( dst, center, cvPoint( cvRound( center.x + magnitude*cos(angle*CV_PI / 180)),
 		                              cvRound( center.y - magnitude*sin(angle*CV_PI / 180))), color, 3, CV_AA, 0 );
+		cvRectangle(dst, 
+			    cvPoint(comp_rect.x, comp_rect.y),
+			    cvPoint(comp_rect.x + comp_rect.width,
+				    comp_rect.y + comp_rect.height),
+			    CV_RGB(255,0,0));
 	}
 }

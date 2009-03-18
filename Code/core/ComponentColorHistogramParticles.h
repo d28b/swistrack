@@ -30,10 +30,15 @@ public:
 	}
 
 private:
+	CvRNG rng;
 	
 	IplImage * mInputChannels[3];
 
 	IplImage * mParticleMask;
+	IplImage * mOutputImage;
+
+	int mMinArea;	//!< (configuration) The minimum area of a blob.
+
 
 	
 	Display mDisplayOutput;
