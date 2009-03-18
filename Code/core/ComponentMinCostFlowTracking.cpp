@@ -50,18 +50,20 @@ void THISCLASS::OnReloadConfiguration()
 }
 
 double THISCLASS::p_link(Particle x_i, Particle x_j) {
-  double colorSim = cvCompareHist(x_i.mColorModel, x_j.mColorModel, 
-				  CV_COMP_BHATTACHARYYA); 
-  // zero is completely similar, 1 is completely different.
-
   double distance = Utility::SquareDistance(x_i.mCenter, x_j.mCenter);
-  
-  
-  if (distance > mMinSquareDistanceForSameTrack ) {
+  if (x_i.mColorModel == NULL || x_j.mColorModel == NULL) {
+    return 0;
+  } else if (distance > mMinSquareDistanceForSameTrack ) {
     return 0;
   } else if (x_i.mTimestamp > x_j.mTimestamp) {
     return 0;
   } else {
+    double colorSim = cvCompareHist(x_i.mColorModel, x_j.mColorModel, 
+				    CV_COMP_BHATTACHARYYA); 
+    // zero is completely similar, 1 is completely different.
+
+
+
     return 1 - colorSim;
   }
 }

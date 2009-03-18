@@ -45,6 +45,7 @@
 #include "ComponentKalmanFilterTrack.h"
 #include "ComponentIDReaderRing.h"
 #include "ComponentSimulationParticles.h"
+#include "ComponentColorHistogramParticles.h"
 #include "ComponentCalibrationLinear.h"
 #include "ComponentCalibrationTSAI.h"
 #include "ComponentOutputFile.h"
@@ -116,6 +117,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentBlobDetectionTwoColors(this));
 	mAvailableComponents.push_back(new ComponentIDReaderRing(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
+	mAvailableComponents.push_back(new ComponentColorHistogramParticles(this));
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
 	mAvailableComponents.push_back(new ComponentCalibrationTSAI(this));
 	mAvailableComponents.push_back(new ComponentTracking(this));
