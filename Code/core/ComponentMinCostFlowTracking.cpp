@@ -8,6 +8,7 @@
 #include "MinCostFlow.h"
 #include <cv.h>
 #include <cassert>
+#include <sstream>
 using namespace std;
 
 THISCLASS::ComponentMinCostFlowTracking(SwisTrackCore *stc):
@@ -107,7 +108,9 @@ void THISCLASS::OnStep()
   for (DataStructureParticles::tParticleVector::iterator pIt = 
 	 particles->begin(); pIt != particles->end(); pIt++) {
     struct MinCostFlow::VertexProps vProps;
-    vProps.name = pIt->mID;
+    ostringstream path;
+    path << pIt->mTimestamp.Format().ToAscii() << " " << pIt->mCenter.x << "," << pIt->mCenter.y;
+    vProps.name = path.str();
 
 
     MinCostFlow::Graph::vertex_descriptor u_i = add_vertex(vProps, mGraph);
@@ -153,6 +156,7 @@ void THISCLASS::ProcessWindow() {
 }
 
 void THISCLASS::OutputTracks(const MinCostFlow::Graph & graph) {
+  
   
 }
 

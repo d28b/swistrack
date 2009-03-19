@@ -35,7 +35,7 @@ private:
 
 
 	void update_mhi( IplImage* img, IplImage* dst, IplImage * foregroundMask, double timestampIn,
-			 int diff_threshold );
+			 int diff_threshold, wxDateTime frameTimestamp );
 
 
 

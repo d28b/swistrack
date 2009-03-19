@@ -87,7 +87,8 @@ void THISCLASS::OnStep()
 	wxDateTime ts = mCore->mDataStructureInput.FrameTimestamp();
 	double timestamp = ts.GetTicks() + ts.GetMillisecond() / 1000.0;
 	
-	update_mhi(inputImage, mOutputImage, mCore->mDataStructureImageBinary.mImage, timestamp, mDiffThreshold);
+	update_mhi(inputImage, mOutputImage, mCore->mDataStructureImageBinary.mImage, timestamp, mDiffThreshold,
+		   mCore->mDataStructureInput.FrameTimestamp());
 	mCore->mDataStructureParticles.mParticles = &mParticles;
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
@@ -111,7 +112,7 @@ void THISCLASS::OnStop() {
 //  dst - resultant motion picture
 //  args - optional parameters
 void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, IplImage * foregroundMask, double timestampIn,
-                             int diff_threshold )
+                             int diff_threshold, wxDateTime frameTimestamp )
 {
 	//double timestamp = (double)clock()/CLOCKS_PER_SEC; // get current time in seconds
 	if (firstTimestamp == -1) {
@@ -238,6 +239,7 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, IplImage * foreground
 		
 		tmpParticle.mCenter.x = center.x;
 		tmpParticle.mCenter.y = center.y;
+		tmpParticle.mTimestamp = frameTimestamp;
 
 		int histSizes[] = {100,100,100};
 		tmpParticle.mColorModel = cvCreateHist(3, histSizes, CV_HIST_ARRAY);
