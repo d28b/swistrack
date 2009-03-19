@@ -2,7 +2,7 @@
 
 void testFlow() 
 {
-  MinCostFlow flow;
+
   MinCostFlow::Graph graph;
   
   //enum {v1, v2, v3, v4, v5};
@@ -74,7 +74,7 @@ void testFlow()
   // no outgoing 6
 
   
-  flow.minCostFlow(&graph);
+  MinCostFlow::FlowInfo info = MinCostFlow::minCostFlow(&graph);
 
   // example from http://www.topcoder.com/tc?module=Static&d1=tutorials&d2=minimumCostFlow2
   assert(graph[edge(v1, v3, graph).first].flow == 2);
@@ -85,7 +85,8 @@ void testFlow()
   assert(graph[edge(v3, v4, graph).first].flow == 5);
   
   assert(graph[edge(v4, v5, graph).first].flow == 3);
-
+  
+  assert(info.cost == 47);
 }
 
 

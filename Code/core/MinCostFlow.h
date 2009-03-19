@@ -33,6 +33,10 @@ class MinCostFlow {
     VertexProps,
     EdgeProps > Graph;
 
+  struct FlowInfo {
+    double cost;
+  };
+
   struct VertexProps {
     std::string name;
     int net_supply;
@@ -45,7 +49,7 @@ class MinCostFlow {
     // flow is capacity - residual_capacity
   };
 
-  Graph residualNetwork(const Graph & graph) {
+  static Graph residualNetwork(const Graph & graph) {
     Graph result;
     //Graph::vertex_iterator vi, vi_end;
     //for (tie(vi, vi_end) = vertices(graph); vi != vi_end; vi++) {
@@ -75,7 +79,7 @@ class MinCostFlow {
   typedef pair<Graph::vertex_descriptor, 
     Graph::vertex_descriptor> VertexPair;
 
-  void addReversedEdges(Graph * pGraph) {
+  static void addReversedEdges(Graph * pGraph) {
     Graph & graph = *pGraph;
     
     graph_traits < Graph >::edge_iterator ei, ei_end;
@@ -106,14 +110,14 @@ class MinCostFlow {
     
   }
 
-  void zeroFlows(Graph * pGraph) {
+  static void zeroFlows(Graph * pGraph) {
     Graph & graph = *pGraph;
     graph_traits < Graph >::edge_iterator ei, ei_end;
     for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei) {
       graph[*ei].flow = 0;
     }
   }
-  VertexPair addSourceAndSink(Graph * pGraph) {
+  static VertexPair addSourceAndSink(Graph * pGraph) {
     Graph & graph = *pGraph;
     Graph::vertex_descriptor sourceVertex, sinkVertex;
     
@@ -152,7 +156,7 @@ class MinCostFlow {
     return pair;
   }
 
-  void minCostFlow(Graph * pGraph) {
+  static FlowInfo minCostFlow(Graph * pGraph) {
     Graph & graph = *pGraph;
     cout << "Computing min cost flow." << endl;
 
@@ -211,6 +215,9 @@ class MinCostFlow {
 
     }
 
+    FlowInfo result;
+    result.cost = 0;
+
     graph_traits < Graph >::edge_iterator ei, ei_end;
     for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei) {
       Graph::vertex_descriptor s, t;
@@ -218,10 +225,14 @@ class MinCostFlow {
       t = target(*ei, graph);
       cout << "From " << graph[s].name << " to " << graph[t].name;
       cout << " " << graph[*ei].flow << endl;
+      result.cost += graph[*ei].flow * graph[*ei].cost;
+      
     }
 
 
 
+
+    return result;
     
 
     //property_map<Graph, edge_reverse_t>::type 

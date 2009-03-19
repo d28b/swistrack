@@ -148,7 +148,9 @@ void THISCLASS::OnStep()
 void THISCLASS::ProcessWindow() {
   cout << "Running min cost flow!" << endl;
   AddTransitionEdges();
-  mFlow.minCostFlow(&mGraph);
+
+  
+  MinCostFlow::FlowInfo flow = MinCostFlow::minCostFlow(&mGraph);
 
   OutputTracks(mGraph);
 
