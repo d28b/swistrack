@@ -1,12 +1,8 @@
 #include "MinCostFlow.h"
 
-void testFlow() 
-{
-
+void MinCostFlow::testFlow() {
   MinCostFlow::Graph graph;
-  
-  //enum {v1, v2, v3, v4, v5};
-  
+
   struct MinCostFlow::EdgeProps eProps;
   struct MinCostFlow::VertexProps vProps;
 
@@ -73,20 +69,26 @@ void testFlow()
 
   // no outgoing 6
 
-  
-  MinCostFlow::minCostFlow(&graph);
+  // make sure it works twice. 
+  VertexPair sourceAndSink = addSourceAndSink(&graph);
+  Graph::vertex_descriptor source = sourceAndSink.first;
+  Graph::vertex_descriptor sink = sourceAndSink.second;
 
-  // example from http://www.topcoder.com/tc?module=Static&d1=tutorials&d2=minimumCostFlow2
-  assert(graph[edge(v1, v3, graph).first].flow == 2);
-  assert(graph[edge(v1, v2, graph).first].flow == 3);
+  
+  for (int i = 0; i < 2; i++) {
+    MinCostFlow::minCostFlow(&graph, source, sink);
+    assert(graph[edge(v1, v3, graph).first].flow == 2);
+    assert(graph[edge(v1, v2, graph).first].flow == 3);
+    
+    assert(graph[edge(v3, v6, graph).first].flow == 1);
+    assert(graph[edge(v3, v5, graph).first].flow == 1);
+    assert(graph[edge(v3, v4, graph).first].flow == 5);
+    
+    assert(graph[edge(v4, v5, graph).first].flow == 3);
+    
+    assert(MinCostFlow::CostOfFlow(graph) == 47);
+  }
 
-  assert(graph[edge(v3, v6, graph).first].flow == 1);
-  assert(graph[edge(v3, v5, graph).first].flow == 1);
-  assert(graph[edge(v3, v4, graph).first].flow == 5);
-  
-  assert(graph[edge(v4, v5, graph).first].flow == 3);
-  
-  assert(MinCostFlow::CostOfFlow(graph) == 47);
 }
 
 

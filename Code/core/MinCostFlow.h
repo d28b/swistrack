@@ -18,7 +18,7 @@
 using namespace boost;
 using namespace std;
 
-void testFlow();
+
 
 /**
  *
@@ -151,21 +151,17 @@ class MinCostFlow {
     VertexPair pair(sourceVertex, sinkVertex);
     return pair;
   }
-
   static void minCostFlow(Graph * pGraph) {
+    VertexPair sourceAndSink = addSourceAndSink(pGraph);
+    minCostFlow(pGraph, sourceAndSink.first, sourceAndSink.second);
+  }
+
+  static void minCostFlow(Graph * pGraph, Graph::vertex_descriptor sourceVertex, Graph::vertex_descriptor sinkVertex) {
     Graph & graph = *pGraph;
     cout << "Computing min cost flow." << endl;
 
-
-    VertexPair sourceAndSink = addSourceAndSink(&graph);
-    Graph::vertex_descriptor sourceVertex = sourceAndSink.first;
-    Graph::vertex_descriptor sinkVertex = sourceAndSink.second;
-    //addReversedEdges(&graph);
     zeroFlows(&graph);
     
-
-
-
     while (1) {
       Graph residuals = residualNetwork(graph);
 
@@ -224,15 +220,39 @@ class MinCostFlow {
       Graph::vertex_descriptor s, t;
       s = source(*ei, graph);
       t = target(*ei, graph);
-      cout << "From " << graph[s].name << " to " << graph[t].name;
-      cout << " " << graph[*ei].flow << endl;
       cost += graph[*ei].flow * graph[*ei].cost;
       
     }
 
     return cost;
   }
+
+
+  /**
+   * Prints the flow in the graph.
+   */
+  static double PrintFlow(const Graph & graph) {
+    
+    double cost = 0;
+
+    graph_traits < Graph >::edge_iterator ei, ei_end;
+    for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei) {
+      Graph::vertex_descriptor s, t;
+      s = source(*ei, graph);
+      t = target(*ei, graph);
+      cout << "From " << graph[s].name << " to " << graph[t].name;
+      cout << " " << graph[*ei].flow << endl;
+    }
+
+    return cost;
+  }
+
+
+  static void testFlow();
+
+
     
 };
+
 
 #endif

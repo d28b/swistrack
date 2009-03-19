@@ -47,6 +47,7 @@ private:
 
 	double mMaxSquareDistanceForSameTrack;
 	double mMaxDifferenceInArea;
+	int mMaxTrackCount;
 
 	wxTimeSpan mWindowSize;
 

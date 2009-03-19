@@ -9,6 +9,7 @@
 #include <cv.h>
 #include <cassert>
 #include <sstream>
+#include <limits>
 using namespace std;
 
 THISCLASS::ComponentMinCostFlowTracking(SwisTrackCore *stc):
@@ -22,7 +23,7 @@ THISCLASS::ComponentMinCostFlowTracking(SwisTrackCore *stc):
 	AddDataStructureWrite(&(mCore->mDataStructureTracks));
 	AddDisplay(&mDisplayOutput);
 
-	testFlow();
+	MinCostFlow::testFlow();
 
 
 	//exit(-1);
@@ -54,6 +55,7 @@ void THISCLASS::OnStart()
   mMaxSquareDistanceForSameTrack = pow(GetConfigurationDouble(wxT("MaxDistanceForSameTrack"), 10), 2);
   
   mMaxDifferenceInArea = GetConfigurationDouble(wxT("MaxDifferenceInAreaForSameTrack"), 50);
+  mMaxTrackCount = GetConfigurationInt(wxT("MaxTrackCount"), 10);
 
   mWindowSize = wxTimeSpan::Seconds(GetConfigurationInt(wxT("WindowSizeSeconds"), 10));
 
@@ -150,7 +152,29 @@ void THISCLASS::ProcessWindow() {
   AddTransitionEdges();
 
   MinCostFlow::minCostFlow(&mGraph);
-  double flowCost = MinCostFlow::CostOfFlow(mGraph);
+  double minCost = numeric_limits<double>::max();
+  MinCostFlow::Graph minGraph;
+  int minTrackCount;
+  cout << "Running: " << mMaxTrackCount << endl;
+  for (int i = 0; i < mMaxTrackCount; i++) {
+    int trackCount = i + 1;
+
+    mGraph[sourceVertex].net_supply = trackCount;
+    mGraph[sinkVertex].net_supply = -trackCount;
+    double flowCost = MinCostFlow::CostOfFlow(mGraph);    
+    cout << "Cost: " << flowCost;
+    if (flowCost < minCost) {
+      minCost = flowCost;
+      minGraph = mGraph;
+      minTrackCount = i;
+    }
+  }
+
+  cout << "Tracks: " << minTrackCount << endl;
+  cout << "Graph" << endl;
+  MinCostFlow::PrintFlow(minGraph);
+
+
 
   OutputTracks(mGraph);
 
