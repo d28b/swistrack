@@ -176,7 +176,7 @@ class MinCostFlow {
 	predecessors(num_vertices(residuals));
 
       cout << "Finding a path." << endl;
-      bool r = bellman_ford_shortest_paths
+      bellman_ford_shortest_paths
 	(residuals, 
 	 root_vertex(sourceVertex).
 	 weight_map(get(&EdgeProps::cost, residuals)).

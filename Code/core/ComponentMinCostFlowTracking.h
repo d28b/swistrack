@@ -35,7 +35,9 @@ private:
 	map<MinCostFlow::Graph::vertex_descriptor, Particle> 
 	  mObservations;
 	Display mDisplayOutput;	
-	
+
+	MinCostFlow mFlow;
+
 	MinCostFlow::Graph mGraph;
 	MinCostFlow::Graph::vertex_descriptor sourceVertex, sinkVertex;
 
@@ -43,7 +45,8 @@ private:
 	double p_exit;
 	double beta_i;
 
-	double mMinSquareDistanceForSameTrack;
+	double mMaxSquareDistanceForSameTrack;
+	double mMaxDifferenceInArea;
 
 	double mWindowSizeSeconds;
 
@@ -51,6 +54,8 @@ private:
 
 	void ProcessWindow();
 	void AddTransitionEdges();
+
+	void OutputTracks(const MinCostFlow::Graph & graph);
 	
 
 

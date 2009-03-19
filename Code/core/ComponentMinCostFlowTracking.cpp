@@ -43,6 +43,10 @@ void THISCLASS::OnStart()
 	
 	vProps.name="sink";
 	sinkVertex = add_vertex(vProps, mGraph);
+
+	mMaxSquareDistanceForSameTrack = pow(GetConfigurationDouble(wxT("MaxDistanceForSameTrack"), 10), 2);
+	
+	mMaxDifferenceInArea = GetConfigurationDouble(wxT("MaxDifferenceInAreaForSameTrack"), 50);
 }
 
 void THISCLASS::OnReloadConfiguration()
@@ -51,9 +55,12 @@ void THISCLASS::OnReloadConfiguration()
 
 double THISCLASS::p_link(Particle x_i, Particle x_j) {
   double distance = Utility::SquareDistance(x_i.mCenter, x_j.mCenter);
+  double area = fabs(x_i.mArea - x_j.mArea);
   if (x_i.mColorModel == NULL || x_j.mColorModel == NULL) {
     return 0;
-  } else if (distance > mMinSquareDistanceForSameTrack ) {
+  } else if (distance > mMaxSquareDistanceForSameTrack ) {
+    return 0;
+  } else if (area > mMaxDifferenceInArea) {
     return 0;
   } else if (x_i.mTimestamp > x_j.mTimestamp) {
     return 0;
@@ -124,15 +131,25 @@ void THISCLASS::OnStep()
 }
 void THISCLASS::ProcessWindow() {
   AddTransitionEdges();
+  mFlow.minCostFlow(&mGraph);
+
+  OutputTracks(mGraph);
+}
+
+void THISCLASS::OutputTracks(const MinCostFlow::Graph & graph) {
   
 }
+
+
 void THISCLASS::AddTransitionEdges() { 
   for (map<MinCostFlow::Graph::vertex_descriptor, Particle>::iterator i = 
 	 mObservations.begin(); i != mObservations.end(); i++) {
     // FIXME - loop over every pair once. 
+    Particle & x_i = i->second;
     for (map<MinCostFlow::Graph::vertex_descriptor, Particle>::iterator j = 
 	   mObservations.begin(); j != mObservations.end(); j++) {
-      double p_lnk = p_link(mObservations[i->first], mObservations[j->first]);
+      Particle & x_j = j->second;
+      double p_lnk = p_link(x_i, x_j);
       if (p_lnk != 0) {
 	MinCostFlow::Graph::vertex_descriptor u_i, v_i, u_j, v_j;
 
