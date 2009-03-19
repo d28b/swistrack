@@ -33,10 +33,6 @@ class MinCostFlow {
     VertexProps,
     EdgeProps > Graph;
 
-  struct FlowInfo {
-    double cost;
-  };
-
   struct VertexProps {
     std::string name;
     int net_supply;
@@ -156,7 +152,7 @@ class MinCostFlow {
     return pair;
   }
 
-  static FlowInfo minCostFlow(Graph * pGraph) {
+  static void minCostFlow(Graph * pGraph) {
     Graph & graph = *pGraph;
     cout << "Computing min cost flow." << endl;
 
@@ -212,11 +208,16 @@ class MinCostFlow {
 	  v = predecessors[v];
 	}	
       }
-
     }
+  }
 
-    FlowInfo result;
-    result.cost = 0;
+  /**
+   * Returns the cost of the flow in the graph. 
+   * This is the cost times the flow over all edges. 
+   */
+  static double CostOfFlow(const Graph & graph) {
+    
+    double cost = 0;
 
     graph_traits < Graph >::edge_iterator ei, ei_end;
     for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei) {
@@ -225,36 +226,13 @@ class MinCostFlow {
       t = target(*ei, graph);
       cout << "From " << graph[s].name << " to " << graph[t].name;
       cout << " " << graph[*ei].flow << endl;
-      result.cost += graph[*ei].flow * graph[*ei].cost;
+      cost += graph[*ei].flow * graph[*ei].cost;
       
     }
 
-
-
-
-    return result;
-    
-
-    //property_map<Graph, edge_reverse_t>::type 
-    //rev = get(edge_reverse, graph);
-
-    /*(    
-    long flow = push_relabel_max_flow
-      (graph, sourceVertex, sinkVertex,
-       capacity_map(get(&EdgeProps::capacity, graph)).
-       residual_capacity_map(get(&EdgeProps::residual_capacity, graph)).
-       vertex_index_map(identity_property_map()).
-       reverse_edge_map(get(&EdgeProps::reverse, graph)));
-    cout << "Flow: " << flow << endl;
-    graph_traits < Graph >::edge_iterator ei, ei_end;    
-    for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei) {
-      cout << "Flow in node: " << graph[source(*ei, graph)].name << 
-	" to " << graph[target(*ei, graph)].name << ": ";
-      cout << (graph[*ei].capacity - graph[*ei].residual_capacity) << endl;
-      }*/
-
-
+    return cost;
   }
+    
 };
 
 #endif

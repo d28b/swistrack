@@ -74,7 +74,7 @@ void testFlow()
   // no outgoing 6
 
   
-  MinCostFlow::FlowInfo info = MinCostFlow::minCostFlow(&graph);
+  MinCostFlow::minCostFlow(&graph);
 
   // example from http://www.topcoder.com/tc?module=Static&d1=tutorials&d2=minimumCostFlow2
   assert(graph[edge(v1, v3, graph).first].flow == 2);
@@ -86,7 +86,7 @@ void testFlow()
   
   assert(graph[edge(v4, v5, graph).first].flow == 3);
   
-  assert(info.cost == 47);
+  assert(MinCostFlow::CostOfFlow(graph) == 47);
 }
 
 
