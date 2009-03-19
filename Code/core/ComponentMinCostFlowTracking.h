@@ -59,6 +59,7 @@ private:
 
 	void OutputTracks(const MinCostFlow::Graph & graph);
 	
+	int mNextTrackId;
 
 
 

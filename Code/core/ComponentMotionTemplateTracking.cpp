@@ -240,6 +240,7 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, IplImage * foreground
 		tmpParticle.mCenter.x = center.x;
 		tmpParticle.mCenter.y = center.y;
 		tmpParticle.mTimestamp = frameTimestamp;
+		tmpParticle.mFrameNumber = mCore->mDataStructureInput.mFrameNumber;
 
 		int histSizes[] = {100,100,100};
 		tmpParticle.mColorModel = cvCreateHist(3, histSizes, CV_HIST_ARRAY);

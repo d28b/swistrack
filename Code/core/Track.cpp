@@ -18,7 +18,7 @@ Track::~Track() {
 /** \brief Add a point to the current track (max track) */
 void Track::AddPoint(CvPoint2D32f p, int frameNumber) {
 	trajectory.push_back(p);
-	if ((int)(trajectory.size()) > maxlength)
+	if (maxlength != -1 && (int)(trajectory.size()) > maxlength)
 		trajectory.erase(trajectory.begin());
 	mLastUpdateFrame = frameNumber;
 }

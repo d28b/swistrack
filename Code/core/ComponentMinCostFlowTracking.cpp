@@ -22,7 +22,8 @@ THISCLASS::ComponentMinCostFlowTracking(SwisTrackCore *stc):
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 	AddDataStructureWrite(&(mCore->mDataStructureTracks));
 	AddDisplay(&mDisplayOutput);
-
+	mNextTrackId = 0;
+	mTracks.clear();
 	MinCostFlow::testFlow();
 
 
@@ -58,7 +59,7 @@ void THISCLASS::OnStart()
   mMaxTrackCount = GetConfigurationInt(wxT("MaxTrackCount"), 10);
 
   mWindowSize = wxTimeSpan::Seconds(GetConfigurationInt(wxT("WindowSizeSeconds"), 10));
-
+  
   mStartTimestamp = wxInvalidDateTime;
 }
 
@@ -146,6 +147,13 @@ void THISCLASS::OnStep()
     ProcessWindow();
     mStartTimestamp = mCore->mDataStructureInput.FrameTimestamp();
   }
+
+  mCore->mDataStructureTracks.mTracks = &mTracks;
+  DisplayEditor de(&mDisplayOutput);
+  if (de.IsActive()) {
+    de.SetMainImage(mCore->mDataStructureInput.mImage);
+    de.SetTrajectories(true);
+  }
 }
 void THISCLASS::ProcessWindow() {
   cout << "Running min cost flow!" << endl;
@@ -179,12 +187,38 @@ void THISCLASS::ProcessWindow() {
 
   OutputTracks(mGraph);
 
-  mGraph.clear();
+  ResetGraph();
 }
 
 void THISCLASS::OutputTracks(const MinCostFlow::Graph & graph) {
-  
-  
+
+  graph_traits < MinCostFlow::Graph >::out_edge_iterator ei, ei_end, ej, ej_end;
+  for (tie(ei, ei_end) = out_edges(sourceVertex, graph); ei != ei_end; ++ei) {
+    
+    if (graph[*ei].flow == 1) {
+      int id = mNextTrackId++;
+      mTracks[id] = Track(id);
+      mTracks[id].SetMaxLength(-1);
+      MinCostFlow::Graph::vertex_descriptor u_i, v_i;
+      u_i = target(*ei, graph);
+      while (u_i != sinkVertex) {
+	mTracks[id].AddPoint(mObservations[u_i].mCenter, mObservations[u_i].mFrameNumber); 
+	assert(out_degree(u_i, graph) == 1);
+	v_i = target(*(out_edges(u_i, graph).first), graph);
+	for (tie(ej, ej_end) = out_edges(v_i, graph); ej != ej_end; ++ej) {
+	  if (graph[*ej].flow == 1) {
+	    u_i = target(*ej, graph);
+	    break;
+	  } else {
+	    assert(graph[*ej].flow == 0);
+	  }
+	  
+	}
+      }
+    } else {
+      assert(graph[*ei].flow == 0);
+    }
+  }
 }
 
 

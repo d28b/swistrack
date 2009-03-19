@@ -14,6 +14,7 @@ public:
 	double mArea;			//!< Particle area [pixels^2].
 	double mCompactness;	//!< The contour's compactness (area/circumference ratio).
 	CvPoint2D32f mWorldCenter; //!< Particle center after calibration [m].
+	int mFrameNumber;
 
 	CvHistogram * mColorModel;
 
