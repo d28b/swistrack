@@ -1,6 +1,11 @@
 #include "MinCostFlow.h"
 
 void MinCostFlow::testFlow() {
+  testFlow1();
+  testFlow2();
+}
+
+void MinCostFlow::testFlow2() {
   MinCostFlow::Graph graph;
 
   struct MinCostFlow::EdgeProps eProps;
@@ -8,6 +13,78 @@ void MinCostFlow::testFlow() {
 
 
   typedef MinCostFlow::Graph::vertex_descriptor vertex_descriptor;
+
+  vProps.name = "1";
+  vProps.net_supply = 5;
+  vertex_descriptor v1 = add_vertex(vProps, graph);
+
+  vProps.name = "2";
+  vProps.net_supply = 0;
+  vertex_descriptor v2 = add_vertex(vProps, graph);
+
+  vProps.name = "3";
+  vProps.net_supply = 0;
+  vertex_descriptor v3 = add_vertex(vProps, graph);
+
+  vProps.name = "4";
+  vProps.net_supply = -3;
+  vertex_descriptor v4 = add_vertex(vProps, graph);
+
+  vProps.name = "5";
+  vProps.net_supply = -2;
+  vertex_descriptor v5 = add_vertex(vProps, graph);
+
+  // outgoing 1
+  eProps.capacity = 7;
+  eProps.cost = 1;
+  add_edge(v1, v2, eProps, graph);
+
+  eProps.capacity = 7;
+  eProps.cost = 5;
+  add_edge(v1, v3, eProps, graph);
+
+  eProps.capacity = 2;
+  eProps.cost = -2;
+  add_edge(v2, v3, eProps, graph);
+
+  eProps.capacity = 3;
+  eProps.cost = 8;
+  add_edge(v2, v4, eProps, graph);
+
+  eProps.capacity = 3;
+  eProps.cost = -3;
+  add_edge(v3, v4, eProps, graph);
+
+  eProps.capacity = 2;
+  eProps.cost = 4;
+  add_edge(v3, v5, eProps, graph);
+
+  // make sure it works twice. 
+  VertexPair sourceAndSink = addSourceAndSink(&graph);
+  Graph::vertex_descriptor source = sourceAndSink.first;
+  Graph::vertex_descriptor sink = sourceAndSink.second;
+  MinCostFlow::minCostFlow(&graph, source, sink);
+  assert(graph[edge(v1, v2, graph).first].flow == 2);
+  assert(graph[edge(v1, v3, graph).first].flow == 3);
+  assert(graph[edge(v2, v3, graph).first].flow == 2);
+  assert(graph[edge(v2, v4, graph).first].flow == 0);
+  assert(graph[edge(v3, v4, graph).first].flow == 3);
+  assert(graph[edge(v3, v5, graph).first].flow == 2);
+  cout << "Cost: " << MinCostFlow::CostOfFlow(graph)  << endl;
+  assert(MinCostFlow::CostOfFlow(graph) == 12);
+
+  
+}
+
+void MinCostFlow::testFlow1() {
+  MinCostFlow::Graph graph;
+
+  struct MinCostFlow::EdgeProps eProps;
+  struct MinCostFlow::VertexProps vProps;
+
+
+  typedef MinCostFlow::Graph::vertex_descriptor vertex_descriptor;
+
   
   vProps.name = "1";
   vProps.net_supply = 5;

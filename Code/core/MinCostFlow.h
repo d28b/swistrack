@@ -113,6 +113,10 @@ class MinCostFlow {
       graph[*ei].flow = 0;
     }
   }
+
+  /**
+   * Adds a single source and sink node to the graph, 
+   */
   static VertexPair addSourceAndSink(Graph * pGraph) {
     Graph & graph = *pGraph;
     Graph::vertex_descriptor sourceVertex, sinkVertex;
@@ -151,11 +155,12 @@ class MinCostFlow {
     VertexPair pair(sourceVertex, sinkVertex);
     return pair;
   }
-  static void minCostFlow(Graph * pGraph) {
-    VertexPair sourceAndSink = addSourceAndSink(pGraph);
-    minCostFlow(pGraph, sourceAndSink.first, sourceAndSink.second);
-  }
 
+  /**
+   * Compute minCost flow for the graph, with the given source and sink vertices. 
+   * Use addSourceAndSink to add these vertices to your graph if your graph has more than one
+   * source and sink node.  
+   */
   static void minCostFlow(Graph * pGraph, Graph::vertex_descriptor sourceVertex, Graph::vertex_descriptor sinkVertex) {
     Graph & graph = *pGraph;
     cout << "Computing min cost flow." << endl;
@@ -248,6 +253,8 @@ class MinCostFlow {
   }
 
 
+  static void testFlow1();
+  static void testFlow2();
   static void testFlow();
 
 

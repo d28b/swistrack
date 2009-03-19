@@ -151,7 +151,7 @@ void THISCLASS::ProcessWindow() {
   cout << "Running min cost flow!" << endl;
   AddTransitionEdges();
 
-  MinCostFlow::minCostFlow(&mGraph);
+
   double minCost = numeric_limits<double>::max();
   MinCostFlow::Graph minGraph;
   int minTrackCount;
@@ -162,7 +162,8 @@ void THISCLASS::ProcessWindow() {
     mGraph[sourceVertex].net_supply = trackCount;
     mGraph[sinkVertex].net_supply = -trackCount;
     double flowCost = MinCostFlow::CostOfFlow(mGraph);    
-    cout << "Cost: " << flowCost;
+    MinCostFlow::minCostFlow(&mGraph, sourceVertex, sinkVertex);
+    cout << "Cost: " << flowCost << endl;
     if (flowCost < minCost) {
       minCost = flowCost;
       minGraph = mGraph;
