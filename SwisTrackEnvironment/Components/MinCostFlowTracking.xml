@@ -8,5 +8,36 @@
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/MinCostFlowTracking</url>
 	<displayimage>Output</displayimage>
 	<configuration>
+	  <parameter type="double">
+	    <name>MaxDistanceForTrack</name>
+	    <label>Maximum Distance between two points to consider linking them.</label>
+	    <min>0</min>
+	    <max>1000</max>
+	    <default>20</default>
+	    <slider>true</slider>
+	    <reloadable>false</reloadable>
+	  </parameter>
+
+	  <parameter type="double">
+	    <name>MaxDifferenceInAreaForSameTrack</name>
+	    <label>Maximum Difference in area for two particle to be considered part of the same track.</label>
+	    <min>0</min>
+	    <max>1000</max>
+	    <default>20</default>
+	    <slider>true</slider>
+	    <reloadable>false</reloadable>
+	  </parameter>
+
+
+	  <parameter type="integer">
+	    <name>WindowSizeSeconds</name>
+	    <label>Window Size - how long to collect particles before associating them as tracks, in seconds.</label>
+	    <min>0</min>
+	    <max>1000</max>
+	    <default>20</default>
+	    <slider>true</slider>
+	    <reloadable>false</reloadable>
+	  </parameter>
+	  
 	</configuration>
 </swistrackcomponent>

@@ -48,11 +48,12 @@ private:
 	double mMaxSquareDistanceForSameTrack;
 	double mMaxDifferenceInArea;
 
-	double mWindowSizeSeconds;
+	wxTimeSpan mWindowSize;
 
 	double p_link(Particle x_i, Particle x_j);
 
 	void ProcessWindow();
+	void ResetGraph();
 	void AddTransitionEdges();
 
 	void OutputTracks(const MinCostFlow::Graph & graph);

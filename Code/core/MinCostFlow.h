@@ -47,11 +47,11 @@ class MinCostFlow {
 
   Graph residualNetwork(const Graph & graph) {
     Graph result;
-    Graph::vertex_iterator vi, vi_end;
-    for (tie(vi, vi_end) = vertices(graph); vi != vi_end; vi++) {
-      Graph::vertex_descriptor d = add_vertex(graph[*vi], result);
-      cout << "Descriptor: " << d << " " << *vi << " " << graph[d].name << endl;
-    }
+    //Graph::vertex_iterator vi, vi_end;
+    //for (tie(vi, vi_end) = vertices(graph); vi != vi_end; vi++) {
+    //Graph::vertex_descriptor d = add_vertex(graph[*vi], result);
+    //cout << "Descriptor: " << d << " " << *vi << " " << graph[d].name << endl;
+    //}
     struct MinCostFlow::EdgeProps eProps;
     graph_traits < Graph >::edge_iterator ei, ei_end;
     for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei) {
@@ -167,15 +167,13 @@ class MinCostFlow {
 
 
     while (1) {
-      cout << "Making residuals." << endl;
       Graph residuals = residualNetwork(graph);
-
 
       vector<double> distances(num_vertices(residuals));
       vector<Graph::vertex_descriptor> 
 	predecessors(num_vertices(residuals));
 
-      cout << "Finding a path." << endl;
+
       bellman_ford_shortest_paths
 	(residuals, 
 	 root_vertex(sourceVertex).
@@ -186,9 +184,8 @@ class MinCostFlow {
 	 predecessor_map(&predecessors[0])
 	 );
 
-      cout << "Augmenting flow." << endl;
+
       if (predecessors[sinkVertex] == sinkVertex) {
-	cout << "No shortest path, so done." << endl;
 	break; // we're done, no more paths.
       } else {
 	Graph::vertex_descriptor v  = sinkVertex;
@@ -196,7 +193,6 @@ class MinCostFlow {
 	int minCapacity = residuals[e].capacity;
 	int i = 0;
 	while (v != sourceVertex) {
-	  cout << "Processing: " << graph[v].name << endl;
 	  e = edge(predecessors[v], v, residuals).first;
 	  if (residuals[e].capacity < minCapacity) {
 	    minCapacity = residuals[e].capacity;
@@ -214,7 +210,7 @@ class MinCostFlow {
       }
 
     }
-    cout << "Printing results." << endl;
+
     graph_traits < Graph >::edge_iterator ei, ei_end;
     for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei) {
       Graph::vertex_descriptor s, t;

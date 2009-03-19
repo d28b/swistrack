@@ -23,7 +23,7 @@ THISCLASS::ComponentMinCostFlowTracking(SwisTrackCore *stc):
 
 	testFlow();
 
-	mStartTimestamp = wxInvalidDateTime;
+
 	//exit(-1);
 }
 
@@ -31,22 +31,32 @@ THISCLASS::~ComponentMinCostFlowTracking()
 {
 }
 
+void THISCLASS::ResetGraph() {
+  mGraph.clear();
+  struct MinCostFlow::VertexProps vProps;
+  
+  vProps.name="source";
+  sourceVertex = add_vertex(vProps, mGraph);
+  
+  vProps.name="sink";
+  sinkVertex = add_vertex(vProps, mGraph);
+
+  mObservations.clear();
+  
+}
+
 void THISCLASS::OnStart()
 {
-	THISCLASS::OnReloadConfiguration();
+  THISCLASS::OnReloadConfiguration();
+  
+  ResetGraph();
+  mMaxSquareDistanceForSameTrack = pow(GetConfigurationDouble(wxT("MaxDistanceForSameTrack"), 10), 2);
+  
+  mMaxDifferenceInArea = GetConfigurationDouble(wxT("MaxDifferenceInAreaForSameTrack"), 50);
 
-	mGraph.clear();
-	struct MinCostFlow::VertexProps vProps;
-	
-	vProps.name="source";
-	sourceVertex = add_vertex(vProps, mGraph);
-	
-	vProps.name="sink";
-	sinkVertex = add_vertex(vProps, mGraph);
+  mWindowSize = wxTimeSpan::Seconds(GetConfigurationInt(wxT("WindowSizeSeconds"), 10));
 
-	mMaxSquareDistanceForSameTrack = pow(GetConfigurationDouble(wxT("MaxDistanceForSameTrack"), 10), 2);
-	
-	mMaxDifferenceInArea = GetConfigurationDouble(wxT("MaxDifferenceInAreaForSameTrack"), 50);
+  mStartTimestamp = wxInvalidDateTime;
 }
 
 void THISCLASS::OnReloadConfiguration()
@@ -124,16 +134,22 @@ void THISCLASS::OnStep()
     // make transition edges later. 
   }
   
-  wxTimeSpan diff = mStartTimestamp.Subtract(mCore->mDataStructureInput.FrameTimestamp());
-  if (diff.GetSeconds() >= mWindowSizeSeconds) {
+  wxTimeSpan diff = mCore->mDataStructureInput.FrameTimestamp().Subtract(mStartTimestamp);
+  cout << "Window size: " << mWindowSize.Format().ToAscii() << endl; 
+  cout << "       diff: " << diff.Format().ToAscii() << endl; 
+  if (diff.IsLongerThan(mWindowSize)) {
     ProcessWindow();
+    mStartTimestamp = mCore->mDataStructureInput.FrameTimestamp();
   }
 }
 void THISCLASS::ProcessWindow() {
+  cout << "Running min cost flow!" << endl;
   AddTransitionEdges();
   mFlow.minCostFlow(&mGraph);
 
   OutputTracks(mGraph);
+
+  mGraph.clear();
 }
 
 void THISCLASS::OutputTracks(const MinCostFlow::Graph & graph) {
