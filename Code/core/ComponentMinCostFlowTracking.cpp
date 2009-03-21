@@ -25,7 +25,11 @@ THISCLASS::ComponentMinCostFlowTracking(SwisTrackCore *stc):
 	mNextTrackId = 0;
 	mTracks.clear();
 	MinCostFlow::testFlow();
-
+	
+	p_entr = 0.000001;
+	p_exit = 0.000001;
+	beta_i = 0.1;
+	  
 
 	//exit(-1);
 }
@@ -43,6 +47,10 @@ void THISCLASS::ResetGraph() {
   
   vProps.name="sink";
   sinkVertex = add_vertex(vProps, mGraph);
+
+  MinCostFlow::VertexPair sourceAndSink = MinCostFlow::addSourceAndSink(&mGraph);
+  tSourceVertex = sourceAndSink.first;
+  tSinkVertex = sourceAndSink.second;
 
   mObservations.clear();
   
@@ -76,7 +84,7 @@ double THISCLASS::p_link(Particle x_i, Particle x_j) {
     return 0;
   } else if (area > mMaxDifferenceInArea) {
     return 0;
-  } else if (x_i.mTimestamp > x_j.mTimestamp) {
+  } else if (x_i.mTimestamp >= x_j.mTimestamp) {
     return 0;
   } else {
     double colorSim = cvCompareHist(x_i.mColorModel, x_j.mColorModel, 
@@ -103,28 +111,36 @@ void THISCLASS::OnStep()
   if (mStartTimestamp == wxInvalidDateTime) {
     mStartTimestamp = mCore->mDataStructureInput.FrameTimestamp();
   }
-  double C_i = beta_i * (1 - beta_i);
+  double C_i = log(beta_i * (1 - beta_i));
   double C_en_i = - log(p_entr);
   double C_ex_i = - log(p_exit);
 
-  
+  cout << "C_i: " << C_i << endl;  
   for (DataStructureParticles::tParticleVector::iterator pIt = 
 	 particles->begin(); pIt != particles->end(); pIt++) {
     struct MinCostFlow::VertexProps vProps;
     ostringstream path;
     path << pIt->mTimestamp.Format().ToAscii() << " " << pIt->mCenter.x << "," << pIt->mCenter.y;
-    vProps.name = path.str();
+    ostringstream uname, vname;
+    uname << "u_i: " << path.str();
+    vname << "v_i: " << path.str();
 
+    vProps.net_supply = 0;
 
+    vProps.name = uname.str();
     MinCostFlow::Graph::vertex_descriptor u_i = add_vertex(vProps, mGraph);
-    
+
+    vProps.name = vname.str();
     MinCostFlow::Graph::vertex_descriptor v_i = add_vertex(vProps, mGraph);
     mObservations[u_i] = *pIt;
     struct MinCostFlow::EdgeProps eProps;
+    eProps.flow = 0;
 
     // Observation edge
     eProps.cost = C_i;
+
     eProps.capacity = 1;
+
     add_edge(u_i, v_i, eProps, mGraph);
 
     // enter edge
@@ -141,8 +157,6 @@ void THISCLASS::OnStep()
   }
   
   wxTimeSpan diff = mCore->mDataStructureInput.FrameTimestamp().Subtract(mStartTimestamp);
-  cout << "Window size: " << mWindowSize.Format().ToAscii() << endl; 
-  cout << "       diff: " << diff.Format().ToAscii() << endl; 
   if (diff.IsLongerThan(mWindowSize)) {
     ProcessWindow();
     mStartTimestamp = mCore->mDataStructureInput.FrameTimestamp();
@@ -158,45 +172,60 @@ void THISCLASS::OnStep()
 void THISCLASS::ProcessWindow() {
   cout << "Running min cost flow!" << endl;
   AddTransitionEdges();
-
+  graph_traits < MinCostFlow::Graph >::out_edge_iterator ei, ei_end, ej, ej_end;
+  cout << "Flow at the begining. " << endl;
+  for (tie(ei, ei_end) = out_edges(sourceVertex, mGraph); ei != ei_end; ++ei) {
+    cout << "Flow: " << mGraph[*ei].flow << endl;
+  }
 
   double minCost = numeric_limits<double>::max();
   MinCostFlow::Graph minGraph;
   int minTrackCount;
   cout << "Running: " << mMaxTrackCount << endl;
-  for (int i = 0; i < mMaxTrackCount; i++) {
+  for (int i = 3; i < 4; i++) {
     int trackCount = i + 1;
+    
 
     mGraph[sourceVertex].net_supply = trackCount;
     mGraph[sinkVertex].net_supply = -trackCount;
+    
+    MinCostFlow::updateSourceAndSink(&mGraph, tSourceVertex, tSinkVertex);
+
+    MinCostFlow::minCostFlow(&mGraph, tSourceVertex, tSinkVertex);
     double flowCost = MinCostFlow::CostOfFlow(mGraph);    
-    MinCostFlow::minCostFlow(&mGraph, sourceVertex, sinkVertex);
     cout << "Cost: " << flowCost << endl;
     if (flowCost < minCost) {
       minCost = flowCost;
       minGraph = mGraph;
-      minTrackCount = i;
+      minTrackCount = trackCount;
     }
   }
 
   cout << "Tracks: " << minTrackCount << endl;
   cout << "Graph" << endl;
-  MinCostFlow::PrintFlow(minGraph);
+  
 
 
 
-  OutputTracks(mGraph);
+  OutputTracks(minGraph);
 
   ResetGraph();
 }
 
 void THISCLASS::OutputTracks(const MinCostFlow::Graph & graph) {
+  cout << "Net supply: " << graph[sourceVertex].net_supply << endl;
+  cout << "Net supply: " << graph[sinkVertex].net_supply << endl;
 
   graph_traits < MinCostFlow::Graph >::out_edge_iterator ei, ei_end, ej, ej_end;
+
+
+  cout << "Output tracks." << endl;
   for (tie(ei, ei_end) = out_edges(sourceVertex, graph); ei != ei_end; ++ei) {
-    
+    cout << "Flow: " << graph[*ei].flow << endl;
+    cout << "Source: " << graph[source(*ei, graph)].name << endl;
     if (graph[*ei].flow == 1) {
       int id = mNextTrackId++;
+
       mTracks[id] = Track(id);
       mTracks[id].SetMaxLength(-1);
       MinCostFlow::Graph::vertex_descriptor u_i, v_i;
@@ -215,10 +244,12 @@ void THISCLASS::OutputTracks(const MinCostFlow::Graph & graph) {
 	  
 	}
       }
+      cout << "Adding new track with length: " << mTracks[id].trajectory.size() << endl;
     } else {
       assert(graph[*ei].flow == 0);
     }
   }
+  cout << "Have: " << mTracks.size() << " tracks." << endl;
 }
 
 
@@ -231,7 +262,10 @@ void THISCLASS::AddTransitionEdges() {
 	   mObservations.begin(); j != mObservations.end(); j++) {
       Particle & x_j = j->second;
       double p_lnk = p_link(x_i, x_j);
+
       if (p_lnk != 0) {
+	double C_i_j = - log(p_lnk);
+	cout << "link: " << C_i_j << endl;
 	MinCostFlow::Graph::vertex_descriptor u_i, v_i, u_j, v_j;
 
 	MinCostFlow::Graph::edge_descriptor e_i, e_j;
@@ -247,7 +281,7 @@ void THISCLASS::AddTransitionEdges() {
 	e_j = *(out_edges(u_j, mGraph).first);
 	v_j = target(e_j, mGraph);
 	MinCostFlow::EdgeProps eProps;
-	eProps.cost = p_lnk;
+	eProps.cost = C_i_j;
 	eProps.flow = 1;
 	add_edge(v_i, u_j, eProps, mGraph);
 	  

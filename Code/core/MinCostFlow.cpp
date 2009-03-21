@@ -59,11 +59,11 @@ void MinCostFlow::testFlow2() {
   eProps.cost = 4;
   add_edge(v3, v5, eProps, graph);
 
-  // make sure it works twice. 
+
   VertexPair sourceAndSink = addSourceAndSink(&graph);
-  Graph::vertex_descriptor source = sourceAndSink.first;
-  Graph::vertex_descriptor sink = sourceAndSink.second;
-  MinCostFlow::minCostFlow(&graph, source, sink);
+  Graph::vertex_descriptor sourceVertex = sourceAndSink.first;
+  Graph::vertex_descriptor sinkVertex = sourceAndSink.second;
+  MinCostFlow::minCostFlow(&graph, sourceVertex, sinkVertex);
   assert(graph[edge(v1, v2, graph).first].flow == 2);
   assert(graph[edge(v1, v3, graph).first].flow == 3);
   assert(graph[edge(v2, v3, graph).first].flow == 2);
@@ -146,14 +146,16 @@ void MinCostFlow::testFlow1() {
 
   // no outgoing 6
 
-  // make sure it works twice. 
   VertexPair sourceAndSink = addSourceAndSink(&graph);
-  Graph::vertex_descriptor source = sourceAndSink.first;
-  Graph::vertex_descriptor sink = sourceAndSink.second;
+  Graph::vertex_descriptor sourceVertex = sourceAndSink.first;
+  Graph::vertex_descriptor sinkVertex = sourceAndSink.second;
 
-  
+
+
+  // make sure it works twice. 
   for (int i = 0; i < 2; i++) {
-    MinCostFlow::minCostFlow(&graph, source, sink);
+    MinCostFlow::updateSourceAndSink(&graph, sourceVertex, sinkVertex);
+    MinCostFlow::minCostFlow(&graph, sourceVertex, sinkVertex);
     assert(graph[edge(v1, v3, graph).first].flow == 2);
     assert(graph[edge(v1, v2, graph).first].flow == 3);
     

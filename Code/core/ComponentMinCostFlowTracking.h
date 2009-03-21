@@ -39,7 +39,12 @@ private:
 	MinCostFlow mFlow;
 
 	MinCostFlow::Graph mGraph;
-	MinCostFlow::Graph::vertex_descriptor sourceVertex, sinkVertex;
+	MinCostFlow::Graph::vertex_descriptor sourceVertex, sinkVertex; // representing source and sink in the paper
+	
+	// transformed source and sink  needed for implementation. 
+	// we keep it around instead of adding and removing these from the graph
+	// because that invalidates other vertex descriptors. 
+	MinCostFlow::Graph::vertex_descriptor tSourceVertex, tSinkVertex; 
 
 	double p_entr;
 	double p_exit;

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/push_relabel_max_flow.hpp>
 #include <boost/graph/adjacency_list.hpp>
@@ -63,7 +64,7 @@ class MinCostFlow {
       }
 
       eProps.cost = -graph[*ei].cost;
-      eProps.capacity =  graph[*ei].flow;
+      eProps.capacity = graph[*ei].flow;
       if (eProps.capacity > 0) {
 	add_edge(target(*ei, graph), source(*ei, graph), eProps, result);
       }
@@ -71,6 +72,14 @@ class MinCostFlow {
 
     return result;
   }
+
+  class TruePred
+  {
+  public:
+    bool operator()(const Graph::edge_descriptor d) {
+      return true;
+    }
+  };
 
   typedef pair<Graph::vertex_descriptor, 
     Graph::vertex_descriptor> VertexPair;
@@ -120,22 +129,36 @@ class MinCostFlow {
   static VertexPair addSourceAndSink(Graph * pGraph) {
     Graph & graph = *pGraph;
     Graph::vertex_descriptor sourceVertex, sinkVertex;
-    
-    
-    
-    struct MinCostFlow::VertexProps vProps;
-
+    struct MinCostFlow::VertexProps vProps;    
     vProps.name = "source";
-    vProps.net_supply = 0;
     sourceVertex = add_vertex(vProps, graph);
 
     vProps.name = "sink";
-    vProps.net_supply = 0;
+
     sinkVertex = add_vertex(vProps, graph);
+
+
+    updateSourceAndSink(pGraph, sourceVertex, sinkVertex);
+    VertexPair pair(sourceVertex, sinkVertex);
+
+    return pair;
+  }
+
+  static void updateSourceAndSink(Graph * pGraph, 
+				  Graph::vertex_descriptor sourceVertex, Graph::vertex_descriptor sinkVertex) {
+
+    Graph & graph = *pGraph;
+
+    remove_out_edge_if(sourceVertex, TruePred(), graph);
+    remove_in_edge_if(sinkVertex, TruePred(), graph);
+
+
+    graph[sourceVertex].net_supply = 0;
+    graph[sinkVertex].net_supply = 0;
 
     EdgeProps eProps;
     eProps.cost = 0;
-
+    
     Graph::vertex_iterator vi, vi_end;
     for (tie(vi, vi_end) = vertices(graph); vi != vi_end; vi++) {
       int supply = graph[*vi].net_supply;
@@ -152,8 +175,7 @@ class MinCostFlow {
 	// do nothing if it equals zero.
       }
     }
-    VertexPair pair(sourceVertex, sinkVertex);
-    return pair;
+
   }
 
   /**
@@ -165,8 +187,8 @@ class MinCostFlow {
     Graph & graph = *pGraph;
     cout << "Computing min cost flow." << endl;
 
-    zeroFlows(&graph);
-    
+
+    zeroFlows(&graph);    
     while (1) {
       Graph residuals = residualNetwork(graph);
 
@@ -184,7 +206,7 @@ class MinCostFlow {
 		       get(vertex_index, residuals))).
 	 predecessor_map(&predecessors[0])
 	 );
-
+      
 
       if (predecessors[sinkVertex] == sinkVertex) {
 	break; // we're done, no more paths.
@@ -236,10 +258,7 @@ class MinCostFlow {
   /**
    * Prints the flow in the graph.
    */
-  static double PrintFlow(const Graph & graph) {
-    
-    double cost = 0;
-
+  static void PrintFlow(const Graph & graph) {
     graph_traits < Graph >::edge_iterator ei, ei_end;
     for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei) {
       Graph::vertex_descriptor s, t;
@@ -249,7 +268,6 @@ class MinCostFlow {
       cout << " " << graph[*ei].flow << endl;
     }
 
-    return cost;
   }
 
 
