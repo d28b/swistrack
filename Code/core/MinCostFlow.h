@@ -16,6 +16,7 @@
 #include <boost/graph/graph_utility.hpp>
 #include <boost/graph/bellman_ford_shortest_paths.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
+#include <boost/graph/graphviz.hpp>
 using namespace boost;
 using namespace std;
 
@@ -116,10 +117,9 @@ class MinCostFlow {
   }
 
   static void zeroFlows(Graph * pGraph) {
-    Graph & graph = *pGraph;
     graph_traits < Graph >::edge_iterator ei, ei_end;
-    for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei) {
-      graph[*ei].flow = 0;
+    for (tie(ei, ei_end) = edges(*pGraph); ei != ei_end; ++ei) {
+      (*pGraph)[*ei].flow = 0;
     }
   }
 
@@ -130,10 +130,10 @@ class MinCostFlow {
     Graph & graph = *pGraph;
     Graph::vertex_descriptor sourceVertex, sinkVertex;
     struct MinCostFlow::VertexProps vProps;    
-    vProps.name = "source";
+    vProps.name = "tSource";
     sourceVertex = add_vertex(vProps, graph);
 
-    vProps.name = "sink";
+    vProps.name = "tSink";
 
     sinkVertex = add_vertex(vProps, graph);
 
@@ -148,9 +148,9 @@ class MinCostFlow {
 				  Graph::vertex_descriptor sourceVertex, Graph::vertex_descriptor sinkVertex) {
 
     Graph & graph = *pGraph;
-
-    remove_out_edge_if(sourceVertex, TruePred(), graph);
-    remove_in_edge_if(sinkVertex, TruePred(), graph);
+    
+    clear_vertex(sourceVertex, graph);
+    clear_vertex(sinkVertex, graph);
 
 
     graph[sourceVertex].net_supply = 0;
@@ -162,17 +162,20 @@ class MinCostFlow {
     Graph::vertex_iterator vi, vi_end;
     for (tie(vi, vi_end) = vertices(graph); vi != vi_end; vi++) {
       int supply = graph[*vi].net_supply;
-      
-      if (supply > 0) {
-	eProps.capacity = supply;
-	add_edge(sourceVertex, *vi, eProps, graph);
-	graph[sourceVertex].net_supply += supply;
-      } else if (supply < 0) {
-	eProps.capacity = -supply;
-	add_edge(*vi, sinkVertex, eProps, graph);
-	graph[sinkVertex].net_supply += supply;
+      if (*vi != sourceVertex && *vi != sinkVertex) {
+	if (supply > 0) {
+	  eProps.capacity = supply;
+	  add_edge(sourceVertex, *vi, eProps, graph);
+	  graph[sourceVertex].net_supply += supply;
+	} else if (supply < 0) {
+	  eProps.capacity = -supply;
+	  add_edge(*vi, sinkVertex, eProps, graph);
+	  graph[sinkVertex].net_supply += supply;
+	} else {
+	  // do nothing if it equals zero.
+	}
       } else {
-	// do nothing if it equals zero.
+	// skip the source and sink we're adding. 
       }
     }
 
@@ -225,9 +228,17 @@ class MinCostFlow {
 	}
 	v  = sinkVertex;
 	while (v != sourceVertex) {
-	  Graph::edge_descriptor e = edge(predecessors[v], v, 
-						     graph).first;
-	  graph[e].flow += minCapacity;
+	  pair<Graph::edge_descriptor, bool> ePair = edge(predecessors[v], v, 
+						     graph);
+
+	  if (ePair.second) {
+	    Graph::edge_descriptor e = ePair.first;
+	    graph[e].flow += minCapacity;
+	  } else {
+	    ePair = edge(v, predecessors[v], graph);
+	    assert(ePair.second);
+	    graph[ePair.first].flow -= minCapacity;
+	  }
 	  v = predecessors[v];
 	}	
       }
@@ -268,6 +279,36 @@ class MinCostFlow {
       cout << " " << graph[*ei].flow << endl;
     }
 
+  }
+  
+  class VertexLabeler {
+  public:
+    const Graph * pGraph;
+    VertexLabeler(const Graph * g) {
+      pGraph = g;
+    }
+    void operator()(std::ostream& out, const Graph::vertex_descriptor v) {
+      out << "[label=\"" << v << " " << (*pGraph)[v].name << "\"]";
+
+    }
+  };
+
+  class EdgeLabeler {
+  public:
+    const Graph * pGraph;
+    EdgeLabeler(const Graph * g) {
+      pGraph = g;
+    }
+    void operator()(std::ostream& out, const Graph::edge_descriptor e) {
+      EdgeProps props = (*pGraph)[e];
+      out << "[label=\"" << e << " " << props.flow << "/" << props.capacity << ", " << props.cost << "\"]";
+
+    }
+  };
+  static void PrintGraphviz(const Graph & graph, string outfileName) {
+    ofstream outfile(outfileName.c_str());
+    write_graphviz(outfile, graph, VertexLabeler(&graph), EdgeLabeler(&graph));
+    outfile.close();
   }
 
 

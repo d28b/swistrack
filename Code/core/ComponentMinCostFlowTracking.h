@@ -51,6 +51,7 @@ private:
 	double beta_i;
 
 	double mMaxSquareDistanceForSameTrack;
+	double mMinimumAreaParticle;
 	double mMaxDifferenceInArea;
 	int mMaxTrackCount;
 

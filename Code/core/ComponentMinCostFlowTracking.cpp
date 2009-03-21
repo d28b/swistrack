@@ -10,6 +10,7 @@
 #include <cassert>
 #include <sstream>
 #include <limits>
+
 using namespace std;
 
 THISCLASS::ComponentMinCostFlowTracking(SwisTrackCore *stc):
@@ -28,7 +29,7 @@ THISCLASS::ComponentMinCostFlowTracking(SwisTrackCore *stc):
 	
 	p_entr = 0.000001;
 	p_exit = 0.000001;
-	beta_i = 0.1;
+	beta_i = 0.3;
 	  
 
 	//exit(-1);
@@ -62,11 +63,16 @@ void THISCLASS::OnStart()
   
   ResetGraph();
   mMaxSquareDistanceForSameTrack = pow(GetConfigurationDouble(wxT("MaxDistanceForSameTrack"), 10), 2);
+
+
   
   mMaxDifferenceInArea = GetConfigurationDouble(wxT("MaxDifferenceInAreaForSameTrack"), 50);
   mMaxTrackCount = GetConfigurationInt(wxT("MaxTrackCount"), 10);
 
   mWindowSize = wxTimeSpan::Seconds(GetConfigurationInt(wxT("WindowSizeSeconds"), 10));
+
+
+  mMinimumAreaParticle = pow(GetConfigurationDouble(wxT("MinimumAreaParticle"), 50), 2);
   
   mStartTimestamp = wxInvalidDateTime;
 }
@@ -77,12 +83,10 @@ void THISCLASS::OnReloadConfiguration()
 
 double THISCLASS::p_link(Particle x_i, Particle x_j) {
   double distance = Utility::SquareDistance(x_i.mCenter, x_j.mCenter);
-  double area = fabs(x_i.mArea - x_j.mArea);
+  //double area = fabs(x_i.mArea - x_j.mArea);
   if (x_i.mColorModel == NULL || x_j.mColorModel == NULL) {
     return 0;
   } else if (distance > mMaxSquareDistanceForSameTrack ) {
-    return 0;
-  } else if (area > mMaxDifferenceInArea) {
     return 0;
   } else if (x_i.mTimestamp >= x_j.mTimestamp) {
     return 0;
@@ -118,42 +122,46 @@ void THISCLASS::OnStep()
   cout << "C_i: " << C_i << endl;  
   for (DataStructureParticles::tParticleVector::iterator pIt = 
 	 particles->begin(); pIt != particles->end(); pIt++) {
-    struct MinCostFlow::VertexProps vProps;
-    ostringstream path;
-    path << pIt->mTimestamp.Format().ToAscii() << " " << pIt->mCenter.x << "," << pIt->mCenter.y;
-    ostringstream uname, vname;
-    uname << "u_i: " << path.str();
-    vname << "v_i: " << path.str();
 
-    vProps.net_supply = 0;
+    if (pIt->mArea >= mMinimumAreaParticle) {
+      struct MinCostFlow::VertexProps vProps;
+      ostringstream path;
+      path << pIt->mTimestamp.Format().ToAscii() << " " << pIt->mCenter.x << "," << pIt->mCenter.y;
+      ostringstream uname, vname;
+      uname << "u_i: " << path.str();
+      vname << "v_i: " << path.str();
+      
+      vProps.net_supply = 0;
 
-    vProps.name = uname.str();
-    MinCostFlow::Graph::vertex_descriptor u_i = add_vertex(vProps, mGraph);
+      vProps.name = uname.str();
+      MinCostFlow::Graph::vertex_descriptor u_i = add_vertex(vProps, mGraph);
+      
+      vProps.name = vname.str();
+      MinCostFlow::Graph::vertex_descriptor v_i = add_vertex(vProps, mGraph);
+      mObservations[u_i] = *pIt;
+      struct MinCostFlow::EdgeProps eProps;
+      eProps.flow = 0;
+      
+      // Observation edge
+      eProps.cost = C_i;
+      
+      eProps.capacity = 1;
+      
+      add_edge(u_i, v_i, eProps, mGraph);
+      
+      // enter edge
+      eProps.cost = C_en_i;
+      eProps.capacity = 1;
+      add_edge(sourceVertex, u_i, eProps, mGraph);
+      
+      // exit edge
+      eProps.cost = C_ex_i;
+      eProps.capacity = 1;
+      add_edge(v_i, sinkVertex, eProps, mGraph);
 
-    vProps.name = vname.str();
-    MinCostFlow::Graph::vertex_descriptor v_i = add_vertex(vProps, mGraph);
-    mObservations[u_i] = *pIt;
-    struct MinCostFlow::EdgeProps eProps;
-    eProps.flow = 0;
+      // make transition edges later. 
+    }
 
-    // Observation edge
-    eProps.cost = C_i;
-
-    eProps.capacity = 1;
-
-    add_edge(u_i, v_i, eProps, mGraph);
-
-    // enter edge
-    eProps.cost = C_en_i;
-    eProps.capacity = 1;
-    add_edge(sourceVertex, u_i, eProps, mGraph);
-
-    // exit edge
-    eProps.cost = C_ex_i;
-    eProps.capacity = 1;
-    add_edge(v_i, sinkVertex, eProps, mGraph);
-
-    // make transition edges later. 
   }
   
   wxTimeSpan diff = mCore->mDataStructureInput.FrameTimestamp().Subtract(mStartTimestamp);
@@ -172,6 +180,8 @@ void THISCLASS::OnStep()
 void THISCLASS::ProcessWindow() {
   cout << "Running min cost flow!" << endl;
   AddTransitionEdges();
+  MinCostFlow::PrintGraphviz(mGraph, string("graph.dot"));
+
   graph_traits < MinCostFlow::Graph >::out_edge_iterator ei, ei_end, ej, ej_end;
   cout << "Flow at the begining. " << endl;
   for (tie(ei, ei_end) = out_edges(sourceVertex, mGraph); ei != ei_end; ++ei) {
@@ -182,7 +192,7 @@ void THISCLASS::ProcessWindow() {
   MinCostFlow::Graph minGraph;
   int minTrackCount;
   cout << "Running: " << mMaxTrackCount << endl;
-  for (int i = 3; i < 4; i++) {
+  for (int i = 0; i < mMaxTrackCount; i++) {
     int trackCount = i + 1;
     
 
@@ -190,6 +200,8 @@ void THISCLASS::ProcessWindow() {
     mGraph[sinkVertex].net_supply = -trackCount;
     
     MinCostFlow::updateSourceAndSink(&mGraph, tSourceVertex, tSinkVertex);
+    MinCostFlow::zeroFlows(&mGraph);
+    MinCostFlow::PrintGraphviz(mGraph, string("graph.dot"));
 
     MinCostFlow::minCostFlow(&mGraph, tSourceVertex, tSinkVertex);
     double flowCost = MinCostFlow::CostOfFlow(mGraph);    
@@ -282,7 +294,7 @@ void THISCLASS::AddTransitionEdges() {
 	v_j = target(e_j, mGraph);
 	MinCostFlow::EdgeProps eProps;
 	eProps.cost = C_i_j;
-	eProps.flow = 1;
+	eProps.capacity = 1;
 	add_edge(v_i, u_j, eProps, mGraph);
 	  
       }
