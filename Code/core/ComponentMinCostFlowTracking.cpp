@@ -119,7 +119,6 @@ void THISCLASS::OnStep()
   double C_en_i = - log(p_entr);
   double C_ex_i = - log(p_exit);
 
-  cout << "C_i: " << C_i << endl;  
   for (DataStructureParticles::tParticleVector::iterator pIt = 
 	 particles->begin(); pIt != particles->end(); pIt++) {
 
@@ -182,12 +181,6 @@ void THISCLASS::ProcessWindow() {
   AddTransitionEdges();
   MinCostFlow::PrintGraphviz(mGraph, string("graph.dot"));
 
-  graph_traits < MinCostFlow::Graph >::out_edge_iterator ei, ei_end, ej, ej_end;
-  cout << "Flow at the begining. " << endl;
-  for (tie(ei, ei_end) = out_edges(sourceVertex, mGraph); ei != ei_end; ++ei) {
-    cout << "Flow: " << mGraph[*ei].flow << endl;
-  }
-
   double minCost = numeric_limits<double>::max();
   MinCostFlow::Graph minGraph;
   int minTrackCount;
@@ -215,9 +208,6 @@ void THISCLASS::ProcessWindow() {
 
   cout << "Tracks: " << minTrackCount << endl;
   cout << "Graph" << endl;
-  
-
-
 
   OutputTracks(minGraph);
 
@@ -231,10 +221,8 @@ void THISCLASS::OutputTracks(const MinCostFlow::Graph & graph) {
   graph_traits < MinCostFlow::Graph >::out_edge_iterator ei, ei_end, ej, ej_end;
 
 
-  cout << "Output tracks." << endl;
+  cout << "Outputting tracks." << endl;
   for (tie(ei, ei_end) = out_edges(sourceVertex, graph); ei != ei_end; ++ei) {
-    cout << "Flow: " << graph[*ei].flow << endl;
-    cout << "Source: " << graph[source(*ei, graph)].name << endl;
     if (graph[*ei].flow == 1) {
       int id = mNextTrackId++;
 
@@ -277,7 +265,6 @@ void THISCLASS::AddTransitionEdges() {
 
       if (p_lnk != 0) {
 	double C_i_j = - log(p_lnk);
-	cout << "link: " << C_i_j << endl;
 	MinCostFlow::Graph::vertex_descriptor u_i, v_i, u_j, v_j;
 
 	MinCostFlow::Graph::edge_descriptor e_i, e_j;

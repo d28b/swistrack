@@ -49,12 +49,13 @@ class MinCostFlow {
 
   static Graph residualNetwork(const Graph & graph) {
     Graph result;
-    //Graph::vertex_iterator vi, vi_end;
-    //for (tie(vi, vi_end) = vertices(graph); vi != vi_end; vi++) {
-    //Graph::vertex_descriptor d = add_vertex(graph[*vi], result);
-    //cout << "Descriptor: " << d << " " << *vi << " " << graph[d].name << endl;
-    //}
+    Graph::vertex_iterator vi, vi_end;
+    for (tie(vi, vi_end) = vertices(graph); vi != vi_end; vi++) {
+      Graph::vertex_descriptor d = add_vertex(graph[*vi], result);
+      assert(d == *vi);
+    }
     struct MinCostFlow::EdgeProps eProps;
+    eProps.flow = 0;
     graph_traits < Graph >::edge_iterator ei, ei_end;
     for (tie(ei, ei_end) = edges(graph); ei != ei_end; ++ei) {
 
@@ -194,13 +195,17 @@ class MinCostFlow {
     zeroFlows(&graph);    
     while (1) {
       Graph residuals = residualNetwork(graph);
+      PrintGraphviz(residuals, string("residuals.dot"));
 
       vector<double> distances(num_vertices(residuals));
       vector<Graph::vertex_descriptor> 
 	predecessors(num_vertices(residuals));
-
-
-      bellman_ford_shortest_paths
+      Graph::vertex_iterator vi, vi_end;
+      for (tie(vi, vi_end) = vertices(residuals); vi != vi_end; vi++) {
+	predecessors[*vi] = *vi;
+      }
+      cout << "Shortest path." << endl;
+      bool r = bellman_ford_shortest_paths
 	(residuals, 
 	 root_vertex(sourceVertex).
 	 weight_map(get(&EdgeProps::cost, residuals)).
@@ -209,17 +214,21 @@ class MinCostFlow {
 		       get(vertex_index, residuals))).
 	 predecessor_map(&predecessors[0])
 	 );
-      
+      assert(r); // never have negative weight cycles.
 
       if (predecessors[sinkVertex] == sinkVertex) {
 	break; // we're done, no more paths.
       } else {
 	Graph::vertex_descriptor v  = sinkVertex;
-	Graph::edge_descriptor e = edge(predecessors[v], v, residuals).first;
+	pair<Graph::edge_descriptor, bool> newEdge = edge(predecessors[v], v, residuals);
+	assert(newEdge.second);
+	Graph::edge_descriptor e = newEdge.first;
 	int minCapacity = residuals[e].capacity;
 	int i = 0;
 	while (v != sourceVertex) {
-	  e = edge(predecessors[v], v, residuals).first;
+	  newEdge =edge(predecessors[v], v, residuals);
+	  assert(newEdge.second);
+	  e = newEdge.first;
 	  if (residuals[e].capacity < minCapacity) {
 	    minCapacity = residuals[e].capacity;
 	  }
