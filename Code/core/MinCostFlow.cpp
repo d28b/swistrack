@@ -6,6 +6,24 @@ void MinCostFlow::testFlow() {
   testFlow1();
   testFlow2();
   testFlowZeroCostCycle();
+  //testWeirdResiduals();
+}
+
+void MinCostFlow::testWeirdResiduals() {
+  Graph residuals;
+  MinCostFlow::ReadGraphviz(string("residuals.weird.dot"), &residuals);
+  Graph::vertex_descriptor sourceV, sinkV;
+  Graph::vertex_iterator vi, vi_end;
+  for (tie(vi, vi_end) = vertices(residuals); vi != vi_end; vi++) {
+    if (residuals[*vi].name == "tSource") {
+      sourceV = *vi;
+    }
+    if (residuals[*vi].name == "tSink") {
+      sinkV = *vi;
+    }
+  }
+  //  testBfCycle(residuals, sourceV, sinkV);
+  //assert(0);
 }
 
 void MinCostFlow::testFlow2() {

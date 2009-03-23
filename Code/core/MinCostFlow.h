@@ -67,7 +67,7 @@ class MinCostFlow {
     }
   };
   struct EdgeProps {
-    double cost;
+    int cost;
     int capacity;
     int flow;
     //Graph::edge_descriptor reverse;
@@ -301,6 +301,7 @@ class MinCostFlow {
 	       distance_map(&distances[0]).
 	       predecessor_map(&predecessors[0])
 	       );
+	    assert(r);
 	    cout << "r:" << r << endl;
 	    v = sinkVertex;
 	    i = 0;
@@ -427,7 +428,6 @@ class MinCostFlow {
     pGraph->clear();
     ifstream in(infileName.c_str());
     dynamic_properties dp = propertiesToSerialize(*pGraph);
-    cout <<" Start to read:" << infileName << endl;
     try
       {
 	read_graphviz(in, *pGraph, dp, string("name"));
@@ -446,6 +446,7 @@ class MinCostFlow {
   static void testFlow2();
   static void testFlow();
   static void testFlowZeroCostCycle();
+  static void testWeirdResiduals();
 
 
   static bool testBfCycle(Graph & graph, Graph::vertex_descriptor sourceV, Graph::vertex_descriptor sinkV) {

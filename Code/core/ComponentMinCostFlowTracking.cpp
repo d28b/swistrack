@@ -125,10 +125,10 @@ void THISCLASS::OnStep()
     if (pIt->mArea >= mMinimumAreaParticle) {
       struct MinCostFlow::VertexProps vProps;
       ostringstream path;
-      path << pIt->mTimestamp.Format().ToAscii() << " " << pIt->mCenter.x << "," << pIt->mCenter.y;
+      path << pIt->mTimestamp.GetTicks() << "_" << pIt->mCenter.x << "_" << pIt->mCenter.y;
       ostringstream uname, vname;
-      uname << "u_i: " << path.str();
-      vname << "v_i: " << path.str();
+      uname << "u_i_" << path.str();
+      vname << "v_i_" << path.str();
       
       vProps.net_supply = 0;
 
@@ -142,19 +142,19 @@ void THISCLASS::OnStep()
       eProps.flow = 0;
       
       // Observation edge
-      eProps.cost = C_i;
+      eProps.cost = C_i * 1000;
       
       eProps.capacity = 1;
       
       add_edge(u_i, v_i, eProps, mGraph);
       
       // enter edge
-      eProps.cost = C_en_i;
+      eProps.cost = C_en_i * 1000;
       eProps.capacity = 1;
       add_edge(sourceVertex, u_i, eProps, mGraph);
       
       // exit edge
-      eProps.cost = C_ex_i;
+      eProps.cost = C_ex_i * 1000;
       eProps.capacity = 1;
       add_edge(v_i, sinkVertex, eProps, mGraph);
 
@@ -280,7 +280,7 @@ void THISCLASS::AddTransitionEdges() {
 	e_j = *(out_edges(u_j, mGraph).first);
 	v_j = target(e_j, mGraph);
 	MinCostFlow::EdgeProps eProps;
-	eProps.cost = C_i_j;
+	eProps.cost = C_i_j * 1000;
 	eProps.capacity = 1;
 	add_edge(v_i, u_j, eProps, mGraph);
 	  
