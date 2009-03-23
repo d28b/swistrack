@@ -52,7 +52,11 @@ void THISCLASS::ResetGraph() {
   MinCostFlow::VertexPair sourceAndSink = MinCostFlow::addSourceAndSink(&mGraph);
   tSourceVertex = sourceAndSink.first;
   tSinkVertex = sourceAndSink.second;
-
+  
+  for (map<MinCostFlow::Graph::vertex_descriptor, Particle>::iterator i = 
+	 mObservations.begin(); i != mObservations.end(); i++) {
+    cvReleaseHist(&(i->second.mColorModel));
+  }
   mObservations.clear();
   
 }
@@ -138,6 +142,10 @@ void THISCLASS::OnStep()
       vProps.name = vname.str();
       MinCostFlow::Graph::vertex_descriptor v_i = add_vertex(vProps, mGraph);
       mObservations[u_i] = *pIt;
+      CvHistogram * newHist = NULL;
+      cvCopyHist(pIt->mColorModel, &newHist);
+      mObservations[u_i].mColorModel = newHist;
+      
       struct MinCostFlow::EdgeProps eProps;
       eProps.flow = 0;
       

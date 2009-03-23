@@ -67,6 +67,10 @@ void THISCLASS::OnStep()
 	if (mForegroundMask == NULL) {
 	  mForegroundMask = cvCreateImage(cvGetSize(inputImage), IPL_DEPTH_8U, 1);
 	}
+	for (DataStructureParticles::tParticleVector::iterator pIt = 
+	       mParticles.begin(); pIt != mParticles.end(); pIt++) {	
+	  cvReleaseHist(&(pIt->mColorModel));
+	}
 	mParticles.clear();
 	/*UpdateTrackers(inputImage);
 
