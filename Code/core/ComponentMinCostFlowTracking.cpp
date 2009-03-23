@@ -179,7 +179,7 @@ void THISCLASS::OnStep()
 void THISCLASS::ProcessWindow() {
   cout << "Running min cost flow!" << endl;
   AddTransitionEdges();
-  MinCostFlow::PrintGraphviz(mGraph, string("graph.dot"));
+  MinCostFlow::WriteGraphviz(mGraph, string("graph.dot"));
 
   double minCost = numeric_limits<double>::max();
   MinCostFlow::Graph minGraph;
@@ -193,8 +193,8 @@ void THISCLASS::ProcessWindow() {
     mGraph[sinkVertex].net_supply = -trackCount;
     
     MinCostFlow::updateSourceAndSink(&mGraph, tSourceVertex, tSinkVertex);
-    MinCostFlow::zeroFlows(&mGraph);
-    MinCostFlow::PrintGraphviz(mGraph, string("graph.dot"));
+    MinCostFlow::initializeGraph(&mGraph);
+    MinCostFlow::WriteGraphviz(mGraph, string("graph.dot"));
 
     MinCostFlow::minCostFlow(&mGraph, tSourceVertex, tSinkVertex);
     double flowCost = MinCostFlow::CostOfFlow(mGraph);    
@@ -293,6 +293,7 @@ void THISCLASS::AddTransitionEdges() {
 }
 
 void THISCLASS::OnStop() {
+
 
 
 }

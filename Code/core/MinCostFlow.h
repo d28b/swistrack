@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
+#include <limits>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/push_relabel_max_flow.hpp>
 #include <boost/graph/adjacency_list.hpp>
@@ -39,6 +39,33 @@ class MinCostFlow {
     std::string name;
     int net_supply;
   };
+  class InnocPred
+  {
+  public:
+    Graph * pGraph;
+    Graph::vertex_descriptor mSource, mSink;
+  InnocPred(Graph * graph, Graph::vertex_descriptor source, Graph::vertex_descriptor sink): 
+    pGraph(graph), mSource(source), mSink(sink) {
+      
+    }
+
+    bool operator()(const Graph::edge_descriptor e) {
+
+      if (target(e, *pGraph) == mSink && isInnocuous(source(e, *pGraph))) {
+	return true;
+      } else {
+	return false;
+      }
+    }
+    bool isInnocuous(Graph::vertex_descriptor v) {
+      if (v == 1 || v == 2 || v == 3 || v == 4 ||
+	  v == 43 || v == 42 ||v == 37 ||v == 40 ||v == 41 ) {
+	return false;
+      } else {
+	return true;
+      }
+    }
+  };
   struct EdgeProps {
     double cost;
     int capacity;
@@ -46,12 +73,25 @@ class MinCostFlow {
     //Graph::edge_descriptor reverse;
     // flow is capacity - residual_capacity
   };
+  
 
-  static Graph residualNetwork(const Graph & graph) {
-    Graph result;
+
+  /**
+   * reduces costs given a vector of potentials.  Modifies the graph. 
+   */
+  //  static void reduceCost(Graph * pGraph, vector<double> potentials) {
+  //    graph_traits < Graph >::edge_iterator ei, ei_end;
+  //    for (tie(ei, ei_end) = edges(*pGraph); ei != ei_end; ++ei) {
+  //      (*pGraph)[*ei].reduced_cost = (*pGraph)[*ei].reduced_cost + 
+  //	potentials[source(*ei, *pGraph)] - potentials[target(*ei, *pGraph)];
+  //    }
+  //  }
+  static void residualNetwork(const Graph & graph, Graph * pResult) {
+
+    pResult->clear();
     Graph::vertex_iterator vi, vi_end;
     for (tie(vi, vi_end) = vertices(graph); vi != vi_end; vi++) {
-      Graph::vertex_descriptor d = add_vertex(graph[*vi], result);
+      Graph::vertex_descriptor d = add_vertex(graph[*vi], *pResult);
       assert(d == *vi);
     }
     struct MinCostFlow::EdgeProps eProps;
@@ -62,17 +102,15 @@ class MinCostFlow {
       eProps.cost = graph[*ei].cost;
       eProps.capacity = graph[*ei].capacity - graph[*ei].flow;
       if (eProps.capacity > 0) {
-	add_edge(source(*ei, graph), target(*ei, graph), eProps, result);
+	add_edge(source(*ei, graph), target(*ei, graph), eProps, *pResult);
       }
 
       eProps.cost = -graph[*ei].cost;
       eProps.capacity = graph[*ei].flow;
       if (eProps.capacity > 0) {
-	add_edge(target(*ei, graph), source(*ei, graph), eProps, result);
+	add_edge(target(*ei, graph), source(*ei, graph), eProps, *pResult);
       }
     }
-
-    return result;
   }
 
   class TruePred
@@ -86,7 +124,7 @@ class MinCostFlow {
   typedef pair<Graph::vertex_descriptor, 
     Graph::vertex_descriptor> VertexPair;
 
-  static void addReversedEdges(Graph * pGraph) {
+  static void ddReversedEdges(Graph * pGraph) {
     Graph & graph = *pGraph;
     
     graph_traits < Graph >::edge_iterator ei, ei_end;
@@ -117,10 +155,11 @@ class MinCostFlow {
     
   }
 
-  static void zeroFlows(Graph * pGraph) {
+  static void initializeGraph(Graph * pGraph) {
     graph_traits < Graph >::edge_iterator ei, ei_end;
     for (tie(ei, ei_end) = edges(*pGraph); ei != ei_end; ++ei) {
       (*pGraph)[*ei].flow = 0;
+      //(*pGraph)[*ei].reduced_cost = (*pGraph)[*ei].cost;
     }
   }
 
@@ -141,7 +180,7 @@ class MinCostFlow {
 
     updateSourceAndSink(pGraph, sourceVertex, sinkVertex);
     VertexPair pair(sourceVertex, sinkVertex);
-
+    
     return pair;
   }
 
@@ -181,7 +220,7 @@ class MinCostFlow {
     }
 
   }
-
+  
   /**
    * Compute minCost flow for the graph, with the given source and sink vertices. 
    * Use addSourceAndSink to add these vertices to your graph if your graph has more than one
@@ -192,29 +231,38 @@ class MinCostFlow {
     cout << "Computing min cost flow." << endl;
 
 
-    zeroFlows(&graph);    
+    initializeGraph(&graph);    
+
+    
+
     while (1) {
-      Graph residuals = residualNetwork(graph);
-      PrintGraphviz(residuals, string("residuals.dot"));
+      Graph residuals;
+      residualNetwork(graph, &residuals);
+      WriteGraphviz(residuals, string("residuals.dot"));
 
       vector<double> distances(num_vertices(residuals));
-      vector<Graph::vertex_descriptor> 
-	predecessors(num_vertices(residuals));
+      vector<Graph::vertex_descriptor> predecessors(num_vertices(residuals));
       Graph::vertex_iterator vi, vi_end;
       for (tie(vi, vi_end) = vertices(residuals); vi != vi_end; vi++) {
 	predecessors[*vi] = *vi;
+	distances[*vi] = numeric_limits < float >::max();
       }
+      distances[sourceVertex] = 0;
+
+
       cout << "Shortest path." << endl;
+
       bool r = bellman_ford_shortest_paths
 	(residuals, 
-	 root_vertex(sourceVertex).
 	 weight_map(get(&EdgeProps::cost, residuals)).
-	 distance_map(make_iterator_property_map
-		      (distances.begin(), 
-		       get(vertex_index, residuals))).
+	 //distance_map(make_iterator_property_map
+	 //(distances.begin(), 
+	 //get(vertex_index, residuals))).
+	 distance_map(&distances[0]).
 	 predecessor_map(&predecessors[0])
 	 );
       assert(r); // never have negative weight cycles.
+
 
       if (predecessors[sinkVertex] == sinkVertex) {
 	break; // we're done, no more paths.
@@ -224,8 +272,9 @@ class MinCostFlow {
 	assert(newEdge.second);
 	Graph::edge_descriptor e = newEdge.first;
 	int minCapacity = residuals[e].capacity;
-	int i = 0;
+	unsigned int i = 0;
 	while (v != sourceVertex) {
+	  cout << "V: " << v << endl;
 	  newEdge =edge(predecessors[v], v, residuals);
 	  assert(newEdge.second);
 	  e = newEdge.first;
@@ -234,6 +283,44 @@ class MinCostFlow {
 	  }
 	  v = predecessors[v];
 	  i++;
+	  if (i > 50) {
+	    cout << "Okay now we're really crazy." << endl;
+	    //remove_edge_if(InnocPred(&residuals), residuals);
+
+	    WriteGraphviz(residuals, string("simpleResiduals.dot"));
+	    distances.clear();
+	    predecessors.clear();
+
+	    bool r = bellman_ford_shortest_paths
+	      (residuals, 
+	       root_vertex(sourceVertex).
+	       weight_map(get(&EdgeProps::cost, residuals)).
+	       //distance_map(make_iterator_property_map
+	       //(distances.begin(), 
+	       //get(vertex_index, residuals))).
+	       distance_map(&distances[0]).
+	       predecessor_map(&predecessors[0])
+	       );
+	    cout << "r:" << r << endl;
+	    v = sinkVertex;
+	    i = 0;
+	    while (v != sourceVertex) {
+	      newEdge =edge(predecessors[v], v, residuals);
+	      cout << "v: " << v << endl;
+	      cout << "In the graph?" << newEdge.second << endl;
+	      cout << "From " << predecessors[v] << " to " << v << " " << graph[newEdge.first].cost << endl;
+	      cout << endl;
+	      v = predecessors[v];
+	      i++;
+	      if (i > num_vertices(graph)) {
+		remove_edge_if(InnocPred(&residuals, sourceVertex, sinkVertex), residuals);
+		WriteGraphviz(residuals, string("residuals.weird.dot"));
+		cout << "Cycle: " << testBfCycle(residuals, sourceVertex, sinkVertex) << endl;
+		assert(0);
+	      }
+	    }
+	    
+	  }
 	}
 	v  = sinkVertex;
 	while (v != sourceVertex) {
@@ -314,18 +401,78 @@ class MinCostFlow {
 
     }
   };
-  static void PrintGraphviz(const Graph & graph, string outfileName) {
+
+  static dynamic_properties propertiesToSerialize(Graph & graph) {
+    dynamic_properties dp;
+    dp.property("name", get(&VertexProps::name, graph));
+    dp.property("net_supply", get(&VertexProps::net_supply, graph));
+    
+    dp.property("cost", get(&EdgeProps::cost, graph));
+    dp.property("capacity", get(&EdgeProps::capacity, graph));
+    dp.property("flow", get(&EdgeProps::flow, graph));
+    //dp.property("id", get(vertex_index, graph));
+    return dp;
+
+  }
+  static void WriteGraphviz(Graph & graph, string outfileName) {
+    cout <<"Writing." << endl;
     ofstream outfile(outfileName.c_str());
-    write_graphviz(outfile, graph, VertexLabeler(&graph), EdgeLabeler(&graph));
+    dynamic_properties dp = propertiesToSerialize(graph);
+    write_graphviz(outfile, graph, dp, string("name"));  //, VertexLabeler(&graph), EdgeLabeler(&graph));
     outfile.close();
+  }
+
+  static void ReadGraphviz(string infileName, Graph * pGraph) {
+    cout << "Clear graph." << endl;
+    pGraph->clear();
+    ifstream in(infileName.c_str());
+    dynamic_properties dp = propertiesToSerialize(*pGraph);
+    cout <<" Start to read:" << infileName << endl;
+    try
+      {
+	read_graphviz(in, *pGraph, dp, string("name"));
+      }
+    catch ( const std::exception & ex )
+      {
+        cout << "Exception: " << ex.what() << endl;
+	assert(0);
+      }
+    //read_graphviz(infileName, *pGraph);
+
   }
 
 
   static void testFlow1();
   static void testFlow2();
   static void testFlow();
+  static void testFlowZeroCostCycle();
 
 
+  static bool testBfCycle(Graph & graph, Graph::vertex_descriptor sourceV, Graph::vertex_descriptor sinkV) {
+    vector<double> distances(num_vertices(graph));
+    vector<Graph::vertex_descriptor> predecessors(num_vertices(graph));
+    bool r = bellman_ford_shortest_paths
+      (graph, 
+       root_vertex(sourceV).
+       weight_map(get(&EdgeProps::cost, graph)).
+       distance_map(&distances[0]).
+       predecessor_map(&predecessors[0])
+       );
+    assert(r);
+    Graph::vertex_descriptor v  = sinkV;
+    assert(predecessors[sinkV] != sinkV);
+    unsigned int i = 0;
+    while (v != sourceV) {
+      cout << "v: " << v << endl;
+      v = predecessors[v];
+      i++;
+      if (i > num_vertices(graph)) {
+	cout << "CYCLE in bellman_ford results!" << endl;
+	return false;
+      }
+    }
+    return true;
+  }
     
 };
 

@@ -1,11 +1,15 @@
 #include "MinCostFlow.h"
 
+
+
 void MinCostFlow::testFlow() {
   testFlow1();
   testFlow2();
+  testFlowZeroCostCycle();
 }
 
 void MinCostFlow::testFlow2() {
+  cout << "Running second test." << endl;
   MinCostFlow::Graph graph;
 
   struct MinCostFlow::EdgeProps eProps;
@@ -77,6 +81,7 @@ void MinCostFlow::testFlow2() {
 }
 
 void MinCostFlow::testFlow1() {
+  cout <<"Running first test." << endl;
   MinCostFlow::Graph graph;
 
   struct MinCostFlow::EdgeProps eProps;
@@ -167,8 +172,132 @@ void MinCostFlow::testFlow1() {
     
     assert(MinCostFlow::CostOfFlow(graph) == 47);
   }
+  cout <<"Graphviz." << endl;
+  cout <<"Writing." << endl;
+  MinCostFlow::WriteGraphviz(graph, string("test.dot"));
+  Graph readInGraph;
+  cout <<"Reading." << endl;
+  MinCostFlow::ReadGraphviz(string("test.dot"), &readInGraph);
+  
+  cout <<"Assert." << endl;
+  assert(MinCostFlow::CostOfFlow(readInGraph) == 47);
+  MinCostFlow::updateSourceAndSink(&readInGraph, sourceVertex, sinkVertex);
+  MinCostFlow::minCostFlow(&readInGraph, sourceVertex, sinkVertex);
+  assert(MinCostFlow::CostOfFlow(readInGraph) == 47);
 
 }
 
 
 
+
+
+void MinCostFlow::testFlowZeroCostCycle() {
+  cout << "Running zero." << endl;
+  MinCostFlow::Graph graph;
+
+  struct MinCostFlow::EdgeProps eProps;
+  struct MinCostFlow::VertexProps vProps;
+
+
+  typedef MinCostFlow::Graph::vertex_descriptor vertex_descriptor;
+
+  vProps.name = "source";
+  vProps.net_supply = 5;
+  vertex_descriptor sourceV = add_vertex(vProps, graph);
+
+  vProps.name = "sink";
+  vProps.net_supply = -5;
+  vertex_descriptor sink = add_vertex(vProps, graph);
+
+
+
+  vProps.name = "v0";
+  vProps.net_supply = 0;
+  vertex_descriptor v0 = add_vertex(vProps, graph);
+
+  vProps.name = "v1";
+  vProps.net_supply = 0;
+  vertex_descriptor v1 = add_vertex(vProps, graph);
+
+  vProps.name = "v2";
+  vProps.net_supply = 0;
+  vertex_descriptor v2 = add_vertex(vProps, graph);
+
+
+  vProps.name = "v3";
+  vProps.net_supply = 0;
+  vertex_descriptor v3 = add_vertex(vProps, graph);
+
+
+
+  vProps.name = "v4";
+  vProps.net_supply = 0;
+  vertex_descriptor v4 = add_vertex(vProps, graph);
+
+
+
+  vProps.name = "u0";
+  vProps.net_supply = 0;
+  vertex_descriptor u0 = add_vertex(vProps, graph);
+
+  vProps.name = "u1";
+  vProps.net_supply = 0;
+  vertex_descriptor u1 = add_vertex(vProps, graph);
+
+  vProps.name = "u2";
+  vProps.net_supply = 0;
+  vertex_descriptor u2 = add_vertex(vProps, graph);
+
+
+  vProps.name = "u3";
+  vProps.net_supply = 0;
+  vertex_descriptor u3 = add_vertex(vProps, graph);
+
+  vProps.name = "u4";
+  vProps.net_supply = 0;
+  vertex_descriptor u4 = add_vertex(vProps, graph);
+
+
+  eProps.capacity = 1;
+  eProps.cost = -1;
+  add_edge(u0, v0, eProps, graph);
+  add_edge(u1, v1, eProps, graph);
+  add_edge(u2, v2, eProps, graph);
+
+
+
+  
+  
+  eProps.cost = 1;
+  add_edge(sourceV, u0, eProps, graph);
+  add_edge(sourceV, u1, eProps, graph);
+  add_edge(sourceV, u2, eProps, graph);
+
+  eProps.cost = -1;
+  add_edge(u3, sourceV, eProps, graph);
+
+
+  eProps.cost = 10;
+  add_edge(v0, sink, eProps, graph);
+  add_edge(v1, sink, eProps, graph);
+
+  eProps.cost = 1;
+  add_edge(v2, sink, eProps, graph);
+
+
+  eProps.cost = -1;
+  add_edge(sink, v3, eProps, graph);
+  eProps.cost = 1;
+  add_edge(v3, u3, eProps, graph);
+
+  add_edge(v3, u2, eProps, graph);
+  initializeGraph(&graph);
+
+  testBfCycle(graph, sourceV, sink);
+
+
+  cout << "Cost: " << MinCostFlow::CostOfFlow(graph)  << endl;
+  //assert(MinCostFlow::CostOfFlow(graph) == 12);
+
+  
+}
