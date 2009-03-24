@@ -655,7 +655,7 @@ void      epe_optimize_error (m_ptr, n_ptr, params, err)
    Yu_2 = Yd * distortion_factor;
 
    /* record the error in the undistorted sensor coordinates */
-   err[i] = hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
+   err[i] = _hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
     }
 }
 

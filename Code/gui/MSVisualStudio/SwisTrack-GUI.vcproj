@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="SwisTrack-GUI"
 	ProjectGUID="{44405FF3-5736-429E-B8E3-DE423B43038B}"
 	RootNamespace="gui"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -85,6 +86,8 @@
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				LinkTimeCodeGeneration="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -106,9 +109,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -153,7 +153,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1"
-				RuntimeLibrary="2"
+				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
 				AssemblerListingLocation="$(IntDir)\"
@@ -194,6 +194,8 @@
 				ProgramDatabaseFile="$(IntDir)\debug/swistrack.pdb"
 				GenerateMapFile="false"
 				MapExports="false"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -218,10 +220,6 @@
 			<Tool
 				Name="VCFxCopTool"
 				ExecutionBucket="14"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-				ExecutionBucket="15"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -297,6 +295,8 @@
 				ProgramDatabaseFile="$(IntDir)\debug/swistrack.pdb"
 				GenerateMapFile="false"
 				MapExports="false"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -319,9 +319,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -399,6 +396,8 @@
 				ProgramDatabaseFile="$(IntDir)\debug/swistrack.pdb"
 				GenerateMapFile="false"
 				MapExports="false"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -421,9 +420,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -501,6 +497,8 @@
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				LinkTimeCodeGeneration="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -522,9 +520,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -601,6 +596,8 @@
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				LinkTimeCodeGeneration="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -622,9 +619,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -1061,14 +1055,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\ConfigurationParameterFile.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\ConfigurationParameterFile.h"
-				>
-			</File>
-			<File
 				RelativePath="..\ConfigurationParameterGigECameraList.cpp"
 				>
 			</File>
@@ -1085,11 +1071,27 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ConfigurationParameterInputFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ConfigurationParameterInputFile.h"
+				>
+			</File>
+			<File
 				RelativePath="..\ConfigurationParameterInteger.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\ConfigurationParameterInteger.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ConfigurationParameterOutputFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ConfigurationParameterOutputFile.h"
 				>
 			</File>
 			<File

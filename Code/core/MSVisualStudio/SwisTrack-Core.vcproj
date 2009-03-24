@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="SwisTrack-Core"
 	ProjectGUID="{D010B136-96BD-4D44-B4F0-30388FB460B7}"
 	RootNamespace="objecttrackerlib"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -42,8 +43,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;..\..\libtsai\INCLUDE;..\..\camshift_wrapper"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
@@ -115,8 +116,8 @@
 				Optimization="2"
 				InlineFunctionExpansion="0"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 0.9\pylon\include&quot;;&quot;L:\Basler\Pylon 0.9\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE;..\..\camshift_wrapper"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
 				WarningLevel="3"
@@ -185,8 +186,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE;L:\xvidcore\src;..\..\camshift_wrapper"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;USE_CAMERA_PYLON_GIGE"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;USE_CAMERA_PYLON_GIGE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
@@ -256,8 +257,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;..\..\libtsai\INCLUDE;..\..\camshift_wrapper"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;USE_CAMERA_CMU_1394"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;USE_CAMERA_CMU_1394;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
@@ -329,8 +330,8 @@
 				Optimization="2"
 				InlineFunctionExpansion="0"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\OpenCV\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE;..\..\camshift_wrapper"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;USE_CAMERA_PYLON_GIGE"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;USE_CAMERA_PYLON_GIGE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
 				WarningLevel="3"
@@ -401,8 +402,8 @@
 				Optimization="2"
 				InlineFunctionExpansion="0"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 0.9\pylon\include&quot;;&quot;L:\Basler\Pylon 0.9\genicam\library\cpp\include&quot;;..\..\libtsai\INCLUDE;..\..\camshift_wrapper"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;USE_CAMERA_CMU_1394"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;USE_CAMERA_CMU_1394;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
 				WarningLevel="3"
@@ -718,6 +719,22 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentAdaptiveBackgroundSubtractionMedian.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentAdaptiveBackgroundSubtractionMedian.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentBackgroundSubtractionCheungKamath.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentBackgroundSubtractionCheungKamath.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentBackgroundSubtractionColor.cpp"
 					>
 				</File>
@@ -794,6 +811,30 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentOutputImageStatisticsBinary.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOutputImageStatisticsBinary.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOutputImageStatisticsColor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOutputImageStatisticsColor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOutputImageStatisticsGray.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOutputImageStatisticsGray.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentOutputMarkFrameManual.cpp"
 					>
 				</File>
@@ -858,6 +899,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentColorHistogramParticles.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentColorHistogramParticles.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentDynamicNearestNeighborTracking.cpp"
 					>
 				</File>
@@ -871,6 +920,22 @@
 				</File>
 				<File
 					RelativePath="..\ComponentKalmanFilterTrack.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMinCostFlowTracking.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMinCostFlowTracking.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMinFlowTracking.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMinFlowTracking.h"
 					>
 				</File>
 				<File
@@ -1020,6 +1085,14 @@
 			</File>
 			<File
 				RelativePath="..\CommunicationNMEAInterface.h"
+				>
+			</File>
+			<File
+				RelativePath="..\NMEALog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\NMEALog.h"
 				>
 			</File>
 		</Filter>
@@ -1235,11 +1308,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\utils.cpp"
+				RelativePath="..\MinCostFlow.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\utils.h"
+				RelativePath="..\MinCostFlow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Utility.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Utility.h"
 				>
 			</File>
 			<File

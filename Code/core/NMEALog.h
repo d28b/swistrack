@@ -7,6 +7,10 @@
 #include <wx/wx.h>
 #endif
 
+#ifdef WIN32
+#define snprintf sprintf_s
+#endif
+
 #include <wx/file.h>
 
 class NMEALog;

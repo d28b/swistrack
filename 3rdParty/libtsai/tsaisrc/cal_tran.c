@@ -119,7 +119,7 @@ void undistorted_to_distorted_sensor_coord (calibration_constants cc,
    return;
     }
 
-    Ru = hypot (Xu, Yu);   /* SQRT(Xu*Xu+Yu*Yu) */
+    Ru = _hypot (Xu, Yu);   /* SQRT(Xu*Xu+Yu*Yu) */
 
     c = 1 / cc.kappa1;
     d = -c * Ru;
@@ -143,7 +143,7 @@ void undistorted_to_distorted_sensor_coord (calibration_constants cc,
    }
     } else {         /* three libtsai_real roots */
    D = SQRT (-D);
-   S = CBRT (hypot (R, D));
+   S = CBRT (_hypot (R, D));
    T = atan2 (D, R) / 3;
    SINCOS (T, sinT, cosT);
 

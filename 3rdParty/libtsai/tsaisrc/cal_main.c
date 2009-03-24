@@ -469,7 +469,7 @@ void      cc_compute_exact_f_and_Tz_error (m_ptr, n_ptr, params, err)
     Yu_2 = Yd[i] * distortion_factor;
 
         /* record the error in the undistorted sensor coordinates */
-        err[i] = hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
+        err[i] = _hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
     }
 }
 
@@ -689,7 +689,7 @@ void      cc_five_parm_optimization_with_late_distortion_removal_error (m_ptr, n
     Yu_2 = Yd[i] * distortion_factor;
 
         /* record the error in the undistorted sensor coordinates */
-        err[i] = hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
+        err[i] = _hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
     }
 }
 
@@ -860,7 +860,7 @@ void      cc_five_parm_optimization_with_early_distortion_removal_error (m_ptr, 
     Yu_2 = Yd[i];
 
         /* record the error in the undistorted sensor coordinates */
-        err[i] = hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
+        err[i] = _hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
     }
 }
 
@@ -1033,7 +1033,7 @@ void      cc_nic_optimization_error (m_ptr, n_ptr, params, err)
     Yu_2 = Yd_ * distortion_factor;
 
         /* record the error in the undistorted sensor coordinates */
-        err[i] = hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
+        err[i] = _hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
     }
 }
 
@@ -1218,7 +1218,7 @@ void      cc_full_optimization_error (m_ptr, n_ptr, params, err)
     Yu_2 = Yd_ * distortion_factor;
 
         /* record the error in the undistorted sensor coordinates */
-        err[i] = hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
+        err[i] = _hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
     }
 }
 
@@ -1638,7 +1638,7 @@ void      ncc_compute_exact_f_and_Tz_error (m_ptr, n_ptr, params, err)
     Yu_2 = Yd[i] * distortion_factor;
 
         /* record the error in the undistorted sensor coordinates */
-        err[i] = hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
+        err[i] = _hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
     }
 }
 
@@ -1851,7 +1851,7 @@ void      ncc_nic_optimization_error (m_ptr, n_ptr, params, err)
     Yu_2 = Yd_ * distortion_factor;
 
         /* record the error in the undistorted sensor coordinates */
-        err[i] = hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
+        err[i] = _hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
     }
 }
 
@@ -2045,7 +2045,7 @@ void      ncc_full_optimization_error (m_ptr, n_ptr, params, err)
     Yu_2 = Yd_ * distortion_factor;
 
         /* record the error in the undistorted sensor coordinates */
-        err[i] = hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
+        err[i] = _hypot (Xu_1 - Xu_2, Yu_1 - Yu_2);
     }
 }
 

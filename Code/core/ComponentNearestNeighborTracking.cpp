@@ -53,7 +53,7 @@ void THISCLASS::OnReloadConfiguration()
 void THISCLASS::OnStep()
 {
 	//distance array is too small, release and recreate
-	if (mCore->mDataStructureParticles.mParticles->size() > maxParticles)
+	if ((int) mCore->mDataStructureParticles.mParticles->size() > maxParticles)
 	{
 		maxParticles = mCore->mDataStructureParticles.mParticles->size();
 		for (int i = 0;i < mMaxNumber;i++)
@@ -107,7 +107,7 @@ void THISCLASS::DataAssociation()
 	//Register the existing indexes
 	std::vector<int> trackIndexes;
 	std::vector<int> particleIndexes;
-	for (int i = 0;i < particles->size();i++)
+	for (int i = 0;i < (int) particles->size();i++)
 		particleIndexes.push_back(i);
 	for (int i = 0;i < mMaxNumber;i++)
 		trackIndexes.push_back(i);
@@ -119,9 +119,9 @@ void THISCLASS::DataAssociation()
 		minDistanceI = 0;
 		minDistanceJ = 0;
 		minDistance = distanceArray[trackIndexes[0]][particleIndexes[0]];
-		for (int i = 0;i < trackIndexes.size();i++)
+		for (int i = 0;i < (int) trackIndexes.size();i++)
 		{
-			for (int j = 0;j < particleIndexes.size();j++)
+			for (int j = 0;j < (int) particleIndexes.size();j++)
 			{
 				if (distanceArray[trackIndexes[i]][particleIndexes[j]] < minDistance)
 				{
