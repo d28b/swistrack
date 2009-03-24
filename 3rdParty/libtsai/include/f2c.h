@@ -16,9 +16,9 @@
 typedef long int integer;
 typedef char *address;
 typedef short int shortint;
-typedef float real;
+typedef float libtsai_real;
 typedef double doublereal;
-typedef struct { real r, i; } complex;
+typedef struct { libtsai_real r, i; } libtsai_complex;
 typedef struct { doublereal r, i; } doublecomplex;
 typedef long int logical;
 typedef short int shortlogical;
@@ -124,9 +124,9 @@ typedef struct
 union Multitype {	/* for multiple entry points */
 	shortint h;
 	integer i;
-	real r;
+	libtsai_real r;
 	doublereal d;
-	complex c;
+	libtsai_complex c;
 	doublecomplex z;
 	};
 
@@ -163,7 +163,7 @@ typedef struct Namelist Namelist;
 typedef int /* Unknown procedure type */ (*U_fp)(...);
 typedef shortint (*J_fp)(...);
 typedef integer (*I_fp)(...);
-typedef real (*R_fp)(...);
+typedef libtsai_real (*R_fp)(...);
 typedef doublereal (*D_fp)(...), (*E_fp)(...);
 typedef /* Complex */ VOID (*C_fp)(...);
 typedef /* Double Complex */ VOID (*Z_fp)(...);
@@ -175,7 +175,7 @@ typedef /* Subroutine */ int (*S_fp)(...);
 typedef int /* Unknown procedure type */ (*U_fp)();
 typedef shortint (*J_fp)();
 typedef integer (*I_fp)();
-typedef real (*R_fp)();
+typedef libtsai_real (*R_fp)();
 typedef doublereal (*D_fp)(), (*E_fp)();
 typedef /* Complex */ VOID (*C_fp)();
 typedef /* Double Complex */ VOID (*Z_fp)();
@@ -184,11 +184,11 @@ typedef shortlogical (*K_fp)();
 typedef /* Character */ VOID (*H_fp)();
 typedef /* Subroutine */ int (*S_fp)();
 #endif
-/* E_fp is for real functions when -R is not specified */
-#define C_f VOID	/* complex function */
+/* E_fp is for libtsai_real functions when -R is not specified */
+#define C_f VOID	/* libtsai_complex function */
 #define H_f VOID	/* character function */
-#define Z_f VOID	/* double complex function */
-typedef doublereal E_f;	/* real function with -R not specified */
+#define Z_f VOID	/* double libtsai_complex function */
+typedef doublereal E_f;	/* libtsai_real function with -R not specified */
 
 /* undef any lower-case symbols that your C compiler predefines, e.g.: */
 

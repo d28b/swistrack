@@ -191,7 +191,7 @@ void      initialize_sony_xc57_androx_parms (camera_parameters *pcp)
 /* John Krumm, 9 November 1993                                          */
 /* This assumes that every other row, starting with the second row from */
 /* the top, has been removed.  The Xap Shot CCD only has 250 lines, and */
-/* it inserts new rows in between the real rows to make a full size     */
+/* it inserts new rows in between the libtsai_real rows to make a full size     */
 /* picture.  Its algorithm for making these new rows isn't very good,   */
 /* so it's best just to throw them away.                                */
 /* The camera's specs give the CCD size as 6.4(V)x4.8(H) mm.            */

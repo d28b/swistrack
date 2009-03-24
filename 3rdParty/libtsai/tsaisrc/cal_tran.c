@@ -128,7 +128,7 @@ void undistorted_to_distorted_sensor_coord (calibration_constants cc,
     R = -d / 2;
     D = CUB (Q) + SQR (R);
 
-    if (D >= 0) {    /* one real root */
+    if (D >= 0) {    /* one libtsai_real root */
    D = SQRT (D);
    S = CBRT (R + D);
    T = CBRT (R - D);
@@ -141,7 +141,7 @@ void undistorted_to_distorted_sensor_coord (calibration_constants cc,
        fprintf (stderr, "         (Xu = %lf, Yu = %lf) -> (Xd = %lf, Yd = %lf)\n\n",
            Xu, Yu, Xu * Rd / Ru, Yu * Rd / Ru);
    }
-    } else {         /* three real roots */
+    } else {         /* three libtsai_real roots */
    D = SQRT (-D);
    S = CBRT (hypot (R, D));
    T = atan2 (D, R) / 3;
