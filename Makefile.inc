@@ -27,4 +27,7 @@ WXWIDGETS_LDLIBS   := `wx-config --version=2.8 --libs`
 # XVID component (activate the following lines to compile with this component)
 #CPPFLAGS_ADD       += -DUSE_XVID
 #LDLIBS_ADD         += -lxvidcore
-LDLIBS_ADD         += -lboost_graph
+
+# Components that depend on the Boost library (activate the following lines to compile with these components)
+#CPPFLAGS_ADD       += -DUSE_BOOST
+#LDLIBS_ADD         += -lboost_graph

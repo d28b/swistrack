@@ -1,6 +1,6 @@
 #include "MinCostFlow.h"
 
-
+#ifdef USE_BOOST
 
 void MinCostFlow::testFlow() {
   testFlow1();
@@ -203,6 +203,4 @@ void MinCostFlow::testFlow1() {
 
 }
 
-
-
-
+#endif // USE_BOOST

@@ -1,15 +1,14 @@
 #ifndef HEADER_ComponentMinCostFlowTracking
 #define HEADER_ComponentMinCostFlowTracking
 
-#include <cv.h>
 #include "Component.h"
+
+#ifdef USE_BOOST
+#include <cv.h>
 #include "DataStructureParticles.h"
-
-
 #include "MinCostFlow.h"
 
-//! A basic tracking component that takes pre-filtered particales and
-// adds them to the nearest track.
+//! A basic tracking component that takes pre-filtered particles and adds them to the nearest track.
 class ComponentMinCostFlowTracking: public Component {
 
 public:
@@ -66,11 +65,37 @@ private:
 	void OutputTracks(const MinCostFlow::Graph & graph);
 	
 	int mNextTrackId;
-
-
-
-
 };
 
-#endif
+#else // USE_BOOST
 
+class ComponentMinCostFlowTracking: public Component {
+
+public:
+	ComponentMinCostFlowTracking(SwisTrackCore *stc): Component(stc, wxT("MinCostFlowTracking")) {
+		Initialize();
+	}
+	~ComponentMinCostFlowTracking() {}
+
+	// Overwritten Component methods
+	void OnStart() {
+		AddError(wxT("This component was not compiled in this executable."));
+	}
+	void OnReloadConfiguration() {
+		AddError(wxT("This component was not compiled in this executable."));
+	}
+	void OnStep() {
+		AddError(wxT("This component was not compiled in this executable."));
+	}
+	void OnStepCleanup() {}
+	void OnStop() {
+		AddError(wxT("This component was not compiled in this executable."));
+	}
+	Component *Create() {
+		return new ComponentMinCostFlowTracking(mCore);
+	}
+};
+
+#endif // USE_BOOST
+
+#endif

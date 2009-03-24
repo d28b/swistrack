@@ -1,11 +1,13 @@
 #include "ComponentMinCostFlowTracking.h"
 #define THISCLASS ComponentMinCostFlowTracking
 
+#ifdef USE_BOOST
+
 #include "DisplayEditor.h"
 #include "Utility.h"
+#include "MinCostFlow.h"
 #include <iostream>
 #include <set>
-#include "MinCostFlow.h"
 #include <cv.h>
 #include <cassert>
 #include <sstream>
@@ -301,7 +303,6 @@ void THISCLASS::AddTransitionEdges() {
 }
 
 void THISCLASS::OnStop() {
-
-
-
 }
+
+#endif // USE_BOOST

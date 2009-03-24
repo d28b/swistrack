@@ -1,5 +1,8 @@
 #ifndef HEADER_MinCostFlow
 #define HEADER_MinCostFlow
+
+#ifdef USE_BOOST
+
 #include <limits.h>
 #include <iostream>
 #include <stdio.h>
@@ -19,8 +22,6 @@
 #include <boost/graph/graphviz.hpp>
 using namespace boost;
 using namespace std;
-
-
 
 /**
  *
@@ -403,5 +404,6 @@ class MinCostFlow {
     
 };
 
+#endif // USE_BOOST
 
 #endif
