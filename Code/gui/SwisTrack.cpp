@@ -199,9 +199,9 @@ void THISCLASS::BuildToolBar() {
 	toolbar->AddTool(cID_Control_Reset, wxT("Reset"), wxBITMAP(bitmap_singlestep), wxT("Stops the execution. It will be started upon the next step."));
 	toolbar->AddSeparator();
 
-	//toolbar->Realize();
-	mHiddenStartStopTool = GetToolBar()->RemoveTool(cID_Control_Stop);
 	toolbar->Realize();
+	mHiddenStartStopTool = GetToolBar()->RemoveTool(cID_Control_Stop);
+	//toolbar->Realize();
 
 	toolbar->SetRows(1 ? 1 : 10 / 1);
 }

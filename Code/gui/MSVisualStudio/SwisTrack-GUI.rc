@@ -37,6 +37,7 @@ BITMAP_UP               BITMAP                  "../bitmaps/bitmap_up.bmp"
 BITMAP_DOWN             BITMAP                  "../bitmaps/bitmap_down.bmp"
 BITMAP_PLUS             BITMAP                  "../bitmaps/bitmap_plus.bmp"
 BITMAP_MINUS            BITMAP                  "../bitmaps/bitmap_minus.bmp"
+BITMAP_STOP            	BITMAP                  "../bitmaps/bitmap_stop.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
