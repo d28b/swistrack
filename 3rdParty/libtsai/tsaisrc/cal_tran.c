@@ -53,6 +53,9 @@ extern struct camera_parameters cp;
 extern struct calibration_constants cc;
 */
 
+#ifdef __GNUC__
+#define _hypot hypot
+#endif
 
 #define SQRT(x) sqrt(fabs(x))
 

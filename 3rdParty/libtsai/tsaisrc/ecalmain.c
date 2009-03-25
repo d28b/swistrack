@@ -77,6 +77,9 @@
 #include "libtsai.h"
 #include "lmdif.h"
 
+#ifdef __GNUC__
+#define _hypot hypot
+#endif
 
 calibration_data	*GlobCDPtr=NULL;
 calibration_constants	*GlobCCPtr=NULL;

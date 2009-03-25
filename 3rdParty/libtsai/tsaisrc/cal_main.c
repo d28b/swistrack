@@ -178,6 +178,10 @@ extern "C"
 {
 #endif
 
+#ifdef __GNUC__
+#define _hypot hypot
+#endif
+
 camera_parameters       *cp;
 calibration_data        *cd;
 calibration_constants   *cc;
