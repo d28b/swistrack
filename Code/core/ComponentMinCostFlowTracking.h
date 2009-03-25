@@ -44,7 +44,7 @@ private:
 	
 	// transformed source and sink  needed for implementation. 
 	// we keep it around instead of adding and removing these from the graph
-	// because that invalidates other vertex descriptors. 
+	// because that invalidates other vertex descriptors in bgl.
 	MinCostFlow::Graph::vertex_descriptor tSourceVertex, tSinkVertex; 
 
 	double p_entr;
