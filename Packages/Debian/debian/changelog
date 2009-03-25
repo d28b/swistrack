@@ -1,3 +1,10 @@
+swistrack (4.0-20090306) hardy; urgency=low
+
+  * update to svn HEAD; enable use of components that depend on xvidcore
+    and boost-graph libraries. (For example, OutputFileM4V)
+  
+ -- Daniel Abel <abeld@angel.elte.hu>  Wed, 25 Mar 2009 12:22:26 +0100
+
 swistrack (4.0-20090305) hardy; urgency=low
 
   * rebuild with different build setup

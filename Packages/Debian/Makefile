@@ -28,7 +28,7 @@ debianized-tree:
 	rsync -r --exclude ".svn" ../../Examples/ swistrack/Examples
 	rsync -r --exclude ".svn" ../../SwisTrackEnvironment/ swistrack/SwisTrackEnvironment
 	cp ../../Makefile swistrack
-	cp ../../Makefile.inc swistrack
+	cp Makefile.inc swistrack
 	cp mkinstalldirs swistrack
 	cp install-sh swistrack
 
