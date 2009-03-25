@@ -44,7 +44,7 @@ private:
 	tFilesMap mFiles;				//!< Vector containing the FileName
 
 	//! Writes the file header.
-	void WriteHeader(structOutputFile *outputFile);
+	static void WriteHeader(std::fstream & fileStream);
 	//! Writes one data record.
 	void WriteData(structOutputFile *outputFile);
 };

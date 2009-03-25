@@ -55,7 +55,7 @@ void THISCLASS::OnStep() {
 				return;
 			}
 			mFiles[it->first] = newOutputFile;
-			WriteHeader(newOutputFile);
+			WriteHeader(newOutputFile->fileStream);
 			WriteData(newOutputFile);
 		}
 		it++;
@@ -86,21 +86,14 @@ void THISCLASS::OnStop() {
 	mFiles.clear();
 }
 
-void THISCLASS::WriteHeader(structOutputFile *outputFile) {
-	// Write the header of the file
-	outputFile->fileStream
-	// Frame number
-	<< "%Frame Number" << "\t"
-	// Center in image coordinates
-	<< "x (image)" << "\t" << "y (image)" << "\t"
-	// Center in world coordinates
-	<< "x (world)" << "\t" << "y (world)" << "\t"
-	// Area
-	<< "Area" << "\t"
-	// Orientation
-	<< "Orientation" << "\t"
-	// Compactness
-	<< "Compactness" << std::endl;
+void THISCLASS::WriteHeader(std::fstream & fileStream) {
+  fileStream
+    << "%Frame Number" << "\t"
+    << "x (image)" << "\t" << "y (image)" << "\t"
+    << "x (world)" << "\t" << "y (world)" << "\t"
+    << "Area" << "\t"
+    << "Orientation" << "\t"
+    << "Compactness" << std::endl;
 }
 void THISCLASS::WriteParticle(std::fstream & fileStream, const Particle & p) {
   // Write the needed data to the file
