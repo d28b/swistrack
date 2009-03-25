@@ -102,7 +102,27 @@ void THISCLASS::WriteHeader(structOutputFile *outputFile) {
 	// Compactness
 	<< "Compactness" << std::endl;
 }
-
+void THISCLASS::WriteParticle(std::fstream & fileStream, const Particle & p) {
+  // Write the needed data to the file
+  fileStream
+    << p.mFrameNumber << "\t"
+    << p.mCenter.x << "\t" << p.mCenter.y << "\t"
+    << p.mWorldCenter.x << "\t" << p.mWorldCenter.y << "\t"
+    << p.mArea << "\t"
+    << p.mOrientation << "\t"
+    << p.mCompactness;
+  if (p.mTimestamp.IsValid()) {
+    wxString date;
+    wxString millis;
+    millis << p.mTimestamp.GetMillisecond();
+    millis.Pad(3 - millis.Length(), '0', false);
+    fileStream
+      << "\t" << p.mTimestamp.GetTicks()
+      << millis.ToAscii();
+  }
+  fileStream << std::endl;
+  
+}
 void THISCLASS::WriteData(structOutputFile *outputFile) {
 	//Search for the corresponding particle
 	DataStructureParticles::tParticleVector *particles = mCore->mDataStructureParticles.mParticles;
@@ -118,7 +138,8 @@ void THISCLASS::WriteData(structOutputFile *outputFile) {
 		// Correct ID is found
 		if (it->mID == outputFile->trackID)
 		{
-			// Write the needed data to the file
+		  WriteParticle(outputFile->fileStream, *it);
+		  /*// Write the needed data to the file
 			outputFile->fileStream
 			// Frame number
 			<< mCore->mDataStructureInput.mFrameNumber << "\t"
@@ -142,7 +163,7 @@ void THISCLASS::WriteData(structOutputFile *outputFile) {
 				<< millis.ToAscii();
 			}
 			outputFile->fileStream << std::endl;
-			return;
+			return;*/
 		}
 		it++;
 	}

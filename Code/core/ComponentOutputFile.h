@@ -27,6 +27,8 @@ public:
 		return new ComponentOutputFile(mCore);
 	}
 
+	static void WriteParticle(std::fstream & fileStream, const Particle & particle);
+
 
 private:
 	struct structOutputFile {
