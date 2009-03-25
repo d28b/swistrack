@@ -29,7 +29,7 @@ void THISCLASS::NMEAProcessData(const char *data, int len) {
 				mBuffer[mBufferPos] = 0;
 				mMessage->AddParsedArgument(wxString(mBuffer, wxConvISO8859_1));
 				mState = 2;
-			} else if (inchar == '\n') {
+			} else if ((inchar == '\r') || (inchar == '\n')) {
 				mBuffer[mBufferPos] = 0;
 				mMessage->AddParsedArgument(wxString(mBuffer, wxConvISO8859_1));
 				OnNMEAProcessMessage(mMessage, false);
@@ -42,7 +42,7 @@ void THISCLASS::NMEAProcessData(const char *data, int len) {
 			}
 		} else if (mState == 2) {
 			char ch = "0123456789ABCDEF"[(mChecksum >> 4) & 0xF];
-			if (inchar == '\n') {
+			if ((inchar == '\r') || (inchar == '\n')) {
 				OnNMEAProcessMessageChecksumError(mMessage);
 				delete mMessage;
 				mMessage = 0;
