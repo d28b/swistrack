@@ -8,7 +8,9 @@
 #include "DataStructureParticles.h"
 #include "MinCostFlow.h"
 
-//! A basic tracking component that takes pre-filtered particles and adds them to the nearest track.
+//! A tracking component that uses the algorithm described in 
+//! Global Data Association for Multi-Object Tracking Using Network Flows
+//! by Li Zhang, Yuan Li and Ramakant Nevatia
 class ComponentMinCostFlowTracking: public Component {
 
 public:
