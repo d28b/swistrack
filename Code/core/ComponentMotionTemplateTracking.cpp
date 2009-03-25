@@ -239,29 +239,33 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, IplImage * foreground
 		center = cvPoint( (comp_rect.x + comp_rect.width / 2),
 		                  (comp_rect.y + comp_rect.height / 2) );
 
-		//tmpParticle.mArea = comp_rect.width * comp_rect.height;
+
 		
 		tmpParticle.mCenter.x = center.x;
 		tmpParticle.mCenter.y = center.y;
 		tmpParticle.mTimestamp = frameTimestamp;
 		tmpParticle.mFrameNumber = mCore->mDataStructureInput.mFrameNumber;
-
+		
 		int histSizes[] = {100,100,100};
 		tmpParticle.mColorModel = cvCreateHist(3, histSizes, CV_HIST_ARRAY);
-		cvZero(mForegroundMask);
-		cvRectangle(mForegroundMask, 
-			    cvPoint(comp_rect.x, comp_rect.y),
-			    cvPoint(comp_rect.x + comp_rect.width,
-				    comp_rect.y + comp_rect.height),
-			    cvScalar(255),
-			    CV_FILLED);
-		
-		cvAnd(mForegroundMask, foregroundMask, mForegroundMask);
-		cvSplit(img, mInputChannels[0], mInputChannels[1], mInputChannels[2], NULL);
-		cvCalcHist(mInputChannels, tmpParticle.mColorModel);
-		cvSet(dst, cvScalar(255,255,255), mForegroundMask);
-
-		tmpParticle.mArea = cvCountNonZero(mForegroundMask);  // only look at foreground pixels.
+		if (foregroundMask != NULL) {
+		  cvZero(mForegroundMask);
+		  cvRectangle(mForegroundMask, 
+			      cvPoint(comp_rect.x, comp_rect.y),
+			      cvPoint(comp_rect.x + comp_rect.width,
+				      comp_rect.y + comp_rect.height),
+			      cvScalar(255),
+			      CV_FILLED);
+		  
+		  cvAnd(mForegroundMask, foregroundMask, mForegroundMask);
+		  cvSplit(img, mInputChannels[0], mInputChannels[1], mInputChannels[2], NULL);
+		  cvCalcHist(mInputChannels, tmpParticle.mColorModel);
+		  cvSet(dst, cvScalar(255,255,255), mForegroundMask);
+		  tmpParticle.mArea = cvCountNonZero(mForegroundMask);  // only look at foreground pixels.
+		} else {
+		  // no histogram when there's no background model. 
+		  tmpParticle.mArea = comp_rect.width * comp_rect.height;
+		}
 		
 		mParticles.push_back(tmpParticle);
 
