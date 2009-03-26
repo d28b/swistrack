@@ -1,33 +1,55 @@
-#include "main.h"
+#include "Application.h"
+#define THISCLASS Application
+
 #include "ConfigurationReaderXML.h"
 #include "SwisTrackCore.h"
 #include "NMEALog.h"
 #include <stdio.h>
 #include <wx/filename.h>
 
-int main(int argc, char **argv) {
-	if (argc == 2) {
-		return runBatch(argv[1]);
-	} else {
-		help();
-		return -1;
-	}
+IMPLEMENT_APP(Application)
+
+bool THISCLASS::OnInit() {
+	// Set some main application parameters.
+	SetVendorName(wxT("SwisTrack Community"));
+	SetAppName(wxT("SwisTrack"));
+	SetExitOnFrameDelete(false);
+
+	// Initialize all available image handlers
+	wxInitAllImageHandlers();
+
+	return true;
 }
 
-void help() {
+int THISCLASS::MainLoop() {
+	// Run if a filename is provided
+	if (argc == 2) {
+		RunBatch(argv[1]);
+	} else {
+		Help();
+	}
+
+	return 0;
+}
+
+int THISCLASS::OnExit() {
+	return 0;
+}
+
+void THISCLASS::Help() {
 	wxPrintf(wxT("SwisTrack 4 - batch processing.\n"));
 	wxPrintf(wxT("Usage: SwisTrack-batch FILENAME\n"));
 	wxPrintf(wxT("For detailed information about SwisTrack and its command line options please consult the SwisTrack Wikibook.\n"));
 }
 
-int runBatch(char *filename_str) {
+int THISCLASS::RunBatch(const wxString filename_str) {
 	wxPrintf(wxT("SwisTrack 4 - batch processing."));
 
 	// Initialize the core
 	SwisTrackCore *core = new SwisTrackCore(wxT("./Components"));
 
 	// Open the file
-	wxFileName filename(wxString::FromAscii(filename_str));
+	wxFileName filename(filename_str);
 	if (! filename.IsFileReadable()) {
 		wxFprintf(stderr, wxT("Could not read ") + filename.GetFullPath());
 		return -1;
