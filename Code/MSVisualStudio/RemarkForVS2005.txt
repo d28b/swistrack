@@ -1,0 +1,21 @@
+The projects were compiled and upgraded to Visual Studio 2008.
+You can however make it backward compatible by just editing the header of the .vcproj and .sln files.
+
+.sln file
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+
+Edit to
+
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+
+.vcproj files
+	Version="9.00"
+
+Edit to
+
+	Version="8.00"
+	
+
+Whith those modifications, these files are made backward compatible with the 2005 Visual Studio version.

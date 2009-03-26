@@ -99,6 +99,7 @@ protected:
 
 	wxBoxSizer *mHorizontalSizer;				//!< The horizonal sizer containing the canvas panel and the component configuration panel.
 	wxToolBarToolBase *mHiddenStartStopTool; 	//!< the hidden tool, either start or stop. (I.e if start is shown, this is the stop.)
+	wxPanel *panel_top;							//!< Pointer to the top panel of the wxSplitterWindow
 
 	//! Creates the menu.
 	void BuildMenuBar();

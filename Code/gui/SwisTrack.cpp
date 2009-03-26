@@ -76,7 +76,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 
 	// Splitter window
 	wxSplitterWindow *splitter_window = new wxSplitterWindow(this);
-	wxPanel *panel_top = new wxPanel(splitter_window);
+	panel_top = new wxPanel(splitter_window);
 	wxPanel *panel_bottom = new wxPanel(splitter_window);
 	splitter_window->SplitHorizontally(panel_top, panel_bottom);
 	splitter_window->SetSashPosition(450);
@@ -103,7 +103,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 
 	// Configuration panel
 	mConfigurationPanel = new ConfigurationPanel(panel_top, this, 0);
-	mHorizontalSizer->Add(mConfigurationPanel, 0, wxEXPAND, 0);
+	mHorizontalSizer->Add(mConfigurationPanel, 0, wxEXPAND, 0);//change during execution
 
 	// Bottom part: vertical separation
 	wxBoxSizer *vsBottom = new wxBoxSizer(wxVERTICAL);
@@ -227,12 +227,12 @@ void THISCLASS::SetConfigurationPanel(Component *c) {
 	}
 
 	// Destroy the old panel
-	mConfigurationPanel->Destroy();
+	mConfigurationPanel->Destroy();	
 
 	// Create a new panel
-	mConfigurationPanel = new ConfigurationPanel(this, this, c);
+	mConfigurationPanel = new ConfigurationPanel(panel_top, this, c);
 	mHorizontalSizer->Add(mConfigurationPanel, 0, wxEXPAND, 0);
-	GetSizer()->Layout();
+	mHorizontalSizer->Layout();
 
 	// Switch to corresponding display
 	if (mConfigurationPanel->mDisplayName != wxT("")) {

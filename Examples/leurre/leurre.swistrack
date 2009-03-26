@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <swistrack>
   <components>
     <component type="InputFileAVI">
-      <parameter name="File" value="C:\boulot\swistrack\Examples\leurre\leurre.avi"/>
+      <parameter name="File" value="leurre.avi"/>
     </component>
     <component type="ConvertToColor"/>
     <component type="BackgroundSubtractionColor">
-      <parameter name="BackgroundImage" value="C:\boulot\swistrack\Examples\leurre\background.bmp"/>
+      <parameter name="BackgroundImage" value="background.bmp"/>
       <parameter name="CorrectMean" value="false"/>
     </component>
     <component type="ThresholdColorCommon">
@@ -15,7 +15,7 @@
       <parameter name="Threshold" value="28"/>
     </component>
     <component type="BinaryMask">
-      <parameter name="MaskImage" value="C:\boulot\swistrack\Examples\leurre\mask.bmp"/>
+      <parameter name="MaskImage" value="mask.bmp"/>
     </component>
     <component type="BinaryErosion">
       <parameter name="Iterations" value=""/>
@@ -39,7 +39,7 @@
       <parameter name="OrientationBool" value=""/>
     </component>
     <component type="CalibrationTSAI">
-      <parameter name="CalibrationPoints" value="C:\boulot\swistrack\Examples\leurre\calibrationPoints.xml"/>
+      <parameter name="CalibrationPoints" value="calibrationPoints.xml"/>
       <parameter name="Ncx" value=""/>
       <parameter name="Ncy" value=""/>
       <parameter name="Nfx" value=""/>

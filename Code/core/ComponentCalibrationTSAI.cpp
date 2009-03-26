@@ -26,10 +26,11 @@ THISCLASS::~ComponentCalibrationTSAI() {
 
 void THISCLASS::OnStart() {
 	// Read the file containing the calibration points
-	wxString filename = GetConfigurationString(wxT("CalibrationPoints"), wxT(""));
+	wxString filename_string = GetConfigurationString(wxT("CalibrationPoints"), wxT(""));
+	wxFileName filename = mCore->GetProjectFileName(filename_string);
 	wxLogNull log;
 	wxXmlDocument document;
-	bool isopen = document.Load(filename);
+	bool isopen = document.Load(filename.GetFullPath().mb_str(wxConvFile));
 	if (! isopen) {
 		AddError(wxT("Could not open or parse the XML file!"));
 		return;

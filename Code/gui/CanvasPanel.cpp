@@ -8,7 +8,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::CanvasPanel(wxWindow *parent, SwisTrack *st):
-		wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 100)),
+		wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(100, 100)),
 		DisplaySubscriberInterface(), mSwisTrack(st),
 		mCurrentDisplay(0), mUpdateRate(1), mUpdateStepCounter(0) {
 

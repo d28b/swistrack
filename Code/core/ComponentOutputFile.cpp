@@ -21,8 +21,8 @@ THISCLASS::ComponentOutputFile(SwisTrackCore *stc):
 THISCLASS::~ComponentOutputFile() {
 }
 
-void THISCLASS::OnStart() {
-	mDirectoryName = GetConfigurationString(wxT("DirectoryName"), wxT(""));
+void THISCLASS::OnStart() 
+{	
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -46,9 +46,8 @@ void THISCLASS::OnStep() {
 		} else {
 			structOutputFile *newOutputFile = new structOutputFile;
 			newOutputFile->trackID = it->first;
-			wxString tmpFileName = mDirectoryName;
-			tmpFileName += wxString::Format(wxT("track_%08d.txt"), it->first);
-			(newOutputFile->fileStream).open(tmpFileName.mb_str(wxConvFile), std::fstream::out | std::fstream::trunc);
+			wxFileName tmpFileName = mCore->GetRunFileName(wxString::Format(wxT("track_%08d.txt"), it->first));
+			(newOutputFile->fileStream).open(tmpFileName.GetFullPath().mb_str(wxConvFile), std::fstream::out | std::fstream::trunc);
 
 			if (!(newOutputFile->fileStream).is_open()) {
 				AddError(wxT("Unable to open one of the output file"));

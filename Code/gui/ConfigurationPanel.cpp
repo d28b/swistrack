@@ -50,7 +50,7 @@ THISCLASS::ConfigurationPanel(wxWindow *parent, SwisTrack *st, Component *c):
 	if (! mErrorList.mList.empty()) {
 		wxStaticText *label = new wxStaticText(mPanel, wxID_ANY, wxT("An error occured while loading the configuration panel of this component."));
 		label->Wrap(scParameterWidth);
-		mPanelSizer->Add(label, 0, wxEXPAND | wxALL, 4);
+		mPanelSizer->Add(mLabelTitle, 0, wxEXPAND | wxALL, 4);
 	}
 }
 
