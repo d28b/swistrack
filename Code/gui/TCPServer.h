@@ -15,7 +15,7 @@ class SwisTrack;
 
 #include "CommunicationInterface.h"
 #include "SwisTrackCoreInterface.h"
-#include "NMEALog.h"
+#include "NMEALogFile.h"
 #include "TCPServerConnection.h"
 
 class TCPServer: public wxEvtHandler, public CommunicationInterface, public SwisTrackCoreInterface {
@@ -61,7 +61,7 @@ private:
 	typedef std::list<TCPServerConnection*> tConnections;
 	tConnections mConnections;
 	//! The log.
-	NMEALog *mNMEALog;
+	NMEALogFile *mNMEALogFile;
 
 	//! Starts listening.
 	void Open();

@@ -30,7 +30,7 @@ void THISCLASS::OnStart() {
 	wxFileName filename = mCore->GetProjectFileName(filename_string);
 	wxLogNull log;
 	wxXmlDocument document;
-	bool isopen = document.Load(filename.GetFullPath().mb_str(wxConvFile));
+	bool isopen = document.Load(filename.GetFullPath());
 	if (! isopen) {
 		AddError(wxT("Could not open or parse the XML file!"));
 		return;

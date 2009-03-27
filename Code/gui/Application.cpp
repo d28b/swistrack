@@ -12,7 +12,7 @@ IMPLEMENT_APP(Application)
 
 bool THISCLASS::OnInit() {
 	// Set some main application parameters.
-	SetVendorName(wxT("Swarm-Intelligent Systems Group, EPFL, Lausanne, Switzerland"));
+	SetVendorName(wxT("SwisTrack Community"));
 	SetAppName(wxT("SwisTrack"));
 
 	// Take the current directory as the application folder

@@ -10,7 +10,7 @@ END_EVENT_TABLE()
 
 THISCLASS::TCPServer(SwisTrack* swistrack):
 		CommunicationInterface(), SwisTrackCoreInterface(),
-		mServer(0), mPort(0), mSwisTrack(swistrack), mConnections(), mNMEALog(0) {
+		mServer(0), mPort(0), mSwisTrack(swistrack), mConnections(), mNMEALogFile(0) {
 
 	// Add SwisTrackCoreInterface
 	SwisTrackCore *stc = mSwisTrack->mSwisTrackCore;
@@ -128,8 +128,8 @@ bool THISCLASS::Send(CommunicationMessage *m) {
 	}
 
 	// Write to LOG file (if any)
-	if (mNMEALog) {
-		bool cursent = mNMEALog->Send(m);
+	if (mNMEALogFile) {
+		bool cursent = mNMEALogFile->SendMessage(m);
 		sent |= cursent;
 	}
 
@@ -138,23 +138,23 @@ bool THISCLASS::Send(CommunicationMessage *m) {
 
 void THISCLASS::OnBeforeStart(bool productionmode) {
 	// Close any existing log file (if any)
-	if (mNMEALog) {
-		delete mNMEALog;
-		mNMEALog = 0;
+	if (mNMEALogFile) {
+		delete mNMEALogFile;
+		mNMEALogFile = 0;
 	}
 
 	// Start a new log file
 	SwisTrackCore *stc = mSwisTrack->mSwisTrackCore;
 	wxFileName filename = stc->GetRunFileName(wxT("nmea"));
 	if (filename.IsOk()) {
-		mNMEALog = new NMEALog(filename.GetFullPath());
+		mNMEALogFile = new NMEALogFile(filename.GetFullPath());
 	}
 }
 
 void THISCLASS::OnAfterStop() {
 	// Close the log file (if any)
-	if (mNMEALog) {
-		delete mNMEALog;
-		mNMEALog = 0;
+	if (mNMEALogFile) {
+		delete mNMEALogFile;
+		mNMEALogFile = 0;
 	}
 }
