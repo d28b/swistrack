@@ -109,7 +109,8 @@ double THISCLASS::p_link(Particle x_i, Particle x_j) {
 
 void THISCLASS::OnStep()
 {
-
+  
+  mParticles.clear(); // usually a no-op, but necessary if we outputted tracks on the last frame.
   DataStructureParticles::tParticleVector * particles = 
     mCore->mDataStructureParticles.mParticles;
 
@@ -180,6 +181,8 @@ void THISCLASS::OnStep()
   }
 
   mCore->mDataStructureTracks.mTracks = &mTracks;
+  mCore->mDataStructureParticles.mParticles = &mParticles;
+
   DisplayEditor de(&mDisplayOutput);
   if (de.IsActive()) {
     de.SetMainImage(mCore->mDataStructureInput.mImage);
@@ -241,6 +244,16 @@ void THISCLASS::OutputTracks(const MinCostFlow::Graph & graph) {
       MinCostFlow::Graph::vertex_descriptor u_i, v_i;
       u_i = target(*ei, graph);
       while (u_i != sinkVertex) {
+	mObservations[u_i].mID = id;
+
+
+
+	mParticles.push_back(mObservations[u_i]);
+	// We're deleting the reference to the color histogram since it's not needed any 
+	// more by this component.  I don't want to copy it because it's big, and I'm too lazy to
+	// implement reference counting.
+	// Note that the particles have to appear in the order they appear in the track to make the output file work.
+	mParticles.back().mColorModel = NULL;
 	mTracks[id].AddPoint(mObservations[u_i].mCenter, mObservations[u_i].mFrameNumber); 
 	assert(out_degree(u_i, graph) == 1);
 	v_i = target(*(out_edges(u_i, graph).first), graph);

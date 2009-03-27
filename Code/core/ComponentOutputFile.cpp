@@ -116,6 +116,11 @@ void THISCLASS::WriteParticle(std::fstream & fileStream, const Particle & p) {
   
 }
 void THISCLASS::WriteData(structOutputFile *outputFile) {
+
+  // This was originally designed assuming each particles were for only one frame.
+  // ComponentMinCostFlow tracking sends particles for many frames at once.
+  // This loop still works if particles for each track are sorted in time. 
+  // So that's part of the spec now. 
 	//Search for the corresponding particle
 	DataStructureParticles::tParticleVector *particles = mCore->mDataStructureParticles.mParticles;
 	if (! particles)

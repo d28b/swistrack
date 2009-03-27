@@ -31,6 +31,7 @@ public:
 
 private:
 	DataStructureTracks::tTrackMap mTracks;
+	DataStructureParticles::tParticleVector mParticles;
 	wxDateTime mStartTimestamp;
 
 	map<MinCostFlow::Graph::vertex_descriptor, Particle> 
