@@ -751,6 +751,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ErrorListDialog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\NMEALogFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\NMEALogFile.h"
+				>
+			</File>
+			<File
 				RelativePath=".\resource.h"
 				>
 			</File>
@@ -964,10 +976,6 @@
 			</File>
 			<File
 				RelativePath="..\ErrorListDialog.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\ErrorListDialog.h"
 				>
 			</File>
 		</Filter>
