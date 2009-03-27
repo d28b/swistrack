@@ -43,20 +43,21 @@ void THISCLASS::Help() {
 }
 
 int THISCLASS::RunBatch(const wxString filename_str) {
-	wxPrintf(wxT("SwisTrack 4 - batch processing."));
+	wxPrintf(wxT("SwisTrack 4 - batch processing.\n"));
 
 	// Initialize the core
 	SwisTrackCore *core = new SwisTrackCore(wxT("./Components"));
+	core->mCommunicationInterface = new NMEALog();
 
 	// Open the file
 	wxFileName filename(filename_str);
 	if (! filename.IsFileReadable()) {
-		wxFprintf(stderr, wxT("Could not read ") + filename.GetFullPath());
+		wxFprintf(stderr, wxT("Could not read ") + filename.GetFullPath() + wxT("\n"));
 		return -1;
 	}
 	ConfigurationReaderXML cr;
 	if (! cr.Open(filename)) {
-		wxFprintf(stderr, wxT("Could not read ") + filename.GetFullPath() + wxT(" Syntax error?"));
+		wxFprintf(stderr, wxT("Could not read ") + filename.GetFullPath() + wxT(" Syntax error?\n"));
 		return -1;
 	}
 
@@ -78,10 +79,13 @@ int THISCLASS::RunBatch(const wxString filename_str) {
 	}
 	wxPrintf(wxT("Running with %d components.\n"), core->GetDeployedComponents()->size());
 
+	// Set the folder
+	core->SetFileName(filename);
+
 	// Start execution
 	bool has_error = false;
 	core->TriggerStart();
-	core->Start(false);
+	core->Start(true);
 	for (std::list<Component*>::const_iterator it = core->GetDeployedComponents()->begin(); it != core->GetDeployedComponents()->end(); it++) {
 		Component *component = *it;
 		std::cout << component->mDisplayName.ToAscii() << ": " << (component->mStarted ? "started" : "not started") << std::endl;

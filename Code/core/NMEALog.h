@@ -20,7 +20,7 @@ class NMEALog;
 class NMEALog: public CommunicationInterface {
 
 public:
-	NMEALog(const wxString &file);
+	NMEALog(const wxString &file = wxT(""));
 	~NMEALog();
 
 	// CommuncationNMEAInterface methods.

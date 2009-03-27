@@ -163,8 +163,8 @@ void THISCLASS::OnStart() {
 
 	// Parameterize the stream grabber
 	const int buffersize = mCamera->PayloadSize.GetValue();
-	mStreamGrabber->MaxBufferSize = buffersize;
-	mStreamGrabber->MaxNumBuffer = mInputBufferSize;
+	mStreamGrabber->MaxBufferSize.SetValue(buffersize);
+	mStreamGrabber->MaxNumBuffer.SetValue(mInputBufferSize);
 	mStreamGrabber->PrepareGrab();
 
 	// Allocate and register image buffers, put them into the grabber's input queue
@@ -230,21 +230,35 @@ void THISCLASS::OnStep() {
 	if (mTriggerMode == sTrigger_Software) {
 		// Send the software trigger
 		mCamera->TriggerSoftware.Execute();
-
-		// Wait for the grabbed image with a timeout of 3 seconds
-		if (! mStreamGrabber->GetWaitObject().Wait(3000)) {
-			AddError(wxT("Failed to retrieve an image: the camera did not send any image."));
-			return;
-		}
 	} else {
 		// Wait for the thread to terminate (this should return immediately, as the thread should have terminated already)
 		wxCriticalSectionLocker csl(mThreadCriticalSection);
 	}
 
+	// Wait for the grabbed image with a timeout of 3 seconds
+	if (! mStreamGrabber->GetWaitObject().Wait(3000)) {
+		AddError(wxT("Failed to retrieve an image: the camera did not send any image."));
+		return;
+	}
+
 	// Get an item from the grabber's output queue
-	mStreamGrabber->RetrieveResult(mCurrentResult);
+	bool res = mStreamGrabber->RetrieveResult(mCurrentResult);
+	if (! res) {
+		printf("RetrieveResult returned false!\n");
+	}
 	if (! mCurrentResult.Succeeded()) {
 		AddError(wxString::Format(wxT("Failed to retrieve an item from the output queue: %s"), mCurrentResult.GetErrorDescription().c_str()));
+		printf("Error: %s\n", mCurrentResult.GetErrorDescription().c_str());
+		printf("ErrorCode: %d\n", mCurrentResult.GetErrorCode());
+		printf("Buffer: %d\n", mCurrentResult.Buffer());
+		printf("Handle: %d\n", mCurrentResult.Handle());
+		printf("Context: %d\n", mCurrentResult.Context());
+		printf("SizeX: %d\n", mCurrentResult.GetSizeX());
+		printf("SizeY: %d\n", mCurrentResult.GetSizeY());
+		printf("PixelType: %d\n", mCurrentResult.GetPixelType());
+		printf("PayloadType: %d\n", mCurrentResult.GetPayloadType());
+		printf("TimeStamp: %d\n", mCurrentResult.GetTimeStamp());
+		printf("FrameNr: %d\n", mCurrentResult.FrameNr());
 		return;
 	}
 
