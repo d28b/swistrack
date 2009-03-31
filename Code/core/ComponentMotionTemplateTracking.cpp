@@ -20,7 +20,7 @@ THISCLASS::ComponentMotionTemplateTracking(SwisTrackCore *stc):
 
 {
 	// Data structure relations
-	mCategory = &(mCore->mCategoryParticleDetection);
+	mCategory = &(mCore->mCategoryTracking);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));

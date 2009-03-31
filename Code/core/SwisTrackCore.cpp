@@ -82,17 +82,22 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 		mDataStructureTracks(),
 		mStarted(false), mProductionMode(false), mStepCounter(0), mEditLocks(0), mDeployedComponents() {
 
+
 	// Initialize the list of available components
+	//Trigger
 	mAvailableComponents.push_back(new ComponentTriggerTimer(this));
 	mAvailableComponents.push_back(new ComponentTriggerCounter(this));
+	//Input
 	mAvailableComponents.push_back(new ComponentInputCamera1394(this));
 	mAvailableComponents.push_back(new ComponentInputCameraUSB(this));
 	mAvailableComponents.push_back(new ComponentInputCameraGigE(this));
 	mAvailableComponents.push_back(new ComponentInputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentInputFileImage(this));
+	//Input conversion
 	mAvailableComponents.push_back(new ComponentConvertToGray(this));
 	mAvailableComponents.push_back(new ComponentConvertToColor(this));
 	mAvailableComponents.push_back(new ComponentConvertBayerToColor(this));
+	//Preprocessing Color
 	mAvailableComponents.push_back(new ComponentChannelArithmetic(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentHSVBackgroundSubtractionColor(this));
@@ -102,34 +107,42 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentSpecificColorSubtraction(this));
 	mAvailableComponents.push_back(new ComponentColorMask(this));
 	mAvailableComponents.push_back(new ComponentColorBlur(this));
+	//Preprocessing Gray
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentGrayMask(this));
-	mAvailableComponents.push_back(new ComponentThresholdGray(this));
+	//Thresholding Color
 	mAvailableComponents.push_back(new ComponentThresholdColorCommon(this));
 	mAvailableComponents.push_back(new ComponentThresholdColorIndependent(this));
 	mAvailableComponents.push_back(new ComponentDoubleThresholdColorIndependent(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveThreshold(this));
+	//Thresholding Gray
+	mAvailableComponents.push_back(new ComponentThresholdGray(this));
+	//Preprocessing Binary
 	mAvailableComponents.push_back(new ComponentBinaryDilation(this));
 	mAvailableComponents.push_back(new ComponentBinaryErosion(this));
 	mAvailableComponents.push_back(new ComponentBinaryMask(this));
 	mAvailableComponents.push_back(new ComponentBlobSelection(this));
+	//Particle Detection		
 	mAvailableComponents.push_back(new ComponentBlobDetectionMinMax(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionTwoColors(this));
 	mAvailableComponents.push_back(new ComponentIDReaderRing(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
-	mAvailableComponents.push_back(new ComponentColorHistogramParticles(this));
+	//Calibration
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
 	mAvailableComponents.push_back(new ComponentCalibrationTSAI(this));
+	//Tracking
 	mAvailableComponents.push_back(new ComponentTracking(this));
 	mAvailableComponents.push_back(new ComponentNearestNeighborTracking(this));
 	mAvailableComponents.push_back(new ComponentDynamicNearestNeighborTracking(this));
+	mAvailableComponents.push_back(new ComponentColorHistogramParticles(this));
 	mAvailableComponents.push_back(new ComponentOpticalFlowPyrLKTracking(this));
 	mAvailableComponents.push_back(new ComponentCamShiftTracking(this));
 	mAvailableComponents.push_back(new ComponentMinCostFlowTracking(this));
 	mAvailableComponents.push_back(new ComponentMotionTemplateTracking(this));
 	mAvailableComponents.push_back(new ComponentTrackSmoothing(this));
 	mAvailableComponents.push_back(new ComponentKalmanFilterTrack(this));
+	//Output
 	mAvailableComponents.push_back(new ComponentOutputFile(this));
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentOutputFileM4V(this));
