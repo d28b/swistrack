@@ -51,6 +51,7 @@
 #include "ComponentOutputFile.h"
 #include "ComponentOutputFileAVI.h"
 #include "ComponentOutputFileM4V.h"
+#include "ComponentOutputFramesImages.h"
 #include "ComponentOutputImageStatisticsBinary.h"
 #include "ComponentOutputImageStatisticsColor.h"
 #include "ComponentOutputImageStatisticsGray.h"
@@ -132,12 +133,13 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentOutputFile(this));
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentOutputFileM4V(this));
+	mAvailableComponents.push_back(new ComponentOutputFramesImages(this));
 	mAvailableComponents.push_back(new ComponentOutputImageStatisticsBinary(this));
 	mAvailableComponents.push_back(new ComponentOutputImageStatisticsColor(this));
 	mAvailableComponents.push_back(new ComponentOutputImageStatisticsGray(this));
 	mAvailableComponents.push_back(new ComponentOutputMarkFrameManual(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
-
+	
 	// Initialize the available components
 	tComponentList::iterator ita = mAvailableComponents.begin();
 	while (ita != mAvailableComponents.end()) {
