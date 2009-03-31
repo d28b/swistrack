@@ -36,6 +36,8 @@ void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum)
 		p.mCenter.x = (float)m->PopDouble(0);
 		p.mCenter.y = (float)m->PopDouble(0);
 		p.mOrientation = (float)m->PopDouble(0);
+		p.mWorldCenter.x = (float)m->PopDouble(0);
+		p.mWorldCenter.y = (float)m->PopDouble(0);
 		mFrameRead.particles.push_back(p);
 	} else if (m->mCommand == wxT("STEP_STOP")) {
 		mFrames.push_back(mFrameRead);

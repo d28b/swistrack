@@ -34,7 +34,7 @@
 			<name>CameraPixelSize</name>
 			<label>Pixel size</label>
 			<unit>m</unit>
-			<default>1</default>
+			<default>0.01</default>
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="pointDouble">
@@ -42,8 +42,8 @@
 			<label>Camera size</label>
 			<unit>pixels</unit>
 			<default>
-				<x>1</x>
-				<y>1</y>
+				<x>640</x>
+				<y>480</y>
 			</default>
 			<reloadable>true</reloadable>
 		</parameter>
