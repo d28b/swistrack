@@ -4,6 +4,7 @@ SCRIPTS_DIR = $(PKG_DIR)/Packages/Debian/scripts
 SCRIPTS_DIR2 = scripts
 # the gpg key to use to sign the package:
 GPG_KEY_ID=6FF7AEA2
+DISTRIB=hardy
 
 all: help
 
@@ -20,26 +21,29 @@ help:
 generate_control:
 	DEB_AUTO_UPDATE_DEBIAN_CONTROL=yes fakeroot debian/rules clean
 
+DEBIANIZED-DIR=swistrack-$(DISTRIB)
 debianized-tree:
-	mkdir -p swistrack
-	rsync -r --exclude ".svn" debian/ swistrack/debian
-	rsync -r --exclude ".svn" ../../Code/ swistrack/Code
-	rsync -r --exclude ".svn" ../../3rdParty/ swistrack/3rdParty
-	rsync -r --exclude ".svn" ../../Examples/ swistrack/Examples
-	rsync -r --exclude ".svn" ../../SwisTrackEnvironment/ swistrack/SwisTrackEnvironment
-	cp ../../Makefile swistrack
-	cp Makefile.inc swistrack
-	cp mkinstalldirs swistrack
-	cp install-sh swistrack
+	rm -rf $(DEBIANIZED-DIR)
+	mkdir -p $(DEBIANIZED-DIR)
+	rsync -r --exclude ".svn" debian-common/ $(DEBIANIZED-DIR)/debian
+	rsync -r --exclude ".svn" ../../Code/ $(DEBIANIZED-DIR)/Code
+	rsync -r --exclude ".svn" ../../3rdParty/ $(DEBIANIZED-DIR)/3rdParty
+	rsync -r --exclude ".svn" ../../Examples/ $(DEBIANIZED-DIR)/Examples
+	rsync -r --exclude ".svn" ../../SwisTrackEnvironment/ $(DEBIANIZED-DIR)/SwisTrackEnvironment
+	cp ubuntu-$(DISTRIB)/changelog $(DEBIANIZED-DIR)/debian/
+	cp ../../Makefile $(DEBIANIZED-DIR)
+	cp Makefile.inc $(DEBIANIZED-DIR)
+	cp mkinstalldirs $(DEBIANIZED-DIR)
+	cp install-sh $(DEBIANIZED-DIR)
 
 # Build source package:
 # pass --no-tgz-check arg to debuild so that it will shut up about not finding orig.tar.gz
 source_package: debianized-tree
-	cd swistrack && debuild --no-tgz-check -S -k$(GPG_KEY_ID)
+	cd $(DEBIANIZED-DIR) && debuild --no-tgz-check -S -k$(GPG_KEY_ID)
 
 # Build without using schroot-ed build system:
 build_package_locally: debianized-tree
-	cd swistrack && debuild --no-tgz-check --lintian-opts -i -I -E
+	cd $(DEBIANIZED-DIR) && debuild --no-tgz-check --lintian-opts -i -I -E
 #cd ../../../ && $(SCRIPTS_DIR)/rotate_build_results "$(PKG_NAME)_"
 
 # Build using schroot-ed build system:
@@ -50,15 +54,15 @@ sbuild_package: source_package
 #lintian -i -I -E $(PKG_WORKING_DIR_BASE)/build/new/*.deb
 
 source_package_for_ppa: debianized-tree
-	cd swistrack && debuild --no-tgz-check -S -sa -k$(GPG_KEY_ID)
+	cd $(DEBIANIZED-DIR) && debuild --no-tgz-check -S -sa -k$(GPG_KEY_ID)
 
 upload_to_ppa: source_package_for_ppa
-	dput my-ppa swistrack_4.0-*changes
+	dput my-ppa swistrack_4.0-*$(DISTRIB)*changes
 #	cd swistrack && debuild --no-tgz-check -S -sa -k$(GPG_KEY_ID)
 
 clean:
 	echo 'clean'
-	-rm -rf swistrack
+	-rm -rf $(DEBIANIZED-DIR)
 	-rm swistrack_4.0-*
 
 old-clean:
