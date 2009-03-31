@@ -10,7 +10,7 @@
 			<label>directroy and filename prefix</label>
 			<reloadable>false</reloadable>
 		</parameter>
-		<label>frame number and extension will be automatically appended.</label>
+		<label>frame number and extension will be automatically appended. Subdirectories will be created as needed.</label>
 		<parameter type="dropdownlist">
 			<name>FileType</name>
 			<label>File Type</label>

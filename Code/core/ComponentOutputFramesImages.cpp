@@ -29,6 +29,8 @@ THISCLASS::~ComponentOutputFramesImages() {
 void THISCLASS::OnStart() {
 	wxString filename_string = GetConfigurationString(wxT("FilePrefix"), wxT(""));
 	mFileName=mCore->GetRunFileName(filename_string);
+	// make sure that subdirectory exists:
+	mFileName.Mkdir(mFileName.GetPath(), 0777, wxPATH_MKDIR_FULL);
 	mFileType = (eFileType)GetConfigurationInt(wxT("FileType"), 0);
 	OnReloadConfiguration();
 }
@@ -73,9 +75,8 @@ void THISCLASS::OnStep() {
 	case 2:
 		fileExtension = ".jpeg";
 	}
-
 	std::ostringstream filename_oss;
-	filename_oss << mFileName.GetFullPath().mb_str(wxConvFile) << "-" << std::setw(8) << std::setfill('0') << mCore->GetStepCounter() << fileExtension; 
+	filename_oss << mFileName.GetFullPath().mb_str(wxConvFile) << "-" << std::setw(8) << std::setfill('0') << mCore->GetStepCounter() << fileExtension;
 	cvSaveImage(filename_oss.str().c_str(), inputimage );
 	
 	// Image is always top down in Swistrack
