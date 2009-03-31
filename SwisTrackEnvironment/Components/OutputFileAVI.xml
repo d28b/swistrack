@@ -11,6 +11,12 @@
 			<label>AVI File</label>
 			<reloadable>false</reloadable>
 		</parameter>
+		<parameter type="string">
+			<name>Codec</name>
+			<label>Codec code</label>
+			<default>Def.</default>
+			<reloadable>false</reloadable>
+		</parameter>
 		<parameter type="integer">
 			<name>FrameRate</name>
 			<label>Frame Rate</label>

@@ -5,7 +5,7 @@
 
 THISCLASS::ComponentOutputFileAVI(SwisTrackCore *stc):
 		Component(stc, wxT("OutputFileAVI")),
-		mWriter(0), mFrameRate(15), mInputSelection(0), mFrameBufferCount(1), mFrameBuffer(0), mFrameBufferWriteCounter(0),
+		mWriter(0), mFrameRate(15), mInputSelection(0), mFrameBufferCount(1), mFrameBuffer(0), mFrameBufferWriteCounter(0), codecString(wxString("Def.")),
 		mDisplayOutput(wxT("Output"), wxT("AVI File: Unprocessed Frame")) {
 
 	// Data structure relations
@@ -24,10 +24,11 @@ THISCLASS::~ComponentOutputFileAVI() {
 }
 
 void THISCLASS::OnStart() {
-	wxString filename_string = GetConfigurationString(wxT("File"), wxT(""));
+	wxString filename_string = GetConfigurationString(wxT("FileTitle"), wxT(""));
 	mFileName=mCore->GetRunFileName(filename_string);
 	mFrameRate = GetConfigurationInt(wxT("FrameRate"), 15);
 	BufferedFrames_Allocate(GetConfigurationInt(wxT("FrameBufferCount"), 1));
+	codecString = GetConfigurationString(wxT("Codec"), wxT("Def."));
 	OnReloadConfiguration();
 }
 
@@ -61,12 +62,20 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
+	//Select the codec
+	int codecValue;
+	if (codecString.Cmp(wxT("Def.")))
+		codecValue=CV_FOURCC(codecString.GetChar(0),codecString.GetChar(1),codecString.GetChar(2),codecString.GetChar(3));
+	else
+		codecValue=-1;
+
 	// Create the Writer
 	if (! mWriter) {
-		if (inputimage->nChannels == 3) {
-			mWriter = cvCreateVideoWriter(mFileName.GetFullPath().mb_str(wxConvFile), -1, mFrameRate, cvGetSize(inputimage));
+		if (inputimage->nChannels == 3) {	
+			wxString toto=mFileName.GetFullPath();
+			mWriter = cvCreateVideoWriter(mFileName.GetFullPath().mb_str(wxConvFile), codecValue, mFrameRate, cvGetSize(inputimage));			
 		} else if (inputimage->nChannels == 1) {
-			mWriter = cvCreateVideoWriter(mFileName.GetFullPath().mb_str(wxConvFile), -1, mFrameRate, cvGetSize(inputimage), 0);
+			mWriter = cvCreateVideoWriter(mFileName.GetFullPath().mb_str(wxConvFile), codecValue, mFrameRate, cvGetSize(inputimage), 0);
 		} else {
 			AddError(wxT("Input image must have 1 or 3 channels"));
 			return;

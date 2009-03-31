@@ -30,6 +30,7 @@ private:
 	int mFrameRate;						//!< (configuration) The frame rate of the output AVI.
 	int mInputSelection;				//!< (configuration) Selects the input channel.
 	wxFileName mFileName;				//!< (configuration) Name of the saved AVI.
+	wxString codecString;				//!< (configuration) Codec code
 	int mFrameBufferCount;				//!< (configuration) Number of frames to buffer before writing to disk.
 	IplImage** mFrameBuffer;			//!< The frame buffer.
 	int mFrameBufferWriteCounter;		//!< The number of frames in the frame buffer.
