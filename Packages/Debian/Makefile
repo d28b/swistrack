@@ -25,7 +25,7 @@ DEBIANIZED-DIR=swistrack-$(DISTRIB)
 debianized-tree:
 	rm -rf $(DEBIANIZED-DIR)
 	mkdir -p $(DEBIANIZED-DIR)
-	rsync -r --exclude ".svn" debian-common/ $(DEBIANIZED-DIR)/debian
+	rsync -r --exclude ".svn" debian/ $(DEBIANIZED-DIR)/debian
 	rsync -r --exclude ".svn" ../../Code/ $(DEBIANIZED-DIR)/Code
 	rsync -r --exclude ".svn" ../../3rdParty/ $(DEBIANIZED-DIR)/3rdParty
 	rsync -r --exclude ".svn" ../../Examples/ $(DEBIANIZED-DIR)/Examples
