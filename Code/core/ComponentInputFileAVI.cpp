@@ -67,10 +67,6 @@ void THISCLASS::OnStep() {
 		mCore->TriggerStop();
 		return;
 	}
-
-	// AVI files are flipped
-	cvFlip(mOutputImage, 0);
-
 	// Set DataStructureImage
 	mCore->mDataStructureInput.mImage = mOutputImage;
 	mCore->mDataStructureInput.mFrameNumber = framenumber;
