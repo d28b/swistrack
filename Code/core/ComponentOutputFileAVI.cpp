@@ -5,7 +5,7 @@
 
 THISCLASS::ComponentOutputFileAVI(SwisTrackCore *stc):
 		Component(stc, wxT("OutputFileAVI")),
-		mWriter(0), mFrameRate(15), mInputSelection(0), mFrameBufferCount(1), mFrameBuffer(0), mFrameBufferWriteCounter(0), codecString(wxString("Def.")),
+		mWriter(0), mFrameRate(15), mInputSelection(0), mFrameBufferCount(1), mFrameBuffer(0), mFrameBufferWriteCounter(0), codecString(wxString(wxT("Def."))),
 		mDisplayOutput(wxT("Output"), wxT("AVI File: Unprocessed Frame")) {
 
 	// Data structure relations
