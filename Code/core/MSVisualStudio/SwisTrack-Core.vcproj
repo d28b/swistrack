@@ -811,6 +811,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentOutputFramesImages.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOutputFramesImages.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentOutputImageStatisticsBinary.cpp"
 					>
 				</File>
