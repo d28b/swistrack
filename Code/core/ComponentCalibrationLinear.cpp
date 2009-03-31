@@ -25,15 +25,13 @@ THISCLASS::~ComponentCalibrationLinear() {
 
 void THISCLASS::OnStart() {
 	// Read the file containing the calibration points
-	wxString filename = GetConfigurationString(wxT("CalibrationPoints"), wxT(""));
+	wxString filename_string = GetConfigurationString(wxT("CalibrationPoints"), wxT(""));
+	wxFileName filename = mCore->GetProjectFileName(filename_string);
 	wxLogNull log;
 	wxXmlDocument document;
-	bool isopen = document.Load(filename);
+	bool isopen = document.Load(filename.GetFullPath());
 	if (! isopen) {
-	  wxString msg;
-                msg << wxT("Could not open or parse the XML file: ") 
-		    << filename;
-		AddError(msg);
+		AddError(wxT("The file \'") + filename.GetFullPath() + wxT("\' could not be read."));
 		return;
 	}
 
@@ -136,8 +134,7 @@ void THISCLASS::OnStart() {
 	maxErrorD = 0;
 	errorD = 0;
 
-	for (unsigned int i = 0; i < calibrationPointList.size(); i++)
-	{
+	for (unsigned int i = 0; i < calibrationPointList.size(); i++) {
 		double tmpErrorX, tmpErrorY, tmpErrorD;
 		CvPoint2D32f originalImage, originalWorld, finalWorld;
 		originalImage.x = (float)(calibrationPointList.at(i)).xImage;
@@ -151,12 +148,15 @@ void THISCLASS::OnStart() {
 		errorX += tmpErrorX;
 		errorY += tmpErrorY;
 		errorD += tmpErrorD;
-		if (tmpErrorX > maxErrorX)
+		if (tmpErrorX > maxErrorX) {
 			maxErrorX = tmpErrorX;
-		if (tmpErrorY > maxErrorY)
+		}
+		if (tmpErrorY > maxErrorY) {
 			maxErrorY = tmpErrorY;
-		if (tmpErrorD > maxErrorD)
+		}
+		if (tmpErrorD > maxErrorD) {
 			maxErrorD = tmpErrorD;
+		}
 	}
 	errorX = errorX / calibrationPointList.size();
 	errorY = errorY / calibrationPointList.size();
