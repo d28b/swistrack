@@ -23,7 +23,11 @@ THISCLASS::ComponentMotionTemplateTracking(SwisTrackCore *stc):
 	mCategory = &(mCore->mCategoryTracking);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
-	AddDataStructureWrite(&(mCore->mDataStructureParticles));
+
+	// This was going to be a tracker when I started writing it
+	// but then I realized it was better to use it for particle
+	// detection and use DynamicNearestNeighborTracking for tracking.
+	AddDataStructureWrite(&(mCore->mDataStructureParticles)); 
 	//AddDataStructureWrite(&(mCore->mDataStructureTracks));
 	AddDisplay(&mDisplayOutput);
 	memset(mInputChannels, 0, 3);
