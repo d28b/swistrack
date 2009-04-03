@@ -11,6 +11,7 @@
 #include "ComponentInputFileImage.h"
 #include "ComponentConvertToGray.h"
 #include "ComponentConvertToColor.h"
+#include "ComponentCannyEdgeDetection.h"
 #include "ComponentConvertBayerToColor.h"
 #include "ComponentChannelArithmetic.h"
 #include "ComponentBackgroundSubtractionGray.h"
@@ -96,6 +97,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	//Input conversion
 	mAvailableComponents.push_back(new ComponentConvertToGray(this));
 	mAvailableComponents.push_back(new ComponentConvertToColor(this));
+	mAvailableComponents.push_back(new ComponentCannyEdgeDetection(this));
 	mAvailableComponents.push_back(new ComponentConvertBayerToColor(this));
 	//Preprocessing Color
 	mAvailableComponents.push_back(new ComponentChannelArithmetic(this));

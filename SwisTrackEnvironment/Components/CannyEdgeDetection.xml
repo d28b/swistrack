@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Canny Edge Detection</friendlyname>
+	<description>Outputs the canny edges in the binary image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/CannyEdgeDetection</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+	</configuration>
+</swistrackcomponent>
