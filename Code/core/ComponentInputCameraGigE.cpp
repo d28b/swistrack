@@ -243,23 +243,8 @@ void THISCLASS::OnStep() {
 
 	// Get an item from the grabber's output queue
 	bool res = mStreamGrabber->RetrieveResult(mCurrentResult);
-	if (! res) {
-		printf("RetrieveResult returned false!\n");
-	}
-	if (! mCurrentResult.Succeeded()) {
-		AddError(wxString::Format(wxT("Failed to retrieve an item from the output queue: %s"), mCurrentResult.GetErrorDescription().c_str()));
-		printf("Error: %s\n", mCurrentResult.GetErrorDescription().c_str());
-		printf("ErrorCode: %d\n", mCurrentResult.GetErrorCode());
-		printf("Buffer: %d\n", mCurrentResult.Buffer());
-		printf("Handle: %d\n", mCurrentResult.Handle());
-		printf("Context: %d\n", mCurrentResult.Context());
-		printf("SizeX: %d\n", mCurrentResult.GetSizeX());
-		printf("SizeY: %d\n", mCurrentResult.GetSizeY());
-		printf("PixelType: %d\n", mCurrentResult.GetPixelType());
-		printf("PayloadType: %d\n", mCurrentResult.GetPayloadType());
-		printf("TimeStamp: %d\n", mCurrentResult.GetTimeStamp());
-		printf("FrameNr: %d\n", mCurrentResult.FrameNr());
-		return;
+	if ((! res) || (! mCurrentResult.Succeeded())) {
+		AddWarning(wxString::Format(wxT("Failed to retrieve an item from the output queue: %s"), mCurrentResult.GetErrorDescription().c_str()));
 	}
 
 	// This is the acquired image
