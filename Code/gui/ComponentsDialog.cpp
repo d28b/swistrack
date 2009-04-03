@@ -24,14 +24,20 @@ THISCLASS::ComponentsDialog(wxWindow* parent, SwisTrackCore *stc):
 	// Add an item for each component
 	SwisTrackCore::tComponentList::iterator it = mSwisTrackCore->mAvailableComponents.begin();
 	wxTreeItemId curcategoryitem;
+	std::map<ComponentCategory *, wxTreeItemId> mCategoryMap;
 	ComponentCategory *curcategory = 0;
 	while (it != mSwisTrackCore->mAvailableComponents.end()) {
 		ComponentCategory *category = (*it)->mCategory;
 		if (category) {
 			if ((! curcategoryitem) || (category != curcategory)) {
+			  curcategory = category;
+			  if (mCategoryMap.find(curcategory) != mCategoryMap.end()) {
+			    curcategoryitem = mCategoryMap[curcategory];
+			  } else {
 				curcategoryitem = mTree->AppendItem(rootitem, category->mDisplayName);
-				mTree->Expand(curcategoryitem);
-				curcategory = category;
+				mCategoryMap[category] = curcategoryitem;
+			  }
+			  mTree->Expand(curcategoryitem);
 			}
 
 			wxTreeItemId item = mTree->AppendItem(curcategoryitem, (*it)->mDisplayName, -1, -1, new ComponentTreeItem(*it));
