@@ -18,9 +18,9 @@ public:
 	~SwisTrackCoreTrigger();
 
 	//! Executes a step if all trigger components are ready.
-	void OnTrigger(wxCommandEvent &event);
+	void OnTrigger(wxEvent &event);
 	//! Clears the StepPerformed flag so that the a new step can be executed.
-	void OnTriggerClear(wxCommandEvent &event);
+	void OnTriggerClear(wxEvent &event);
 	//! Idle event handler.
 	void OnIdle();
 

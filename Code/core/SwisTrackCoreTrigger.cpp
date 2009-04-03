@@ -11,17 +11,17 @@ THISCLASS::SwisTrackCoreTrigger(SwisTrackCore *stc):
 		mSwisTrackCore(stc), mActive(false), mStepPerformed(false) {
 
 	mSwisTrackCore->AddInterface(this);
-	Connect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER, wxCommandEventHandler(THISCLASS::OnTrigger));
-	Connect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER_CLEAR, wxCommandEventHandler(THISCLASS::OnTriggerClear));
+	Connect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER, wxEventHandler(THISCLASS::OnTrigger));
+	Connect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER_CLEAR, wxEventHandler(THISCLASS::OnTriggerClear));
 }
 
 THISCLASS::~SwisTrackCoreTrigger() {
 	mSwisTrackCore->RemoveInterface(this);
-	Disconnect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER, wxCommandEventHandler(THISCLASS::OnTrigger));
-	Disconnect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER_CLEAR, wxCommandEventHandler(THISCLASS::OnTriggerClear));
+	Disconnect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER, wxEventHandler(THISCLASS::OnTrigger));
+	Disconnect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER_CLEAR, wxEventHandler(THISCLASS::OnTriggerClear));
 }
 
-void THISCLASS::OnTrigger(wxCommandEvent &event) {
+void THISCLASS::OnTrigger(wxEvent &event) {
 	if (mStepPerformed) {
 		return;
 	}
@@ -61,7 +61,7 @@ void THISCLASS::OnTrigger(wxCommandEvent &event) {
 	mSwisTrackCore->Step();
 }
 
-void THISCLASS::OnTriggerClear(wxCommandEvent &event) {
+void THISCLASS::OnTriggerClear(wxEvent &event) {
 	mStepPerformed = false;
 }
 

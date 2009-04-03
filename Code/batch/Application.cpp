@@ -5,18 +5,23 @@
 #include "SwisTrackCore.h"
 #include "NMEALog.h"
 #include <stdio.h>
+#include <iostream>
 #include <wx/filename.h>
+using namespace std;
 
 IMPLEMENT_APP(Application)
 
+int THISCLASS::OnRun() {
+  return MainLoop();
+}
 bool THISCLASS::OnInit() {
 	// Set some main application parameters.
 	SetVendorName(wxT("SwisTrack Community"));
 	SetAppName(wxT("SwisTrack"));
-	SetExitOnFrameDelete(false);
+	//SetExitOnFrameDelete(false);
 
 	// Initialize all available image handlers
-	wxInitAllImageHandlers();
+	//wxInitAllImageHandlers();
 
 	return true;
 }
@@ -62,12 +67,11 @@ int THISCLASS::RunBatch(const wxString filename_str) {
 	}
 
 	// Read the components
-	wxFileName::SetCwd(wxT(".."));
 	cr.ReadComponents(core);
 	if (cr.mErrorList.mList.size() != 0) {
 		wxFprintf(stderr, wxT("The following errors occured while reading ") + filename.GetFullPath() + wxT("\n"));
 		for (ErrorList::tList::iterator it = cr.mErrorList.mList.begin(); it != cr.mErrorList.mList.end(); it++) {
-			std::cerr << "Line " << it->mLineNumber << ": " << it->mMessage.ToAscii() << std::endl;
+			cerr << "Line " << it->mLineNumber << ": " << it->mMessage.ToAscii() << endl;
 		}
 		return -1;
 	}
@@ -85,11 +89,11 @@ int THISCLASS::RunBatch(const wxString filename_str) {
 	// Start execution
 	bool has_error = false;
 	core->TriggerStart();
-	core->Start(true);
-	for (std::list<Component*>::const_iterator it = core->GetDeployedComponents()->begin(); it != core->GetDeployedComponents()->end(); it++) {
+	core->Start(false);
+	for (list<Component*>::const_iterator it = core->GetDeployedComponents()->begin(); it != core->GetDeployedComponents()->end(); it++) {
 		Component *component = *it;
-		std::cout << component->mDisplayName.ToAscii() << ": " << (component->mStarted ? "started" : "not started") << std::endl;
-		for (std::list<StatusItem>::iterator it = component->mStatus.begin(); it != component->mStatus.end(); it++) {
+		cout << component->mDisplayName.ToAscii() << ": " << (component->mStarted ? "started" : "not started") << endl;
+		for (list<StatusItem>::iterator it = component->mStatus.begin(); it != component->mStatus.end(); it++) {
 			if (it->mType == StatusItem::sTypeError) {
 				wxFprintf(stderr, wxT("  Error: ") + it->mMessage + wxT("\n"));
 				has_error = true;
@@ -112,9 +116,9 @@ int THISCLASS::RunBatch(const wxString filename_str) {
 		core->Step();
 
 		// Print warnings and errors
-		for (std::list<Component*>::const_iterator it = core->GetDeployedComponents()->begin(); it != core->GetDeployedComponents()->end(); it++) {
+		for (list<Component*>::const_iterator it = core->GetDeployedComponents()->begin(); it != core->GetDeployedComponents()->end(); it++) {
 			Component *component = *it;
-			for (std::list<StatusItem>::iterator it = component->mStatus.begin(); it != component->mStatus.end(); it++) {
+			for (list<StatusItem>::iterator it = component->mStatus.begin(); it != component->mStatus.end(); it++) {
 				if (it->mType == StatusItem::sTypeError) {
 					wxFprintf(stderr, component->mDisplayName + wxT(": Error: ") + it->mMessage + wxT("\n"));
 					has_error = true;
