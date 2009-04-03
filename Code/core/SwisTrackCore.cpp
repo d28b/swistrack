@@ -96,8 +96,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentInputFileImage(this));
 	//Input conversion
 	mAvailableComponents.push_back(new ComponentConvertToGray(this));
-	mAvailableComponents.push_back(new ComponentConvertToColor(this));
-	mAvailableComponents.push_back(new ComponentCannyEdgeDetection(this));
+	mAvailableComponents.push_back(new ComponentConvertToColor(this));	
 	mAvailableComponents.push_back(new ComponentConvertBayerToColor(this));
 	//Preprocessing Color
 	mAvailableComponents.push_back(new ComponentChannelArithmetic(this));
@@ -109,6 +108,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentSpecificColorSubtraction(this));
 	mAvailableComponents.push_back(new ComponentColorMask(this));
 	mAvailableComponents.push_back(new ComponentColorBlur(this));
+	mAvailableComponents.push_back(new ComponentCannyEdgeDetection(this));
 	//Preprocessing Gray
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionGray(this));
