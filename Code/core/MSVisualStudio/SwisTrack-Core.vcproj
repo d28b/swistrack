@@ -5,7 +5,6 @@
 	Name="SwisTrack-Core"
 	ProjectGUID="{D010B136-96BD-4D44-B4F0-30388FB460B7}"
 	RootNamespace="objecttrackerlib"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -740,6 +739,14 @@
 				</File>
 				<File
 					RelativePath="..\ComponentBackgroundSubtractionColor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentCannyEdgeDetection.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentCannyEdgeDetection.h"
 					>
 				</File>
 				<File
