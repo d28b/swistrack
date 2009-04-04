@@ -30,7 +30,7 @@ void THISCLASS::OnStart()
 void THISCLASS::OnReloadConfiguration() {
 
   mThreshold1 = GetConfigurationDouble(wxT("Threshold1"), 50);
-  mThreshold2 = GetConfigurationDouble(wxT("Threshold1"), 200);
+  mThreshold2 = GetConfigurationDouble(wxT("Threshold2"), 200);
   
 }
 
@@ -54,7 +54,7 @@ void THISCLASS::OnStep() {
 	
 
 	cvCanny(inputimage, mOutputImage, mThreshold1, mThreshold2);
-
+	mCore->mDataStructureImageBinary.mImage = mOutputImage;
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
 		de.SetMainImage(mOutputImage);
