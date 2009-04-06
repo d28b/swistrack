@@ -126,8 +126,8 @@ THISCLASS::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 }
 
 THISCLASS::~SwisTrack() {
-	Control_StopRunMode();
-	Control_StopProductionMode();
+	mSwisTrackCore->TriggerStop();
+	mSwisTrackCore->Stop();
 
 	// Delete the components that rely on SwisTrackCore
 	mComponentListPanel->Destroy();
@@ -251,80 +251,30 @@ void THISCLASS::SetConfigurationPanel(Component *c) {
 	eld.ShowModal();
 }
 
-void THISCLASS::Control_Step() {
-	// Start (if necessary) and perform a step, unless the automatic trigger is active
-	if (mSwisTrackCore->IsTriggerActive()) {
-		return;
-	}
-	mSwisTrackCore->Start(false);
-	mSwisTrackCore->Step();
-}
-
-void THISCLASS::Control_ReloadConfiguration() {
-	// In production mode, we just call Control_ReloadConfiguration which may not update all configuration parameters.
-	// Otherwise, we stop the simulation (it is automatically restarted upon the next step).
-	if (mSwisTrackCore->IsStartedInProductionMode()) {
-		mSwisTrackCore->ReloadConfiguration();
-	} else {
-		mSwisTrackCore->Stop();
-		mSwisTrackCore->Start(false);
-	}
-}
-
-void THISCLASS::Control_StartProductionMode() {
-	// Stop and start in production mode, unless we are in production mode already
-	if (mSwisTrackCore->IsStartedInProductionMode()) {
-		return;
-	}
-	mSwisTrackCore->Stop();
-	mSwisTrackCore->Start(true);
-}
-
-void THISCLASS::Control_StopProductionMode() {
-	// Stop production mode (if we are running in production mode) and start in normal mode
-	if (! mSwisTrackCore->IsStartedInProductionMode()) {
-		return;
-	}
-	mSwisTrackCore->Stop();
-	mSwisTrackCore->Start(false);
-}
-
-void THISCLASS::Control_StartRunMode() {
-	// Activate the automatic trigger
-	mSwisTrackCore->TriggerStart();
-	mSwisTrackCore->Start(false);
-}
-
-void THISCLASS::Control_StopRunMode() {
-	// Deactivate the automatic trigger
-	mSwisTrackCore->TriggerStop();
-}
-
 bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 	if (m->mCommand == wxT("STEP")) {
-		Control_Step();
+		mSwisTrackCore->Step();
 		return true;
 	} else if (m->mCommand == wxT("RELOADCONFIGURATION")) {
-		Control_ReloadConfiguration();
+		mSwisTrackCore->ReloadConfiguration();
 		return true;
 	} else if (m->mCommand == wxT("RUN")) {
 		bool state = m->PopBool(false);
 		if (state) {
-			Control_StartRunMode();
+			mSwisTrackCore->TriggerStart();
 		} else {
-			Control_StopRunMode();
+			mSwisTrackCore->TriggerStop();
 		}
 		return true;
 	} else if (m->mCommand == wxT("START")) {
 		wxString str = m->PopString(wxT("DEFAULT"));
 		wxString strlc = str.Lower();
-		if (strlc == wxT("production")) {
-			Control_StartProductionMode();
-		} else {
-			Control_StopProductionMode();
-		}
+		mSwisTrackCore->Stop();
+		mSwisTrackCore->Start(strlc == wxT("production"));
 		return true;
 	} else if (m->mCommand == wxT("STOP")) {
+		mSwisTrackCore->Stop();
+		return true;
 	}
 
 	return false;
@@ -336,16 +286,17 @@ void THISCLASS::OnBeforeStart(bool productionmode) {
 		SaveFile(mSwisTrackCore->GetRunFileName(wxT("configuration.swistrack")), false, true);
 	}
 
-	// Update the status text
+	// Update toolbar and status text
 	GetToolBar()->ToggleTool(cID_Control_ProductionMode, productionmode);
 	GetToolBar()->EnableTool(cID_Control_Reset, ! productionmode);
 	SetStatusText(mSwisTrackCore->GetRunTitle(), cStatusField_RunTitle);
 }
 
 void THISCLASS::OnAfterStop() {
+	// Update toolbar and status text
 	GetToolBar()->ToggleTool(cID_Control_ProductionMode, false);
 	GetToolBar()->EnableTool(cID_Control_Reset, true);
-	SetStatusText("", cStatusField_RunTitle);
+	SetStatusText(wxT(""), cStatusField_RunTitle);
 }
 
 void THISCLASS::OnBeforeTriggerStart() {
@@ -358,7 +309,7 @@ void THISCLASS::OnBeforeTriggerStart() {
 		GetToolBar()->Realize();
 	}
 
-	// Update the status text
+	// Update the toolbar
 	GetToolBar()->EnableTool(cID_Control_Step, false);
 }
 
@@ -372,15 +323,16 @@ void THISCLASS::OnAfterTriggerStop() {
 		GetToolBar()->Realize();
 	}
 
-	// Update the status text
+	// Update the toolbar
 	GetToolBar()->EnableTool(cID_Control_Step, true);
 }
 
 void THISCLASS::OnFileNew(wxCommandEvent& WXUNUSED(event)) {
 	wxMessageDialog dlg(this, wxT("This will destroy your current session. Are you sure?"), wxT("Destroy current session?"), wxOK | wxCANCEL | wxICON_ERROR);
 	if (dlg.ShowModal() != wxID_OK) {
-		return; // user canceled
+		return;
 	}
+
 	NewFile();
 }
 
@@ -426,8 +378,8 @@ void THISCLASS::OpenFile(const wxFileName &filename, bool breakonerror, bool ast
 	//}
 
 	// Close the current configuration
-	Control_StopProductionMode();
-	Control_StopRunMode();
+	mSwisTrackCore->Stop();
+	mSwisTrackCore->TriggerStop();
 	SetConfigurationPanel(0);
 
 	// At this point, we definitively switch to the new file.
@@ -527,26 +479,37 @@ void THISCLASS::OnFileQuit(wxCommandEvent& WXUNUSED(event)) {
 
 void THISCLASS::OnControlProductionMode(wxCommandEvent& WXUNUSED(event)) {
 	if (mSwisTrackCore->IsStartedInProductionMode()) {
-		Control_StopProductionMode();
+		mSwisTrackCore->Stop();
+		if (mSwisTrackCore->IsTriggerActive()) {
+			mSwisTrackCore->Start(false);
+		}
 	} else {
-		Control_StartProductionMode();
+		mSwisTrackCore->Stop();
+		mSwisTrackCore->Start(true);
 	}
 }
 
 void THISCLASS::OnControlRun(wxCommandEvent& WXUNUSED(event)) {
 	if (mSwisTrackCore->IsTriggerActive()) {
-		Control_StopRunMode();
+		mSwisTrackCore->TriggerStop();
 	} else {
-		Control_StartRunMode();
+		mSwisTrackCore->Start(false);
+		mSwisTrackCore->TriggerStart();
 	}
 }
 
 void THISCLASS::OnControlStep(wxCommandEvent& WXUNUSED(event)) {
-	Control_Step();
+	// Start (if necessary) and perform a step, unless the automatic trigger is active
+	if (mSwisTrackCore->IsTriggerActive()) {
+		return;
+	}
+	mSwisTrackCore->Start(false);
+	mSwisTrackCore->Step();
 }
 
 void THISCLASS::OnControlReset(wxCommandEvent& WXUNUSED(event)) {
-	Control_ReloadConfiguration();
+	mSwisTrackCore->Stop();
+	mSwisTrackCore->Start(false);
 }
 
 void THISCLASS::OnIdle(wxIdleEvent& event) {

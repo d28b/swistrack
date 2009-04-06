@@ -55,14 +55,14 @@ void THISCLASS::SetNewValue(wxWindow *updateprotection) {
 		if (mSwisTrack->mSwisTrackCore->IsStartedInProductionMode()) {
 			return;
 		}
-		mSwisTrack->Control_Step();
+		mSwisTrack->mSwisTrackCore->Step();
 	} else {
 		if (mSwisTrack->mSwisTrackCore->IsStartedInProductionMode()) {
 			return;
 		}
 		mSwisTrack->mSwisTrackCore->Stop();
 		mSwisTrack->mSwisTrackCore->Start(false);
-		mSwisTrack->Control_Step();
+		mSwisTrack->mSwisTrackCore->Step();
 	}
 }
 

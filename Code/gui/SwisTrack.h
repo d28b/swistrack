@@ -62,19 +62,6 @@ public:
 	//! Sets the configuration panel on the right side.
 	void SetConfigurationPanel(Component *c);
 
-	//! Starts in production mode.
-	void Control_StartProductionMode();
-	//! Stops production mode.
-	void Control_StopProductionMode();
-	//! Performs a single step. If necessary, the core is started (in non-production mode).
-	void Control_Step();
-	//! Reloads the configuration. If the core is started in production mode, this only reloads a subset of the parameters. Otherwise, a complete core stop/start is performed.
-	void Control_ReloadConfiguration();
-	//! Starts the automatic trigger.
-	void Control_StartRunMode();
-	//! Stops the automatic trigger and switches to manual trigger.
-	void Control_StopRunMode();
-
 protected:
 	//! IDs for the controls and the menu commands
 	enum eID {

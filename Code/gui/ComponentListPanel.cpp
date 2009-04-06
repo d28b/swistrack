@@ -304,7 +304,7 @@ void THISCLASS::OnAfterStep() {
 
 void THISCLASS::OnAfterEdit() {
 	Update();
-	mSwisTrack->Control_ReloadConfiguration();
+	mSwisTrack->mSwisTrackCore->ReloadConfiguration();
 }
 
 void THISCLASS::OnButtonAddClick(wxCommandEvent& event) {
