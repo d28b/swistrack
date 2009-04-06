@@ -59,7 +59,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxFrame)
 	EVT_IDLE(THISCLASS::OnIdle)
 END_EVENT_TABLE()
 
-SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
+THISCLASS::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& size, long style):
 		wxFrame(NULL, -1, title, pos, size, style),
 		CommunicationCommandHandler(),
 		SwisTrackCoreInterface(),
@@ -125,7 +125,7 @@ SwisTrack::SwisTrack(const wxString& title, const wxPoint& pos, const wxSize& si
 	mSwisTrackCore->AddInterface(this);
 }
 
-SwisTrack::~SwisTrack() {
+THISCLASS::~SwisTrack() {
 	Control_StopRunMode();
 	Control_StopProductionMode();
 
@@ -227,7 +227,7 @@ void THISCLASS::SetConfigurationPanel(Component *c) {
 	}
 
 	// Destroy the old panel
-	mConfigurationPanel->Destroy();	
+	mConfigurationPanel->Destroy();
 
 	// Create a new panel
 	mConfigurationPanel = new ConfigurationPanel(panel_top, this, c);
@@ -277,12 +277,7 @@ void THISCLASS::Control_StartProductionMode() {
 		return;
 	}
 	mSwisTrackCore->Stop();
-	GetToolBar()->ToggleTool(cID_Control_ProductionMode, true);
-	GetToolBar()->EnableTool(cID_Control_Reset, false);
 	mSwisTrackCore->Start(true);
-
-	// Update the status text
-	SetStatusText(mSwisTrackCore->GetRunTitle(), cStatusField_RunTitle);
 }
 
 void THISCLASS::Control_StopProductionMode() {
@@ -291,49 +286,18 @@ void THISCLASS::Control_StopProductionMode() {
 		return;
 	}
 	mSwisTrackCore->Stop();
-	GetToolBar()->ToggleTool(cID_Control_ProductionMode, false);
-	GetToolBar()->EnableTool(cID_Control_Reset, true);
 	mSwisTrackCore->Start(false);
-
-	// Update the status text
-	SetStatusText(mSwisTrackCore->GetRunTitle(), cStatusField_RunTitle);
 }
 
 void THISCLASS::Control_StartRunMode() {
-	// Switch start to stop button (by removing one and adding the other one) and store removed tool in mHiddenStartStopTool
-	int pos = GetToolBar()->GetToolPos(cID_Control_Run);
-	if ( pos != wxNOT_FOUND) {
-		wxToolBarToolBase *temp = GetToolBar()->RemoveTool(cID_Control_Run);
-		GetToolBar()->InsertTool(pos, mHiddenStartStopTool);
-		mHiddenStartStopTool = temp;
-		GetToolBar()->Realize();
-	}
-
 	// Activate the automatic trigger
-	GetToolBar()->EnableTool(cID_Control_Step, false);
 	mSwisTrackCore->TriggerStart();
 	mSwisTrackCore->Start(false);
-
-	// Update the status text
-	SetStatusText(mSwisTrackCore->GetRunTitle(), cStatusField_RunTitle);
 }
 
 void THISCLASS::Control_StopRunMode() {
-	// Switch stop to start button (by removing one and adding the other one) and store removed tool in mHiddenStartStopTool
-	int pos = GetToolBar()->GetToolPos(cID_Control_Stop);
-	if ( pos != wxNOT_FOUND) { // need to check because starting SwisTrack will trigger a call to this method, even though app is in 'stopped' mode
-		wxToolBarToolBase *temp = GetToolBar()->RemoveTool(cID_Control_Stop);
-		GetToolBar()->InsertTool(pos, mHiddenStartStopTool);
-		mHiddenStartStopTool = temp;
-		GetToolBar()->Realize();
-	}
-
 	// Deactivate the automatic trigger
-	GetToolBar()->EnableTool(cID_Control_Step, true);
 	mSwisTrackCore->TriggerStop();
-
-	// Update the status text
-	SetStatusText(mSwisTrackCore->GetRunTitle(), cStatusField_RunTitle);
 }
 
 bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
@@ -351,7 +315,7 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 			Control_StopRunMode();
 		}
 		return true;
-	} else if (m->mCommand == wxT("MODE")) {
+	} else if (m->mCommand == wxT("START")) {
 		wxString str = m->PopString(wxT("DEFAULT"));
 		wxString strlc = str.Lower();
 		if (strlc == wxT("production")) {
@@ -360,6 +324,7 @@ bool THISCLASS::OnCommunicationCommand(CommunicationMessage *m) {
 			Control_StopProductionMode();
 		}
 		return true;
+	} else if (m->mCommand == wxT("STOP")) {
 	}
 
 	return false;
@@ -370,9 +335,48 @@ void THISCLASS::OnBeforeStart(bool productionmode) {
 	if (productionmode) {
 		SaveFile(mSwisTrackCore->GetRunFileName(wxT("configuration.swistrack")), false, true);
 	}
+
+	// Update the status text
+	GetToolBar()->ToggleTool(cID_Control_ProductionMode, productionmode);
+	GetToolBar()->EnableTool(cID_Control_Reset, ! productionmode);
+	SetStatusText(mSwisTrackCore->GetRunTitle(), cStatusField_RunTitle);
 }
 
-void SwisTrack::OnFileNew(wxCommandEvent& WXUNUSED(event)) {
+void THISCLASS::OnAfterStop() {
+	GetToolBar()->ToggleTool(cID_Control_ProductionMode, false);
+	GetToolBar()->EnableTool(cID_Control_Reset, true);
+	SetStatusText("", cStatusField_RunTitle);
+}
+
+void THISCLASS::OnBeforeTriggerStart() {
+	// Switch start to stop button (by removing one and adding the other one) and store removed tool in mHiddenStartStopTool
+	int pos = GetToolBar()->GetToolPos(cID_Control_Run);
+	if ( pos != wxNOT_FOUND) {
+		wxToolBarToolBase *temp = GetToolBar()->RemoveTool(cID_Control_Run);
+		GetToolBar()->InsertTool(pos, mHiddenStartStopTool);
+		mHiddenStartStopTool = temp;
+		GetToolBar()->Realize();
+	}
+
+	// Update the status text
+	GetToolBar()->EnableTool(cID_Control_Step, false);
+}
+
+void THISCLASS::OnAfterTriggerStop() {
+	// Switch stop to start button (by removing one and adding the other one) and store removed tool in mHiddenStartStopTool
+	int pos = GetToolBar()->GetToolPos(cID_Control_Stop);
+	if ( pos != wxNOT_FOUND) { // need to check because starting SwisTrack will trigger a call to this method, even though app is in 'stopped' mode
+		wxToolBarToolBase *temp = GetToolBar()->RemoveTool(cID_Control_Stop);
+		GetToolBar()->InsertTool(pos, mHiddenStartStopTool);
+		mHiddenStartStopTool = temp;
+		GetToolBar()->Realize();
+	}
+
+	// Update the status text
+	GetToolBar()->EnableTool(cID_Control_Step, true);
+}
+
+void THISCLASS::OnFileNew(wxCommandEvent& WXUNUSED(event)) {
 	wxMessageDialog dlg(this, wxT("This will destroy your current session. Are you sure?"), wxT("Destroy current session?"), wxOK | wxCANCEL | wxICON_ERROR);
 	if (dlg.ShowModal() != wxID_OK) {
 		return; // user canceled
@@ -516,7 +520,7 @@ void THISCLASS::SaveFile(const wxFileName &filename, bool breakonerror, bool asc
 	}
 }
 
-void SwisTrack::OnFileQuit(wxCommandEvent& WXUNUSED(event)) {
+void THISCLASS::OnFileQuit(wxCommandEvent& WXUNUSED(event)) {
 	Close(TRUE);
 	Destroy();
 }
@@ -583,7 +587,7 @@ void THISCLASS::OnHelp(wxCommandEvent& WXUNUSED(event)) {
 	wxLaunchDefaultBrowser(wxT("http://en.wikibooks.org/wiki/Swistrack"));
 }
 
-void SwisTrack::OnHelpAbout(wxCommandEvent& WXUNUSED(event)) {
+void THISCLASS::OnHelpAbout(wxCommandEvent& WXUNUSED(event)) {
 	AboutDialog *dlg = new AboutDialog(this);
 	dlg->ShowModal();
 }

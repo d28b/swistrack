@@ -115,6 +115,9 @@ protected:
 
 	// SwisTrackCoreInterface methods
 	void OnBeforeStart(bool productionmode);
+	void OnAfterStop();
+	void OnBeforeTriggerStart();
+	void OnAfterTriggerStop();
 
 	// Event handlers
 	void OnFileNew(wxCommandEvent& WXUNUSED(event));
