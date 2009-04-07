@@ -2,6 +2,7 @@
 #define THISCLASS ComponentOutputFile
 using namespace std;
 #include <iostream>
+#include <errno.h>
 #include <fstream>
 #include "DisplayEditor.h"
 
@@ -23,6 +24,8 @@ THISCLASS::~ComponentOutputFile() {
 
 void THISCLASS::OnStart() 
 {	
+  mDirectoryName = GetConfigurationString(wxT("DirectoryName"), wxT(""));
+  
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -46,12 +49,23 @@ void THISCLASS::OnStep() {
 		} else {
 			structOutputFile *newOutputFile = new structOutputFile;
 			newOutputFile->trackID = it->first;
-			wxFileName tmpFileName = mCore->GetRunFileName(wxString::Format(wxT("track_%08d.txt"), it->first));
+			wxString  file = wxString::Format(wxT("track_%08d.txt"), it->first);
+			wxFileName tmpFileName = mCore->GetRunFileName(file);
+			cout << "Name: " << mDirectoryName.ToAscii() << endl;
+			if (mDirectoryName != wxT("")) {
+			  tmpFileName = wxFileName(mDirectoryName, file);
+			}
+			cout << "file: " << tmpFileName.GetPath().ToAscii() << 
+			  "/" << tmpFileName.GetFullName().ToAscii() << endl;
 			(newOutputFile->fileStream).open(tmpFileName.GetFullPath().mb_str(wxConvFile), std::fstream::out | std::fstream::trunc);
 
 			if (!(newOutputFile->fileStream).is_open()) {
-				AddError(wxT("Unable to open one of the output file"));
-				return;
+			  wxString msg;
+			  msg << wxT("Unable to open one of the output file: ");
+			  msg << tmpFileName.GetFullPath() << wxT(" ");
+			  msg << wxString::FromAscii(sys_errlist[errno]);
+			  AddError(msg);
+			  return;
 			}
 			mFiles[it->first] = newOutputFile;
 			WriteHeader(newOutputFile->fileStream);
