@@ -7,6 +7,14 @@ all:
 	$(MAKE) -C Code/core
 	$(MAKE) -C Code/gui
 
+.PHONY: osxbundle
+osxbundle:
+	$(MAKE) -C 3rdParty/libtsai
+	$(MAKE) -C 3rdParty/camshift_wrapper
+	$(MAKE) -C 3rdParty/cvblobslib_v6p1
+	$(MAKE) -C Code/core
+	$(MAKE) -C Code/gui osxbundle
+
 .PHONY: batch
 batch:
 	$(MAKE) -C 3rdParty/libtsai
