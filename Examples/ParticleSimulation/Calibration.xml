@@ -22,7 +22,7 @@
 		<point>
 			<xworld>3.4</xworld>
 			<yworld>1.6</yworld>
-			<ximage>130.0</ximage>
+			<ximage>340.0</ximage>
 			<yimage>160.0</yimage>
 		</point>
 		<point>
@@ -36,6 +36,12 @@
 			<yworld>4.7</yworld>
 			<ximage>370.0</ximage>
 			<yimage>470.0</yimage>
+		</point>
+		<point>
+			<xworld>2.55</xworld>
+			<yworld>5.1</yworld>
+			<ximage>255.0</ximage>
+			<yimage>510.0</yimage>
 		</point>
 	</points>
 </pointlist>
