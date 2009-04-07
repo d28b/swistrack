@@ -16,7 +16,7 @@ FILES_D   := $(FILES_C:.c=.d)
 
 # Flags
 override CFLAGS    += -g -Wall
-override CPPFLAGS  += $(OPENCV_CPPFLAGS) -I/usr/include
+override CPPFLAGS  += $(OPENCV_CPPFLAGS) -I/usr/lib/include/opencv
 
 # Build
 .PHONY: all

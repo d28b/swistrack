@@ -53,7 +53,7 @@ void THISCLASS::OnStep() {
 
 	// Get and check input image
 	IplImage *inputimage = cvCloneImage(mCore->mDataStructureImageBinary.mImage);
-	IplImage *outputImage = cvCloneImage(mCore->mDataStructureImageBinary.mImage);
+	IplImage *outputImage = mCore->mDataStructureImageBinary.mImage;
 	//mCore->mDataStructureImageBinary.mImage;
 	if (! inputimage) {
 		AddError(wxT("No input image."));
