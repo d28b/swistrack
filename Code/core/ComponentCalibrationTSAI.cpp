@@ -3,8 +3,8 @@
 
 #include "DisplayEditor.h"
 #include "DataStructureParticles.h"
-#include <wx/log.h>
 #include "libtsai.h"
+#include <wx/log.h>
 #include <fstream>
 
 THISCLASS::ComponentCalibrationTSAI(SwisTrackCore *stc):
@@ -128,16 +128,17 @@ void THISCLASS::OnStart() {
 	errorD = errorD / calibrationPointList.size();
 
 	//Write error into calibration.log
-	std::fstream outputFile;
-	outputFile.open("calibration.log", std::fstream::out | std::fstream::trunc);
-	outputFile << "Calibration error" << std::endl;
-	outputFile << "Max error in X: \t" << maxErrorX << std::endl;
-	outputFile << "Max error in Y: \t" << maxErrorY << std::endl;
-	outputFile << "Average error in X: \t" << errorX << std::endl;
-	outputFile << "Average error in Y: \t" << errorY << std::endl;
-	outputFile << "Max distance error: \t" << maxErrorD << std::endl;
-	outputFile << "Average distance error: \t" << errorD << std::endl;
-	outputFile.close();
+	std::fstream logfile;
+	wxFileName logfilename = mCore->GetRunFileName(wxT("CalibrationTSAI.log"));
+	logfile.open(logfilename.GetFullPath().mb_str(wxConvFile), std::fstream::out | std::fstream::trunc);
+	logfile << "Calibration error" << std::endl;
+	logfile << "Max error in X: \t" << maxErrorX << std::endl;
+	logfile << "Max error in Y: \t" << maxErrorY << std::endl;
+	logfile << "Average error in X: \t" << errorX << std::endl;
+	logfile << "Average error in Y: \t" << errorY << std::endl;
+	logfile << "Max distance error: \t" << maxErrorD << std::endl;
+	logfile << "Average distance error: \t" << errorD << std::endl;
+	logfile.close();
 }
 
 void THISCLASS::OnReloadConfiguration() {

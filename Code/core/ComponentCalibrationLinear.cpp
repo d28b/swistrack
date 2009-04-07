@@ -162,17 +162,29 @@ void THISCLASS::OnStart() {
 	errorY = errorY / calibrationPointList.size();
 	errorD = errorD / calibrationPointList.size();
 
-	//Write error into calibration.log
-	std::fstream outputFile;
-	outputFile.open("calibration.log", std::fstream::out | std::fstream::trunc);
-	outputFile << "Calibration error" << std::endl;
-	outputFile << "Max error in X: \t" << maxErrorX << std::endl;
-	outputFile << "Max error in Y: \t" << maxErrorY << std::endl;
-	outputFile << "Average error in X: \t" << errorX << std::endl;
-	outputFile << "Average error in Y: \t" << errorY << std::endl;
-	outputFile << "Max distance error: \t" << maxErrorD << std::endl;
-	outputFile << "Average distance error: \t" << errorD << std::endl;
-	outputFile.close();
+	// Write the calibration parameters
+	std::fstream logfile;
+	wxFileName logfilename = mCore->GetRunFileName(wxT("CalibrationLinear.log"));
+	logfile.open(logfilename.GetFullPath().mb_str(wxConvFile), std::fstream::out | std::fstream::trunc);
+	logfile << "Calibration error" << std::endl;
+	logfile << "Max error in X: \t" << maxErrorX << std::endl;
+	logfile << "Max error in Y: \t" << maxErrorY << std::endl;
+	logfile << "Average error in X: \t" << errorX << std::endl;
+	logfile << "Average error in Y: \t" << errorY << std::endl;
+	logfile << "Max distance error: \t" << maxErrorD << std::endl;
+	logfile << "Average distance error: \t" << errorD << std::endl;
+	logfile << "Camera matrix: " << std::endl;
+	logfile << "\t" << "x = a11 u + a12 v + a13 + a14 u^2 + a15 v^2 + a16 uv" << std::endl;
+	logfile << "\t" << "y = a21 u + a22 v + a23 + a24 u^2 + a25 v^2 + a26 uv" << std::endl;
+	for (int i = 0; i < 6; i++) {
+		logfile << "\t" << cameraMatrix[i];
+	}
+	logfile << std::endl;
+	for (int i = 6; i < 12; i++) {
+		logfile << "\t" << cameraMatrix[i];
+	}
+	logfile << std::endl;
+	logfile.close();
 }
 
 void THISCLASS::OnReloadConfiguration() {
