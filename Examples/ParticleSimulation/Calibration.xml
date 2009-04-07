@@ -2,40 +2,40 @@
 <pointlist>
 	<points>
 		<point>
-			<xworld>0.0</xworld>
-			<yworld>0.0</yworld>
-			<ximage>0.0</ximage>
-			<yimage>0.0</yimage>
+			<xworld>1.3</xworld>
+			<yworld>1.5</yworld>
+			<ximage>130.0</ximage>
+			<yimage>150.0</yimage>
 		</point>
 		<point>
-			<xworld>6.4</xworld>
+			<xworld>6.3</xworld>
+			<yworld>4.2</yworld>
+			<ximage>630.0</ximage>
+			<yimage>420.0</yimage>
+		</point>
+		<point>
+			<xworld>0.1</xworld>
 			<yworld>4.8</yworld>
-			<ximage>640.0</ximage>
+			<ximage>10.0</ximage>
 			<yimage>480.0</yimage>
 		</point>
 		<point>
-			<xworld>0.0</xworld>
-			<yworld>4.8</yworld>
-			<ximage>0.0</ximage>
-			<yimage>480.0</yimage>
+			<xworld>3.4</xworld>
+			<yworld>1.6</yworld>
+			<ximage>130.0</ximage>
+			<yimage>160.0</yimage>
 		</point>
 		<point>
-			<xworld>6.4</xworld>
-			<yworld>0.0</yworld>
-			<ximage>640.0</ximage>
-			<yimage>0.0</yimage>
+			<xworld>2.2</xworld>
+			<yworld>1.25</yworld>
+			<ximage>220.0</ximage>
+			<yimage>125.0</yimage>
 		</point>
 		<point>
-			<xworld>3.2</xworld>
-			<yworld>1.0</yworld>
-			<ximage>320.0</ximage>
-			<yimage>100.0</yimage>
-		</point>
-		<point>
-			<xworld>3.2</xworld>
-			<yworld>3.8</yworld>
-			<ximage>320.0</ximage>
-			<yimage>380.0</yimage>
+			<xworld>3.7</xworld>
+			<yworld>4.7</yworld>
+			<ximage>370.0</ximage>
+			<yimage>470.0</yimage>
 		</point>
 	</points>
 </pointlist>
