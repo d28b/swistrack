@@ -3,6 +3,7 @@
 
 #include "DisplayEditor.h"
 #define PI 3.14159265358979
+#include <algorithm>
 
 THISCLASS::ComponentBlobDetectionRedGreen(SwisTrackCore *stc):
 		Component(stc, wxT("BlobDetectionRedGreen")),
@@ -197,9 +198,7 @@ void THISCLASS::FindBlobs(IplImage *inputimage, cColor &color) {
 	// Init blob extraxtion
 	CvMemStorage* storage = cvCreateMemStorage(0);
 	CvContourScanner blobs = cvStartFindContours(inputimage, storage, sizeof(CvContour), CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
-
-	// We clear the output vector
-	color.mParticles.clear();
+	DataStructureParticles::tParticleVector particles;
 
 	// Iterate over blobs
 	while (1) {
@@ -230,16 +229,8 @@ void THISCLASS::FindBlobs(IplImage *inputimage, cColor &color) {
 				newparticle.mID = -1;
 				newparticle.mIDCovariance = -1;
 
-				// Insert the particle at the right place, such that the list remains sorted (note that one could use a heap here to lower the complexity)
-				std::vector<Particle>::iterator j;
-				for (j = color.mParticles.begin(); (j != color.mParticles.end()) && (newparticle.mArea < (*j).mArea); j++);
-				color.mParticles.insert(j, newparticle);
-
-				// Remove particles if we have too many of them
-				while (color.mParticles.size() > mMaxNumberOfParticles) {
-					// Remove the smallest one
-					color.mParticles.pop_back();
-				}
+				// Add the particle
+				particles.push_back(newparticle);
 			}
 		}
 
@@ -250,4 +241,32 @@ void THISCLASS::FindBlobs(IplImage *inputimage, cColor &color) {
 	// Finalize blob extraction
 	cvEndFindContours(&blobs);
 	cvReleaseMemStorage(&storage);
+
+	// Sort the particles
+	std::sort(particles.begin(), particles.end(), Particle::CompareArea);
+
+	// We clear the output vector
+	color.mParticles.clear();
+
+	// Keep only the largest particles, and only the biggest particle within a certain range
+	float mindistance2 = pow((float)mMaxDistance, 2.0f) * 0.5;
+	std::vector<Particle>::iterator i1;
+	for (i1 = particles.begin(); i1 != particles.end(); i1++) {
+		// Check if there is a particle nearby already
+		std::vector<Particle>::iterator i2 = i1;
+		for (i2 = color.mParticles.begin(); i2 != color.mParticles.end(); i2++) {
+			float distance2 = pow(i1->mCenter.x - i2->mCenter.x, 2.0f) + pow(i1->mCenter.y - i2->mCenter.y, 2.0f);
+			if (distance2 < mindistance2) {
+				break;
+			}
+		}
+
+		// If not, add the particle and check if we have enough
+		if (i2 == color.mParticles.end()) {
+			color.mParticles.push_back(*i1);
+			if (color.mParticles.size() > mMaxNumberOfParticles) {
+				break;
+			}
+		}
+	}
 }
