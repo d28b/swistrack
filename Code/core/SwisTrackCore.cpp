@@ -35,6 +35,7 @@
 #include "ComponentBlobSelection.h"
 #include "ComponentBlobDetectionMinMax.h"
 #include "ComponentBlobDetectionTwoColors.h"
+#include "ComponentBlobDetectionRedGreen.h"
 #include "ComponentTracking.h"
 #include "ComponentNearestNeighborTracking.h"
 #include "ComponentDynamicNearestNeighborTracking.h"
@@ -96,7 +97,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentInputFileImage(this));
 	//Input conversion
 	mAvailableComponents.push_back(new ComponentConvertToGray(this));
-	mAvailableComponents.push_back(new ComponentConvertToColor(this));	
+	mAvailableComponents.push_back(new ComponentConvertToColor(this));
 	mAvailableComponents.push_back(new ComponentConvertBayerToColor(this));
 	//Preprocessing Color
 	mAvailableComponents.push_back(new ComponentChannelArithmetic(this));
@@ -125,9 +126,10 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentBinaryErosion(this));
 	mAvailableComponents.push_back(new ComponentBinaryMask(this));
 	mAvailableComponents.push_back(new ComponentBlobSelection(this));
-	//Particle Detection		
+	//Particle Detection
 	mAvailableComponents.push_back(new ComponentBlobDetectionMinMax(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionTwoColors(this));
+	mAvailableComponents.push_back(new ComponentBlobDetectionRedGreen(this));
 	mAvailableComponents.push_back(new ComponentIDReaderRing(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
 	//Calibration
@@ -154,7 +156,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentOutputImageStatisticsGray(this));
 	mAvailableComponents.push_back(new ComponentOutputMarkFrameManual(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
-	
+
 	// Initialize the available components
 	tComponentList::iterator ita = mAvailableComponents.begin();
 	while (ita != mAvailableComponents.end()) {
