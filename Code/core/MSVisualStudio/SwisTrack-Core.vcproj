@@ -5,6 +5,7 @@
 	Name="SwisTrack-Core"
 	ProjectGUID="{D010B136-96BD-4D44-B4F0-30388FB460B7}"
 	RootNamespace="objecttrackerlib"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -607,6 +608,14 @@
 				</File>
 				<File
 					RelativePath="..\ComponentBlobDetectionMinMax.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentBlobDetectionRedGreen.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentBlobDetectionRedGreen.h"
 					>
 				</File>
 				<File
