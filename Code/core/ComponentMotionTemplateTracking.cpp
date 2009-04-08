@@ -21,7 +21,7 @@ THISCLASS::ComponentMotionTemplateTracking(SwisTrackCore *stc):
 {
 	// Data structure relations
 	mCategory = &(mCore->mCategoryTracking);
-	AddDataStructureRead(&(mCore->mDataStructureImageColor));
+	AddDataStructureRead(&(mCore->mDataStructureInput));
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 
 	// This was going to be a tracker when I started writing it
@@ -62,7 +62,7 @@ void THISCLASS::OnStep()
 
 	wxTimeSpan timeSinceLastFrame = mCore->mDataStructureInput.TimeSinceLastFrame();
 
-	IplImage *inputImage = mCore->mDataStructureImageColor.mImage;
+	IplImage *inputImage = mCore->mDataStructureInput.mImage;
 	if (! inputImage) {
 		AddError(wxT("No input image."));
 		return;
@@ -265,7 +265,7 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, IplImage * foreground
 		  cvSplit(img, mInputChannels[0], mInputChannels[1], mInputChannels[2], NULL);
 		  cvCalcHist(mInputChannels, tmpParticle.mColorModel);
 		  cvSet(dst, cvScalar(255,255,255), mForegroundMask);
-		  tmpParticle.mArea = cvCountNonZero(mForegroundMask);  // only look at foreground pixels.
+		  tmpParticle.mArea = comp_rect.width * comp_rect.height;
 		} else {
 		  // no histogram when there's no background model. 
 		  tmpParticle.mArea = comp_rect.width * comp_rect.height;
