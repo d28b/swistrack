@@ -4,7 +4,7 @@ Track::Track() {
 }
 
 /** \brief Constructor - id number id*/
-Track::Track(int idnumber) :  mLastUpdateFrame(0), trajectory(0) {
+Track::Track(int idnumber) :  mLastUpdateFrame(0), mColorModel(0), trajectory(0) {
 	maxlength = 50; // maximum length of trajectory to store
 	//printf("%f %f\n",trajectory.at(0).x,trajectory.at(0).y);
 	mID = idnumber;
@@ -21,10 +21,16 @@ void Track::AddPoint(CvPoint2D32f p, int frameNumber) {
 	if (maxlength != -1 && (int)(trajectory.size()) > maxlength)
 		trajectory.erase(trajectory.begin());
 	mLastUpdateFrame = frameNumber;
+
 }
 
 void Track::SetMaxLength(int length) {
   maxlength = length;
+}
+
+void Track:: SetColorModel(CvHistogram * model) {
+  cvReleaseHist(&mColorModel);
+  mColorModel = model;
 }
 
 void Track::SetCritPoint(CvPoint2D32f *p) {

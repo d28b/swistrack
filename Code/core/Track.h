@@ -13,9 +13,12 @@ private:
 	//CvScalar color;
 	int mLastUpdateFrame;
 
+
+
 public:
 	void SetCritPoint(CvPoint2D32f* p);
-	int mID;					/*< Holds ID number of track */
+	int mID;
+	CvHistogram * mColorModel;
 	std::vector<CvPoint2D32f> trajectory; /*< Info about objects being tracked */
 	/** Critical point */
 	CvPoint2D32f critpoint;
@@ -28,6 +31,9 @@ public:
 	int LastUpdateFrame() {
 	  return mLastUpdateFrame;
 	}
+
+	/** The track takes ownership of the color model. */
+	void SetColorModel(CvHistogram * model);
 
 	/** Destructor */
 	~Track();
