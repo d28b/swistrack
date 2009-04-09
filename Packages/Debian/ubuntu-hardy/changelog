@@ -1,3 +1,9 @@
+swistrack (4.0-20090309~hardy1) hardy; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Thu, 09 Apr 2009 15:16:48 +0200
+
 swistrack (4.0-20090307~hardy2) hardy; urgency=low
 
   * update to svn HEAD
