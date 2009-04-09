@@ -85,7 +85,7 @@ void THISCLASS::OnStep()
     }
   }
 
-
+  mCore->mDataStructureImageColor.mImage  = mOutputImage; 
   DisplayEditor de(&mDisplayOutput);
   if (de.IsActive()) {
     de.SetMainImage(mOutputImage);
