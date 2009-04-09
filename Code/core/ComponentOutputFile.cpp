@@ -63,7 +63,7 @@ void THISCLASS::OnStep() {
 			  wxString msg;
 			  msg << wxT("Unable to open one of the output file: ");
 			  msg << tmpFileName.GetFullPath() << wxT(" ");
-			  msg << wxString::FromAscii(sys_errlist[errno]);
+			  msg << wxString::FromAscii(strerror(errno));
 			  AddError(msg);
 			  return;
 			}
