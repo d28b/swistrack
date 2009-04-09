@@ -29,8 +29,8 @@ public:
 private:
 	wxTextCtrl *mTextCtrl;		//!< The corresponding GUI widget.
 	wxButton *mButton;			//!< The corresponding GUI widget.
-	int mValueDefault;			//!< The default value.
-	int mNewValue;				//!< The new value.
+	wxColor mValueDefault;			//!< The default value.
+	wxColor mNewValue;				//!< The new value.
 
 	// ConfigurationParameter methods
 	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
@@ -42,8 +42,6 @@ private:
 	// Returns true if the new value is the same as the currently set value.
 	bool CompareNewValue();
 
-	// Converts a wxColour to an integer.
-	int ColorToInt(wxColour &color);
 
 	DECLARE_EVENT_TABLE()
 };

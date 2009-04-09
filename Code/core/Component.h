@@ -2,7 +2,7 @@
 #define HEADER_Component
 
 class Component;
-
+#include <wx/wx.h>
 #include <wx/string.h>
 #include <list>
 #include <map>
@@ -86,6 +86,9 @@ public:
 	wxString GetConfigurationString(const wxString &key, const wxString &defvalue);
 	//! Returns a timestamp from the configuration.
 	wxDateTime GetConfigurationDate(const wxString &key, const wxDateTime &defvalue);
+
+	//! Returns a timestamp from the configuration.
+	wxColour GetConfigurationColor(const wxString &key, const wxColour &defvalue);
 
 	//! Clears the status list
 	void ClearStatus();

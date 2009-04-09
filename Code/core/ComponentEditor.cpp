@@ -29,7 +29,7 @@ void THISCLASS::ConfigurationReadXML(wxXmlNode *configuration, ErrorList *xmlerr
 	// Default settings
 	mComponent->mConfiguration.clear();
 	mComponent->mEnabledInterval = 1;
-
+	
 	// Read all nodes of the XML node belonging to the component
 	wxXmlNode *node = configuration->GetChildren();
 	while (node) {
@@ -111,5 +111,14 @@ bool THISCLASS::SetConfigurationDate(const wxString &key, const wxDateTime &valu
 		return false;
 	}
 	mComponent->mConfiguration[key] = ConfigurationConversion::Date(value);
+	return true;
+}
+
+
+bool THISCLASS::SetConfigurationColor(const wxString &key, const wxColor &value) {
+	if (! mComponent) {
+		return false;
+	}
+	mComponent->mConfiguration[key] = ConfigurationConversion::Color(value);
 	return true;
 }

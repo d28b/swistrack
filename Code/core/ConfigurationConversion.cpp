@@ -1,5 +1,6 @@
 #include "ConfigurationConversion.h"
 #define THISCLASS ConfigurationConversion
+#include <iostream>
 
 bool THISCLASS::Bool(const wxString &str, bool defvalue) {
 	if (str.Len() == 0) {
@@ -64,4 +65,17 @@ wxDateTime THISCLASS::Date(const wxString &str, const wxDateTime &defvalue) {
 	wxDateTime retval = wxDateTime();
 	retval.ParseFormat(str);
 	return retval;
+}
+
+wxColor THISCLASS::Color(const wxString &str, const wxColor &defValue) {
+  if (str.Len() == 0) {
+    return defValue;
+  } else {
+    return wxColor(str);
+  }
+}
+
+wxString THISCLASS::Color(const wxColor value) {
+  std::cout << "Color: " << value.GetAsString(wxC2S_HTML_SYNTAX).ToAscii() << "\n";
+  return value.GetAsString(wxC2S_HTML_SYNTAX);
 }

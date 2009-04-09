@@ -109,6 +109,10 @@ wxDateTime THISCLASS::GetConfigurationDate(const wxString &key, const wxDateTime
 	return ConfigurationConversion::Date(GetConfigurationString(key, wxT("")), defvalue);
 }
 
+wxColor THISCLASS::GetConfigurationColor(const wxString &key, const wxColor &defvalue) {
+	return ConfigurationConversion::Color(GetConfigurationString(key, wxT("")), defvalue);
+}
+
 wxString THISCLASS::GetConfigurationString(const wxString &key, const wxString &defvalue) {
 	// If the key is available in the configuration, return its value
 	tConfigurationMap::const_iterator it = mConfiguration.find(key);

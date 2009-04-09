@@ -16,7 +16,7 @@ END_EVENT_TABLE()
 THISCLASS::ConfigurationParameterColor(wxWindow* parent):
 		ConfigurationParameter(parent),
 		mTextCtrl(0), mButton(0),
-		mValueDefault(0) {
+		mValueDefault(*wxBLACK) {
 
 }
 
@@ -49,7 +49,7 @@ void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 	if (updateprotection == mTextCtrl) {
 		return;
 	}
-	int value = mComponent->GetConfigurationInt(mName, mValueDefault);
+	wxColor value = mComponent->GetConfigurationColor(mName, mValueDefault);
 	mTextCtrl->SetValue(wxColour(value).GetAsString(wxC2S_HTML_SYNTAX));
 }
 
@@ -58,13 +58,13 @@ bool THISCLASS::ValidateNewValue() {
 }
 
 bool THISCLASS::CompareNewValue() {
-	int value = mComponent->GetConfigurationInt(mName, mValueDefault);
+	wxColor value = mComponent->GetConfigurationColor(mName, mValueDefault);
 	return (value == mNewValue);
 }
 
 void THISCLASS::OnSetNewValue() {
 	ComponentEditor ce(mComponent);
-	ce.SetConfigurationInt(mName, mNewValue);
+	ce.SetConfigurationColor(mName, mNewValue);
 }
 
 void THISCLASS::OnButtonClicked(wxCommandEvent& event) {
@@ -73,7 +73,7 @@ void THISCLASS::OnButtonClicked(wxCommandEvent& event) {
 	if (dlg.ShowModal() != wxID_OK) {
 		return;
 	}
-	mNewValue = ColorToInt(dlg.GetColourData().GetColour());
+	mNewValue = dlg.GetColourData().GetColour();
 	ValidateNewValue();
 	SetNewValue();
 }
@@ -85,11 +85,9 @@ void THISCLASS::OnTextEnter(wxCommandEvent& event) {
 
 void THISCLASS::OnKillFocus(wxFocusEvent& event) {
 	wxColour color = wxColour(mTextCtrl->GetValue());
-	mNewValue = ColorToInt(color);
+	mNewValue = color;
 	ValidateNewValue();
 	SetNewValue();
 }
 
-int THISCLASS::ColorToInt(wxColour &color) {
-	return color.Red() + (color.Green() << 8) + (color.Blue() << 16);
-}
+
