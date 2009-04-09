@@ -27,6 +27,9 @@ public:
 	//! Converts a configuration value into a date.
 	static wxDateTime Date(const wxString &str, const wxDateTime &defvalue);
 
+	static wxColor Color(const wxString & str, const wxColor & defValue);
+
+
 	//! Converts a boolean value into a configuration value.
 	static wxString Bool(bool value);
 	//! Converts a int value into a configuration value.
@@ -35,6 +38,8 @@ public:
 	static wxString Double(double value);
 	//! Converts a date into a configuration value.
 	static wxString Date(wxDateTime value);
+
+	static wxString Color(const wxColor);
 };
 
 #endif
