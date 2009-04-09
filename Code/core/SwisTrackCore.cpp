@@ -25,6 +25,8 @@
 #include "ComponentSpecificColorSubtraction.h"
 #include "ComponentColorMask.h"
 #include "ComponentColorBlur.h"
+#include "ComponentColorSwapper.h"
+#include "ComponentMoveBinaryToColor.h"
 #include "ComponentThresholdGray.h"
 #include "ComponentThresholdColorCommon.h"
 #include "ComponentThresholdColorIndependent.h"
@@ -109,6 +111,8 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentSpecificColorSubtraction(this));
 	mAvailableComponents.push_back(new ComponentColorMask(this));
 	mAvailableComponents.push_back(new ComponentColorBlur(this));
+	mAvailableComponents.push_back(new ComponentColorSwapper(this));
+	mAvailableComponents.push_back(new ComponentMoveBinaryToColor(this));
 	mAvailableComponents.push_back(new ComponentCannyEdgeDetection(this));
 	//Preprocessing Gray
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
