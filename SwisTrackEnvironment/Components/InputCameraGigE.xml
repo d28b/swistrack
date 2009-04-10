@@ -16,7 +16,7 @@
 			<label>Mode</label>
 			<items>
 				<item key="true">Color (YUV422)</item>
-				<item key="false">Mono (8 bit)</item>
+				<item key="false">Grayscale (8 bit)</item>
 			</items>
 			<reloadable>false</reloadable>
 		</parameter>
