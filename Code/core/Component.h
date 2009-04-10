@@ -4,9 +4,10 @@
 class Component;
 #include <wx/wx.h>
 #include <wx/string.h>
+#include <wx/xml/xml.h>
+#include <wx/colour.h>
 #include <list>
 #include <map>
-#include <wx/xml/xml.h>
 #include "StatusItem.h"
 #include "SwisTrackCore.h"
 #include "DataStructure.h"
@@ -86,8 +87,7 @@ public:
 	wxString GetConfigurationString(const wxString &key, const wxString &defvalue);
 	//! Returns a timestamp from the configuration.
 	wxDateTime GetConfigurationDate(const wxString &key, const wxDateTime &defvalue);
-
-	//! Returns a timestamp from the configuration.
+	//! Returns a color from the configuration.
 	wxColour GetConfigurationColor(const wxString &key, const wxColour &defvalue);
 
 	//! Clears the status list

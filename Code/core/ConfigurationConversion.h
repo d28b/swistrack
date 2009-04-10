@@ -4,6 +4,7 @@
 class ConfigurationConversion;
 
 #include <wx/xml/xml.h>
+#include <wx/colour.h>
 #include "SwisTrackCore.h"
 
 //! Functions to convert configuration strings to other types and vice versa.
@@ -26,9 +27,8 @@ public:
 	static double Double(const wxString &str, double defvalue);
 	//! Converts a configuration value into a date.
 	static wxDateTime Date(const wxString &str, const wxDateTime &defvalue);
-
-	static wxColor Color(const wxString & str, const wxColor & defValue);
-
+	//! Converts a configuration value into a color.
+	static wxColor Color(const wxString & str, const wxColor &defValue);
 
 	//! Converts a boolean value into a configuration value.
 	static wxString Bool(bool value);
@@ -38,7 +38,7 @@ public:
 	static wxString Double(double value);
 	//! Converts a date into a configuration value.
 	static wxString Date(wxDateTime value);
-
+	//! Converts a color into a configuration value.
 	static wxString Color(const wxColor);
 };
 

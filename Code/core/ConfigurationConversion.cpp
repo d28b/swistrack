@@ -55,7 +55,7 @@ wxString THISCLASS::Double(double value) {
 }
 
 wxString THISCLASS::Date(wxDateTime value) {
-        return value.Format();
+	return value.Format();
 }
 
 wxDateTime THISCLASS::Date(const wxString &str, const wxDateTime &defvalue) {
@@ -68,14 +68,14 @@ wxDateTime THISCLASS::Date(const wxString &str, const wxDateTime &defvalue) {
 }
 
 wxColor THISCLASS::Color(const wxString &str, const wxColor &defValue) {
-  if (str.Len() == 0) {
-    return defValue;
-  } else {
-    return wxColor(str);
-  }
+	if (str.Len() == 0) {
+		return defValue;
+	} else {
+		return wxColor(str);
+	}
 }
 
 wxString THISCLASS::Color(const wxColor value) {
-  std::cout << "Color: " << value.GetAsString(wxC2S_HTML_SYNTAX).ToAscii() << "\n";
-  return value.GetAsString(wxC2S_HTML_SYNTAX);
+	std::cout << "Color: " << value.GetAsString(wxC2S_HTML_SYNTAX).ToAscii() << "\n";
+	return value.GetAsString(wxC2S_HTML_SYNTAX);
 }
