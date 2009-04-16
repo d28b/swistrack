@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Output Image Statistics (Color)</friendlyname>
+	<friendlyname>Output Image Statistics (grayscale)</friendlyname>
 	<description>Calculates statistics of a color image.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputImageStatisticsColor</url>
 	<displayimage>Output</displayimage>

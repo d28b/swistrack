@@ -27,9 +27,9 @@
 			<name>InputImage</name>
 			<label>Input Image</label>
 			<items>
-				<item key="0">Gray</item>
-				<item key="1">Color</item>
-				<item key="2">Binary</item>
+				<item key="color">Color</item>
+				<item key="grayscale">Grayscale</item>
+				<item key="binary">Binary</item>
 			</items>
 			<default>0</default>
 			<reloadable>true</reloadable>

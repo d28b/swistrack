@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Background Subtraction based on Cheung and Kamath (2005)</friendlyname>
+	<friendlyname>Background Subtraction Based on Cheung and Kamath (2005)</friendlyname>
 	<description>Combine slow adapting and fast adapting background subtraction.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BackgroundSubtractionCheungKamath</url>
 	<displayimage>Output</displayimage>

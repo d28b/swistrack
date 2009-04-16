@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Output Image Statistics (Binary)</friendlyname>
+	<friendlyname>Output Image Statistics (binary)</friendlyname>
 	<description>Calculates statistics of a binary image.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputImageStatisticsBinary</url>
 	<displayimage>Output</displayimage>

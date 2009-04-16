@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Output each frame to seperate image</friendlyname>
-	<description>Saves each frame as a seperate image in the given directory. Increments filename by storing frame number in it.</description>
+	<friendlyname>Output to Image Sequence</friendlyname>
+	<description>Saves each frame as a separate image in the given directory. Increments filename by storing frame number in it.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputFramesImages</url>
 	<displayimage>Output</displayimage>
 	<configuration>
 		<parameter type="outputfile">
 			<name>FilePrefix</name>
-			<label>directroy and filename prefix</label>
+			<label>Directory and filename prefix</label>
 			<reloadable>false</reloadable>
 		</parameter>
-		<label>frame number and extension will be automatically appended. Subdirectories will be created as needed.</label>
+		<label>Frame number and extension will be automatically appended. Subdirectories will be created as needed.</label>
 		<parameter type="dropdownlist">
 			<name>FileType</name>
 			<label>File Type</label>
@@ -27,9 +27,9 @@
 			<name>InputImage</name>
 			<label>Input Image</label>
 			<items>
-				<item key="0">Gray</item>
-				<item key="1">Color</item>
-				<item key="2">Binary</item>
+				<item key="color">Color</item>
+				<item key="grayscale">Grayscale</item>
+				<item key="binary">Binary</item>
 			</items>
 			<default>0</default>
 			<reloadable>true</reloadable>

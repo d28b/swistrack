@@ -21,8 +21,8 @@
 			<name>InputChannel</name>
 			<label>Input Channel</label>
 			<items>
-				<item key="grayscale">Gray</item>
 				<item key="color">Color</item>
+				<item key="grayscale">Grayscale</item>
 				<item key="binary">Binary</item>
 			</items>
 			<default>grayscale</default>

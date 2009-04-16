@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Threshold</friendlyname>
+	<friendlyname>Threshold (color)</friendlyname>
 	<description>Thresholds a color image and stores the result in a binary image.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ThresholdColorCommon</url>
 	<displayimage>Output</displayimage>

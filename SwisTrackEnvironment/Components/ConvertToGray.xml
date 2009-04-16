@@ -10,7 +10,7 @@
 			<name>Channel</name>
 			<label>Channel</label>
 			<items>
-				<item key="0">All (convert to gray)</item>
+				<item key="0">All (convert to grayscale)</item>
 				<item key="3">Red</item>
 				<item key="2">Green</item>
 				<item key="1">Blue</item>

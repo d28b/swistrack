@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Double Threshold</friendlyname>
+	<friendlyname>Double Threshold (color)</friendlyname>
 	<description>Thresholds a color image using a lower and an upper threshold value for each channel. The result is a binary image.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/DoubleThresholdColorIndependent</url>
 	<displayimage>Output</displayimage>
