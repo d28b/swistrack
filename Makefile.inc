@@ -9,10 +9,10 @@ CXX       := g++
 AR        := ar
 
 # OpenCV (activate the second set of lines in case you don't have pkg-config)
-OPENCV_CPPFLAGS    := `pkg-config --cflags opencv`
-OPENCV_LDLIBS      := `pkg-config --libs opencv`
-#OPENCV_CPPFLAGS    := -I/usr/include/opencv
-#OPENCV_LDLIBS      := -lcxcore -lcv -lhighgui -lcvaux -lml
+#OPENCV_CPPFLAGS    := `pkg-config --cflags opencv`
+#OPENCV_LDLIBS      := `pkg-config --libs opencv`
+OPENCV_CPPFLAGS    := -I/usr/include/opencv
+OPENCV_LDLIBS      := -lcxcore -lcv -lhighgui -lcvaux -lml
 
 # wxWidgets
 WXWIDGETS_CPPFLAGS := `wx-config --version=2.8 --cppflags`
