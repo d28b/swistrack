@@ -41,7 +41,7 @@ private:
 		cKeepInMemory_Compressed
 	};
 
-	//! Keep in memory feature
+	//! Input channel
 	enum eInputChannel {
 		cInputChannel_None,
 		cInputChannel_Color,

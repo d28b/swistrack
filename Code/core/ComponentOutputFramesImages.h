@@ -31,7 +31,15 @@ public:
 	}
 
 private:
-	int mInputSelection;				//!< (configuration) Selects the input channel.
+	//! Input channel
+	enum eInputChannel {
+		cInputChannel_None,
+		cInputChannel_Color,
+		cInputChannel_Grayscale,
+		cInputChannel_Binary
+	};
+
+	enum eInputChannel mInputChannel;	//!< (configuration) Selected input channel.
 	wxFileName mFileName;				//!< (configuration) directory and filename prefix
 	eFileType mFileType;				//!< (configuration) directory and filename prefix
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.

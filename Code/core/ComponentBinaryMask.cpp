@@ -51,12 +51,6 @@ void THISCLASS::OnStart() {
 		mMaskImage = img;
 	}
 
-	// load other parameters:
-	OnReloadConfiguration();
-	return;
-}
-
-void THISCLASS::OnReloadConfiguration() {
 	// Mask mode
 	wxString mode = GetConfigurationString(wxT("Mode"), wxT("black-black"));
 	if (mode == wxT("white-white")) {
@@ -70,6 +64,13 @@ void THISCLASS::OnReloadConfiguration() {
 	} else {
 		mMode = cMode_BlackBlack;
 	}
+
+	// Load other parameters
+	OnReloadConfiguration();
+	return;
+}
+
+void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {

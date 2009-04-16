@@ -9,7 +9,7 @@ using namespace std;
 
 THISCLASS::ComponentOutputFramesImages(SwisTrackCore *stc):
 		Component(stc, wxT("OutputFramesImages")),
-		mInputSelection(0),
+		mInputChannel(cInputChannel_None),
 		mDisplayOutput(wxT("Output"), wxT("FramesImages: Unprocessed Frame")) {
 
 	// Data structure relations
@@ -28,7 +28,7 @@ THISCLASS::~ComponentOutputFramesImages() {
 
 void THISCLASS::OnStart() {
 	wxString filename_string = GetConfigurationString(wxT("FilePrefix"), wxT(""));
-	mFileName=mCore->GetRunFileName(filename_string);
+	mFileName = mCore->GetRunFileName(filename_string);
 	// make sure that subdirectory exists:
 	mFileName.Mkdir(mFileName.GetPath(), 0777, wxPATH_MKDIR_FULL);
 	mFileType = (eFileType)GetConfigurationInt(wxT("FileType"), 0);
@@ -36,23 +36,29 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mInputSelection = GetConfigurationInt(wxT("InputImage"), 0);
+	wxString inputchannel = GetConfigurationString(wxT("InputChannel"), wxT(""));
+	if (inputchannel == wxT("color")) {
+		mInputChannel = cInputChannel_Color;
+	} else if (inputchannel == wxT("grayscale")) {
+		mInputChannel = cInputChannel_Grayscale;
+	} else if (inputchannel == wxT("binary")) {
+		mInputChannel = cInputChannel_Binary;
+	} else {
+		mInputChannel = cInputChannel_None;
+	}
 }
 
 void THISCLASS::OnStep() {
 	// Get the input image
 	IplImage* inputimage;
-	switch (mInputSelection) {
-	case 0:
-		// Gray image
-		inputimage = mCore->mDataStructureImageGray.mImage;
-		break;
-	case 1:
-		// Color image
+	switch (mInputChannel) {
+	case cInputChannel_Color:
 		inputimage = mCore->mDataStructureImageColor.mImage;
 		break;
-	case 2:
-		// Binary image
+	case cInputChannel_Grayscale:
+		inputimage = mCore->mDataStructureImageGray.mImage;
+		break;
+	case cInputChannel_Binary:
 		inputimage = mCore->mDataStructureImageBinary.mImage;
 		break;
 	default:
@@ -64,6 +70,7 @@ void THISCLASS::OnStep() {
 		AddError(wxT("No image on selected input."));
 		return;
 	}
+
 	char *fileExtension;
 	switch (mFileType) {
 	case 0:
@@ -78,7 +85,7 @@ void THISCLASS::OnStep() {
 	std::ostringstream filename_oss;
 	filename_oss << mFileName.GetFullPath().mb_str(wxConvFile) << "-" << std::setw(8) << std::setfill('0') << mCore->GetStepCounter() << fileExtension;
 	cvSaveImage(filename_oss.str().c_str(), inputimage );
-	
+
 	// Image is always top down in Swistrack
 	inputimage->origin = 0;
 

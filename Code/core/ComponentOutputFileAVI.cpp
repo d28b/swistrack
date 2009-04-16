@@ -5,7 +5,8 @@
 
 THISCLASS::ComponentOutputFileAVI(SwisTrackCore *stc):
 		Component(stc, wxT("OutputFileAVI")),
-		mWriter(0), mFrameRate(15), mInputSelection(0), mFrameBufferCount(1), mFrameBuffer(0), mFrameBufferWriteCounter(0), codecString(wxString(wxT("Def."))),
+		mWriter(0), mFrameRate(15), mInputChannel(cInputChannel_None), mFrameBufferCount(1), mFrameBuffer(0),
+		mCodecString(wxString(wxT("Def."))), mFrameBufferWriteCounter(0),
 		mDisplayOutput(wxT("Output"), wxT("AVI File: Unprocessed Frame")) {
 
 	// Data structure relations
@@ -25,31 +26,37 @@ THISCLASS::~ComponentOutputFileAVI() {
 
 void THISCLASS::OnStart() {
 	wxString filename_string = GetConfigurationString(wxT("FileTitle"), wxT(""));
-	mFileName=mCore->GetRunFileName(filename_string);
+	mFileName = mCore->GetRunFileName(filename_string);
 	mFrameRate = GetConfigurationInt(wxT("FrameRate"), 15);
 	BufferedFrames_Allocate(GetConfigurationInt(wxT("FrameBufferCount"), 1));
-	codecString = GetConfigurationString(wxT("Codec"), wxT("Def."));
+	mCodecString = GetConfigurationString(wxT("Codec"), wxT("Def."));
 	OnReloadConfiguration();
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mInputSelection = GetConfigurationInt(wxT("InputImage"), 0);
+	wxString inputchannel = GetConfigurationString(wxT("InputChannel"), wxT(""));
+	if (inputchannel == wxT("color")) {
+		mInputChannel = cInputChannel_Color;
+	} else if (inputchannel == wxT("grayscale")) {
+		mInputChannel = cInputChannel_Grayscale;
+	} else if (inputchannel == wxT("binary")) {
+		mInputChannel = cInputChannel_Binary;
+	} else {
+		mInputChannel = cInputChannel_None;
+	}
 }
 
 void THISCLASS::OnStep() {
 	// Get the input image
 	IplImage* inputimage;
-	switch (mInputSelection) {
-	case 0:
-		// Gray image
-		inputimage = mCore->mDataStructureImageGray.mImage;
-		break;
-	case 1:
-		// Color image
+	switch (mInputChannel) {
+	case cInputChannel_Color:
 		inputimage = mCore->mDataStructureImageColor.mImage;
 		break;
-	case 2:
-		// Binary image
+	case cInputChannel_Grayscale:
+		inputimage = mCore->mDataStructureImageGray.mImage;
+		break;
+	case cInputChannel_Binary:
 		inputimage = mCore->mDataStructureImageBinary.mImage;
 		break;
 	default:
@@ -62,18 +69,18 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
-	//Select the codec
+	// Select the codec
 	int codecValue;
-	if (codecString.Cmp(wxT("Def.")))
-		codecValue=CV_FOURCC(codecString.GetChar(0),codecString.GetChar(1),codecString.GetChar(2),codecString.GetChar(3));
+	if (mCodecString.Cmp(wxT("Def.")))
+		codecValue = CV_FOURCC(mCodecString.GetChar(0), mCodecString.GetChar(1), mCodecString.GetChar(2), mCodecString.GetChar(3));
 	else
-		codecValue=-1;
+		codecValue = -1;
 
 	// Create the Writer
 	if (! mWriter) {
-		if (inputimage->nChannels == 3) {	
-			wxString toto=mFileName.GetFullPath();
-			mWriter = cvCreateVideoWriter(mFileName.GetFullPath().mb_str(wxConvFile), codecValue, mFrameRate, cvGetSize(inputimage));			
+		if (inputimage->nChannels == 3) {
+			wxString toto = mFileName.GetFullPath();
+			mWriter = cvCreateVideoWriter(mFileName.GetFullPath().mb_str(wxConvFile), codecValue, mFrameRate, cvGetSize(inputimage));
 		} else if (inputimage->nChannels == 1) {
 			mWriter = cvCreateVideoWriter(mFileName.GetFullPath().mb_str(wxConvFile), codecValue, mFrameRate, cvGetSize(inputimage), 0);
 		} else {

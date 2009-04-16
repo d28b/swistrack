@@ -26,11 +26,19 @@ public:
 	}
 
 private:
+	//! Input channel
+	enum eInputChannel {
+		cInputChannel_None,
+		cInputChannel_Color,
+		cInputChannel_Grayscale,
+		cInputChannel_Binary
+	};
+
 	CvVideoWriter* mWriter;				//!< Pointer to AVI sequence.
 	int mFrameRate;						//!< (configuration) The frame rate of the output AVI.
-	int mInputSelection;				//!< (configuration) Selects the input channel.
+	enum eInputChannel mInputChannel;	//!< (configuration) Selected input channel.
 	wxFileName mFileName;				//!< (configuration) Name of the saved AVI.
-	wxString codecString;				//!< (configuration) Codec code
+	wxString mCodecString;				//!< (configuration) Codec code
 	int mFrameBufferCount;				//!< (configuration) Number of frames to buffer before writing to disk.
 	IplImage** mFrameBuffer;			//!< The frame buffer.
 	int mFrameBufferWriteCounter;		//!< The number of frames in the frame buffer.
