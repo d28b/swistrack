@@ -13,7 +13,7 @@ FILES_CPP := $(wildcard *.cpp)
 FILES_H   := $(wildcard *.h)
 FILES_O   := $(FILES_CPP:.cpp=.o)
 FILES_D   := $(FILES_CPP:.cpp=.d)
-FILES_A   := ../core/libSwisTrackCore.a ../../3rdParty/cvblobslib_v6p1/libCVBlobs.a ../../3rdParty/libtsai/libtsai.a ../../3rdParty/camshift_wrapper/libCamshiftWrapper.a
+FILES_A   := ../core/libSwisTrackCore.a ../../3rdParty/cvblobslib_v6p1/libCVBlobs.a ../../3rdParty/libtsai/libtsai.a ../../3rdParty/camshift_wrapper/libCamshiftWrapper.a 
 
 # Flags
 override CXXFLAGS  += -g -Wall $(CXXFLAGS_ADD)
@@ -28,6 +28,7 @@ all: $(TARGET)
 $(TARGET): $(FILES_O) $(FILES_A)
 	@echo "=== Building $@"
 	$(CXX) $(LDFLAGS) $(FILES_O) $(FILES_A) $(LDLIBS) -o $@
+#	$(CXX) $(LDFLAGS) $(FILES_O) $(FILES_A)/usr/lib/libefence.a  $(LDLIBS) -o $@
 
 .PHONY: osxbundle
 osxbundle: $(TARGET)
