@@ -6,10 +6,10 @@
 THISCLASS::ComponentMoveBinaryToColor(SwisTrackCore *stc):
 		Component(stc, wxT("MoveBinaryToColor")),
 		mOutputImage(0),
-		mDisplayOutput(wxT("Output"), wxT("After conversion from Bayer to BGR")) {
+		mDisplayOutput(wxT("Output"), wxT("Move the binary image to the color image.")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryInputConversion);
+	mCategory = &(mCore->mCategoryPreprocessingBinary);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);
@@ -56,7 +56,7 @@ void THISCLASS::OnStep()
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureImageGray.mImage = 0;
+
 }
 
 void THISCLASS::OnStop() {

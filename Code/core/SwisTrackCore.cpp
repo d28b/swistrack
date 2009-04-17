@@ -142,7 +142,6 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentTracking(this));
 	mAvailableComponents.push_back(new ComponentNearestNeighborTracking(this));
 	mAvailableComponents.push_back(new ComponentDynamicNearestNeighborTracking(this));
-	mAvailableComponents.push_back(new ComponentColorHistogramParticles(this));
 	mAvailableComponents.push_back(new ComponentCamShiftTracking(this));
 	mAvailableComponents.push_back(new ComponentMinCostFlowTracking(this));
 	mAvailableComponents.push_back(new ComponentMotionTemplateTracking(this));
