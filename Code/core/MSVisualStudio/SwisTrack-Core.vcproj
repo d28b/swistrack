@@ -783,6 +783,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentColorSwapper.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentHSVBackgroundSubtractionColor.cpp"
 					>
 				</File>
@@ -1072,6 +1076,10 @@
 				</File>
 				<File
 					RelativePath="..\ComponentConvertToGray.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMoveBinaryToColor.cpp"
 					>
 				</File>
 			</Filter>
