@@ -106,7 +106,8 @@ void THISCLASS::WriteHeader(std::fstream & fileStream) {
     << "x (world)" << "\t" << "y (world)" << "\t"
     << "Area" << "\t"
     << "Orientation" << "\t"
-    << "Compactness" << std::endl;
+    << "Compactness" << "\t"
+	 << "TimeStamp (ms)" << std::endl;
 }
 void THISCLASS::WriteParticle(std::fstream & fileStream, const Particle & p) {
   // Write the needed data to the file
@@ -118,13 +119,15 @@ void THISCLASS::WriteParticle(std::fstream & fileStream, const Particle & p) {
     << p.mOrientation << "\t"
     << p.mCompactness;
   if (p.mTimestamp.IsValid()) {
-    wxString date;
     wxString millis;
     millis << p.mTimestamp.GetMillisecond();
     millis.Pad(3 - millis.Length(), '0', false);
     fileStream
       << "\t" << p.mTimestamp.GetTicks()
       << millis.ToAscii();
+  } else  {
+	 fileStream
+		<< "\t -1"; // write -1 in place of an invalid timestamp
   }
   fileStream << std::endl;
   
