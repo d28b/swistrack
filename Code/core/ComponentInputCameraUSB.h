@@ -29,6 +29,7 @@ public:
 private:
 	CvCapture* mCapture;				//!< Pointer to the capture object.
 	IplImage* mOutputImage;				//!< The last acquired image.
+	int mFrameNumber;							//!< The frame number since the component was started.
 
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 };
