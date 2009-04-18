@@ -4,7 +4,7 @@
 #include <cv.h>
 #include "Component.h"
 
-//! A component that detects blobs that have a certain size and stores them as particles in DataStructureParticle.
+//! A component that selects blobs that have a certain size
 class ComponentBlobSelection: public Component {
 
 public:
