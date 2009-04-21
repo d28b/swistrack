@@ -18,11 +18,15 @@ OPENCV_LDLIBS      := `pkg-config --libs opencv`
 WXWIDGETS_CPPFLAGS := `wx-config --version=2.8 --cppflags`
 WXWIDGETS_LDLIBS   := `wx-config --version=2.8 --libs`
 
-# GiGE Camera Component (activate the following lines to compile with this component)
+# GiGE PYLON Camera Component (activate the following lines to compile with this component)
 #PYLON_ROOT         := /opt/pylon
 #GENICAM_ROOT_V1_1  := /opt/pylon
 #CPPFLAGS_ADD       += -I$(PYLON_ROOT)/include -I$(GENICAM_ROOT_V1_1)/include/genicam -DUSE_CAMERA_PYLON_GIGE
 #LDLIBS_ADD         += -L$(PYLON_ROOT)/lib -L$(GENICAM_ROOT_V1_1)/lib -lpylonbase
+
+# GiGE Proselica Camera Component (activate the following lines to compile with this component)
+#CPPFLAGS_ADD       += -DUSE_CAMERA_PROSILICA_GIGE
+
 
 # XVID component (activate the following lines to compile with this component)
 #CPPFLAGS_ADD       += -DUSE_XVID

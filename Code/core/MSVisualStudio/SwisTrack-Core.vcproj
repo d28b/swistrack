@@ -547,6 +547,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentInputCameraProselicaGigE.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentInputCameraProselicaGigE.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentInputCameraUSB.cpp"
 					>
 				</File>
@@ -980,14 +988,6 @@
 				</File>
 				<File
 					RelativePath="..\ComponentNearestNeighborTracking.h"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentOpticalFlowPyrLKTracking.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentOpticalFlowPyrLKTracking.h"
 					>
 				</File>
 				<File

@@ -7,6 +7,7 @@
 #include "ComponentInputCamera1394.h"
 #include "ComponentInputCameraUSB.h"
 #include "ComponentInputCameraGigE.h"
+#include "ComponentInputCameraProselicaGigE.h"
 #include "ComponentInputFileAVI.h"
 #include "ComponentInputFileImage.h"
 #include "ComponentConvertToGray.h"
@@ -94,6 +95,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentInputCamera1394(this));
 	mAvailableComponents.push_back(new ComponentInputCameraUSB(this));
 	mAvailableComponents.push_back(new ComponentInputCameraGigE(this));
+	mAvailableComponents.push_back(new ComponentInputCameraProselicaGigE(this));
 	mAvailableComponents.push_back(new ComponentInputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentInputFileImage(this));
 	//Input conversion
