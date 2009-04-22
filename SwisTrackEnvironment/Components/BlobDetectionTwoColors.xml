@@ -27,6 +27,17 @@
 			<sliderstep>1</sliderstep>
 			<reloadable>true</reloadable>
 		</parameter>
+		<parameter type="dropdownlist">
+			<name>OutputParams</name>
+			<label>Output Parameters</label>
+			<items>
+				<item key="blob1">blob #1</item>
+				<item key="blob2">blob #2</item>
+				<item key="avg">combination</item>
+			</items>
+			<default>avg</default>
+			<reloadable>true</reloadable>
+		</parameter>
 		<line />
 		<parameter type="color">
 			<name>Color1_Color</name>

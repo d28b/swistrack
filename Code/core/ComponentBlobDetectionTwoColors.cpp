@@ -37,6 +37,7 @@ void THISCLASS::OnStart() {
 void THISCLASS::OnReloadConfiguration() {
 	mMaxNumberOfParticles = GetConfigurationInt(wxT("mMaxNumberOfParticles"), 10);
 	mMaxDistance = GetConfigurationDouble(wxT("MaxDistance"), 10.);
+	mOutputParams = GetConfigurationInt(wxT("OutputParams"), 2);
 	mColor1.mColor = GetConfigurationInt(wxT("Color1_Color"), 0xff);
 	mColor1.mThresholdB = GetConfigurationInt(wxT("Color1_ThresholdB"), 32);
 	mColor1.mThresholdG = GetConfigurationInt(wxT("Color1_ThresholdG"), 32);
@@ -125,10 +126,37 @@ void THISCLASS::OnStep() {
 		// Create particle with this combination of blobs
 		if (k_min != mColor2.mParticles.end()) {
 			Particle newparticle;
-			newparticle.mArea = (*k_min).mArea + (*i).mArea;
-			newparticle.mCenter.x = ((*k_min).mCenter.x + (*i).mCenter.x) * 0.5;
-			newparticle.mCenter.y = ((*k_min).mCenter.y + (*i).mCenter.y) * 0.5;
-			newparticle.mOrientation = atan2((*k_min).mCenter.y - (*i).mCenter.y, (*k_min).mCenter.x - (*i).mCenter.x);
+			switch (mOutputParams) {
+			case 0:
+				// blob #1
+				newparticle.mArea = (*i).mArea;
+				newparticle.mCenter.x = (*i).mCenter.x;
+				newparticle.mCenter.y = (*i).mCenter.y;
+				newparticle.mCompactness = (*i).mCompactness;
+				newparticle.mOrientation = (*i).mOrientation;
+				break;
+			case 1:
+				// blob #2
+				newparticle.mArea = (*k_min).mArea;
+				newparticle.mCenter.x = (*k_min).mCenter.x;
+				newparticle.mCenter.y = (*k_min).mCenter.y;
+				newparticle.mCompactness = (*k_min).mCompactness;
+				newparticle.mOrientation = (*k_min).mOrientation;
+				break;
+			case 2:
+				// combination
+				newparticle.mArea = (*k_min).mArea + (*i).mArea;
+				newparticle.mCenter.x = ((*k_min).mCenter.x + (*i).mCenter.x) * 0.5;
+				newparticle.mCenter.y = ((*k_min).mCenter.y + (*i).mCenter.y) * 0.5;
+				newparticle.mCompactness = ((*k_min).mCompactness + (*i).mCompactness) * 0.5;
+				newparticle.mOrientation = atan2((*k_min).mCenter.y - (*i).mCenter.y, (*k_min).mCenter.x - (*i).mCenter.x);
+				break;
+			default:
+				AddError(wxT("Invalid Output Parameter Type"));
+				return;
+			}
+			newparticle.mFrameNumber = mCore->mDataStructureInput.mFrameNumber;
+			newparticle.mTimestamp = mCore->mDataStructureInput.FrameTimestamp();
 			mParticles.push_back(newparticle);
 		}
 	}
@@ -230,6 +258,8 @@ void THISCLASS::FindBlobs(IplImage *inputimage, cColor &color) {
 		// Compute the moments
 		CvMoments moments;
 		cvMoments(contour, &moments);
+
+
 
 		// Compute particle position
 		Particle newparticle;
