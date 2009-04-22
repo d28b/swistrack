@@ -236,6 +236,11 @@ void THISCLASS::OnStep() {
 	ct->Create();
 	ct->Run();
 
+	// Set Timestamp for the current frame
+	// this data is not read from the camera, so we will do the
+	// best we can: take a timestamp now.
+	mCore->mDataStructureInput.SetFrameTimestamp(wxDateTime::UNow());
+
 	if(!mColor)
 	{
 		//Gray Output
@@ -249,8 +254,7 @@ void THISCLASS::OnStep() {
 	}
 
     // Set the frame number
-    mFrameNumber++;
-    mCore->mDataStructureInput.mFrameNumber = mFrameNumber;
+    mCore->mDataStructureInput.mFrameNumber = mFrameNumber++;
 }
 
 void THISCLASS::OnStepCleanup() 

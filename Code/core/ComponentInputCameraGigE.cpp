@@ -250,6 +250,11 @@ void THISCLASS::OnStep() {
 	// This is the acquired image
 	IplImage *outputimage = (IplImage*)(mCurrentResult.Context());
 
+	// Set Timestamp for the current frame
+	// this data is not read from the camera, so we will do the
+	// best we can: take a timestamp now.
+	mCore->mDataStructureInput.SetFrameTimestamp(wxDateTime::UNow());
+
 	// If we are acquireing a color image, we need to transform it from YUV422 to BGR, otherwise we use the raw image
 	if (mColor) {
 		PrepareOutputImage(outputimage);
@@ -260,8 +265,7 @@ void THISCLASS::OnStep() {
 	}
 
 	// Set the frame number
-	mFrameNumber++;
-	mCore->mDataStructureInput.mFrameNumber = mFrameNumber;
+	mCore->mDataStructureInput.mFrameNumber = mFrameNumber++;
 }
 
 void THISCLASS::OnStepCleanup() {

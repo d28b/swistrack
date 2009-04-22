@@ -119,7 +119,6 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	// Get image from camera
-	mFrameNumber++;
 	int status = mCamera.AcquireImage();
 	switch (status) {
 	case CAM_SUCCESS:
@@ -145,9 +144,14 @@ void THISCLASS::OnStep() {
 		mCamera.getRGB((unsigned char *)mOutputImage->imageData, mOutputImage->nChannels*mOutputImage->depth / 8*mOutputImage->height*mOutputImage->width);
 	}
 
+	// Set Timestamp for the current frame
+	// this data is not read from the camera, so we will do the
+	// best we can: take a timestamp now.
+	mCore->mDataStructureInput.SetFrameTimestamp(wxDateTime::UNow());
+
 	// Set this image in the DataStructureImage
 	mCore->mDataStructureInput.mImage = mOutputImage;
-	mCore->mDataStructureInput.mFrameNumber = mFrameNumber;
+	mCore->mDataStructureInput.mFrameNumber = mFrameNumber++;
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);

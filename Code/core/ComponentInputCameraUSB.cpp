@@ -56,7 +56,7 @@ void THISCLASS::OnStep() {
 	// Set Timestamp for the current frame
 	// this data is not read from the camera, so we will do the
 	// best we can: take a timestamp now.
-	mCore->mDataStructureInput.SetFrameTimestamp(wxDateTime::Now());
+	mCore->mDataStructureInput.SetFrameTimestamp(wxDateTime::UNow());
 
 	// Set DataStructureImage
 	mCore->mDataStructureInput.mImage = mOutputImage;
