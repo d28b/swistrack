@@ -28,8 +28,14 @@ void THISCLASS::OnStart() {
 	// Open file
 	wxString filename_string = GetConfigurationString(wxT("File"), wxT(""));
 	wxFileName filename = mCore->GetProjectFileName(filename_string);
+	if (! filename.FileExists()) {
+	  wxString msg = wxT("The avi file does not exist: ");
+	  msg << filename_string;
+	  AddError(msg);
+	  return;
+	}
 	if (filename.IsOk()) {
-		mCapture = cvCaptureFromFile(filename.GetFullPath().mb_str(wxConvFile));
+	  mCapture = cvCreateFileCapture(filename.GetFullPath().mb_str(wxConvFile));
 	}
 
 	// Error? Check whether the file exists or not, to give an appropriate error message to the user
