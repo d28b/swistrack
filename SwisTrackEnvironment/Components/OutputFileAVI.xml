@@ -24,7 +24,7 @@
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="dropdownlist">
-			<name>InputImage</name>
+			<name>InputChannel</name>
 			<label>Input Image</label>
 			<items>
 				<item key="color">Color</item>
