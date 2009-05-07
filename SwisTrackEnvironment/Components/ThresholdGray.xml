@@ -1,4 +1,4 @@
-	<?xml version="1.0"?>
+<?xml version="1.0"?>
 <swistrackcomponent>
 	<friendlyname>Threshold (grayscale)</friendlyname>
 	<description>Thresholds a grayscale image and stores the result in a binary image.</description>
