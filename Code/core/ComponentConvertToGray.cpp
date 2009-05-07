@@ -57,8 +57,21 @@ void THISCLASS::OnStep() {
 				}
 
 				// Copy
-				cvSetImageCOI(inputimage, mChannel);
-				cvCopy(inputimage, mOutputImage);
+				switch(mChannel)
+				{				
+				case 1:
+					cvSplit(inputimage, mOutputImage, NULL, NULL, NULL);
+					break;
+				case 2:
+					cvSplit(inputimage, NULL, mOutputImage, NULL, NULL);
+					break;
+				case 3:
+					cvSplit(inputimage, NULL, NULL, mOutputImage, NULL);
+					break;
+				default:
+					AddError(wxT("Conversion to gray failed."));
+					break;
+				}
 			} else {
 				// Otherwise, convert to gray using the standard procedure
 				cvCvtColor(inputimage, mOutputImage, CV_BGR2GRAY);
@@ -70,7 +83,7 @@ void THISCLASS::OnStep() {
 		} else {
 			// Other cases (should never happen), we take the first channel
 			PrepareOutputImage(inputimage);
-			cvCvtPixToPlane(inputimage, mOutputImage, NULL, NULL, NULL);
+			cvSplit(inputimage, mOutputImage, NULL, NULL, NULL);
 			mCore->mDataStructureImageGray.mImage = mOutputImage;
 		}
 	} catch (...) {
