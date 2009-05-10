@@ -51,6 +51,7 @@
 #include "ComponentSimulationParticles.h"
 #include "ComponentColorHistogramParticles.h"
 #include "ComponentCalibrationLinear.h"
+#include "ComponentCalibrationOpenCV.h"
 #include "ComponentCalibrationTSAI.h"
 #include "ComponentOutputFile.h"
 #include "ComponentOutputFileAVI.h"
@@ -139,6 +140,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
 	//Calibration
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
+	mAvailableComponents.push_back(new ComponentCalibrationOpenCV(this));
 	mAvailableComponents.push_back(new ComponentCalibrationTSAI(this));
 	//Tracking
 	mAvailableComponents.push_back(new ComponentTracking(this));
