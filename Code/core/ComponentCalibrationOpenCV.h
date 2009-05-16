@@ -57,8 +57,9 @@ private:
 	CvMat* rotation_matrix_inverse;
 	CvMat* translation_vectors;
 	CvMat* translation_tr;
-	IplImage* mapx; 
-	IplImage* mapy;
+	CvMat* intrinsic_transfer;
+	CvMat* mapx; 
+	CvMat* mapy;
 // they should be released at destructor
 };
 #endif
