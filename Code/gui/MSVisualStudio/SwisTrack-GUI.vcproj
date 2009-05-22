@@ -5,7 +5,6 @@
 	Name="SwisTrack-GUI"
 	ProjectGUID="{44405FF3-5736-429E-B8E3-DE423B43038B}"
 	RootNamespace="gui"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -86,8 +85,6 @@
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				LinkTimeCodeGeneration="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -109,6 +106,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -194,8 +194,6 @@
 				ProgramDatabaseFile="$(IntDir)\debug/swistrack.pdb"
 				GenerateMapFile="false"
 				MapExports="false"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -227,6 +225,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 		</Configuration>
 		<Configuration
@@ -262,7 +263,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\core;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;"
+				AdditionalIncludeDirectories="..\..\core;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 2.0\genicam\library\cpp\include&quot;;&quot;L:\Basler\Pylon 2.0\pylon\include&quot;"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WINVER=0x400;_MT;wxUSE_GUI=1;__WXDEBUG__;WXDEBUG=1;USE_CAMERA_PYLON_GIGE"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
@@ -285,18 +286,16 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxbase28d_net.lib wxbase28d_xml.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib GCBase_MDd_VC80.lib GenApi_MDd_VC80.lib PylonBase_MDd_VC80.lib PylonGigE_MDd_VC80.lib"
+				AdditionalDependencies="wxbase28d_net.lib wxbase28d_xml.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib GCBase_MDd_VC80_v1_1.lib GenApi_MDd_VC80_v1_1.lib PylonBase_MDd_VC80.lib PylonGigE_MDd_VC80.lib"
 				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;&quot;L:\Basler\Pylon 1.0\pylon\lib&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\lib\win32_i86&quot;;L:\xvidcore\build\win32\bin"
+				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;&quot;L:\Basler\Pylon 2.0\pylon\lib\Win32&quot;;&quot;L:\Basler\Pylon 2.0\genicam\library\cpp\lib\win32_i86&quot;;L:\xvidcore\build\win32\bin"
 				IgnoreDefaultLibraryNames="libci.lib;msvcrt.lib;libc.lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)\debug/swistrack.pdb"
 				GenerateMapFile="false"
 				MapExports="false"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -319,6 +318,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -396,8 +398,6 @@
 				ProgramDatabaseFile="$(IntDir)\debug/swistrack.pdb"
 				GenerateMapFile="false"
 				MapExports="false"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -420,6 +420,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -462,7 +465,7 @@
 				FavorSizeOrSpeed="1"
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="..\..\core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\include&quot;;&quot;L:\Basler\Pylon 1.0\pylon\include&quot;"
+				AdditionalIncludeDirectories="..\..\core;L:\1394camera\include;L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\opencv\otherlibs\highgui;L:\opencv\cv\include;L:\opencv\cxcore\include;L:\opencv\otherlibs\cvcam\include;&quot;L:\Basler\Pylon 2.0\genicam\library\cpp\include&quot;;&quot;L:\Basler\Pylon 2.0\pylon\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WINDOWS__;__WXMSW__;__WIN95__;__WIN32__;USE_CAMERA_PYLON_GIGE"
 				RuntimeLibrary="2"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
@@ -486,19 +489,17 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxbase28_net.lib wxbase28_xml.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib GCBase_MD_VC80.lib GenApi_MD_VC80.lib PylonBase_MD_VC80.lib PylonGigE_MD_VC80.lib"
+				AdditionalDependencies="wxbase28_net.lib wxbase28_xml.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib GCBase_MD_VC80_v1_1.lib GenApi_MD_VC80_v1_1.lib PylonBase_MD_VC80.lib PylonGigE_MD_VC80.lib"
 				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;&quot;L:\Basler\Pylon 1.0\pylon\lib&quot;;&quot;L:\Basler\Pylon 1.0\genicam\library\cpp\lib\win32_i86&quot;"
+				AdditionalLibraryDirectories="L:\wxWidgets\lib\vc_lib;L:\wxWidgets\contrib\lib;L:\opencv\lib;&quot;L:\Basler\Pylon 2.0\pylon\lib\Win32&quot;;&quot;L:\Basler\Pylon 2.0\genicam\library\cpp\lib\win32_i86&quot;"
 				IgnoreDefaultLibraryNames=""
 				DelayLoadDLLs=""
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				LinkTimeCodeGeneration="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -520,6 +521,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -596,8 +600,6 @@
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				LinkTimeCodeGeneration="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -619,6 +621,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
