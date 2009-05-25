@@ -21,13 +21,6 @@ override CPPFLAGS  += $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -I/usr/include -I
 override LDLIBS    += $(OPENCV_LDLIBS) $(WXWIDGETS_LDLIBS) -lm $(LDLIBS_ADD)
 override LDFLAGS   += $(LDFLAGS_ADD)
 
-# Build with cygwin
-.PHONY: cygwin
-cygwin: $(FILES_O) $(FILES_A)
-	@echo "=== Building SwisTrack (cygwin)"
-	windres MSVisualStudio/SwisTrack-GUI.rc -O coff -o cygwinRC.o
-	$(CXX) $(LDFLAGS) $(FILES_O) $(FILES_A) cygwinRC.o  $(LDLIBS) -o $(TARGET)
-
 # Build
 .PHONY: all
 all: $(TARGET)
@@ -37,13 +30,21 @@ $(TARGET): $(FILES_O) $(FILES_A)
 	$(CXX) $(LDFLAGS) $(FILES_O) $(FILES_A) $(LDLIBS) -o $@
 #	$(CXX) $(LDFLAGS) $(FILES_O) $(FILES_A)/usr/lib/libefence.a  $(LDLIBS) -o $@
 
+$(FILES_O): %.o: %.cpp
+	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
+
+# Build with cygwin
+.PHONY: cygwin
+cygwin: $(FILES_O) $(FILES_A)
+	@echo "=== Building SwisTrack (cygwin)"
+	windres MSVisualStudio/SwisTrack-GUI.rc -O coff -o cygwinRC.o
+	$(CXX) $(LDFLAGS) $(FILES_O) $(FILES_A) cygwinRC.o  $(LDLIBS) -o $(TARGET)
+
+# Build on Mac OS X
 .PHONY: osxbundle
 osxbundle: $(TARGET)
 	cd $(TARGET_FOLDER) && tar xfz ../Code/AppleXCode/SwisTrack.app.skeleton.tar.gz
 	cp $(TARGET) $(TARGET_FOLDER)/SwisTrack.app/Contents/MacOS/
-
-$(FILES_O): %.o: %.cpp
-	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
 
 # Cleanup
 .PHONY: clean
