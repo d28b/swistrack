@@ -14,6 +14,14 @@ osxbundle:
 	$(MAKE) -C 3rdParty/cvblobslib_v6p1
 	$(MAKE) -C Code/core
 	$(MAKE) -C Code/gui osxbundle
+	
+.PHONY: cygwin
+cygwin:
+	$(MAKE) -C 3rdParty/libtsai
+	$(MAKE) -C 3rdParty/camshift_wrapper
+	$(MAKE) -C 3rdParty/cvblobslib_v6p1
+	$(MAKE) -C Code/core
+	$(MAKE) -C Code/gui cygwin
 
 .PHONY: batch
 batch:

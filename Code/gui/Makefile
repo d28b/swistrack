@@ -21,6 +21,13 @@ override CPPFLAGS  += $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -I/usr/include -I
 override LDLIBS    += $(OPENCV_LDLIBS) $(WXWIDGETS_LDLIBS) -lm $(LDLIBS_ADD)
 override LDFLAGS   += $(LDFLAGS_ADD)
 
+# Build with cygwin
+.PHONY: cygwin
+cygwin: $(FILES_O) $(FILES_A)
+	@echo "=== Building SwisTrack (cygwin)"
+	windres MSVisualStudio/SwisTrack-GUI.rc -O coff -o cygwinRC.o
+	$(CXX) $(LDFLAGS) $(FILES_O) $(FILES_A) cygwinRC.o  $(LDLIBS) -o $(TARGET)
+
 # Build
 .PHONY: all
 all: $(TARGET)
