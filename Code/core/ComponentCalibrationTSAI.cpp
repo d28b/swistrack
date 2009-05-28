@@ -75,6 +75,7 @@ void THISCLASS::OnStart() {
 	// Put the points into the matrix
 	if (calibrationPointList.size() > TSAI_MAX_POINTS) {
 		AddError(wxT("There are more calibration points than accepted by the Tsai calibration library"));
+		return;
 	}
 	calibrationData.point_count = calibrationPointList.size();
 	for (int i = 0; i < calibrationData.point_count; i++) {
