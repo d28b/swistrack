@@ -53,6 +53,7 @@
 #include "ComponentCalibrationLinear.h"
 #include "ComponentCalibrationOpenCV.h"
 #include "ComponentCalibrationTSAI.h"
+#include "ComponentCalibrationFileTSAI.h"
 #include "ComponentOutputFile.h"
 #include "ComponentOutputFileAVI.h"
 #include "ComponentOutputFileM4V.h"
@@ -138,10 +139,11 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentBlobDetectionRedGreen(this));
 	mAvailableComponents.push_back(new ComponentIDReaderRing(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
-	//Calibration
+	//Calibration	
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
 	mAvailableComponents.push_back(new ComponentCalibrationOpenCV(this));
 	mAvailableComponents.push_back(new ComponentCalibrationTSAI(this));
+	mAvailableComponents.push_back(new ComponentCalibrationFileTSAI(this));
 	//Tracking
 	mAvailableComponents.push_back(new ComponentTracking(this));
 	mAvailableComponents.push_back(new ComponentNearestNeighborTracking(this));

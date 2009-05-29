@@ -1,4 +1,6 @@
 function WriteSwisTrackCalibrationXMLFile(imagePoints, worldPoints, fileName);
+% function WriteSwisTrackCalibrationXMLFile(imagePoints, worldPoints, fileName);
+%
 % Writes an XML file for SwisTrack's calibration components.
 % Such files are independent from the calibration method used and can be used with several calibration components.
 %

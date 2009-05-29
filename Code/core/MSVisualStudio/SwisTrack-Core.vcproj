@@ -5,6 +5,7 @@
 	Name="SwisTrack-Core"
 	ProjectGUID="{D010B136-96BD-4D44-B4F0-30388FB460B7}"
 	RootNamespace="objecttrackerlib"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -669,6 +670,14 @@
 			<Filter
 				Name="8 Calibration"
 				>
+				<File
+					RelativePath="..\ComponentCalibrationFileTSAI.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentCalibrationFileTSAI.h"
+					>
+				</File>
 				<File
 					RelativePath="..\ComponentCalibrationLinear.cpp"
 					>
