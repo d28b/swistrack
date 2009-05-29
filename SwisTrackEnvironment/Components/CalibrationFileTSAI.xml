@@ -12,7 +12,7 @@
 		</parameter>
 		<parameter type="inputfile">
 			<name>CalibrationParameters</name>
-			<label>Calib. Parameters</label>
+			<label>Calib. Param.</label>
 		</parameter>
 	</configuration>
 </swistrackcomponent>
