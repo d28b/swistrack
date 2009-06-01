@@ -98,6 +98,8 @@ void THISCLASS::OnStep() {
 		tmpParticle.mArea = moments.m00;
 		tmpParticle.mCenter.x = (float)(rectROI.x + (moments.m10 / moments.m00 + 0.5));  // moments using Green theorem
 		tmpParticle.mCenter.y = (float)(rectROI.y + (moments.m01 / moments.m00 + 0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem
+		tmpParticle.mTimestamp = mCore->mDataStructureInput.FrameTimestamp();
+		tmpParticle.mFrameNumber = mCore->mDataStructureInput.mFrameNumber;
 
 		// Selection based on area
 		if ((mAreaSelection == false) || ((tmpParticle.mArea <= mMaxArea) && (tmpParticle.mArea >= mMinArea)))

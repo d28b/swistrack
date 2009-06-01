@@ -72,10 +72,13 @@ void THISCLASS::UpdateTrackers(IplImage * inputImage)
 				                           mCore->mDataStructureInput.mFrameNumber);
 				Particle p;
 				p.mCenter = box.center;
+
 				p.mID = i->first;
 				p.mArea = -1;
 				p.mCompactness = -1;
 				p.mOrientation = -1;
+				p.mTimestamp = mCore->mDataStructureInput.FrameTimestamp();
+				p.mFrameNumber = mCore->mDataStructureInput.mFrameNumber;
 				mParticles.push_back(p);
 			}
 
@@ -119,6 +122,8 @@ void THISCLASS::AddNewTracks(IplImage * inputImage) {
 			p.mArea = pIt->mArea;
 			p.mCompactness = pIt->mCompactness;
 			p.mOrientation = pIt->mOrientation;
+			p.mTimestamp = pIt->mTimestamp;
+			p.mFrameNumber = pIt->mFrameNumber;
 			mParticles.push_back(p);
 
 			mTrackers[id] = camshift();
