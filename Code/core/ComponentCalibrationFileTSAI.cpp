@@ -234,7 +234,7 @@ void THISCLASS::OnStop()
 			 char tmpStr[3]="aa";
 			 tmpStr[0]=tmpStr[0]+i;
 			 tmpStr[1]=tmpStr[1]+j;
-			 cvmSet(matrix,i,j,ConfigurationConversion::Double(ReadChildContent(wxT(tmpStr)), 0));			 
+			 cvmSet(matrix,i,j,ConfigurationConversion::Double(ReadChildContent(wxString::FromAscii(tmpStr)), 0));
 		 }		
  }
 
