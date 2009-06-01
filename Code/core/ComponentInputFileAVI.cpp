@@ -44,10 +44,10 @@ void THISCLASS::OnStart() {
 		f.open(filename.GetFullPath().mb_str(wxConvFile));
 		if (f.is_open()) {
 			f.close();
-			AddError(wxT("Cannot open AVI file: codec problem, VFW codec required, not DirectShow."));
+			AddError(wxT("Can open the AVI file as a file, but not with OpenCV."));
 			return;
 		} else {
-			AddError(wxT("Cannot open AVI file: file not found."));
+			AddError(wxT("Cannot open AVI file: permissions problem or something?"));
 			return;
 		}
 	}
