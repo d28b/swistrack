@@ -76,7 +76,7 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 	mColumnStepDuration = col;
 	mList->InsertColumn(col++, wxT("Step duration"), wxLIST_FORMAT_CENTER, 100);
 	mColumnMessages = col;
-	mList->InsertColumn(col++, wxT("Messages"), wxLIST_FORMAT_LEFT, 400);
+	mList->InsertColumn(col++, wxT("Messages"), wxLIST_FORMAT_LEFT, 800);
 
 	// Create Buttons
 	//wxStaticLine *line1=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 2), wxLI_HORIZONTAL);
@@ -187,10 +187,8 @@ void THISCLASS::Update() {
 		row++;
 	}
 
-	// Set optimal column widths of all DataStructure columns
-	for (int i = 1; i < mColumnMessages - 1; i++) {
-		mList->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
-	}
+
+
 
 	// Make the selection visible
 	if (selecteditemid > -1) {
@@ -246,6 +244,11 @@ void THISCLASS::UpdateStatus() {
 			li.SetText(str);
 
 			mList->SetItem(li);
+
+			// Set optimal column widths of all DataStructure columns
+			for (int i = 1; i < mColumnMessages - 1; i++) {
+			  mList->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
+			}
 		} else {
 			wxListItem li;
 			li.SetId(item);
@@ -253,7 +256,7 @@ void THISCLASS::UpdateStatus() {
 			li.SetText(wxT(""));
 			mList->SetItem(li);
 		}
-
+		
 		// EnabledInterval
 		wxListItem li;
 		li.SetId(item);
