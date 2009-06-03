@@ -6,6 +6,18 @@
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/CamShiftTracking</url>
 	<displayimage>Output</displayimage>
 	<configuration>
+	  <parameter type="dropdownlist">
+	    <name>HistogramDimensions</name>
+	    <label>HistogramDimensions</label>
+	    <items>
+	      <item key="1">1</item>
+	      <item key="2">2</item>
+	      <item key="3">3</item>
+	    </items>
+	    <unit></unit>
+	    <default>1</default>
+	    <reloadable>false</reloadable>
+	  </parameter>
 	  <parameter type="integer">
 	    <name>VMin</name>
 	    <label>VMin</label>

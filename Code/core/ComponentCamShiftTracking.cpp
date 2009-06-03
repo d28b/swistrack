@@ -33,6 +33,7 @@ void THISCLASS::OnStart()
 {
 	mVmin = GetConfigurationInt(wxT("VMin"), 60);
 	mSmin = GetConfigurationInt(wxT("SMin"), 50);
+	mHistogramDimensions = GetConfigurationInt(wxT("HistogramDimensions"), 1);
 	for (std::map<int, camshift>::iterator i = mTrackers.begin();
 	        i != mTrackers.end(); i++) {
 		setVmin(&i->second, mVmin);
@@ -127,7 +128,7 @@ void THISCLASS::AddNewTracks(IplImage * inputImage) {
 			mParticles.push_back(p);
 
 			mTrackers[id] = camshift();
-			createTracker(&mTrackers[id], inputImage);
+			createTracker(&mTrackers[id], inputImage, mHistogramDimensions);
 			setVmin(&mTrackers[id], mVmin);
 			setSmin(&mTrackers[id], mSmin);
 			CvRect start = Utility::RectByCenter(pIt->mCenter.x,
@@ -208,11 +209,11 @@ void THISCLASS::OnStep()
 		if (mTrackers.size() == 0) {
 			cvCopy(mCore->mDataStructureInput.mImage, mOutputImage);
 		} else {
-			//mOutputImage = cvCloneImage(mTrackers.begin()->second.pHueImg);
+		  //mOutputImage = cvCloneImage(mTrackers.begin()->second.pHueImg);
 			//cvCopy(inputImage, mOutputImage);
-			//cvCvtColor(mTrackers.begin()->second.pMask, mOutputImage, CV_GRAY2BGR);
-			//cvCvtColor(mTrackers.begin()->second.pMask, mOutputImage, CV_GRAY2BGR);
-			cvCopy(mCore->mDataStructureInput.mImage, mOutputImage);
+		  cout << "Tracker: " << mTrackers.begin()->first << endl;
+		  cvCvtColor(mTrackers.begin()->second.pProbImg, mOutputImage, CV_GRAY2BGR);
+		  //cvCopy(mCore->mDataStructureInput.mImage, mOutputImage);
 		}
 
 		for (std::map<int, camshift>::iterator i = mTrackers.begin();

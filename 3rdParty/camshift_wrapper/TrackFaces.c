@@ -104,7 +104,7 @@ int initAll(camshift * cs)
 
 	// Initialize tracker
 	captureVideoFrame();
-	if( !createTracker(cs, pVideoFrameCopy) ) return 0;
+	if( !createTracker(cs, pVideoFrameCopy, 1) ) return 0;
 
 	// Set Camshift parameters
 	setVmin(cs, 60);

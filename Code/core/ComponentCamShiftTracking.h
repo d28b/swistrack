@@ -44,6 +44,7 @@ private:
 
 	int mInitialWindowSize; //!< (configuration) The size of the initial window when you initialize a new tracker.
 
+	int mHistogramDimensions; //!< (configuration)  Parameter for camshift
 	int mVmin; //!< (configuration)  Parameter for camshift
 	int mSmin; //!< (configuration)  Parameter for camshift
 	unsigned int mMaximumNumberOfTrackers;
