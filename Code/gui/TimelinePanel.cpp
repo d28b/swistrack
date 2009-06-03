@@ -4,6 +4,7 @@
 #include <wx/image.h>
 #include <highgui.h>
 #include <fstream>
+#include <math.h>
 #include "ImageConversion.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxControl)
@@ -177,7 +178,7 @@ void THISCLASS::DrawTicks(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timel
 
 		if (ticknumber % 10 == 0) {
 			dc.DrawLine(x, 0, x, 4);
-			wxString label = wxString::Format(wxT("%d"), (int)(xtime * 1000));
+			wxString label = wxString::Format(wxT("%d"), (int)floor(xtime * 1000. + 0.5));
 			int textwidth, textheight;
 			GetTextExtent(label, &textwidth, &textheight) ;
 			textwidth >>= 1;
