@@ -127,7 +127,7 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, IplImage * foreground
 		firstTimestamp = timestampIn - 0.01;
 	}
 	double timestamp = timestampIn - firstTimestamp;
-	printf("ts: %.3f\n", timestamp);
+	//printf("ts: %.3f\n", timestamp);
 	//double timestamp = timestampIn;
 
 	CvSize size = cvSize(img->width, img->height); // get current frame size

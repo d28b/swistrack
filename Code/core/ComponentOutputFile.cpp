@@ -51,12 +51,10 @@ void THISCLASS::OnStep() {
 			newOutputFile->trackID = it->first;
 			wxString  file = wxString::Format(wxT("track_%08d.txt"), it->first);
 			wxFileName tmpFileName = mCore->GetRunFileName(file);
-			cout << "Name: " << mDirectoryName.ToAscii() << endl;
 			if (mDirectoryName != wxT("")) {
 			  tmpFileName = wxFileName(mDirectoryName, file);
 			}
-			cout << "file: " << tmpFileName.GetPath().ToAscii() << 
-			  "/" << tmpFileName.GetFullName().ToAscii() << endl;
+
 			(newOutputFile->fileStream).open(tmpFileName.GetFullPath().mb_str(wxConvFile), std::fstream::out | std::fstream::trunc);
 
 			if (!(newOutputFile->fileStream).is_open()) {

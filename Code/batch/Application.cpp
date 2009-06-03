@@ -12,6 +12,10 @@ using namespace std;
 IMPLEMENT_APP(Application)
 
 int THISCLASS::OnRun() {
+  // if you comment out this printf, then no other printfs or couts
+  // work.  I have no idea why.  This is on Ubuntu Jaunty, and also os
+  // X leopard.
+  printf("SwisTrack 4 - batch processing.\n");
   return MainLoop();
 }
 bool THISCLASS::OnInit() {
@@ -48,11 +52,9 @@ void THISCLASS::Help() {
 }
 
 int THISCLASS::RunBatch(const wxString filename_str) {
-	wxPrintf(wxT("SwisTrack 4 - batch processing.\n"));
-
 	// Initialize the core
 	SwisTrackCore *core = new SwisTrackCore(wxT("./Components"));
-	core->mCommunicationInterface = new NMEALog();
+	core->mCommunicationInterface = new NMEALog(wxT("swistrack.log"));
 
 	// Open the file
 	wxFileName filename(filename_str);
@@ -75,14 +77,12 @@ int THISCLASS::RunBatch(const wxString filename_str) {
 		}
 		return -1;
 	}
-
 	// Check if there are any components
 	if (core->GetDeployedComponents()->size() == 0) {
 		wxFprintf(stderr, wxT("The configuration file is empty (no components).\n"));
 		return -1;
 	}
 	wxPrintf(wxT("Running with %d components.\n"), core->GetDeployedComponents()->size());
-
 	// Set the folder
 	core->SetFileName(filename);
 
@@ -92,6 +92,7 @@ int THISCLASS::RunBatch(const wxString filename_str) {
 	core->Start(false);
 	for (list<Component*>::const_iterator it = core->GetDeployedComponents()->begin(); it != core->GetDeployedComponents()->end(); it++) {
 		Component *component = *it;
+
 		cout << component->mDisplayName.ToAscii() << ": " << (component->mStarted ? "started" : "not started") << endl;
 		for (list<StatusItem>::iterator it = component->mStatus.begin(); it != component->mStatus.end(); it++) {
 			if (it->mType == StatusItem::sTypeError) {

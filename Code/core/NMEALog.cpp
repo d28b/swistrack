@@ -5,9 +5,9 @@ THISCLASS::NMEALog(const wxString &file):
 		mLogFile() {
 
 	if (file.length() == 0) {
-		mLogFile.Attach(wxFile::fd_stdout);
+	  mLogFile.Attach(wxFile::fd_stdout);
 	} else {
-		mLogFile.Open(file, wxFile::write);
+	  mLogFile.Open(file, wxFile::write);
 	}
 }
 
