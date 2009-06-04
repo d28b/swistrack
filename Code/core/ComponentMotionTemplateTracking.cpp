@@ -20,7 +20,7 @@ THISCLASS::ComponentMotionTemplateTracking(SwisTrackCore *stc):
 
 {
 	// Data structure relations
-	mCategory = &(mCore->mCategoryTracking);
+	mCategory = &(mCore->mCategoryParticleDetection);
 	AddDataStructureRead(&(mCore->mDataStructureInput));
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 
@@ -265,7 +265,8 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, IplImage * foreground
 		  cvSplit(img, mInputChannels[0], mInputChannels[1], mInputChannels[2], NULL);
 		  cvCalcHist(mInputChannels, tmpParticle.mColorModel);
 		  cvSet(dst, cvScalar(255,255,255), mForegroundMask);
-		  tmpParticle.mArea = comp_rect.width * comp_rect.height;
+		  //tmpParticle.mArea = comp_rect.width * comp_rect.height;
+		  tmpParticle.mArea = cvCountNonZero(mForegroundMask);
 		} else {
 		  // no histogram when there's no background model. 
 		  tmpParticle.mArea = comp_rect.width * comp_rect.height;
