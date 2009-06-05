@@ -48,7 +48,7 @@ private:
 	int mNextTrackId;
 
 	// Parameters
-	double mColorThreshold; 
+	double mColorSimilarityThreshold; 
 	double mMaxDistanceSquared; 
 	double mMinNewTrackDistanceSquared; 
 	int mFrameKillThreshold; 

@@ -61,8 +61,8 @@ void THISCLASS::OnReloadConfiguration()
 	mTrackDistanceKillThresholdSquared =
 	    pow(GetConfigurationDouble(wxT("TrackDistanceKillThreshold"), 10), 2);
 
-	mColorThreshold = 
-	  GetConfigurationDouble(wxT("ColorHistogramThreshold"), 0.5);
+	mColorSimilarityThreshold = 
+	  GetConfigurationDouble(wxT("ColorSimilarityThreshold"), 0.5);
 
 
 
@@ -231,9 +231,11 @@ void THISCLASS::DataAssociation()
 			track = &mTracks[trackIndexes[minDistanceI]];
 		}
 
-		(particles->at(particleIndexes[minDistanceJ])).mID = track->mID;
-		AddParticle(track->mID,
-			    particles->at(particleIndexes[minDistanceJ]));
+		Particle & p = (particles->at(particleIndexes[minDistanceJ]));
+		p.mID = track->mID;
+		
+		AddParticle(track->mID,p);
+
 		
 		//Suppress the indexes in the vectors
 		trackIndexes.erase(trackIndexes.begin() + minDistanceI);
@@ -301,8 +303,8 @@ bool THISCLASS::ColorsMatch(const Track & track, const Particle & particle) {
   
   double colorSim = cvCompareHist(mTmp1, mTmp2, CV_COMP_BHATTACHARYYA); 
   printf("%d Color theshold: %.4f <= %.4f\n", 
-	 track.mID, colorSim, mColorThreshold);
-  if (colorSim <= mColorThreshold) {
+	 track.mID, colorSim, mColorSimilarityThreshold);
+  if (colorSim <= mColorSimilarityThreshold) {
     return true;
   } else {
     printf("Rejecting because the color is different: %.4f\n", colorSim);

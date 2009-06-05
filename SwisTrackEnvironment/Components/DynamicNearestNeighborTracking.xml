@@ -41,6 +41,15 @@
 			<reloadable>true</reloadable>
 		</parameter>
 
+		<parameter type="double">
+			<name>ColorSimilarityThreshold</name>
+			<label>How similar the particle has to be to the color model of the track.</label>
+			<min>0</min>
+			<max>1</max>
+			<default>0.5</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		
 		<parameter type="integer">
 			<name>TrackDistanceKillThreshold</name>
 			<label>Mininum distance between tracks before dropping tracks.</label>
