@@ -26,6 +26,13 @@ public:
 	}
 
 	static void IntegrateHistogram(CvHistogram * dest, CvHistogram * newSample);	
+
+	/**
+	 * Draws the histogram in the image.
+	 * If target is null, creates a new image, otherwise draws in target.
+	 * Returns the image that it created, or that was passed in. 
+	 */
+	static IplImage * DrawHistogram1D(CvHistogram * histogram, IplImage * hist_image=NULL);
 };
 
 #endif

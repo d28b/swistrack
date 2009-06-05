@@ -60,6 +60,8 @@ private:
 	IplImage *orient; // orientation
 	IplImage *mask; // valid orientation mask
 	IplImage *segmask; // motion segmentation map
+
+	IplImage *mHsv; // hsv image
 	CvMemStorage* storage; // temporary storage
 	double firstTimestamp;
 

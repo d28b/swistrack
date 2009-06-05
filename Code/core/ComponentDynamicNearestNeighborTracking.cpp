@@ -221,11 +221,14 @@ void THISCLASS::DataAssociation()
 				mTracks.insert(tTrackPair(id, Track(id)));
 				track = &mTracks[id];
 				squareDistanceArray[track->mID] = new double[maxParticles];
-				AddParticle(track->mID,p);
+				AddParticle(track->mID, p);
 			}
 		} else {
+
 		  track = &mTracks[trackIndexes[minDistanceI]];
-		  AddParticle(track->mID,p);
+		  if (ColorsMatch(*track, *p)) {
+		    AddParticle(track->mID, p);
+		  }
 
 		}
 		// Suppress the indexes in the vectors		
@@ -270,9 +273,15 @@ void THISCLASS::AddParticle(int i, Particle * p){
 	assert(i == track.mID);
 	track.AddPoint(p->mCenter, mCore->mDataStructureInput.mFrameNumber);
 	printf("%d adding particle size %.3f\n", track.mID, p->mArea);
-	if (p->mColorModel != NULL && track.mColorModel != NULL) {
+
+	// if somebody doesn't have a color model, then ignore.
+	if (track.mColorModel == NULL && p->mColorModel != NULL) {
+	  cvCopyHist(p->mColorModel, &track.mColorModel);
+	}else if (p->mColorModel != NULL && track.mColorModel != NULL) {
 	  Utility::IntegrateHistogram(track.mColorModel, p->mColorModel);
 	  cvCopyHist(p->mColorModel, &track.mColorModel);
+	} else {
+	  // no color features.
 	}
 }
 
@@ -283,7 +292,7 @@ void THISCLASS::ClearTracks() {
 
 
 bool THISCLASS::ColorsMatch(const Track & track, const Particle & particle) {
-  // if somebody doesn't have a color model, then ignore.
+
   if (particle.mColorModel == NULL || track.mColorModel == NULL) {
     return true;
   }

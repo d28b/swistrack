@@ -1,5 +1,7 @@
 #include "Utility.h"
 #define THISCLASS Utility
+#include <stdio.h>
+
 
 double THISCLASS::SquareDistance(CvPoint2D32f p1, CvPoint2D32f p2) {
 	double dx = p1.x - p2.x;
@@ -39,7 +41,9 @@ void THISCLASS::IntegrateHistogram(CvHistogram * dest, CvHistogram * newSample) 
   }
 }
 
-/*CvBox2D THISCLASS::RectToBox(CvRect rect) {
+/*
+ // untested. 
+  CvBox2D THISCLASS::RectToBox(CvRect rect) {
 
   CvBox2D out;
   out.center = cvPoint2D32f(rect.x + width / 2.0,
@@ -50,4 +54,21 @@ void THISCLASS::IntegrateHistogram(CvHistogram * dest, CvHistogram * newSample) 
 }
 */
 
+IplImage * THISCLASS::DrawHistogram1D(CvHistogram * hist, IplImage * hist_image) {
 
+  if (hist_image == NULL) {
+    hist_image = cvCreateImage(cvSize(320,200), 8, 1);
+  }
+  int sizes[CV_MAX_DIM];
+  int dims = cvGetDims( hist->bins, sizes);
+  assert(dims == 1);
+  int hist_size = sizes[0];
+  cvSet( hist_image, cvScalarAll(255), 0 );
+  int bin_w = cvRound((double)hist_image->width/hist_size);
+  for(int i = 0; i < hist_size; i++ ) {
+    cvRectangle( hist_image, cvPoint(i*bin_w, hist_image->height),
+		 cvPoint((i+1)*bin_w, hist_image->height - cvRound(cvGetReal1D(hist->bins,i))),
+		 cvScalarAll(0), -1, 8, 0 );
+  }
+  return hist_image;
+}

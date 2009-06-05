@@ -3,6 +3,7 @@
 
 #include "DisplayEditor.h"
 #include "Utility.h"
+#include <highgui.h>
 #include <limits>
 #include <iostream>
 #include <set>
@@ -14,7 +15,7 @@ THISCLASS::ComponentMotionTemplateTracking(SwisTrackCore *stc):
 		mParticles(), mOutputImage(0),
 		mMhiDuration(1),
 		N(4), buf(0), last(0), mhi(0),
-		orient(0), mask(0), segmask(0), storage(0), firstTimestamp(-1),
+		orient(0), mask(0), segmask(0), mHsv(0), storage(0), firstTimestamp(-1),
 		mForegroundMask(0),
 		mDisplayOutput(wxT("Output"), wxT("Tracking"))
 
@@ -119,7 +120,7 @@ void THISCLASS::OnStop() {
 //  img - input video frame
 //  dst - resultant motion picture
 //  args - optional parameters
-void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, IplImage * foregroundMask, double timestampIn,
+void  THISCLASS::update_mhi( IplImage* inputImage, IplImage* dst, IplImage * foregroundMask, double timestampIn,
                              int diff_threshold, wxDateTime frameTimestamp )
 {
 	//double timestamp = (double)clock()/CLOCKS_PER_SEC; // get current time in seconds
@@ -130,7 +131,7 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, IplImage * foreground
 	//printf("ts: %.3f\n", timestamp);
 	//double timestamp = timestampIn;
 
-	CvSize size = cvSize(img->width, img->height); // get current frame size
+	CvSize size = cvSize(inputImage->width, inputImage->height); // get current frame size
 	int i, idx1 = last, idx2;
 	IplImage* silh;
 	CvSeq* seq;
@@ -158,6 +159,7 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, IplImage * foreground
 		cvReleaseImage( &orient );
 		cvReleaseImage( &segmask );
 		cvReleaseImage( &mask );
+		cvReleaseImage( &mHsv);
 		for (int i = 0; i < 3; i++) {
 		  mInputChannels[i] = cvCreateImage( size, IPL_DEPTH_8U, 1 );
 		}
@@ -169,7 +171,11 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, IplImage * foreground
 		mask = cvCreateImage( size, IPL_DEPTH_8U, 1 );
 	}
 
-	cvCvtColor( img, buf[last], CV_BGR2GRAY ); // convert frame to grayscale
+	cvCvtColor( inputImage, buf[last], CV_BGR2GRAY ); // convert frame to grayscale
+	if (mHsv == NULL) {
+	  mHsv = cvCloneImage(inputImage);
+	}
+	cvCvtColor(inputImage, mHsv, CV_BGR2HSV);
 
 	idx2 = (last + 1) % N; // index of (last - (N-1))th frame
 	last = idx2;
@@ -250,8 +256,7 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, IplImage * foreground
 		tmpParticle.mTimestamp = frameTimestamp;
 		tmpParticle.mFrameNumber = mCore->mDataStructureInput.mFrameNumber;
 		
-		int histSizes[] = {100,100,100};
-		tmpParticle.mColorModel = cvCreateHist(3, histSizes, CV_HIST_ARRAY);
+		//int histSizes[] = {100,100,100};
 		if (foregroundMask != NULL) {
 		  cvZero(mForegroundMask);
 		  cvRectangle(mForegroundMask, 
@@ -262,8 +267,18 @@ void  THISCLASS::update_mhi( IplImage* img, IplImage* dst, IplImage * foreground
 			      CV_FILLED);
 		  
 		  cvAnd(mForegroundMask, foregroundMask, mForegroundMask);
-		  cvSplit(img, mInputChannels[0], mInputChannels[1], mInputChannels[2], NULL);
-		  cvCalcHist(mInputChannels, tmpParticle.mColorModel);
+		  cvSplit(mHsv, mInputChannels[0], mInputChannels[1], mInputChannels[2], NULL);
+
+		  int nBins = 16;
+		  float h_ranges[] = { 0, 180 }; /* hue varies from 0 (~0°red) to 180 (~360°red again) */
+		  float * ranges[] = {h_ranges};
+		  //float s_ranges[] = { 0, 255 }; /* saturation varies from 0 (black-gray-white) to 255 (pure spectrum color) */
+  
+		  tmpParticle.mColorModel = cvCreateHist(1, &nBins, CV_HIST_ARRAY, ranges);
+		  cvClearHist(tmpParticle.mColorModel);
+		  cvCalcHist(mInputChannels, tmpParticle.mColorModel, 0, mForegroundMask);
+		  IplImage * hist_image = Utility::DrawHistogram1D(tmpParticle.mColorModel);
+		  cvSaveImage("particle.hist.jpg", hist_image);
 		  cvSet(dst, cvScalar(255,255,255), mForegroundMask);
 		  //tmpParticle.mArea = comp_rect.width * comp_rect.height;
 		  tmpParticle.mArea = cvCountNonZero(mForegroundMask);
