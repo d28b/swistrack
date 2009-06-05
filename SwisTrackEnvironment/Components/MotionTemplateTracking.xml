@@ -23,6 +23,7 @@
 	  <parameter type="double">
 	    <name>MhiDuration</name>
 	    <label>MhiDuration</label>
+	    <min>0.0000000000001</min>
 	    <unit></unit>
 	    <default>1</default>
 	    <reloadable>false</reloadable>
