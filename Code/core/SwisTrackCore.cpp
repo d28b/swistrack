@@ -62,6 +62,7 @@
 #include "ComponentOutputImageStatisticsBinary.h"
 #include "ComponentOutputImageStatisticsColor.h"
 #include "ComponentOutputImageStatisticsGray.h"
+#include "ComponentOutputImageOverlayColor.h"
 #include "ComponentOutputMarkFrameManual.h"
 #include "ComponentOutputParticles.h"
 #include "ComponentDoubleThresholdColorIndependent.h"
@@ -163,6 +164,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentOutputImageStatisticsBinary(this));
 	mAvailableComponents.push_back(new ComponentOutputImageStatisticsColor(this));
 	mAvailableComponents.push_back(new ComponentOutputImageStatisticsGray(this));
+	mAvailableComponents.push_back(new ComponentOutputImageOverlayColor(this));
 	mAvailableComponents.push_back(new ComponentOutputMarkFrameManual(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 
