@@ -39,7 +39,8 @@ private:
 	void ClearTracks();
 	void InitializeTracks();
 	double GetCost(const Track & track, CvPoint2D32f p);
-	void AddPoint(int i, CvPoint2D32f p);
+	void AddParticle(int i, const Particle & p);
+	bool ColorsMatch(const Track & track, const Particle & particle);
 
 	DataStructureParticles::tParticleVector *particles;
 	std::map<int, double*> squareDistanceArray;
@@ -47,12 +48,15 @@ private:
 	int mNextTrackId;
 
 	// Parameters
-	double mMaxDistanceSquared; //!< (configuration) The maximum distance between a track and a particle to attach
-	double mMinNewTrackDistanceSquared; //!< (configuration) The minimum distance between new tracks
-	int mFrameKillThreshold; //!< (configuration) The number of frames a point doesn't get updated before it gets destroyed.
-	int mTrackDistanceKillThresholdSquared; //!< (configuration) The distance between tracks before one should be dropped.
+	double mColorThreshold; 
+	double mMaxDistanceSquared; 
+	double mMinNewTrackDistanceSquared; 
+	int mFrameKillThreshold; 
+	int mTrackDistanceKillThresholdSquared; 
 	DataStructureTracks::tTrackMap mTracks;
-	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
+	Display mDisplayOutput;	//!< The Display showing the last acquired image and the particles.
+
+	CvHistogram * mTmp1, * mTmp2;
 
 };
 

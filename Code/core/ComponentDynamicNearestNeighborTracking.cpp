@@ -11,7 +11,9 @@ typedef  DataStructureTracks::tTrackMap::value_type tTrackPair;
 THISCLASS::ComponentDynamicNearestNeighborTracking(SwisTrackCore *stc):
 		Component(stc, wxT("DynamicNearestNeighborTracking")),
 		mNextTrackId(0),
-		mDisplayOutput(wxT("Output"), wxT("Dynamic Tracking"))
+		mDisplayOutput(wxT("Output"), wxT("Dynamic Tracking")),
+		mTmp1(0), mTmp2(0)
+
 {
 	// Data structure relations
 	mCategory = &(mCore->mCategoryTracking);
@@ -58,6 +60,11 @@ void THISCLASS::OnReloadConfiguration()
 	    GetConfigurationDouble(wxT("FrameKillThreshold"), 10);
 	mTrackDistanceKillThresholdSquared =
 	    pow(GetConfigurationDouble(wxT("TrackDistanceKillThreshold"), 10), 2);
+
+	mColorThreshold = 
+	  GetConfigurationDouble(wxT("ColorHistogramThreshold"), 0.5);
+
+
 
 
 	InitializeTracks();
@@ -225,9 +232,9 @@ void THISCLASS::DataAssociation()
 		}
 
 		(particles->at(particleIndexes[minDistanceJ])).mID = track->mID;
-		AddPoint(track->mID,
-		         particles->at(particleIndexes[minDistanceJ]).mCenter);
-
+		AddParticle(track->mID,
+			    particles->at(particleIndexes[minDistanceJ]));
+		
 		//Suppress the indexes in the vectors
 		trackIndexes.erase(trackIndexes.begin() + minDistanceI);
 		particleIndexes.erase(particleIndexes.begin() + minDistanceJ);
@@ -261,13 +268,45 @@ double THISCLASS::GetCost(const Track & track, CvPoint2D32f p)
 * \param i : Identifies the trajectory p will be added to
 * \param p : Point to add to trajectory i (subpixel accuracy)
 */
-void THISCLASS::AddPoint(int i, CvPoint2D32f p){
+void THISCLASS::AddParticle(int i, const Particle & p){
 	Track & track = mTracks[i];
 	assert(i == track.mID);
-	track.AddPoint(p, mCore->mDataStructureInput.mFrameNumber);
+	track.AddPoint(p.mCenter, mCore->mDataStructureInput.mFrameNumber);
+	printf("%d adding particle size %.3f\n", track.mID, p.mArea);
+	if (p.mColorModel != NULL && track.mColorModel != NULL) {
+	  Utility::IntegrateHistogram(track.mColorModel, p.mColorModel);
+	  cvCopyHist(p.mColorModel, &track.mColorModel);
+	}
 }
 
 
 void THISCLASS::ClearTracks() {
 	mTracks.clear();
+}
+
+
+bool THISCLASS::ColorsMatch(const Track & track, const Particle & particle) {
+  // if somebody doesn't have a color model, then ignore.
+  if (particle.mColorModel == NULL || track.mColorModel == NULL) {
+    return true;
+  }
+
+  cvCopyHist(track.mColorModel, &mTmp1);
+  cvCopyHist(particle.mColorModel, &mTmp2);
+
+  cvNormalizeHist(mTmp1, 1);
+  cvNormalizeHist(mTmp2, 1);
+
+  
+  
+  double colorSim = cvCompareHist(mTmp1, mTmp2, CV_COMP_BHATTACHARYYA); 
+  printf("%d Color theshold: %.4f <= %.4f\n", 
+	 track.mID, colorSim, mColorThreshold);
+  if (colorSim <= mColorThreshold) {
+    return true;
+  } else {
+    printf("Rejecting because the color is different: %.4f\n", colorSim);
+    return false;
+  }
+  
 }
