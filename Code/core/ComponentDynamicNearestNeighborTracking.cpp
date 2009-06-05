@@ -43,7 +43,7 @@ void THISCLASS::InitializeTracks()
 {
 	int id = mNextTrackId++;
 	mTracks.insert(tTrackPair(id, Track(id)));
-	distanceArray[id] = new double[maxParticles];
+	squareDistanceArray[id] = new double[maxParticles];
 }
 
 void THISCLASS::OnReloadConfiguration()
@@ -80,7 +80,7 @@ void THISCLASS::OnStep()
 		for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
 		        i != mTracks.end(); i++)
 		{
-			distanceArray[i->first] = new double[maxParticles];
+			squareDistanceArray[i->first] = new double[maxParticles];
 		}
 	}
 	// get the particles as input to component
@@ -113,11 +113,11 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::ClearDistanceArray() {
-	for (map<int, double*>::iterator pos = distanceArray.begin();
-	        pos != distanceArray.end(); ++pos) {
+	for (map<int, double*>::iterator pos = squareDistanceArray.begin();
+	        pos != squareDistanceArray.end(); ++pos) {
 		delete[] pos->second;
 	}
-	distanceArray.clear();
+	squareDistanceArray.clear();
 }
 
 void THISCLASS::OnStop() {
@@ -173,7 +173,7 @@ void THISCLASS::DataAssociation()
 		for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
 		        i != mTracks.end(); i++)
 		{
-			distanceArray[i->first][p] = GetCost(i->second, pIt->mCenter);
+			squareDistanceArray[i->first][p] = GetCost(i->second, pIt->mCenter);
 		}
 		//  Compute distance from each particle to each track
 	}
@@ -195,14 +195,14 @@ void THISCLASS::DataAssociation()
 		int minDistanceI, minDistanceJ;
 		minDistanceI = 0;
 		minDistanceJ = 0;
-		minDistance = distanceArray[trackIndexes[0]][particleIndexes[0]];
+		minDistance = squareDistanceArray[trackIndexes[0]][particleIndexes[0]];
 		for (unsigned int i = 0;i < trackIndexes.size();i++)
 		{
 			for (unsigned int j = 0;j < particleIndexes.size();j++)
 			{
-				if (distanceArray[trackIndexes[i]][particleIndexes[j]] < minDistance)
+				if (squareDistanceArray[trackIndexes[i]][particleIndexes[j]] < minDistance)
 				{
-					minDistance = distanceArray[trackIndexes[i]][particleIndexes[j]];
+					minDistance = squareDistanceArray[trackIndexes[i]][particleIndexes[j]];
 					minDistanceI = i;
 					minDistanceJ = j;
 				}
@@ -216,7 +216,7 @@ void THISCLASS::DataAssociation()
 				mTracks.insert(tTrackPair(id, Track(id)));
 
 				track = &mTracks[id];
-				distanceArray[track->mID] = new double[maxParticles];
+				squareDistanceArray[track->mID] = new double[maxParticles];
 			} else {
 				break;
 			}

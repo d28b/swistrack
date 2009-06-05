@@ -42,7 +42,7 @@ private:
 	void AddPoint(int i, CvPoint2D32f p);
 
 	DataStructureParticles::tParticleVector *particles;
-	std::map<int, double*> distanceArray;
+	std::map<int, double*> squareDistanceArray;
 	unsigned int maxParticles;
 	int mNextTrackId;
 
