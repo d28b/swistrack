@@ -7,7 +7,7 @@
 #include <set>
 
 using namespace std;
-
+typedef  DataStructureTracks::tTrackMap::value_type tTrackPair;
 THISCLASS::ComponentDynamicNearestNeighborTracking(SwisTrackCore *stc):
 		Component(stc, wxT("DynamicNearestNeighborTracking")),
 		mNextTrackId(0),
@@ -42,7 +42,7 @@ void THISCLASS::OnStart()
 void THISCLASS::InitializeTracks()
 {
 	int id = mNextTrackId++;
-	mTracks[id] = Track(id);
+	mTracks.insert(tTrackPair(id, Track(id)));
 	distanceArray[id] = new double[maxParticles];
 }
 
@@ -213,7 +213,7 @@ void THISCLASS::DataAssociation()
 		if (minDistance > mMaxDistanceSquared) {
 			if (minDistance  >= mMinNewTrackDistanceSquared) {
 				int id = mNextTrackId++;
-				mTracks[id] =  Track(id);
+				mTracks.insert(tTrackPair(id, Track(id)));
 
 				track = &mTracks[id];
 				distanceArray[track->mID] = new double[maxParticles];
