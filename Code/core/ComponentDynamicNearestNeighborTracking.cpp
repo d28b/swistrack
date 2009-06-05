@@ -191,18 +191,18 @@ void THISCLASS::DataAssociation()
 	//Search for the minimalDistance
 	while ((!trackIndexes.empty()) && (!particleIndexes.empty()))
 	{
-		double minDistance;
+		double minDistanceSquared;
 		int minDistanceI, minDistanceJ;
 		minDistanceI = 0;
 		minDistanceJ = 0;
-		minDistance = squareDistanceArray[trackIndexes[0]][particleIndexes[0]];
+		minDistanceSquared = squareDistanceArray[trackIndexes[0]][particleIndexes[0]];
 		for (unsigned int i = 0;i < trackIndexes.size();i++)
 		{
 			for (unsigned int j = 0;j < particleIndexes.size();j++)
 			{
-				if (squareDistanceArray[trackIndexes[i]][particleIndexes[j]] < minDistance)
+				if (squareDistanceArray[trackIndexes[i]][particleIndexes[j]] < minDistanceSquared)
 				{
-					minDistance = squareDistanceArray[trackIndexes[i]][particleIndexes[j]];
+					minDistanceSquared = squareDistanceArray[trackIndexes[i]][particleIndexes[j]];
 					minDistanceI = i;
 					minDistanceJ = j;
 				}
@@ -210,8 +210,8 @@ void THISCLASS::DataAssociation()
 		}
 		//If the distance between track and particle is too big, make a new track
 		Track * track = NULL;
-		if (minDistance > mMaxDistanceSquared) {
-			if (minDistance  >= mMinNewTrackDistanceSquared) {
+		if (minDistanceSquared > mMaxDistanceSquared) {
+			if (minDistanceSquared  >= mMinNewTrackDistanceSquared) {
 				int id = mNextTrackId++;
 				mTracks.insert(tTrackPair(id, Track(id)));
 
