@@ -37,9 +37,8 @@ private:
 	void DataAssociation();
 	void ClearDistanceArray();
 	void ClearTracks();
-	void InitializeTracks();
 	double GetCost(const Track & track, CvPoint2D32f p);
-	void AddParticle(int i, const Particle & p);
+	void AddParticle(int i, Particle * p);
 	bool ColorsMatch(const Track & track, const Particle & particle);
 
 	DataStructureParticles::tParticleVector *particles;

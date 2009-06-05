@@ -41,12 +41,6 @@ void THISCLASS::OnStart()
 	THISCLASS::OnReloadConfiguration();
 }
 
-void THISCLASS::InitializeTracks()
-{
-	int id = mNextTrackId++;
-	mTracks.insert(tTrackPair(id, Track(id)));
-	squareDistanceArray[id] = new double[maxParticles];
-}
 
 void THISCLASS::OnReloadConfiguration()
 {
@@ -64,10 +58,6 @@ void THISCLASS::OnReloadConfiguration()
 	mColorSimilarityThreshold = 
 	  GetConfigurationDouble(wxT("ColorSimilarityThreshold"), 0.5);
 
-
-
-
-	InitializeTracks();
 }
 
 void THISCLASS::OnStep()
@@ -93,9 +83,6 @@ void THISCLASS::OnStep()
 	// get the particles as input to component
 	//	(pointer modifies data in place!)
 	particles = mCore->mDataStructureParticles.mParticles;
-	if (mTracks.size() == 0) {
-		InitializeTracks();
-	}
 
 	// associate all points with the nearest track
 	DataAssociation();
@@ -191,10 +178,22 @@ void THISCLASS::DataAssociation()
 	for (unsigned int i = 0;i < particles->size();i++) {
 		particleIndexes.push_back(i);
 	}
+
+	printf("Size 1: %d\n", trackIndexes.size());
 	for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
 	        i != mTracks.end(); i++) {
 		trackIndexes.push_back(i->first);
 	}
+
+	if (mTracks.empty() && !particleIndexes.empty()) {
+	  int id = mNextTrackId++;
+	  mTracks.insert(tTrackPair(id, Track(id)));
+	  squareDistanceArray[id] = new double[maxParticles];
+	  AddParticle(id, &particles->at(0));
+	  particleIndexes.erase(particleIndexes.begin());
+	}
+	printf("Size 2: %d\n", trackIndexes.size());
+
 	//Search for the minimalDistance
 	while ((!trackIndexes.empty()) && (!particleIndexes.empty()))
 	{
@@ -203,6 +202,7 @@ void THISCLASS::DataAssociation()
 		minDistanceI = 0;
 		minDistanceJ = 0;
 		minDistanceSquared = squareDistanceArray[trackIndexes[0]][particleIndexes[0]];
+		printf("Size 3: %d\n", trackIndexes.size());
 		for (unsigned int i = 0;i < trackIndexes.size();i++)
 		{
 			for (unsigned int j = 0;j < particleIndexes.size();j++)
@@ -217,29 +217,26 @@ void THISCLASS::DataAssociation()
 		}
 		//If the distance between track and particle is too big, make a new track
 		Track * track = NULL;
+		Particle * p = &(particles->at(particleIndexes[minDistanceJ]));
 		if (minDistanceSquared > mMaxDistanceSquared) {
 			if (minDistanceSquared  >= mMinNewTrackDistanceSquared) {
 				int id = mNextTrackId++;
 				mTracks.insert(tTrackPair(id, Track(id)));
-
 				track = &mTracks[id];
 				squareDistanceArray[track->mID] = new double[maxParticles];
-			} else {
-				break;
+				AddParticle(track->mID,p);
 			}
 		} else {
-			track = &mTracks[trackIndexes[minDistanceI]];
+		  track = &mTracks[trackIndexes[minDistanceI]];
+		  AddParticle(track->mID,p);
+
 		}
-
-		Particle & p = (particles->at(particleIndexes[minDistanceJ]));
-		p.mID = track->mID;
-		
-		AddParticle(track->mID,p);
-
-		
-		//Suppress the indexes in the vectors
+		// Suppress the indexes in the vectors		
 		trackIndexes.erase(trackIndexes.begin() + minDistanceI);
 		particleIndexes.erase(particleIndexes.begin() + minDistanceJ);
+
+
+
 	}
 }
 
@@ -270,14 +267,15 @@ double THISCLASS::GetCost(const Track & track, CvPoint2D32f p)
 * \param i : Identifies the trajectory p will be added to
 * \param p : Point to add to trajectory i (subpixel accuracy)
 */
-void THISCLASS::AddParticle(int i, const Particle & p){
+void THISCLASS::AddParticle(int i, Particle * p){
 	Track & track = mTracks[i];
+	p->mID = track.mID;
 	assert(i == track.mID);
-	track.AddPoint(p.mCenter, mCore->mDataStructureInput.mFrameNumber);
-	printf("%d adding particle size %.3f\n", track.mID, p.mArea);
-	if (p.mColorModel != NULL && track.mColorModel != NULL) {
-	  Utility::IntegrateHistogram(track.mColorModel, p.mColorModel);
-	  cvCopyHist(p.mColorModel, &track.mColorModel);
+	track.AddPoint(p->mCenter, mCore->mDataStructureInput.mFrameNumber);
+	printf("%d adding particle size %.3f\n", track.mID, p->mArea);
+	if (p->mColorModel != NULL && track.mColorModel != NULL) {
+	  Utility::IntegrateHistogram(track.mColorModel, p->mColorModel);
+	  cvCopyHist(p->mColorModel, &track.mColorModel);
 	}
 }
 
