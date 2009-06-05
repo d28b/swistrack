@@ -179,7 +179,6 @@ void THISCLASS::DataAssociation()
 		particleIndexes.push_back(i);
 	}
 
-	printf("Size 1: %d\n", trackIndexes.size());
 	for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
 	        i != mTracks.end(); i++) {
 		trackIndexes.push_back(i->first);
@@ -192,7 +191,6 @@ void THISCLASS::DataAssociation()
 	  AddParticle(id, &particles->at(0));
 	  particleIndexes.erase(particleIndexes.begin());
 	}
-	printf("Size 2: %d\n", trackIndexes.size());
 
 	//Search for the minimalDistance
 	while ((!trackIndexes.empty()) && (!particleIndexes.empty()))
@@ -202,7 +200,6 @@ void THISCLASS::DataAssociation()
 		minDistanceI = 0;
 		minDistanceJ = 0;
 		minDistanceSquared = squareDistanceArray[trackIndexes[0]][particleIndexes[0]];
-		printf("Size 3: %d\n", trackIndexes.size());
 		for (unsigned int i = 0;i < trackIndexes.size();i++)
 		{
 			for (unsigned int j = 0;j < particleIndexes.size();j++)
