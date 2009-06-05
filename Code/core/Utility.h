@@ -24,6 +24,8 @@ public:
 	  mat = cvGetMat(image, mat);
 	  return mat;
 	}
+
+	static void IntegrateHistogram(CvHistogram * dest, CvHistogram * newSample);	
 };
 
 #endif

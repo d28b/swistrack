@@ -13,6 +13,31 @@ CvRect THISCLASS::RectByCenter(int centerX, int centerY, int width, int height) 
 	return cvRect(lowerLeftx, lowerLefty, width, height);
 }
 
+void THISCLASS::IntegrateHistogram(CvHistogram * dest, CvHistogram * newSample) {
+  int size1[CV_MAX_DIM], size2[CV_MAX_DIM], total = 1;
+
+  int dims1 = cvGetDims( dest->bins, size1 );
+  int dims2 = cvGetDims( newSample->bins, size2 );
+  assert(dims1 == dims2);
+  for(int i = 0; i < dims1; i++ ) {
+    assert(size1[i] == size2[i]);
+    total *= size1[i];
+  }
+  
+  union { float* fl; uchar* ptr; } v;
+  v.fl = 0;
+  float *destBins, *newSampleBins;
+  
+  cvGetRawData(dest->bins, &v.ptr);
+  destBins = v.fl;
+
+  cvGetRawData(newSample->bins, &v.ptr);
+  newSampleBins = v.fl;
+
+  for(int i = 0; i < total; i++ ) {
+    destBins[i] += newSampleBins[i];
+  }
+}
 
 /*CvBox2D THISCLASS::RectToBox(CvRect rect) {
 
@@ -24,3 +49,5 @@ CvRect THISCLASS::RectByCenter(int centerX, int centerY, int width, int height) 
   return out;
 }
 */
+
+
