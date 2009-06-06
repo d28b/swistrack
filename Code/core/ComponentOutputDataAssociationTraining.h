@@ -29,7 +29,7 @@ private:
 	int mBufferedFrameCount;
 	wxTimeSpan mWindowSize;
 
-	std::fstream fileStream;
+	std::fstream mFileStream;
 	DataStructureParticles::tParticleVector mParticles;
 	IplImage * mOutputImage;
 
@@ -37,6 +37,8 @@ private:
 
 	void BufferParticles(const DataStructureParticles::tParticleVector * inputParticles);
 	void FilterParticles();
+
+	void OutputTrainingData(const DataStructureParticles::tParticleVector * inputParticles);
 	
 };
 

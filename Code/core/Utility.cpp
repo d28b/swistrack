@@ -1,13 +1,19 @@
 #include "Utility.h"
 #define THISCLASS Utility
 #include <stdio.h>
-
+#include <math.h>
 
 double THISCLASS::SquareDistance(CvPoint2D32f p1, CvPoint2D32f p2) {
 	double dx = p1.x - p2.x;
 	double dy = p1.y - p2.y;
 	return dx*dx + dy*dy;
 }
+
+double THISCLASS::Distance(CvPoint2D32f p1, CvPoint2D32f p2) 
+{
+  return pow(SquareDistance(p1, p2), 0.5);
+}
+
 
 CvRect THISCLASS::RectByCenter(int centerX, int centerY, int width, int height) {
 	int lowerLeftx = centerX - width / 2;
@@ -71,4 +77,22 @@ IplImage * THISCLASS::DrawHistogram1D(CvHistogram * hist, IplImage * hist_image)
 		 cvScalarAll(0), -1, 8, 0 );
   }
   return hist_image;
+}
+
+float THISCLASS::toMillis(wxDateTime ts) 
+{
+  printf("Ticks: %d\n", ts.GetTicks());
+  double value = ts.GetTicks() * 1000ULL + ts.GetMillisecond();
+  printf("Returning: %.3f\n", value);
+  return value;
+}
+wxString THISCLASS::toMillisString(wxDateTime ts) {
+  wxString millis;
+  millis << ts.GetMillisecond();
+  millis.Pad(3 - millis.Length(), '0', false);
+
+  wxString out;
+  out << ts.GetTicks();
+  out << millis;
+  return out;
 }

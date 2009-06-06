@@ -2,6 +2,8 @@
 #define HEADER_Utility
 
 #include <cv.h>
+#include <wx/string.h>
+#include <wx/datetime.h>
 
 //! General utility functions.
 /*!
@@ -17,6 +19,11 @@ public:
 
 	//! Calculates the square distance.
 	static double SquareDistance(CvPoint2D32f p1, CvPoint2D32f p2);
+	static double Distance(CvPoint2D32f p1, CvPoint2D32f p2) ;
+
+	static wxString toMillisString(wxDateTime ts);
+	static float toMillis(wxDateTime ts);
+
 	//! Creates a rectangle from center, width and height.
 	static CvRect RectByCenter(int center_x, int center_xy, int width, int height);
 	static CvMat * IpImageToCvMat(IplImage * image) {

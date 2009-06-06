@@ -2,8 +2,10 @@
 #define THISCLASS ComponentOutputDataAssociationTraining
 
 #include "DisplayEditor.h"
-
+#include "DataAssociationClassifier.h"
+#include <iomanip>
 using namespace std;
+
 
 THISCLASS::ComponentOutputDataAssociationTraining(SwisTrackCore *stc):
   Component(stc, wxT("OutputDataAssociationTraining")),
@@ -37,13 +39,16 @@ void THISCLASS::OnStart() {
 //
 void THISCLASS::OnStep() {
 
-  if (! fileStream.is_open()) {
-    fileStream.open(mFileName.ToAscii(), fstream::out | fstream::app);
+  if (! mFileStream.is_open()) {
+    mFileStream.open(mFileName.ToAscii(), fstream::out | fstream::app);
   }
   cout << "Got me " << mParticles.size() << " particles." << endl;
   
   FilterParticles();
   const DataStructureParticles::tParticleVector * particles = mCore->mDataStructureParticles.mParticles;
+
+  OutputTrainingData(particles);
+
   BufferParticles(particles);
 
 
@@ -52,6 +57,24 @@ void THISCLASS::OnStep() {
   if (de.IsActive()) {
     de.SetMainImage(mCore->mDataStructureInput.mImage);
     de.SetParticles(&mParticles);
+  }
+}
+
+void THISCLASS::OutputTrainingData(const DataStructureParticles::tParticleVector * inputParticles) 
+{
+  mFileStream << std::setprecision(15);
+  for (DataStructureParticles::tParticleVector::const_iterator p1 = mParticles.begin(); 
+       p1 != mParticles.end(); p1++) {
+    for (DataStructureParticles::tParticleVector::const_iterator p2 = inputParticles->begin(); 
+	 p2 != inputParticles->end(); p2++) {
+      DataAssociationClassifier::FeatureVector features = 
+	DataAssociationClassifier::ComputeFeatureVector(*p1, *p2);
+      for (DataAssociationClassifier::FeatureVector::iterator i = features.begin();
+	     i != features.end(); i++) {      
+	mFileStream << i->second << "\t";
+      }
+      mFileStream << endl;
+    }
   }
 }
 
@@ -75,12 +98,12 @@ void THISCLASS::BufferParticles(const DataStructureParticles::tParticleVector * 
     }
   }
 
-  fileStream.flush();
+  mFileStream.flush();
 }
 
 void THISCLASS::OnReloadConfiguration() {
   mFileName = GetConfigurationString(wxT("FileName"), wxT(""));
-  fileStream.open(mFileName.ToAscii(), fstream::out | fstream::trunc);
+  mFileStream.open(mFileName.ToAscii(), fstream::out | fstream::trunc);
 
   mBufferedFrameCount = GetConfigurationInt(wxT("BufferedFrameCount"), 10);
   mWindowSize = wxTimeSpan::Seconds(GetConfigurationInt(wxT("WindowSizeSeconds"), 2));
@@ -90,6 +113,6 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-  fileStream.close();
+  mFileStream.close();
   cvReleaseImage(&mOutputImage);
 }

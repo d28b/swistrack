@@ -5,6 +5,7 @@ using namespace std;
 #include <errno.h>
 #include <fstream>
 #include "DisplayEditor.h"
+#include "Utility.h"
 
 THISCLASS::ComponentOutputFile(SwisTrackCore *stc):
 		Component(stc, wxT("OutputFile")),
@@ -117,12 +118,7 @@ void THISCLASS::WriteParticle(std::fstream & fileStream, const Particle & p) {
     << p.mOrientation << "\t"
     << p.mCompactness;
   if (p.mTimestamp.IsValid()) {
-    wxString millis;
-    millis << p.mTimestamp.GetMillisecond();
-    millis.Pad(3 - millis.Length(), '0', false);
-    fileStream
-      << "\t" << p.mTimestamp.GetTicks()
-      << millis.ToAscii();
+    fileStream << "\t" << Utility::toMillisString(p.mTimestamp).ToAscii();
   } else  {
 	 fileStream
 		<< "\t -1"; // write -1 in place of an invalid timestamp
