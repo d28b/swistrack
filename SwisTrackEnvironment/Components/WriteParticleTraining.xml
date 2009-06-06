@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Write Particles as Training Data</friendlyname>
+	<description>Writes out pairs of particles as training data.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/WriteParticleTraining</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="string">
+			<name>FileNameName</name>
+			<label>FileDirectory</label>
+			<reloadable>false</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>
