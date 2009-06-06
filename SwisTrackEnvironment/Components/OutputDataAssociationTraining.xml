@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Write Particles as Training Data</friendlyname>
+	<friendlyname>Output Data Association Training Data</friendlyname>
 	<description>Writes out pairs of particles as training data.</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/WriteParticleTraining</url>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputDataAssocationTraining</url>
 	<displayimage>Write Training</displayimage>
 
 	<configuration>
@@ -11,5 +11,19 @@
 			<label>FileName</label>
 			<reloadable>false</reloadable>
 		</parameter>
+		<parameter type="integer">
+			<name>BufferedFrameCount</name>
+			<label>BufferedFrameCount</label>
+			<reloadable>false</reloadable>
+		</parameter>
+
+	  <parameter type="double">
+	    <name>WindowSizeSeconds</name>
+	    <label>Window Size - how long to collect particles before associating them as tracks, in seconds.</label>
+	    <min>0</min>
+	    <max>1000</max>
+	    <slider>true</slider>
+	    <reloadable>false</reloadable>
+	  </parameter>
 	</configuration>
 </swistrackcomponent>

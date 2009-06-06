@@ -2,6 +2,7 @@
 #define HEADER_ComponentOutputDataAssociationTraining
 
 #include "Component.h"
+#include <fstream>
 
 //! A component that writes particles to the communication interface. This information is usually transmitted to clients that connect via TCP to SwisTrack.
 class ComponentOutputDataAssociationTraining: public Component {
@@ -23,7 +24,20 @@ public:
 	}
 
 private:
+	// Configuration
 	wxString mFileName;	
+	int mBufferedFrameCount;
+	wxTimeSpan mWindowSize;
+
+	std::fstream fileStream;
+	DataStructureParticles::tParticleVector mParticles;
+	IplImage * mOutputImage;
+
+	Display mDisplayOutput;	//!< The Display showing the last acquired image and the particles.
+
+	void BufferParticles(const DataStructureParticles::tParticleVector * inputParticles);
+	void FilterParticles();
+	
 };
 
 #endif
