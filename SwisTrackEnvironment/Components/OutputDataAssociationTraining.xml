@@ -7,8 +7,8 @@
 
 	<configuration>
 		<parameter type="string">
-			<name>FileNameName</name>
-			<label>FileDirectory</label>
+			<name>FileName</name>
+			<label>FileName</label>
 			<reloadable>false</reloadable>
 		</parameter>
 	</configuration>

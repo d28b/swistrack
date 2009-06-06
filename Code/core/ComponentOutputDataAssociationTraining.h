@@ -1,16 +1,16 @@
-#ifndef HEADER_ComponentWriteParticleTraining
-#define HEADER_ComponentWriteParticleTraining
+#ifndef HEADER_ComponentOutputDataAssociationTraining
+#define HEADER_ComponentOutputDataAssociationTraining
 
 #include "Component.h"
 
 //! A component that writes particles to the communication interface. This information is usually transmitted to clients that connect via TCP to SwisTrack.
-class ComponentWriteParticleTraining: public Component {
+class ComponentOutputDataAssociationTraining: public Component {
 
 public:
 	//! Constructor.
-	ComponentWriteParticleTraining(SwisTrackCore *stc);
+	ComponentOutputDataAssociationTraining(SwisTrackCore *stc);
 	//! Destructor.
-	~ComponentWriteParticleTraining();
+	~ComponentOutputDataAssociationTraining();
 
 	// Overwritten Component methods
 	void OnStart();
@@ -19,7 +19,7 @@ public:
 	void OnStepCleanup();
 	void OnStop();
 	Component *Create() {
-		return new ComponentWriteParticleTraining(mCore);
+		return new ComponentOutputDataAssociationTraining(mCore);
 	}
 
 private:

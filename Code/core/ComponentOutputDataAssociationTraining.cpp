@@ -1,8 +1,8 @@
-#include "ComponentWriteParticleTraining.h"
-#define THISCLASS ComponentWriteParticleTraining
+#include "ComponentOutputDataAssociationTraining.h"
+#define THISCLASS ComponentOutputDataAssociationTraining
 
-THISCLASS::ComponentWriteParticleTraining(SwisTrackCore *stc):
-		Component(stc, wxT("WriteParticleTraining")) {
+THISCLASS::ComponentOutputDataAssociationTraining(SwisTrackCore *stc):
+		Component(stc, wxT("OutputDataAssociationTraining")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryOutput);
@@ -12,7 +12,7 @@ THISCLASS::ComponentWriteParticleTraining(SwisTrackCore *stc):
 	Initialize();
 }
 
-THISCLASS::~ComponentWriteParticleTraining() {
+THISCLASS::~ComponentOutputDataAssociationTraining() {
 }
 
 void THISCLASS::OnStart() {
