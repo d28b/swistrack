@@ -40,9 +40,7 @@ void THISCLASS::OnStart() {
 //
 void THISCLASS::OnStep() {
 
-  if (! mFileStream.is_open()) {
-    mFileStream.open(mFileName.ToAscii(), fstream::out | fstream::app);
-  }
+
   cout << "Got me " << mParticles.size() << " particles." << endl;
   
   FilterParticles();
@@ -63,13 +61,26 @@ void THISCLASS::OnStep() {
 
 void THISCLASS::OutputTrainingData(const DataStructureParticles::tParticleVector * inputParticles) 
 {
-  mFileStream << std::setprecision(15);
+
   for (DataStructureParticles::tParticleVector::const_iterator p1 = mParticles.begin(); 
        p1 != mParticles.end(); p1++) {
     for (DataStructureParticles::tParticleVector::const_iterator p2 = inputParticles->begin(); 
 	 p2 != inputParticles->end(); p2++) {
       DataAssociationClassifier::FeatureVector features = 
 	DataAssociationClassifier::ComputeFeatureVector(*p1, *p2);
+      if (! mFileStream.is_open()) {
+	mFileStream.open(mFileName.ToAscii(), fstream::out | fstream::trunc);
+	mFileStream << std::setprecision(15);
+	for (DataAssociationClassifier::FeatureVector::iterator i = features.begin();
+	     i != features.end(); i++) {      
+	  mFileStream << i->first << "\t";
+	  cout << "header: " << i->first << endl;
+	}
+	
+	mFileStream << endl;
+      }
+
+
       for (DataAssociationClassifier::FeatureVector::iterator i = features.begin();
 	     i != features.end(); i++) {      
 	mFileStream << i->second << "\t";
@@ -104,7 +115,8 @@ void THISCLASS::BufferParticles(const DataStructureParticles::tParticleVector * 
 
 void THISCLASS::OnReloadConfiguration() {
   mFileName = GetConfigurationString(wxT("FileName"), wxT(""));
-  mFileStream.open(mFileName.ToAscii(), fstream::out | fstream::trunc);
+  mFileStream.close();
+  
 
   mBufferedFrameCount = GetConfigurationInt(wxT("BufferedFrameCount"), 10);
   mWindowSize = wxTimeSpan::Seconds(GetConfigurationInt(wxT("WindowSizeSeconds"), 2));

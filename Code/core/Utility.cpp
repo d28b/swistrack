@@ -81,9 +81,7 @@ IplImage * THISCLASS::DrawHistogram1D(CvHistogram * hist, IplImage * hist_image)
 
 float THISCLASS::toMillis(wxDateTime ts) 
 {
-  printf("Ticks: %d\n", ts.GetTicks());
   double value = ts.GetTicks() * 1000ULL + ts.GetMillisecond();
-  printf("Returning: %.3f\n", value);
   return value;
 }
 wxString THISCLASS::toMillisString(wxDateTime ts) {
