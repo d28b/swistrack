@@ -100,6 +100,8 @@ void THISCLASS::OnStep()
 		   mCore->mDataStructureInput.FrameTimestamp());
 	mCore->mDataStructureParticles.mParticles = &mParticles;
 	DisplayEditor de(&mDisplayOutput);
+
+
 	if (de.IsActive()) {
 	  de.SetMainImage(mOutputImage);
 	}
@@ -111,7 +113,6 @@ void THISCLASS::OnStepCleanup() {
 
 void THISCLASS::OnStop() {
 	cvReleaseImage(&mOutputImage);
-	mOutputImage = 0;
 }
 
 
