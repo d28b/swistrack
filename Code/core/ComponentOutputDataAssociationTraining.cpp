@@ -92,11 +92,13 @@ void THISCLASS::OutputTrainingData(const DataStructureParticles::tParticleVector
 
 void THISCLASS::FilterParticles() {
   for (DataStructureParticles::tParticleVector::iterator pIt = mParticles.begin(); 
-       pIt != mParticles.end(); pIt++) {
+       pIt != mParticles.end();) {
     wxTimeSpan diff = mCore->mDataStructureInput.FrameTimestamp().Subtract(pIt->mTimestamp);
     if (diff.IsLongerThan(mWindowSize)) {
       cvReleaseHist(&pIt->mColorModel);
-      mParticles.erase(pIt);
+      pIt = mParticles.erase(pIt);
+    } else {
+      ++pIt;
     }
   }
 }
