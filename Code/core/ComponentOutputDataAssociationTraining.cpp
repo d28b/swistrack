@@ -4,6 +4,7 @@
 #include "DisplayEditor.h"
 #include "DataAssociationClassifier.h"
 #include <iomanip>
+#include <iostream>
 using namespace std;
 
 
