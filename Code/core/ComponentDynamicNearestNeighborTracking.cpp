@@ -7,7 +7,8 @@
 #include <set>
 
 using namespace std;
-typedef  DataStructureTracks::tTrackMap::value_type tTrackPair;
+typedef  DataStructureTracks::tTrackMap::value_type tTrackPair;
+
 THISCLASS::ComponentDynamicNearestNeighborTracking(SwisTrackCore *stc):
 		Component(stc, wxT("DynamicNearestNeighborTracking")),
 		mNextTrackId(0),
@@ -82,11 +83,11 @@ void THISCLASS::OnStep()
 	}
 	// get the particles as input to component
 	//	(pointer modifies data in place!)
-	particles = mCore->mDataStructureParticles.mParticles;
+
 
 	// associate all points with the nearest track
-	DataAssociation();
-
+	DataAssociation(mCore->mDataStructureParticles.mParticles);
+	
 	// get rid of the tracks that have died.
 	FilterTracks();
 
@@ -157,12 +158,13 @@ void THISCLASS::FilterTracks()
 
 }
 
-void THISCLASS::DataAssociation()
+void THISCLASS::DataAssociation(DataStructureParticles::tParticleVector * particles)
 {
 	int p = 0;
+
 	//for each input particle, blob selection has already removed any wxT("noise"), so there should not be any unwanted particles in the list
 	for (DataStructureParticles::tParticleVector::iterator pIt = particles->begin();pIt != particles->end();pIt++, p++)
-	{
+	  {
 		assert(pIt->mID == -1);			// (particle should not be associated)
 		for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
 		        i != mTracks.end(); i++)

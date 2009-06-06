@@ -34,14 +34,14 @@ private:
 	 * Filter tracks we aren't using any more.
 	 */
 	void FilterTracks();
-	void DataAssociation();
+	void DataAssociation(DataStructureParticles::tParticleVector * particles);
 	void ClearDistanceArray();
 	void ClearTracks();
 	double GetCost(const Track & track, CvPoint2D32f p);
 	void AddParticle(int i, Particle * p);
 	bool ColorsMatch(const Track & track, const Particle & particle);
 
-	DataStructureParticles::tParticleVector *particles;
+
 	std::map<int, double*> squareDistanceArray;
 	unsigned int maxParticles;
 	int mNextTrackId;
