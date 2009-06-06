@@ -1,5 +1,5 @@
-#include "ComponentMotionTemplateTracking.h"
-#define THISCLASS ComponentMotionTemplateTracking
+#include "ComponentMotionTemplateParticleDetector.h"
+#define THISCLASS ComponentMotionTemplateParticleDetector
 
 #include "DisplayEditor.h"
 #include "Utility.h"
@@ -10,8 +10,8 @@
 
 using namespace std;
 
-THISCLASS::ComponentMotionTemplateTracking(SwisTrackCore *stc):
-		Component(stc, wxT("MotionTemplateTracking")),
+THISCLASS::ComponentMotionTemplateParticleDetector(SwisTrackCore *stc):
+		Component(stc, wxT("MotionTemplateParticleDetector")),
 		mParticles(), mOutputImage(0),
 		mMhiDuration(1),
 		N(4), buf(0), last(0), mhi(0),
@@ -35,7 +35,7 @@ THISCLASS::ComponentMotionTemplateTracking(SwisTrackCore *stc):
 	Initialize();						// Read the XML configuration file
 }
 
-THISCLASS::~ComponentMotionTemplateTracking()
+THISCLASS::~ComponentMotionTemplateParticleDetector()
 {
 
 }

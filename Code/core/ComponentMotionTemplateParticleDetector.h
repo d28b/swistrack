@@ -1,5 +1,5 @@
-#ifndef HEADER_ComponentMotionTemplateTracking
-#define HEADER_ComponentMotionTemplateTracking
+#ifndef HEADER_ComponentMotionTemplateParticleDetector
+#define HEADER_ComponentMotionTemplateParticleDetector
 
 #include <cv.h>
 //#include <cvaux.hpp>
@@ -11,13 +11,13 @@ extern "C" {
 
 //! A basic tracking component that takes pre-filtered particales and
 // adds them to the nearest track.
-class ComponentMotionTemplateTracking: public Component {
+class ComponentMotionTemplateParticleDetector: public Component {
 
 public:
 	//! Constructor.
-	ComponentMotionTemplateTracking(SwisTrackCore *stc);
+	ComponentMotionTemplateParticleDetector(SwisTrackCore *stc);
 	//! Destructor.
-	~ComponentMotionTemplateTracking();
+	~ComponentMotionTemplateParticleDetector();
 
 	// Overwritten Component methods
 	void OnStart();
@@ -26,7 +26,7 @@ public:
 	void OnStepCleanup();
 	void OnStop();
 	Component *Create() {
-		return new ComponentMotionTemplateTracking(mCore);
+		return new ComponentMotionTemplateParticleDetector(mCore);
 	}
 
 private:

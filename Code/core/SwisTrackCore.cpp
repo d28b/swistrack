@@ -44,7 +44,7 @@
 #include "ComponentDynamicNearestNeighborTracking.h"
 #include "ComponentCamShiftTracking.h"
 #include "ComponentMinCostFlowTracking.h"
-#include "ComponentMotionTemplateTracking.h"
+#include "ComponentMotionTemplateParticleDetector.h"
 #include "ComponentFilterParticles.h"
 #include "ComponentTrackSmoothing.h"
 #include "ComponentKalmanFilterTrack.h"
@@ -153,7 +153,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentDynamicNearestNeighborTracking(this));
 	mAvailableComponents.push_back(new ComponentCamShiftTracking(this));
 	mAvailableComponents.push_back(new ComponentMinCostFlowTracking(this));
-	mAvailableComponents.push_back(new ComponentMotionTemplateTracking(this));
+	mAvailableComponents.push_back(new ComponentMotionTemplateParticleDetector(this));
 	mAvailableComponents.push_back(new ComponentFilterParticles(this));
 	mAvailableComponents.push_back(new ComponentTrackSmoothing(this));
 	mAvailableComponents.push_back(new ComponentKalmanFilterTrack(this));
