@@ -124,7 +124,15 @@ THISCLASS::ExampleTable THISCLASS::fromFile(const string fileName)
       fin.getline(buffer, SIZE);
       assert(fin.eof() || fin.good());
       istringstream line(buffer);
-      
+      Example ex;
+      for (unsigned int i = 0; i < keys.size(); i++) {
+	float value;
+	line >> value;
+	ex[keys[i]] = value;
+	printf("key: %s %.3f\n", keys[i].c_str(), value);
+      }
+      data.push_back(ex);
+      assert(!line);
       
     }
     fin.close();

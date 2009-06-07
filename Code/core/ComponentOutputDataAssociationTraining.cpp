@@ -72,9 +72,11 @@ void THISCLASS::OutputTrainingData(const DataStructureParticles::tParticleVector
 	mFileStream.open(mFileName.ToAscii(), fstream::out | fstream::trunc);
 	mFileStream << std::setprecision(15);
 	for (DataAssociationClassifier::Example::iterator i = features.begin();
-	     i != features.end(); i++) {      
-	  mFileStream << i->first << "\t";
-	  cout << "header: " << i->first << endl;
+	     i != features.end(); i++) {
+	  if (i != features.begin()) {
+	    mFileStream << "\t";
+	  }
+	  mFileStream << i->first;
 	}
 	
 	mFileStream << endl;
@@ -83,7 +85,10 @@ void THISCLASS::OutputTrainingData(const DataStructureParticles::tParticleVector
 
       for (DataAssociationClassifier::Example::iterator i = features.begin();
 	     i != features.end(); i++) {      
-	mFileStream << i->second << "\t";
+	if (i != features.begin()) {
+	  mFileStream << "\t";
+	}	  
+	mFileStream << i->second;
       }
       mFileStream << endl;
     }
