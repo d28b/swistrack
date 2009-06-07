@@ -61,7 +61,7 @@ THISCLASS::Example THISCLASS::ComputeExample(const Particle & p1, const Particle
     double colorSim = cvCompareHist(mTmp1, mTmp2, CV_COMP_BHATTACHARYYA); 
     out["differenceInColor"] = colorSim;
   } else {
-    //out["differenceInColor"] = 0;
+    out["differenceInColor"] = -1;
   }
   
   return out;
