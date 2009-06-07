@@ -66,12 +66,12 @@ void THISCLASS::OutputTrainingData(const DataStructureParticles::tParticleVector
        p1 != mParticles.end(); p1++) {
     for (DataStructureParticles::tParticleVector::const_iterator p2 = inputParticles->begin(); 
 	 p2 != inputParticles->end(); p2++) {
-      DataAssociationClassifier::FeatureVector features = 
-	DataAssociationClassifier::ComputeFeatureVector(*p1, *p2);
+      DataAssociationClassifier::Example features = 
+	DataAssociationClassifier::ComputeExample(*p1, *p2);
       if (! mFileStream.is_open()) {
 	mFileStream.open(mFileName.ToAscii(), fstream::out | fstream::trunc);
 	mFileStream << std::setprecision(15);
-	for (DataAssociationClassifier::FeatureVector::iterator i = features.begin();
+	for (DataAssociationClassifier::Example::iterator i = features.begin();
 	     i != features.end(); i++) {      
 	  mFileStream << i->first << "\t";
 	  cout << "header: " << i->first << endl;
@@ -81,7 +81,7 @@ void THISCLASS::OutputTrainingData(const DataStructureParticles::tParticleVector
       }
 
 
-      for (DataAssociationClassifier::FeatureVector::iterator i = features.begin();
+      for (DataAssociationClassifier::Example::iterator i = features.begin();
 	     i != features.end(); i++) {      
 	mFileStream << i->second << "\t";
       }

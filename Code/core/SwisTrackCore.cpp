@@ -66,6 +66,7 @@
 #include "ComponentOutputMarkFrameManual.h"
 #include "ComponentOutputParticles.h"
 #include "ComponentOutputDataAssociationTraining.h"
+#include "ComponentClassifierTracker.h"
 #include "ComponentDoubleThresholdColorIndependent.h"
 #include "NMEALog.h"
 THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
@@ -169,6 +170,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentOutputMarkFrameManual(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 	mAvailableComponents.push_back(new ComponentOutputDataAssociationTraining(this));
+	mAvailableComponents.push_back(new ComponentClassifierTracker(this));
 
 	// Initialize the available components
 	tComponentList::iterator ita = mAvailableComponents.begin();
