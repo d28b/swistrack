@@ -16,7 +16,8 @@ void THISCLASS::ExampleTableToMat(const THISCLASS::ExampleTable samples,
 
   assert(samples.size() != 0);
   const Example example = *samples.begin();
-  *data = cvCreateMat(samples.size(), example.size(), CV_32F );
+  int numTrainingFeatures = example.size() - 1;
+  *data = cvCreateMat(samples.size(), numTrainingFeatures, CV_32F );
   *responses = cvCreateMat(samples.size(), 1, CV_32F );
 
 
@@ -25,9 +26,15 @@ void THISCLASS::ExampleTableToMat(const THISCLASS::ExampleTable samples,
        i != samples.end(); ++i) {
     int featureIdx = 0;
     for (Example::const_iterator j = i->begin(); j != i->end(); ++j) {
-      float * ddata = data[0]->data.fl + example.size() * samplesIdx;
-      ddata[featureIdx] = j->second;
-      featureIdx++;
+      if (j->first == "class") {
+	float* response = responses[0]->data.fl + samplesIdx;
+	*response = j->second;
+      } else {
+	float * ddata = data[0]->data.fl + numTrainingFeatures * samplesIdx;
+	ddata[featureIdx] = j->second;
+	featureIdx++;
+      }
+
     }
     samplesIdx++;
   }
@@ -73,14 +80,15 @@ void THISCLASS::Train(const ExampleTable samples)
   assert(samples.size() != 0);
 
   const Example example = *samples.begin();
-  int numFeatures = example.size();
+  int numTrainingFeatures = example.size() - 1; // don't include the class feature.
   int numSamples = samples.size();
-  CvMat * var_type = cvCreateMat(numFeatures + 1, 1, CV_8U );
+  CvMat * var_type = cvCreateMat(numTrainingFeatures + 1, 1, CV_8U );
   cvSet(var_type, cvScalarAll(CV_VAR_ORDERED));
-  cvSetReal1D(var_type, numFeatures, CV_VAR_CATEGORICAL );
-  CvMat * trainingOrTesting = cvCreateMat( 1, numSamples, CV_8UC1 );
+  cvSetReal1D(var_type, numTrainingFeatures, CV_VAR_CATEGORICAL );
+  int numTrainingSamples = (int) (numSamples * 0.5);
+  CvMat * trainingOrTesting = cvCreateMat(1, numSamples, CV_8UC1 );
   {
-    int numTrainingSamples = 100;
+
     CvMat tmp;
     cvGetCols(trainingOrTesting, &tmp, 0, numTrainingSamples);
     cvSet( &tmp, cvRealScalar(1) );
@@ -89,10 +97,44 @@ void THISCLASS::Train(const ExampleTable samples)
   }
   CvMat* responses = 0;
   CvMat* data = 0;
+  ExampleTableToMat(samples, &data, &responses);
 
-  forest.train(data, CV_ROW_SAMPLE, responses, 0, trainingOrTesting, var_type, 0,
-	       CvRTParams(10,10,0,false,15,0,true,4,100,0.01f,CV_TERMCRIT_ITER));
+  printf("response: %dx%d\n", responses->rows, responses->cols);
+  printf("Data: %dx%d\n", data->rows, data->cols);
+  printf("Training or testing: %dx%d\n", trainingOrTesting->rows, trainingOrTesting->cols);
+  printf("var type: %dx%d\n", var_type->rows, var_type->cols);
+
+  for (int i = 0; i < responses->rows; i++) {
+    float value = cvGetReal1D(responses, i);
+    if (value != 0 && value != 1) {
+      printf("Weird value[%d]: %f\n", i, value);
+    }
+  }
+
+  CvRTParams params(10,10,
+		    0,false,
+		    15,0,
+		    true,
+		    0,100,
+		    0.01f,CV_TERMCRIT_ITER);
+  //forest.train(data, CV_ROW_SAMPLE, responses, 0, trainingOrTesting, var_type, 0, params);
+  forest.train(data, CV_ROW_SAMPLE, responses, 0, NULL, var_type, 0, params);
   
+  double train_hr = 0, test_hr = 0;
+
+  for (int i = 0; i < numSamples; i++) {
+
+    CvMat sample;
+    cvGetRow( data, &sample, i );
+    double r = forest.predict( &sample );
+    r = fabs((double)r - responses->data.fl[i]) <= FLT_EPSILON ? 1 : 0;
+    
+    if( i < numTrainingSamples ) {
+      train_hr += r;
+    } else {
+      test_hr += r;
+    }
+  }
 
 }
 
@@ -106,19 +148,20 @@ THISCLASS::ExampleTable THISCLASS::fromFile(const string fileName)
     ExampleTable data;
 
     ifstream fin(fileName.c_str());
-    cout << "File: " << fileName << endl;
 
     assert(fin.good());
     fin.getline(buffer, SIZE);
     assert(fin.good());
     istringstream line(buffer);
     
-    do {
+    while (true) {
       string key;
       line >> key;
+      if (key == "" || key.find("particle") == 0) {
+	break;
+      }
       keys.push_back(key);
-    } while (line);
-
+    }
 
     while (! fin.eof()) {
       fin.getline(buffer, SIZE);
@@ -129,11 +172,8 @@ THISCLASS::ExampleTable THISCLASS::fromFile(const string fileName)
 	float value;
 	line >> value;
 	ex[keys[i]] = value;
-	printf("key: %s %.3f\n", keys[i].c_str(), value);
       }
       data.push_back(ex);
-      assert(!line);
-      
     }
     fin.close();
     
