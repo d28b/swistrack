@@ -126,7 +126,9 @@ void THISCLASS::OnReloadConfiguration() {
   
 
   mBufferedFrameCount = GetConfigurationInt(wxT("BufferedFrameCount"), 10);
-  mWindowSize = wxTimeSpan::Seconds(GetConfigurationInt(wxT("WindowSizeSeconds"), 2));
+  int millis = GetConfigurationDouble(wxT("WindowSizeMilliseconds"), 2);
+  printf("Millis: %d\n", millis);
+  mWindowSize = wxTimeSpan(0, 0, 0, millis);
 }
 
 void THISCLASS::OnStepCleanup() {

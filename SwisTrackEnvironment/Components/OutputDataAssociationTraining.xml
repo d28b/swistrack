@@ -17,10 +17,10 @@
 			<reloadable>false</reloadable>
 		</parameter>
 
-	  <parameter type="double">
-	    <name>WindowSizeSeconds</name>
+	  <parameter type="int">
+	    <name>WindowSizeMilliseconds</name>
 	    <label>Window Size - how long to collect particles before associating them as tracks, in seconds.</label>
-	    <min>0</min>
+	    <min>1</min>
 	    <max>1000</max>
 	    <slider>true</slider>
 	    <reloadable>false</reloadable>
