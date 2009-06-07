@@ -135,7 +135,21 @@ void THISCLASS::Train(const ExampleTable samples)
       test_hr += r;
     }
   }
-
+  test_hr /= (double)(numSamples-numTrainingSamples);
+  train_hr /= (double)numTrainingSamples;
+  printf( "Recognition rate: train = %.1f%%, test = %.1f%%\n",
+	  train_hr*100., test_hr*100. );
+  printf( "Number of trees: %d\n", forest.get_tree_count() );
+  // Print variable importance
+  CvMat* var_importance = (CvMat*)forest.get_var_importance();
+  if( var_importance )
+    {
+      double rt_imp_sum = cvSum( var_importance ).val[0];
+      printf("var#\timportance (in %%):\n");
+      for(int i = 0; i < var_importance->cols; i++ )
+	printf( "%-2d\t%-4.1f\n", i,
+		100.f*var_importance->data.fl[i]/rt_imp_sum);
+    }
 }
 
 
