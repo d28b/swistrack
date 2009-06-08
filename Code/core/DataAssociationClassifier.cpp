@@ -8,7 +8,24 @@
 
 #include "Utility.h"
 
-
+class ConfusionMatrix {
+public:
+  int truePositives;
+  int falsePositives;
+  int trueNegatives;
+  int falseNegatives;
+  ConfusionMatrix():
+    truePositives(0), falsePositives(0), trueNegatives(0), falseNegatives(0) {
+  }
+  
+  void print() {
+    printf("        Predicted\n");
+    printf("            T     F\n");
+    printf("Actual  T  %d    %d\n", truePositives, falseNegatives);
+    printf("        F  %d    %d\n", falsePositives, trueNegatives);
+  }
+  
+};
 
 void THISCLASS::ExampleTableToMat(const THISCLASS::ExampleTable samples, 
 				  CvMat ** data, CvMat ** responses) 
@@ -122,12 +139,28 @@ void THISCLASS::Train(const ExampleTable samples)
   
   double train_hr = 0, test_hr = 0;
 
+  ConfusionMatrix cm;
+
+
   for (int i = 0; i < numSamples; i++) {
 
     CvMat sample;
     cvGetRow( data, &sample, i );
     double r = forest.predict( &sample );
-    r = fabs((double)r - responses->data.fl[i]) <= FLT_EPSILON ? 1 : 0;
+    double correctValue = responses->data.fl[i];
+    if (r == 1 && correctValue == 1) {
+      cm.truePositives += 1;
+    } else if (r == 1 && correctValue == 0) {
+      cm.falsePositives += 1;
+    } else if (r == 0 && correctValue == 1) {
+      cm.falseNegatives += 1;
+    } else if (r == 0 && correctValue == 0) {
+      cm.trueNegatives += 1;
+    } else {
+      assert(0);
+    }
+    
+    r = fabs((double)r - correctValue) <= FLT_EPSILON ? 1 : 0;
     
     if( i < numTrainingSamples ) {
       train_hr += r;
@@ -137,6 +170,7 @@ void THISCLASS::Train(const ExampleTable samples)
   }
   test_hr /= (double)(numSamples-numTrainingSamples);
   train_hr /= (double)numTrainingSamples;
+  cm.print();
   printf( "Recognition rate: train = %.1f%%, test = %.1f%%\n",
 	  train_hr*100., test_hr*100. );
   printf( "Number of trees: %d\n", forest.get_tree_count() );

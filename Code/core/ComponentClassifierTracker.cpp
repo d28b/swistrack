@@ -40,7 +40,7 @@ void THISCLASS::OnStart()
 	THISCLASS::OnReloadConfiguration();
 
 	DataAssociationClassifier::ExampleTable table = 
-	  DataAssociationClassifier::fromFile("../../track.benchmark.training.txt.labeled");
+	  DataAssociationClassifier::fromFile("../../track.benchmark.training.txt.labeled.sampled");
 	mClassifier.Train(table);
 }
 
