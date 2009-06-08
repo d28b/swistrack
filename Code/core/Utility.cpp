@@ -79,10 +79,9 @@ IplImage * THISCLASS::DrawHistogram1D(CvHistogram * hist, IplImage * hist_image)
   return hist_image;
 }
 
-float THISCLASS::toMillis(wxDateTime ts) 
+double THISCLASS::toMillis(wxDateTime ts) 
 {
-  double value = ts.GetTicks() * 1000ULL + ts.GetMillisecond();
-  return value;
+  return ts.GetTicks() * 1000ULL + ts.GetMillisecond();
 }
 wxString THISCLASS::toMillisString(wxDateTime ts) {
   wxString millis;

@@ -70,7 +70,7 @@ THISCLASS::Example THISCLASS::ComputeExample(const Particle & p1, const Particle
   out["particle.2.mCenter.x"] = p2.mCenter.x;
   out["particle.2.mCenter.y"] = p2.mCenter.y;
   out["particle.2.timestamp"] = Utility::toMillis(p2.mTimestamp);
-  
+
   out["distanceInSpacePixels"] = Utility::Distance(p1.mCenter, p2.mCenter);
   out["distanceInTimeSeconds"] = fabs(p1.mTimestamp.Subtract(p2.mTimestamp).GetMilliseconds().ToDouble() / 1000.0);
   out["differenceInAreaPixels"] = fabs(p1.mArea - p2.mArea);

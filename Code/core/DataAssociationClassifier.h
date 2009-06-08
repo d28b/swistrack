@@ -14,7 +14,7 @@ using namespace std;
 class DataAssociationClassifier {
 
  public: 
-  typedef map<string, float> Example;
+  typedef map<string, double> Example;
   typedef vector<Example> ExampleTable;
 
   
