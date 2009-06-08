@@ -26,8 +26,10 @@ public:
 private:
 	// Configuration
 	wxString mFileName;	
-	int mBufferedFrameCount;
+
 	wxTimeSpan mWindowSize;
+	double mMaxDistanceSquared; 
+
 
 	std::fstream mFileStream;
 	DataStructureParticles::tParticleVector mParticles;

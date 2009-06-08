@@ -3,6 +3,7 @@
 
 #include "DisplayEditor.h"
 #include "DataAssociationClassifier.h"
+#include "Utility.h"
 #include <iomanip>
 #include <iostream>
 using namespace std;
@@ -66,32 +67,31 @@ void THISCLASS::OutputTrainingData(const DataStructureParticles::tParticleVector
        p1 != mParticles.end(); p1++) {
     for (DataStructureParticles::tParticleVector::const_iterator p2 = inputParticles->begin(); 
 	 p2 != inputParticles->end(); p2++) {
-      DataAssociationClassifier::Example features = 
-	DataAssociationClassifier::ComputeExample(*p1, *p2);
-      if (! mFileStream.is_open()) {
-	printf("OPening\n");
-	mFileStream.open(mFileName.ToAscii(), fstream::out | fstream::trunc);
-	mFileStream << std::setprecision(15);
+      double distanceSquared = Utility::SquareDistance(p1->mCenter, p2->mCenter);
+      if (distanceSquared <= mMaxDistanceSquared) {
+	DataAssociationClassifier::Example features = 
+	  DataAssociationClassifier::ComputeExample(*p1, *p2);
+	if (! mFileStream.is_open()) {
+	  mFileStream.open(mFileName.ToAscii(), fstream::out | fstream::trunc);
+	  mFileStream << std::setprecision(15);
+	  for (DataAssociationClassifier::Example::iterator i = features.begin();
+	       i != features.end(); i++) {
+	    if (i != features.begin()) {
+	      mFileStream << "\t";
+	    }
+	    mFileStream << i->first;
+	  }
+	  mFileStream << endl;
+	}
 	for (DataAssociationClassifier::Example::iterator i = features.begin();
-	     i != features.end(); i++) {
+	     i != features.end(); i++) {      
 	  if (i != features.begin()) {
 	    mFileStream << "\t";
-	  }
-	  mFileStream << i->first;
+	  }	  
+	  mFileStream << i->second;
 	}
-	
 	mFileStream << endl;
       }
-
-
-      for (DataAssociationClassifier::Example::iterator i = features.begin();
-	     i != features.end(); i++) {      
-	if (i != features.begin()) {
-	  mFileStream << "\t";
-	}	  
-	mFileStream << i->second;
-      }
-      mFileStream << endl;
     }
   }
   mFileStream.flush();
@@ -131,9 +131,14 @@ void THISCLASS::OnReloadConfiguration() {
   mFileStream.close();
   
 
-  mBufferedFrameCount = GetConfigurationInt(wxT("BufferedFrameCount"), 10);
+
   int millis = GetConfigurationDouble(wxT("WindowSizeMilliseconds"), 2);
   mWindowSize = wxTimeSpan(0, 0, 0, millis);
+
+
+  mMaxDistanceSquared = GetConfigurationDouble(wxT("MaxDistance"), 200);
+  mMaxDistanceSquared *= mMaxDistanceSquared;
+
 }
 
 void THISCLASS::OnStepCleanup() {

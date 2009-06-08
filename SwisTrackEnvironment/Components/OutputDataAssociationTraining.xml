@@ -25,5 +25,14 @@
 	    <slider>true</slider>
 	    <reloadable>false</reloadable>
 	  </parameter>
+	  <parameter type="double">
+	    <name>MaxDistance</name>
+	    <label>Maximum Distance</label>
+	    <min>0</min>
+	    <max>1000</max>
+	    <default>20</default>
+	    <slider>true</slider>
+	    <reloadable>true</reloadable>
+	  </parameter>
 	</configuration>
 </swistrackcomponent>
