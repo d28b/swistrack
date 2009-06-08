@@ -97,6 +97,10 @@ void THISCLASS::Train(const ExampleTable samples)
   assert(samples.size() != 0);
 
   const Example example = *samples.begin();
+  vector<string> keys;
+  for (Example::const_iterator j = example.begin(); j != example.end(); ++j) {
+    keys.push_back(j->first);
+  }
   int numTrainingFeatures = example.size() - 1; // don't include the class feature.
   int numSamples = samples.size();
   CvMat * var_type = cvCreateMat(numTrainingFeatures + 1, 1, CV_8U );
@@ -181,8 +185,8 @@ void THISCLASS::Train(const ExampleTable samples)
       double rt_imp_sum = cvSum( var_importance ).val[0];
       printf("var#\timportance (in %%):\n");
       for(int i = 0; i < var_importance->cols; i++ )
-	printf( "%-2d\t%-4.1f\n", i,
-		100.f*var_importance->data.fl[i]/rt_imp_sum);
+	printf( "%-2d\t%-4.1f\t%s\n", i,
+		100.f*var_importance->data.fl[i]/rt_imp_sum, keys[i+1].c_str());
     }
 }
 
@@ -214,6 +218,9 @@ THISCLASS::ExampleTable THISCLASS::fromFile(const string fileName)
     while (! fin.eof()) {
       fin.getline(buffer, SIZE);
       assert(fin.eof() || fin.good());
+      if (strlen(buffer) == 0) {
+	continue;
+      }
       istringstream line(buffer);
       Example ex;
       for (unsigned int i = 0; i < keys.size(); i++) {
