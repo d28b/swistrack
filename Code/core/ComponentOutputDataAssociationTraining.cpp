@@ -69,6 +69,7 @@ void THISCLASS::OutputTrainingData(const DataStructureParticles::tParticleVector
       DataAssociationClassifier::Example features = 
 	DataAssociationClassifier::ComputeExample(*p1, *p2);
       if (! mFileStream.is_open()) {
+	printf("OPening\n");
 	mFileStream.open(mFileName.ToAscii(), fstream::out | fstream::trunc);
 	mFileStream << std::setprecision(15);
 	for (DataAssociationClassifier::Example::iterator i = features.begin();
@@ -93,14 +94,16 @@ void THISCLASS::OutputTrainingData(const DataStructureParticles::tParticleVector
       mFileStream << endl;
     }
   }
+  mFileStream.flush();
 }
 
 void THISCLASS::FilterParticles() {
   for (DataStructureParticles::tParticleVector::iterator pIt = mParticles.begin(); 
        pIt != mParticles.end();) {
+
     wxTimeSpan diff = mCore->mDataStructureInput.FrameTimestamp().Subtract(pIt->mTimestamp);
     if (diff.IsLongerThan(mWindowSize)) {
-      cvReleaseHist(&pIt->mColorModel);
+      cvReleaseHist(&(pIt->mColorModel));
       pIt = mParticles.erase(pIt);
     } else {
       ++pIt;
@@ -112,12 +115,15 @@ void THISCLASS::BufferParticles(const DataStructureParticles::tParticleVector * 
   for (DataStructureParticles::tParticleVector::const_iterator pIt = inputParticles->begin(); 
        pIt != inputParticles->end(); pIt++) {
     mParticles.push_back(*pIt);
+    Particle & p = mParticles.back();
     if (pIt->mColorModel != NULL) {
-      cvCopyHist(pIt->mColorModel,  &mParticles.back().mColorModel);
+      p.mColorModel = NULL; // force new memory allocation
+      cvCopyHist(pIt->mColorModel,  &p.mColorModel);
+    } else {
+      p.mColorModel = NULL;
     }
-  }
 
-  mFileStream.flush();
+  }
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -127,7 +133,6 @@ void THISCLASS::OnReloadConfiguration() {
 
   mBufferedFrameCount = GetConfigurationInt(wxT("BufferedFrameCount"), 10);
   int millis = GetConfigurationDouble(wxT("WindowSizeMilliseconds"), 2);
-  printf("Millis: %d\n", millis);
   mWindowSize = wxTimeSpan(0, 0, 0, millis);
 }
 

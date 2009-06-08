@@ -207,11 +207,8 @@ void  THISCLASS::update_mhi( IplImage* inputImage, IplImage* dst, IplImage * for
 
 	// iterate through the motion components,
 	// One more iteration (i == -1) corresponds to the whole image (global motion)
-	mParticles.clear();
-	Particle tmpParticle; // Used to put the calculated value in memory
-
 	for ( i = -1; i < seq->total; i++ ) {
-
+	  Particle tmpParticle; // Used to put the calculated value in memory
 		if ( i < 0 ) { // case of the whole image
 			comp_rect = cvRect( 0, 0, size.width, size.height );
 			color = CV_RGB(255, 255, 255);
@@ -286,6 +283,7 @@ void  THISCLASS::update_mhi( IplImage* inputImage, IplImage* dst, IplImage * for
 		} else {
 		  // no histogram when there's no background model. 
 		  tmpParticle.mArea = comp_rect.width * comp_rect.height;
+		  tmpParticle.mColorModel = NULL;
 		}
 		
 		mParticles.push_back(tmpParticle);

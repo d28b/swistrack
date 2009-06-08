@@ -77,7 +77,8 @@ THISCLASS::Example THISCLASS::ComputeExample(const Particle & p1, const Particle
 
 
   if (p1.mColorModel != NULL && p2.mColorModel != NULL) {
-    CvHistogram * mTmp1, * mTmp2;
+    CvHistogram * mTmp1 = NULL, * mTmp2 = NULL;
+
     cvCopyHist(p1.mColorModel, &mTmp1);
     cvCopyHist(p2.mColorModel, &mTmp2);
     cvNormalizeHist(mTmp1, 1);

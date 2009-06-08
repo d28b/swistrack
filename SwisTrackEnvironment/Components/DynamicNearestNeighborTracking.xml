@@ -43,10 +43,10 @@
 
 		<parameter type="double">
 			<name>ColorSimilarityThreshold</name>
-			<label>How similar the particle has to be to the color model of the track.</label>
+			<label>How similar the particle has to be to the color model of the track. Sketchy.</label>
 			<min>0</min>
 			<max>1</max>
-			<default>0.5</default>
+			<default>1</default>
 			<reloadable>true</reloadable>
 		</parameter>
 		

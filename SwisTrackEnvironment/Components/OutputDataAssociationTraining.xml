@@ -17,7 +17,7 @@
 			<reloadable>false</reloadable>
 		</parameter>
 
-	  <parameter type="int">
+	  <parameter type="integer">
 	    <name>WindowSizeMilliseconds</name>
 	    <label>Window Size - how long to collect particles before associating them as tracks, in seconds.</label>
 	    <min>1</min>
