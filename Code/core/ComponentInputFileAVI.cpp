@@ -77,6 +77,13 @@ void THISCLASS::OnStep() {
 	mCore->mDataStructureInput.mImage = mOutputImage;
 	mCore->mDataStructureInput.mFrameNumber = framenumber;
 	mCore->mDataStructureInput.mFramesCount = framescount;
+	double progress = GetProgressMSec();
+	double secondsInVideo = GetProgressFrameNumber() / GetFPS();
+	wxDateTime ts((time_t) secondsInVideo);
+	double millis = (secondsInVideo - (int) secondsInVideo) * 1000;
+	ts.SetMillisecond((int) millis);
+	mCore->mDataStructureInput.SetFrameTimestamp(ts);
+
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
