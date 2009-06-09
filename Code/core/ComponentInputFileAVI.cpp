@@ -77,6 +77,8 @@ void THISCLASS::OnStep() {
 	mCore->mDataStructureInput.mImage = mOutputImage;
 	mCore->mDataStructureInput.mFrameNumber = framenumber;
 	mCore->mDataStructureInput.mFramesCount = framescount;
+
+	// On linux, directly readig the millisecond offset doesn't work.
 	double progress = GetProgressMSec();
 	double secondsInVideo = GetProgressFrameNumber() / GetFPS();
 	wxDateTime ts((time_t) secondsInVideo);
