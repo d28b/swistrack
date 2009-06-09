@@ -184,6 +184,8 @@ void THISCLASS::FilterTracks()
 void THISCLASS::DataAssociation(DataStructureParticles::tParticleVector * particles)
 {
 
+  set<int> blacklistedTracks;
+
   for (DataStructureParticles::tParticleVector::iterator pIt = particles->begin();pIt != particles->end();pIt++) {
 
     double minDistanceSquared = DBL_MAX;
@@ -191,21 +193,26 @@ void THISCLASS::DataAssociation(DataStructureParticles::tParticleVector * partic
     Particle & p = *pIt;
     for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
 	 i != mTracks.end(); i++) {
-      double distance = Utility::SquareDistance(i->second.trajectory.back(),
+      double distanceSquared = Utility::SquareDistance(i->second.trajectory.back(),
 						pIt->mCenter);
       int trackId = i->first;
-      if (distance < mMaxDistanceSquared) {
+      if (distanceSquared < minDistanceSquared) {
+	minDistanceSquared = distanceSquared;
+      }
+      if (distanceSquared < mMaxDistanceSquared) {
 	// just take the first match
-	if (mClassifier.IsSameTrack(*pIt, mParticleCache[trackId].front())) {
-
+	if (mClassifier.IsSameTrack(*pIt, mParticleCache[trackId].front()) &&
+	    blacklistedTracks.find(trackId) == blacklistedTracks.end()) {
+	  blacklistedTracks.insert(trackId);
 	  AddParticle(trackId, &p);
 	  addedParticle = true;
 	  break;
 	}
       }
     }
-    if (!addedParticle && minDistanceSquared  >= mMinNewTrackDistanceSquared) {
+  if (!addedParticle && minDistanceSquared  >= mMinNewTrackDistanceSquared) {
       int id = mNextTrackId++;
+      blacklistedTracks.insert(id);
       mTracks.insert(tTrackPair(id, Track(id)));
       Track * track = &mTracks[id];
       AddParticle(track->mID, &p);
