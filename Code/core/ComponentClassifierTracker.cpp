@@ -121,48 +121,79 @@ void THISCLASS::OnStop() {
 	ClearDistanceArray();
 
 }
+
+void THISCLASS::EraseTrack(int id) 
+{
+    mTracks.erase(id);
+    vector<Particle> p = mParticleCache[id];
+    for (vector<Particle>::iterator i = p.begin(); i != p.end(); i++) {
+      cvReleaseHist(&(i->mColorModel));
+    }
+    mParticleCache.erase(id);
+}
+
+void THISCLASS::EraseTracks(set<int> trackIds) 
+{
+  set<int> trackIdsToErase;
+  for (set<int>::iterator i = trackIdsToErase.begin();
+       i != trackIdsToErase.end(); i++) {
+    EraseTrack(*i);
+
+  }
+}
+
 void THISCLASS::FilterTracks()
 {
 
-	for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
-	        i != mTracks.end(); i++) {
-		Track & track = i->second;
-		if (mCore->mDataStructureInput.mFrameNumber - track.LastUpdateFrame() >= mFrameKillThreshold) {
-			mTracks.erase(i);
-
-		}
+  for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
+       i != mTracks.end(); i++) {
+    Track & track = i->second;
+    if (mCore->mDataStructureInput.mFrameNumber - track.LastUpdateFrame() >= mFrameKillThreshold) {
+      mTracks.erase(i);
+      
+    }
+  }
+  
+  set<int> trackIdsToErase;
+  for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
+       i != mTracks.end(); i++) {
+    Track & track1 = i->second;
+    for (DataStructureTracks::tTrackMap::iterator j = mTracks.begin();
+	 j != mTracks.end(); j++) {
+      Track & track2 = j->second;
+      double cost = Utility::SquareDistance(track1.trajectory.back(), track2.trajectory.back());
+      if (track1.mID != track2.mID && cost < mTrackDistanceKillThresholdSquared) {
+	// kill a track - keep the older one
+	if (track1.mID < track2.mID) {
+	  trackIdsToErase.insert(track2.mID);
+	} else {
+	  trackIdsToErase.insert(track1.mID);
+	  break;
 	}
-
-	set<int> trackIdsToErase;
-	for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
-	        i != mTracks.end(); i++) {
-		Track & track1 = i->second;
-		for (DataStructureTracks::tTrackMap::iterator j = mTracks.begin();
-		        j != mTracks.end(); j++) {
-			Track & track2 = j->second;
-			double cost = Utility::SquareDistance(track1.trajectory.back(), track2.trajectory.back());
-			if (track1.mID != track2.mID && cost < mTrackDistanceKillThresholdSquared) {
-				// kill a track - keep the older one
-				if (track1.mID < track2.mID) {
-					trackIdsToErase.insert(track2.mID);
-				} else {
-					trackIdsToErase.insert(track1.mID);
-					break;
-				}
-			}
-		}
-	}
-	for (set<int>::iterator i = trackIdsToErase.begin();
-	        i != trackIdsToErase.end(); i++) {
-
-		mTracks.erase(*i);
-	}
-
+      }
+    }
+  }
+  for (set<int>::iterator i = trackIdsToErase.begin();
+       i != trackIdsToErase.end(); i++) {
+    
+    mTracks.erase(*i);
+  }
+  
 }
 
 void THISCLASS::DataAssociation(DataStructureParticles::tParticleVector * particles)
 {
 
+  for (DataStructureParticles::tParticleVector::iterator pIt = particles->begin();pIt != particles->end();pIt++) {
+    for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
+	 i != mTracks.end(); i++) {
+      double distance = Utility::SquareDistance(i->second.trajectory.back(),
+						pIt->mCenter);
+      if (distance < mMaxDistanceSquared) {
+	mClassifier.IsSameTrack(*pIt, mParticleCache[i->first].front());
+      }
+    }
+  }
   
 }
 
@@ -200,15 +231,13 @@ void THISCLASS::AddParticle(int i, Particle * p){
 	track.AddPoint(p->mCenter, mCore->mDataStructureInput.mFrameNumber);
 	printf("%d adding particle size %.3f\n", track.mID, p->mArea);
 
-	// if somebody doesn't have a color model, then ignore.
-	if (track.mColorModel == NULL && p->mColorModel != NULL) {
-	  cvCopyHist(p->mColorModel, &track.mColorModel);
-	}else if (p->mColorModel != NULL && track.mColorModel != NULL) {
-	  Utility::IntegrateHistogram(track.mColorModel, p->mColorModel);
-	  cvCopyHist(p->mColorModel, &track.mColorModel);
-	} else {
-	  // no color features.
+	vector<Particle> & particles = mParticleCache[track.mID];
+	particles.push_back(*p);
+	if (p->mColorModel != NULL) {
+	  particles.back().mColorModel = NULL;
+	  cvCopyHist(p->mColorModel, &(particles.back().mColorModel));
 	}
+
 }
 
 

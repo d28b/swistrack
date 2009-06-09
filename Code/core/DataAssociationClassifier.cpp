@@ -27,6 +27,11 @@ public:
   
 };
 
+void THISCLASS::ExampleToMat(const Example e, CvMat ** sample, CvMat ** responses)
+{ 
+
+}
+
 void THISCLASS::ExampleTableToMat(const THISCLASS::ExampleTable samples, 
 				  CvMat ** data, CvMat ** responses) 
 {
@@ -56,6 +61,22 @@ void THISCLASS::ExampleTableToMat(const THISCLASS::ExampleTable samples,
     samplesIdx++;
   }
 
+}
+
+bool THISCLASS::IsSameTrack(const Particle & p1, const Particle & p2) 
+{
+  Example e = ComputeExample(p1, p2);
+  CvMat * sample = cvCreateMat(1, e.size(),CV_32F );
+  
+  double r= forest.predict(sample);
+  if (r == 1.0) {
+    return true;
+  } else if (r == 0.0) {
+    return false;
+  } else {
+    assert(0); // only handle binary decisions
+  }
+  cvReleaseMat(&sample);
 }
 
 THISCLASS::Example THISCLASS::ComputeExample(const Particle & p1, const Particle & p2)
@@ -144,7 +165,8 @@ void THISCLASS::Train(const ExampleTable samples)
   
   double train_hr = 0, test_hr = 0;
 
-  ConfusionMatrix cm;
+  ConfusionMatrix trainingCm;
+  ConfusionMatrix testingCm;
 
 
   for (int i = 0; i < numSamples; i++) {
@@ -153,29 +175,37 @@ void THISCLASS::Train(const ExampleTable samples)
     cvGetRow( data, &sample, i );
     double r = forest.predict( &sample );
     double correctValue = responses->data.fl[i];
+    ConfusionMatrix * cm;
+    if ( i < numTrainingSamples) {
+      cm = &trainingCm;
+      train_hr += r;
+    } else {
+      cm = &testingCm;
+      test_hr += r;
+    }
+
     if (r == 1 && correctValue == 1) {
-      cm.truePositives += 1;
+      cm->truePositives += 1;
     } else if (r == 1 && correctValue == 0) {
-      cm.falsePositives += 1;
+      cm->falsePositives += 1;
     } else if (r == 0 && correctValue == 1) {
-      cm.falseNegatives += 1;
+      cm->falseNegatives += 1;
     } else if (r == 0 && correctValue == 0) {
-      cm.trueNegatives += 1;
+      cm->trueNegatives += 1;
     } else {
       assert(0);
     }
     
     r = fabs((double)r - correctValue) <= FLT_EPSILON ? 1 : 0;
     
-    if( i < numTrainingSamples ) {
-      train_hr += r;
-    } else {
-      test_hr += r;
-    }
+
   }
   test_hr /= (double)(numSamples-numTrainingSamples);
   train_hr /= (double)numTrainingSamples;
-  cm.print();
+  printf("Training confusion matrix\n");
+  trainingCm.print();
+  printf("Testing confusion matrix\n");
+  testingCm.print();
   printf( "Recognition rate: train = %.1f%%, test = %.1f%%\n",
 	  train_hr*100., test_hr*100. );
   printf( "Number of trees: %d\n", forest.get_tree_count() );
@@ -196,7 +226,7 @@ THISCLASS::ExampleTable THISCLASS::fromFile(const string fileName)
  {
 #define SIZE 1024
     char buffer[SIZE];
-
+    
     vector<string> keys;
     ExampleTable data;
 

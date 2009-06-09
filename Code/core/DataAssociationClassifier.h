@@ -18,17 +18,19 @@ class DataAssociationClassifier {
   typedef vector<Example> ExampleTable;
 
   
+  void Train(const vector<Example> samples);
+  bool IsSameTrack(const Particle & p1, const Particle & p2);
+
 
   static Example ComputeExample(const Particle & p1, const Particle & p2);
 
-  void Train(const vector<Example> samples);
-    
 
   static void ExampleTableToMat(const ExampleTable samples, 
 				CvMat ** data, CvMat ** responses) ;
+  void ExampleToMat(const Example e, CvMat ** mat, CvMat ** responses);
 
   static ExampleTable fromFile(const string fileName);
-
+  
 
 
  private:
