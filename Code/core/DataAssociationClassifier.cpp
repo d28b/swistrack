@@ -26,9 +26,20 @@ public:
   }
   
 };
+void THISCLASS::ExampleToMat(const Example e, CvMat ** sample)
 
-void THISCLASS::ExampleToMat(const Example e, CvMat ** sample, CvMat ** responses)
-{ 
+{  
+  int numTrainingFeatures = e.size() - 1;
+  if (*sample == NULL) {
+    *sample = cvCreateMat(1, numTrainingFeatures, CV_32F);
+  }
+  int featureIdx = 0;
+  for (Example::const_iterator j = e.begin(); j != e.end(); ++j) {
+    (**sample).data.fl[featureIdx] = j->second;
+    featureIdx++;
+  }
+
+  
 
 }
 
@@ -42,18 +53,19 @@ void THISCLASS::ExampleTableToMat(const THISCLASS::ExampleTable samples,
   *data = cvCreateMat(samples.size(), numTrainingFeatures, CV_32F );
   *responses = cvCreateMat(samples.size(), 1, CV_32F );
 
-
   int samplesIdx = 0;
   for (ExampleTable::const_iterator i = samples.begin(); 
        i != samples.end(); ++i) {
     int featureIdx = 0;
+    CvMat sample;
+    cvGetRow( *data, &sample, samplesIdx );
+    CvMat response;
+    cvGetRow( *responses, &response, samplesIdx);
     for (Example::const_iterator j = i->begin(); j != i->end(); ++j) {
       if (j->first == "class") {
-	float* response = responses[0]->data.fl + samplesIdx;
-	*response = j->second;
+	*response.data.fl = j->second;
       } else {
-	float * ddata = data[0]->data.fl + numTrainingFeatures * samplesIdx;
-	ddata[featureIdx] = j->second;
+	sample.data.fl[featureIdx] = j->second;
 	featureIdx++;
       }
 
@@ -66,9 +78,13 @@ void THISCLASS::ExampleTableToMat(const THISCLASS::ExampleTable samples,
 bool THISCLASS::IsSameTrack(const Particle & p1, const Particle & p2) 
 {
   Example e = ComputeExample(p1, p2);
-  CvMat * sample = cvCreateMat(1, e.size(),CV_32F );
+  //CvMat * sample = cvCreateMat(1, e.size(),CV_32F );
+
+  CvMat * sample;
+  ExampleToMat(e, &sample);
   
   double r= forest.predict(sample);
+
   if (r == 1.0) {
     return true;
   } else if (r == 0.0) {

@@ -27,10 +27,11 @@ class DataAssociationClassifier {
 
   static void ExampleTableToMat(const ExampleTable samples, 
 				CvMat ** data, CvMat ** responses) ;
-  void ExampleToMat(const Example e, CvMat ** mat, CvMat ** responses);
+
 
   static ExampleTable fromFile(const string fileName);
-  
+
+  void ExampleToMat(const Example e, CvMat ** sample);
 
 
  private:
