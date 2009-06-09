@@ -13,7 +13,7 @@ Track::Track(int idnumber) :  mLastUpdateFrame(0), mColorModel(0), trajectory(0)
 };
 
 Track::~Track() {
-  cvReleaseHist(&mColorModel);
+
 }
 
 /** \brief Add a point to the current track (max track) */
