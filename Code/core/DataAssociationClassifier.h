@@ -30,6 +30,8 @@ class DataAssociationClassifier {
 
 
   static ExampleTable fromFile(const string fileName);
+  static bool IsTrainingFeature(string name);
+  static int NumTrainingFeatures(Example ex);
 
   void ExampleToMat(const Example e, CvMat ** sample);
 

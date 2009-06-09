@@ -26,17 +26,40 @@ public:
   }
   
 };
+
+bool THISCLASS::IsTrainingFeature(string name) 
+{
+  if (name == "class" || name.find("particle") == 0) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+int THISCLASS::NumTrainingFeatures(Example ex) 
+{
+  int count = 0;
+  for (Example::const_iterator j = ex.begin(); j != ex.end(); ++j) {
+    if (IsTrainingFeature(j->first)) {
+      count++;
+    }
+  }
+  return count;
+}
+
 void THISCLASS::ExampleToMat(const Example e, CvMat ** sample)
 
 {  
-  int numTrainingFeatures = e.size() - 1;
+  int numTrainingFeatures = NumTrainingFeatures(e);
   if (*sample == NULL) {
     *sample = cvCreateMat(1, numTrainingFeatures, CV_32F);
   }
   int featureIdx = 0;
   for (Example::const_iterator j = e.begin(); j != e.end(); ++j) {
-    (**sample).data.fl[featureIdx] = j->second;
-    featureIdx++;
+    if (IsTrainingFeature(j->first)) {
+      (**sample).data.fl[featureIdx] = j->second;
+      featureIdx++;
+    }
   }
 
   
@@ -49,7 +72,7 @@ void THISCLASS::ExampleTableToMat(const THISCLASS::ExampleTable samples,
 
   assert(samples.size() != 0);
   const Example example = *samples.begin();
-  int numTrainingFeatures = example.size() - 1;
+  int numTrainingFeatures = NumTrainingFeatures(example);
   *data = cvCreateMat(samples.size(), numTrainingFeatures, CV_32F );
   *responses = cvCreateMat(samples.size(), 1, CV_32F );
 
@@ -65,8 +88,10 @@ void THISCLASS::ExampleTableToMat(const THISCLASS::ExampleTable samples,
       if (j->first == "class") {
 	*response.data.fl = j->second;
       } else {
-	sample.data.fl[featureIdx] = j->second;
-	featureIdx++;
+	if (IsTrainingFeature(j->first)) {
+	  sample.data.fl[featureIdx] = j->second;
+	  featureIdx++;
+	}
       }
 
     }
@@ -80,19 +105,20 @@ bool THISCLASS::IsSameTrack(const Particle & p1, const Particle & p2)
   Example e = ComputeExample(p1, p2);
   //CvMat * sample = cvCreateMat(1, e.size(),CV_32F );
 
-  CvMat * sample;
+  CvMat * sample = NULL;
   ExampleToMat(e, &sample);
-  
-  double r= forest.predict(sample);
-
+  printf("sample: %dx%d\n", sample->rows, sample->cols);
+  double r = forest.predict(sample);
+  cvReleaseMat(&sample);
   if (r == 1.0) {
     return true;
   } else if (r == 0.0) {
     return false;
   } else {
     assert(0); // only handle binary decisions
+    return false;
   }
-  cvReleaseMat(&sample);
+
 }
 
 THISCLASS::Example THISCLASS::ComputeExample(const Particle & p1, const Particle & p2)
@@ -139,7 +165,7 @@ void THISCLASS::Train(const ExampleTable samples)
   for (Example::const_iterator j = example.begin(); j != example.end(); ++j) {
     keys.push_back(j->first);
   }
-  int numTrainingFeatures = example.size() - 1; // don't include the class feature.
+  int numTrainingFeatures = NumTrainingFeatures(example);
   int numSamples = samples.size();
   CvMat * var_type = cvCreateMat(numTrainingFeatures + 1, 1, CV_8U );
   cvSet(var_type, cvScalarAll(CV_VAR_ORDERED));
@@ -256,10 +282,11 @@ THISCLASS::ExampleTable THISCLASS::fromFile(const string fileName)
     while (true) {
       string key;
       line >> key;
-      if (key == "" || key.find("particle") == 0) {
+      if (key == "") {
 	break;
       }
       keys.push_back(key);
+
     }
 
     while (! fin.eof()) {

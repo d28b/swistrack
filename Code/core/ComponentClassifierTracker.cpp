@@ -185,14 +185,32 @@ void THISCLASS::DataAssociation(DataStructureParticles::tParticleVector * partic
 {
 
   for (DataStructureParticles::tParticleVector::iterator pIt = particles->begin();pIt != particles->end();pIt++) {
+
+    double minDistanceSquared = DBL_MAX;
+    bool addedParticle = false;
+    Particle & p = *pIt;
     for (DataStructureTracks::tTrackMap::iterator i = mTracks.begin();
 	 i != mTracks.end(); i++) {
       double distance = Utility::SquareDistance(i->second.trajectory.back(),
 						pIt->mCenter);
+      int trackId = i->first;
       if (distance < mMaxDistanceSquared) {
-	mClassifier.IsSameTrack(*pIt, mParticleCache[i->first].front());
+	// just take the first match
+	if (mClassifier.IsSameTrack(*pIt, mParticleCache[trackId].front())) {
+
+	  AddParticle(trackId, &p);
+	  addedParticle = true;
+	  break;
+	}
       }
     }
+    if (!addedParticle && minDistanceSquared  >= mMinNewTrackDistanceSquared) {
+      int id = mNextTrackId++;
+      mTracks.insert(tTrackPair(id, Track(id)));
+      Track * track = &mTracks[id];
+      AddParticle(track->mID, &p);
+    }
+
   }
   
 }
