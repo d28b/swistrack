@@ -1,5 +1,5 @@
 function optSx=optimizeSx(image, world, C, dx, dy, sxArray,criterion)
-% function optSx=optimizeSx(image, world, C, dx, dy, sx)
+% function optSx=optimizeSx(image, world, C, dx, dy, sxArray,criterion)
 %
 % Compute the best sx values for the Tsai calibration using
 % computeTsaiCalibrationParameters function.
@@ -36,7 +36,7 @@ tmpError=inf;
 for i=1:length(sxArray)
     [R,T,f,k1]= computeTsaiCalibrationParameters(image,world, C , dx, dy, sxArray(i),false);
     newReal=TsaiImage2World(image, R, T, f, k1, C, dx, dy, sxArray(i));
-    [averageError, maxError, stdError]=computeError(world, newReal);
+    [averageError, maxError, stdError]=computeError(world, newReal,false);
     matrixError=[averageError;maxError;stdError];
     if (matrixError(criterion(1),criterion(2))<tmpError)
         tmpError=matrixError(criterion(1),criterion(2));

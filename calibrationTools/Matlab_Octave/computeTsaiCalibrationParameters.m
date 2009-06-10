@@ -36,7 +36,7 @@ function [R,T,f,k1]= computeTsaiCalibrationParameters(image, world, C, dx, dy, s
 %Inputs check
 
 EPSILON = 1.0e-8;
-%Control of the arguments
+%Test arguments
 if ((size(image,2)~= 2))
     error('Image points matrix must be N by 2.')
 end
