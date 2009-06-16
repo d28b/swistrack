@@ -30,7 +30,7 @@ public:
 private:
 	IplImage * mBackgroundModel;
 	IplImage *mOutputImage;
-	Display mDisplayOutput;			//!< The DisplayImage showing the output of this component.
+	Display mDisplayOutput;	
 };
 
 #endif
