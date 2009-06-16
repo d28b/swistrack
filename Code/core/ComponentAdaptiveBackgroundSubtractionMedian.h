@@ -25,6 +25,8 @@ public:
 		return new ComponentAdaptiveBackgroundSubtractionMedian(mCore);
 	}
 
+	void UpdateBackgroundModel(IplImage * inputImage);
+
 private:
 	IplImage * mBackgroundModel;
 	IplImage *mOutputImage;

@@ -61,26 +61,7 @@ void THISCLASS::OnStep() {
 	  mOutputImage = cvCloneImage(inputImage);
 	}
 
-	for (int y = 0; y < mBackgroundModel->height; y++) {
-	  uchar * bgptr = (uchar *) (mBackgroundModel->imageData + y * mBackgroundModel->widthStep);
-	  uchar * cptr = (uchar *) (inputImage->imageData + y * mBackgroundModel->widthStep);
-	  for (int x = 0; x < mBackgroundModel->width; x++) {
-	    for (int i = 0; i < 3; i++) {
-	      int bgval = bgptr[3*x + i];
-	      int imgval = cptr[3*x + i];
-	      if (bgval < imgval) {
-		bgptr[3*x + i] += 1;
-	      } else if (bgval > imgval) {
-		bgptr[3*x + i] -= 1;
-	      } else {
-		// nothing if they are equal
-	      }
-	    }
-	  }
-	}
-	    
-
-	cvAbsDiff(inputImage, mBackgroundModel, mOutputImage);
+	UpdateBackgroundModel(inputImage);
 	
 	mCore->mDataStructureImageColor.mImage = mOutputImage;
 	// Set the display
@@ -89,6 +70,29 @@ void THISCLASS::OnStep() {
 	  de.SetMainImage(mOutputImage);
 	  //de.SetMainImage(mBackgroundModel);
 	}
+}
+
+void THISCLASS::UpdateBackgroundModel(IplImage * inputImage) 
+{
+  
+  for (int y = 0; y < mBackgroundModel->height; y++) {
+    uchar * bgptr = (uchar *) (mBackgroundModel->imageData + y * mBackgroundModel->widthStep);
+    uchar * cptr = (uchar *) (inputImage->imageData + y * mBackgroundModel->widthStep);
+    for (int x = 0; x < mBackgroundModel->width; x++) {
+      for (int i = 0; i < 3; i++) {
+	int bgval = bgptr[3*x + i];
+	int imgval = cptr[3*x + i];
+	if (bgval < imgval) {
+	  bgptr[3*x + i] += 1;
+	} else if (bgval > imgval) {
+	  bgptr[3*x + i] -= 1;
+	} else {
+	  // nothing if they are equal
+	}
+      }
+    }
+  }
+  cvAbsDiff(inputImage, mBackgroundModel, mOutputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
