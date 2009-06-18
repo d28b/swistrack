@@ -39,6 +39,7 @@
 #include "ComponentBlobDetectionMinMax.h"
 #include "ComponentBlobDetectionTwoColors.h"
 #include "ComponentBlobDetectionRedGreen.h"
+#include "ComponentBlobDetectionCircularHough.h"
 #include "ComponentTracking.h"
 #include "ComponentNearestNeighborTracking.h"
 #include "ComponentDynamicNearestNeighborTracking.h"
@@ -68,6 +69,7 @@
 #include "ComponentOutputDataAssociationTraining.h"
 #include "ComponentClassifierTracker.h"
 #include "ComponentDoubleThresholdColorIndependent.h"
+#include "ComponentSobelDifferentiation.h"
 #include "NMEALog.h"
 THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 		mAvailableComponents(), mDataStructures(), mSwisTrackCoreInterfaces(), mComponentConfigurationFolder(componentconfigurationfolder),
@@ -141,7 +143,9 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentBlobDetectionMinMax(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionTwoColors(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionRedGreen(this));
-	mAvailableComponents.push_back(new ComponentIDReaderRing(this));
+	mAvailableComponents.push_back(new ComponentBlobDetectionCircularHough(this));
+	mAvailableComponents.push_back(new ComponentSobelDifferentiation(this));
+  mAvailableComponents.push_back(new ComponentIDReaderRing(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
 	//Calibration	
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
@@ -171,7 +175,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 	mAvailableComponents.push_back(new ComponentOutputDataAssociationTraining(this));
 	mAvailableComponents.push_back(new ComponentClassifierTracker(this));
-
+ 
 	// Initialize the available components
 	tComponentList::iterator ita = mAvailableComponents.begin();
 	while (ita != mAvailableComponents.end()) {
