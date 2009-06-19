@@ -16,7 +16,7 @@ FILES_D   := $(FILES_CPP:.cpp=.d)
 
 # Flags
 override CXXFLAGS  += -g -Wall $(CXXFLAGS_ADD)
-override CPPFLAGS  += $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -I/usr/include -I../../3rdParty/libtsai/include -I../../3rdParty/camshift_wrapper -I../../3rdParty/cvblobslib_v6p1 $(CPPFLAGS_ADD)
+override CPPFLAGS  += $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -I/usr/include -I../../3rdParty/libtsai/include -I../../3rdParty/camshift_wrapper -I../../3rdParty/cvblobslib_v6p1 $(CPPFLAGS_ADD) -g
 
 # Build
 .PHONY: all

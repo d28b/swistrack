@@ -27,14 +27,19 @@
 #include "ComponentColorMask.h"
 #include "ComponentColorBlur.h"
 #include "ComponentColorSwapper.h"
+#include "ComponentMoveGrayToColor.h"
 #include "ComponentMoveBinaryToColor.h"
+#include "ComponentMoveColorToBinary.h"
+#include "ComponentMoveColorToGray.h"
 #include "ComponentThresholdGray.h"
 #include "ComponentThresholdColorCommon.h"
 #include "ComponentThresholdColorIndependent.h"
 #include "ComponentAdaptiveThreshold.h"
 #include "ComponentBinaryDilation.h"
+#include "ComponentMorphology.h"
 #include "ComponentBinaryErosion.h"
 #include "ComponentBinaryMask.h"
+#include "ComponentInvertBinary.h"
 #include "ComponentBlobSelection.h"
 #include "ComponentBlobDetectionMinMax.h"
 #include "ComponentBlobDetectionTwoColors.h"
@@ -121,6 +126,9 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentColorMask(this));
 	mAvailableComponents.push_back(new ComponentColorBlur(this));
 	mAvailableComponents.push_back(new ComponentColorSwapper(this));
+	mAvailableComponents.push_back(new ComponentMoveColorToBinary(this));
+	mAvailableComponents.push_back(new ComponentMoveColorToGray(this));
+	mAvailableComponents.push_back(new ComponentMoveGrayToColor(this));
 	mAvailableComponents.push_back(new ComponentMoveBinaryToColor(this));
 	mAvailableComponents.push_back(new ComponentCannyEdgeDetection(this));
 	//Preprocessing Gray
@@ -136,9 +144,11 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentThresholdGray(this));
 	//Preprocessing Binary
 	mAvailableComponents.push_back(new ComponentBinaryDilation(this));
+	mAvailableComponents.push_back(new ComponentMorphology(this));
 	mAvailableComponents.push_back(new ComponentBinaryErosion(this));
 	mAvailableComponents.push_back(new ComponentBinaryMask(this));
 	mAvailableComponents.push_back(new ComponentBlobSelection(this));
+	mAvailableComponents.push_back(new ComponentInvertBinary(this));
 	//Particle Detection
 	mAvailableComponents.push_back(new ComponentBlobDetectionMinMax(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionTwoColors(this));

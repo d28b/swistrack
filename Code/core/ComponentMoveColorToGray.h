@@ -1,17 +1,17 @@
-#ifndef HEADER_ComponentMoveBinaryToColor
-#define HEADER_ComponentMoveBinaryToColor
+#ifndef HEADER_ComponentMoveColorToGray
+#define HEADER_ComponentMoveColorToGray
 
 #include <cv.h>
 #include "Component.h"
 
-//! A component that converts the input binary image to BGR.
-class ComponentMoveBinaryToColor: public Component {
+//! A component that converts the color input image to gray.
+class ComponentMoveColorToGray: public Component {
 
 public:
 	//! Constructor.
-	ComponentMoveBinaryToColor(SwisTrackCore *stc);
+	ComponentMoveColorToGray(SwisTrackCore *stc);
 	//! Destructor.
-	~ComponentMoveBinaryToColor();
+	~ComponentMoveColorToGray();
 
 	// Overwritten Component methods
 	void OnStart();
@@ -20,7 +20,7 @@ public:
 	void OnStepCleanup();
 	void OnStop();
 	Component *Create() {
-		return new ComponentMoveBinaryToColor(mCore);
+		return new ComponentMoveColorToGray(mCore);
 	}
 
 private:
