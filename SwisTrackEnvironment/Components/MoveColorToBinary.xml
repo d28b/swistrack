@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Move Binary to Color</friendlyname>
+	<friendlyname>Move Color to Binary</friendlyname>
 	<description>
-	  Convert binary image to color image. 
+	  Move the color image to the binary. 
 	</description>
-	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/MoveBinaryToColor</url>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/MoveColorToBinary</url>
 	<displayimage>Output</displayimage>
 	<configuration>
 	</configuration>
