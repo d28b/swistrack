@@ -75,6 +75,7 @@
 #include "ComponentClassifierTracker.h"
 #include "ComponentDoubleThresholdColorIndependent.h"
 #include "ComponentSobelDifferentiation.h"
+#include "ComponentBinarySmooth.h"
 #include "NMEALog.h"
 THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 		mAvailableComponents(), mDataStructures(), mSwisTrackCoreInterfaces(), mComponentConfigurationFolder(componentconfigurationfolder),
@@ -149,6 +150,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentBinaryMask(this));
 	mAvailableComponents.push_back(new ComponentBlobSelection(this));
 	mAvailableComponents.push_back(new ComponentInvertBinary(this));
+	mAvailableComponents.push_back(new ComponentBinarySmooth(this));
 	//Particle Detection
 	mAvailableComponents.push_back(new ComponentBlobDetectionMinMax(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionTwoColors(this));

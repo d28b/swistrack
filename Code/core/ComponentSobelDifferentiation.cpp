@@ -46,6 +46,17 @@ void THISCLASS::OnReloadConfiguration()
 		yorder = 0;
 	if (yorder > 3 )
 		yorder = 3;
+	// Ensuring the differentiation order is less than the kernel size 
+	if (apertureSize == 1 || apertureSize == 3)
+	{
+		if (xorder > 2)
+			xorder = 2;
+		if (yorder > 2)
+			yorder = 2;
+	}
+	// Ensuring that at least 1 differentiation will be made
+	if (xorder == 0 && yorder == 0)
+		xorder = 1; 
 }
 
 void THISCLASS::OnStep() 
@@ -70,6 +81,7 @@ void THISCLASS::OnStep()
 	// apertureSize : Size of the extended Sobel kernel, must be 1, 3, 5 or 7
 	mCore->mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepLapTime, this);
 	
+	mCore->mDataStructureImageGray.mImage = outputimage;
 	// Let the DisplayImage know about our image
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {

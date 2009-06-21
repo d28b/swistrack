@@ -47,7 +47,6 @@ void THISCLASS::OnStep()
 	cvCvtColor(inputimage, mOutputImage, CV_GRAY2BGR);
 
 	mCore->mDataStructureImageColor.mImage = mOutputImage;
-
 	// Let the Display know about our image
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {

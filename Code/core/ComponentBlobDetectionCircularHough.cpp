@@ -120,7 +120,7 @@ void THISCLASS::OnStep()
 
 	// Set these particles
 	mCore->mDataStructureParticles.mParticles = &mParticles;
-	
+	mCore->mDataStructureImageColor.mImage = outputimage;
 	// Let the DisplayImage know about our image
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {

@@ -104,14 +104,15 @@ void THISCLASS::OnStep()
 		cvDilate( inputimage, tempimage, NULL, iterations);		
 		cvErode( tempimage, tempimage2, NULL, iterations);
 		cvSub(tempimage2, inputimage, outputimage, NULL);
-	}	
+	}
 	
+	IplImage *OutputImage = outputimage;
 	mCore->mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepLapTime, this);
-	
+	mCore->mDataStructureImageBinary.mImage = OutputImage;
 	// Let the DisplayImage know about our image
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
-		de.SetMainImage(outputimage);
+		de.SetMainImage(OutputImage);
 	}
 }
 
