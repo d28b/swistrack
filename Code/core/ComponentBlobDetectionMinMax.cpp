@@ -107,43 +107,36 @@ void THISCLASS::OnStep() {
 			tmpParticle.mCompactness = GetContourCompactness(contour);
 			if ((mCompactnessSelection == false) || ((tmpParticle.mCompactness > mMinCompactness) && (tmpParticle.mCompactness < mMaxCompactness)))
 			{
-				double tempValue = cvGetCentralMoment(&moments, 2, 0) - cvGetCentralMoment(&moments, 0, 2);
-				tmpParticle.mOrientation = atan(2 * cvGetCentralMoment(&moments, 1, 1) / (tempValue + sqrt(tempValue * tempValue + 4 * cvGetCentralMoment(&moments, 1, 1) * cvGetCentralMoment(&moments, 1, 1))));
-				if ((mOrientationSelection == false) || (((tmpParticle.mOrientation > mMinOrientation) && (tmpParticle.mOrientation < mMaxOrientation)) || ((tmpParticle.mOrientation > mMinOrientation + PI) && (tmpParticle.mOrientation < mMaxOrientation + PI)) || ((tmpParticle.mOrientation > mMinOrientation - PI) && (tmpParticle.mOrientation < mMaxOrientation - PI))))
+				cvDrawContours(outputImage, contour, cvScalarAll(255), cvScalarAll(255), 0, CV_FILLED);
+				// Check if we have already enough particles
+				if (mParticles.size() == mMaxNumber)
 				{
-					cvDrawContours(outputImage, contour, cvScalarAll(255), cvScalarAll(255), 0, CV_FILLED);
-					// Check if we have already enough particles
-					if (mParticles.size() == mMaxNumber)
+					// If the particle is bigger than the smallest stored particle, store it, else do nothing
+					if (tmpParticle.mArea > mParticles.back().mArea)
 					{
-						// If the particle is bigger than the smallest stored particle, store it, else do nothing
-						if (tmpParticle.mArea > mParticles.back().mArea)
-						{
-							// Find the place were it must be inserted, sorted by size
-							for (j = mParticles.begin(); (j != mParticles.end()) && (tmpParticle.mArea < (*j).mArea); j++);
-
-							// Fill unused values
-							tmpParticle.mID = -1;
-							tmpParticle.mIDCovariance = -1;
-
-							// Insert the particle
-							mParticles.insert(j, tmpParticle);
-							// Remove the smallest one
-							mParticles.pop_back();
-						}
-					}
-					else
-					{
-						// The particle is added at the correct place
 						// Find the place were it must be inserted, sorted by size
 						for (j = mParticles.begin(); (j != mParticles.end()) && (tmpParticle.mArea < (*j).mArea); j++);
 
 						// Fill unused values
 						tmpParticle.mID = -1;
 						tmpParticle.mIDCovariance = -1;
-
 						// Insert the particle
 						mParticles.insert(j, tmpParticle);
+						// Remove the smallest one
+						mParticles.pop_back();
 					}
+				}
+				else
+				{
+					// The particle is added at the correct place
+					// Find the place were it must be inserted, sorted by size
+					for (j = mParticles.begin(); (j != mParticles.end()) && (tmpParticle.mArea < (*j).mArea); j++);
+
+					// Fill unused values
+					tmpParticle.mID = -1;
+					tmpParticle.mIDCovariance = -1;
+					// Insert the particle
+					mParticles.insert(j, tmpParticle);
 				}
 			}
 		}
@@ -154,20 +147,6 @@ void THISCLASS::OnStep() {
 		cvRelease((void**)&contour);
 	}
 	contour = cvEndFindContours(&blobs);
-
-	// If we need to display the particles
-	/* if(trackingimg->GetDisplay())
-	{
-		for(j=rejectedparticles.begin();j!=rejectedparticles.end();j++)
-		{
-			trackingimg->DrawCircle(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255,0,0));
-		}
-		for(j=particles.begin();j!=particles.end();j++)
-		{
-			trackingimg->DrawCircle(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(0,255,0));
-			trackingimg->Cover(cvPoint((int)(((*j).p).x),(int)(((*j).p).y)),CV_RGB(255,0,0),2);
-		}
-	} */
 
 	cvReleaseImage(&inputimage);
 	cvRelease((void**)&contour);
