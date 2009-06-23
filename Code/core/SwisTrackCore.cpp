@@ -76,7 +76,7 @@
 #include "ComponentDoubleThresholdColorIndependent.h"
 #include "ComponentSobelDifferentiation.h"
 #include "ComponentBinarySmooth.h"
-#include "ComponentTomatoDetector.h"
+
 #include "NMEALog.h"
 THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 		mAvailableComponents(), mDataStructures(), mSwisTrackCoreInterfaces(), mComponentConfigurationFolder(componentconfigurationfolder),
@@ -160,13 +160,13 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentSobelDifferentiation(this));
   	mAvailableComponents.push_back(new ComponentIDReaderRing(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
+	
 	//Calibration	
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
 	mAvailableComponents.push_back(new ComponentCalibrationOpenCV(this));
 	mAvailableComponents.push_back(new ComponentCalibrationTSAI(this));
 	mAvailableComponents.push_back(new ComponentCalibrationFileTSAI(this));
 	//Tracking
-	mAvailableComponents.push_back(new ComponentTomatoDetector(this));
 	mAvailableComponents.push_back(new ComponentTracking(this));
 	mAvailableComponents.push_back(new ComponentNearestNeighborTracking(this));
 	mAvailableComponents.push_back(new ComponentDynamicNearestNeighborTracking(this));
