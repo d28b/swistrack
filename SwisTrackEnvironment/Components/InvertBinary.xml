@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Invert Binary</friendlyname>
+	<description>
+	  Invert Binary Image. 
+	</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/InvertBinary</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+	</configuration>
+</swistrackcomponent>
