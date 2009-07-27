@@ -35,6 +35,7 @@ debianized-tree:
 	cp Makefile.inc $(DEBIANIZED-DIR)
 	cp mkinstalldirs $(DEBIANIZED-DIR)
 	cp install-sh $(DEBIANIZED-DIR)
+	cd $(DEBIANIZED-DIR) && DEB_AUTO_UPDATE_DEBIAN_CONTROL=yes fakeroot debian/rules clean && cd -
 
 # Build source package:
 # pass --no-tgz-check arg to debuild so that it will shut up about not finding orig.tar.gz
