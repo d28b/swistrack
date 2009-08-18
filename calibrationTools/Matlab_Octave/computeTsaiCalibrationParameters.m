@@ -145,7 +145,8 @@ end
 %Compute f, tz and k1
 fun = @(x) norm(Yd'+x(3)* Yd'.*r2' - x(1)* (R(2,1)*world(1,:)'+ R(2,2)*world(2,:)'+ ty)./(R(3,1)*world(1,:)'+ R(3,2)*world(2,:)'+ x(2)))+norm(Xd'+x(3)*Xd'.*r2'-x(1)*(R(1,1)*world(1,:)'+ R(1,2)*world(2,:)'+ tx)./(R(3,1)*world(1,:)'+ R(3,2)*world(2,:)'+ x(2)));
 x0=[ftz(1);ftz(2);0];
-x=fminsearch(fun,x0);
+%x=fminsearch(fun,x0);
+x=fminsearch(fun,x0, optimset('MaxFunEvals', 1000000, 'MaxIter',  1000000));
 T=[tx;ty;x(2)];
 f = x(1);
 k1 = x(3);
