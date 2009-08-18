@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Output Particles to a SQLite file</friendlyname>
+	<description>Writes particles to a SQLite file.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputSQLite</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="string">
+			<name>DirectoryName</name>
+			<label>Output Directory</label>
+			<reloadable>false</reloadable>
+            <default>/tmp</default>
+		</parameter>
+
+		<parameter type="string">
+			<name>FileName</name>
+			<label>Output SQLite file name</label>
+			<reloadable>false</reloadable>
+            <default>tracks.sqlite</default>
+		</parameter>
+        
+        <parameter type="checkbox">
+            <name>ClearAtStart</name>
+            <label>Clear points and configuration at start of run</label>
+            <default>1</default>
+            <reloadable>true</reloadable>
+        </parameter>
+
+	</configuration>
+</swistrackcomponent>

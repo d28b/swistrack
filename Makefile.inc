@@ -27,6 +27,8 @@ WXWIDGETS_LDLIBS   := `wx-config --version=2.8 --libs`
 # GiGE Proselica Camera Component (activate the following lines to compile with this component)
 #CPPFLAGS_ADD       += -DUSE_CAMERA_PROSILICA_GIGE
 
+# Sqlite3
+LDLIBS_ADD          += -lsqlite3
 
 # XVID component (activate the following lines to compile with this component)
 #CPPFLAGS_ADD       += -DUSE_XVID

@@ -62,6 +62,7 @@
 #include "ComponentCalibrationTSAI.h"
 #include "ComponentCalibrationFileTSAI.h"
 #include "ComponentOutputFile.h"
+#include "ComponentOutputSQLite.h"
 #include "ComponentOutputFileAVI.h"
 #include "ComponentOutputFileM4V.h"
 #include "ComponentOutputFramesImages.h"
@@ -178,6 +179,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentKalmanFilterTrack(this));
 	//Output
 	mAvailableComponents.push_back(new ComponentOutputFile(this));
+    mAvailableComponents.push_back(new ComponentOutputSQLite(this));
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentOutputFileM4V(this));
 	mAvailableComponents.push_back(new ComponentOutputFramesImages(this));
