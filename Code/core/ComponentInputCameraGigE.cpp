@@ -158,9 +158,9 @@ void THISCLASS::OnStart() {
 
 	// Enable chunk mode (to obtain the trigger input counter)
 	mCamera->ChunkModeActive.SetValue(true);
-	mCamera->ChunkSelector.SetValue(Basler_GigECameraParams::ChunkSelector_Triggerinputcounter);
+	mCamera->ChunkSelector.SetValue(Basler_GigECameraParams::ChunkSelector_Framecounter);
 	mCamera->ChunkEnable.SetValue(true);
-	//mCamera->ChunkSelector.SetValue(Pylon::Basler_GigECameraParams::ChunkSelector_Timestamp);
+	//mCamera->ChunkSelector.SetValue(Basler_GigECameraParams::ChunkSelector_Timestamp);
 	//mCamera->ChunkEnable.SetValue(true);
 	mChunkParser = mCamera->CreateChunkParser();
 
@@ -259,19 +259,18 @@ void THISCLASS::OnStep() {
 	// This is the acquired image
 	IplImage *outputimage = (IplImage*)(mCurrentResult.Context());
 
-	// If we are acquireing a color image, we need to transform it from YUV422 to BGR, otherwise we use the raw image
+	// If we are acquireing a color image, we need to transform it from BayerRG to BGR, otherwise we use the raw image
 	if (mColor) {
 		PrepareOutputImage(outputimage);
-		cvCvtColor(outputimage, mOutputImage, CV_BayerBG2BGR);
-		//ImageConversion::CvtYUV422ToBGR(outputimage, mOutputImage);
+		cvCvtColor(outputimage, mOutputImage, CV_BayerRG2BGR);
 		mCore->mDataStructureInput.mImage = mOutputImage;
 	} else {
 		mCore->mDataStructureInput.mImage = outputimage;
 	}
 
-	// Parse the frame number (trigger input counter of the camera)
+	// Parse the frame number (frame counter of the camera)
 	mChunkParser->AttachBuffer(mCurrentResult.Buffer(), mCurrentResult.GetPayloadSize());
-	mCore->mDataStructureInput.mFrameNumber = mCamera->ChunkTriggerinputcounter.GetValue();
+	mCore->mDataStructureInput.mFrameNumber = mCamera->ChunkFramecounter.GetValue();
 
 	// The camera returns a time stamp, but we prefer the time stamp of the computer here
 	mCore->mDataStructureInput.SetFrameTimestamp(wxDateTime::UNow());
