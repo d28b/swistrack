@@ -74,7 +74,8 @@ void THISCLASS::OnStart() {
 	cameraParameters.sx = GetConfigurationDouble(wxT("sx"), 1.0);
 	// Put the points into the matrix
 	if (calibrationPointList.size() > TSAI_MAX_POINTS) {
-		AddError(wxT("There are more calibration points than accepted by the Tsai calibration library"));
+		AddError(wxT("There are more calibration points than accepted by the Tsai calibration library."));
+		return;
 		return;
 	}
 	calibrationData.point_count = calibrationPointList.size();
@@ -91,6 +92,7 @@ void THISCLASS::OnStart() {
 	}
 	catch (...) {
 		AddError(wxT("Calibration using libtsai failed."));
+		return;
 	}
 
 	//Compute error of calibration on calibration points

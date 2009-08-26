@@ -142,8 +142,8 @@ void THISCLASS::OnStart() {
 		originalWorld.x = (float)(calibrationPointList.at(i)).xWorld;
 		originalWorld.y = (float)(calibrationPointList.at(i)).yWorld;
 		finalWorld = THISCLASS::Image2World(originalImage);
-		tmpErrorX = abs(originalWorld.x - finalWorld.x);
-		tmpErrorY = abs(originalWorld.y - finalWorld.y);
+		tmpErrorX = (double)fabsf(originalWorld.x - finalWorld.x);
+		tmpErrorY = (double)fabsf(originalWorld.y - finalWorld.y);
 		tmpErrorD = sqrt(tmpErrorX * tmpErrorX + tmpErrorY * tmpErrorY);
 		errorX += tmpErrorX;
 		errorY += tmpErrorY;

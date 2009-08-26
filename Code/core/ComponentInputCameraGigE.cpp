@@ -94,24 +94,20 @@ void THISCLASS::OnStart() {
 		mCamera->PixelFormat.SetValue(Basler_GigECameraParams::PixelFormat_Mono8);
 	}
 
-	// Area of interest
-	int cameraw = mCamera->Width.GetMax();
-	int camerah = mCamera->Height.GetMax();
+	// Area of interest: Offset
 	int aoix = GetConfigurationInt(wxT("AOIOffset.x"), 0);
 	int aoiy = GetConfigurationInt(wxT("AOIOffset.y"), 0);
+
+	// Area of interest: Size
+	int cameraw = mCamera->Width.GetMax();
+	int camerah = mCamera->Height.GetMax();
 	int aoiw = GetConfigurationInt(wxT("AOISize.x"), 64);
 	int aoih = GetConfigurationInt(wxT("AOISize.y"), 64);
-	if (aoix > cameraw - 1) {
-		aoix = cameraw - 1;
+	if (aoiw > cameraw) {
+		aoiw = cameraw;
 	}
-	if (aoiy > camerah - 1) {
-		aoiy = camerah - 1;
-	}
-	if (aoiw > cameraw - aoix) {
-		aoiw = cameraw - aoix;
-	}
-	if (aoih > camerah - aoiy) {
-		aoih = camerah - aoiy;
+	if (aoih > camerah) {
+		aoih = camerah;
 	}
 	aoiw = aoiw ^ (aoiw & 0x3);	// The image width must currently be a multiple of 4, for alignment reasons.
 	aoih = aoih ^ (aoih & 0x1);	// The image height must currently be a multiple of 2.
@@ -251,7 +247,8 @@ void THISCLASS::OnStep() {
 	// Get an item from the grabber's output queue
 	bool res = mStreamGrabber->RetrieveResult(mCurrentResult);
 	if ((! res) || (! mCurrentResult.Succeeded())) {
-		AddWarning(wxString::Format(wxT("Failed to retrieve an item from the output queue: %s"), mCurrentResult.GetErrorDescription().c_str()));
+		wxString message(mCurrentResult.GetErrorDescription().c_str(), wxConvUTF8);
+		AddWarning(wxT("Failed to retrieve an item from the output queue: ") + message);
 	}
 
 	// This is the acquired image
@@ -267,12 +264,14 @@ void THISCLASS::OnStep() {
 	}
 
 	// Parse the frame number (frame counter of the camera)
-	mChunkParser->AttachBuffer(mCurrentResult.Buffer(), mCurrentResult.GetPayloadSize());
-	if (mFrameNumberStart == -1) {
-		mFrameNumberStart = mCamera->ChunkFramecounter.GetValue();
-		mCore->mDataStructureInput.mFrameNumber = 0;
-	} else {
-		mCore->mDataStructureInput.mFrameNumber = mCamera->ChunkFramecounter.GetValue() - mFrameNumberStart;
+	if (mCurrentResult.Succeeded()) {
+		mChunkParser->AttachBuffer(mCurrentResult.Buffer(), mCurrentResult.GetPayloadSize());
+		if (mFrameNumberStart < 0) {
+			mFrameNumberStart = mCamera->ChunkFramecounter.GetValue();
+			mCore->mDataStructureInput.mFrameNumber = 0;
+		} else {
+			mCore->mDataStructureInput.mFrameNumber = mCamera->ChunkFramecounter.GetValue() - mFrameNumberStart;
+		}
 	}
 
 	// The camera returns a time stamp, but we prefer the time stamp of the computer here
