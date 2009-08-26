@@ -7,9 +7,10 @@
  *
  */
 
-#include "ComponentOutputSQLite.h"  
-#include "ConfigurationWriterXML.h"
+#include "ComponentOutputSQLite.h" 
 
+#ifdef USE_SQLITE3 
+#include "ConfigurationWriterXML.h"
 #include "Utility.h"
 
 #include <stdio.h>
@@ -398,3 +399,5 @@ double ComponentOutputSQLite::GetProgressPercent()     { return  0; }
 double ComponentOutputSQLite::GetProgressMSec()        { return -1; }
 int    ComponentOutputSQLite::GetProgressFrameNumber() { return  0; }
 double ComponentOutputSQLite::GetFPS()                 { return -1; }
+
+#endif // USE_SQLITE3

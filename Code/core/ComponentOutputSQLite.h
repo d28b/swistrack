@@ -7,16 +7,21 @@
  *
  */
 
-#include "Component.h"
-#include "SwisTrackCore.h"
+#ifndef HEADER_ComponentOutputSQLite
+#define HEADER_ComponentOutputSQLite
 
+#include "Component.h"
+
+#ifdef USE_SQLITE3
+
+#include "SwisTrackCore.h"
 extern "C"  {
     #include <sqlite3.h>
 }
 
 //SQLITE_EXTENSION_INIT1;
 
-class ComponentOutputSQLite : public Component {
+class ComponentOutputSQLite: public Component {
     
 public:
     ComponentOutputSQLite(SwisTrackCore* stc);
@@ -52,3 +57,36 @@ private:
     Display         mDisplayOutput;			//!< The DisplayImage showing the output of this component.
 
 };
+
+#else // USE_SQLITE3
+
+class ComponentOutputSQLite: public Component {
+
+public:
+	ComponentOutputSQLite(SwisTrackCore *stc): Component(stc, wxT("OutputSQLite")) {
+		Initialize();
+	}
+	~ComponentOutputSQLite() {}
+
+	// Overwritten Component methods
+	void OnStart() {
+		AddError(wxT("SQLite support was not compiled into this executable."));
+	}
+	void OnReloadConfiguration() {
+		AddError(wxT("SQLite support was not compiled into this executable."));
+	}
+	void OnStep() {
+		AddError(wxT("SQLite support was not compiled into this executable."));
+	}
+	void OnStepCleanup() {}
+	void OnStop() {
+		AddError(wxT("SQLite support was not compiled into this executable."));
+	}
+	Component *Create() {
+		return new ComponentOutputSQLite(mCore);
+	}
+};
+
+#endif // USE_SQLITE3
+
+#endif

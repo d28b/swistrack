@@ -120,4 +120,3 @@ public:
 #endif // USE_CAMERA_PYLON_GIGE
 
 #endif
-
