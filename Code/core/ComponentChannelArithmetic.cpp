@@ -7,10 +7,10 @@
 
 THISCLASS::ComponentChannelArithmetic(SwisTrackCore *stc):
 		Component(stc, wxT("ChannelArithmetic")),
-		mOutputImage(0),
 		coeff1(0.3), coeff2(0.59), coeff3(0.11),
 		channel1(1), channel2(2), channel3(3),
 		op1(ADD), op2(ADD),
+		mOutputImage(0),
 		mDisplayOutput(wxT("Output"), wxT("After channel arithmetic"))
 {
 	// Data structure relations

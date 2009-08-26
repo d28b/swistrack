@@ -158,7 +158,7 @@ void THISCLASS::OnStart() {
 
 	// Enable chunk mode (to obtain the trigger input counter)
 	mCamera->ChunkModeActive.SetValue(true);
-	mCamera->ChunkSelector.SetValue(Pylon::Basler_GigECameraParams::ChunkSelector_Triggerinputcounter);
+	mCamera->ChunkSelector.SetValue(Basler_GigECameraParams::ChunkSelector_Triggerinputcounter);
 	mCamera->ChunkEnable.SetValue(true);
 	//mCamera->ChunkSelector.SetValue(Pylon::Basler_GigECameraParams::ChunkSelector_Timestamp);
 	//mCamera->ChunkEnable.SetValue(true);
@@ -177,7 +177,7 @@ void THISCLASS::OnStart() {
 
 	// Allocate and register image buffers, put them into the grabber's input queue
 	try {
-		int data_size = Camera.PayloadSize.GetValue();
+		int data_size = mCamera->PayloadSize.GetValue();
 		for (int i = 0; i < mInputBufferSize; ++i) {
 			mInputBufferImages[i] = cvCreateImageHeader(cvSize(aoiw, aoih), 8, 1);
 			mInputBufferImages[i]->imageData = new char[data_size];
@@ -270,7 +270,7 @@ void THISCLASS::OnStep() {
 	}
 
 	// Parse the frame number (trigger input counter of the camera)
-	mChunkParser->AttachBuffer(mCurrentResult->Buffer(), mCurrentResult->GetPayloadSize());
+	mChunkParser->AttachBuffer(mCurrentResult.Buffer(), mCurrentResult.GetPayloadSize());
 	mCore->mDataStructureInput.mFrameNumber = mCamera->ChunkTriggerinputcounter.GetValue();
 
 	// The camera returns a time stamp, but we prefer the time stamp of the computer here

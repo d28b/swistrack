@@ -27,13 +27,14 @@ WXWIDGETS_LDLIBS   := `wx-config --version=2.8 --libs`
 # GiGE Proselica Camera Component (activate the following lines to compile with this component)
 #CPPFLAGS_ADD       += -DUSE_CAMERA_PROSILICA_GIGE
 
-# Sqlite3
-LDLIBS_ADD          += -lsqlite3
+# SQlite3 (activate the following lines to compile with components using this library)
+#CPPFLAGS_ADD       += -DUSE_SQLITE3
+#LDLIBS_ADD         += -lsqlite3
 
 # XVID component (activate the following lines to compile with this component)
 #CPPFLAGS_ADD       += -DUSE_XVID
 #LDLIBS_ADD         += -lxvidcore
 
-# Components that depend on the Boost library (activate the following lines to compile with these components)
+# Boost (activate the following lines to compile with components using the Boost library)
 #CPPFLAGS_ADD       += -DUSE_BOOST
 #LDLIBS_ADD         += -lboost_graph

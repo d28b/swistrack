@@ -79,13 +79,12 @@ void THISCLASS::OnStep() {
 	mCore->mDataStructureInput.mFramesCount = framescount;
 
 	// On linux, directly readig the millisecond offset doesn't work.
-	double progress = GetProgressMSec();
+	//double progress = GetProgressMSec();
 	double secondsInVideo = GetProgressFrameNumber() / GetFPS();
 	wxDateTime ts((time_t) secondsInVideo);
 	double millis = (secondsInVideo - (int) secondsInVideo) * 1000;
 	ts.SetMillisecond((int) millis);
 	mCore->mDataStructureInput.SetFrameTimestamp(ts);
-
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);

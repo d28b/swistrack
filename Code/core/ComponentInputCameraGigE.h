@@ -50,7 +50,7 @@ private:
 
 	Pylon::CBaslerGigECamera *mCamera;					//!< Camera object.
 	Pylon::CBaslerGigEStreamGrabber *mStreamGrabber;	//!< Stream grabber object.
-	Pylon::CChunkParser *mChunkParser;					//!< Chunk parser object.
+	Pylon::IChunkParser *mChunkParser;					//!< Chunk parser object.
 
 	static const int mInputBufferSizeMax = 32;							//!< The maximum number of input buffer images.
 	IplImage *mInputBufferImages[mInputBufferSizeMax];					//!< The input buffer images.
