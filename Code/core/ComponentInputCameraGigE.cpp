@@ -8,7 +8,7 @@
 THISCLASS::ComponentInputCameraGigE(SwisTrackCore *stc):
 		Component(stc, wxT("InputCameraGigE")),
 		mCamera(0), mStreamGrabber(0), mCurrentResult(),
-		mFrameNumber(0), mOutputImage(0) {
+		mFrameNumberStart(-1), mOutputImage(0) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryInput);
@@ -44,7 +44,7 @@ void THISCLASS::OnStart() {
 	mTriggerMode = (eTriggerMode)GetConfigurationInt(wxT("TriggerMode"), 0);
 	mTriggerTimerFPS = GetConfigurationInt(wxT("TriggerTimerFPS"), 10);
 	mInputBufferSize = GetConfigurationInt(wxT("InputBufferSize"), 8);
-	mFrameNumber = 0;
+	mFrameNumberStart = -1;
 
 	// Check the maximum amount of buffers
 	if (mInputBufferSize < 1) {
@@ -160,7 +160,6 @@ void THISCLASS::OnStart() {
 	mCamera->ChunkModeActive.SetValue(true);
 	mCamera->ChunkSelector.SetValue(Basler_GigECameraParams::ChunkSelector_Framecounter);
 	mCamera->ChunkEnable.SetValue(true);
-	mFrameNumberStart = -1;
 	mChunkParser = mCamera->CreateChunkParser();  // TODO: destroy?
 
 	// Get and open a stream grabber
