@@ -57,7 +57,7 @@ private:
 	Pylon::StreamBufferHandle mInputBufferHandles[mInputBufferSizeMax];	//!< The corresponding buffer handles.
 	Pylon::GrabResult mCurrentResult;									//!< The current result.
 
-	int mFrameNumber;									//!< The frame number since the component was started.
+	int mFrameNumberStart;								//!< The frame number of the first acquired frame, or -1 if no frame has been acquired yet.
 	IplImage *mOutputImage;								//!< The current output image (only used for color acquisition, for mono acquision one of the mInputBufferImages is used).
 
 	//! The thread waiting for new images (in case of external trigger).

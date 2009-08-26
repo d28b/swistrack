@@ -160,9 +160,8 @@ void THISCLASS::OnStart() {
 	mCamera->ChunkModeActive.SetValue(true);
 	mCamera->ChunkSelector.SetValue(Basler_GigECameraParams::ChunkSelector_Framecounter);
 	mCamera->ChunkEnable.SetValue(true);
-	//mCamera->ChunkSelector.SetValue(Basler_GigECameraParams::ChunkSelector_Timestamp);
-	//mCamera->ChunkEnable.SetValue(true);
-	mChunkParser = mCamera->CreateChunkParser();
+	mFrameNumberStart = -1;
+	mChunkParser = mCamera->CreateChunkParser();  // TODO: destroy?
 
 	// Get and open a stream grabber
 	mCamera->GetStreamGrabber(0);
@@ -270,7 +269,12 @@ void THISCLASS::OnStep() {
 
 	// Parse the frame number (frame counter of the camera)
 	mChunkParser->AttachBuffer(mCurrentResult.Buffer(), mCurrentResult.GetPayloadSize());
-	mCore->mDataStructureInput.mFrameNumber = mCamera->ChunkFramecounter.GetValue();
+	if (mFrameNumberStart == -1) {
+		mFrameNumberStart = mCamera->ChunkFramecounter.GetValue();
+		mCore->mDataStructureInput.mFrameNumber = 0;
+	} else {
+		mCore->mDataStructureInput.mFrameNumber = mCamera->ChunkFramecounter.GetValue() - mFrameNumberStart;
+	}
 
 	// The camera returns a time stamp, but we prefer the time stamp of the computer here
 	mCore->mDataStructureInput.SetFrameTimestamp(wxDateTime::UNow());
