@@ -36,7 +36,7 @@ private:
 			}
 			cvReleaseImage(&mOutputImage);
 		}
-		mOutputImage = cvCreateImage(cvSize(inputimage->width, inputimage->height), inputimage->depth, 1);
+		mOutputImage = cvCreateImage(cvSize(inputimage->width, inputimage->height), inputimage->depth, 3);
 	}
 };
 

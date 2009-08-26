@@ -89,7 +89,7 @@ void THISCLASS::OnStart() {
 
 	// Pixel format: color or mono
 	if (mColor) {
-		mCamera->PixelFormat.SetValue(Basler_GigECameraParams::PixelFormat_YUV422Packed);
+		mCamera->PixelFormat.SetValue(Basler_GigECameraParams::PixelFormat_BayerBG8);
 	} else {
 		mCamera->PixelFormat.SetValue(Basler_GigECameraParams::PixelFormat_Mono8);
 	}
@@ -156,6 +156,14 @@ void THISCLASS::OnStart() {
 	// Configure reloadable values
 	OnReloadConfiguration();
 
+	// Enable chunk mode (to obtain the trigger input counter)
+	mCamera->ChunkModeActive.SetValue(true);
+	mCamera->ChunkSelector.SetValue(Pylon::Basler_GigECameraParams::ChunkSelector_Triggerinputcounter);
+	mCamera->ChunkEnable.SetValue(true);
+	//mCamera->ChunkSelector.SetValue(Pylon::Basler_GigECameraParams::ChunkSelector_Timestamp);
+	//mCamera->ChunkEnable.SetValue(true);
+	mChunkParser = mCamera->CreateChunkParser();
+
 	// Get and open a stream grabber
 	mCamera->GetStreamGrabber(0);
 	mStreamGrabber = new Pylon::CBaslerGigECamera::StreamGrabber_t(mCamera->GetStreamGrabber(0));
@@ -169,10 +177,11 @@ void THISCLASS::OnStart() {
 
 	// Allocate and register image buffers, put them into the grabber's input queue
 	try {
-		int channels = (mColor ? 2 : 1);
+		int data_size = Camera.PayloadSize.GetValue();
 		for (int i = 0; i < mInputBufferSize; ++i) {
-			mInputBufferImages[i] = cvCreateImage(cvSize(aoiw, aoih), 8, channels);
-			mInputBufferHandles[i] = mStreamGrabber->RegisterBuffer(mInputBufferImages[i]->imageData, mInputBufferImages[i]->imageSize);
+			mInputBufferImages[i] = cvCreateImageHeader(cvSize(aoiw, aoih), 8, 1);
+			mInputBufferImages[i]->imageData = new char[data_size];
+			mInputBufferHandles[i] = mStreamGrabber->RegisterBuffer(mInputBufferImages[i]->imageData, data_size);
 			mStreamGrabber->QueueBuffer(mInputBufferHandles[i], mInputBufferImages[i]);
 		}
 	} catch (GenICam::GenericException &e) {
@@ -250,22 +259,22 @@ void THISCLASS::OnStep() {
 	// This is the acquired image
 	IplImage *outputimage = (IplImage*)(mCurrentResult.Context());
 
-	// Set Timestamp for the current frame
-	// this data is not read from the camera, so we will do the
-	// best we can: take a timestamp now.
-	mCore->mDataStructureInput.SetFrameTimestamp(wxDateTime::UNow());
-
 	// If we are acquireing a color image, we need to transform it from YUV422 to BGR, otherwise we use the raw image
 	if (mColor) {
 		PrepareOutputImage(outputimage);
-		ImageConversion::CvtYUV422ToBGR(outputimage, mOutputImage);
+		cvCvtColor(outputimage, mOutputImage, CV_BayerBG2BGR);
+		//ImageConversion::CvtYUV422ToBGR(outputimage, mOutputImage);
 		mCore->mDataStructureInput.mImage = mOutputImage;
 	} else {
 		mCore->mDataStructureInput.mImage = outputimage;
 	}
 
-	// Set the frame number
-	mCore->mDataStructureInput.mFrameNumber = mFrameNumber++;
+	// Parse the frame number (trigger input counter of the camera)
+	mChunkParser->AttachBuffer(mCurrentResult->Buffer(), mCurrentResult->GetPayloadSize());
+	mCore->mDataStructureInput.mFrameNumber = mCamera->ChunkTriggerinputcounter.GetValue();
+
+	// The camera returns a time stamp, but we prefer the time stamp of the computer here
+	mCore->mDataStructureInput.SetFrameTimestamp(wxDateTime::UNow());
 }
 
 void THISCLASS::OnStepCleanup() {
@@ -315,7 +324,8 @@ void THISCLASS::OnStop() {
 	// Deregister and free buffers
 	for (int i = 0; i < mInputBufferSize; ++i) {
 		mStreamGrabber->DeregisterBuffer(mInputBufferHandles[i]);
-		cvReleaseImage(&mInputBufferImages[i]);
+		delete mInputBufferImages[i]->imageData;
+		cvReleaseImageHeader(&mInputBufferImages[i]);
 	}
 
 	// Clean up

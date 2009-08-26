@@ -7,7 +7,7 @@
 class DataStructureInput: public DataStructureImage {
 
 public:
-	int mFrameNumber;			//!< Frame number.
+	int mFrameNumber;			//!< Frame number as provided by the input source (if available). For a reliable
 	int mFramesCount;			//!< The total number of frames available (if available).
 
 	//! Constructor.

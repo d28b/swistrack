@@ -21,33 +21,30 @@ THISCLASS::ComponentConvertBayerToColor(SwisTrackCore *stc):
 THISCLASS::~ComponentConvertBayerToColor() {
 }
 
-void THISCLASS::OnStart()
-{
+void THISCLASS::OnStart() {
 	OnReloadConfiguration();
 }
 
-void THISCLASS::OnReloadConfiguration()
-{
+void THISCLASS::OnReloadConfiguration() {
 	mBayerType = GetConfigurationInt(wxT("BayerType"), 0);
-
 }
 
-void THISCLASS::OnStep()
-{
+void THISCLASS::OnStep() {
+	// Check input image
 	IplImage *inputimage = mCore->mDataStructureInput.mImage;
 	if (! inputimage) {
 		return;
 	}
-	if (!mOutputImage)
-		mOutputImage = cvCreateImage(cvSize(inputimage->width, inputimage->height), inputimage->depth, 3);
-	if (inputimage->nChannels != 1)
-	{
-		AddError(wxT("This function require a Gray input Image"));
+	if (inputimage->nChannels != 1) {
+		AddError(wxT("This component requires a grayscale input image."));
 	}
 
+	// Prepare the output image
+	PrepareOutputImage(inputimage);
+
+	// Convert
 	try {
-		switch (mBayerType)
-		{
+		switch (mBayerType) {
 		case 0 :
 			cvCvtColor(inputimage, mOutputImage, CV_BayerBG2BGR);
 			break;
@@ -67,6 +64,8 @@ void THISCLASS::OnStep()
 	} catch (...) {
 		AddError(wxT("Conversion from Bayer to BGR failed."));
 	}
+
+	// Set the output image on the color data structure
 	mCore->mDataStructureImageColor.mImage = mOutputImage;
 
 	// Let the Display know about our image
@@ -77,7 +76,7 @@ void THISCLASS::OnStep()
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureImageGray.mImage = 0;
+	mCore->mDataStructureImageColor.mImage = 0;
 }
 
 void THISCLASS::OnStop() {

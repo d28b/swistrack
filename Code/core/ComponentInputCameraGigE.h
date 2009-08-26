@@ -50,6 +50,7 @@ private:
 
 	Pylon::CBaslerGigECamera *mCamera;					//!< Camera object.
 	Pylon::CBaslerGigEStreamGrabber *mStreamGrabber;	//!< Stream grabber object.
+	Pylon::CChunkParser *mChunkParser;					//!< Chunk parser object.
 
 	static const int mInputBufferSizeMax = 32;							//!< The maximum number of input buffer images.
 	IplImage *mInputBufferImages[mInputBufferSizeMax];					//!< The input buffer images.
@@ -60,7 +61,7 @@ private:
 	IplImage *mOutputImage;								//!< The current output image (only used for color acquisition, for mono acquision one of the mInputBufferImages is used).
 
 	//! The thread waiting for new images (in case of external trigger).
-class Thread: public wxThread {
+	class Thread: public wxThread {
 	public:
 		ComponentInputCameraGigE *mComponent;		//!< The associated component.
 
