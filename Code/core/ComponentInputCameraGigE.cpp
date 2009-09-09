@@ -171,11 +171,10 @@ void THISCLASS::OnStart() {
 
 	// Allocate and register image buffers, put them into the grabber's input queue
 	try {
-		int data_size = mCamera->PayloadSize.GetValue();
 		for (int i = 0; i < mInputBufferSize; ++i) {
 			mInputBufferImages[i] = cvCreateImageHeader(cvSize(aoiw, aoih), 8, 1);
-			mInputBufferImages[i]->imageData = new char[data_size];
-			mInputBufferHandles[i] = mStreamGrabber->RegisterBuffer(mInputBufferImages[i]->imageData, data_size);
+			mInputBufferImages[i]->imageData = new char[buffersize];
+			mInputBufferHandles[i] = mStreamGrabber->RegisterBuffer(mInputBufferImages[i]->imageData, buffersize);
 			mStreamGrabber->QueueBuffer(mInputBufferHandles[i], mInputBufferImages[i]);
 		}
 	} catch (GenICam::GenericException &e) {
@@ -330,6 +329,7 @@ void THISCLASS::OnStop() {
 	}
 
 	// Clean up
+	mCamera->DestroyChunkParser(mChunkParser);
 	mStreamGrabber->FinishGrab();
 	mStreamGrabber->Close();
 	mStreamGrabber = 0;

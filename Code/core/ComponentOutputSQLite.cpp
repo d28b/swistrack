@@ -159,7 +159,7 @@ bool ComponentOutputSQLite::CreateTables()
             AddError(wxString::FromAscii(errorMsg));
             sqlite3_free(errorMsg); errorMsg = NULL;
         } else {
-            AddError(wxT("Unknown error trying to create points index."));
+            AddError(wxT("Unknown error trying to create points index."));
         }
         return false;
     }
