@@ -21,6 +21,7 @@
 #include "ComponentAdaptiveBackgroundSubtractionGray.h"
 #include "ComponentAdaptiveBackgroundSubtractionColor.h"
 #include "ComponentAdaptiveBackgroundSubtractionMedian.h"
+#include "ComponentAdaptiveBackgroundSubtractionMode.h"
 #include "ComponentBackgroundSubtractionCheungKamath.h"
 #include "ComponentGrayMask.h"
 #include "ComponentSpecificColorSubtraction.h"
@@ -124,6 +125,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentHSVBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionMedian(this));
+	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionMode(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionCheungKamath(this));
 	mAvailableComponents.push_back(new ComponentSpecificColorSubtraction(this));
 	mAvailableComponents.push_back(new ComponentColorMask(this));
