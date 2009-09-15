@@ -360,7 +360,7 @@ void ComponentOutputSQLite::OnStep()
                 sqlite3_bind_double(mInsertStatement, column++, particle->mArea);
                 sqlite3_bind_double(mInsertStatement, column++, particle->mOrientation);
                 sqlite3_bind_double(mInsertStatement, column++, particle->mCompactness);
-                sqlite3_bind_double(mInsertStatement, column++, particle->mTimestamp.IsValid() ? Utility::toMillis(particle->mTimestamp) : -1);
+                sqlite3_bind_double(mInsertStatement, column++, particle->mTimestamp.IsValid() ? (Utility::toMillis(particle->mTimestamp) * 1000.0) : -1);
                 
                 AttemptInsert(mInsertStatement);
             }
