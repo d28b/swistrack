@@ -28,7 +28,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	mValueDefault = config->ReadString(wxT("default"), wxT(""));
 
 	// Prepare file filter
-	wxString filetype = config->ReadString(wxT("filetype"), "");
+	wxString filetype = config->ReadString(wxT("filetype"), wxT(""));
 	if (filetype == wxT("image")) {
 		mFileFilter = wxT("All known formats|*.bmp;*.dib;*.jpeg;*.jpg;*.jpe;*.png;*.pmb;*.pgm;*.ppm;*.sr;*.ras;*.tiff;*.tif;*.exr;*.jp2|Windows bitmaps|*.bmp;*.dib|JPEG files|*.jpeg;*.jpg;*.jpe|PNG|*.png|Portable image format|*.pmb;*.pgm;*.ppm|Sun raster format|*.sr;*.ras|TIFF files|*.tiff;*.tif|OpenEXR HDR images|*.exr|JPEG 2000 images|*.jp2|All files|*.*");
 	} else {
