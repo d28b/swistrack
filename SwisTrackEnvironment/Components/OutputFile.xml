@@ -7,9 +7,9 @@
 
 	<configuration>
 		<parameter type="outputfile">
-			<name>DirectoryName</name>
-			<label>Output Directory</label>
-			<default>tracks</default>
+			<name>FileNamePrefix</name>
+			<label>File prefix</label>
+			<default>track</default>
 			<reloadable>false</reloadable>
 		</parameter>
 	</configuration>

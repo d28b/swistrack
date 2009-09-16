@@ -24,7 +24,7 @@ THISCLASS::~ComponentOutputFile() {
 }
 
 void THISCLASS::OnStart() {
-	mDirectoryName = GetConfigurationString(wxT("DirectoryName"), wxT(""));
+	mFileNamePrefix = GetConfigurationString(wxT("FileNamePrefix"), wxT(""));
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -48,18 +48,21 @@ void THISCLASS::OnStep() {
 		} else {
 			structOutputFile *newOutputFile = new structOutputFile;
 			newOutputFile->trackID = it->first;
-			wxString  file = wxString::Format(wxT("track_%08d.txt"), it->first);
-			wxFileName tmpFileName = mCore->GetRunFileName(file);
-			if (mDirectoryName != wxT("")) {
-				tmpFileName = wxFileName(mDirectoryName, file);
+
+			// Put file name together
+			wxString filename_str = mFileNamePrefix + wxString::Format(wxT("_%08d.txt"), it->first);
+			wxFileName filename = mCore->GetRunFileName(filename_str);
+			if (! filename.IsOk()) {
+				AddError(wxT("Invalid output file prefix."));
+				return;
 			}
 
-			(newOutputFile->fileStream).open(tmpFileName.GetFullPath().mb_str(wxConvFile), std::fstream::out | std::fstream::trunc);
+			newOutputFile->fileStream.open(filename.GetFullPath().mb_str(wxConvFile), std::fstream::out | std::fstream::trunc);
 
-			if (!(newOutputFile->fileStream).is_open()) {
+			if (! newOutputFile->fileStream.is_open()) {
 				wxString msg;
-				msg << wxT("Unable to open one of the output file: ");
-				msg << tmpFileName.GetFullPath() << wxT(" ");
+				msg << wxT("Unable to open one of the output files: ");
+				msg << filename.GetFullPath() << wxT(" ");
 				msg << wxString::FromAscii(strerror(errno));
 				AddError(msg);
 				return;

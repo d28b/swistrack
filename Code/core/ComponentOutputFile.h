@@ -39,7 +39,7 @@ private:
 	// Map track ID -> file.
 	typedef std::map<int, structOutputFile*> tFilesMap;
 
-	wxString mDirectoryName;		//!< Name of the directory to save
+	wxString mFileNamePrefix;		//!< Prefix of file names
 	Display mDisplayOutput;			//!< The DisplayImage showing the output of this component.
 	tFilesMap mFiles;				//!< Vector containing the FileName
 
