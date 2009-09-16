@@ -10,7 +10,6 @@
 #include "ConfigurationParameterColor.h"
 #include "ConfigurationParameterInputFile.h"
 #include "ConfigurationParameterOutputFile.h"
-#include "ConfigurationParameterImage.h"
 #include "ConfigurationParameterDate.h"
 #include "ConfigurationParameterPointInteger.h"
 #include "ConfigurationParameterPointDouble.h"
@@ -49,9 +48,6 @@ ConfigurationParameter *THISCLASS::Create(const wxString &type, wxWindow* parent
 	}
 	if (typelc == wxT("outputfile")) {
 		return new ConfigurationParameterOutputFile(parent);
-	}
-	if (typelc == wxT("image")) {
-		return new ConfigurationParameterImage(parent);
 	}
 	if (typelc == wxT("date")) {
 		return new ConfigurationParameterDate(parent);

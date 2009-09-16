@@ -26,7 +26,15 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
 	mValueDefault = config->ReadString(wxT("default"), wxT(""));
-	mFileFilter = config->ReadString(wxT("filefilter"), wxT("All files|*.*"));
+
+	// Prepare file filter
+	wxString filetype = config->ReadString(wxT("filetype"), "");
+	if (filetype == wxT("image")) {
+		mFileFilter = wxT("All known formats|*.bmp;*.dib;*.jpeg;*.jpg;*.jpe;*.png;*.pmb;*.pgm;*.ppm;*.sr;*.ras;*.tiff;*.tif;*.exr;*.jp2|Windows bitmaps|*.bmp;*.dib|JPEG files|*.jpeg;*.jpg;*.jpe|PNG|*.png|Portable image format|*.pmb;*.pgm;*.ppm|Sun raster format|*.sr;*.ras|TIFF files|*.tiff;*.tif|OpenEXR HDR images|*.exr|JPEG 2000 images|*.jp2|All files|*.*");
+	} else {
+		mFileFilter = wxT("All files|*.*");
+	}
+	mFileFilter = config->ReadString(wxT("filefilter"), mFileFilter);
 
 	// Create the controls
 	wxStaticText *label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
@@ -69,14 +77,14 @@ void THISCLASS::OnSetNewValue() {
 
 void THISCLASS::OnButtonClicked(wxCommandEvent& event) {
 	// Normalize the current path
-	wxFileName current_filename=mSwisTrack->mSwisTrackCore->GetProjectFileName(mTextCtrl->GetValue());
+	wxFileName current_filename = mSwisTrack->mSwisTrackCore->GetProjectFileName(mTextCtrl->GetValue());
 	wxString current_fullpath;
 	if (current_filename.IsOk()) {
-		current_fullpath=current_filename.GetFullPath();
+		current_fullpath = current_filename.GetFullPath();
 	}
 
 	// Show the file open window
-	long dialogStyle = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
+	long dialogStyle = wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_PREVIEW;
 	wxFileDialog dlg(this, wxT("Select file"), wxT(""), current_fullpath, mFileFilter, dialogStyle);
 	if (dlg.ShowModal() != wxID_OK) {
 		return;

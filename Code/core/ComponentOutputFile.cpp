@@ -23,10 +23,8 @@ THISCLASS::ComponentOutputFile(SwisTrackCore *stc):
 THISCLASS::~ComponentOutputFile() {
 }
 
-void THISCLASS::OnStart() 
-{	
-  mDirectoryName = GetConfigurationString(wxT("DirectoryName"), wxT(""));
-  
+void THISCLASS::OnStart() {
+	mDirectoryName = GetConfigurationString(wxT("DirectoryName"), wxT(""));
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -37,7 +35,7 @@ void THISCLASS::OnStep() {
 	DataStructureTracks::tTrackMap *mTracks;
 	mTracks = mCore->mDataStructureTracks.mTracks;
 	if (! mTracks) {
-		AddError(wxT("No Track"));
+		AddError(wxT("No tracks."));
 		return;
 	}
 
@@ -53,18 +51,18 @@ void THISCLASS::OnStep() {
 			wxString  file = wxString::Format(wxT("track_%08d.txt"), it->first);
 			wxFileName tmpFileName = mCore->GetRunFileName(file);
 			if (mDirectoryName != wxT("")) {
-			  tmpFileName = wxFileName(mDirectoryName, file);
+				tmpFileName = wxFileName(mDirectoryName, file);
 			}
 
 			(newOutputFile->fileStream).open(tmpFileName.GetFullPath().mb_str(wxConvFile), std::fstream::out | std::fstream::trunc);
 
 			if (!(newOutputFile->fileStream).is_open()) {
-			  wxString msg;
-			  msg << wxT("Unable to open one of the output file: ");
-			  msg << tmpFileName.GetFullPath() << wxT(" ");
-			  msg << wxString::FromAscii(strerror(errno));
-			  AddError(msg);
-			  return;
+				wxString msg;
+				msg << wxT("Unable to open one of the output file: ");
+				msg << tmpFileName.GetFullPath() << wxT(" ");
+				msg << wxString::FromAscii(strerror(errno));
+				AddError(msg);
+				return;
 			}
 			mFiles[it->first] = newOutputFile;
 			WriteHeader(newOutputFile->fileStream);
@@ -89,8 +87,7 @@ void THISCLASS::OnStepCleanup() {
 void THISCLASS::OnStop() {
 	// Close all files
 	tFilesMap::iterator it = mFiles.begin();
-	while (it != mFiles.end())
-	{
+	while (it != mFiles.end()) {
 		((it->second)->fileStream).close();
 		delete it->second;
 		it++;
@@ -99,79 +96,76 @@ void THISCLASS::OnStop() {
 }
 
 void THISCLASS::WriteHeader(std::fstream & fileStream) {
-  fileStream
-    << "%Frame Number" << "\t"
-    << "x (image)" << "\t" << "y (image)" << "\t"
-    << "x (world)" << "\t" << "y (world)" << "\t"
-    << "Area" << "\t"
-    << "Orientation" << "\t"
-    << "Compactness" << "\t"
-	 << "TimeStamp (ms)" << std::endl;
+	fileStream
+	<< "%Frame Number" << "\t"
+	<< "x (image)" << "\t" << "y (image)" << "\t"
+	<< "x (world)" << "\t" << "y (world)" << "\t"
+	<< "Area" << "\t"
+	<< "Orientation" << "\t"
+	<< "Compactness" << "\t"
+	<< "TimeStamp (ms)" << std::endl;
 }
 void THISCLASS::WriteParticle(std::fstream & fileStream, const Particle & p) {
-  // Write the needed data to the file
-  fileStream
-    << p.mFrameNumber << "\t"
-    << p.mCenter.x << "\t" << p.mCenter.y << "\t"
-    << p.mWorldCenter.x << "\t" << p.mWorldCenter.y << "\t"
-    << p.mArea << "\t"
-    << p.mOrientation << "\t"
-    << p.mCompactness;
-  if (p.mTimestamp.IsValid()) {
-    fileStream << "\t" << Utility::toMillisString(p.mTimestamp).ToAscii();
-  } else  {
-	 fileStream
-		<< "\t -1"; // write -1 in place of an invalid timestamp
-  }
-  fileStream << std::endl;
-  
-}
-void THISCLASS::WriteData(structOutputFile *outputFile) {
+	// Write the needed data to the file
+	fileStream
+	<< p.mFrameNumber << "\t"
+	<< p.mCenter.x << "\t" << p.mCenter.y << "\t"
+	<< p.mWorldCenter.x << "\t" << p.mWorldCenter.y << "\t"
+	<< p.mArea << "\t"
+	<< p.mOrientation << "\t"
+	<< p.mCompactness;
 
-  // This was originally designed assuming each particles were for only one frame.
-  // ComponentMinCostFlow tracking sends particles for many frames at once.
-  // This loop still works if particles for each track are sorted in time. 
-  // So that's part of the spec now. 
+	if (p.mTimestamp.IsValid()) {
+		fileStream << "\t" << Utility::toMillisString(p.mTimestamp).ToAscii();
+	} else  {
+		fileStream << "\t -1"; // write -1 in place of an invalid timestamp
+	}
+
+	fileStream << std::endl;
+}
+
+void THISCLASS::WriteData(structOutputFile *outputFile) {
+	// This was originally designed assuming each particles were for only one frame.
+	// ComponentMinCostFlow tracking sends particles for many frames at once.
+	// This loop still works if particles for each track are sorted in time.
+	// So that's part of the spec now.
 	//Search for the corresponding particle
 	DataStructureParticles::tParticleVector *particles = mCore->mDataStructureParticles.mParticles;
-	if (! particles)
-	{
+	if (! particles) {
 		AddError(wxT("There are no particles"));
 		return;
 	}
 
 	DataStructureParticles::tParticleVector::iterator it = particles->begin();
-	while (it != particles->end())
-	{
+	while (it != particles->end()) {
 		// Correct ID is found
-		if (it->mID == outputFile->trackID)
-		{
-		  WriteParticle(outputFile->fileStream, *it);
-		  /*// Write the needed data to the file
-			outputFile->fileStream
-			// Frame number
-			<< mCore->mDataStructureInput.mFrameNumber << "\t"
-			// Center (image coordinates)
-			<< it->mCenter.x << "\t" << it->mCenter.y << "\t"
-			// Center (world coordinates)
-			<< it->mWorldCenter.x << "\t" << it->mWorldCenter.y << "\t"
-			// Area
-			<< it->mArea << "\t"
-			// Orientation
-			<< it->mOrientation << "\t"
-			// Compactness
-			<< it->mCompactness;
-			if (mCore->mDataStructureInput.FrameTimestamp().IsValid()) {
-				wxString date;
-				wxString millis;
-				millis << mCore->mDataStructureInput.FrameTimestamp().GetMillisecond();
-				millis.Pad(3 - millis.Length(), '0', false);
-				outputFile->fileStream
-				<< "\t" << mCore->mDataStructureInput.FrameTimestamp().GetTicks()
-				<< millis.ToAscii();
-			}
-			outputFile->fileStream << std::endl;
-			return;*/
+		if (it->mID == outputFile->trackID) {
+			WriteParticle(outputFile->fileStream, *it);
+			/*// Write the needed data to the file
+			  outputFile->fileStream
+			  // Frame number
+			  << mCore->mDataStructureInput.mFrameNumber << "\t"
+			  // Center (image coordinates)
+			  << it->mCenter.x << "\t" << it->mCenter.y << "\t"
+			  // Center (world coordinates)
+			  << it->mWorldCenter.x << "\t" << it->mWorldCenter.y << "\t"
+			  // Area
+			  << it->mArea << "\t"
+			  // Orientation
+			  << it->mOrientation << "\t"
+			  // Compactness
+			  << it->mCompactness;
+			  if (mCore->mDataStructureInput.FrameTimestamp().IsValid()) {
+			  	wxString date;
+			  	wxString millis;
+			  	millis << mCore->mDataStructureInput.FrameTimestamp().GetMillisecond();
+			  	millis.Pad(3 - millis.Length(), '0', false);
+			  	outputFile->fileStream
+			  	<< "\t" << mCore->mDataStructureInput.FrameTimestamp().GetTicks()
+			  	<< millis.ToAscii();
+			  }
+			  outputFile->fileStream << std::endl;
+			  return;*/
 		}
 		it++;
 	}

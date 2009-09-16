@@ -1,14 +1,15 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Output Particles to a Text File</friendlyname>
-	<description>Writes particles to a text file. Each track is stored in a separate file.</description>
+	<friendlyname>Output Particles to Text Files</friendlyname>
+	<description>Writes particles to text files. Each track is stored in a separate file.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputFile</url>
 	<displayimage>Output</displayimage>
 
 	<configuration>
-		<parameter type="string">
+		<parameter type="outputfile">
 			<name>DirectoryName</name>
 			<label>Output Directory</label>
+			<default>tracks</default>
 			<reloadable>false</reloadable>
 		</parameter>
 	</configuration>

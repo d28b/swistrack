@@ -5,9 +5,10 @@
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BinaryMask</url>
 	<displayimage>Output</displayimage>
 	<configuration>
-		<parameter type="image">
+		<parameter type="inputfile">
 			<name>MaskImage</name>
 			<label>Mask image</label>
+			<filetype>image</filetype>
 			<reloadable>false</reloadable>
 		</parameter>
 		<parameter type="dropdownlist">

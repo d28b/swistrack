@@ -5,9 +5,10 @@
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/AdaptiveBackgroundSubtractionGray</url>
 	<displayimage>Output</displayimage>
 	<configuration>
-		<parameter type="image">
+		<parameter type="inputfile">
 			<name>BackgroundImage</name>
 			<label>Background image</label>
+			<filetype>image</filetype>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>Mode</name>

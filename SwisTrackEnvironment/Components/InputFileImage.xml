@@ -9,6 +9,7 @@
 		<parameter type="inputfile">
 			<name>File</name>
 			<label>Image file</label>
+			<filetype>image</filetype>
 			<reloadable>false</reloadable>
 		</parameter>
 	</configuration>

@@ -5,10 +5,11 @@
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ColorMask</url>
 	<displayimage>Output</displayimage>
 	<configuration>
-		<parameter type="image">
+		<parameter type="inputfile">
 			<name>MaskImage</name>
 			<label>Mask image</label>
 			<reloadable>false</reloadable>
+			<filetype>image</filetype>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>Mode</name>

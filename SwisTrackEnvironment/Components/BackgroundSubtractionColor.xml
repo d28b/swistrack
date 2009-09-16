@@ -5,9 +5,10 @@
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BackgroundSubtractionColor</url>
 	<displayimage>Output</displayimage>
 	<configuration>
-		<parameter type="image">
+		<parameter type="inputfile">
 			<name>BackgroundImage</name>
 			<label>Background image</label>
+			<filetype>image</filetype>
 		</parameter>
 		<parameter type="checkbox">
 			<name>CorrectMean</name>

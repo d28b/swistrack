@@ -5,7 +5,8 @@
 
 THISCLASS::ComponentInputCameraUSB(SwisTrackCore *stc):
 		Component(stc, wxT("InputCameraUSB")),
-		mCapture(0), mOutputImage(0),mFrameNumber(0),
+		mFlipVertically(false),
+		mCapture(0), mOutputImage(0), mFrameNumber(0),
 		mDisplayOutput(wxT("Output"), wxT("USB Camera: Input Frame")) {
 
 	// Data structure relations
@@ -26,7 +27,10 @@ THISCLASS::~ComponentInputCameraUSB() {
 
 void THISCLASS::OnStart() {
 	int camera_number = GetConfigurationInt(wxT("CameraNumber"), 0);
-	if (camera_number<-1) {camera_number=-1; AddWarning(wxT("Using -1 as camera number."));}
+	if (camera_number < -1) {
+		camera_number = -1;
+		AddWarning(wxT("Using -1 as camera number."));
+	}
 
 	mCapture = cvCaptureFromCAM(camera_number);
 	if (! mCapture) {
@@ -37,6 +41,7 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
+	mFlipVertically = GetConfigurationBool(wxT("FlipVertically"), false);
 }
 
 void THISCLASS::OnStep() {
@@ -45,12 +50,15 @@ void THISCLASS::OnStep() {
 	}
 
 	// Read from camera
-	// note: this allways reads -1 (at least with some cameras and drivers), so we keep our own count and use that instead.
-	//int framenumber = (int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES);
 	mOutputImage = cvQueryFrame(mCapture);
 	if (! mOutputImage) {
 		AddError(wxT("Could not retrieve image from USB camera."));
 		return;
+	}
+
+	// Flip the image if desired
+	if (mFlipVertically) {
+		cvFlip(mOutputImage, 0, 0);
 	}
 
 	// Set Timestamp for the current frame

@@ -6,9 +6,10 @@
 	<displayimage>Output</displayimage>
 
 	<configuration>
-		<parameter type="image">
+		<parameter type="inputfile">
 			<name>BackgroundImage</name>
 			<label>Background image</label>
+			<filetype>image</filetype>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

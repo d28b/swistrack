@@ -16,5 +16,11 @@
 			<reloadable>false</reloadable>
 		</parameter>
 		<label>Camera 0 is the first camera, 1 is the second camera, and so on. Setting this value to -1 means "any camera".</label>
+		<parameter type="checkbox">
+			<name>FlipVertically</name>
+			<label>Flip the image vertically</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
 	</configuration>
 </swistrackcomponent>
