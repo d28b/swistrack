@@ -15,9 +15,6 @@ THISCLASS::TCPServerConnection(TCPServer* ss, wxSocketBase *sb):
 	mSocket->SetEventHandler(*this, SOCKET_ID);
 	mSocket->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
 	mSocket->Notify(true);
-
-	// TODO remove this
-	mSubscriptions.push_back(wxT("*"));
 }
 
 THISCLASS::~TCPServerConnection() {
@@ -130,10 +127,16 @@ bool THISCLASS::SendMessage(CommunicationMessage *m) {
 		return false;
 	}
 
-	// If it's a normal message, only send if if the sender subscribed for it
+	// If the sender didn't subscribe for any messages, send all
+	if (mSubscriptions.size()==0) {
+		NMEASendMessage(m);
+		return true;
+	}
+
+	// Otherwise, only send if if the sender has subscribed for it
 	tSubscriptions::iterator it = mSubscriptions.begin();
 	while (it != mSubscriptions.end()) {
-		if (((*it) == wxT("*")) || ((*it) == m->mCommand)) {
+		if ((*it) == m->mCommand) {
 			NMEASendMessage(m);
 			return true;
 		}
