@@ -5,7 +5,6 @@
 	Name="SwisTrack-Core"
 	ProjectGUID="{D010B136-96BD-4D44-B4F0-30388FB460B7}"
 	RootNamespace="objecttrackerlib"
-	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -43,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;L:\OpenCV\ml\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
@@ -116,7 +115,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="0"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;L:\OpenCV\ml\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
@@ -186,7 +185,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;&quot;L:\Basler\Pylon 2.0\pylon\include&quot;;&quot;L:\Basler\Pylon 2.0\genicam\library\cpp\include&quot;"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;&quot;L:\Basler\Pylon 2.0\pylon\include&quot;;&quot;L:\Basler\Pylon 2.0\genicam\library\cpp\include&quot;;L:\OpenCV\ml\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;USE_CAMERA_PYLON_GIGE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
@@ -257,7 +256,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;_CRT_SECURE_NO_DEPRECATE&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;L:\OpenCV\ml\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;USE_CAMERA_CMU_1394;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
@@ -330,7 +329,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="0"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;&quot;L:\Basler\Pylon 2.0\pylon\include&quot;;&quot;L:\Basler\Pylon 2.0\genicam\library\cpp\include&quot;"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;&quot;L:\Basler\Pylon 2.0\pylon\include&quot;;&quot;L:\Basler\Pylon 2.0\genicam\library\cpp\include&quot;;L:\OpenCV\ml\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;USE_CAMERA_PYLON_GIGE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
@@ -402,7 +401,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="0"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1"
+				AdditionalIncludeDirectories="L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;L:\OpenCV\ml\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;USE_CAMERA_CMU_1394;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				PrecompiledHeaderFile="$(IntDir)\$(SolutionName).pch"
@@ -606,10 +605,34 @@
 					RelativePath="..\ComponentGrayMask.h"
 					>
 				</File>
+				<File
+					RelativePath="..\ComponentMoveGrayToColor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMoveGrayToColor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentSobelDifferentiation.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentSobelDifferentiation.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="7 Particle detection"
 				>
+				<File
+					RelativePath="..\ComponentBlobDetectionCircularHough.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentBlobDetectionCircularHough.h"
+					>
+				</File>
 				<File
 					RelativePath="..\ComponentBlobDetectionMinMax.cpp"
 					>
@@ -635,11 +658,27 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentFilterParticles.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentFilterParticles.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentIDReaderRing.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\ComponentIDReaderRing.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMotionTemplateParticleDetector.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMotionTemplateParticleDetector.h"
 					>
 				</File>
 				<File
@@ -731,11 +770,35 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentBinarySmooth.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentBinarySmooth.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentBlobSelection.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\ComponentBlobSelection.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentInvertBinary.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentInvertBinary.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMorphology.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMorphology.h"
 					>
 				</File>
 			</Filter>
@@ -756,6 +819,14 @@
 				</File>
 				<File
 					RelativePath="..\ComponentAdaptiveBackgroundSubtractionMedian.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentAdaptiveBackgroundSubtractionMode.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentAdaptiveBackgroundSubtractionMode.h"
 					>
 				</File>
 				<File
@@ -819,6 +890,22 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentMoveColorToBinary.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMoveColorToBinary.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMoveColorToGray.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentMoveColorToGray.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentSpecificColorSubtraction.cpp"
 					>
 				</File>
@@ -830,6 +917,14 @@
 			<Filter
 				Name="10 Output"
 				>
+				<File
+					RelativePath="..\ComponentOutputDataAssociationTraining.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOutputDataAssociationTraining.h"
+					>
+				</File>
 				<File
 					RelativePath="..\ComponentOutputFile.cpp"
 					>
@@ -860,6 +955,14 @@
 				</File>
 				<File
 					RelativePath="..\ComponentOutputFramesImages.h"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOutputImageOverlayColor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentOutputImageOverlayColor.h"
 					>
 				</File>
 				<File
@@ -951,6 +1054,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\ComponentClassifierTracker.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\ComponentClassifierTracker.h"
+					>
+				</File>
+				<File
 					RelativePath="..\ComponentColorHistogramParticles.cpp"
 					>
 				</File>
@@ -988,14 +1099,6 @@
 				</File>
 				<File
 					RelativePath="..\ComponentMinFlowTracking.h"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentMotionTemplateTracking.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\ComponentMotionTemplateTracking.h"
 					>
 				</File>
 				<File
@@ -1347,6 +1450,14 @@
 		<Filter
 			Name="Utility Functions"
 			>
+			<File
+				RelativePath="..\DataAssociationClassifier.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\DataAssociationClassifier.h"
+				>
+			</File>
 			<File
 				RelativePath="..\ImageConversion.cpp"
 				>

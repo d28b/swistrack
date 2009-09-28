@@ -36,13 +36,13 @@ void captureVideoFrame();
 //
 void main1( int argc, char** argv )
 {
-  camshift cs;
+	camshift cs;
 	CvRect * pFaceRect = 0;
-	if( !initAll(&cs) ) exitProgram(&cs, -1);
+	if ( !initAll(&cs) ) exitProgram(&cs, -1);
 
 	// Capture and display video frames until a face
 	// is detected
-	while( 1 )
+	while ( 1 )
 	{
 		// Look for a face in the next video frame
 		captureVideoFrame();
@@ -50,17 +50,17 @@ void main1( int argc, char** argv )
 
 		// Show the display image
 		cvShowImage( DISPLAY_WINDOW, pVideoFrameCopy );
-		if( (char)27==cvWaitKey(1) ) exitProgram(&cs, 0);
+		if ( (char)27 == cvWaitKey(1) ) exitProgram(&cs, 0);
 
 		// exit loop when a face is detected
-		if(pFaceRect) break;
+		if (pFaceRect) break;
 	}
 
 	// initialize tracking
 	startTracking(&cs, pVideoFrameCopy, pFaceRect);
 
 	// Track the detected face using CamShift
-	while( 1 )
+	while ( 1 )
 	{
 		CvBox2D faceBox;
 
@@ -72,9 +72,9 @@ void main1( int argc, char** argv )
 
 		// outline face ellipse
 		cvEllipseBox(pVideoFrameCopy, faceBox,
-		             CV_RGB(255,0,0), 3, CV_AA, 0 );
+		             CV_RGB(255, 0, 0), 3, CV_AA, 0 );
 		cvShowImage( DISPLAY_WINDOW, pVideoFrameCopy );
-		if( (char)27==cvWaitKey(1) ) break;
+		if ( (char)27 == cvWaitKey(1) ) break;
 	}
 
 	exitProgram(&cs, 0);
@@ -86,17 +86,17 @@ void main1( int argc, char** argv )
 //
 int initAll(camshift * cs)
 {
-	if( !initCapture() ) return 0;
-	if( !initFaceDet(OPENCV_ROOT
-		"/data/haarcascades/haarcascade_frontalface_default.xml"))
+	if ( !initCapture() ) return 0;
+	if ( !initFaceDet(OPENCV_ROOT
+	                  "/data/haarcascades/haarcascade_frontalface_default.xml"))
 		return 0;
 
 	// Startup message tells user how to begin and how to exit
 	printf( "\n********************************************\n"
 	        "To exit, click inside the video display,\n"
 	        "then press the ESC key\n\n"
-			"Press <ENTER> to begin"
-			"\n********************************************\n" );
+	        "Press <ENTER> to begin"
+	        "\n********************************************\n" );
 	fgetc(stdin);
 
 	// Create the display window
@@ -104,7 +104,7 @@ int initAll(camshift * cs)
 
 	// Initialize tracker
 	captureVideoFrame();
-	if( !createTracker(cs, pVideoFrameCopy, 1) ) return 0;
+	if ( !createTracker(cs, pVideoFrameCopy, 1) ) return 0;
 
 	// Set Camshift parameters
 	setVmin(cs, 60);
@@ -139,15 +139,15 @@ void captureVideoFrame(camshift * cs)
 {
 	// Capture the next frame
 	IplImage  * pVideoFrame = nextVideoFrame();
-	if( !pVideoFrame ) exitProgram(cs, -1);
+	if ( !pVideoFrame ) exitProgram(cs, -1);
 
 	// Copy it to the display image, inverting it if needed
-	if( !pVideoFrameCopy )
+	if ( !pVideoFrameCopy )
 		pVideoFrameCopy = cvCreateImage( cvGetSize(pVideoFrame), 8, 3 );
 	cvCopy( pVideoFrame, pVideoFrameCopy, 0 );
 	pVideoFrameCopy->origin = pVideoFrame->origin;
 
-	if( 1 == pVideoFrameCopy->origin ) // 1 means the image is inverted
+	if ( 1 == pVideoFrameCopy->origin ) // 1 means the image is inverted
 	{
 		cvFlip( pVideoFrameCopy, 0, 0 );
 		pVideoFrameCopy->origin = 0;

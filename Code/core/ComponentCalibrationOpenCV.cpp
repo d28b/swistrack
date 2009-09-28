@@ -267,10 +267,10 @@ void THISCLASS::OnStart() {
 	intrinsic_matrix = cvCreateMat(3, 3, CV_32F);
 	cvZero(intrinsic_matrix);
 	//initial values currently not used, let openCV calcultate them
-	intrinsic_matrix->data.fl[0] = 0.2; //fx
+	intrinsic_matrix->data.fl[0] = 0.2f; //fx
 	intrinsic_matrix->data.fl[2] = 1032 / 2; //cx
 
-	intrinsic_matrix->data.fl[4] = 0.2; //fy
+	intrinsic_matrix->data.fl[4] = 0.2f; //fy
 	intrinsic_matrix->data.fl[5] = 778 / 2; //cy
 	intrinsic_matrix->data.fl[8] = 1;
 

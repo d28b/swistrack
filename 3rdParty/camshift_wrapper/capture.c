@@ -21,7 +21,7 @@ int initCapture()
 {
 	// Initialize video capture
 	pCapture = cvCaptureFromCAM( CV_CAP_ANY );
-	if( !pCapture )
+	if ( !pCapture )
 	{
 		fprintf(stderr, "failed to initialize video capture\n");
 		return 0;
@@ -48,7 +48,7 @@ void closeCapture()
 IplImage * nextVideoFrame()
 {
 	IplImage * pVideoFrame = cvQueryFrame( pCapture );
-	if( !pVideoFrame )
+	if ( !pVideoFrame )
 		fprintf(stderr, "failed to get a video frame\n");
 
 	return pVideoFrame;

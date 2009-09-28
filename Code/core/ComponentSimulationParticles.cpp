@@ -66,7 +66,7 @@ void THISCLASS::OnReloadConfiguration() {
 	// Check for stupid configurations
 	if (mCameraPixelSize <= 0) {
 		AddError(wxT("The pixel size must be bigger than 0."));
-		mCameraPixelSize = 0.01;
+		mCameraPixelSize = 0.01f;
 	}
 }
 

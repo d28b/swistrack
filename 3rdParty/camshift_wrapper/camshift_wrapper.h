@@ -13,29 +13,29 @@
 
 
 struct camshiftStruct {
-  // Parameters
-  int   nHistBins;                 // number of histogram bins
-  float **rangesArr;          // histogram range
-  int vmin; 
-  int vmax; 
-  int smin; // limits for calculating hue
-  int histogramDims;
-  // File-level variables
+	// Parameters
+	int   nHistBins;                 // number of histogram bins
+	float **rangesArr;          // histogram range
+	int vmin;
+	int vmax;
+	int smin; // limits for calculating hue
+	int histogramDims;
+	// File-level variables
 
-  IplImage * pChannels[NUM_CHANNELS]; 
-  //IplImage * pHueImg; // the Hue channel of the HSV image
-  //IplImage * pSaturationImg; // the Saturation channel of the HSV image
-  //IplImage * pValueImg; // the Saturation channel of the HSV image
+	IplImage * pChannels[NUM_CHANNELS];
+	//IplImage * pHueImg; // the Hue channel of the HSV image
+	//IplImage * pSaturationImg; // the Saturation channel of the HSV image
+	//IplImage * pValueImg; // the Saturation channel of the HSV image
 
 
-  IplImage * pMask; // this image is used for masking pixels
-  IplImage * pProbImg; // the face probability estimates for each pixel
+	IplImage * pMask; // this image is used for masking pixels
+	IplImage * pProbImg; // the face probability estimates for each pixel
 
-  CvHistogram * pHist; // histogram of hue in the original face image
-  
-  CvRect prevFaceRect;  // location of face in previous frame
-  CvBox2D faceBox;      // current face-location estimate
-  int nFrames;
+	CvHistogram * pHist; // histogram of hue in the original face image
+
+	CvRect prevFaceRect;  // location of face in previous frame
+	CvBox2D faceBox;      // current face-location estimate
+	int nFrames;
 };
 typedef struct camshiftStruct camshift;
 

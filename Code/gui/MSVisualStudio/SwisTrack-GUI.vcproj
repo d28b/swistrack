@@ -74,7 +74,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxbase28_net.lib wxbase28_xml.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib"
+				AdditionalDependencies="wxbase28_net.lib wxbase28_xml.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib ml.lib"
 				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -183,7 +183,7 @@
 				ExecutionBucket="9"
 				LinkLibraryDependencies="true"
 				UseLibraryDependencyInputs="false"
-				AdditionalDependencies="wxbase28d_net.lib wxbase28d_xml.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib"
+				AdditionalDependencies="wxbase28d_net.lib wxbase28d_xml.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib ml.lib"
 				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -286,7 +286,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxbase28d_net.lib wxbase28d_xml.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib GCBase_MDd_VC80_v1_1.lib GenApi_MDd_VC80_v1_1.lib PylonBase_MDd_VC80.lib PylonGigE_MDd_VC80.lib"
+				AdditionalDependencies="wxbase28d_net.lib wxbase28d_xml.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib GCBase_MDd_VC80_v1_1.lib GenApi_MDd_VC80_v1_1.lib PylonBase_MDd_VC80.lib PylonGigE_MDd_VC80.lib ml.lib"
 				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -387,7 +387,7 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="true"
 				UseLibraryDependencyInputs="false"
-				AdditionalDependencies="wxbase28d_net.lib wxbase28d_xml.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib 1394camera.lib"
+				AdditionalDependencies="wxbase28d_net.lib wxbase28d_xml.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib 1394camera.lib ml.lib"
 				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -489,7 +489,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxbase28_net.lib wxbase28_xml.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib GCBase_MD_VC80_v1_1.lib GenApi_MD_VC80_v1_1.lib PylonBase_MD_VC80.lib PylonGigE_MD_VC80.lib"
+				AdditionalDependencies="wxbase28_net.lib wxbase28_xml.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib GCBase_MD_VC80_v1_1.lib GenApi_MD_VC80_v1_1.lib PylonBase_MD_VC80.lib PylonGigE_MD_VC80.lib ml.lib"
 				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -589,7 +589,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxbase28_net.lib wxbase28_xml.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib 1394camera.lib"
+				AdditionalDependencies="wxbase28_net.lib wxbase28_xml.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib oleacc.lib odbc32.lib cv.lib highgui.lib cxcore.lib 1394camera.lib ml.lib"
 				OutputFile="$(SolutionDir)\..\..\SwisTrackEnvironment\$(SolutionName) - $(ConfigurationName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -1073,14 +1073,6 @@
 			</File>
 			<File
 				RelativePath="..\ConfigurationParameterGigECameraList.h"
-				>
-			</File>
-			<File
-				RelativePath="..\ConfigurationParameterImage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\ConfigurationParameterImage.h"
 				>
 			</File>
 			<File
