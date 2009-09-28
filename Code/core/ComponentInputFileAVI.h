@@ -31,6 +31,8 @@ public:
 	double GetFPS();
 
 private:
+	bool mFlipVertically;				//!< (configuration) Flip the image vertically (on some computers, the image appears upside down)
+
 	CvCapture* mCapture;				//!< Pointer to AVI sequence.
 	IplImage* mOutputImage;				//!< The last acquired image.
 

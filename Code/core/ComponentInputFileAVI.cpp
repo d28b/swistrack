@@ -6,6 +6,7 @@
 
 THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
 		Component(stc, wxT("InputFileAVI")),
+		mFlipVertically(false),
 		mCapture(0), mOutputImage(0),
 		mDisplayOutput(wxT("Output"), wxT("AVI File: Unprocessed Frame")) {
 
@@ -57,6 +58,7 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
+	mFlipVertically = GetConfigurationBool(wxT("FlipVertically"), false);
 }
 
 void THISCLASS::OnStep() {
@@ -73,6 +75,12 @@ void THISCLASS::OnStep() {
 		mCore->TriggerStop();
 		return;
 	}
+
+	// Flip the image if desired
+	if (mFlipVertically) {
+		cvFlip(mOutputImage, 0, 0);
+	}
+
 	// Set DataStructureImage
 	mCore->mDataStructureInput.mImage = mOutputImage;
 	mCore->mDataStructureInput.mFrameNumber = framenumber;
