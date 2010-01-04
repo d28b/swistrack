@@ -93,6 +93,10 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	IplImage *img = mCore->mDataStructureImageGray.mImage;
+	if (! img) {
+		AddError(wxT("No image available on the grayscale channel. You may want to add a 'Conversion to Grayscale' component."));
+		return;
+	}
 
 	//int fileid=0;
 	DataStructureParticles::tParticleVector::iterator it = mCore->mDataStructureParticles.mParticles->begin();
