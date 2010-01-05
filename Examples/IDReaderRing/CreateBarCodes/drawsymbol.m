@@ -2,8 +2,8 @@ function drawsymbol(N, symbol, name)
 
 symbolchips=dec2bin(symbol, N)-48;
 
-figure(3);
-clf;
+%figure(3);
+%clf;
 hold on;
 
 % Outer circle (black)
