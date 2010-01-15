@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
-	<friendlyname>Dynamic Nearest Neighbor Tracking</friendlyname>
-	<description>A fork of the basic tracking component, that will attempt to handle long-term tracking.  It will automatically create trackers when new particles are detected, and delete tracks when the particle stops moving.
+	<friendlyname>Meanshift based on binary image input</friendlyname>
+	<description>
 	</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/DynamicNearestNeighborTracking</url>
 	<displayimage>Output</displayimage>

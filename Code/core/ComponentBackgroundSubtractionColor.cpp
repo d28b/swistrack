@@ -23,6 +23,7 @@ THISCLASS::~ComponentBackgroundSubtractionColor() {
 }
 
 void THISCLASS::OnStart() {
+
 	wxString filename_string = GetConfigurationString(wxT("BackgroundImage"), wxT(""));
 	wxFileName filename = mCore->GetProjectFileName(filename_string);
 	if (filename.IsOk()) {
@@ -63,6 +64,7 @@ void THISCLASS::OnStep() {
 		AddError(wxT("No input Image"));
 		return;
 	}
+		
 	if (inputimage->nChannels != 3)
 	{
 		AddError(wxT("Input image has not 3 channels."));

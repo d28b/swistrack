@@ -10,7 +10,11 @@ TARGET    := libSwisTrackCore.a
 
 # Files
 FILES_CPP := $(wildcard *.cpp)
+FILES_CPP   += $(SWISTRACK_ROOT)/../src/ComponentInputFileSquint.cpp
+FILES_CPP   += $(SWISTRACK_ROOT)/../src/ComponentOutputFileSquint.cpp
 FILES_H   := $(wildcard *.h)
+FILES_H   += $(SWISTRACK_ROOT)/../src/ComponentInputFileSquint.h
+FILES_H   += $(SWISTRACK_ROOT)/../src/ComponentOutputFileSquint.h
 FILES_O   := $(FILES_CPP:.cpp=.o)
 FILES_D   := $(FILES_CPP:.cpp=.d)
 

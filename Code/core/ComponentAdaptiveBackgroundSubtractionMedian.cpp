@@ -3,6 +3,7 @@
 
 #include <highgui.h>
 #include "DisplayEditor.h"
+#include <cstdio>
 
 int LInfDistance(CvScalar p1, CvScalar p2) {
   int maxVal = 0;
@@ -54,8 +55,13 @@ void THISCLASS::OnStep() {
 		return;
 	}
 	if (!mBackgroundModel) {
+  	cvSaveImage("aaaaa.jpg", inputImage);
+
 	  mBackgroundModel = cvCloneImage(inputImage);
 	}
+	char filename[30];
+	sprintf(filename, "Baseline%d.jpg", mCore->mDataStructureInput.mFrameNumber);
+	cvSaveImage(filename, inputImage);
 
 	if (! mOutputImage) {
 	  mOutputImage = cvCloneImage(inputImage);
