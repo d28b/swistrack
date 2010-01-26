@@ -22,7 +22,8 @@ THISCLASS::ComponentBlobDetectionCircularHough(SwisTrackCore *stc):
 	Initialize();
 }
 
-THISCLASS::~ComponentBlobDetectionCircularHough() {}
+THISCLASS::~ComponentBlobDetectionCircularHough() {
+}
 
 void THISCLASS::OnStart() 
 {
@@ -72,11 +73,18 @@ void THISCLASS::OnStep()
 {
 	// Get and check input image
 	IplImage *inputimage = mCore->mDataStructureImageGray.mImage;
-	IplImage *outputimage = mCore->mDataStructureImageColor.mImage;	
+	IplImage *outputimage = cvCreateImage(cvSize( inputimage->width,
+						      inputimage->height), 8, 3 );
+	cvMerge(inputimage,inputimage,inputimage, NULL, outputimage);
 	if (! inputimage) {
 		AddError(wxT("No input image."));
 		return;
 	}
+	if (! outputimage) {
+		AddError(wxT("No output image."));
+		return;
+	}
+
 	if (inputimage->nChannels != 1) {
 		AddError(wxT("The input image is not a gray image."));
 		return;
@@ -104,8 +112,7 @@ void THISCLASS::OnStep()
 		// x=cvRound(p[0])
 		// y=cvRound(p[1])
 		// radius=cvRound(p[2])
-         	cvCircle( outputimage, cvPoint(cvRound(p[0]),cvRound(p[1])), 
-             	cvRound(p[2]), CV_RGB(255,0,0), 2 );
+	  cvCircle( outputimage, cvPoint(cvRound(p[0]), cvRound(p[1])), cvRound(p[2]), CV_RGB(255,0,0), 2 );
 		Particle newparticle;
 		newparticle.mCenter.x = p[0];
 		newparticle.mCenter.y = p[1];
@@ -120,7 +127,7 @@ void THISCLASS::OnStep()
 
 	// Set these particles
 	mCore->mDataStructureParticles.mParticles = &mParticles;
-	mCore->mDataStructureImageColor.mImage = outputimage;
+	  //mCore->mDataStructureImageColor.mImage = outputimage;
 	// Let the DisplayImage know about our image
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
