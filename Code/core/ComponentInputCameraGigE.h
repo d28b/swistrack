@@ -47,6 +47,7 @@ private:
 	eTriggerMode mTriggerMode;							//!< (configuration) The trigger source.
 	double mTriggerTimerFPS;							//!< (configuration) The FPS of the trigger timer.
 	int mInputBufferSize;								//!< (configuration) The number of input buffer images.
+  int mEthernetPacketSize;							//!< (configuration) The ethernet packet size.
 
 	Pylon::CBaslerGigECamera *mCamera;					//!< Camera object.
 	Pylon::CBaslerGigEStreamGrabber *mStreamGrabber;	//!< Stream grabber object.

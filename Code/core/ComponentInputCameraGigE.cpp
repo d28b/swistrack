@@ -44,6 +44,7 @@ void THISCLASS::OnStart() {
 	mTriggerMode = (eTriggerMode)GetConfigurationInt(wxT("TriggerMode"), 0);
 	mTriggerTimerFPS = GetConfigurationInt(wxT("TriggerTimerFPS"), 10);
 	mInputBufferSize = GetConfigurationInt(wxT("InputBufferSize"), 8);
+  mEthernetPacketSize = GetConfigurationInt(wxT("EthernetPacketSize"), 6500);
 	mFrameNumberStart = -1;
 
 	// Check the maximum amount of buffers
@@ -148,6 +149,9 @@ void THISCLASS::OnStart() {
 			mCamera->TriggerSource.SetValue(Basler_GigECameraParams::TriggerSource_Software);
 		}
 	}
+
+  // Set Ethernet Packet Size
+  mCamera->GevSCPSPacketSize.SetValue(mEthernetPacketSize);
 
 	// Configure reloadable values
 	OnReloadConfiguration();
