@@ -108,6 +108,18 @@ void THISCLASS::OnStep() {
 			if ((mCompactnessSelection == false) || ((tmpParticle.mCompactness > mMinCompactness) && (tmpParticle.mCompactness < mMaxCompactness)))
 			{
 				cvDrawContours(outputImage, contour, cvScalarAll(255), cvScalarAll(255), 0, CV_FILLED);
+
+  			// compute orientation from moments
+  			if (moments.mu20 == moments.mu02) {
+  				if (moments.mu11 == 0) tmpParticle.mOrientation = 0;
+  				else if (moments.mu11 > 0) tmpParticle.mOrientation = PI/4;
+  				else tmpParticle.mOrientation = -PI/4;
+  			}
+  			else if (moments.mu20 > moments.mu02)
+  				tmpParticle.mOrientation = atan(2*moments.mu11 / (moments.mu20-moments.mu02))/2;
+  			else
+  				tmpParticle.mOrientation = atan(2*moments.mu11 / (moments.mu20-moments.mu02))/2 + PI/2;
+
 				// Check if we have already enough particles
 				if (mParticles.size() == mMaxNumber)
 				{

@@ -271,9 +271,20 @@ void THISCLASS::FindBlobs(IplImage *inputimage, cColor &color) {
 		if ((color.mSelectionByArea == false) || ((newparticle.mArea <= color.mAreaMax) && (newparticle.mArea >= color.mAreaMin))) {
 			newparticle.mCompactness = GetContourCompactness(contour);
 			if ((color.mSelectionByCompactness == false) || ((newparticle.mCompactness > color.mCompactnessMin) && (newparticle.mCompactness < color.mCompactnessMax))) {
-				double centralmoment = cvGetCentralMoment(&moments, 2, 0) - cvGetCentralMoment(&moments, 0, 2);
-				newparticle.mOrientation = atan(2 * cvGetCentralMoment(&moments, 1, 1) / (centralmoment + sqrt(centralmoment * centralmoment + 4 * cvGetCentralMoment(&moments, 1, 1) * cvGetCentralMoment(&moments, 1, 1))));
+//				double centralmoment = cvGetCentralMoment(&moments, 2, 0) - cvGetCentralMoment(&moments, 0, 2);
+//				newparticle.mOrientation = atan(2 * cvGetCentralMoment(&moments, 1, 1) / (centralmoment + sqrt(centralmoment * centralmoment + 4 * cvGetCentralMoment(&moments, 1, 1) * cvGetCentralMoment(&moments, 1, 1))));
 
+  			// compute orientation from moments
+  			if (moments.mu20 == moments.mu02) {
+  				if (moments.mu11 == 0) newparticle.mOrientation = 0;
+  				else if (moments.mu11 > 0) newparticle.mOrientation = PI/4;
+  				else newparticle.mOrientation = -PI/4;
+  			}
+  			else if (moments.mu20 > moments.mu02)
+  				newparticle.mOrientation = atan(2*moments.mu11 / (moments.mu20-moments.mu02))/2;
+  			else
+  				newparticle.mOrientation = atan(2*moments.mu11 / (moments.mu20-moments.mu02))/2 + PI/2;
+				
 				// Fill unused values
 				newparticle.mID = -1;
 				newparticle.mIDCovariance = -1;
