@@ -78,6 +78,7 @@
 			<unit>bytes</unit>
 			<default>6500</default>
 			<slider>false</slider>
+			<sliderstep>4</sliderstep>
 			<reloadable>false</reloadable>
 		</parameter>
 		<title>Area of Interest</title>
@@ -93,7 +94,7 @@
 			</min>
 			<max>
 				<x>1032</x>
-				<y>778</y>
+				<y>800</y>
 			</max>
 			<default>
 				<x>0</x>
@@ -113,7 +114,7 @@
 			</min>
 			<max>
 				<x>1032</x>
-				<y>778</y>
+				<y>800</y>
 			</max>
 			<default>
 				<x>1032</x>

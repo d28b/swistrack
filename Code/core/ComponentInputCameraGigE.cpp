@@ -44,7 +44,7 @@ void THISCLASS::OnStart() {
 	mTriggerMode = (eTriggerMode)GetConfigurationInt(wxT("TriggerMode"), 0);
 	mTriggerTimerFPS = GetConfigurationInt(wxT("TriggerTimerFPS"), 10);
 	mInputBufferSize = GetConfigurationInt(wxT("InputBufferSize"), 8);
-  mEthernetPacketSize = GetConfigurationInt(wxT("EthernetPacketSize"), 6500);
+	mEthernetPacketSize = GetConfigurationInt(wxT("EthernetPacketSize"), 6500);
 	mFrameNumberStart = -1;
 
 	// Check the maximum amount of buffers
@@ -150,11 +150,17 @@ void THISCLASS::OnStart() {
 		}
 	}
 
-  // Set Ethernet Packet Size
-  mCamera->GevSCPSPacketSize.SetValue(mEthernetPacketSize);
-
 	// Configure reloadable values
 	OnReloadConfiguration();
+
+	// Set Ethernet Packet Size
+	try { 
+		mCamera->GevSCPSPacketSize.SetValue(mEthernetPacketSize - mEthernetPacketSize%4); // only stepsize = 4 allowed
+	} catch (GenICam::GenericException &e) {
+		printf("%s\n", e.GetDescription());
+		AddError(wxT("Error while setting Ethernet Packet Size."));
+		return;
+	}
 
 	// Enable chunk mode (to obtain the trigger input counter)
 	mCamera->ChunkModeActive.SetValue(true);
