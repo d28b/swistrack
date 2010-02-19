@@ -57,7 +57,7 @@ private:
 	cColor mColor2;				//!< (configuration) Color 2.
 	DataStructureParticles::tParticleVector mParticles;	//!< The list of detected particles. This is the list given to DataStructureParticles.
 	Display mDisplayOutput;								//!< The Display showing the last acquired image and the particles.
-	int mOutputParams;				//!< (configuration) Selects the blob for output parameters (1st, 2nd, avg)
+	wxString mOutputParams;				//!< (configuration) Selects the blob for output parameters (1st, 2nd, avg)
 
 	//! Returns the compactness of a contour. Used by the blob detection algorithm.
 	double GetContourCompactness(const void* contour);
