@@ -3,7 +3,7 @@ PKG_DIR=swistrack
 SCRIPTS_DIR = $(PKG_DIR)/Packages/Debian/scripts
 SCRIPTS_DIR2 = scripts
 # the gpg key to use to sign the package:
-GPG_KEY_ID=6FF7AEA2
+GPG_KEY_ID=BF435980
 DISTRIB=hardy
 
 all: help
