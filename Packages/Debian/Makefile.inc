@@ -29,5 +29,5 @@ CPPFLAGS_ADD       += -DUSE_XVID
 LDLIBS_ADD         += -lxvidcore
 
 # Components that depend on the Boost library (activate the following lines to compile with these components)
-CPPFLAGS_ADD       += -DUSE_BOOST
-LDLIBS_ADD         += -lboost_graph
+#CPPFLAGS_ADD       += -DUSE_BOOST
+#LDLIBS_ADD         += -lboost_graph
