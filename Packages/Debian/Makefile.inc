@@ -24,6 +24,13 @@ WXWIDGETS_LDLIBS   := `wx-config --version=2.8 --libs`
 #CPPFLAGS_ADD       += -I$(PYLON_ROOT)/include -I$(GENICAM_ROOT_V1_1)/include/genicam -DUSE_CAMERA_PYLON_GIGE
 #LDLIBS_ADD         += -L$(PYLON_ROOT)/lib -L$(GENICAM_ROOT_V1_1)/lib -lpylonbase
 
+# GiGE Proselica Camera Component (activate the following lines to compile with this component)
+#CPPFLAGS_ADD       += -DUSE_CAMERA_PROSILICA_GIGE
+
+# SQlite3 (activate the following lines to compile with components using this library)
+CPPFLAGS_ADD       += -DUSE_SQLITE3
+LDLIBS_ADD         += -lsqlite3
+
 # XVID component (activate the following lines to compile with this component)
 CPPFLAGS_ADD       += -DUSE_XVID
 LDLIBS_ADD         += -lxvidcore
