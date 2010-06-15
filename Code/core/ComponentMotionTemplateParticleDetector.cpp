@@ -62,9 +62,7 @@ void THISCLASS::OnStep()
 {
 
 	wxTimeSpan timeSinceLastFrame = mCore->mDataStructureInput.TimeSinceLastFrame();
-//Edited 
 	IplImage *inputImage = mCore->mDataStructureInput.mImage;
-//	IplImage *inputImage = mCore->mDataStructureImageColor.mImage;
 
 	if (! inputImage) {
 		AddError(wxT("No input image."));

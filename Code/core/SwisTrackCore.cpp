@@ -9,8 +9,6 @@
 #include "ComponentInputCameraGigE.h"
 #include "ComponentInputCameraProselicaGigE.h"
 #include "ComponentInputFileAVI.h"
-#include "ComponentOutputFileSquint.h"
-#include "ComponentInputFileSquint.h"
 #include "ComponentInputFileImage.h"
 #include "ComponentConvertToGray.h"
 #include "ComponentConvertToColor.h"
@@ -24,7 +22,6 @@
 #include "ComponentAdaptiveBackgroundSubtractionColor.h"
 #include "ComponentAdaptiveBackgroundSubtractionMedian.h"
 #include "ComponentAdaptiveBackgroundSubtractionMode.h"
-#include "ComponentAdaptiveBackgroundSubtractionCodebook.h"
 #include "ComponentBackgroundSubtractionCheungKamath.h"
 #include "ComponentGrayMask.h"
 #include "ComponentSpecificColorSubtraction.h"
@@ -35,7 +32,6 @@
 #include "ComponentMoveBinaryToColor.h"
 #include "ComponentMoveColorToBinary.h"
 #include "ComponentMoveColorToGray.h"
-#include "ComponentForegroundContourCleanup.h"
 #include "ComponentThresholdGray.h"
 #include "ComponentThresholdColorCommon.h"
 #include "ComponentThresholdColorIndependent.h"
@@ -82,8 +78,6 @@
 #include "ComponentDoubleThresholdColorIndependent.h"
 #include "ComponentSobelDifferentiation.h"
 #include "ComponentBinarySmooth.h"
-#include "ComponentBinaryMeanshift.h"
-#include "ComponentBinaryCamshift.h"
 
 #include "NMEALog.h"
 THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
@@ -120,8 +114,6 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentInputCameraGigE(this));
 	mAvailableComponents.push_back(new ComponentInputCameraProselicaGigE(this));
 	mAvailableComponents.push_back(new ComponentInputFileAVI(this));
-	mAvailableComponents.push_back(new ComponentOutputFileSquint(this));
-	mAvailableComponents.push_back(new ComponentInputFileSquint(this));
 	mAvailableComponents.push_back(new ComponentInputFileImage(this));
 	//Input conversion
 	mAvailableComponents.push_back(new ComponentConvertToGray(this));
@@ -134,7 +126,6 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionMedian(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionMode(this));
-	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionCodebook(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionCheungKamath(this));
 	mAvailableComponents.push_back(new ComponentSpecificColorSubtraction(this));
 	mAvailableComponents.push_back(new ComponentColorMask(this));
@@ -157,7 +148,6 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	//Thresholding Gray
 	mAvailableComponents.push_back(new ComponentThresholdGray(this));
 	//Preprocessing Binary
-	mAvailableComponents.push_back(new ComponentForegroundContourCleanup(this));
 	mAvailableComponents.push_back(new ComponentBinaryDilation(this));
 	mAvailableComponents.push_back(new ComponentMorphology(this));
 	mAvailableComponents.push_back(new ComponentBinaryErosion(this));
@@ -189,8 +179,6 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentFilterParticles(this));
 	mAvailableComponents.push_back(new ComponentTrackSmoothing(this));
 	mAvailableComponents.push_back(new ComponentKalmanFilterTrack(this));
-	mAvailableComponents.push_back(new ComponentBinaryMeanshift(this));
-	mAvailableComponents.push_back(new ComponentBinaryCamshift(this));
 
 	//Output
 	mAvailableComponents.push_back(new ComponentOutputFile(this));

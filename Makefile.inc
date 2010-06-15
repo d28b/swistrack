@@ -38,7 +38,3 @@ WXWIDGETS_LDLIBS   := `wx-config --version=2.8 --libs`
 # Boost (activate the following lines to compile with components using the Boost library)
 #CPPFLAGS_ADD       += -DUSE_BOOST
 #LDLIBS_ADD         += -lboost_graph
- 
-LDLIBS_ADD          += -L$(SWISTRACK_ROOT)/../libSquintArmyKnife -lSquintArmyKnife
-CPPFLAGS_ADD       += -I$(SWISTRACK_ROOT)/../src -I. -I$(SWISTRACK_ROOT)/../libSquintArmyKnife
-LD_LIBRARY_PATH=$(SWISTRACK_ROOT)/../libSquintArmyKnife
