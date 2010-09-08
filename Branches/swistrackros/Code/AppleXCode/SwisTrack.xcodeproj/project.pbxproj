@@ -1,0 +1,1057 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E91A15E60EAD20ED009B8232 /* ComponentTrackSmoothing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91A15E40EAD20ED009B8232 /* ComponentTrackSmoothing.cpp */; };
+		E91A15EA0EAD2116009B8232 /* ConfigurationParameterDate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91A15E80EAD2116009B8232 /* ConfigurationParameterDate.cpp */; };
+		E91A15ED0EAD2136009B8232 /* ComponentOpticalFlowPyrLKTracking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91A15EB0EAD2136009B8232 /* ComponentOpticalFlowPyrLKTracking.cpp */; };
+		E91A15F00EAD2143009B8232 /* ComponentDynamicNearestNeighborTracking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E91A15EE0EAD2143009B8232 /* ComponentDynamicNearestNeighborTracking.cpp */; };
+		E99BCF450E9ADAB90017989E /* CommunicationCommandHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCE9F0E9ADAB80017989E /* CommunicationCommandHandler.cpp */; };
+		E99BCF460E9ADAB90017989E /* CommunicationInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEA10E9ADAB80017989E /* CommunicationInterface.cpp */; };
+		E99BCF470E9ADAB90017989E /* CommunicationMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEA30E9ADAB80017989E /* CommunicationMessage.cpp */; };
+		E99BCF480E9ADAB90017989E /* CommunicationNMEAInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEA50E9ADAB80017989E /* CommunicationNMEAInterface.cpp */; };
+		E99BCF490E9ADAB90017989E /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEA70E9ADAB80017989E /* Component.cpp */; };
+		E99BCF4A0E9ADAB90017989E /* ComponentAdaptiveBackgroundSubtractionColor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEA90E9ADAB80017989E /* ComponentAdaptiveBackgroundSubtractionColor.cpp */; };
+		E99BCF4B0E9ADAB90017989E /* ComponentAdaptiveBackgroundSubtractionGray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEAB0E9ADAB80017989E /* ComponentAdaptiveBackgroundSubtractionGray.cpp */; };
+		E99BCF4C0E9ADAB90017989E /* ComponentBackgroundSubtractionColor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEAD0E9ADAB80017989E /* ComponentBackgroundSubtractionColor.cpp */; };
+		E99BCF4D0E9ADAB90017989E /* ComponentBackgroundSubtractionGray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEAF0E9ADAB80017989E /* ComponentBackgroundSubtractionGray.cpp */; };
+		E99BCF4E0E9ADAB90017989E /* ComponentBinaryDilation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEB10E9ADAB80017989E /* ComponentBinaryDilation.cpp */; };
+		E99BCF4F0E9ADAB90017989E /* ComponentBinaryErosion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEB30E9ADAB80017989E /* ComponentBinaryErosion.cpp */; };
+		E99BCF500E9ADAB90017989E /* ComponentBinaryMask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEB50E9ADAB80017989E /* ComponentBinaryMask.cpp */; };
+		E99BCF510E9ADAB90017989E /* ComponentBlobDetectionMinMax.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEB70E9ADAB80017989E /* ComponentBlobDetectionMinMax.cpp */; };
+		E99BCF520E9ADAB90017989E /* ComponentBlobDetectionTwoColors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEB90E9ADAB80017989E /* ComponentBlobDetectionTwoColors.cpp */; };
+		E99BCF530E9ADAB90017989E /* ComponentBlobSelection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEBB0E9ADAB80017989E /* ComponentBlobSelection.cpp */; };
+		E99BCF540E9ADAB90017989E /* ComponentCalibrationLinear.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEBD0E9ADAB80017989E /* ComponentCalibrationLinear.cpp */; };
+		E99BCF550E9ADAB90017989E /* ComponentCalibrationTSAI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEBF0E9ADAB80017989E /* ComponentCalibrationTSAI.cpp */; };
+		E99BCF560E9ADAB90017989E /* ComponentCategory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEC10E9ADAB80017989E /* ComponentCategory.cpp */; };
+		E99BCF570E9ADAB90017989E /* ComponentChannelArithmetic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEC30E9ADAB80017989E /* ComponentChannelArithmetic.cpp */; };
+		E99BCF580E9ADAB90017989E /* ComponentColorBlur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEC50E9ADAB80017989E /* ComponentColorBlur.cpp */; };
+		E99BCF590E9ADAB90017989E /* ComponentColorMask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEC70E9ADAB80017989E /* ComponentColorMask.cpp */; };
+		E99BCF5A0E9ADAB90017989E /* ComponentConvertBayerToColor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEC90E9ADAB80017989E /* ComponentConvertBayerToColor.cpp */; };
+		E99BCF5B0E9ADAB90017989E /* ComponentConvertToColor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCECB0E9ADAB80017989E /* ComponentConvertToColor.cpp */; };
+		E99BCF5C0E9ADAB90017989E /* ComponentConvertToGray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCECD0E9ADAB80017989E /* ComponentConvertToGray.cpp */; };
+		E99BCF5D0E9ADAB90017989E /* ComponentDoubleThresholdColorIndependent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCECF0E9ADAB80017989E /* ComponentDoubleThresholdColorIndependent.cpp */; };
+		E99BCF5E0E9ADAB90017989E /* ComponentEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCED10E9ADAB80017989E /* ComponentEditor.cpp */; };
+		E99BCF5F0E9ADAB90017989E /* ComponentGrayMask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCED30E9ADAB80017989E /* ComponentGrayMask.cpp */; };
+		E99BCF600E9ADAB90017989E /* ComponentHSVBackgroundSubtractionColor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCED50E9ADAB80017989E /* ComponentHSVBackgroundSubtractionColor.cpp */; };
+		E99BCF610E9ADAB90017989E /* ComponentIDReaderRing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCED70E9ADAB80017989E /* ComponentIDReaderRing.cpp */; };
+		E99BCF620E9ADAB90017989E /* ComponentInputCamera1394.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCED90E9ADAB80017989E /* ComponentInputCamera1394.cpp */; };
+		E99BCF630E9ADAB90017989E /* ComponentInputCameraGigE.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEDB0E9ADAB80017989E /* ComponentInputCameraGigE.cpp */; };
+		E99BCF640E9ADAB90017989E /* ComponentInputCameraUSB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEDD0E9ADAB80017989E /* ComponentInputCameraUSB.cpp */; };
+		E99BCF650E9ADAB90017989E /* ComponentInputFileAVI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEDF0E9ADAB80017989E /* ComponentInputFileAVI.cpp */; };
+		E99BCF660E9ADAB90017989E /* ComponentInputFileImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEE10E9ADAB80017989E /* ComponentInputFileImage.cpp */; };
+		E99BCF670E9ADAB90017989E /* ComponentNearestNeighborTracking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEE30E9ADAB80017989E /* ComponentNearestNeighborTracking.cpp */; };
+		E99BCF680E9ADAB90017989E /* ComponentOutputAVI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEE50E9ADAB80017989E /* ComponentOutputAVI.cpp */; };
+		E99BCF690E9ADAB90017989E /* ComponentOutputFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEE70E9ADAB80017989E /* ComponentOutputFile.cpp */; };
+		E99BCF6A0E9ADAB90017989E /* ComponentOutputFileAVI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEE90E9ADAB80017989E /* ComponentOutputFileAVI.cpp */; };
+		E99BCF6B0E9ADAB90017989E /* ComponentOutputFileM4V.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEEB0E9ADAB80017989E /* ComponentOutputFileM4V.cpp */; };
+		E99BCF6C0E9ADAB90017989E /* ComponentOutputMarkFrameManual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEED0E9ADAB80017989E /* ComponentOutputMarkFrameManual.cpp */; };
+		E99BCF6D0E9ADAB90017989E /* ComponentOutputParticles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEEF0E9ADAB80017989E /* ComponentOutputParticles.cpp */; };
+		E99BCF6E0E9ADAB90017989E /* ComponentSimulationParticles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEF10E9ADAB80017989E /* ComponentSimulationParticles.cpp */; };
+		E99BCF6F0E9ADAB90017989E /* ComponentSpecificColorSubtraction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEF30E9ADAB80017989E /* ComponentSpecificColorSubtraction.cpp */; };
+		E99BCF700E9ADAB90017989E /* ComponentThresholdColorCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEF50E9ADAB80017989E /* ComponentThresholdColorCommon.cpp */; };
+		E99BCF710E9ADAB90017989E /* ComponentThresholdColorIndependent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEF70E9ADAB80017989E /* ComponentThresholdColorIndependent.cpp */; };
+		E99BCF720E9ADAB90017989E /* ComponentThresholdGray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEF90E9ADAB80017989E /* ComponentThresholdGray.cpp */; };
+		E99BCF730E9ADAB90017989E /* ComponentTracking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEFB0E9ADAB80017989E /* ComponentTracking.cpp */; };
+		E99BCF740E9ADAB90017989E /* ComponentTrigger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEFD0E9ADAB80017989E /* ComponentTrigger.cpp */; };
+		E99BCF750E9ADAB90017989E /* ComponentTriggerCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCEFF0E9ADAB80017989E /* ComponentTriggerCounter.cpp */; };
+		E99BCF760E9ADAB90017989E /* ComponentTriggerTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF010E9ADAB80017989E /* ComponentTriggerTimer.cpp */; };
+		E99BCF770E9ADAB90017989E /* ConfigurationConversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF030E9ADAB80017989E /* ConfigurationConversion.cpp */; };
+		E99BCF780E9ADAB90017989E /* ConfigurationReaderXML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF050E9ADAB80017989E /* ConfigurationReaderXML.cpp */; };
+		E99BCF790E9ADAB90017989E /* ConfigurationWriterXML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF070E9ADAB80017989E /* ConfigurationWriterXML.cpp */; };
+		E99BCF7A0E9ADAB90017989E /* ConfigurationXML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF090E9ADAB80017989E /* ConfigurationXML.cpp */; };
+		E99BCF7B0E9ADAB90017989E /* DataStructure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF0B0E9ADAB80017989E /* DataStructure.cpp */; };
+		E99BCF7C0E9ADAB90017989E /* DataStructureImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF0D0E9ADAB80017989E /* DataStructureImage.cpp */; };
+		E99BCF7D0E9ADAB90017989E /* DataStructureInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF0F0E9ADAB80017989E /* DataStructureInput.cpp */; };
+		E99BCF7E0E9ADAB90017989E /* DataStructureParticles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF110E9ADAB80017989E /* DataStructureParticles.cpp */; };
+		E99BCF7F0E9ADAB90017989E /* DataStructureTracks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF130E9ADAB80017989E /* DataStructureTracks.cpp */; };
+		E99BCF800E9ADAB90017989E /* Display.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF150E9ADAB80017989E /* Display.cpp */; };
+		E99BCF810E9ADAB90017989E /* DisplayEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF170E9ADAB80017989E /* DisplayEditor.cpp */; };
+		E99BCF820E9ADAB90017989E /* DisplayRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF190E9ADAB80017989E /* DisplayRenderer.cpp */; };
+		E99BCF830E9ADAB90017989E /* DisplaySubscriberInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF1B0E9ADAB80017989E /* DisplaySubscriberInterface.cpp */; };
+		E99BCF850E9ADAB90017989E /* ErrorList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF1F0E9ADAB80017989E /* ErrorList.cpp */; };
+		E99BCF860E9ADAB90017989E /* ErrorListItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF210E9ADAB80017989E /* ErrorListItem.cpp */; };
+		E99BCF870E9ADAB90017989E /* ImageConversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF230E9ADAB80017989E /* ImageConversion.cpp */; };
+		E99BCF890E9ADAB90017989E /* ObjectList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF270E9ADAB80017989E /* ObjectList.cpp */; };
+		E99BCF8A0E9ADAB90017989E /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF290E9ADAB80017989E /* Particle.cpp */; };
+		E99BCF8B0E9ADAB90017989E /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF2B0E9ADAB80017989E /* Random.cpp */; };
+		E99BCF8C0E9ADAB90017989E /* RandomExponential.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF2D0E9ADAB80017989E /* RandomExponential.cpp */; };
+		E99BCF8D0E9ADAB90017989E /* RandomNormal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF300E9ADAB80017989E /* RandomNormal.cpp */; };
+		E99BCF8E0E9ADAB90017989E /* RandomPoisson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF320E9ADAB80017989E /* RandomPoisson.cpp */; };
+		E99BCF900E9ADAB90017989E /* SimulationParticles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF350E9ADAB80017989E /* SimulationParticles.cpp */; };
+		E99BCF910E9ADAB90017989E /* StatusItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF370E9ADAB80017989E /* StatusItem.cpp */; };
+		E99BCF920E9ADAB90017989E /* SwisTrackCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF390E9ADAB80017989E /* SwisTrackCore.cpp */; };
+		E99BCF930E9ADAB90017989E /* SwisTrackCoreEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF3B0E9ADAB80017989E /* SwisTrackCoreEditor.cpp */; };
+		E99BCF940E9ADAB90017989E /* SwisTrackCoreEventRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF3D0E9ADAB80017989E /* SwisTrackCoreEventRecorder.cpp */; };
+		E99BCF950E9ADAB90017989E /* SwisTrackCoreInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF3F0E9ADAB80017989E /* SwisTrackCoreInterface.cpp */; };
+		E99BCF960E9ADAB90017989E /* SwisTrackCoreTrigger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF410E9ADAB80017989E /* SwisTrackCoreTrigger.cpp */; };
+		E99BCF970E9ADAB90017989E /* Track.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCF430E9ADAB80017989E /* Track.cpp */; };
+		E99BD04D0E9AF0530017989E /* AboutDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCFD80E9AF0530017989E /* AboutDialog.cpp */; };
+		E99BD04E0E9AF0530017989E /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BCFDA0E9AF0530017989E /* Application.cpp */; };
+		E99BD07F0E9AF0530017989E /* Canvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD00D0E9AF0530017989E /* Canvas.cpp */; };
+		E99BD0800E9AF0530017989E /* CanvasAnnotation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD00F0E9AF0530017989E /* CanvasAnnotation.cpp */; };
+		E99BD0810E9AF0530017989E /* CanvasPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0110E9AF0530017989E /* CanvasPanel.cpp */; };
+		E99BD0820E9AF0530017989E /* CanvasTitle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0130E9AF0530017989E /* CanvasTitle.cpp */; };
+		E99BD0830E9AF0530017989E /* ComponentListPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0150E9AF0530017989E /* ComponentListPanel.cpp */; };
+		E99BD0840E9AF0530017989E /* ComponentsDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0170E9AF0530017989E /* ComponentsDialog.cpp */; };
+		E99BD0850E9AF0530017989E /* ComponentTreeItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0190E9AF0530017989E /* ComponentTreeItem.cpp */; };
+		E99BD0860E9AF0530017989E /* ConfigurationPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD01B0E9AF0530017989E /* ConfigurationPanel.cpp */; };
+		E99BD0870E9AF0530017989E /* ConfigurationParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD01D0E9AF0530017989E /* ConfigurationParameter.cpp */; };
+		E99BD0880E9AF0530017989E /* ConfigurationParameterAngle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD01F0E9AF0530017989E /* ConfigurationParameterAngle.cpp */; };
+		E99BD0890E9AF0530017989E /* ConfigurationParameterButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0210E9AF0530017989E /* ConfigurationParameterButton.cpp */; };
+		E99BD08A0E9AF0530017989E /* ConfigurationParameterCheckBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0230E9AF0530017989E /* ConfigurationParameterCheckBox.cpp */; };
+		E99BD08B0E9AF0530017989E /* ConfigurationParameterColor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0250E9AF0530017989E /* ConfigurationParameterColor.cpp */; };
+		E99BD08C0E9AF0530017989E /* ConfigurationParameterDouble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0270E9AF0530017989E /* ConfigurationParameterDouble.cpp */; };
+		E99BD08D0E9AF0530017989E /* ConfigurationParameterDropdownList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0290E9AF0530017989E /* ConfigurationParameterDropdownList.cpp */; };
+		E99BD08E0E9AF0530017989E /* ConfigurationParameterFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD02B0E9AF0530017989E /* ConfigurationParameterFactory.cpp */; };
+		E99BD08F0E9AF0530017989E /* ConfigurationParameterFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD02D0E9AF0530017989E /* ConfigurationParameterFile.cpp */; };
+		E99BD0900E9AF0530017989E /* ConfigurationParameterGigECameraList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD02F0E9AF0530017989E /* ConfigurationParameterGigECameraList.cpp */; };
+		E99BD0910E9AF0530017989E /* ConfigurationParameterImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0310E9AF0530017989E /* ConfigurationParameterImage.cpp */; };
+		E99BD0920E9AF0530017989E /* ConfigurationParameterInteger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0330E9AF0530017989E /* ConfigurationParameterInteger.cpp */; };
+		E99BD0930E9AF0530017989E /* ConfigurationParameterPointDouble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0350E9AF0530017989E /* ConfigurationParameterPointDouble.cpp */; };
+		E99BD0940E9AF0530017989E /* ConfigurationParameterPointInteger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0370E9AF0530017989E /* ConfigurationParameterPointInteger.cpp */; };
+		E99BD0950E9AF0530017989E /* ConfigurationParameterString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0390E9AF0530017989E /* ConfigurationParameterString.cpp */; };
+		E99BD0960E9AF0530017989E /* ConfigurationParameterVideoFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD03B0E9AF0530017989E /* ConfigurationParameterVideoFormat.cpp */; };
+		E99BD0970E9AF0530017989E /* ErrorListDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD03D0E9AF0530017989E /* ErrorListDialog.cpp */; };
+		E99BD09A0E9AF0530017989E /* SwisTrack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0430E9AF0530017989E /* SwisTrack.cpp */; };
+		E99BD09B0E9AF0530017989E /* TCPServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0450E9AF0530017989E /* TCPServer.cpp */; };
+		E99BD09C0E9AF0530017989E /* TCPServerConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0470E9AF0530017989E /* TCPServerConnection.cpp */; };
+		E99BD09D0E9AF0530017989E /* TCPServerDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0490E9AF0530017989E /* TCPServerDialog.cpp */; };
+		E99BD09E0E9AF0530017989E /* TimelinePanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E99BD04B0E9AF0530017989E /* TimelinePanel.cpp */; };
+		E99BD0D20E9AF08B0017989E /* matrix.c in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0AC0E9AF08B0017989E /* matrix.c */; };
+		E99BD0D40E9AF08B0017989E /* dpmpar.c in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0AF0E9AF08B0017989E /* dpmpar.c */; };
+		E99BD0D60E9AF08B0017989E /* enorm.c in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0B10E9AF08B0017989E /* enorm.c */; };
+		E99BD0D80E9AF08B0017989E /* fdjac2.c in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0B30E9AF08B0017989E /* fdjac2.c */; };
+		E99BD0DA0E9AF08B0017989E /* lmdif.c in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0B50E9AF08B0017989E /* lmdif.c */; };
+		E99BD0DC0E9AF08B0017989E /* lmpar.c in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0B70E9AF08B0017989E /* lmpar.c */; };
+		E99BD0DE0E9AF08B0017989E /* qrfac.c in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0B90E9AF08B0017989E /* qrfac.c */; };
+		E99BD0E00E9AF08B0017989E /* qrsolv.c in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0BB0E9AF08B0017989E /* qrsolv.c */; };
+		E99BD0E60E9AF08B0017989E /* cal_eval.c in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0C40E9AF08B0017989E /* cal_eval.c */; };
+		E99BD0E80E9AF08B0017989E /* cal_main.c in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0C60E9AF08B0017989E /* cal_main.c */; };
+		E99BD0EA0E9AF08B0017989E /* cal_tran.c in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0C80E9AF08B0017989E /* cal_tran.c */; };
+		E99BD0EC0E9AF08B0017989E /* cal_util.c in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0CA0E9AF08B0017989E /* cal_util.c */; };
+		E99BD0EE0E9AF08B0017989E /* ecalmain.c in Sources */ = {isa = PBXBuildFile; fileRef = E99BD0CC0E9AF08B0017989E /* ecalmain.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E91A15E40EAD20ED009B8232 /* ComponentTrackSmoothing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentTrackSmoothing.cpp; sourceTree = "<group>"; };
+		E91A15E50EAD20ED009B8232 /* ComponentTrackSmoothing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentTrackSmoothing.h; sourceTree = "<group>"; };
+		E91A15E80EAD2116009B8232 /* ConfigurationParameterDate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConfigurationParameterDate.cpp; sourceTree = "<group>"; };
+		E91A15E90EAD2116009B8232 /* ConfigurationParameterDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigurationParameterDate.h; sourceTree = "<group>"; };
+		E91A15EB0EAD2136009B8232 /* ComponentOpticalFlowPyrLKTracking.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentOpticalFlowPyrLKTracking.cpp; sourceTree = "<group>"; };
+		E91A15EC0EAD2136009B8232 /* ComponentOpticalFlowPyrLKTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentOpticalFlowPyrLKTracking.h; sourceTree = "<group>"; };
+		E91A15EE0EAD2143009B8232 /* ComponentDynamicNearestNeighborTracking.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentDynamicNearestNeighborTracking.cpp; sourceTree = "<group>"; };
+		E91A15EF0EAD2143009B8232 /* ComponentDynamicNearestNeighborTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentDynamicNearestNeighborTracking.h; sourceTree = "<group>"; };
+		E99BCE930E9AD9A10017989E /* SwisTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwisTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E99BCE960E9AD9A10017989E /* SwisTrack-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SwisTrack-Info.plist"; sourceTree = "<group>"; };
+		E99BCE9F0E9ADAB80017989E /* CommunicationCommandHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = CommunicationCommandHandler.cpp; path = ../core/CommunicationCommandHandler.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEA00E9ADAB80017989E /* CommunicationCommandHandler.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = CommunicationCommandHandler.h; path = ../core/CommunicationCommandHandler.h; sourceTree = SOURCE_ROOT; };
+		E99BCEA10E9ADAB80017989E /* CommunicationInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = CommunicationInterface.cpp; path = ../core/CommunicationInterface.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEA20E9ADAB80017989E /* CommunicationInterface.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = CommunicationInterface.h; path = ../core/CommunicationInterface.h; sourceTree = SOURCE_ROOT; };
+		E99BCEA30E9ADAB80017989E /* CommunicationMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = CommunicationMessage.cpp; path = ../core/CommunicationMessage.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEA40E9ADAB80017989E /* CommunicationMessage.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = CommunicationMessage.h; path = ../core/CommunicationMessage.h; sourceTree = SOURCE_ROOT; };
+		E99BCEA50E9ADAB80017989E /* CommunicationNMEAInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = CommunicationNMEAInterface.cpp; path = ../core/CommunicationNMEAInterface.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEA60E9ADAB80017989E /* CommunicationNMEAInterface.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = CommunicationNMEAInterface.h; path = ../core/CommunicationNMEAInterface.h; sourceTree = SOURCE_ROOT; };
+		E99BCEA70E9ADAB80017989E /* Component.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = Component.cpp; path = ../core/Component.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEA80E9ADAB80017989E /* Component.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = Component.h; path = ../core/Component.h; sourceTree = SOURCE_ROOT; };
+		E99BCEA90E9ADAB80017989E /* ComponentAdaptiveBackgroundSubtractionColor.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentAdaptiveBackgroundSubtractionColor.cpp; path = ../core/ComponentAdaptiveBackgroundSubtractionColor.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEAA0E9ADAB80017989E /* ComponentAdaptiveBackgroundSubtractionColor.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentAdaptiveBackgroundSubtractionColor.h; path = ../core/ComponentAdaptiveBackgroundSubtractionColor.h; sourceTree = SOURCE_ROOT; };
+		E99BCEAB0E9ADAB80017989E /* ComponentAdaptiveBackgroundSubtractionGray.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentAdaptiveBackgroundSubtractionGray.cpp; path = ../core/ComponentAdaptiveBackgroundSubtractionGray.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEAC0E9ADAB80017989E /* ComponentAdaptiveBackgroundSubtractionGray.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentAdaptiveBackgroundSubtractionGray.h; path = ../core/ComponentAdaptiveBackgroundSubtractionGray.h; sourceTree = SOURCE_ROOT; };
+		E99BCEAD0E9ADAB80017989E /* ComponentBackgroundSubtractionColor.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentBackgroundSubtractionColor.cpp; path = ../core/ComponentBackgroundSubtractionColor.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEAE0E9ADAB80017989E /* ComponentBackgroundSubtractionColor.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentBackgroundSubtractionColor.h; path = ../core/ComponentBackgroundSubtractionColor.h; sourceTree = SOURCE_ROOT; };
+		E99BCEAF0E9ADAB80017989E /* ComponentBackgroundSubtractionGray.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentBackgroundSubtractionGray.cpp; path = ../core/ComponentBackgroundSubtractionGray.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEB00E9ADAB80017989E /* ComponentBackgroundSubtractionGray.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentBackgroundSubtractionGray.h; path = ../core/ComponentBackgroundSubtractionGray.h; sourceTree = SOURCE_ROOT; };
+		E99BCEB10E9ADAB80017989E /* ComponentBinaryDilation.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentBinaryDilation.cpp; path = ../core/ComponentBinaryDilation.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEB20E9ADAB80017989E /* ComponentBinaryDilation.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentBinaryDilation.h; path = ../core/ComponentBinaryDilation.h; sourceTree = SOURCE_ROOT; };
+		E99BCEB30E9ADAB80017989E /* ComponentBinaryErosion.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentBinaryErosion.cpp; path = ../core/ComponentBinaryErosion.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEB40E9ADAB80017989E /* ComponentBinaryErosion.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentBinaryErosion.h; path = ../core/ComponentBinaryErosion.h; sourceTree = SOURCE_ROOT; };
+		E99BCEB50E9ADAB80017989E /* ComponentBinaryMask.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentBinaryMask.cpp; path = ../core/ComponentBinaryMask.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEB60E9ADAB80017989E /* ComponentBinaryMask.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentBinaryMask.h; path = ../core/ComponentBinaryMask.h; sourceTree = SOURCE_ROOT; };
+		E99BCEB70E9ADAB80017989E /* ComponentBlobDetectionMinMax.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentBlobDetectionMinMax.cpp; path = ../core/ComponentBlobDetectionMinMax.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEB80E9ADAB80017989E /* ComponentBlobDetectionMinMax.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentBlobDetectionMinMax.h; path = ../core/ComponentBlobDetectionMinMax.h; sourceTree = SOURCE_ROOT; };
+		E99BCEB90E9ADAB80017989E /* ComponentBlobDetectionTwoColors.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentBlobDetectionTwoColors.cpp; path = ../core/ComponentBlobDetectionTwoColors.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEBA0E9ADAB80017989E /* ComponentBlobDetectionTwoColors.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentBlobDetectionTwoColors.h; path = ../core/ComponentBlobDetectionTwoColors.h; sourceTree = SOURCE_ROOT; };
+		E99BCEBB0E9ADAB80017989E /* ComponentBlobSelection.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentBlobSelection.cpp; path = ../core/ComponentBlobSelection.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEBC0E9ADAB80017989E /* ComponentBlobSelection.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentBlobSelection.h; path = ../core/ComponentBlobSelection.h; sourceTree = SOURCE_ROOT; };
+		E99BCEBD0E9ADAB80017989E /* ComponentCalibrationLinear.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentCalibrationLinear.cpp; path = ../core/ComponentCalibrationLinear.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEBE0E9ADAB80017989E /* ComponentCalibrationLinear.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentCalibrationLinear.h; path = ../core/ComponentCalibrationLinear.h; sourceTree = SOURCE_ROOT; };
+		E99BCEBF0E9ADAB80017989E /* ComponentCalibrationTSAI.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentCalibrationTSAI.cpp; path = ../core/ComponentCalibrationTSAI.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEC00E9ADAB80017989E /* ComponentCalibrationTSAI.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentCalibrationTSAI.h; path = ../core/ComponentCalibrationTSAI.h; sourceTree = SOURCE_ROOT; };
+		E99BCEC10E9ADAB80017989E /* ComponentCategory.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentCategory.cpp; path = ../core/ComponentCategory.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEC20E9ADAB80017989E /* ComponentCategory.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentCategory.h; path = ../core/ComponentCategory.h; sourceTree = SOURCE_ROOT; };
+		E99BCEC30E9ADAB80017989E /* ComponentChannelArithmetic.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentChannelArithmetic.cpp; path = ../core/ComponentChannelArithmetic.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEC40E9ADAB80017989E /* ComponentChannelArithmetic.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentChannelArithmetic.h; path = ../core/ComponentChannelArithmetic.h; sourceTree = SOURCE_ROOT; };
+		E99BCEC50E9ADAB80017989E /* ComponentColorBlur.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentColorBlur.cpp; path = ../core/ComponentColorBlur.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEC60E9ADAB80017989E /* ComponentColorBlur.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentColorBlur.h; path = ../core/ComponentColorBlur.h; sourceTree = SOURCE_ROOT; };
+		E99BCEC70E9ADAB80017989E /* ComponentColorMask.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentColorMask.cpp; path = ../core/ComponentColorMask.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEC80E9ADAB80017989E /* ComponentColorMask.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentColorMask.h; path = ../core/ComponentColorMask.h; sourceTree = SOURCE_ROOT; };
+		E99BCEC90E9ADAB80017989E /* ComponentConvertBayerToColor.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentConvertBayerToColor.cpp; path = ../core/ComponentConvertBayerToColor.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCECA0E9ADAB80017989E /* ComponentConvertBayerToColor.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentConvertBayerToColor.h; path = ../core/ComponentConvertBayerToColor.h; sourceTree = SOURCE_ROOT; };
+		E99BCECB0E9ADAB80017989E /* ComponentConvertToColor.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentConvertToColor.cpp; path = ../core/ComponentConvertToColor.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCECC0E9ADAB80017989E /* ComponentConvertToColor.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentConvertToColor.h; path = ../core/ComponentConvertToColor.h; sourceTree = SOURCE_ROOT; };
+		E99BCECD0E9ADAB80017989E /* ComponentConvertToGray.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentConvertToGray.cpp; path = ../core/ComponentConvertToGray.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCECE0E9ADAB80017989E /* ComponentConvertToGray.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentConvertToGray.h; path = ../core/ComponentConvertToGray.h; sourceTree = SOURCE_ROOT; };
+		E99BCECF0E9ADAB80017989E /* ComponentDoubleThresholdColorIndependent.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentDoubleThresholdColorIndependent.cpp; path = ../core/ComponentDoubleThresholdColorIndependent.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCED00E9ADAB80017989E /* ComponentDoubleThresholdColorIndependent.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentDoubleThresholdColorIndependent.h; path = ../core/ComponentDoubleThresholdColorIndependent.h; sourceTree = SOURCE_ROOT; };
+		E99BCED10E9ADAB80017989E /* ComponentEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentEditor.cpp; path = ../core/ComponentEditor.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCED20E9ADAB80017989E /* ComponentEditor.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentEditor.h; path = ../core/ComponentEditor.h; sourceTree = SOURCE_ROOT; };
+		E99BCED30E9ADAB80017989E /* ComponentGrayMask.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentGrayMask.cpp; path = ../core/ComponentGrayMask.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCED40E9ADAB80017989E /* ComponentGrayMask.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentGrayMask.h; path = ../core/ComponentGrayMask.h; sourceTree = SOURCE_ROOT; };
+		E99BCED50E9ADAB80017989E /* ComponentHSVBackgroundSubtractionColor.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentHSVBackgroundSubtractionColor.cpp; path = ../core/ComponentHSVBackgroundSubtractionColor.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCED60E9ADAB80017989E /* ComponentHSVBackgroundSubtractionColor.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentHSVBackgroundSubtractionColor.h; path = ../core/ComponentHSVBackgroundSubtractionColor.h; sourceTree = SOURCE_ROOT; };
+		E99BCED70E9ADAB80017989E /* ComponentIDReaderRing.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentIDReaderRing.cpp; path = ../core/ComponentIDReaderRing.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCED80E9ADAB80017989E /* ComponentIDReaderRing.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentIDReaderRing.h; path = ../core/ComponentIDReaderRing.h; sourceTree = SOURCE_ROOT; };
+		E99BCED90E9ADAB80017989E /* ComponentInputCamera1394.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentInputCamera1394.cpp; path = ../core/ComponentInputCamera1394.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEDA0E9ADAB80017989E /* ComponentInputCamera1394.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentInputCamera1394.h; path = ../core/ComponentInputCamera1394.h; sourceTree = SOURCE_ROOT; };
+		E99BCEDB0E9ADAB80017989E /* ComponentInputCameraGigE.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentInputCameraGigE.cpp; path = ../core/ComponentInputCameraGigE.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEDC0E9ADAB80017989E /* ComponentInputCameraGigE.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentInputCameraGigE.h; path = ../core/ComponentInputCameraGigE.h; sourceTree = SOURCE_ROOT; };
+		E99BCEDD0E9ADAB80017989E /* ComponentInputCameraUSB.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentInputCameraUSB.cpp; path = ../core/ComponentInputCameraUSB.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEDE0E9ADAB80017989E /* ComponentInputCameraUSB.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentInputCameraUSB.h; path = ../core/ComponentInputCameraUSB.h; sourceTree = SOURCE_ROOT; };
+		E99BCEDF0E9ADAB80017989E /* ComponentInputFileAVI.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentInputFileAVI.cpp; path = ../core/ComponentInputFileAVI.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEE00E9ADAB80017989E /* ComponentInputFileAVI.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentInputFileAVI.h; path = ../core/ComponentInputFileAVI.h; sourceTree = SOURCE_ROOT; };
+		E99BCEE10E9ADAB80017989E /* ComponentInputFileImage.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentInputFileImage.cpp; path = ../core/ComponentInputFileImage.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEE20E9ADAB80017989E /* ComponentInputFileImage.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentInputFileImage.h; path = ../core/ComponentInputFileImage.h; sourceTree = SOURCE_ROOT; };
+		E99BCEE30E9ADAB80017989E /* ComponentNearestNeighborTracking.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentNearestNeighborTracking.cpp; path = ../core/ComponentNearestNeighborTracking.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEE40E9ADAB80017989E /* ComponentNearestNeighborTracking.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentNearestNeighborTracking.h; path = ../core/ComponentNearestNeighborTracking.h; sourceTree = SOURCE_ROOT; };
+		E99BCEE50E9ADAB80017989E /* ComponentOutputAVI.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentOutputAVI.cpp; path = ../core/ComponentOutputAVI.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEE60E9ADAB80017989E /* ComponentOutputAVI.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentOutputAVI.h; path = ../core/ComponentOutputAVI.h; sourceTree = SOURCE_ROOT; };
+		E99BCEE70E9ADAB80017989E /* ComponentOutputFile.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentOutputFile.cpp; path = ../core/ComponentOutputFile.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEE80E9ADAB80017989E /* ComponentOutputFile.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentOutputFile.h; path = ../core/ComponentOutputFile.h; sourceTree = SOURCE_ROOT; };
+		E99BCEE90E9ADAB80017989E /* ComponentOutputFileAVI.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentOutputFileAVI.cpp; path = ../core/ComponentOutputFileAVI.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEEA0E9ADAB80017989E /* ComponentOutputFileAVI.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentOutputFileAVI.h; path = ../core/ComponentOutputFileAVI.h; sourceTree = SOURCE_ROOT; };
+		E99BCEEB0E9ADAB80017989E /* ComponentOutputFileM4V.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentOutputFileM4V.cpp; path = ../core/ComponentOutputFileM4V.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEEC0E9ADAB80017989E /* ComponentOutputFileM4V.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentOutputFileM4V.h; path = ../core/ComponentOutputFileM4V.h; sourceTree = SOURCE_ROOT; };
+		E99BCEED0E9ADAB80017989E /* ComponentOutputMarkFrameManual.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentOutputMarkFrameManual.cpp; path = ../core/ComponentOutputMarkFrameManual.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEEE0E9ADAB80017989E /* ComponentOutputMarkFrameManual.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentOutputMarkFrameManual.h; path = ../core/ComponentOutputMarkFrameManual.h; sourceTree = SOURCE_ROOT; };
+		E99BCEEF0E9ADAB80017989E /* ComponentOutputParticles.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentOutputParticles.cpp; path = ../core/ComponentOutputParticles.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEF00E9ADAB80017989E /* ComponentOutputParticles.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentOutputParticles.h; path = ../core/ComponentOutputParticles.h; sourceTree = SOURCE_ROOT; };
+		E99BCEF10E9ADAB80017989E /* ComponentSimulationParticles.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentSimulationParticles.cpp; path = ../core/ComponentSimulationParticles.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEF20E9ADAB80017989E /* ComponentSimulationParticles.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentSimulationParticles.h; path = ../core/ComponentSimulationParticles.h; sourceTree = SOURCE_ROOT; };
+		E99BCEF30E9ADAB80017989E /* ComponentSpecificColorSubtraction.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentSpecificColorSubtraction.cpp; path = ../core/ComponentSpecificColorSubtraction.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEF40E9ADAB80017989E /* ComponentSpecificColorSubtraction.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentSpecificColorSubtraction.h; path = ../core/ComponentSpecificColorSubtraction.h; sourceTree = SOURCE_ROOT; };
+		E99BCEF50E9ADAB80017989E /* ComponentThresholdColorCommon.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentThresholdColorCommon.cpp; path = ../core/ComponentThresholdColorCommon.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEF60E9ADAB80017989E /* ComponentThresholdColorCommon.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentThresholdColorCommon.h; path = ../core/ComponentThresholdColorCommon.h; sourceTree = SOURCE_ROOT; };
+		E99BCEF70E9ADAB80017989E /* ComponentThresholdColorIndependent.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentThresholdColorIndependent.cpp; path = ../core/ComponentThresholdColorIndependent.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEF80E9ADAB80017989E /* ComponentThresholdColorIndependent.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentThresholdColorIndependent.h; path = ../core/ComponentThresholdColorIndependent.h; sourceTree = SOURCE_ROOT; };
+		E99BCEF90E9ADAB80017989E /* ComponentThresholdGray.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentThresholdGray.cpp; path = ../core/ComponentThresholdGray.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEFA0E9ADAB80017989E /* ComponentThresholdGray.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentThresholdGray.h; path = ../core/ComponentThresholdGray.h; sourceTree = SOURCE_ROOT; };
+		E99BCEFB0E9ADAB80017989E /* ComponentTracking.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentTracking.cpp; path = ../core/ComponentTracking.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEFC0E9ADAB80017989E /* ComponentTracking.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentTracking.h; path = ../core/ComponentTracking.h; sourceTree = SOURCE_ROOT; };
+		E99BCEFD0E9ADAB80017989E /* ComponentTrigger.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentTrigger.cpp; path = ../core/ComponentTrigger.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCEFE0E9ADAB80017989E /* ComponentTrigger.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentTrigger.h; path = ../core/ComponentTrigger.h; sourceTree = SOURCE_ROOT; };
+		E99BCEFF0E9ADAB80017989E /* ComponentTriggerCounter.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentTriggerCounter.cpp; path = ../core/ComponentTriggerCounter.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF000E9ADAB80017989E /* ComponentTriggerCounter.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentTriggerCounter.h; path = ../core/ComponentTriggerCounter.h; sourceTree = SOURCE_ROOT; };
+		E99BCF010E9ADAB80017989E /* ComponentTriggerTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentTriggerTimer.cpp; path = ../core/ComponentTriggerTimer.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF020E9ADAB80017989E /* ComponentTriggerTimer.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentTriggerTimer.h; path = ../core/ComponentTriggerTimer.h; sourceTree = SOURCE_ROOT; };
+		E99BCF030E9ADAB80017989E /* ConfigurationConversion.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationConversion.cpp; path = ../core/ConfigurationConversion.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF040E9ADAB80017989E /* ConfigurationConversion.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationConversion.h; path = ../core/ConfigurationConversion.h; sourceTree = SOURCE_ROOT; };
+		E99BCF050E9ADAB80017989E /* ConfigurationReaderXML.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationReaderXML.cpp; path = ../core/ConfigurationReaderXML.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF060E9ADAB80017989E /* ConfigurationReaderXML.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationReaderXML.h; path = ../core/ConfigurationReaderXML.h; sourceTree = SOURCE_ROOT; };
+		E99BCF070E9ADAB80017989E /* ConfigurationWriterXML.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationWriterXML.cpp; path = ../core/ConfigurationWriterXML.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF080E9ADAB80017989E /* ConfigurationWriterXML.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationWriterXML.h; path = ../core/ConfigurationWriterXML.h; sourceTree = SOURCE_ROOT; };
+		E99BCF090E9ADAB80017989E /* ConfigurationXML.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationXML.cpp; path = ../core/ConfigurationXML.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF0A0E9ADAB80017989E /* ConfigurationXML.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationXML.h; path = ../core/ConfigurationXML.h; sourceTree = SOURCE_ROOT; };
+		E99BCF0B0E9ADAB80017989E /* DataStructure.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = DataStructure.cpp; path = ../core/DataStructure.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF0C0E9ADAB80017989E /* DataStructure.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = DataStructure.h; path = ../core/DataStructure.h; sourceTree = SOURCE_ROOT; };
+		E99BCF0D0E9ADAB80017989E /* DataStructureImage.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = DataStructureImage.cpp; path = ../core/DataStructureImage.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF0E0E9ADAB80017989E /* DataStructureImage.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = DataStructureImage.h; path = ../core/DataStructureImage.h; sourceTree = SOURCE_ROOT; };
+		E99BCF0F0E9ADAB80017989E /* DataStructureInput.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = DataStructureInput.cpp; path = ../core/DataStructureInput.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF100E9ADAB80017989E /* DataStructureInput.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = DataStructureInput.h; path = ../core/DataStructureInput.h; sourceTree = SOURCE_ROOT; };
+		E99BCF110E9ADAB80017989E /* DataStructureParticles.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = DataStructureParticles.cpp; path = ../core/DataStructureParticles.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF120E9ADAB80017989E /* DataStructureParticles.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = DataStructureParticles.h; path = ../core/DataStructureParticles.h; sourceTree = SOURCE_ROOT; };
+		E99BCF130E9ADAB80017989E /* DataStructureTracks.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = DataStructureTracks.cpp; path = ../core/DataStructureTracks.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF140E9ADAB80017989E /* DataStructureTracks.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = DataStructureTracks.h; path = ../core/DataStructureTracks.h; sourceTree = SOURCE_ROOT; };
+		E99BCF150E9ADAB80017989E /* Display.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = Display.cpp; path = ../core/Display.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF160E9ADAB80017989E /* Display.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = Display.h; path = ../core/Display.h; sourceTree = SOURCE_ROOT; };
+		E99BCF170E9ADAB80017989E /* DisplayEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = DisplayEditor.cpp; path = ../core/DisplayEditor.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF180E9ADAB80017989E /* DisplayEditor.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = DisplayEditor.h; path = ../core/DisplayEditor.h; sourceTree = SOURCE_ROOT; };
+		E99BCF190E9ADAB80017989E /* DisplayRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = DisplayRenderer.cpp; path = ../core/DisplayRenderer.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF1A0E9ADAB80017989E /* DisplayRenderer.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = DisplayRenderer.h; path = ../core/DisplayRenderer.h; sourceTree = SOURCE_ROOT; };
+		E99BCF1B0E9ADAB80017989E /* DisplaySubscriberInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = DisplaySubscriberInterface.cpp; path = ../core/DisplaySubscriberInterface.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF1C0E9ADAB80017989E /* DisplaySubscriberInterface.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = DisplaySubscriberInterface.h; path = ../core/DisplaySubscriberInterface.h; sourceTree = SOURCE_ROOT; };
+		E99BCF1F0E9ADAB80017989E /* ErrorList.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ErrorList.cpp; path = ../core/ErrorList.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF200E9ADAB80017989E /* ErrorList.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ErrorList.h; path = ../core/ErrorList.h; sourceTree = SOURCE_ROOT; };
+		E99BCF210E9ADAB80017989E /* ErrorListItem.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ErrorListItem.cpp; path = ../core/ErrorListItem.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF220E9ADAB80017989E /* ErrorListItem.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ErrorListItem.h; path = ../core/ErrorListItem.h; sourceTree = SOURCE_ROOT; };
+		E99BCF230E9ADAB80017989E /* ImageConversion.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ImageConversion.cpp; path = ../core/ImageConversion.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF240E9ADAB80017989E /* ImageConversion.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ImageConversion.h; path = ../core/ImageConversion.h; sourceTree = SOURCE_ROOT; };
+		E99BCF270E9ADAB80017989E /* ObjectList.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ObjectList.cpp; path = ../core/ObjectList.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF280E9ADAB80017989E /* ObjectList.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ObjectList.h; path = ../core/ObjectList.h; sourceTree = SOURCE_ROOT; };
+		E99BCF290E9ADAB80017989E /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = Particle.cpp; path = ../core/Particle.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF2A0E9ADAB80017989E /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = Particle.h; path = ../core/Particle.h; sourceTree = SOURCE_ROOT; };
+		E99BCF2B0E9ADAB80017989E /* Random.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = Random.cpp; path = ../core/Random.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF2C0E9ADAB80017989E /* Random.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = Random.h; path = ../core/Random.h; sourceTree = SOURCE_ROOT; };
+		E99BCF2D0E9ADAB80017989E /* RandomExponential.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = RandomExponential.cpp; path = ../core/RandomExponential.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF2E0E9ADAB80017989E /* RandomExponential.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = RandomExponential.h; path = ../core/RandomExponential.h; sourceTree = SOURCE_ROOT; };
+		E99BCF2F0E9ADAB80017989E /* RandomMersenneTwister.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = RandomMersenneTwister.h; path = ../core/RandomMersenneTwister.h; sourceTree = SOURCE_ROOT; };
+		E99BCF300E9ADAB80017989E /* RandomNormal.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = RandomNormal.cpp; path = ../core/RandomNormal.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF310E9ADAB80017989E /* RandomNormal.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = RandomNormal.h; path = ../core/RandomNormal.h; sourceTree = SOURCE_ROOT; };
+		E99BCF320E9ADAB80017989E /* RandomPoisson.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = RandomPoisson.cpp; path = ../core/RandomPoisson.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF330E9ADAB80017989E /* RandomPoisson.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = RandomPoisson.h; path = ../core/RandomPoisson.h; sourceTree = SOURCE_ROOT; };
+		E99BCF350E9ADAB80017989E /* SimulationParticles.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = SimulationParticles.cpp; path = ../core/SimulationParticles.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF360E9ADAB80017989E /* SimulationParticles.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = SimulationParticles.h; path = ../core/SimulationParticles.h; sourceTree = SOURCE_ROOT; };
+		E99BCF370E9ADAB80017989E /* StatusItem.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = StatusItem.cpp; path = ../core/StatusItem.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF380E9ADAB80017989E /* StatusItem.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = StatusItem.h; path = ../core/StatusItem.h; sourceTree = SOURCE_ROOT; };
+		E99BCF390E9ADAB80017989E /* SwisTrackCore.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = SwisTrackCore.cpp; path = ../core/SwisTrackCore.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF3A0E9ADAB80017989E /* SwisTrackCore.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = SwisTrackCore.h; path = ../core/SwisTrackCore.h; sourceTree = SOURCE_ROOT; };
+		E99BCF3B0E9ADAB80017989E /* SwisTrackCoreEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = SwisTrackCoreEditor.cpp; path = ../core/SwisTrackCoreEditor.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF3C0E9ADAB80017989E /* SwisTrackCoreEditor.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = SwisTrackCoreEditor.h; path = ../core/SwisTrackCoreEditor.h; sourceTree = SOURCE_ROOT; };
+		E99BCF3D0E9ADAB80017989E /* SwisTrackCoreEventRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = SwisTrackCoreEventRecorder.cpp; path = ../core/SwisTrackCoreEventRecorder.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF3E0E9ADAB80017989E /* SwisTrackCoreEventRecorder.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = SwisTrackCoreEventRecorder.h; path = ../core/SwisTrackCoreEventRecorder.h; sourceTree = SOURCE_ROOT; };
+		E99BCF3F0E9ADAB80017989E /* SwisTrackCoreInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = SwisTrackCoreInterface.cpp; path = ../core/SwisTrackCoreInterface.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF400E9ADAB80017989E /* SwisTrackCoreInterface.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = SwisTrackCoreInterface.h; path = ../core/SwisTrackCoreInterface.h; sourceTree = SOURCE_ROOT; };
+		E99BCF410E9ADAB80017989E /* SwisTrackCoreTrigger.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = SwisTrackCoreTrigger.cpp; path = ../core/SwisTrackCoreTrigger.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF420E9ADAB80017989E /* SwisTrackCoreTrigger.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = SwisTrackCoreTrigger.h; path = ../core/SwisTrackCoreTrigger.h; sourceTree = SOURCE_ROOT; };
+		E99BCF430E9ADAB80017989E /* Track.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = Track.cpp; path = ../core/Track.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCF440E9ADAB80017989E /* Track.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = Track.h; path = ../core/Track.h; sourceTree = SOURCE_ROOT; };
+		E99BCFD80E9AF0530017989E /* AboutDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = AboutDialog.cpp; path = ../gui/AboutDialog.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCFD90E9AF0530017989E /* AboutDialog.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = AboutDialog.h; path = ../gui/AboutDialog.h; sourceTree = SOURCE_ROOT; };
+		E99BCFDA0E9AF0530017989E /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = ../gui/Application.cpp; sourceTree = SOURCE_ROOT; };
+		E99BCFDB0E9AF0530017989E /* Application.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = Application.h; path = ../gui/Application.h; sourceTree = SOURCE_ROOT; };
+		E99BD00D0E9AF0530017989E /* Canvas.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = Canvas.cpp; path = ../gui/Canvas.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD00E0E9AF0530017989E /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = Canvas.h; path = ../gui/Canvas.h; sourceTree = SOURCE_ROOT; };
+		E99BD00F0E9AF0530017989E /* CanvasAnnotation.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = CanvasAnnotation.cpp; path = ../gui/CanvasAnnotation.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0100E9AF0530017989E /* CanvasAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = CanvasAnnotation.h; path = ../gui/CanvasAnnotation.h; sourceTree = SOURCE_ROOT; };
+		E99BD0110E9AF0530017989E /* CanvasPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = CanvasPanel.cpp; path = ../gui/CanvasPanel.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0120E9AF0530017989E /* CanvasPanel.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = CanvasPanel.h; path = ../gui/CanvasPanel.h; sourceTree = SOURCE_ROOT; };
+		E99BD0130E9AF0530017989E /* CanvasTitle.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = CanvasTitle.cpp; path = ../gui/CanvasTitle.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0140E9AF0530017989E /* CanvasTitle.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = CanvasTitle.h; path = ../gui/CanvasTitle.h; sourceTree = SOURCE_ROOT; };
+		E99BD0150E9AF0530017989E /* ComponentListPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentListPanel.cpp; path = ../gui/ComponentListPanel.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0160E9AF0530017989E /* ComponentListPanel.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentListPanel.h; path = ../gui/ComponentListPanel.h; sourceTree = SOURCE_ROOT; };
+		E99BD0170E9AF0530017989E /* ComponentsDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentsDialog.cpp; path = ../gui/ComponentsDialog.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0180E9AF0530017989E /* ComponentsDialog.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentsDialog.h; path = ../gui/ComponentsDialog.h; sourceTree = SOURCE_ROOT; };
+		E99BD0190E9AF0530017989E /* ComponentTreeItem.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ComponentTreeItem.cpp; path = ../gui/ComponentTreeItem.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD01A0E9AF0530017989E /* ComponentTreeItem.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ComponentTreeItem.h; path = ../gui/ComponentTreeItem.h; sourceTree = SOURCE_ROOT; };
+		E99BD01B0E9AF0530017989E /* ConfigurationPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationPanel.cpp; path = ../gui/ConfigurationPanel.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD01C0E9AF0530017989E /* ConfigurationPanel.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationPanel.h; path = ../gui/ConfigurationPanel.h; sourceTree = SOURCE_ROOT; };
+		E99BD01D0E9AF0530017989E /* ConfigurationParameter.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameter.cpp; path = ../gui/ConfigurationParameter.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD01E0E9AF0530017989E /* ConfigurationParameter.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameter.h; path = ../gui/ConfigurationParameter.h; sourceTree = SOURCE_ROOT; };
+		E99BD01F0E9AF0530017989E /* ConfigurationParameterAngle.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterAngle.cpp; path = ../gui/ConfigurationParameterAngle.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0200E9AF0530017989E /* ConfigurationParameterAngle.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterAngle.h; path = ../gui/ConfigurationParameterAngle.h; sourceTree = SOURCE_ROOT; };
+		E99BD0210E9AF0530017989E /* ConfigurationParameterButton.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterButton.cpp; path = ../gui/ConfigurationParameterButton.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0220E9AF0530017989E /* ConfigurationParameterButton.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterButton.h; path = ../gui/ConfigurationParameterButton.h; sourceTree = SOURCE_ROOT; };
+		E99BD0230E9AF0530017989E /* ConfigurationParameterCheckBox.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterCheckBox.cpp; path = ../gui/ConfigurationParameterCheckBox.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0240E9AF0530017989E /* ConfigurationParameterCheckBox.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterCheckBox.h; path = ../gui/ConfigurationParameterCheckBox.h; sourceTree = SOURCE_ROOT; };
+		E99BD0250E9AF0530017989E /* ConfigurationParameterColor.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterColor.cpp; path = ../gui/ConfigurationParameterColor.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0260E9AF0530017989E /* ConfigurationParameterColor.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterColor.h; path = ../gui/ConfigurationParameterColor.h; sourceTree = SOURCE_ROOT; };
+		E99BD0270E9AF0530017989E /* ConfigurationParameterDouble.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterDouble.cpp; path = ../gui/ConfigurationParameterDouble.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0280E9AF0530017989E /* ConfigurationParameterDouble.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterDouble.h; path = ../gui/ConfigurationParameterDouble.h; sourceTree = SOURCE_ROOT; };
+		E99BD0290E9AF0530017989E /* ConfigurationParameterDropdownList.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterDropdownList.cpp; path = ../gui/ConfigurationParameterDropdownList.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD02A0E9AF0530017989E /* ConfigurationParameterDropdownList.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterDropdownList.h; path = ../gui/ConfigurationParameterDropdownList.h; sourceTree = SOURCE_ROOT; };
+		E99BD02B0E9AF0530017989E /* ConfigurationParameterFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterFactory.cpp; path = ../gui/ConfigurationParameterFactory.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD02C0E9AF0530017989E /* ConfigurationParameterFactory.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterFactory.h; path = ../gui/ConfigurationParameterFactory.h; sourceTree = SOURCE_ROOT; };
+		E99BD02D0E9AF0530017989E /* ConfigurationParameterFile.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterFile.cpp; path = ../gui/ConfigurationParameterFile.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD02E0E9AF0530017989E /* ConfigurationParameterFile.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterFile.h; path = ../gui/ConfigurationParameterFile.h; sourceTree = SOURCE_ROOT; };
+		E99BD02F0E9AF0530017989E /* ConfigurationParameterGigECameraList.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterGigECameraList.cpp; path = ../gui/ConfigurationParameterGigECameraList.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0300E9AF0530017989E /* ConfigurationParameterGigECameraList.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterGigECameraList.h; path = ../gui/ConfigurationParameterGigECameraList.h; sourceTree = SOURCE_ROOT; };
+		E99BD0310E9AF0530017989E /* ConfigurationParameterImage.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterImage.cpp; path = ../gui/ConfigurationParameterImage.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0320E9AF0530017989E /* ConfigurationParameterImage.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterImage.h; path = ../gui/ConfigurationParameterImage.h; sourceTree = SOURCE_ROOT; };
+		E99BD0330E9AF0530017989E /* ConfigurationParameterInteger.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterInteger.cpp; path = ../gui/ConfigurationParameterInteger.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0340E9AF0530017989E /* ConfigurationParameterInteger.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterInteger.h; path = ../gui/ConfigurationParameterInteger.h; sourceTree = SOURCE_ROOT; };
+		E99BD0350E9AF0530017989E /* ConfigurationParameterPointDouble.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterPointDouble.cpp; path = ../gui/ConfigurationParameterPointDouble.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0360E9AF0530017989E /* ConfigurationParameterPointDouble.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterPointDouble.h; path = ../gui/ConfigurationParameterPointDouble.h; sourceTree = SOURCE_ROOT; };
+		E99BD0370E9AF0530017989E /* ConfigurationParameterPointInteger.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterPointInteger.cpp; path = ../gui/ConfigurationParameterPointInteger.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0380E9AF0530017989E /* ConfigurationParameterPointInteger.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterPointInteger.h; path = ../gui/ConfigurationParameterPointInteger.h; sourceTree = SOURCE_ROOT; };
+		E99BD0390E9AF0530017989E /* ConfigurationParameterString.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterString.cpp; path = ../gui/ConfigurationParameterString.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD03A0E9AF0530017989E /* ConfigurationParameterString.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterString.h; path = ../gui/ConfigurationParameterString.h; sourceTree = SOURCE_ROOT; };
+		E99BD03B0E9AF0530017989E /* ConfigurationParameterVideoFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigurationParameterVideoFormat.cpp; path = ../gui/ConfigurationParameterVideoFormat.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD03C0E9AF0530017989E /* ConfigurationParameterVideoFormat.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ConfigurationParameterVideoFormat.h; path = ../gui/ConfigurationParameterVideoFormat.h; sourceTree = SOURCE_ROOT; };
+		E99BD03D0E9AF0530017989E /* ErrorListDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = ErrorListDialog.cpp; path = ../gui/ErrorListDialog.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD03E0E9AF0530017989E /* ErrorListDialog.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = ErrorListDialog.h; path = ../gui/ErrorListDialog.h; sourceTree = SOURCE_ROOT; };
+		E99BD0430E9AF0530017989E /* SwisTrack.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = SwisTrack.cpp; path = ../gui/SwisTrack.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0440E9AF0530017989E /* SwisTrack.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = SwisTrack.h; path = ../gui/SwisTrack.h; sourceTree = SOURCE_ROOT; };
+		E99BD0450E9AF0530017989E /* TCPServer.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = TCPServer.cpp; path = ../gui/TCPServer.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0460E9AF0530017989E /* TCPServer.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = TCPServer.h; path = ../gui/TCPServer.h; sourceTree = SOURCE_ROOT; };
+		E99BD0470E9AF0530017989E /* TCPServerConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = TCPServerConnection.cpp; path = ../gui/TCPServerConnection.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD0480E9AF0530017989E /* TCPServerConnection.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = TCPServerConnection.h; path = ../gui/TCPServerConnection.h; sourceTree = SOURCE_ROOT; };
+		E99BD0490E9AF0530017989E /* TCPServerDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = TCPServerDialog.cpp; path = ../gui/TCPServerDialog.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD04A0E9AF0530017989E /* TCPServerDialog.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = TCPServerDialog.h; path = ../gui/TCPServerDialog.h; sourceTree = SOURCE_ROOT; };
+		E99BD04B0E9AF0530017989E /* TimelinePanel.cpp */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.cpp.cpp; name = TimelinePanel.cpp; path = ../gui/TimelinePanel.cpp; sourceTree = SOURCE_ROOT; };
+		E99BD04C0E9AF0530017989E /* TimelinePanel.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = TimelinePanel.h; path = ../gui/TimelinePanel.h; sourceTree = SOURCE_ROOT; };
+		E99BD0A20E9AF08A0017989E /* cal_defs.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = cal_defs.h; path = ../libtsai/include/cal_defs.h; sourceTree = SOURCE_ROOT; };
+		E99BD0A30E9AF08A0017989E /* f2c.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = f2c.h; path = ../libtsai/include/f2c.h; sourceTree = SOURCE_ROOT; };
+		E99BD0A40E9AF08A0017989E /* gasdev.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = gasdev.h; path = ../libtsai/include/gasdev.h; sourceTree = SOURCE_ROOT; };
+		E99BD0A50E9AF08A0017989E /* libtsai.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = libtsai.h; path = ../libtsai/include/libtsai.h; sourceTree = SOURCE_ROOT; };
+		E99BD0A60E9AF08A0017989E /* lmdif.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = lmdif.h; path = ../libtsai/include/lmdif.h; sourceTree = SOURCE_ROOT; };
+		E99BD0A70E9AF08A0017989E /* matrix.h */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.h; name = matrix.h; path = ../libtsai/include/matrix.h; sourceTree = SOURCE_ROOT; };
+		E99BD0AC0E9AF08B0017989E /* matrix.c */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.c; name = matrix.c; path = ../libtsai/mathsrc/matrix.c; sourceTree = SOURCE_ROOT; };
+		E99BD0AF0E9AF08B0017989E /* dpmpar.c */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.c; name = dpmpar.c; path = ../libtsai/mathsrc/minpack/dpmpar.c; sourceTree = SOURCE_ROOT; };
+		E99BD0B10E9AF08B0017989E /* enorm.c */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.c; name = enorm.c; path = ../libtsai/mathsrc/minpack/enorm.c; sourceTree = SOURCE_ROOT; };
+		E99BD0B30E9AF08B0017989E /* fdjac2.c */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.c; name = fdjac2.c; path = ../libtsai/mathsrc/minpack/fdjac2.c; sourceTree = SOURCE_ROOT; };
+		E99BD0B50E9AF08B0017989E /* lmdif.c */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.c; name = lmdif.c; path = ../libtsai/mathsrc/minpack/lmdif.c; sourceTree = SOURCE_ROOT; };
+		E99BD0B70E9AF08B0017989E /* lmpar.c */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.c; name = lmpar.c; path = ../libtsai/mathsrc/minpack/lmpar.c; sourceTree = SOURCE_ROOT; };
+		E99BD0B90E9AF08B0017989E /* qrfac.c */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.c; name = qrfac.c; path = ../libtsai/mathsrc/minpack/qrfac.c; sourceTree = SOURCE_ROOT; };
+		E99BD0BB0E9AF08B0017989E /* qrsolv.c */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.c; name = qrsolv.c; path = ../libtsai/mathsrc/minpack/qrsolv.c; sourceTree = SOURCE_ROOT; };
+		E99BD0C40E9AF08B0017989E /* cal_eval.c */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.c; name = cal_eval.c; path = ../libtsai/tsaisrc/cal_eval.c; sourceTree = SOURCE_ROOT; };
+		E99BD0C60E9AF08B0017989E /* cal_main.c */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.c; name = cal_main.c; path = ../libtsai/tsaisrc/cal_main.c; sourceTree = SOURCE_ROOT; };
+		E99BD0C80E9AF08B0017989E /* cal_tran.c */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.c; name = cal_tran.c; path = ../libtsai/tsaisrc/cal_tran.c; sourceTree = SOURCE_ROOT; };
+		E99BD0CA0E9AF08B0017989E /* cal_util.c */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.c; name = cal_util.c; path = ../libtsai/tsaisrc/cal_util.c; sourceTree = SOURCE_ROOT; };
+		E99BD0CC0E9AF08B0017989E /* ecalmain.c */ = {isa = PBXFileReference; fileEncoding = 5; lastKnownFileType = sourcecode.c.c; name = ecalmain.c; path = ../libtsai/tsaisrc/ecalmain.c; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E99BCE910E9AD9A10017989E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E99BCE7B0E9AD93D0017989E = {
+			isa = PBXGroup;
+			children = (
+				E99BD09F0E9AF08A0017989E /* libtsai */,
+				E99BCFD70E9AF0530017989E /* gui */,
+				E99BCE9E0E9ADAB80017989E /* core */,
+				E99BCE940E9AD9A10017989E /* Products */,
+				E99BCE960E9AD9A10017989E /* SwisTrack-Info.plist */,
+			);
+			sourceTree = "<group>";
+		};
+		E99BCE940E9AD9A10017989E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E99BCE930E9AD9A10017989E /* SwisTrack.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E99BCE9E0E9ADAB80017989E /* core */ = {
+			isa = PBXGroup;
+			children = (
+				E91A15EE0EAD2143009B8232 /* ComponentDynamicNearestNeighborTracking.cpp */,
+				E91A15EF0EAD2143009B8232 /* ComponentDynamicNearestNeighborTracking.h */,
+				E91A15EB0EAD2136009B8232 /* ComponentOpticalFlowPyrLKTracking.cpp */,
+				E91A15EC0EAD2136009B8232 /* ComponentOpticalFlowPyrLKTracking.h */,
+				E91A15E40EAD20ED009B8232 /* ComponentTrackSmoothing.cpp */,
+				E91A15E50EAD20ED009B8232 /* ComponentTrackSmoothing.h */,
+				E99BCE9F0E9ADAB80017989E /* CommunicationCommandHandler.cpp */,
+				E99BCEA00E9ADAB80017989E /* CommunicationCommandHandler.h */,
+				E99BCEA10E9ADAB80017989E /* CommunicationInterface.cpp */,
+				E99BCEA20E9ADAB80017989E /* CommunicationInterface.h */,
+				E99BCEA30E9ADAB80017989E /* CommunicationMessage.cpp */,
+				E99BCEA40E9ADAB80017989E /* CommunicationMessage.h */,
+				E99BCEA50E9ADAB80017989E /* CommunicationNMEAInterface.cpp */,
+				E99BCEA60E9ADAB80017989E /* CommunicationNMEAInterface.h */,
+				E99BCEA70E9ADAB80017989E /* Component.cpp */,
+				E99BCEA80E9ADAB80017989E /* Component.h */,
+				E99BCEA90E9ADAB80017989E /* ComponentAdaptiveBackgroundSubtractionColor.cpp */,
+				E99BCEAA0E9ADAB80017989E /* ComponentAdaptiveBackgroundSubtractionColor.h */,
+				E99BCEAB0E9ADAB80017989E /* ComponentAdaptiveBackgroundSubtractionGray.cpp */,
+				E99BCEAC0E9ADAB80017989E /* ComponentAdaptiveBackgroundSubtractionGray.h */,
+				E99BCEAD0E9ADAB80017989E /* ComponentBackgroundSubtractionColor.cpp */,
+				E99BCEAE0E9ADAB80017989E /* ComponentBackgroundSubtractionColor.h */,
+				E99BCEAF0E9ADAB80017989E /* ComponentBackgroundSubtractionGray.cpp */,
+				E99BCEB00E9ADAB80017989E /* ComponentBackgroundSubtractionGray.h */,
+				E99BCEB10E9ADAB80017989E /* ComponentBinaryDilation.cpp */,
+				E99BCEB20E9ADAB80017989E /* ComponentBinaryDilation.h */,
+				E99BCEB30E9ADAB80017989E /* ComponentBinaryErosion.cpp */,
+				E99BCEB40E9ADAB80017989E /* ComponentBinaryErosion.h */,
+				E99BCEB50E9ADAB80017989E /* ComponentBinaryMask.cpp */,
+				E99BCEB60E9ADAB80017989E /* ComponentBinaryMask.h */,
+				E99BCEB70E9ADAB80017989E /* ComponentBlobDetectionMinMax.cpp */,
+				E99BCEB80E9ADAB80017989E /* ComponentBlobDetectionMinMax.h */,
+				E99BCEB90E9ADAB80017989E /* ComponentBlobDetectionTwoColors.cpp */,
+				E99BCEBA0E9ADAB80017989E /* ComponentBlobDetectionTwoColors.h */,
+				E99BCEBB0E9ADAB80017989E /* ComponentBlobSelection.cpp */,
+				E99BCEBC0E9ADAB80017989E /* ComponentBlobSelection.h */,
+				E99BCEBD0E9ADAB80017989E /* ComponentCalibrationLinear.cpp */,
+				E99BCEBE0E9ADAB80017989E /* ComponentCalibrationLinear.h */,
+				E99BCEBF0E9ADAB80017989E /* ComponentCalibrationTSAI.cpp */,
+				E99BCEC00E9ADAB80017989E /* ComponentCalibrationTSAI.h */,
+				E99BCEC10E9ADAB80017989E /* ComponentCategory.cpp */,
+				E99BCEC20E9ADAB80017989E /* ComponentCategory.h */,
+				E99BCEC30E9ADAB80017989E /* ComponentChannelArithmetic.cpp */,
+				E99BCEC40E9ADAB80017989E /* ComponentChannelArithmetic.h */,
+				E99BCEC50E9ADAB80017989E /* ComponentColorBlur.cpp */,
+				E99BCEC60E9ADAB80017989E /* ComponentColorBlur.h */,
+				E99BCEC70E9ADAB80017989E /* ComponentColorMask.cpp */,
+				E99BCEC80E9ADAB80017989E /* ComponentColorMask.h */,
+				E99BCEC90E9ADAB80017989E /* ComponentConvertBayerToColor.cpp */,
+				E99BCECA0E9ADAB80017989E /* ComponentConvertBayerToColor.h */,
+				E99BCECB0E9ADAB80017989E /* ComponentConvertToColor.cpp */,
+				E99BCECC0E9ADAB80017989E /* ComponentConvertToColor.h */,
+				E99BCECD0E9ADAB80017989E /* ComponentConvertToGray.cpp */,
+				E99BCECE0E9ADAB80017989E /* ComponentConvertToGray.h */,
+				E99BCECF0E9ADAB80017989E /* ComponentDoubleThresholdColorIndependent.cpp */,
+				E99BCED00E9ADAB80017989E /* ComponentDoubleThresholdColorIndependent.h */,
+				E99BCED10E9ADAB80017989E /* ComponentEditor.cpp */,
+				E99BCED20E9ADAB80017989E /* ComponentEditor.h */,
+				E99BCED30E9ADAB80017989E /* ComponentGrayMask.cpp */,
+				E99BCED40E9ADAB80017989E /* ComponentGrayMask.h */,
+				E99BCED50E9ADAB80017989E /* ComponentHSVBackgroundSubtractionColor.cpp */,
+				E99BCED60E9ADAB80017989E /* ComponentHSVBackgroundSubtractionColor.h */,
+				E99BCED70E9ADAB80017989E /* ComponentIDReaderRing.cpp */,
+				E99BCED80E9ADAB80017989E /* ComponentIDReaderRing.h */,
+				E99BCED90E9ADAB80017989E /* ComponentInputCamera1394.cpp */,
+				E99BCEDA0E9ADAB80017989E /* ComponentInputCamera1394.h */,
+				E99BCEDB0E9ADAB80017989E /* ComponentInputCameraGigE.cpp */,
+				E99BCEDC0E9ADAB80017989E /* ComponentInputCameraGigE.h */,
+				E99BCEDD0E9ADAB80017989E /* ComponentInputCameraUSB.cpp */,
+				E99BCEDE0E9ADAB80017989E /* ComponentInputCameraUSB.h */,
+				E99BCEDF0E9ADAB80017989E /* ComponentInputFileAVI.cpp */,
+				E99BCEE00E9ADAB80017989E /* ComponentInputFileAVI.h */,
+				E99BCEE10E9ADAB80017989E /* ComponentInputFileImage.cpp */,
+				E99BCEE20E9ADAB80017989E /* ComponentInputFileImage.h */,
+				E99BCEE30E9ADAB80017989E /* ComponentNearestNeighborTracking.cpp */,
+				E99BCEE40E9ADAB80017989E /* ComponentNearestNeighborTracking.h */,
+				E99BCEE50E9ADAB80017989E /* ComponentOutputAVI.cpp */,
+				E99BCEE60E9ADAB80017989E /* ComponentOutputAVI.h */,
+				E99BCEE70E9ADAB80017989E /* ComponentOutputFile.cpp */,
+				E99BCEE80E9ADAB80017989E /* ComponentOutputFile.h */,
+				E99BCEE90E9ADAB80017989E /* ComponentOutputFileAVI.cpp */,
+				E99BCEEA0E9ADAB80017989E /* ComponentOutputFileAVI.h */,
+				E99BCEEB0E9ADAB80017989E /* ComponentOutputFileM4V.cpp */,
+				E99BCEEC0E9ADAB80017989E /* ComponentOutputFileM4V.h */,
+				E99BCEED0E9ADAB80017989E /* ComponentOutputMarkFrameManual.cpp */,
+				E99BCEEE0E9ADAB80017989E /* ComponentOutputMarkFrameManual.h */,
+				E99BCEEF0E9ADAB80017989E /* ComponentOutputParticles.cpp */,
+				E99BCEF00E9ADAB80017989E /* ComponentOutputParticles.h */,
+				E99BCEF10E9ADAB80017989E /* ComponentSimulationParticles.cpp */,
+				E99BCEF20E9ADAB80017989E /* ComponentSimulationParticles.h */,
+				E99BCEF30E9ADAB80017989E /* ComponentSpecificColorSubtraction.cpp */,
+				E99BCEF40E9ADAB80017989E /* ComponentSpecificColorSubtraction.h */,
+				E99BCEF50E9ADAB80017989E /* ComponentThresholdColorCommon.cpp */,
+				E99BCEF60E9ADAB80017989E /* ComponentThresholdColorCommon.h */,
+				E99BCEF70E9ADAB80017989E /* ComponentThresholdColorIndependent.cpp */,
+				E99BCEF80E9ADAB80017989E /* ComponentThresholdColorIndependent.h */,
+				E99BCEF90E9ADAB80017989E /* ComponentThresholdGray.cpp */,
+				E99BCEFA0E9ADAB80017989E /* ComponentThresholdGray.h */,
+				E99BCEFB0E9ADAB80017989E /* ComponentTracking.cpp */,
+				E99BCEFC0E9ADAB80017989E /* ComponentTracking.h */,
+				E99BCEFD0E9ADAB80017989E /* ComponentTrigger.cpp */,
+				E99BCEFE0E9ADAB80017989E /* ComponentTrigger.h */,
+				E99BCEFF0E9ADAB80017989E /* ComponentTriggerCounter.cpp */,
+				E99BCF000E9ADAB80017989E /* ComponentTriggerCounter.h */,
+				E99BCF010E9ADAB80017989E /* ComponentTriggerTimer.cpp */,
+				E99BCF020E9ADAB80017989E /* ComponentTriggerTimer.h */,
+				E99BCF030E9ADAB80017989E /* ConfigurationConversion.cpp */,
+				E99BCF040E9ADAB80017989E /* ConfigurationConversion.h */,
+				E99BCF050E9ADAB80017989E /* ConfigurationReaderXML.cpp */,
+				E99BCF060E9ADAB80017989E /* ConfigurationReaderXML.h */,
+				E99BCF070E9ADAB80017989E /* ConfigurationWriterXML.cpp */,
+				E99BCF080E9ADAB80017989E /* ConfigurationWriterXML.h */,
+				E99BCF090E9ADAB80017989E /* ConfigurationXML.cpp */,
+				E99BCF0A0E9ADAB80017989E /* ConfigurationXML.h */,
+				E99BCF0B0E9ADAB80017989E /* DataStructure.cpp */,
+				E99BCF0C0E9ADAB80017989E /* DataStructure.h */,
+				E99BCF0D0E9ADAB80017989E /* DataStructureImage.cpp */,
+				E99BCF0E0E9ADAB80017989E /* DataStructureImage.h */,
+				E99BCF0F0E9ADAB80017989E /* DataStructureInput.cpp */,
+				E99BCF100E9ADAB80017989E /* DataStructureInput.h */,
+				E99BCF110E9ADAB80017989E /* DataStructureParticles.cpp */,
+				E99BCF120E9ADAB80017989E /* DataStructureParticles.h */,
+				E99BCF130E9ADAB80017989E /* DataStructureTracks.cpp */,
+				E99BCF140E9ADAB80017989E /* DataStructureTracks.h */,
+				E99BCF150E9ADAB80017989E /* Display.cpp */,
+				E99BCF160E9ADAB80017989E /* Display.h */,
+				E99BCF170E9ADAB80017989E /* DisplayEditor.cpp */,
+				E99BCF180E9ADAB80017989E /* DisplayEditor.h */,
+				E99BCF190E9ADAB80017989E /* DisplayRenderer.cpp */,
+				E99BCF1A0E9ADAB80017989E /* DisplayRenderer.h */,
+				E99BCF1B0E9ADAB80017989E /* DisplaySubscriberInterface.cpp */,
+				E99BCF1C0E9ADAB80017989E /* DisplaySubscriberInterface.h */,
+				E99BCF1F0E9ADAB80017989E /* ErrorList.cpp */,
+				E99BCF200E9ADAB80017989E /* ErrorList.h */,
+				E99BCF210E9ADAB80017989E /* ErrorListItem.cpp */,
+				E99BCF220E9ADAB80017989E /* ErrorListItem.h */,
+				E99BCF230E9ADAB80017989E /* ImageConversion.cpp */,
+				E99BCF240E9ADAB80017989E /* ImageConversion.h */,
+				E99BCF270E9ADAB80017989E /* ObjectList.cpp */,
+				E99BCF280E9ADAB80017989E /* ObjectList.h */,
+				E99BCF290E9ADAB80017989E /* Particle.cpp */,
+				E99BCF2A0E9ADAB80017989E /* Particle.h */,
+				E99BCF2B0E9ADAB80017989E /* Random.cpp */,
+				E99BCF2C0E9ADAB80017989E /* Random.h */,
+				E99BCF2D0E9ADAB80017989E /* RandomExponential.cpp */,
+				E99BCF2E0E9ADAB80017989E /* RandomExponential.h */,
+				E99BCF2F0E9ADAB80017989E /* RandomMersenneTwister.h */,
+				E99BCF300E9ADAB80017989E /* RandomNormal.cpp */,
+				E99BCF310E9ADAB80017989E /* RandomNormal.h */,
+				E99BCF320E9ADAB80017989E /* RandomPoisson.cpp */,
+				E99BCF330E9ADAB80017989E /* RandomPoisson.h */,
+				E99BCF350E9ADAB80017989E /* SimulationParticles.cpp */,
+				E99BCF360E9ADAB80017989E /* SimulationParticles.h */,
+				E99BCF370E9ADAB80017989E /* StatusItem.cpp */,
+				E99BCF380E9ADAB80017989E /* StatusItem.h */,
+				E99BCF390E9ADAB80017989E /* SwisTrackCore.cpp */,
+				E99BCF3A0E9ADAB80017989E /* SwisTrackCore.h */,
+				E99BCF3B0E9ADAB80017989E /* SwisTrackCoreEditor.cpp */,
+				E99BCF3C0E9ADAB80017989E /* SwisTrackCoreEditor.h */,
+				E99BCF3D0E9ADAB80017989E /* SwisTrackCoreEventRecorder.cpp */,
+				E99BCF3E0E9ADAB80017989E /* SwisTrackCoreEventRecorder.h */,
+				E99BCF3F0E9ADAB80017989E /* SwisTrackCoreInterface.cpp */,
+				E99BCF400E9ADAB80017989E /* SwisTrackCoreInterface.h */,
+				E99BCF410E9ADAB80017989E /* SwisTrackCoreTrigger.cpp */,
+				E99BCF420E9ADAB80017989E /* SwisTrackCoreTrigger.h */,
+				E99BCF430E9ADAB80017989E /* Track.cpp */,
+				E99BCF440E9ADAB80017989E /* Track.h */,
+			);
+			name = core;
+			path = ../core;
+			sourceTree = SOURCE_ROOT;
+		};
+		E99BCFD70E9AF0530017989E /* gui */ = {
+			isa = PBXGroup;
+			children = (
+				E91A15E80EAD2116009B8232 /* ConfigurationParameterDate.cpp */,
+				E91A15E90EAD2116009B8232 /* ConfigurationParameterDate.h */,
+				E99BCFD80E9AF0530017989E /* AboutDialog.cpp */,
+				E99BCFD90E9AF0530017989E /* AboutDialog.h */,
+				E99BCFDA0E9AF0530017989E /* Application.cpp */,
+				E99BCFDB0E9AF0530017989E /* Application.h */,
+				E99BD00D0E9AF0530017989E /* Canvas.cpp */,
+				E99BD00E0E9AF0530017989E /* Canvas.h */,
+				E99BD00F0E9AF0530017989E /* CanvasAnnotation.cpp */,
+				E99BD0100E9AF0530017989E /* CanvasAnnotation.h */,
+				E99BD0110E9AF0530017989E /* CanvasPanel.cpp */,
+				E99BD0120E9AF0530017989E /* CanvasPanel.h */,
+				E99BD0130E9AF0530017989E /* CanvasTitle.cpp */,
+				E99BD0140E9AF0530017989E /* CanvasTitle.h */,
+				E99BD0150E9AF0530017989E /* ComponentListPanel.cpp */,
+				E99BD0160E9AF0530017989E /* ComponentListPanel.h */,
+				E99BD0170E9AF0530017989E /* ComponentsDialog.cpp */,
+				E99BD0180E9AF0530017989E /* ComponentsDialog.h */,
+				E99BD0190E9AF0530017989E /* ComponentTreeItem.cpp */,
+				E99BD01A0E9AF0530017989E /* ComponentTreeItem.h */,
+				E99BD01B0E9AF0530017989E /* ConfigurationPanel.cpp */,
+				E99BD01C0E9AF0530017989E /* ConfigurationPanel.h */,
+				E99BD01D0E9AF0530017989E /* ConfigurationParameter.cpp */,
+				E99BD01E0E9AF0530017989E /* ConfigurationParameter.h */,
+				E99BD01F0E9AF0530017989E /* ConfigurationParameterAngle.cpp */,
+				E99BD0200E9AF0530017989E /* ConfigurationParameterAngle.h */,
+				E99BD0210E9AF0530017989E /* ConfigurationParameterButton.cpp */,
+				E99BD0220E9AF0530017989E /* ConfigurationParameterButton.h */,
+				E99BD0230E9AF0530017989E /* ConfigurationParameterCheckBox.cpp */,
+				E99BD0240E9AF0530017989E /* ConfigurationParameterCheckBox.h */,
+				E99BD0250E9AF0530017989E /* ConfigurationParameterColor.cpp */,
+				E99BD0260E9AF0530017989E /* ConfigurationParameterColor.h */,
+				E99BD0270E9AF0530017989E /* ConfigurationParameterDouble.cpp */,
+				E99BD0280E9AF0530017989E /* ConfigurationParameterDouble.h */,
+				E99BD0290E9AF0530017989E /* ConfigurationParameterDropdownList.cpp */,
+				E99BD02A0E9AF0530017989E /* ConfigurationParameterDropdownList.h */,
+				E99BD02B0E9AF0530017989E /* ConfigurationParameterFactory.cpp */,
+				E99BD02C0E9AF0530017989E /* ConfigurationParameterFactory.h */,
+				E99BD02D0E9AF0530017989E /* ConfigurationParameterFile.cpp */,
+				E99BD02E0E9AF0530017989E /* ConfigurationParameterFile.h */,
+				E99BD02F0E9AF0530017989E /* ConfigurationParameterGigECameraList.cpp */,
+				E99BD0300E9AF0530017989E /* ConfigurationParameterGigECameraList.h */,
+				E99BD0310E9AF0530017989E /* ConfigurationParameterImage.cpp */,
+				E99BD0320E9AF0530017989E /* ConfigurationParameterImage.h */,
+				E99BD0330E9AF0530017989E /* ConfigurationParameterInteger.cpp */,
+				E99BD0340E9AF0530017989E /* ConfigurationParameterInteger.h */,
+				E99BD0350E9AF0530017989E /* ConfigurationParameterPointDouble.cpp */,
+				E99BD0360E9AF0530017989E /* ConfigurationParameterPointDouble.h */,
+				E99BD0370E9AF0530017989E /* ConfigurationParameterPointInteger.cpp */,
+				E99BD0380E9AF0530017989E /* ConfigurationParameterPointInteger.h */,
+				E99BD0390E9AF0530017989E /* ConfigurationParameterString.cpp */,
+				E99BD03A0E9AF0530017989E /* ConfigurationParameterString.h */,
+				E99BD03B0E9AF0530017989E /* ConfigurationParameterVideoFormat.cpp */,
+				E99BD03C0E9AF0530017989E /* ConfigurationParameterVideoFormat.h */,
+				E99BD03D0E9AF0530017989E /* ErrorListDialog.cpp */,
+				E99BD03E0E9AF0530017989E /* ErrorListDialog.h */,
+				E99BD0430E9AF0530017989E /* SwisTrack.cpp */,
+				E99BD0440E9AF0530017989E /* SwisTrack.h */,
+				E99BD0450E9AF0530017989E /* TCPServer.cpp */,
+				E99BD0460E9AF0530017989E /* TCPServer.h */,
+				E99BD0470E9AF0530017989E /* TCPServerConnection.cpp */,
+				E99BD0480E9AF0530017989E /* TCPServerConnection.h */,
+				E99BD0490E9AF0530017989E /* TCPServerDialog.cpp */,
+				E99BD04A0E9AF0530017989E /* TCPServerDialog.h */,
+				E99BD04B0E9AF0530017989E /* TimelinePanel.cpp */,
+				E99BD04C0E9AF0530017989E /* TimelinePanel.h */,
+			);
+			name = gui;
+			path = ../gui;
+			sourceTree = SOURCE_ROOT;
+		};
+		E99BD09F0E9AF08A0017989E /* libtsai */ = {
+			isa = PBXGroup;
+			children = (
+				E99BD0A10E9AF08A0017989E /* include */,
+				E99BD0AB0E9AF08A0017989E /* mathsrc */,
+				E99BD0BD0E9AF08B0017989E /* test */,
+				E99BD0C30E9AF08B0017989E /* tsaisrc */,
+			);
+			name = libtsai;
+			path = ../libtsai;
+			sourceTree = SOURCE_ROOT;
+		};
+		E99BD0A10E9AF08A0017989E /* include */ = {
+			isa = PBXGroup;
+			children = (
+				E99BD0A20E9AF08A0017989E /* cal_defs.h */,
+				E99BD0A30E9AF08A0017989E /* f2c.h */,
+				E99BD0A40E9AF08A0017989E /* gasdev.h */,
+				E99BD0A50E9AF08A0017989E /* libtsai.h */,
+				E99BD0A60E9AF08A0017989E /* lmdif.h */,
+				E99BD0A70E9AF08A0017989E /* matrix.h */,
+			);
+			name = include;
+			path = ../libtsai/include;
+			sourceTree = SOURCE_ROOT;
+		};
+		E99BD0AB0E9AF08A0017989E /* mathsrc */ = {
+			isa = PBXGroup;
+			children = (
+				E99BD0AC0E9AF08B0017989E /* matrix.c */,
+				E99BD0AE0E9AF08B0017989E /* minpack */,
+			);
+			name = mathsrc;
+			path = ../libtsai/mathsrc;
+			sourceTree = SOURCE_ROOT;
+		};
+		E99BD0AE0E9AF08B0017989E /* minpack */ = {
+			isa = PBXGroup;
+			children = (
+				E99BD0AF0E9AF08B0017989E /* dpmpar.c */,
+				E99BD0B10E9AF08B0017989E /* enorm.c */,
+				E99BD0B30E9AF08B0017989E /* fdjac2.c */,
+				E99BD0B50E9AF08B0017989E /* lmdif.c */,
+				E99BD0B70E9AF08B0017989E /* lmpar.c */,
+				E99BD0B90E9AF08B0017989E /* qrfac.c */,
+				E99BD0BB0E9AF08B0017989E /* qrsolv.c */,
+			);
+			name = minpack;
+			path = ../libtsai/mathsrc/minpack;
+			sourceTree = SOURCE_ROOT;
+		};
+		E99BD0BD0E9AF08B0017989E /* test */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = test;
+			path = ../libtsai/test;
+			sourceTree = SOURCE_ROOT;
+		};
+		E99BD0C30E9AF08B0017989E /* tsaisrc */ = {
+			isa = PBXGroup;
+			children = (
+				E99BD0C40E9AF08B0017989E /* cal_eval.c */,
+				E99BD0C60E9AF08B0017989E /* cal_main.c */,
+				E99BD0C80E9AF08B0017989E /* cal_tran.c */,
+				E99BD0CA0E9AF08B0017989E /* cal_util.c */,
+				E99BD0CC0E9AF08B0017989E /* ecalmain.c */,
+			);
+			name = tsaisrc;
+			path = ../libtsai/tsaisrc;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E99BCE920E9AD9A10017989E /* SwisTrack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E99BCE990E9AD9A20017989E /* Build configuration list for PBXNativeTarget "SwisTrack" */;
+			buildPhases = (
+				E99BCE8F0E9AD9A10017989E /* Resources */,
+				E99BCE900E9AD9A10017989E /* Sources */,
+				E99BCE910E9AD9A10017989E /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwisTrack;
+			productName = SwisTrack;
+			productReference = E99BCE930E9AD9A10017989E /* SwisTrack.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E99BCE7D0E9AD93D0017989E /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = E99BCE800E9AD93D0017989E /* Build configuration list for PBXProject "SwisTrack" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 0;
+			mainGroup = E99BCE7B0E9AD93D0017989E;
+			productRefGroup = E99BCE940E9AD9A10017989E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E99BCE920E9AD9A10017989E /* SwisTrack */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E99BCE8F0E9AD9A10017989E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E99BCE900E9AD9A10017989E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E99BCF450E9ADAB90017989E /* CommunicationCommandHandler.cpp in Sources */,
+				E99BCF460E9ADAB90017989E /* CommunicationInterface.cpp in Sources */,
+				E99BCF470E9ADAB90017989E /* CommunicationMessage.cpp in Sources */,
+				E99BCF480E9ADAB90017989E /* CommunicationNMEAInterface.cpp in Sources */,
+				E99BCF490E9ADAB90017989E /* Component.cpp in Sources */,
+				E99BCF4A0E9ADAB90017989E /* ComponentAdaptiveBackgroundSubtractionColor.cpp in Sources */,
+				E99BCF4B0E9ADAB90017989E /* ComponentAdaptiveBackgroundSubtractionGray.cpp in Sources */,
+				E99BCF4C0E9ADAB90017989E /* ComponentBackgroundSubtractionColor.cpp in Sources */,
+				E99BCF4D0E9ADAB90017989E /* ComponentBackgroundSubtractionGray.cpp in Sources */,
+				E99BCF4E0E9ADAB90017989E /* ComponentBinaryDilation.cpp in Sources */,
+				E99BCF4F0E9ADAB90017989E /* ComponentBinaryErosion.cpp in Sources */,
+				E99BCF500E9ADAB90017989E /* ComponentBinaryMask.cpp in Sources */,
+				E99BCF510E9ADAB90017989E /* ComponentBlobDetectionMinMax.cpp in Sources */,
+				E99BCF520E9ADAB90017989E /* ComponentBlobDetectionTwoColors.cpp in Sources */,
+				E99BCF530E9ADAB90017989E /* ComponentBlobSelection.cpp in Sources */,
+				E99BCF540E9ADAB90017989E /* ComponentCalibrationLinear.cpp in Sources */,
+				E99BCF550E9ADAB90017989E /* ComponentCalibrationTSAI.cpp in Sources */,
+				E99BCF560E9ADAB90017989E /* ComponentCategory.cpp in Sources */,
+				E99BCF570E9ADAB90017989E /* ComponentChannelArithmetic.cpp in Sources */,
+				E99BCF580E9ADAB90017989E /* ComponentColorBlur.cpp in Sources */,
+				E99BCF590E9ADAB90017989E /* ComponentColorMask.cpp in Sources */,
+				E99BCF5A0E9ADAB90017989E /* ComponentConvertBayerToColor.cpp in Sources */,
+				E99BCF5B0E9ADAB90017989E /* ComponentConvertToColor.cpp in Sources */,
+				E99BCF5C0E9ADAB90017989E /* ComponentConvertToGray.cpp in Sources */,
+				E99BCF5D0E9ADAB90017989E /* ComponentDoubleThresholdColorIndependent.cpp in Sources */,
+				E99BCF5E0E9ADAB90017989E /* ComponentEditor.cpp in Sources */,
+				E99BCF5F0E9ADAB90017989E /* ComponentGrayMask.cpp in Sources */,
+				E99BCF600E9ADAB90017989E /* ComponentHSVBackgroundSubtractionColor.cpp in Sources */,
+				E99BCF610E9ADAB90017989E /* ComponentIDReaderRing.cpp in Sources */,
+				E99BCF620E9ADAB90017989E /* ComponentInputCamera1394.cpp in Sources */,
+				E99BCF630E9ADAB90017989E /* ComponentInputCameraGigE.cpp in Sources */,
+				E99BCF640E9ADAB90017989E /* ComponentInputCameraUSB.cpp in Sources */,
+				E99BCF650E9ADAB90017989E /* ComponentInputFileAVI.cpp in Sources */,
+				E99BCF660E9ADAB90017989E /* ComponentInputFileImage.cpp in Sources */,
+				E99BCF670E9ADAB90017989E /* ComponentNearestNeighborTracking.cpp in Sources */,
+				E99BCF680E9ADAB90017989E /* ComponentOutputAVI.cpp in Sources */,
+				E99BCF690E9ADAB90017989E /* ComponentOutputFile.cpp in Sources */,
+				E99BCF6A0E9ADAB90017989E /* ComponentOutputFileAVI.cpp in Sources */,
+				E99BCF6B0E9ADAB90017989E /* ComponentOutputFileM4V.cpp in Sources */,
+				E99BCF6C0E9ADAB90017989E /* ComponentOutputMarkFrameManual.cpp in Sources */,
+				E99BCF6D0E9ADAB90017989E /* ComponentOutputParticles.cpp in Sources */,
+				E99BCF6E0E9ADAB90017989E /* ComponentSimulationParticles.cpp in Sources */,
+				E99BCF6F0E9ADAB90017989E /* ComponentSpecificColorSubtraction.cpp in Sources */,
+				E99BCF700E9ADAB90017989E /* ComponentThresholdColorCommon.cpp in Sources */,
+				E99BCF710E9ADAB90017989E /* ComponentThresholdColorIndependent.cpp in Sources */,
+				E99BCF720E9ADAB90017989E /* ComponentThresholdGray.cpp in Sources */,
+				E99BCF730E9ADAB90017989E /* ComponentTracking.cpp in Sources */,
+				E99BCF740E9ADAB90017989E /* ComponentTrigger.cpp in Sources */,
+				E99BCF750E9ADAB90017989E /* ComponentTriggerCounter.cpp in Sources */,
+				E99BCF760E9ADAB90017989E /* ComponentTriggerTimer.cpp in Sources */,
+				E99BCF770E9ADAB90017989E /* ConfigurationConversion.cpp in Sources */,
+				E99BCF780E9ADAB90017989E /* ConfigurationReaderXML.cpp in Sources */,
+				E99BCF790E9ADAB90017989E /* ConfigurationWriterXML.cpp in Sources */,
+				E99BCF7A0E9ADAB90017989E /* ConfigurationXML.cpp in Sources */,
+				E99BCF7B0E9ADAB90017989E /* DataStructure.cpp in Sources */,
+				E99BCF7C0E9ADAB90017989E /* DataStructureImage.cpp in Sources */,
+				E99BCF7D0E9ADAB90017989E /* DataStructureInput.cpp in Sources */,
+				E99BCF7E0E9ADAB90017989E /* DataStructureParticles.cpp in Sources */,
+				E99BCF7F0E9ADAB90017989E /* DataStructureTracks.cpp in Sources */,
+				E99BCF800E9ADAB90017989E /* Display.cpp in Sources */,
+				E99BCF810E9ADAB90017989E /* DisplayEditor.cpp in Sources */,
+				E99BCF820E9ADAB90017989E /* DisplayRenderer.cpp in Sources */,
+				E99BCF830E9ADAB90017989E /* DisplaySubscriberInterface.cpp in Sources */,
+				E99BCF850E9ADAB90017989E /* ErrorList.cpp in Sources */,
+				E99BCF860E9ADAB90017989E /* ErrorListItem.cpp in Sources */,
+				E99BCF870E9ADAB90017989E /* ImageConversion.cpp in Sources */,
+				E99BCF890E9ADAB90017989E /* ObjectList.cpp in Sources */,
+				E99BCF8A0E9ADAB90017989E /* Particle.cpp in Sources */,
+				E99BCF8B0E9ADAB90017989E /* Random.cpp in Sources */,
+				E99BCF8C0E9ADAB90017989E /* RandomExponential.cpp in Sources */,
+				E99BCF8D0E9ADAB90017989E /* RandomNormal.cpp in Sources */,
+				E99BCF8E0E9ADAB90017989E /* RandomPoisson.cpp in Sources */,
+				E99BCF900E9ADAB90017989E /* SimulationParticles.cpp in Sources */,
+				E99BCF910E9ADAB90017989E /* StatusItem.cpp in Sources */,
+				E99BCF920E9ADAB90017989E /* SwisTrackCore.cpp in Sources */,
+				E99BCF930E9ADAB90017989E /* SwisTrackCoreEditor.cpp in Sources */,
+				E99BCF940E9ADAB90017989E /* SwisTrackCoreEventRecorder.cpp in Sources */,
+				E99BCF950E9ADAB90017989E /* SwisTrackCoreInterface.cpp in Sources */,
+				E99BCF960E9ADAB90017989E /* SwisTrackCoreTrigger.cpp in Sources */,
+				E99BCF970E9ADAB90017989E /* Track.cpp in Sources */,
+				E99BD04D0E9AF0530017989E /* AboutDialog.cpp in Sources */,
+				E99BD04E0E9AF0530017989E /* Application.cpp in Sources */,
+				E99BD07F0E9AF0530017989E /* Canvas.cpp in Sources */,
+				E99BD0800E9AF0530017989E /* CanvasAnnotation.cpp in Sources */,
+				E99BD0810E9AF0530017989E /* CanvasPanel.cpp in Sources */,
+				E99BD0820E9AF0530017989E /* CanvasTitle.cpp in Sources */,
+				E99BD0830E9AF0530017989E /* ComponentListPanel.cpp in Sources */,
+				E99BD0840E9AF0530017989E /* ComponentsDialog.cpp in Sources */,
+				E99BD0850E9AF0530017989E /* ComponentTreeItem.cpp in Sources */,
+				E99BD0860E9AF0530017989E /* ConfigurationPanel.cpp in Sources */,
+				E99BD0870E9AF0530017989E /* ConfigurationParameter.cpp in Sources */,
+				E99BD0880E9AF0530017989E /* ConfigurationParameterAngle.cpp in Sources */,
+				E99BD0890E9AF0530017989E /* ConfigurationParameterButton.cpp in Sources */,
+				E99BD08A0E9AF0530017989E /* ConfigurationParameterCheckBox.cpp in Sources */,
+				E99BD08B0E9AF0530017989E /* ConfigurationParameterColor.cpp in Sources */,
+				E99BD08C0E9AF0530017989E /* ConfigurationParameterDouble.cpp in Sources */,
+				E99BD08D0E9AF0530017989E /* ConfigurationParameterDropdownList.cpp in Sources */,
+				E99BD08E0E9AF0530017989E /* ConfigurationParameterFactory.cpp in Sources */,
+				E99BD08F0E9AF0530017989E /* ConfigurationParameterFile.cpp in Sources */,
+				E99BD0900E9AF0530017989E /* ConfigurationParameterGigECameraList.cpp in Sources */,
+				E99BD0910E9AF0530017989E /* ConfigurationParameterImage.cpp in Sources */,
+				E99BD0920E9AF0530017989E /* ConfigurationParameterInteger.cpp in Sources */,
+				E99BD0930E9AF0530017989E /* ConfigurationParameterPointDouble.cpp in Sources */,
+				E99BD0940E9AF0530017989E /* ConfigurationParameterPointInteger.cpp in Sources */,
+				E99BD0950E9AF0530017989E /* ConfigurationParameterString.cpp in Sources */,
+				E99BD0960E9AF0530017989E /* ConfigurationParameterVideoFormat.cpp in Sources */,
+				E99BD0970E9AF0530017989E /* ErrorListDialog.cpp in Sources */,
+				E99BD09A0E9AF0530017989E /* SwisTrack.cpp in Sources */,
+				E99BD09B0E9AF0530017989E /* TCPServer.cpp in Sources */,
+				E99BD09C0E9AF0530017989E /* TCPServerConnection.cpp in Sources */,
+				E99BD09D0E9AF0530017989E /* TCPServerDialog.cpp in Sources */,
+				E99BD09E0E9AF0530017989E /* TimelinePanel.cpp in Sources */,
+				E99BD0D20E9AF08B0017989E /* matrix.c in Sources */,
+				E99BD0D40E9AF08B0017989E /* dpmpar.c in Sources */,
+				E99BD0D60E9AF08B0017989E /* enorm.c in Sources */,
+				E99BD0D80E9AF08B0017989E /* fdjac2.c in Sources */,
+				E99BD0DA0E9AF08B0017989E /* lmdif.c in Sources */,
+				E99BD0DC0E9AF08B0017989E /* lmpar.c in Sources */,
+				E99BD0DE0E9AF08B0017989E /* qrfac.c in Sources */,
+				E99BD0E00E9AF08B0017989E /* qrsolv.c in Sources */,
+				E99BD0E60E9AF08B0017989E /* cal_eval.c in Sources */,
+				E99BD0E80E9AF08B0017989E /* cal_main.c in Sources */,
+				E99BD0EA0E9AF08B0017989E /* cal_tran.c in Sources */,
+				E99BD0EC0E9AF08B0017989E /* cal_util.c in Sources */,
+				E99BD0EE0E9AF08B0017989E /* ecalmain.c in Sources */,
+				E91A15E60EAD20ED009B8232 /* ComponentTrackSmoothing.cpp in Sources */,
+				E91A15EA0EAD2116009B8232 /* ConfigurationParameterDate.cpp in Sources */,
+				E91A15ED0EAD2136009B8232 /* ComponentOpticalFlowPyrLKTracking.cpp in Sources */,
+				E91A15F00EAD2143009B8232 /* ComponentDynamicNearestNeighborTracking.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E99BCE7E0E9AD93D0017989E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Debug;
+		};
+		E99BCE7F0E9AD93D0017989E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			name = Release;
+		};
+		E99BCE970E9AD9A20017989E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = (
+					"/usr/lib/wx/include/mac-unicode-debug-2.8",
+					"/usr/include/wx-2.8",
+					/usr/include/opencv,
+				);
+				INFOPLIST_FILE = "SwisTrack-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-D_FILE_OFFSET_BITS=64",
+					"-D_LARGE_FILES",
+					"-D__WXDEBUG__",
+					"-D__WXMAC__",
+				);
+				OTHER_LDFLAGS = (
+					"-framework",
+					IOKit,
+					"-framework",
+					Carbon,
+					"-framework",
+					Cocoa,
+					"-framework",
+					System,
+					"-framework",
+					QuickTime,
+					"-framework",
+					OpenGL,
+					"-framework",
+					AGL,
+					"-lwx_macud_richtext-2.8",
+					"-lwx_macud_aui-2.8",
+					"-lwx_macud_xrc-2.8",
+					"-lwx_macud_qa-2.8",
+					"-lwx_macud_html-2.8",
+					"-lwx_macud_adv-2.8",
+					"-lwx_macud_core-2.8",
+					"-lwx_base_carbonud_xml-2.8",
+					"-lwx_base_carbonud_net-2.8",
+					"-lwx_base_carbonud-2.8",
+					"-lm",
+					"-lcv",
+					"-lcxcore",
+					"-lhighgui",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = SwisTrack;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		E99BCE980E9AD9A20017989E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				INFOPLIST_FILE = "SwisTrack-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Carbon,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = SwisTrack;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E99BCE800E9AD93D0017989E /* Build configuration list for PBXProject "SwisTrack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E99BCE7E0E9AD93D0017989E /* Debug */,
+				E99BCE7F0E9AD93D0017989E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E99BCE990E9AD9A20017989E /* Build configuration list for PBXNativeTarget "SwisTrack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E99BCE970E9AD9A20017989E /* Debug */,
+				E99BCE980E9AD9A20017989E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E99BCE7D0E9AD93D0017989E /* Project object */;
+}

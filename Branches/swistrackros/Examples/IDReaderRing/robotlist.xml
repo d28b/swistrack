@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<objectlist>
+	<objects>
+		<object id="15">
+			<barcode>
+				<chips length="14" symbol="15" />
+				<angle>0</angle>
+			</barcode>
+		</object>
+		<object id="127">
+			<barcode>
+				<chips length="14" symbol="127" />
+				<angle>0</angle>
+			</barcode>
+		</object>
+		<object id="9">
+			<barcode>
+				<chips length="14" symbol="6822" />
+				<angle>0</angle>
+			</barcode>
+		</object>
+		<object id="2">
+			<barcode>
+				<chips length="14" symbol="332" />
+				<angle>0</angle>
+			</barcode>
+		</object>
+	</objects>
+</objectlist>

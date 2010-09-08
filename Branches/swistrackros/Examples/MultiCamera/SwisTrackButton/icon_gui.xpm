@@ -1,0 +1,29 @@
+/* XPM */
+static const char *icon_gui_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 7 1",
+"  c white",
+". c #008000",
+"X c #800000",
+"o c red",
+"O c #808080",
+"+ c #c0c0c0",
+"@ c None",
+/* pixels */
+"@@@@OOOOOOO+@@@@",
+"@@@OOO@@@@@+++@@",
+"@@OOO@@@@XX@O+@@",
+"@@OO@@@@XXX@@++@",
+"@@OO@@@@XX@@@O+@",
+"@OOO@@   @@@@O++",
+"@OO@@@@@ @@@@@O+",
+"@OO@@@@@@@@@@@O+",
+"@OO@@ +@@@@@@@O+",
+"@OO@@..@@@@@@@O+",
+"@OOO@@@...@@@O++",
+"@@OO@@@.o.@@@O+@",
+"@@OO@@@...@@@O+@",
+"@@OOO@@...@@O++@",
+"@@@OOO@@@@@O++@@",
+"@@@@OOOOOOO++@@@"
+};

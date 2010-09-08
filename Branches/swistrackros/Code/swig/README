@@ -1,0 +1,13 @@
+This is the beginning of a swig wrapper for swistrack.  The test case
+shows how to instantiate a pipeline and step it forwards, getting an
+IplImage at each step.  You can then call any of the openCV functions
+on it, or display it in a gui, or whatever you want.
+
+I was going ot use it to make a QT4 video player in python, but had
+trouble converting it to something that Qt could display.  Qt4.5 is
+going to read RGB 888, which is the default format of an IplImage but
+4.3 doesn't do it yet.  It's tricky because a QImage is a SIP python
+object, while everything else in the universe uses Swig.
+
+It does *not* yet support writing swistrack plugins in python.  It
+lets you call swistrack from python, but not python from swistrack. 

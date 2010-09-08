@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Double Threshold (color)</friendlyname>
+	<description>Thresholds a color image using a lower and an upper threshold value for each channel. The result is a binary image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/DoubleThresholdColorIndependent</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="integer">
+			<name>BlueLowThreshold</name>
+			<label>Blue Low Threshold</label>
+			<min>0</min>
+			<max>255</max>
+			<slider>true</slider>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>BlueHighThreshold</name>
+			<label>Blue High Threshold</label>
+			<min>0</min>
+			<max>255</max>
+			<slider>true</slider>
+			<default>255</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>GreenLowThreshold</name>
+			<label>Green Low Threshold</label>
+			<min>0</min>
+			<max>255</max>
+			<slider>true</slider>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>GreenHighThreshold</name>
+			<label>Green High Threshold</label>
+			<min>0</min>
+			<max>255</max>
+			<slider>true</slider>
+			<default>255</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>RedLowThreshold</name>
+			<label>Red Low Threshold</label>
+			<min>0</min>
+			<max>255</max>
+			<slider>true</slider>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>RedHighThreshold</name>
+			<label>Red High Threshold</label>
+			<min>0</min>
+			<max>255</max>
+			<slider>true</slider>
+			<default>255</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

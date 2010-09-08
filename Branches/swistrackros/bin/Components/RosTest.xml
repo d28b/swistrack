@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Output Particles to ROS</friendlyname>
+	<description>Writes particles to a ROS message.</description>
+	<url>http://www.ros.org</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+	</configuration>
+</swistrackcomponent>

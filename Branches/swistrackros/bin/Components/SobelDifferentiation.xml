@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Sobel Differentiation</friendlyname>
+	<description>Calculates first, second, third or mixed image derivatives using extended Sobel operator</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/SobelDifferentiation</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<line />
+		<title>Parameters</title>
+		<parameter type="integer">
+			<name>xorder</name>
+			<label>Differentiation Order for x</label>
+			<min>0</min>
+			<max>3</max>
+			<default>1</default>
+			<unit>order</unit>
+			<slider>true</slider>
+			<sliderstep>1</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>yorder</name>
+			<label>Differentiation Order for y</label>
+			<min>0</min>
+			<default>1</default>
+			<max>3</max>
+			<unit>order</unit>
+			<slider>true</slider>
+			<sliderstep>1</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="dropdownlist">
+	    		<name>apertureSize</name>
+	    		<label>Size of the extended Sobel kernel</label>
+	    		<items>
+	    		  <item key="1">1</item>
+	    		  <item key="3">3</item>
+	    		  <item key="5">5</item>
+			  <item key="7">7</item>	    	
+			</items>
+	    		<default>3</default>
+	    		<reloadable>true</reloadable>
+	  	</parameter>
+	</configuration>
+</swistrackcomponent>

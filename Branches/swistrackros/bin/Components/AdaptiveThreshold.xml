@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Adaptive Threshold</friendlyname>
+	<description>Thresholds a color image using a lower and an upper threshold value for each channel. The result is a binary image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/AdaptiveThreshold</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="integer">
+			<name>Threshold</name>
+			<label>Threshold</label>
+			<min>0</min>
+			<max>255</max>
+			<slider>true</slider>
+			<default>100</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

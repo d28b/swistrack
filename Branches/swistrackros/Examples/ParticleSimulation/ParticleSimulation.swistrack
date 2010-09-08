@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<swistrack>
+  <components>
+    <component type="SimulationParticles">
+      <enabledinterval value="1"/>
+      <parameter name="CameraOrigin.x" value="0.000000"/>
+      <parameter name="CameraOrigin.y" value="0.000000"/>
+      <parameter name="CameraPixelSize" value="0.010000"/>
+      <parameter name="CameraRotation" value="0.000000"/>
+      <parameter name="CameraSize.h" value="640"/>
+      <parameter name="CameraSize.w" value="480"/>
+      <parameter name="CameraSize.x" value="640.000000"/>
+      <parameter name="CameraSize.y" value="480.000000"/>
+      <parameter name="File" value="Particles.txt"/>
+    </component>
+    <component type="CalibrationLinear">
+      <enabledinterval value="1"/>
+      <parameter name="CalibrationPoints" value="Calibration.xml"/>
+    </component>
+    <component type="OutputParticles">
+      <enabledinterval value="1"/>
+    </component>
+  </components>
+  <server>
+    <port>3001</port>
+  </server>
+</swistrack>

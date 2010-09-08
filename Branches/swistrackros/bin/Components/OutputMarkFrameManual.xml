@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Manually Mark Frames</friendlyname>
+	<description>Sends MARK messages to the output stream whenever the user clicks a button. The image is left untouched.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputMarkFrameManual</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+		<parameter type="string">
+			<name>MarkerName</name>
+			<label>Marker name (only A-Z and 0-9)</label>
+			<default></default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="button">
+			<name>Mark</name>
+			<label>Mark 1</label>
+			<value>1</value>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="button">
+			<name>Mark</name>
+			<label>Mark 2</label>
+			<value>2</value>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="button">
+			<name>Mark</name>
+			<label>Mark 3</label>
+			<value>3</value>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="button">
+			<name>Mark</name>
+			<label>Mark ON</label>
+			<value>ON</value>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="button">
+			<name>Mark</name>
+			<label>Mark OFF</label>
+			<value>OFF</value>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

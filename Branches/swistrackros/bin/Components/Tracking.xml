@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Nearest Neighbor Tracking (SwisTrack 3)</friendlyname>
+	<description>This is the nearest neighbor tracking code used in SwisTrack 3. Note that this component is only provided for compatibility with old setups. New applications should use the new "Nearest Neighbor Tracking" component instead.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/Tracking</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+	    <parameter type="integer">
+		    <name>MaxNumber</name>
+			<label>Max. Number</label>
+			<unit>Individuals</unit>
+			<default>10</default>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>DistanceGate</name>
+			<label>Distance Gate</label>
+			<unit>pixels</unit>
+			<slider>true</slider>
+			<default>100</default>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>ShareTrajectories</name>
+			<label>Share Trajectories</label>
+			<default>true</default>
+			<reloadable>false</reloadable>
+		</parameter>
+
+	</configuration>
+</swistrackcomponent>

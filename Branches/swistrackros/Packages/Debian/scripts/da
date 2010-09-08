@@ -1,0 +1,70 @@
+#!/bin/sh
+
+# Usage: da [-A] PROGRAM ARGUMENTS
+
+# Runs PROGRAM over each of the build schroot names, like so:
+#
+#   PROGRAM SCHROOTNAME ARGUMENTS
+#
+# On one architecture of each Debian/Ubuntu version, passes the -A
+# option before ARGUMENTS.  If -A is passed to this script, the
+# program only gets run over one schroot per Debian/Ubuntu version.
+# At the end of the run, the script will display which schroots the
+# command succeeded and failed for.
+
+# Typically this script is used to build Debathena packages, in which
+# case PROGRAM is sbuildhack and ARGUMENTS is a path to a .dsc file.
+
+. $(dirname "$0")/debian-versions.sh
+
+A=0
+if [ "$1" = -A ]; then A=1; shift; fi
+prog="$1"; shift
+succ=
+fail=
+
+# Display a horizontal rule on stderr.
+hr () {
+    for i in $(seq 60); do echo -n '═' >&2; done; echo >&2
+}
+
+# Run $prog with the provided arguments, with display annotations and
+# success/failure tracking.
+t () {
+    while true; do
+	tput bold >&2
+	hr
+	echo "Running: $prog $@" >&2
+	tput sgr0 >&2
+	if $prog "$@"; then
+	    succ=$succ\ $1
+	    break
+	else
+	    tput bold >&2
+	    tput setf 4; echo -n "Failed: " >&2
+	    tput sgr0 >&2
+	    echo -n "$prog $@ [a/R/f] " >&2
+	    read -r x || exit $?
+	    if [ "$x" = "a" ]; then exit 1; fi
+            if [ "$x" = "f" ]; then fail=$fail\ $1 break; fi
+	fi
+    done
+    echo >&2
+}
+
+for code in $DEBIAN_CODES; do
+    t "$code"-amd64 -A "$@"
+    [ $A -eq 1 ] || t "$code"-i386 "$@"
+done
+
+tput bold >&2
+hr
+echo "Done: $prog \$dist $@" >&2
+tput setf 2 >&2; echo -n "Succeeded:" >&2
+tput sgr0 >&2; echo "$succ" >&2
+if [ -n "$fail" ]; then
+    tput bold >&2; tput setf 4 >&2; echo -n "Failed:" >&2
+    tput sgr0 >&2; echo "$fail" >&2
+    exit 1
+fi
+exit 0

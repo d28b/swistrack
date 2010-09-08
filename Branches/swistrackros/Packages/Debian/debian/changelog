@@ -1,0 +1,74 @@
+swistrack (4.0-20090307) hardy; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Tue, 31 Mar 2009 12:40:17 +0200
+
+swistrack (4.0-20090306) hardy; urgency=low
+
+  * update to svn HEAD; enable use of components that depend on xvidcore
+    and boost-graph libraries. (For example, OutputFileM4V)
+  
+ -- Daniel Abel <abeld@angel.elte.hu>  Wed, 25 Mar 2009 12:22:26 +0100
+
+swistrack (4.0-20090305) hardy; urgency=low
+
+  * rebuild with different build setup
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Thu, 05 Mar 2009 14:46:50 +0100
+
+swistrack (4.0-20090304) hardy; urgency=low
+
+  * rebuild with svn trunk; many changes
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Wed, 04 Mar 2009 15:46:23 +0100
+
+swistrack (4.0-8) hardy; urgency=low
+
+  * again
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Mon, 15 Dec 2008 14:11:52 +0100
+
+swistrack (4.0-7) hardy; urgency=low
+
+  * again
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Mon, 15 Dec 2008 14:05:25 +0100
+
+swistrack (4.0-6) hardy; urgency=low
+
+  * fix section
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Mon, 15 Dec 2008 12:52:07 +0100
+
+swistrack (4.0-5) hardy; urgency=low
+
+  * bleh
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Mon, 15 Dec 2008 12:40:41 +0100
+
+swistrack (4.0-4) unstable; urgency=low
+
+  * fix section
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Mon, 15 Dec 2008 12:37:48 +0100
+
+swistrack (4.0-3) hardy; urgency=low
+
+  * really correct dist.
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Mon, 15 Dec 2008 12:27:38 +0100
+
+swistrack (4.0-2) unstable; urgency=low
+
+  * correct 'distribution' in changelog, hopefully PPA will accept this
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Mon, 15 Dec 2008 12:22:36 +0100
+
+swistrack (4.0-1) hardy; urgency=low
+
+  * package for debian/ubuntu: upstream svn rev 630 (current svn trunk; I
+    assume this is 4.x)
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Thu, 04 Dec 2008 12:01:31 +0100
+

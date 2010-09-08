@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Dynamic Nearest Neighbor Tracking</friendlyname>
+	<description>A fork of the basic tracking component, that will attempt to handle long-term tracking.  It will automatically create trackers when new particles are detected, and delete tracks when the particle stops moving.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/DynamicNearestNeighborTracking</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+		<parameter type="integer">
+		    <name>MaxNumber</name>
+			<label>Number of Tracks</label>
+			<unit>Individuals</unit>
+			<default>10</default>
+		</parameter>
+		<parameter type="double">
+			<name>MaxDistance</name>
+			<label>Maximum Distance</label>
+			<min>0</min>
+			<max>1000</max>
+			<default>20</default>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>MinNewTrackDistance</name>
+			<label>Minimum Distance for track creation</label>
+			<min>0</min>
+			<max>1000</max>
+			<default>100</default>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<parameter type="double">
+			<name>FrameKillThreshold</name>
+			<label>Frames to wait before stopping the track.</label>
+			<min>3</min>
+			<max>1000</max>
+			<default>100</default>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<parameter type="double">
+			<name>ColorSimilarityThreshold</name>
+			<label>How similar the particle has to be to the color model of the track. Sketchy.</label>
+			<min>0</min>
+			<max>1</max>
+			<default>1</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		
+		<parameter type="integer">
+			<name>TrackDistanceKillThreshold</name>
+			<label>Mininum distance between tracks before dropping tracks.</label>
+			<min>3</min>
+			<max>1000</max>
+			<default>100</default>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

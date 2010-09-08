@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Threshold (color)</friendlyname>
+	<description>Thresholds a color image and stores the result in a binary image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ThresholdColorCommon</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="integer">
+			<name>Threshold</name>
+			<label>Threshold</label>
+			<min>0</min>
+			<max>85</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>AverageBool</name>
+			<label>Using average value of the channels</label>
+			<default>1</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>InvertThreshold</name>
+			<label>Invert Threshold</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

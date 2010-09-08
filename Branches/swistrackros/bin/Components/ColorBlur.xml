@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Blur</friendlyname>
+	<description>Blurs a color image. This an expensive operation, but will reduce the noise.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ColorBlur</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+		<parameter type="dropdownlist">
+			<name>Mode</name>
+			<label>Mode</label>
+			<items>
+				<item key="gaussian">Gaussian</item>
+				<item key="median">Median</item>
+				<item key="mean">Mean</item>
+				<item key="sum">Sum</item>
+			</items>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="dropdownlist">
+			<name>Radius</name>
+			<label>Radius</label>
+			<items>
+				<item key="1">1x1</item>
+				<item key="3">3x3</item>
+				<item key="5">5x5</item>
+				<item key="7">7x7</item>
+				<item key="9">9x9</item>
+			</items>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

@@ -1,0 +1,27 @@
+/* XPM */
+static const char *bitmap_paste_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 6 1",
+"  c black",
+". c navy",
+"X c yellow",
+"o c #808080",
+"O c none",
+"+ c white",
+/* pixels */
+"OOOOOOOOOOOOOOOO",
+"OOOOO    OOOOOOO",
+"O     XX     OOO",
+" ooo X  X ooo OO",
+" oo OOOOOO oo OO",
+" oo        oo OO",
+" oooooooooooo OO",
+" ooooo....... OO",
+" ooooo.+++++..OO",
+" ooooo.+++++.+.O",
+" ooooo.+...+...O",
+" ooooo.+++++++.O",
+" ooooo.+.....+.O",
+"O     .+++++++.O",
+"OOOOOO.........O"
+};

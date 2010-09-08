@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Calibration with a Linear Model</friendlyname>
+	<description>Uses a simple linear model to transform the particle positions from image coordinates to world coordinates. This is a basic calibration method by which the camera rectangle is mapped onto a tetragon.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/CalibrationLinear</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="inputfile">
+			<name>CalibrationPoints</name>
+			<label>Calibration Points</label>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

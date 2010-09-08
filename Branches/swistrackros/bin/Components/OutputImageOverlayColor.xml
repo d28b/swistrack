@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Output an Image Overlay</friendlyname>
+	<description>Combines all frames and writes one image at the end with all overlaid frames. Note that the images to combine should have a black or white background</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputImageOverlayColor</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+		<parameter type="outputfile">
+			<name>File</name>
+			<label>File name</label>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="dropdownlist">
+			<name>Mode</name>
+			<label>Combination</label>
+			<items>
+				<item key="addition">Addition</item>
+				<item key="subtraction">Subtraction</item>
+				<item key="multiplication">Multiplication</item>
+			</items>
+			<default>addition</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<line />
+		<label>The following button resets the image at the next step.</label>
+		<parameter type="button">
+			<name>ResetImage</name>
+			<label>Reset image</label>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

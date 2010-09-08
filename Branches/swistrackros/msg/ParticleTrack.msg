@@ -1,0 +1,12 @@
+Header header
+int32 ID
+float32 IDCovariance
+float32 xCenter
+float32 yCenter
+float32 orientation
+float64 area
+float64 compactness
+float32 xWorldCenter
+float32 yWorldCenter
+int32 frameNumber
+int32 timeStamp

@@ -1,0 +1,9 @@
+tutorialSlides are the slides
+
+presentation.patch is some changes to the gui to make the font larger
+and stuff, to make it better for a live demo.  So you can read things
+on the projector.
+
+The presentation included a live demo of making a background
+subtraction pipeline, as well as a live demo of a motion templates
+tracking pipeline.

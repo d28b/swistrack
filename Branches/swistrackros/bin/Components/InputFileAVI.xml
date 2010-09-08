@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Input from AVI File</friendlyname>
+	<description>Reads an AVI file.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/InputFileAvi</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="inputfile">
+			<name>File</name>
+			<label>AVI File</label>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>FlipVertically</name>
+			<label>Flip the image vertically</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

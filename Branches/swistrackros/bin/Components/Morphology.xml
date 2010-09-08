@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Morphology</friendlyname>
+	<description>Multi-purpose morpholohy component, where operation:
+	</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/Morphology</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<line />
+		<title>Parameters</title>
+		<parameter type="dropdownlist">
+	    		<name>operation</name>
+	    		<label>Operations</label>
+	    		<items>
+	    		  <item key="1">CV_MOP_OPEN</item>
+	    		  <item key="2">CV_MOP_CLOSE</item>
+	    		  <item key="3">CV_MOP_GRADIENT</item>
+			  <item key="4">CV_MOP_TOPHAT</item>
+			  <item key="5">CV_MOP_BLACKHAT</item>	    	
+			</items>
+	    		<default>1</default>
+	    		<reloadable>true</reloadable>
+	  	</parameter>
+		<parameter type="integer">
+			<name>iterations</name>
+			<label>Number of iterations</label>
+			<min>1</min>
+			<default>1</default>
+			<max>5</max>
+			<unit>iterations</unit>
+			<slider>true</slider>
+			<sliderstep>1</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

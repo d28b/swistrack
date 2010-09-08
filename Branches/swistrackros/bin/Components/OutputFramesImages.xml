@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Output to Image Sequence</friendlyname>
+	<description>Saves each frame as a separate image in the given directory. Increments filename by storing frame number in it.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputFramesImages</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+		<parameter type="outputfile">
+			<name>FilePrefix</name>
+			<label>Directory and filename prefix</label>
+			<reloadable>false</reloadable>
+		</parameter>
+		<label>Frame number and extension will be automatically appended. Subdirectories will be created as needed.</label>
+		<parameter type="dropdownlist">
+			<name>FileType</name>
+			<label>File Type</label>
+			<items>
+				<item key="0">png</item>
+				<item key="1">bmp</item>
+				<item key="2">jpeg</item>
+			</items>
+			<default>0</default>
+			<reloadable>false</reloadable>
+		</parameter>
+		<label>Note: ".bmp" appears to be fastest, but produces huge files.</label>
+		<parameter type="dropdownlist">
+			<name>InputChannel</name>
+			<label>Input Image</label>
+			<items>
+				<item key="color">Color</item>
+				<item key="grayscale">Grayscale</item>
+				<item key="binary">Binary</item>
+			</items>
+			<default>color</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Read Circular Bar Code</friendlyname>
+	<description>Detects ID and orientation of all robots by reading a circular bar code placed around the blob.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/IDReaderRing</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="double">
+			<name>RingRadiusOuter</name>
+			<label>Outer Radius</label>
+			<min>1</min>
+			<max>50</max>
+			<default>12</default>
+			<unit>pixels</unit>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>RingRadiusInner</name>
+			<label>Inner radius</label>
+			<min>1</min>
+			<max>50</max>
+			<default>8</default>
+			<unit>pixels</unit>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="inputfile">
+			<name>ObjectListFileName</name>
+			<label>Objects and codes</label>
+			<default></default>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

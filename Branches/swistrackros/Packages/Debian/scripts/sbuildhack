@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# Wrapper around sbuild.  The main purpose is to append a
+# distribution-dependent string like "~ubuntu7.10" to the binary
+# package version, using Sbuildhack.pm.
+
+# This script us normally run as "da sbuildhack filename.dsc".
+
+# This script will skip dists listed in ./nobuild.
+
+usage() {
+    echo "Usage: $0 <dist>-<arch> ..." >&2
+    exit 1
+}
+
+. $(dirname "$0")/debian-versions.sh
+
+dist_arch=$1; shift
+if [ -z "$dist_arch" ]; then usage; fi
+IFS=- read dist arch <<EOF
+$dist_arch
+EOF
+if [ -z "$dist" ] || [ -z "$arch" ]; then usage; fi
+
+if [ -e nobuild ] && fgrep -q "$dist" nobuild; then
+  echo "Skipping $dist since it is listed in ./nobuild."
+  exit
+fi
+
+export NMUTAG=`gettag "$dist"`
+perl -I"$(dirname "$0")" -MSbuildHack \
+	/usr/bin/sbuild --binNMU=171717 --make-binNMU="Build with sbuild." \
+	-d "$dist" --arch="$arch" --apt-update -v "$@"
