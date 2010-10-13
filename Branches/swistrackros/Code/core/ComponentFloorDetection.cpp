@@ -214,7 +214,7 @@ void THISCLASS::OnStep() {
 
 	  // Draw the accumulated hue histogram
 	  cvGetMinMaxHistValue(combinedHueHist, &minVal_a, &maxVal_a, &min_a, &max_a);
-	  cout << "minval_h " << minVal_a << " maxval_h " << maxVal_a << " min h " << min_a << " maxh " << max_a << endl;
+	  //	  cout << "minval_h " << minVal_a << " maxval_h " << maxVal_a << " min h " << min_a << " maxh " << max_a << endl;
 	  
 	  
 	  for(int h=0;h<h_bins;h++){
@@ -226,7 +226,7 @@ void THISCLASS::OnStep() {
 	    else
 	      scaledVal = cvRound(binVal[0]*255/maxVal_a);
 	    
-	    cout << "binVal " << *binVal << " scaled " << scaledVal << " height " << histImage_a->height << endl;
+	    //	    cout << "binVal " << *binVal << " scaled " << scaledVal << " height " << histImage_a->height << endl;
 	    cvRectangle(histImage_a,cvPoint(h,histImage_a->height),
 			cvPoint((h+1),histImage_a->height - scaledVal),
 			CV_RGB(255,0,0), CV_FILLED);
@@ -234,7 +234,7 @@ void THISCLASS::OnStep() {
 
 	  // Draw the accumulated int histogram
 	  cvGetMinMaxHistValue(combinedIntHist, &minVal_b, &maxVal_b, &min_b, &max_b);
-	  cout << "minval_b " << minVal_b << " maxval_b " << maxVal_b << " min B " << min_b << " maxb " << max_b << endl;
+	  //	  cout << "minval_b " << minVal_b << " maxval_b " << maxVal_b << " min B " << min_b << " maxb " << max_b << endl;
 	  
 	  
 	  for(int h=0;h<i_bins;h++){
