@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Floor Detection</friendlyname>
+	<description>Blurs a color image. This an expensive operation, but will reduce the noise.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ColorBlur</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+		<parameter type="integer">
+			<name>HueThreshold</name>
+			<label>Hue Threshold</label>
+			<min>1</min>
+			<default>60</default>
+			<slider>true</slider>
+			<sliderstep>1</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>IntThreshold</name>
+			<label>Intensity Threshold</label>
+			<min>1</min>
+			<default>80</default>
+			<slider>true</slider>
+			<sliderstep>1</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>lowerBound</name>
+			<label>Lower Bound of Trapezoid</label>
+			<min>1</min>
+			<max>630</max>
+			<default>100</default>
+			<slider>true</slider>
+			<sliderstep>1</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkBox">
+			<name>showT</name>
+			<label>Show Sampling Area</label>
+			<default>true</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>
