@@ -1,3 +1,9 @@
+swistrack (4.0-20090623~intrepid2) unstable; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@hal.elte.hu>  Thu, 02 Dec 2010 12:18:01 +0100
+
 swistrack (4.0-20090623~intrepid1) intrepid; urgency=low
 
   * update to svn HEAD

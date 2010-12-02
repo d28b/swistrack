@@ -1,3 +1,9 @@
+swistrack (4.0-20090623~karmic2) unstable; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@hal.elte.hu>  Thu, 02 Dec 2010 12:18:30 +0100
+
 swistrack (4.0-20090623~karmic1) karmic; urgency=low
 
   * rebuild
