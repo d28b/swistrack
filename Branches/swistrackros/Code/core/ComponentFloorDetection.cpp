@@ -71,25 +71,25 @@ void THISCLASS::OnStart() {
 
 void THISCLASS::OnReloadConfiguration() {
   // Hue Threshold
-  mHueT = GetConfigurationInt(wxT("Hue Threshold"), 10);
+  mHueT = GetConfigurationInt(wxT("HueThreshold"), 10);
   if (mHueT < 1) {
     mHueT = 1;
   }
 
   // Intinsity Threshold
-  mIntT = GetConfigurationInt(wxT("Intinsity Threshold"), 10);
+  mIntT = GetConfigurationInt(wxT("IntThreshold"), 10);
   if (mIntT < 1) {
     mIntT = 1;
   }
 
   // Trapezoid lower bound
-  lowerBound = GetConfigurationInt(wxT("Lower Bound of Trapezoid"), 100);
+  lowerBound = GetConfigurationInt(wxT("lowerBound"), 75);
   if (lowerBound < 0) {
     lowerBound = 0;
   }
 
   // Show Sampling Area
-  showT = GetConfigurationBool(wxT("Show Sampling Area"), true);
+  showT = GetConfigurationBool(wxT("showT"), true);
 
   cout << "Updated Configuration: Hue Thresh " << mHueT << " Int Thresh " << mIntT << endl; 
 
@@ -112,7 +112,7 @@ void THISCLASS::OnStep() {
 	int h_bins = 181, s_bins = 256, v_bins = 256, i_bins = 256;
 	IplImage *inputimage = mCore->mDataStructureImageColor.mImage;
 	IplImage *outputimage = cvCreateImage(cvGetSize(inputimage),IPL_DEPTH_8U, 1);
-	//cvCopy(inputimage, outputimage,NULL);
+	
  
 	if (! inputimage) {
 		AddError(wxT("No input image."));
@@ -123,9 +123,9 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
-	int left_bound = 100;
-	int right_bound = 100;
-	int top_bound = 240;
+	int left_bound = 150;
+	int right_bound = 150;
+	int top_bound = 340;
 
 
 	// Sample RBG image
@@ -297,6 +297,8 @@ void THISCLASS::OnStep() {
 	    int scaledh = cvRound(count_h*255/maxVal_a);
 	    int scaledi = cvRound(count_i*255/maxVal_b);
 	    int scaledvalue = cvRound((scaledh+scaledi)/2);
+	    if(scaledvalue < 20)
+	      scaledvalue = 0;
 	    outdata[i*out_step+j*out_channels] = scaledvalue;
 	    outdata[i*out_step+j*out_channels+1] = 0;
 	    outdata[i*out_step+j*out_channels+2] = 0;
@@ -333,10 +335,10 @@ void THISCLASS::OnStep() {
 	
 	// SET DISPLAY
 
-	mCore->mDataStructureImageColor.mImage = outputimage;
+	mCore->mDataStructureImageGray.mImage = outputimage;
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
-		de.SetMainImage(mCore->mDataStructureImageColor.mImage);
+		de.SetMainImage(mCore->mDataStructureImageGray.mImage);
 	}
 
 	/*

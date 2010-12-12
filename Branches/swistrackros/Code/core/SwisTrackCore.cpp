@@ -28,6 +28,8 @@
 #include "ComponentColorMask.h"
 #include "ComponentColorBlur.h"
 #include "ComponentColorSwapper.h"
+#include "ComponentFloorDetection.h"
+#include "ComponentHaarCascade.h"
 #include "ComponentMoveGrayToColor.h"
 #include "ComponentMoveBinaryToColor.h"
 #include "ComponentMoveColorToBinary.h"
@@ -133,6 +135,8 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentColorMask(this));
 	mAvailableComponents.push_back(new ComponentColorBlur(this));
 	mAvailableComponents.push_back(new ComponentColorSwapper(this));
+	mAvailableComponents.push_back(new ComponentFloorDetection(this));
+	mAvailableComponents.push_back(new ComponentHaarCascade(this));
 	mAvailableComponents.push_back(new ComponentMoveColorToBinary(this));
 	mAvailableComponents.push_back(new ComponentMoveColorToGray(this));
 	mAvailableComponents.push_back(new ComponentMoveGrayToColor(this));
