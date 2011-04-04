@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<pointlist>
+	<points>
+		<point>
+			<xworld>2</xworld>
+			<yworld>1</yworld>
+			<ximage>249.7672</ximage>
+			<yimage>185.645</yimage>
+		</point>
+		<point>
+			<xworld>2</xworld>
+			<yworld>1.5</yworld>
+			<ximage>327.1379</ximage>
+			<yimage>186.7276</yimage>
+		</point>
+	</points>
+</pointlist>
