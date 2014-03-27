@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Output Image Statistics (binary)</friendlyname>
+	<description>Calculates statistics of a binary image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputImageStatisticsBinary</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="checkbox">
+			<name>CalculateNonZero</name>
+			<label>Number of non-zero pixels</label>
+			<default>1</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>CalculateSum</name>
+			<label>Sum</label>
+			<default>1</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>CalculateMeanStdDev</name>
+			<label>Mean, std deviation</label>
+			<default>1</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>CalculateMinMax</name>
+			<label>Min, max</label>
+			<default>1</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

@@ -1,0 +1,25 @@
+/* XPM */
+static const char *bitmap_save_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 4 1",
+"  c #000000",
+". c #808000",
+"X c #808080",
+"o c none",
+/* pixels */
+"oooooooooooooooo",
+"o              o",
+"o . oooooooo o o",
+"o . oooooooo   o",
+"o . oooooooo . o",
+"o . oooooooo . o",
+"o . oooooooo . o",
+"o . oooooooo . o",
+"o ..        X. o",
+"o ............ o",
+"o ..         . o",
+"o ..      oo . o",
+"o ..      oo . o",
+"o ..      oo . o",
+"oo             o"
+};

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Conversion from Bayer Pattern to BGR</friendlyname>
+	<description>Converts a single-channel Bayer pattern image to a three-channel (BGR) color image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ConvertBayerToBGR</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+	<parameter type="dropdownlist">
+		<name>BayerType</name>
+		<label>Bayer pattern type</label>
+		<items>
+			<item key="0">BG</item>
+			<item key="1">GB</item>
+			<item key="2">RG</item>
+			<item key="3">GR</item>
+		</items>
+		<reloadable>true</reloadable>
+	</parameter>
+	</configuration>
+</swistrackcomponent>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Image Erosion</friendlyname>
+	<description>Applies a morphological erosion (3x3 kernel) on the image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BinaryErosion</url>
+	<displayimage>Output</displayimage>
+	<category>BinaryProcessing</category>
+	<configuration>
+		<parameter type="integer">
+			<name>Iterations</name>
+			<label>Iterations</label>
+			<min>0</min>
+			<max>10</max>
+			<default>1</default>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

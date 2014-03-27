@@ -1,0 +1,19 @@
+TSAI Parameter Optimization using PSO
+=====================================
+Ebru Aydin, September 2009
+
+
+The "optimizeTSAIParametersWithPSO.m" and "computeErrorPSO.m" scripts optimize parameters for the TSAI camera calibration/distortion model. The scripts are based on Brian Birge's free "PSOt" Matlab toolbox. A copy of this toolbox is available in this folder.
+
+
+USAGE:
+
+* Add the path to PSOt to the Matlab paths:
+	path(path, '/path/to/PSOt')
+	path(path, '/path/to/PSOt/hiddenutils')
+
+* The set of parameters which will be optimized should be arranged and the rest of the parameters should be fixed in both "optimizeTSAIParametersWithPSO.m" and "computeErrorPSO.m".
+
+* "computeErrorPSO" function reads the file "cameraX.calibration" in the same directory and calculates maximum error. This script uses "TsaiImage2World.m".
+
+* At the end, all the parameters are stored (using "WriteTSAICalibrationParametersXMLFile.m") in a file called "parameters". This file can directly be used as calibration file in SwisTrack.

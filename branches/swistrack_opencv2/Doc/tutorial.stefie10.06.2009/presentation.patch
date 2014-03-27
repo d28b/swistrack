@@ -1,0 +1,75 @@
+Index: Code/gui/ComponentsDialog.cpp
+===================================================================
+--- Code/gui/ComponentsDialog.cpp	(wersja 963)
++++ Code/gui/ComponentsDialog.cpp	(kopia robocza)
+@@ -10,13 +10,14 @@
+ END_EVENT_TABLE()
+ 
+ THISCLASS::ComponentsDialog(wxWindow* parent, SwisTrackCore *stc):
+-		wxDialog(parent, -1, wxT("Add Component"), wxDefaultPosition, wxSize(400, 400), wxDEFAULT_DIALOG_STYLE), mSwisTrackCore(stc), mSelectedComponent(0) {
++		wxDialog(parent, -1, wxT("Add Component"), wxDefaultPosition, wxSize(600, 600), wxDEFAULT_DIALOG_STYLE), mSwisTrackCore(stc), mSelectedComponent(0) {
+ 
+ 
+ 	// Create tree control
+ 	mTree = new wxTreeCtrl(this, wxID_ANY);
+ 	mTree->SetWindowStyle(wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT);
+-
++	wxFont font = wxFont(*wxNORMAL_FONT);
++	font.SetPointSize(15);
+ 	// Add the root element
+ 	wxTreeItemId rootitem = mTree->AddRoot(wxT(""));
+ 	wxTreeItemId rootitem2 = mTree->GetRootItem();
+@@ -35,12 +36,15 @@
+ 			    curcategoryitem = mCategoryMap[curcategory];
+ 			  } else {
+ 				curcategoryitem = mTree->AppendItem(rootitem, category->mDisplayName);
++				mTree->SetItemFont(curcategoryitem, font);
+ 				mCategoryMap[category] = curcategoryitem;
+ 			  }
+ 			  mTree->Expand(curcategoryitem);
+ 			}
+ 
+ 			wxTreeItemId item = mTree->AppendItem(curcategoryitem, (*it)->mDisplayName, -1, -1, new ComponentTreeItem(*it));
++			mTree->SetItemFont(item, font);
++				
+ 		}
+ 		it++;
+ 	}
+Index: Code/gui/ComponentListPanel.cpp
+===================================================================
+--- Code/gui/ComponentListPanel.cpp	(wersja 963)
++++ Code/gui/ComponentListPanel.cpp	(kopia robocza)
+@@ -52,13 +52,14 @@
+ 
+ 	// Create List
+ 	mList = new wxListCtrl(this, cID_List);
++
+ 	mList->SetWindowStyle(wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL | wxBORDER_SIMPLE);
+ 	mList->Connect(wxID_ANY, wxEVT_LEFT_DCLICK, wxMouseEventHandler(THISCLASS::OnListLeftDoubleClick), 0, this);
+ 	mList->Connect(wxID_ANY, wxEVT_RIGHT_DOWN, wxMouseEventHandler(THISCLASS::OnListMouseRightDown), 0, this);
+ 
+ 	// Add column for the component name
+ 	int col = 0;
+-	mList->InsertColumn(col++, wxT("Component"), wxLIST_FORMAT_LEFT, 200);
++	mList->InsertColumn(col++, wxT("Component"), wxLIST_FORMAT_LEFT, 400);
+ 
+ 	// Add column for the trigger flag
+ 	mList->InsertColumn(col++, wxT("Trigger"), wxLIST_FORMAT_CENTER, 50);
+@@ -137,6 +138,8 @@
+ 	SwisTrackCore *stc = mSwisTrack->mSwisTrackCore;
+ 	const SwisTrackCore::tComponentList *cl = stc->GetDeployedComponents();
+ 	SwisTrackCore::tComponentList::const_iterator it = cl->begin();
++	wxFont font = wxFont(*wxNORMAL_FONT);
++	font.SetPointSize(15);
+ 	while (it != cl->end()) {
+ 		int col = 0;
+ 		wxListItem li;
+@@ -146,7 +149,7 @@
+ 		li.SetColumn(col++);
+ 		li.SetText((*it)->mDisplayName);
+ 		li.SetTextColour(*wxBLACK);
+-		li.SetFont(*wxNORMAL_FONT);
++		li.SetFont(font);
+ 		li.SetData((void*)(*it));
+ 		if (mSelectedComponent == (*it)) {
+ 			li.SetState(wxLIST_STATE_SELECTED);

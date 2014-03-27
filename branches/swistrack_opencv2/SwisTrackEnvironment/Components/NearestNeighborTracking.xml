@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Nearest Neighbor Tracking</friendlyname>
+	<description>Basic tracking component; takes pre-filtered particles (use the BlobSelection and BlobDetection components before this one) and adds each of them to the track nearest to it. IMPORTANT: Make sure that the number of tracks and the max number of particles in BlobDetection are the same, and that exactly that number of targets are present.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/NearestNeighborTracking</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+		<parameter type="integer">
+		    <name>MaxNumber</name>
+			<label>Number of Tracks</label>
+			<unit>Individuals</unit>
+			<default>10</default>
+		</parameter>
+		<parameter type="double">
+			<name>MaxDistance</name>
+			<label>Maximum Distance</label>
+			<min>0</min>
+			<max>1000</max>
+			<default>20</default>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

@@ -1,0 +1,14 @@
+# -*- debian-mr-copyright -*-
+# http://wiki.debian.org/Proposals/CopyrightFormat
+Format-Specification: http://wiki.debian.org/Proposals/CopyrightFormat?action=recall&rev=196
+
+Files: debian-versions.sh da sbuildhack SbuildHack.pm
+Copyright: debathena project
+License: ?
+From debathena svn repository (trunk/scripts/ directory), with local modifications
+
+Files: mk-sbuild-lv
+Copyright: Copyright 2006-2007 (C) Canonical Ltd.
+Copyright: Copyright 2008, Daniel Abel <abeld@angel.elte.hu>
+License: GPL-2
+From ubuntu-dev-tools ubuntu package, with local modifications

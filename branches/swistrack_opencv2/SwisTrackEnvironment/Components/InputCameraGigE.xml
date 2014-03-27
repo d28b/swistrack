@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Input from GigE Camera</friendlyname>
+	<description>Grabs an image from a gigabit ethernet (GigE) camera using the Basler Pylon driver.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/InputCameraGigE</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="gigecameralist">
+			<name>CameraFullName</name>
+			<label>Camera</label>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="dropdownlist">
+			<name>Color</name>
+			<label>Mode</label>
+			<items>
+				<item key="true">Color (YUV422)</item>
+				<item key="false">Grayscale (8 bit)</item>
+			</items>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="dropdownlist">
+			<name>TriggerMode</name>
+			<label>Trigger mode</label>
+			<items>
+				<item key="0">Timer</item>
+				<item key="1">External trigger (line 1)</item>
+				<item key="2">External trigger (line 2)</item>
+				<item key="3">External trigger (line 3)</item>
+				<item key="4">External trigger (line 4)</item>
+				<item key="5">Software trigger</item>
+			</items>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>TriggerTimerFPS</name>
+			<label>Timer</label>
+			<unit>FPS</unit>
+			<min>1</min>
+			<max>50</max>
+			<default>10</default>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>ExposureTime</name>
+			<label>Exposure time</label>
+			<min>1</min>
+			<max>1000</max>
+			<default>400</default>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>AnalogGain</name>
+			<label>Analog gain</label>
+			<min>360</min>
+			<max>1023</max>
+			<default>500</default>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>InputBufferSize</name>
+			<label>Input buffer size</label>
+			<min>1</min>
+			<max>16</max>
+			<unit>images</unit>
+			<default>8</default>
+			<slider>false</slider>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>EthernetPacketSize</name>
+			<label>Ethernet packet size</label>
+			<min>100</min>
+			<max>10000</max>
+			<unit>bytes</unit>
+			<default>6500</default>
+			<slider>false</slider>
+			<sliderstep>4</sliderstep>
+			<reloadable>false</reloadable>
+		</parameter>
+		<title>Area of Interest</title>
+		<parameter type="pointInteger">
+			<name>AOIOffset</name>
+			<label>Offset</label>
+			<labelx>X</labelx>
+			<labely>Y</labely>
+			<unit>pixels</unit>
+			<min>
+				<x>0</x>
+				<y>0</y>
+			</min>
+			<max>
+				<x>1032</x>
+				<y>800</y>
+			</max>
+			<default>
+				<x>0</x>
+				<y>0</y>
+			</default>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="pointInteger">
+			<name>AOISize</name>
+			<label>Size</label>
+			<labelx>W</labelx>
+			<labely>H</labely>
+			<unit>pixels</unit>
+			<min>
+				<x>0</x>
+				<y>0</y>
+			</min>
+			<max>
+				<x>1032</x>
+				<y>800</y>
+			</max>
+			<default>
+				<x>1032</x>
+				<y>778</y>
+			</default>
+			<reloadable>false</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

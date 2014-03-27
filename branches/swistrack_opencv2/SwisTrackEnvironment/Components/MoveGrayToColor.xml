@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Move Gray to Color</friendlyname>
+	<description>
+	  Convert Gray image to color image. 
+	</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/MoveGrayToColor</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+	</configuration>
+</swistrackcomponent>

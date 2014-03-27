@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Blob Detection</friendlyname>
+	<description>Detects blobs on a binary image and stores them as particles.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BlobDetectionMinMax</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="integer">
+			<name>MaxNumber</name>
+			<label>Max. blobs</label>
+			<min>1</min>
+			<max>50</max>
+			<default>10</default>
+			<unit>blobs</unit>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>AreaBool</name>
+			<label>Area selection</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>MinArea</name>
+			<label>Min. blob size</label>
+			<min>0</min>
+			<default>10</default>
+			<unit>pixels</unit>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>MaxArea</name>
+			<label>Max. blob size</label>
+			<min>0</min>
+			<default>100</default>
+			<unit>pixels</unit>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>CompactnessBool</name>
+			<label>Compactness Selection</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>MinCompactness</name>
+			<label>Min. compactness</label>
+			<min>0</min>
+			<default>0</default>
+			<max>1</max>
+			<slider>true</slider>
+			<sliderstep>0.01</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>MaxCompactness</name>
+			<label>Max. compactness</label>
+			<min>0</min>
+			<default>1</default>
+			<max>1</max>
+			<slider>true</slider>
+			<sliderstep>0.01</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>OrientationBool</name>
+			<label>Orientation Selection</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>MinOrientation</name>
+			<label>Min. orientation</label>
+			<min>-90</min>
+			<default>-90</default>
+			<max>180</max>
+			<slider>true</slider>
+			<sliderstep>0.1</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>MaxOrientation</name>
+			<label>Max. orientation</label>
+			<min>-90</min>
+			<default>90</default>
+			<max>180</max>
+			<slider>true</slider>
+			<sliderstep>0.1</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Background Subtraction (grayscale)</friendlyname>
+	<description>Subtracts a background image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/AdaptiveBackgroundSubtractionGray</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+		<parameter type="inputfile">
+			<name>BackgroundImage</name>
+			<label>Background image</label>
+			<filetype>image</filetype>
+		</parameter>
+		<parameter type="dropdownlist">
+			<name>Mode</name>
+			<label>Mode</label>
+			<items>
+				<item key="AbsDiff">Abs(I - B)</item>
+				<item key="SubImageBackground">Truncate(I - B, 0..255)</item>
+				<item key="SubBackgroundImage">Truncate(B - I, 0..255)</item>
+			</items>
+			<default>AbsDiff</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>CorrectMean</name>
+			<label>Correct Mean</label>
+			<default>1</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

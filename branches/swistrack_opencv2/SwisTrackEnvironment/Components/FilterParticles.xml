@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Filter Particles</friendlyname>
+	<description>NOT a particle filter.  Just stupid little filters to get rid of potentially bad particles.
+	</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/FilterParticles</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+		<parameter type="double">
+			<name>MinParticleArea</name>
+			<label>Minimum area for a particle</label>
+			<min>0</min>
+			<max>1000000</max>
+			<default>100</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>MaxParticleArea</name>
+			<label>Maximum area for a particle</label>
+			<min>0</min>
+			<max>1000000</max>
+			<default>100000</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

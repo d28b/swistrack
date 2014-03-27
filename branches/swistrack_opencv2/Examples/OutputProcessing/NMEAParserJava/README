@@ -1,0 +1,23 @@
+SwisTrack 4 NMEA Parser and Example
+===================================
+
+
+How to Run the Example
+----------------------
+
+Type
+	make
+to compile the sample program. (Note that you need a java compiler set up on your machine.)
+
+Once this is done, you can run it with
+	java MySwisTrackClientSTDIN
+The program is pretty self-explanatory.
+
+
+How to Use the NMEA Parser
+--------------------------
+
+You need to integrate the following 2 files in your project:
+	CommunicationMessage.java
+	CommunicationNMEAInterface.java
+How to use them is explained in "MySwisTrackClientSTDIN.java".

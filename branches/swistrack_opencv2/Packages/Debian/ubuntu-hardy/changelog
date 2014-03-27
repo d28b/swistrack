@@ -1,0 +1,35 @@
+swistrack (4.0-20090623~hardy2) unstable; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@hal.elte.hu>  Thu, 02 Dec 2010 12:17:47 +0100
+
+swistrack (4.0-20090623~hardy1) hardy; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@hal.elte.hu>  Wed, 05 May 2010 14:37:02 +0200
+
+swistrack (4.0-20090623~hardy) hardy; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Mon, 27 Jul 2009 13:47:17 +0200
+
+swistrack (4.0-20090309~hardy1) hardy; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Thu, 09 Apr 2009 15:16:48 +0200
+
+swistrack (4.0-20090307~hardy2) hardy; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Tue, 31 Mar 2009 15:21:29 +0200
+
+swistrack (4.0-20090307~hardy1) hardy; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Tue, 31 Mar 2009 12:40:17 +0200

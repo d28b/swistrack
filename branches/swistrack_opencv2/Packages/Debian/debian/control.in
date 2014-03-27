@@ -1,0 +1,18 @@
+Source: swistrack
+Section: misc
+Priority: extra
+Maintainer: Daniel Abel <abeld@angel.elte.hu>
+Build-Depends: @cdbs@, libcv-dev, libhighgui-dev, libwxgtk2.8-dev, libwxbase2.8-dev, doxygen, libxvidcore-dev, libcvaux-dev, libboost-graph-dev, libsqlite3-dev
+Standards-Version: 3.8.0
+
+Package: swistrack
+Architecture: any
+Depends: ${shlibs:Depends}, libsqlite3-0
+Description: Multi-Object Tracking Software for Robotics and Biology
+ SwisTrack is a powerful tool for tracking robots, humans, animals and
+ objects using a camera or a recorded video as input source. It uses
+ Intel's OpenCV library for fast image processing and contains
+ interfaces for USB, FireWire and GigE cameras, as well as AVI files.
+ Upstream url: http://www5.epfl.ch/swis/page3080.html
+ .
+ This is a non-official package

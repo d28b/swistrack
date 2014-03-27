@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<swistrack>
+  <components>
+    <component type="InputFileAVI">
+      <enabledinterval value="1"/>
+      <parameter name="File" value="leurre.avi"/>
+    </component>
+    <component type="ConvertToColor">
+      <enabledinterval value="1"/>
+    </component>
+    <component type="ConvertToGray">
+      <enabledinterval value="1"/>
+    </component>
+    <component type="CannyEdgeDetection">
+      <enabledinterval value="1"/>
+      <parameter name="Threshold1" value="150.000000"/>
+      <parameter name="Threshold2" value="300.000000"/>
+    </component>
+    <component type="OutputFileAVI">
+      <enabledinterval value="1"/>
+      <parameter name="FileTitle" value="test.avi"/>
+      <parameter name="InputChannel" value="binary"/>
+    </component>
+  </components>
+  <server>
+    <port>3000</port>
+  </server>
+</swistrack>

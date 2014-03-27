@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Adaptive Background Subtraction (color, median)</friendlyname>
+	<description>Substract a background based on the prior images.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/AdaptiveBackgroundSubtractionMedian</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+
+	</configuration>
+</swistrackcomponent>

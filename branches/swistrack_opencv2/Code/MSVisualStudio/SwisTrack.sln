@@ -1,0 +1,96 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SwisTrack-GUI", "..\gui\MSVisualStudio\SwisTrack-GUI.vcproj", "{44405FF3-5736-429E-B8E3-DE423B43038B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D010B136-96BD-4D44-B4F0-30388FB460B7} = {D010B136-96BD-4D44-B4F0-30388FB460B7}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SwisTrack-Core", "..\core\MSVisualStudio\SwisTrack-Core.vcproj", "{D010B136-96BD-4D44-B4F0-30388FB460B7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C54B6A19-2693-4B9C-9DD4-DAD77EE932B9} = {C54B6A19-2693-4B9C-9DD4-DAD77EE932B9}
+		{A10316DB-E1C4-4338-9777-4C2EB07179A6} = {A10316DB-E1C4-4338-9777-4C2EB07179A6}
+		{DAFAE4ED-D59E-4657-8DAB-18A2185D9458} = {DAFAE4ED-D59E-4657-8DAB-18A2185D9458}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libtsai", "..\..\3rdParty\libtsai\libtsai.vcproj", "{A10316DB-E1C4-4338-9777-4C2EB07179A6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "camshift_wrapper", "..\..\3rdParty\camshift_wrapper\MSVisualStudio\camshift_wrapper.vcproj", "{DAFAE4ED-D59E-4657-8DAB-18A2185D9458}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cvblobslib", "..\..\3rdParty\cvblobslib_v6p1\cvblobslib\cvblobslib.vcproj", "{C54B6A19-2693-4B9C-9DD4-DAD77EE932B9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug - FireWire Camera|Win32 = Debug - FireWire Camera|Win32
+		Debug - GigaBit Camera|Win32 = Debug - GigaBit Camera|Win32
+		Debug|Win32 = Debug|Win32
+		Release - FireWire Camera|Win32 = Release - FireWire Camera|Win32
+		Release - GigaBit Camera|Win32 = Release - GigaBit Camera|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Debug - FireWire Camera|Win32.ActiveCfg = Debug - FireWire Camera|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Debug - FireWire Camera|Win32.Build.0 = Debug - FireWire Camera|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Debug - GigaBit Camera|Win32.ActiveCfg = Debug - GigaBit Camera|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Debug - GigaBit Camera|Win32.Build.0 = Debug - GigaBit Camera|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Debug|Win32.Build.0 = Debug|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release - FireWire Camera|Win32.ActiveCfg = Release - FireWire Camera|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release - FireWire Camera|Win32.Build.0 = Release - FireWire Camera|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release - GigaBit Camera|Win32.ActiveCfg = Release - GigaBit Camera|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release - GigaBit Camera|Win32.Build.0 = Release - GigaBit Camera|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release|Win32.ActiveCfg = Release|Win32
+		{44405FF3-5736-429E-B8E3-DE423B43038B}.Release|Win32.Build.0 = Release|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Debug - FireWire Camera|Win32.ActiveCfg = Debug - FireWire Camera|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Debug - FireWire Camera|Win32.Build.0 = Debug - FireWire Camera|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Debug - GigaBit Camera|Win32.ActiveCfg = Debug - GigaBit Camera|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Debug - GigaBit Camera|Win32.Build.0 = Debug - GigaBit Camera|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Debug|Win32.Build.0 = Debug|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release - FireWire Camera|Win32.ActiveCfg = Release - FireWire Camera|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release - FireWire Camera|Win32.Build.0 = Release - FireWire Camera|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release - GigaBit Camera|Win32.ActiveCfg = Release - GigaBit Camera|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release - GigaBit Camera|Win32.Build.0 = Release - GigaBit Camera|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release|Win32.ActiveCfg = Release|Win32
+		{D010B136-96BD-4D44-B4F0-30388FB460B7}.Release|Win32.Build.0 = Release|Win32
+		{A10316DB-E1C4-4338-9777-4C2EB07179A6}.Debug - FireWire Camera|Win32.ActiveCfg = Debug|Win32
+		{A10316DB-E1C4-4338-9777-4C2EB07179A6}.Debug - FireWire Camera|Win32.Build.0 = Debug|Win32
+		{A10316DB-E1C4-4338-9777-4C2EB07179A6}.Debug - GigaBit Camera|Win32.ActiveCfg = Debug|Win32
+		{A10316DB-E1C4-4338-9777-4C2EB07179A6}.Debug - GigaBit Camera|Win32.Build.0 = Debug|Win32
+		{A10316DB-E1C4-4338-9777-4C2EB07179A6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A10316DB-E1C4-4338-9777-4C2EB07179A6}.Debug|Win32.Build.0 = Debug|Win32
+		{A10316DB-E1C4-4338-9777-4C2EB07179A6}.Release - FireWire Camera|Win32.ActiveCfg = Release|Win32
+		{A10316DB-E1C4-4338-9777-4C2EB07179A6}.Release - FireWire Camera|Win32.Build.0 = Release|Win32
+		{A10316DB-E1C4-4338-9777-4C2EB07179A6}.Release - GigaBit Camera|Win32.ActiveCfg = Release|Win32
+		{A10316DB-E1C4-4338-9777-4C2EB07179A6}.Release - GigaBit Camera|Win32.Build.0 = Release|Win32
+		{A10316DB-E1C4-4338-9777-4C2EB07179A6}.Release|Win32.ActiveCfg = Release|Win32
+		{A10316DB-E1C4-4338-9777-4C2EB07179A6}.Release|Win32.Build.0 = Release|Win32
+		{DAFAE4ED-D59E-4657-8DAB-18A2185D9458}.Debug - FireWire Camera|Win32.ActiveCfg = Debug|Win32
+		{DAFAE4ED-D59E-4657-8DAB-18A2185D9458}.Debug - FireWire Camera|Win32.Build.0 = Debug|Win32
+		{DAFAE4ED-D59E-4657-8DAB-18A2185D9458}.Debug - GigaBit Camera|Win32.ActiveCfg = Debug|Win32
+		{DAFAE4ED-D59E-4657-8DAB-18A2185D9458}.Debug - GigaBit Camera|Win32.Build.0 = Debug|Win32
+		{DAFAE4ED-D59E-4657-8DAB-18A2185D9458}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DAFAE4ED-D59E-4657-8DAB-18A2185D9458}.Debug|Win32.Build.0 = Debug|Win32
+		{DAFAE4ED-D59E-4657-8DAB-18A2185D9458}.Release - FireWire Camera|Win32.ActiveCfg = Release|Win32
+		{DAFAE4ED-D59E-4657-8DAB-18A2185D9458}.Release - FireWire Camera|Win32.Build.0 = Release|Win32
+		{DAFAE4ED-D59E-4657-8DAB-18A2185D9458}.Release - GigaBit Camera|Win32.ActiveCfg = Release|Win32
+		{DAFAE4ED-D59E-4657-8DAB-18A2185D9458}.Release - GigaBit Camera|Win32.Build.0 = Release|Win32
+		{DAFAE4ED-D59E-4657-8DAB-18A2185D9458}.Release|Win32.ActiveCfg = Release|Win32
+		{DAFAE4ED-D59E-4657-8DAB-18A2185D9458}.Release|Win32.Build.0 = Release|Win32
+		{C54B6A19-2693-4B9C-9DD4-DAD77EE932B9}.Debug - FireWire Camera|Win32.ActiveCfg = Debug|Win32
+		{C54B6A19-2693-4B9C-9DD4-DAD77EE932B9}.Debug - FireWire Camera|Win32.Build.0 = Debug|Win32
+		{C54B6A19-2693-4B9C-9DD4-DAD77EE932B9}.Debug - GigaBit Camera|Win32.ActiveCfg = Debug|Win32
+		{C54B6A19-2693-4B9C-9DD4-DAD77EE932B9}.Debug - GigaBit Camera|Win32.Build.0 = Debug|Win32
+		{C54B6A19-2693-4B9C-9DD4-DAD77EE932B9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C54B6A19-2693-4B9C-9DD4-DAD77EE932B9}.Debug|Win32.Build.0 = Debug|Win32
+		{C54B6A19-2693-4B9C-9DD4-DAD77EE932B9}.Release - FireWire Camera|Win32.ActiveCfg = Release|Win32
+		{C54B6A19-2693-4B9C-9DD4-DAD77EE932B9}.Release - FireWire Camera|Win32.Build.0 = Release|Win32
+		{C54B6A19-2693-4B9C-9DD4-DAD77EE932B9}.Release - GigaBit Camera|Win32.ActiveCfg = Release|Win32
+		{C54B6A19-2693-4B9C-9DD4-DAD77EE932B9}.Release - GigaBit Camera|Win32.Build.0 = Release|Win32
+		{C54B6A19-2693-4B9C-9DD4-DAD77EE932B9}.Release|Win32.ActiveCfg = Release|Win32
+		{C54B6A19-2693-4B9C-9DD4-DAD77EE932B9}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

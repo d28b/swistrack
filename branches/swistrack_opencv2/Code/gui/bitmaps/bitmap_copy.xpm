@@ -1,0 +1,25 @@
+/* XPM */
+static const char *bitmap_copy_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 4 1",
+"  c black",
+". c navy",
+"X c none",
+"o c white",
+/* pixels */
+"XXXXXXXXXXXXXXXX",
+"X      XXXXXXXXX",
+"X oooo  XXXXXXXX",
+"X oooo o XXXXXXX",
+"X o  o ......XXX",
+"X ooooo.oooo..XX",
+"X o    .oooo.o.X",
+"X ooooo.o  o....",
+"X o    .ooooooo.",
+"X ooooo.o     o.",
+"X      .ooooooo.",
+"XXXXXXX.o     o.",
+"XXXXXXX.ooooooo.",
+"XXXXXXX.........",
+"XXXXXXXXXXXXXXXX"
+};

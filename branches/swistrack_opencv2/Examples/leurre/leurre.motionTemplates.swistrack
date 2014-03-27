@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<swistrack>
+  <components>
+    <component type="InputFileAVI">
+      <enabledinterval value="1"/>
+      <parameter name="File" value="leurre.avi"/>
+    </component>
+    <component type="ConvertToColor">
+      <enabledinterval value="1"/>
+    </component>
+    <component type="MotionTemplateParticleDetector">
+      <enabledinterval value="1"/>
+      <parameter name="DiffThreshold" value="21"/>
+      <parameter name="MaxTimeDelta" value="1.500000"/>
+      <parameter name="MhiDuration" value="0.100000"/>
+      <parameter name="MinTimeDelta" value="0.010000"/>
+      <parameter name="SegmentThreshold" value="0.100000"/>
+    </component>
+    <component type="CalibrationTSAI">
+      <enabledinterval value="1"/>
+      <parameter name="CalibrationPoints" value="calibrationPoints.xml"/>
+      <parameter name="Ncx" value=""/>
+      <parameter name="Ncy" value=""/>
+      <parameter name="Nfx" value=""/>
+      <parameter name="Nfy" value=""/>
+      <parameter name="dx" value=""/>
+      <parameter name="dy" value=""/>
+      <parameter name="sx" value=""/>
+    </component>
+    <component type="DynamicNearestNeighborTracking">
+      <enabledinterval value="1"/>
+      <parameter name="FrameKillThreshold" value="45.000000"/>
+      <parameter name="MaxDistance" value="125.000000"/>
+      <parameter name="MaxNumber" value="10"/>
+      <parameter name="MinNewTrackDistance" value="150.000000"/>
+      <parameter name="TrackDistanceKillThreshold" value="40"/>
+    </component>
+    <component type="OutputFile">
+      <enabledinterval value="1"/>
+      <parameter name="DirectoryName" value=""/>
+    </component>
+  </components>
+  <server>
+    <port>3000</port>
+  </server>
+</swistrack>

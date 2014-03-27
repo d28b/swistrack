@@ -1,0 +1,36 @@
+swistrack (4.0-20090623~intrepid2) unstable; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@hal.elte.hu>  Thu, 02 Dec 2010 12:18:01 +0100
+
+swistrack (4.0-20090623~intrepid1) intrepid; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@hal.elte.hu>  Wed, 05 May 2010 14:37:23 +0200
+
+swistrack (4.0-20090623~intrepid) intrepid; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Mon, 27 Jul 2009 13:47:28 +0200
+
+swistrack (4.0-20090309~intrepid) intrepid; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Thu, 09 Apr 2009 15:17:09 +0200
+
+swistrack (4.0-20090307~intrepid2) intrepid; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Tue, 31 Mar 2009 15:21:48 +0200
+
+swistrack (4.0-20090307~intrepid1) intrepid; urgency=low
+
+  * update to svn HEAD
+  * build for intrepid, as well
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Tue, 31 Mar 2009 12:40:17 +0200

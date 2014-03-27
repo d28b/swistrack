@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Motion Template Particle Detector</friendlyname>
+	<description>Uses motempl.c from the opencv book.
+	</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/MotionTemplateParticleDetector</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+	  <parameter type="integer">
+	    <name>DiffThreshold</name>
+	    <label>DiffThreshold</label>
+	    <unit></unit>
+	    <default>30</default>
+	    <reloadable>false</reloadable>
+	  </parameter>
+	  <parameter type="double">
+	    <name>SegmentThreshold</name>
+	    <label>SegmentThreshold</label>
+	    <unit></unit>
+	    <default>1.5</default>
+	    <reloadable>false</reloadable>
+	  </parameter>
+	  <parameter type="double">
+	    <name>MhiDuration</name>
+	    <label>MhiDuration</label>
+	    <min>0.0000000000001</min>
+	    <unit></unit>
+	    <default>1</default>
+	    <reloadable>false</reloadable>
+	  </parameter>
+	  <parameter type="double">
+	    <name>MaxTimeDelta</name>
+	    <label>MaxTimeDelta</label>
+	    <unit></unit>
+	    <default>0.5</default>
+	    <reloadable>false</reloadable>
+	  </parameter>
+	  <parameter type="double">
+	    <name>MinTimeDelta</name>
+	    <label>MinTimeDelta</label>
+	    <unit></unit>
+	    <default>0.05</default>
+	    <reloadable>false</reloadable>
+	  </parameter>
+	</configuration>
+</swistrackcomponent>

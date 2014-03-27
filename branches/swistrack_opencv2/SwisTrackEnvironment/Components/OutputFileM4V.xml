@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Output to MPEG4 File</friendlyname>
+	<description>Write an MPEG4 video file.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputFileM4V</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="outputfile">
+			<name>FileName</name>
+			<label>M4V File</label>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>FrameRate</name>
+			<label>Frame Rate</label>
+			<default>15</default>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="dropdownlist">
+			<name>InputChannel</name>
+			<label>Input Channel</label>
+			<items>
+				<item key="color">Color</item>
+				<item key="grayscale">Grayscale</item>
+				<item key="binary">Binary</item>
+			</items>
+			<default>grayscale</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

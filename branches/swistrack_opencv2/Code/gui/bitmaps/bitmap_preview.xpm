@@ -1,0 +1,26 @@
+/* XPM */
+static const char *bitmap_preview_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 5 1",
+"  c black",
+". c cyan",
+"X c #808080",
+"o c none",
+"O c white",
+/* pixels */
+"         ooooooo",
+" OOOOOOO  oooooo",
+" OOOOOOO o ooooo",
+" OOOOOOO    oooo",
+" OOOOOOOOOO oooo",
+" OOOOOOO    oooo",
+" OOOOOO XooX ooo",
+" OOOOO X..oXX oo",
+" OOOOO o.ooXo oo",
+" OOOOO ooooXo oo",
+" OOOOO Xoo.XX oo",
+" OOOOOO XooX Xoo",
+" OOOOOOO    X  o",
+" OOOOOOOOOO o   ",
+"            oo  "
+};

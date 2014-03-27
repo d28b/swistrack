@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Calibration with TSAI</friendlyname>
+	<description>Uses the TSAI coplanar calibration method to transform the particle positions from image coordinates to world coordinates.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/CalibrationTSAI</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="inputfile">
+			<name>CalibrationPoints</name>
+			<label>Calib. Points</label>
+		</parameter>
+		<parameter type="double">
+			<name>Ncx</name>
+			<label>Ncx</label>
+			<default>640</default>
+		</parameter>
+		<parameter type="double">
+			<name>Nfx</name>
+			<label>Nfx</label>
+			<default>640</default>
+		</parameter>
+		<parameter type="double">
+			<name>Ncy</name>
+			<label>Ncy</label>
+			<default>480</default>
+		</parameter>
+		<parameter type="double">
+			<name>Nfy</name>
+			<label>Nfy</label>
+			<default>480</default>
+		</parameter>
+
+		<parameter type="double">
+			<name>dx</name>
+			<label>dx</label>
+			<default>0.0065</default>
+		</parameter>
+		<parameter type="double">
+			<name>dy</name>
+			<label>dy</label>
+			<default>0.0065</default>
+		</parameter>
+		<parameter type="double">
+			<name>sx</name>
+			<label>sx</label>
+			<default>1.0</default>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<swistrack>
+  <components>
+    <component type="InputFileAVI">
+      <parameter name="File" value="/home/stefie10/dev/cogmac/tfs/slimd/3rdParty/swistrack/swistrack/Examples/leurre/leurre.avi"/>
+    </component>
+    <component type="ConvertToColor">
+      <enabled value="true"/>
+    </component>
+    <component type="AdaptiveBackgroundSubtractionMedian">
+      <enabled value="true"/>
+    </component>
+    <component type="ThresholdColorCommon">
+      <enabled value="true"/>
+      <parameter name="Threshold" value="6"/>
+    </component>
+    <component type="BinaryErosion">
+      <enabled value="true"/>
+    </component>
+    <component type="BackgroundSubtractionCheungKamath">
+      <enabled value="true"/>
+    </component>
+  </components>
+  <server>
+    <port>3000</port>
+  </server>
+</swistrack>

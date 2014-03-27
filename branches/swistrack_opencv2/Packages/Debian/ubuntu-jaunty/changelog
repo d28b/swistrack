@@ -1,0 +1,36 @@
+swistrack (4.0-20090623~jaunty2) unstable; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@hal.elte.hu>  Thu, 02 Dec 2010 12:18:16 +0100
+
+swistrack (4.0-20090623~jaunty1) jaunty; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@hal.elte.hu>  Wed, 05 May 2010 14:37:40 +0200
+
+swistrack (4.0-20090623~jaunty) jaunty; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Mon, 27 Jul 2009 13:47:44 +0200
+
+swistrack (4.0-20090309~jaunty) jaunty; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Thu, 09 Apr 2009 15:20:30 +0200
+
+swistrack (4.0-20090307~jaunty2) jaunty; urgency=low
+
+  * update to svn HEAD
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Tue, 31 Mar 2009 15:22:06 +0200
+
+swistrack (4.0-20090307~jaunty1) jaunty; urgency=low
+
+  * update to svn HEAD
+  * build for jaunty, as well
+
+ -- Daniel Abel <abeld@angel.elte.hu>  Tue, 31 Mar 2009 12:40:17 +0200

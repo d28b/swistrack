@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Particle Simulation</friendlyname>
+	<description>Reads particles from a file and injects them as if they were detected on an image. The file must contain NMEA 0183 records as they are sent over the TCP connection.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/SimulationParticles</url>
+	<display>Output</display>
+
+	<configuration>
+		<parameter type="inputfile">
+			<name>File</name>
+			<label>Simulation file</label>
+			<filter>NMEA 0183 data file|*.*</filter>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="pointDouble">
+			<name>CameraOrigin</name>
+			<label>Camera origin</label>
+			<unit>m</unit>
+			<default>
+				<x>0</x>
+				<y>0</y>
+			</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="angle">
+			<name>CameraRotation</name>
+			<label>Orientation</label>
+			<min>0</min>
+			<max>6.2831853</max>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>CameraPixelSize</name>
+			<label>Pixel size</label>
+			<unit>m</unit>
+			<default>0.01</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="pointDouble">
+			<name>CameraSize</name>
+			<label>Camera size</label>
+			<unit>pixels</unit>
+			<default>
+				<x>640</x>
+				<y>480</y>
+			</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

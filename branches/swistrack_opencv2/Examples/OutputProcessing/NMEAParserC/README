@@ -1,0 +1,23 @@
+SwisTrack 4 NMEA Parser and Example
+===================================
+
+
+How to Run the Example
+----------------------
+
+Type
+	make
+to compile the sample program "example-stdin". (Note that you need a C compiler set up on your machine.)
+
+Once this is done, you can run it with
+	./example-stdin
+The program is pretty self-explanatory.
+
+
+How to Use the NMEA Parser
+--------------------------
+
+You need to integrate the following 2 files in your project:
+	nmea_parser.h
+	nmea_parser.c
+How to use them is explained in "example-stdin.c".
