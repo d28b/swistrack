@@ -64,7 +64,7 @@ CvRect * detectFace(IplImage * pImg)
 	                1.1,                       // increase search scale by 10% each pass
 	                6,                         // require six neighbors
 	                CV_HAAR_DO_CANNY_PRUNING,  // skip regions unlikely to contain a face
-	                cvSize(minFaceSize, minFaceSize));
+	                cvSize(minFaceSize, minFaceSize), cvSize(0,0));
 
 	// if one or more faces are detected, return the first one
 	if ( pFaceRectSeq && pFaceRectSeq->total )
