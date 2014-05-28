@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Graph Control</friendlyname>
+	<description>Control algorithm for particle assembly
+	</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/GraphControl</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+		<parameter type="integer">
+			<name>ArenaSize</name>
+			<label>Arena radius</label>
+			<min>0</min>
+			<max>500</max>
+			<default>150</default>
+			<reloadable>true</reloadable>
+			<slider>true</slider>
+			<sliderstep>1</sliderstep>			
+		</parameter>
+	
+		<parameter type="integer">
+			<name>ClusterSize</name>
+			<label>Number of particles in the target structure</label>
+			<min>0</min>
+			<max>20</max>
+			<default>4</default>
+			<reloadable>true</reloadable>
+			<slider>true</slider>
+			<sliderstep>1</sliderstep>			
+		</parameter>
+
+		<parameter type="integer">
+			<name>ParticleSize</name>
+			<label>Particle size (proximity)</label>
+			<min>1</min>
+			<max>60</max>
+			<default>30</default>
+			<reloadable>true</reloadable>
+			<slider>true</slider>
+			<sliderstep>1</sliderstep>			
+		</parameter>
+
+	</configuration>
+</swistrackcomponent>

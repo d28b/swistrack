@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Resize Image</friendlyname>
+	<description>Changes size of image by setting region of interest</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ConvertToGray</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="double">
+			<name>CropLeft</name>
+			<label>Crop left</label>
+			<min>0</min>
+			<max>500</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+			<default>0.0</default>
+			<sliderstep>1.0</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<parameter type="double">
+			<name>CropTop</name>
+			<label>Crop top</label>
+			<min>0</min>
+			<max>500</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+			<default>0.0</default>
+			<sliderstep>1.0</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<parameter type="double">
+			<name>width</name>
+			<label>width (0: original)</label>
+			<min>-500</min>
+			<max>2000</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+			<default>0.0</default>
+			<sliderstep>1.0</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<parameter type="double">
+			<name>height</name>
+			<label>height (0: original)</label>
+			<min>-500</min>
+			<max>2000</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+			<default>0.0</default>
+			<sliderstep>1.0</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+
+	</configuration>
+	
+</swistrackcomponent>

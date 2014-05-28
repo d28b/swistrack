@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Fourier transform (FFT)</friendlyname>
+	<description>Converts a grayscale image to the frequency domain using the 2D-FFT. The output is a complex matrix. The display output is the magnitude plotted in log-scale.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/FFT</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="dropdownlist">
+			<name>Output size</name>
+			<label>Output size</label>
+			<items>
+				<item key="0">Auto</item>
+			</items>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>GenerateOutput</name>
+			<label>Generate Display Output (slower)</label>
+			<default>1</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

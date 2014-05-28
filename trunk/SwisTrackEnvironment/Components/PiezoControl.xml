@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Piezo Control</friendlyname>
+	<description>Module to control the piezo of the SelfSys Microfluidic chamber</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/PiezoControl</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="inputfile">
+			<name>SerialDevicePiezo</name>
+			<label>serial device for piezo</label>
+			<default>/dev/ttyUSB0</default>
+			<reloadable>false</reloadable>
+		</parameter>
+
+		<parameter type="checkbox">
+			<name>Activate</name>
+			<label>Activate</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		
+		<parameter type="dropdownlist">
+			<name>Mode</name>
+			<label>Mode</label>
+			<items>
+				<item key="0">Manual: Assembly mode</item>
+				<item key="1">Manual: Disassembly mode</item>
+				<item key="2">Auto</item>
+			</items>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<parameter type="integer">
+			<name>f1</name>
+			<label>Frequency Assembly Mode</label>
+			<min>0</min>
+			<max>100000</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+			<default>30000</default>
+			<sliderstep>500</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<parameter type="integer">
+			<name>a1</name>
+			<label>Amplitude Assembly Mode</label>
+			<min>0</min>
+			<max>400</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+			<default>100</default>
+			<sliderstep>1</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<parameter type="integer">
+			<name>f2</name>
+			<label>Frequency Disassembly Mode</label>
+			<min>0</min>
+			<max>100000</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+			<default>30000</default>
+			<sliderstep>500</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<parameter type="integer">
+			<name>a2</name>
+			<label>Amplitude Disassembly Mode</label>
+			<min>0</min>
+			<max>400</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+			<default>100</default>
+			<sliderstep>1</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+
+
+	</configuration>
+</swistrackcomponent>

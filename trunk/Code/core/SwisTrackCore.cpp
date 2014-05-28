@@ -7,11 +7,16 @@
 #include "ComponentInputCamera1394.h"
 #include "ComponentInputCameraUSB.h"
 #include "ComponentInputCameraGigE.h"
+#include "ComponentInputCameraARVGigE.h"
 #include "ComponentInputCameraProselicaGigE.h"
 #include "ComponentInputFileAVI.h"
 #include "ComponentInputFileImage.h"
 #include "ComponentConvertToGray.h"
 #include "ComponentConvertToColor.h"
+#include "ComponentFFT.h"
+#include "ComponentResize.h"
+#include "ComponentInverseFFT.h"
+#include "ComponentFrequencyFilter.h"
 #include "ComponentCannyEdgeDetection.h"
 #include "ComponentConvertBayerToColor.h"
 #include "ComponentChannelArithmetic.h"
@@ -57,6 +62,8 @@
 #include "ComponentKalmanFilterTrack.h"
 #include "ComponentIDReaderRing.h"
 #include "ComponentSimulationParticles.h"
+#include "ComponentFourierCorrelation.h"
+#include "ComponentFourierPatternTracker.h"
 #include "ComponentColorHistogramParticles.h"
 #include "ComponentCalibrationLinear.h"
 #include "ComponentCalibrationOpenCV.h"
@@ -79,6 +86,11 @@
 #include "ComponentSobelDifferentiation.h"
 #include "ComponentBinarySmooth.h"
 
+#include "ComponentChamberControl.h"
+#include "ComponentPiezoControl.h"
+#include "ComponentGraphControl.h"
+
+
 #include "NMEALog.h"
 THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 		mAvailableComponents(), mDataStructures(), mSwisTrackCoreInterfaces(), mComponentConfigurationFolder(componentconfigurationfolder),
@@ -98,9 +110,11 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 		mDataStructureInput(),
 		mDataStructureImageColor(wxT("ImageColor"), wxT("Color image")),
 		mDataStructureImageGray(wxT("ImageGray"), wxT("Grayscale image")),
+		mDataStructureImageFFT(wxT("ImageFFT"), wxT("Fourier image")),
 		mDataStructureImageBinary(wxT("ImageBinary"), wxT("Binary image")),
 		mDataStructureParticles(),
 		mDataStructureTracks(),
+		mDataStructureCommands(),
 		mStarted(false), mProductionMode(false), mStepCounter(0), mEditLocks(0), mDeployedComponents() {
 
 
@@ -112,6 +126,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentInputCamera1394(this));
 	mAvailableComponents.push_back(new ComponentInputCameraUSB(this));
 	mAvailableComponents.push_back(new ComponentInputCameraGigE(this));
+	mAvailableComponents.push_back(new ComponentInputCameraARVGigE(this));
 	mAvailableComponents.push_back(new ComponentInputCameraProselicaGigE(this));
 	mAvailableComponents.push_back(new ComponentInputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentInputFileImage(this));
@@ -119,6 +134,9 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentConvertToGray(this));
 	mAvailableComponents.push_back(new ComponentConvertToColor(this));
 	mAvailableComponents.push_back(new ComponentConvertBayerToColor(this));
+	mAvailableComponents.push_back(new ComponentFFT(this));
+	mAvailableComponents.push_back(new ComponentInverseFFT(this));
+	mAvailableComponents.push_back(new ComponentResize(this));
 	//Preprocessing Color
 	mAvailableComponents.push_back(new ComponentChannelArithmetic(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionColor(this));
@@ -140,6 +158,8 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentGrayMask(this));
+	mAvailableComponents.push_back(new ComponentFrequencyFilter(this));
+	mAvailableComponents.push_back(new ComponentFourierCorrelation(this));
 	//Thresholding Color
 	mAvailableComponents.push_back(new ComponentThresholdColorCommon(this));
 	mAvailableComponents.push_back(new ComponentThresholdColorIndependent(this));
@@ -163,6 +183,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentSobelDifferentiation(this));
   	mAvailableComponents.push_back(new ComponentIDReaderRing(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
+	mAvailableComponents.push_back(new ComponentFourierPatternTracker(this));
 	
 	//Calibration	
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
@@ -194,7 +215,12 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 	mAvailableComponents.push_back(new ComponentOutputDataAssociationTraining(this));
 	mAvailableComponents.push_back(new ComponentClassifierTracker(this));
- 
+ 
+ 	mAvailableComponents.push_back(new ComponentGraphControl(this));
+	mAvailableComponents.push_back(new ComponentChamberControl(this));
+ 	mAvailableComponents.push_back(new ComponentPiezoControl(this));
+ 
+
 	// Initialize the available components
 	tComponentList::iterator ita = mAvailableComponents.begin();
 	while (ita != mAvailableComponents.end()) {
@@ -206,9 +232,12 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mDataStructures.push_back(&mDataStructureInput);
 	mDataStructures.push_back(&mDataStructureImageColor);
 	mDataStructures.push_back(&mDataStructureImageGray);
+	mDataStructures.push_back(&mDataStructureImageFFT);
 	mDataStructures.push_back(&mDataStructureImageBinary);
 	mDataStructures.push_back(&mDataStructureParticles);
 	mDataStructures.push_back(&mDataStructureTracks);
+	mDataStructures.push_back(&mDataStructureCommands);
+
 }
 
 THISCLASS::~SwisTrackCore() {

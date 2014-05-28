@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Frequency filter</friendlyname>
+	<description>Performs highpass, lowpass and bandpass filtering in the frequency domain.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/FrequencyFilter</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		
+		<parameter type="double">
+			<name>CenterFrequency</name>
+			<label>Center Frequency</label>
+			<min>0</min>
+			<max>1</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+			<default>0.0</default>
+			<sliderstep>0.01</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>Width</name>
+			<label>Width</label>
+			<min>0.0</min>
+			<max>0.5</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+			<default>0.0</default>
+			<sliderstep>0.01</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>Sigma</name>
+			<label>Sigma</label>
+			<min>0.01</min>
+			<max>3</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+			<default>0.3</default>
+			<sliderstep>0.01</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+		
+
+		<parameter type="double">
+			<name>Gain</name>
+			<label>Gain</label>
+			<min>0.01</min>
+			<max>100</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+			<default>1.0</default>
+			<sliderstep>0.01</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<parameter type="checkbox">
+			<name>InvertFilter</name>
+			<label>Invert Filter (Notch)</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<parameter type="checkbox">
+			<name>GenerateOutput</name>
+			<label>Generate Display Output (slow)</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

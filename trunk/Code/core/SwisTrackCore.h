@@ -14,6 +14,7 @@ class SwisTrackCore;
 #include "DataStructureImage.h"
 #include "DataStructureParticles.h"
 #include "DataStructureTracks.h"
+#include "DataStructureCommand.h"
 #include "ErrorList.h"
 #include "SwisTrackCoreInterface.h"
 #include "SwisTrackCoreTrigger.h"
@@ -62,9 +63,12 @@ public:
 	DataStructureInput mDataStructureInput;
 	DataStructureImage mDataStructureImageColor;
 	DataStructureImage mDataStructureImageGray;
+	DataStructureImage mDataStructureImageFFT;        // used by FFT modules (F. Schill 2014)
 	DataStructureImage mDataStructureImageBinary;
 	DataStructureParticles mDataStructureParticles;
 	DataStructureTracks mDataStructureTracks;
+	DataStructureCommand mDataStructureCommands;
+
 
 	//! Constructor.
 	SwisTrackCore(wxString componentconfigurationfolder);

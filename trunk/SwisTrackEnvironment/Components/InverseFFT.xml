@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Inverse FFT</friendlyname>
+	<description>Converts an Fourier image to a spatial domain grayscale image using the inverse 2D-FFT. </description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ConvertToGray</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="dropdownlist">
+			<name>Output type</name>
+			<label>Output Type</label>
+			<items>
+				<item key="0">Real</item>
+				<item key="1">Imaginary</item>
+				<item key="2">Magnitude</item>
+				<item key="3">Phase</item>
+				<item key="4">Sqare mag.</item>
+			</items>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<parameter type="checkbox">
+			<name>Normalize</name>
+			<label>Normalize output</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+
+	</configuration>
+	
+</swistrackcomponent>

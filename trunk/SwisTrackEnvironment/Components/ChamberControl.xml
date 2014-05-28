@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Chamber Control</friendlyname>
+	<description>Module to control SelfSys Microfluidic chamber</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ChamberControl</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="inputfile">
+			<name>SerialDeviceValves</name>
+			<label>serial device for valve control</label>
+			<default>/dev/ttyACM0</default>
+			
+		</parameter>
+
+		<parameter type="checkbox">
+			<name>Compressor</name>
+			<label>Compressor</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<parameter type="checkbox">
+			<name>Valve1</name>
+			<label>Valve 1</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>Valve2</name>
+			<label>Valve 2</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>Valve3</name>
+			<label>Valve 3</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="checkbox">
+			<name>Valve4</name>
+			<label>Valve 4</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+
+
+		<parameter type="checkbox">
+			<name>Pump</name>
+			<label>Pump</label>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		
+		<parameter type="double">
+			<name>PumpSpeed</name>
+			<label>Pump speed</label>
+			<min>-255</min>
+			<max>255</max>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+			<default>0</default>
+			<sliderstep>1.0</sliderstep>
+			<reloadable>true</reloadable>
+		</parameter>
+
+	</configuration>
+</swistrackcomponent>
