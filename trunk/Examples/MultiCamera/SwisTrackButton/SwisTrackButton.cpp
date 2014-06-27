@@ -47,7 +47,7 @@ THISCLASS::SwisTrackButton(const wxString& title, const wxPoint& pos, const wxSi
 	vs->Add(button, 0, wxEXPAND, 0);
 
 	// Connections
-	ReadConfiguration("SwisTrackButton.configuration");
+	ReadConfiguration(wxT("SwisTrackButton.configuration"));
 	//AddConnection(wxT("grmapc11.epfl.ch"), 3000);
 	//AddConnection(wxT("grmapc11.epfl.ch"), 3001);
 	//AddConnection(wxT("grmapc12.epfl.ch"), 3002);
