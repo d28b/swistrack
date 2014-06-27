@@ -102,8 +102,8 @@ void THISCLASS::OnStart() {
 	// Area of interest: Size
 	int cameraw = mCamera->Width.GetMax();
 	int camerah = mCamera->Height.GetMax();
-	int aoiw = GetConfigurationInt(wxT("AOISize.x"), 64);
-	int aoih = GetConfigurationInt(wxT("AOISize.y"), 64);
+	int aoiw = GetConfigurationInt(wxT("AOISize.x"), 1032);
+	int aoih = GetConfigurationInt(wxT("AOISize.y"), 778);
 	if (aoiw > cameraw) {
 		aoiw = cameraw;
 	}

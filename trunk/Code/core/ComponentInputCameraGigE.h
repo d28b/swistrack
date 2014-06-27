@@ -4,6 +4,12 @@
 #include "Component.h"
 
 #ifdef USE_CAMERA_PYLON_GIGE
+
+// This is only defined for builds with more recent Pylon drivers, which require the master header
+#ifdef USE_PYLON3
+#include <pylon/PylonIncludes.h>
+#endif
+
 #include <pylon/TlFactory.h>
 #include <pylon/Result.h>
 #include <pylon/gige/BaslerGigECamera.h>
@@ -50,7 +56,11 @@ private:
   int mEthernetPacketSize;							//!< (configuration) The ethernet packet size.
 
 	Pylon::CBaslerGigECamera *mCamera;					//!< Camera object.
+#ifdef USE_PYLON3
+	Pylon::CPylonGigEStreamGrabber *mStreamGrabber;		//!< Stream grabber object.
+#else
 	Pylon::CBaslerGigEStreamGrabber *mStreamGrabber;	//!< Stream grabber object.
+#endif
 	Pylon::IChunkParser *mChunkParser;					//!< Chunk parser object.
 
 	static const int mInputBufferSizeMax = 32;							//!< The maximum number of input buffer images.

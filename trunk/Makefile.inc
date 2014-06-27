@@ -16,8 +16,8 @@ OPENCV_LDLIBS      := `pkg-config --libs opencv`
 #OPENCV_LDLIBS      := -lcxcore -lcv -lhighgui -lcvaux -lml
 
 # wxWidgets
-WXWIDGETS_CPPFLAGS := `wx-config --version=2.8 --cppflags`
-WXWIDGETS_LDLIBS   := `wx-config --version=2.8 --libs`
+WXWIDGETS_CPPFLAGS := `wx-config --cppflags`
+WXWIDGETS_LDLIBS   := `wx-config --libs`
 
 #glib
 GLIB_CPPFLAGS :=`pkg-config --cflags glib-2.0`
@@ -29,11 +29,20 @@ LDLIBS_ADD   += $(GLIB_LDLIBS)
 #switch GPU/CUDA code on
 #CPPFLAGS_ADD += -DGPU_ENABLED
 
-# GiGE PYLON Camera Component (activate the following lines to compile with this component)
+# GiGE PYLON Camera Component (activate to compile component)
+# Defaults for Pylon 1
 #PYLON_ROOT         := /opt/pylon
 #GENICAM_ROOT_V1_1  := /opt/pylon
 #CPPFLAGS_ADD       += -I$(PYLON_ROOT)/include -I$(GENICAM_ROOT_V1_1)/include/genicam -DUSE_CAMERA_PYLON_GIGE
 #LDLIBS_ADD         += -L$(PYLON_ROOT)/lib -L$(GENICAM_ROOT_V1_1)/lib -lpylonbase
+
+# GiGE PYLON Camera Component (activate to compile component)
+# Defaults for Pylon 3 (replace Linux32_i86 with Linux64_x64 if compiling 64 bit)
+#PYLON_ROOT         := /opt/pylon3
+#GENICAM_ROOT_V2_3  := /opt/pylon3/genicam
+#CPPFLAGS_ADD       += -isystem$(PYLON_ROOT)/include -isystem$(GENICAM_ROOT_V2_3)/library/CPP/include -DUSE_CAMERA_PYLON_GIGE -DUSE_GIGE -DUSE_PYLON3
+#LDFLAGS_ADD        += -L$(PYLON_ROOT)/lib -L$(GENICAM_ROOT_V2_3)/library/CPP/lib/Linux32_i86 -L$(GENICAM_ROOT_V2_3)/bin/Linux32_i86 -L$(GENICAM_ROOT_V2_3)/bin/Linux32_i86/GenApi/Generic -Wl,-E
+#LDLIBS_ADD         += -lpylonbase -lGenApi_gcc40_v2_3 -lGCBase_gcc40_v2_3 -lLog_gcc40_v2_3 -lMathParser_gcc40_v2_3 -lXerces-C_gcc40_v2_7 -llog4cpp_gcc40_v2_3
 
 #ARV_ROOT := $(SWISTRACK_ROOT)/3rd_Party/aravis-0.2.2
 #CPPFLAGS_ADD        +=  -DUSE_CAMERA_ARV_GIGE

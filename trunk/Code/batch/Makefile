@@ -17,7 +17,7 @@ FILES_A   := ../core/libSwisTrackCore.a ../../3rdParty/cvblobslib_v6p1/libCVBlob
 
 # Flags
 CXXFLAGS  := -g -Wall $(CXXFLAGS_ADD)
-CPPFLAGS  := $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -I/usr/include -I../core $(CPPFLAGS_ADD)
+CPPFLAGS  := $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -isystem/usr/include -I../core $(CPPFLAGS_ADD)
 LDLIBS    := $(OPENCV_LDLIBS) $(WXWIDGETS_LDLIBS) -lm $(LDLIBS_ADD)
 LDFLAGS   := $(LDFLAGS_ADD)
 
