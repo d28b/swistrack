@@ -15,7 +15,7 @@ FILES_O   := $(FILES_CPP:.cpp=.o)
 FILES_D   := $(FILES_CPP:.cpp=.d)
 
 # Flags
-override CXXFLAGS  += -g -Wall
+override CXXFLAGS  += -g -Wall -Wno-unknown-pragmas
 override CPPFLAGS  += $(OPENCV_CPPFLAGS) -I/usr/include
 
 # Build
