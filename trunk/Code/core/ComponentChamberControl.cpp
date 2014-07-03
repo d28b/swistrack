@@ -38,19 +38,22 @@ THISCLASS::ComponentChamberControl(SwisTrackCore *stc):
 }
 
 THISCLASS::~ComponentChamberControl() {
-	for (int i=0; i<NUMBER_VALVES; i++) {
-		printf("switch valve %i : off \n", i);
-		switch_valve(i, false);
-	}
+	// check if serial port was opened, and shut down everything if necessary
+	if (serial_fd>0) {
+		for (int i=0; i<NUMBER_VALVES; i++) {
+			printf("switch valve %i : off \n", i);
+			switch_valve(i, false);
+		}
 
-	printf("switch compressor: off \n");
-	switch_compressor(false);
-	
-	
-	printf("switch pump: off");
-	switch_pump(false, 0);
-	
-	close(serial_fd);
+		printf("switch compressor: off \n");
+		switch_compressor(false);
+		
+		
+		printf("switch pump: off");
+		switch_pump(false, 0);
+		
+		close(serial_fd);
+	}
 }
 
 
