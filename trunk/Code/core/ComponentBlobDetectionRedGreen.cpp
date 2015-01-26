@@ -124,6 +124,8 @@ void THISCLASS::OnStep() {
 			newparticle.mCenter.x = ((*k_min).mCenter.x + (*i).mCenter.x) * 0.5;
 			newparticle.mCenter.y = ((*k_min).mCenter.y + (*i).mCenter.y) * 0.5;
 			newparticle.mOrientation = atan2((*k_min).mCenter.y - (*i).mCenter.y, (*k_min).mCenter.x - (*i).mCenter.x);
+			newparticle.mFrameNumber = mCore->mDataStructureInput.mFrameNumber;
+			newparticle.mTimestamp = mCore->mDataStructureInput.FrameTimestamp();
 			mParticles.push_back(newparticle);
 		}
 	}
