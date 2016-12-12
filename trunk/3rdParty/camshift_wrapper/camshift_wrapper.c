@@ -129,10 +129,7 @@ void ensureSizeBounds(camshift *cs, CvSize size) {
 	if (cs->prevFaceRect.y + cs->prevFaceRect.height >= size.height) {
 		cs->prevFaceRect.height = size.height - cs->prevFaceRect.y - 1;
 	}
-	if (isnan(cs->faceBox.size.height) ||
-	        isnan(cs->faceBox.size.width) ||
-	        isnan(cs->prevFaceRect.width) ||
-	        isnan(cs->prevFaceRect.height))  {
+	if (isnan(cs->faceBox.size.height) || isnan(cs->faceBox.size.width)) {
 		cs->faceBox.size.height = 1;
 		cs->faceBox.size.width = 1;
 		cs->prevFaceRect.height = 1;
