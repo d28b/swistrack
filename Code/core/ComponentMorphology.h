@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentMorphology
 #define HEADER_ComponentMorphology
 
-#include <cv.h>
+#include <opencv2/core.hpp>
 #include <string>
 #include "Component.h"
 #include "DataStructureParticles.h"
@@ -12,7 +12,7 @@ class ComponentMorphology: public Component {
 public:
 
 	//! Constructor.
-	ComponentMorphology(SwisTrackCore *stc);
+	ComponentMorphology(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentMorphology();
 
@@ -22,19 +22,15 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	int operation;
-	int iterations;
-	int mChannelMain;					//!< The channel to subtract from.
-	int mChannelSubtract;					//!< The channel to subtract.
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentMorphology(mCore);
 	}
-private:
-	IplImage *tempimage;	
-	IplImage *tempimage2;
-	IplImage *outputimage;				//!< The image created by this component.
-	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 
+private:
+	int mOperation;						//!< (configuration) The operation type.
+	cv::Mat mKernel;					//!< (configuration) The erosion/dilation kernel.
+	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 };
 
 #endif

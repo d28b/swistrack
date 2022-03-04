@@ -1,11 +1,7 @@
 #ifndef HEADER_ComponentFilterParticles
 #define HEADER_ComponentFilterParticles
 
-#include <cv.h>
-//#include <cvaux.hpp>
-extern "C" {
-#include "camshift_wrapper.h"
-}
+#include <opencv2/core.hpp>
 #include "Component.h"
 #include "DataStructureParticles.h"
 
@@ -15,7 +11,7 @@ class ComponentFilterParticles: public Component {
 
 public:
 	//! Constructor.
-	ComponentFilterParticles(SwisTrackCore *stc);
+	ComponentFilterParticles(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentFilterParticles();
 
@@ -25,14 +21,13 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentFilterParticles(mCore);
 	}
 
 private:
 	DataStructureParticles::tParticleVector mParticles;
-
-	IplImage * mOutputImage;
 
 	double mMaxParticleArea;
 	double mMinParticleArea;

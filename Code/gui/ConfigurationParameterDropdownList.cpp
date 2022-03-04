@@ -12,8 +12,8 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterDropdownList(wxWindow* parent):
-		ConfigurationParameter(parent),
-		mValueDefault(wxT("")) {
+	ConfigurationParameter(parent),
+	mValueDefault(wxT("")) {
 
 }
 
@@ -52,7 +52,7 @@ void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
 		// Create one list item per "item" node
 		if (node->GetName() == wxT("item")) {
 			wxString key(wxT(""));
-			wxXmlProperty *prop = node->GetProperties();
+			wxXmlAttribute * prop = node->GetAttributes();
 			while (prop) {
 				if (prop->GetName() == wxT("key")) {
 					key = prop->GetValue();

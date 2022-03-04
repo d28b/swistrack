@@ -8,15 +8,15 @@
 #include "ComponentEditor.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
-       EVT_DATE_CHANGED(wxID_ANY, THISCLASS::OnDateChanged)
-       EVT_COMBOBOX(wxID_ANY, THISCLASS::OnAmPmChanged)
-       EVT_SPINCTRL(wxID_ANY, THISCLASS::OnHourMinuteChanged)
+	EVT_DATE_CHANGED(wxID_ANY, THISCLASS::OnDateChanged)
+	EVT_COMBOBOX(wxID_ANY, THISCLASS::OnAmPmChanged)
+	EVT_SPINCTRL(wxID_ANY, THISCLASS::OnHourMinuteChanged)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterDate(wxWindow* parent):
-		ConfigurationParameter(parent),
-		mDateCtrl(0),
-		mValueDefault() {
+	ConfigurationParameter(parent),
+	mDateCtrl(0),
+	mValueDefault() {
 
 }
 
@@ -64,19 +64,19 @@ void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 	mDateCtrl->SetValue(value);
 
 	if (value.GetHour() == 0) {
-	  mHourCtrl->SetValue(12);
-	  mAmPmCtrl->SetValue(wxT("AM"));
+		mHourCtrl->SetValue(12);
+		mAmPmCtrl->SetValue(wxT("AM"));
 	} else if (value.GetHour() == 12) {
-	  mHourCtrl->SetValue(12);
-	  mAmPmCtrl->SetValue(wxT("PM"));
+		mHourCtrl->SetValue(12);
+		mAmPmCtrl->SetValue(wxT("PM"));
 	} else {
-	  if (value.GetHour() > 12) {
-	    mHourCtrl->SetValue(value.GetHour() % 12);
-	    mAmPmCtrl->SetValue(wxT("PM"));
-	  } else {
-	    mHourCtrl->SetValue(value.GetHour());
-	    mAmPmCtrl->SetValue(wxT("AM"));
-	  }
+		if (value.GetHour() > 12) {
+			mHourCtrl->SetValue(value.GetHour() % 12);
+			mAmPmCtrl->SetValue(wxT("PM"));
+		} else {
+			mHourCtrl->SetValue(value.GetHour());
+			mAmPmCtrl->SetValue(wxT("AM"));
+		}
 	}
 	mMinuteCtrl->SetValue(value.GetMinute());
 }
@@ -99,27 +99,27 @@ void THISCLASS::UpdateDate() {
 	mNewValue = mDateCtrl->GetValue();
 	int hour = mHourCtrl->GetValue();
 	if (mAmPmCtrl->GetValue() == wxT("PM")) {
-	  if (hour != 12) {
-	    hour += 12;
-	  }
+		if (hour != 12) {
+			hour += 12;
+		}
 	} else {
-	  if (hour == 12) {
-	    hour = 0;
-	  }
+		if (hour == 12) {
+			hour = 0;
+		}
 	}
 	mNewValue.SetHour(hour);
 	mNewValue.SetMinute(mMinuteCtrl->GetValue());
 	SetNewValue(mDateCtrl);
 
-	
+
 }
 void THISCLASS::OnDateChanged(wxDateEvent& event) {
-        UpdateDate();
+	UpdateDate();
 }
 
 void THISCLASS::OnHourMinuteChanged(wxSpinEvent& event) {
-        UpdateDate();
+	UpdateDate();
 }
 void THISCLASS::OnAmPmChanged(wxCommandEvent& event) {
-        UpdateDate();
+	UpdateDate();
 }

@@ -3,10 +3,9 @@
 
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentMoveColorToBinary(SwisTrackCore *stc):
-		Component(stc, wxT("MoveColorToBinary")),
-		mOutputImage(0),
-		mDisplayOutput(wxT("Output"), wxT("Move the color image to the Binary.")) {
+THISCLASS::ComponentMoveColorToBinary(SwisTrackCore * stc):
+	Component(stc, wxT("MoveColorToBinary")),
+	mDisplayOutput(wxT("Output"), wxT("Move the color image to the Binary.")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryPreprocessingColor);
@@ -21,46 +20,32 @@ THISCLASS::ComponentMoveColorToBinary(SwisTrackCore *stc):
 THISCLASS::~ComponentMoveColorToBinary() {
 }
 
-void THISCLASS::OnStart()
-{
+void THISCLASS::OnStart() {
 	OnReloadConfiguration();
 }
 
-void THISCLASS::OnReloadConfiguration()
-{
-
+void THISCLASS::OnReloadConfiguration() {
 }
 
-void THISCLASS::OnStep()
-{
-	IplImage *inputimage = mCore->mDataStructureImageColor.mImage;
-	if (! inputimage) {
-		return;
-	}
-	if (!mOutputImage)
-		mOutputImage = cvCreateImage(cvSize(inputimage->width, inputimage->height), inputimage->depth, 1);
-	if (inputimage->nChannels != 3) {
-		AddError(wxT("The input image is not a color image."));
+void THISCLASS::OnStep() {
+	cv::Mat inputImage = mCore->mDataStructureImageColor.mImage;
+	if (inputImage.empty()) {
+		AddError(wxT("No input image."));
 		return;
 	}
 
-	cvCvtColor(inputimage, mOutputImage, CV_RGB2GRAY);
+	cv::Mat outputImage(inputImage.size(), CV_8UC1);
+	cv::cvtColor(inputImage, outputImage, cv::COLOR_BGR2GRAY);
 
-	mCore->mDataStructureImageBinary.mImage = mOutputImage;
+	mCore->mDataStructureImageBinary.mImage = outputImage;
 
 	// Let the Display know about our image
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(mCore->mDataStructureImageBinary.mImage);
-	}
+	if (de.IsActive()) de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
-
 }
 
 void THISCLASS::OnStop() {
-	if (mOutputImage) {
-		cvReleaseImage(&mOutputImage);
-	}
 }

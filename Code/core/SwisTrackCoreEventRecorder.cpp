@@ -7,9 +7,9 @@
 
 #include "SwisTrackCore.h"
 
-THISCLASS::SwisTrackCoreEventRecorder(SwisTrackCore *stc):
-		mSwisTrackCore(stc), mCurrentTimeline(0), mLastTimeline(0),
-		mPreviousStep(), mStepDistance(0) {
+THISCLASS::SwisTrackCoreEventRecorder(SwisTrackCore * stc):
+	mSwisTrackCore(stc), mCurrentTimeline(0), mLastTimeline(0),
+	mPreviousStep(), mStepDistance(0) {
 
 	// Store the frequency of the counter
 #ifdef __WXMSW__

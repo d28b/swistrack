@@ -1,27 +1,23 @@
 #include "DisplayRenderer.h"
 #define THISCLASS DisplayRenderer
 
-#include "ImageConversion.h"
+#include "ImageTools.h"
 #include <cmath>
 #include <iomanip>
-#define PI 3.14159265358979
 
-THISCLASS::DisplayRenderer(Display *display):
-		mDisplay(0), mImage(0),
-		mScalingFactor(1), mCropRectangle(cvRect(0, 0, 0, 0)), mFlipVertical(false), mFlipHorizontal(false),
-		mDrawImage(true), mDrawParticles(true), mDrawTrajectories(true), mDrawErrors(true), mUseMask(true) {
+THISCLASS::DisplayRenderer(Display * display):
+	mDisplay(0), mImage(), mFontFace(cv::FONT_HERSHEY_SIMPLEX), mFontSize(0.4), mFontSizeBig(1.0),
+	mScalingFactor(1), mCropRectangle(0, 0, 0, 0), mFlipVertical(false), mFlipHorizontal(false),
+	mDrawImage(true), mDrawParticles(true), mDrawTrajectories(true), mDrawErrors(true), mUseMask(true) {
 
 	SetDisplay(display);
-
-	// Initialize font
-	cvInitFont(&mFontMain, CV_FONT_HERSHEY_SIMPLEX, 0.4, 0.4);
 }
 
 THISCLASS::~DisplayRenderer() {
 	DeleteCache();
 }
 
-void THISCLASS::SetDisplay(Display *display) {
+void THISCLASS::SetDisplay(Display * display) {
 	mDisplay = display;
 	DeleteCache();
 }
@@ -31,20 +27,16 @@ void THISCLASS::SetScalingFactor(double scalingfactor) {
 	DeleteCache();
 }
 
-void THISCLASS::SetScalingFactorMax(CvSize maxsize) {
+void THISCLASS::SetScalingFactorMax(cv::Size maxsize) {
 	// Get the size of the image
-	CvSize srcsize = GetSize();
+	cv::Size srcsize = GetSize();
 
 	// Find out the smallest ratio such that the image fits into [maxwidth, maxheight]
 	double rw = (double)(maxsize.width) / (double)(srcsize.width);
 	double rh = (double)(maxsize.height) / (double)(srcsize.height);
 	double mScalingFactor = 1;
-	if (mScalingFactor > rw) {
-		mScalingFactor = rw;
-	}
-	if (mScalingFactor > rh) {
-		mScalingFactor = rh;
-	}
+	if (mScalingFactor > rw) mScalingFactor = rw;
+	if (mScalingFactor > rh) mScalingFactor = rh;
 }
 
 void THISCLASS::SetFlipHorizontal(bool flip) {
@@ -57,43 +49,31 @@ void THISCLASS::SetFlipVertical(bool flip) {
 	DeleteCache();
 }
 
-void THISCLASS::SetCropRectangle(CvRect rect) {
+void THISCLASS::SetCropRectangle(cv::Rect rect) {
 	mCropRectangle = rect;
 	DeleteCache();
 }
 
 void THISCLASS::DeleteCache() {
-	if (! mImage) {
-		return;
-	}
-	cvReleaseImage(&mImage);
-	mImage = 0;
+	mImage.release();
 }
 
-CvSize THISCLASS::GetSize() {
-	if (! mDisplay) {
-		return cvSize(300, 200);
-	}
-	double w = (double)(mDisplay->mSize.width) * mScalingFactor;
-	double h = (double)(mDisplay->mSize.height) * mScalingFactor;
-	CvSize size = cvSize((int)floor(w + 0.5), (int)floor(h + 0.5));
-	if ((size.width <= 0) || (size.height <= 0)) {
-		return cvSize(300, 200);
-	}
+cv::Size THISCLASS::GetSize() {
+	if (! mDisplay) return cv::Size(300, 200);
+	double w = (double) mDisplay->mSize.width * mScalingFactor;
+	double h = (double) mDisplay->mSize.height * mScalingFactor;
+	cv::Size size((int) floor(w + 0.5), (int) floor(h + 0.5));
+	if (size.width <= 0 || size.height <= 0) return cv::Size(300, 200);
 	return size;
 }
 
-IplImage *THISCLASS::GetImage() {
+cv::Mat THISCLASS::GetImage() {
 	// Return the cached image if possible
-	if (mImage) {
-		return mImage;
-	}
+	if (! mImage.empty()) return mImage;
 
 	// Create an empty image
-	CvSize size = GetSize();
-	mImage = cvCreateImage(size, IPL_DEPTH_8U, 3);
-	strcpy(mImage->channelSeq, "RGB");
-	memset(mImage->imageData, 255, mImage->imageSize);
+	cv::Size size = GetSize();
+	mImage = cv::Mat(size, CV_8UC3);
 
 	// If the display is null, just display an error message
 	if (! mDisplay) {
@@ -118,128 +98,94 @@ IplImage *THISCLASS::GetImage() {
 	return mImage;
 }
 
-bool THISCLASS::DrawMainImage(ErrorList *errors) {
-	if (! mDrawImage) {
-		return false;
-	}
-	if (! mDisplay) {
-		return false;
-	}
-	if (! mDisplay->mMainImage) {
-		return false;
-	}
+bool THISCLASS::DrawMainImage(ErrorList * errors) {
+	if (! mDrawImage) return false;
+	if (! mDisplay) return false;
+	if (mDisplay->mMainImage.empty()) return false;
 
 	// Resize and convert the image
-	IplImage *mainimage = cvCreateImage(cvSize(mImage->width, mImage->height), IPL_DEPTH_8U, 3);
-	IplImage *imagergb = ImageConversion::ToRGB(mDisplay->mMainImage);
-	cvResize(imagergb, mainimage, CV_INTER_LINEAR);
-	if (mDisplay->mMainImage != imagergb) {
-		cvReleaseImage(&imagergb);
-	}
+	cv::Mat imageRGB = ImageTools::BGRToRGB(mDisplay->mMainImage);
+	cv::Mat mainImage;
+	cv::resize(imageRGB, mainImage, mImage.size(), 0, 0, cv::INTER_LINEAR);
 
 	// Draw this main image
-	if ((mUseMask) && (mDisplay->mMaskImage)) {
+	if (mUseMask && ! mDisplay->mMaskImage.empty()) {
 		// Resize mask image
-		IplImage *resizedmaskimage = cvCreateImage(cvSize(mImage->width, mImage->height), IPL_DEPTH_8U, 1);
-		cvResize(mDisplay->mMaskImage, resizedmaskimage, CV_INTER_LINEAR);
-		cvCopy(mainimage, mImage, resizedmaskimage);
-		cvReleaseImage(&resizedmaskimage);
+		cv::Mat resizedMaskImage;
+		cv::resize(mDisplay->mMaskImage, resizedMaskImage, mImage.size(), cv::INTER_LINEAR);
+		mainImage.copyTo(mImage, resizedMaskImage);
 	} else {
-		cvCopy(mainimage, mImage);
+		mImage = mainImage;
 	}
 
-	cvReleaseImage(&mainimage);
 	return true;
 }
 
 bool THISCLASS::DrawParticles(ErrorList *errors) {
-	if (! mDrawParticles) {
-		return false;
-	}
-	if (! mDisplay) {
-		return false;
-	}
+	if (! mDrawParticles) return false;
+	if (! mDisplay) return false;
 
 	// Draw particles
-	DataStructureParticles::tParticleVector::iterator it = mDisplay->mParticles.begin();
-	while (it != mDisplay->mParticles.end()) {
-		int x = (int)floor(it->mCenter.x * mScalingFactor + 0.5);
-		int y = (int)floor(it->mCenter.y * mScalingFactor + 0.5);
-		cvRectangle(mImage, cvPoint(x - 2, y - 2), cvPoint(x + 2, y + 2), cvScalar(192, 0, 0), 1);
+	for (auto particle : mDisplay->mParticles) {
+		int x = (int) floor(particle.mCenter.x * mScalingFactor + 0.5);
+		int y = (int) floor(particle.mCenter.y * mScalingFactor + 0.5);
+		cv::rectangle(mImage, cv::Point(x - 2, y - 2), cv::Point(x + 2, y + 2), cv::Scalar(192, 0, 0), 1);
 
-		float c = cosf(it->mOrientation) * 8; //cosf(it->mOrientation/57.29577951)*20; // TODO: mOrientation contains an angle (rad), and the appropriate conversion to rad should be done when filling this structure
-		float s = sinf(it->mOrientation) * 8; //sinf(it->mOrientation/57.29577951)*20;
-		cvLine(mImage, cvPoint(x, y), cvPoint(x + (int)floorf(c + 0.5), y + (int)floorf(s + 0.5)), cvScalar(192, 0, 0), 1);
+		float c = cosf(particle.mOrientation) * 8; //cosf(particle.mOrientation/57.29577951)*20; // TODO: mOrientation contains an angle (rad), and the appropriate conversion to rad should be done when filling this structure
+		float s = sinf(particle.mOrientation) * 8; //sinf(particle.mOrientation/57.29577951)*20;
+		cv::line(mImage, cv::Point(x, y), cv::Point(x + (int)floorf(c + 0.5), y + (int)floorf(s + 0.5)), cv::Scalar(192, 0, 0), 1);
 
-		wxString label = wxString::Format(wxT("%d [%f]"), it->mID, it->mIDCovariance);
-		cvPutText(mImage, label.mb_str(wxConvISO8859_1), cvPoint(x + 12, y + 10), &mFontMain, cvScalar(255, 0, 0));
-		it++;
+		wxString label = wxString::Format(wxT("%d [%f]"), particle.mID, particle.mIDCovariance);
+		cv::putText(mImage, label.ToStdString(), cv::Point(x + 12, y + 10), mFontFace, mFontSize, cv::Scalar(255, 0, 0));
 	}
 
 	return true;
 }
 
 bool THISCLASS::DrawTrajectories(ErrorList *errors) {
-	if (! mDrawTrajectories) {
-		return false;
-	}
-	if (! mDisplay) {
-		return false;
-	}
-	if (! mDisplay->mTrajectories) {
-		return false;
-	}
+	if (! mDrawTrajectories) return false;
+	if (! mDisplay) return false;
+	if (! mDisplay->mTrajectories) return false;
 
 	// Draw trajectories
-	DataStructureTracks::tTrackMap *tracks = mDisplay->mComponent->GetSwisTrackCore()->mDataStructureTracks.mTracks;
-	DataStructureTracks::tTrackMap::iterator it = tracks->begin();
-	CvFont font;
-	cvInitFont(&font, CV_FONT_HERSHEY_PLAIN,1.0, 1.0);
-
-	while (it != tracks->end()) {
+	DataStructureTracks::tTrackMap * tracks = mDisplay->mComponent->GetSwisTrackCore()->mDataStructureTracks.mTracks;
+	for (auto tuple : *tracks) {
 		// Color for this track
-		CvScalar color = cvScalar((it->first * 50) % 255, 
-					  (it->first * 50) % 255, 
-					  255);
+		cv::Scalar color = cv::Scalar((tuple.first * 50) % 255, (tuple.first * 50) % 255, 255);
 
 		// Draw trajectory polyline
-		std::vector<CvPoint2D32f>::iterator p = it->second.trajectory.begin();
+		std::vector<cv::Point2f>::iterator p = tuple.second.trajectory.begin();
 		int xprev = (int)floor((*p).x * mScalingFactor + 0.5);
 		int yprev = (int)floor((*p).y * mScalingFactor + 0.5);
-		while (p != it->second.trajectory.end()) {
+		while (p != tuple.second.trajectory.end()) {
 			int x = (int)floor((*p).x * mScalingFactor + 0.5);
 			int y = (int)floor((*p).y * mScalingFactor + 0.5);
-			cvLine(mImage, cvPoint(xprev, yprev), cvPoint(x, y), color, 3);
+			cv::line(mImage, cv::Point(xprev, yprev), cv::Point(x, y), color, 3);
 			xprev = x;
 			yprev = y;
 			p++;
 		}
 
-		cvRectangle(mImage, cvPoint(xprev - 2, yprev - 2), cvPoint(xprev + 2, yprev + 2), color, 1);
+		cv::rectangle(mImage, cv::Point(xprev - 2, yprev - 2), cv::Point(xprev + 2, yprev + 2), color, 1);
 		wxString text;
-		text << it->first;
-		cvPutText(mImage, text.ToAscii(), cvPoint(xprev + 3, yprev + 3),
-			  &font, color);
-		it++;
+		text << tuple.first;
+		cv::putText(mImage, text.ToStdString(), cv::Point(xprev + 3, yprev + 3), mFontFace, mFontSizeBig, color);
 	}
 
 	return true;
 }
+
 bool THISCLASS::DrawErrors(ErrorList *errors) {
-	if (! mDrawErrors) {
-		return false;
-	}
-	if (! mDisplay) {
-		return false;
-	}
+	if (! mDrawErrors) return false;
+	if (! mDisplay) return false;
 
 	// The first line starts at the bottom
-	int y = mImage->height - 6;
+	int y = mImage.rows - 6;
 
 	// Draw all error messages
 	ErrorList::tList::iterator it = errors->mList.begin();
 	while (it != errors->mList.end()) {
-		cvPutText(mImage, (*it).mMessage.mb_str(wxConvISO8859_1), cvPoint(4, y), &mFontMain, cvScalar(0, 0, 255));
+		cv::putText(mImage, (*it).mMessage.ToStdString(), cv::Point(4, y), mFontFace, mFontSize, cv::Scalar(0, 0, 255));
 		y += 20;
 		it++;
 	}
@@ -247,7 +193,7 @@ bool THISCLASS::DrawErrors(ErrorList *errors) {
 	// Draw all error messages
 	it = mDisplay->mErrors.mList.begin();
 	while (it != mDisplay->mErrors.mList.end()) {
-		cvPutText(mImage, (*it).mMessage.mb_str(wxConvISO8859_1), cvPoint(4, y), &mFontMain, cvScalar(0, 0, 255));
+		cv::putText(mImage, (*it).mMessage.ToStdString(), cv::Point(4, y), mFontFace, mFontSize, cv::Scalar(0, 0, 255));
 		y += 20;
 		it++;
 	}
@@ -255,14 +201,12 @@ bool THISCLASS::DrawErrors(ErrorList *errors) {
 	return true;
 }
 
-bool THISCLASS::DrawMessagePanel(wxString errstr) {
-	cvRectangle(mImage, cvPoint(0, 0), cvPoint(mImage->width - 1, mImage->height - 1), cvScalar(0, 0, 0), 1);
-	if (errstr.Len() == 0) {
-		return true;
-	}
-	CvSize textsize;
+bool THISCLASS::DrawMessagePanel(wxString errorString) {
+	cv::rectangle(mImage, cv::Point(0, 0), cv::Point(mImage.cols - 1, mImage.rows - 1), cv::Scalar(0, 0, 0), 1);
+	if (errorString.Len() == 0) return true;
+
 	int ymin;
-	cvGetTextSize(errstr.mb_str(wxConvISO8859_1), &mFontMain, &textsize, &ymin);
-	cvPutText(mImage, errstr.mb_str(wxConvISO8859_1), cvPoint((mImage->width - textsize.width) / 2, (mImage->height + textsize.height) / 2), &mFontMain, cvScalar(255, 0, 0));
+	cv::Size textsize = cv::getTextSize(errorString.ToStdString(), mFontFace, mFontSize, 1, &ymin);
+	cv::putText(mImage, errorString.ToStdString(), cv::Point((mImage.cols - textsize.width) / 2, (mImage.rows + textsize.height) / 2), mFontFace, mFontSize, cv::Scalar(255, 0, 0));
 	return true;
 }

@@ -7,10 +7,10 @@ using namespace std;
 #include "DisplayEditor.h"
 #include "Utility.h"
 
-THISCLASS::ComponentOutputFile(SwisTrackCore *stc):
-		Component(stc, wxT("OutputFile")),
-		mDisplayOutput(wxT("Output"), wxT("After tracking"))
-{
+THISCLASS::ComponentOutputFile(SwisTrackCore * stc):
+	Component(stc, wxT("OutputFile")),
+	mDisplayOutput(wxT("Output"), wxT("After tracking")) {
+
 	// Data structure relations
 	mCategory = &(mCore->mCategoryOutput);
 	AddDisplay(&mDisplayOutput);
@@ -100,26 +100,26 @@ void THISCLASS::OnStop() {
 
 void THISCLASS::WriteHeader(std::fstream & fileStream) {
 	fileStream
-	<< "%Frame Number" << "\t"
-	<< "x (image)" << "\t" << "y (image)" << "\t"
-	<< "x (world)" << "\t" << "y (world)" << "\t"
-	<< "Area" << "\t"
-	<< "Orientation" << "\t"
-	<< "Compactness" << "\t"
-	<< "TimeStamp (ms)" << std::endl;
+	        << "%Frame Number" << "\t"
+	        << "x (image)" << "\t" << "y (image)" << "\t"
+	        << "x (world)" << "\t" << "y (world)" << "\t"
+	        << "Area" << "\t"
+	        << "Orientation" << "\t"
+	        << "Compactness" << "\t"
+	        << "TimeStamp (ms)" << std::endl;
 }
 void THISCLASS::WriteParticle(std::fstream & fileStream, const Particle & p) {
 	// Write the needed data to the file
 	fileStream
-	<< p.mFrameNumber << "\t"
-	<< p.mCenter.x << "\t" << p.mCenter.y << "\t"
-	<< p.mWorldCenter.x << "\t" << p.mWorldCenter.y << "\t"
-	<< p.mArea << "\t"
-	<< p.mOrientation << "\t"
-	<< p.mCompactness;
+	        << p.mFrameNumber << "\t"
+	        << p.mCenter.x << "\t" << p.mCenter.y << "\t"
+	        << p.mWorldCenter.x << "\t" << p.mWorldCenter.y << "\t"
+	        << p.mArea << "\t"
+	        << p.mOrientation << "\t"
+	        << p.mCompactness;
 
-	if (p.mTimestamp.IsValid()) {
-		fileStream << "\t" << Utility::toMillisString(p.mTimestamp).ToAscii();
+	if (p.mFrameTimestamp.IsValid()) {
+		fileStream << "\t" << Utility::toMillisString(p.mFrameTimestamp).ToAscii();
 	} else  {
 		fileStream << "\t -1"; // write -1 in place of an invalid timestamp
 	}
@@ -133,7 +133,7 @@ void THISCLASS::WriteData(structOutputFile *outputFile) {
 	// This loop still works if particles for each track are sorted in time.
 	// So that's part of the spec now.
 	//Search for the corresponding particle
-	DataStructureParticles::tParticleVector *particles = mCore->mDataStructureParticles.mParticles;
+	DataStructureParticles::tParticleVector * particles = mCore->mDataStructureParticles.mParticles;
 	if (! particles) {
 		AddError(wxT("There are no particles"));
 		return;

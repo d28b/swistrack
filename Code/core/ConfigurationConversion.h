@@ -28,7 +28,9 @@ public:
 	//! Converts a configuration value into a date.
 	static wxDateTime Date(const wxString &str, const wxDateTime &defvalue);
 	//! Converts a configuration value into a color.
-	static wxColor Color(const wxString & str, const wxColor &defValue);
+	static wxColor Color(const wxString & str, const wxColor defValue);
+	//! Converts a configuration value into a color.
+	static cv::Scalar Color(const wxString & str, const cv::Scalar defValue);
 
 	//! Converts a boolean value into a configuration value.
 	static wxString Bool(bool value);

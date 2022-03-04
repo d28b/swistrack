@@ -6,7 +6,7 @@
 #include <wx/button.h>
 
 THISCLASS::TCPServerDialog(wxWindow *parent):
-		wxDialog(parent, -1, wxT("TCP Server Settings"), wxDefaultPosition, wxSize(400, 200), wxDEFAULT_DIALOG_STYLE)	{
+	wxDialog(parent, -1, wxT("TCP Server Settings"), wxDefaultPosition, wxSize(400, 200), wxDEFAULT_DIALOG_STYLE)	{
 
 	wxPanel *p = new wxPanel(this, -1);
 

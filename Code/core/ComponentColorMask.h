@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentColorMask
 #define HEADER_ComponentColorMask
 
-#include <cv.h>
+#include <opencv2/core.hpp>
 #include "Component.h"
 
 //! A component that detects blobs that have a certain size and stores them as particles in DataStructureParticle.
@@ -9,7 +9,7 @@ class ComponentColorMask: public Component {
 
 public:
 	//! Constructor.
-	ComponentColorMask(SwisTrackCore *stc);
+	ComponentColorMask(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentColorMask();
 
@@ -19,7 +19,8 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentColorMask(mCore);
 	}
 
@@ -31,7 +32,7 @@ private:
 		cMode_BlackWhite
 	};
 
-	IplImage *mMaskImage;		//!< The mask image.
+	cv::Mat mMaskImage;			//!< (configuration) The mask image.
 	enum eMode mMode;			//!< (configuration) The mode.
 
 	Display mDisplayOutput;		//!< The DisplayImage showing the output of this component.

@@ -1,7 +1,7 @@
 #ifndef HEADER_Particle
 #define HEADER_Particle
 #include <wx/datetime.h>
-#include <cv.h>
+#include <opencv2/core.hpp>
 
 //! A particle.
 class Particle {
@@ -9,28 +9,26 @@ class Particle {
 public:
 	int mID;					//!< ID of the particle, or of its associated track.
 	float mIDCovariance;		//!< The covariance value of the ID detection algorithm.
-	CvPoint2D32f mCenter;		//!< Particle center [pixels].
+	cv::Point2f mCenter;		//!< Particle center [pixels].
 	float mOrientation;			//!< The orientation angle of the particle [rad].
 	double mArea;				//!< Particle area [pixels^2].
 	double mCompactness;		//!< The contour's compactness (area/circumference ratio).
-	CvPoint2D32f mWorldCenter;	//!< Particle center after calibration [m].
-	int mFrameNumber;
+	cv::Point2f mWorldCenter;	//!< Particle center after calibration [m].
 
-	CvHistogram * mColorModel;
+	cv::Mat mColorModel;		//!< Color histogram of the particle.
 
-	wxDateTime mTimestamp;
+	int mFrameNumber;			//!< Frame number.
+	wxDateTime mFrameTimestamp;	//!< Frame timestamp.
 
 	//! Constructor.
-	Particle(): mID(-1), mCenter(), mOrientation(0), mArea(0), mCompactness(0), mWorldCenter(), mColorModel(0), mTimestamp() {}
+	Particle(): mID(-1), mCenter(), mOrientation(0), mArea(0), mCompactness(0), mWorldCenter(), mColorModel(), mFrameNumber(0), mFrameTimestamp() { }
 	//! Destructor.
-	~Particle() {
-	}
+	~Particle() { }
 
 	//! Comparison function (comparison by area, largest first)
-	static bool CompareArea(const Particle &p1, const Particle &p2) {
-		return (p1.mArea > p2.mArea);
+	static bool CompareArea(const Particle & p1, const Particle & p2) {
+		return p1.mArea > p2.mArea;
 	}
 };
 
 #endif
-

@@ -1,0 +1,4 @@
+*.orig
+*.d
+*.o
+test/opencv-test

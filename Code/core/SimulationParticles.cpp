@@ -5,8 +5,8 @@
 #include <algorithm>
 
 THISCLASS::SimulationParticles(const wxFileName &filename):
-		mFrames(), mFrameRead(), mFileName(filename), mFile(0),
-		mCurrentFrame(mFrames.end()), mEmptyFrame() {
+	mFrames(), mFrameRead(), mFileName(filename), mFile(0),
+	mCurrentFrame(mFrames.end()), mEmptyFrame() {
 
 	// Initialize structures
 	mFrameRead.number = 0;
@@ -58,38 +58,31 @@ void THISCLASS::OnNMEASend(const char *buffer, int len) {
 }
 
 bool THISCLASS::ReadBlock() {
-	if (! mFile->is_open()) {
-		return false;
-	}
+	if (! mFile->is_open()) return false;
 
 	char buffer[1024];
 	mFile->read(buffer, sizeof(buffer));
 	int len = mFile->gcount();
-	if (len < 1) {
-		return false;
-	}
+	if (len < 1) return false;
+
 	NMEAProcessData(buffer, len);
 	return true;
 }
 
-THISCLASS::Frame *THISCLASS::FirstFrame() {
+THISCLASS::Frame * THISCLASS::FirstFrame() {
 	while (1) {
 		// Move to the first frame
 		mCurrentFrame = mFrames.begin();
 
 		// Found? Great ...
-		if (mCurrentFrame != mFrames.end()) {
-			return &*mCurrentFrame;
-		}
+		if (mCurrentFrame != mFrames.end()) return &*mCurrentFrame;
 
 		// Read the next block in the file and quit if we are at the end of the file
-		if (! ReadBlock()) {
-			return 0;
-		}
+		if (! ReadBlock()) return 0;
 	}
 }
 
-THISCLASS::Frame *THISCLASS::NextFrame() {
+THISCLASS::Frame * THISCLASS::NextFrame() {
 	while (1) {
 		// Try incrementing
 		tFrameList::iterator nextframe = mCurrentFrame;
@@ -109,24 +102,16 @@ THISCLASS::Frame *THISCLASS::NextFrame() {
 	}
 }
 
-THISCLASS::Frame *THISCLASS::GetCurrentFrame() {
-	if (mCurrentFrame == mFrames.end()) {
-		return 0;
-	}
+THISCLASS::Frame * THISCLASS::GetCurrentFrame() {
+	if (mCurrentFrame == mFrames.end()) return 0;
 	return &*mCurrentFrame;
 }
 
-THISCLASS::Frame *THISCLASS::GetFutureFrameByNumber(int number) {
+THISCLASS::Frame * THISCLASS::GetFutureFrameByNumber(int number) {
 	while (mCurrentFrame != mFrames.end()) {
-		if (mCurrentFrame->number == number) {
-			return &*mCurrentFrame;
-		}
-		if (mCurrentFrame->number > number) {
-			break;
-		}
-		if (! NextFrame()) {
-			break;
-		}
+		if (mCurrentFrame->number == number) return &*mCurrentFrame;
+		if (mCurrentFrame->number > number) break;
+		if (! NextFrame()) break;
 	}
 
 	// If no frame is available for this frame number, pretend to have a frame with no particles

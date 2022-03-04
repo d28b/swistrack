@@ -3,10 +3,10 @@
 
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentThresholdColorIndependent(SwisTrackCore *stc):
-		Component(stc, wxT("ThresholdColorIndependent")),
-		mOutputImage(0), mBlueThreshold(128), mGreenThreshold(128), mRedThreshold(128), mOrBool(true), mInvertThreshold(false),
-		mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
+THISCLASS::ComponentThresholdColorIndependent(SwisTrackCore * stc):
+	Component(stc, wxT("ThresholdColorIndependent")),
+	mBlueThreshold(128), mGreenThreshold(128), mRedThreshold(128), mOrBool(true), mInvertThreshold(false),
+	mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryThresholdingColor);
@@ -22,9 +22,6 @@ THISCLASS::~ComponentThresholdColorIndependent() {
 }
 
 void THISCLASS::OnStart() {
-	tmpImage[0] = NULL;
-	tmpImage[1] = NULL;
-	tmpImage[2] = NULL;
 	OnReloadConfiguration();
 }
 
@@ -37,78 +34,32 @@ void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputimage = mCore->mDataStructureImageColor.mImage;
-	if (! inputimage) {
+	cv::Mat inputImage = mCore->mDataStructureImageColor.mImage;
+	if (inputImage.empty()) {
 		AddError(wxT("Cannot access input image."));
 		return;
 	}
-	if (inputimage->nChannels != 3) {
-		AddError(wxT("Input must be a color image (3 channels)."));
-	}
-	//Create the images needed for the work if necessary
-	for (int i = 0;i < 3;i++) {
-		if (!tmpImage[i])
-			tmpImage[i] = cvCreateImage(cvGetSize(inputimage), 8, 1);
-	}
 
-	//Do the thresholding
-	//We compute the average value on the three channels
-	try {
-		PrepareOutputImage(inputimage);
-		cvSplit(inputimage, tmpImage[0], tmpImage[1], tmpImage[2], NULL);
-		for (int i = 0;i < 3;i++) {
-			switch (inputimage->channelSeq[i]) {
-			case 'B':
-				if (mInvertThreshold) {
-					cvThreshold(tmpImage[i], tmpImage[i], mBlueThreshold, 255, CV_THRESH_BINARY_INV);
-				} else {
-					cvThreshold(tmpImage[i], tmpImage[i], mBlueThreshold, 255, CV_THRESH_BINARY);
-				}
-
-				break;
-
-			case 'G':
-				if (mInvertThreshold) {
-					cvThreshold(tmpImage[i], tmpImage[i], mGreenThreshold, 255, CV_THRESH_BINARY_INV);
-				} else {
-					cvThreshold(tmpImage[i], tmpImage[i], mGreenThreshold, 255, CV_THRESH_BINARY);
-				}
-
-				break;
-
-			case 'R':
-				if (mInvertThreshold) {
-					cvThreshold(tmpImage[i], tmpImage[i], mRedThreshold, 255, CV_THRESH_BINARY_INV);
-				} else {
-					cvThreshold(tmpImage[i], tmpImage[i], mRedThreshold, 255, CV_THRESH_BINARY);
-				}
-
-				break;
-
-			default:
-				AddError(wxT("Only Blue, Green and Red channels are accepted for this thresholding method."));
-				return;
-			}
-		}
-
-		if (mOrBool) {
-			cvOr(tmpImage[0], tmpImage[1], tmpImage[0]);
-			cvOr(tmpImage[0], tmpImage[2], mOutputImage);
-		} else {
-			cvAnd(tmpImage[0], tmpImage[1], tmpImage[0]);
-			cvAnd(tmpImage[0], tmpImage[2], mOutputImage);
-		}
-		mCore->mDataStructureImageBinary.mImage = mOutputImage;
-	} catch (...) {
-		AddError(wxT("Thresholding failed."));
+	if (inputImage.channels() != 3) {
+		AddError(wxT("Input image must have 3 channels."));
 		return;
 	}
 
+	cv::Mat channels[3];
+	cv::split(inputImage, channels);
+	cv::threshold(channels[0], channels[0], mRedThreshold, 255, mInvertThreshold ? cv::THRESH_BINARY_INV : cv::THRESH_BINARY);
+	cv::threshold(channels[1], channels[1], mGreenThreshold, 255, mInvertThreshold ? cv::THRESH_BINARY_INV : cv::THRESH_BINARY);
+	cv::threshold(channels[2], channels[2], mBlueThreshold, 255, mInvertThreshold ? cv::THRESH_BINARY_INV : cv::THRESH_BINARY);
+
+	cv::Mat outputImage = mOrBool ?
+	                      channels[0] | channels[1] | channels[2] :
+	                      channels[0] & channels[1] & channels[2];
+
+	mCore->mDataStructureImageBinary.mImage = outputImage;
+
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(mOutputImage);
-	}
+	if (de.IsActive()) de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
@@ -116,12 +67,4 @@ void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-	if (mOutputImage) {
-		cvReleaseImage(&mOutputImage);
-	}
-	for (int i = 0; i < 3; i++) {
-		if (tmpImage[i]) {
-			cvReleaseImage(&(tmpImage[i]));
-		}
-	}
 }

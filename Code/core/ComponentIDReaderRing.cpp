@@ -3,15 +3,14 @@
 
 #include <fstream>
 #include <cmath>
-#define PI (3.14159265358979)
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentIDReaderRing(SwisTrackCore *stc):
-		Component(stc, wxT("IDReaderRing")),
-		mRingRadiusInner(3), mRingRadiusOuter(5), mObjectList(0),
-		mRingValuesMax(0), mRingCount(0), mRingAngles(0), mRingValues(0),
-		mCodeLength(0), mBinValues(0), mBinCounts(0),
-		mDisplayOutput(wxT("Output"), wxT("Particles")) {
+THISCLASS::ComponentIDReaderRing(SwisTrackCore * stc):
+	Component(stc, wxT("IDReaderRing")),
+	mRingRadiusInner(3), mRingRadiusOuter(5), mObjectList(0),
+	mRingValuesMax(0), mRingCount(0), mRingAngles(0), mRingValues(0),
+	mCodeLength(0), mBinValues(0), mBinCounts(0),
+	mDisplayOutput(wxT("Output"), wxT("Particles")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryParticleDetection);
@@ -66,7 +65,6 @@ void THISCLASS::OnStart() {
 
 	// Reload the other settings
 	OnReloadConfiguration();
-	return;
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -92,8 +90,8 @@ void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
-	IplImage *img = mCore->mDataStructureImageGray.mImage;
-	if (! img) {
+	cv::Mat img = mCore->mDataStructureImageGray.mImage;
+	if (img.empty()) {
 		AddError(wxT("No image available on the grayscale channel. You may want to add a 'Conversion to Grayscale' component."));
 		return;
 	}
@@ -108,30 +106,22 @@ void THISCLASS::OnStep() {
 		float y1 = floor(cy - mRingRadiusOuter);
 		float x2 = ceil(cx + mRingRadiusOuter);
 		float y2 = ceil(cy + mRingRadiusOuter);
-		if (x1 < 0) {
-			x1 = 0;
-		}
-		if (y1 < 0) {
-			y1 = 0;
-		}
-		if (x2 > img->width) {
-			x2 = img->width;
-		}
-		if (y2 > img->height) {
-			y2 = img->height;
-		}
+		if (x1 < 0) x1 = 0;
+		if (y1 < 0) y1 = 0;
+		if (x2 > img.cols) x2 = img.cols;
+		if (y2 > img.rows) y2 = img.rows;
 
 		// Retrieve all pixels on the ring
 		//wxStopWatch sw;
 		mRingCount = 0;
 		int sum = 0;
-		unsigned char *data_linestart = (unsigned char *)img->imageData + img->widthStep * (int)y1 + (int)x1;
-		for (float y = y1 + 0.5; y <= y2; y += 1) {
-			unsigned char *data = data_linestart;
+		int yi = (int) y1;
+		for (float y = y1 + 0.5; y <= y2; y += 1, yi += 1) {
+			unsigned char * data = img.ptr(yi);
 			for (float x = x1 + 0.5; x <= x2; x += 1) {
 				float d2 = (x - cx) * (x - cx) + (y - cy) * (y - cy);
 				if ((d2 <= mRingRadiusOuter2) && (d2 >= mRingRadiusInner2)) {
-					mRingAngles[mRingCount] = atan2f(y - cy, x - cx) / (2 * PI);
+					mRingAngles[mRingCount] = atan2f(y - cy, x - cx) / (2 * M_PI);
 					mRingValues[mRingCount] = (int) * data;
 					sum += mRingValues[mRingCount];
 					mRingCount++;
@@ -139,9 +129,9 @@ void THISCLASS::OnStep() {
 				} else {
 					*data = 255;
 				}
+
 				data++;
 			}
-			data_linestart += img->widthStep;
 		}
 		//mStepDuration=sw.Time();
 
@@ -165,7 +155,7 @@ void THISCLASS::OnStep() {
 		float max_sum = 0;
 		float max_shift = 0;
 		int max_rotation = 0;
-		ObjectList::Object *max_object = 0;
+		ObjectList::Object * max_object = NULL;
 
 		// Correlate with all barcodes
 		float shift = 1 / (float)mCodeLength;
@@ -209,7 +199,7 @@ void THISCLASS::OnStep() {
 		if (max_object) {
 			it->mID = max_object->objectid;
 			it->mIDCovariance = max_sum;  // FIXME: divide by stddev(signal)
-			it->mOrientation = (max_shift + (float)max_rotation / (float)mCodeLength) * 2 * PI + max_object->angle;
+			it->mOrientation = (max_shift + (float)max_rotation / (float)mCodeLength) * 2 * M_PI + max_object->angle;
 		}
 
 		it++;

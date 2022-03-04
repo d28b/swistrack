@@ -26,7 +26,7 @@ public:
 	double Exponential() {
 		unsigned long jz = mRandomMersenneTwister->randInt();
 		unsigned long iz = jz & 255;
-		return (jz < ke[iz]) ? jz*we[iz] : efix(jz, iz);
+		return (jz < ke[iz]) ? jz * we[iz] : efix(jz, iz);
 	}
 };
 

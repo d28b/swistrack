@@ -2,7 +2,7 @@
 #define THISCLASS NMEALogFile
 
 THISCLASS::NMEALogFile(const wxString &file):
-		mLogFile(file, wxFile::write) {
+	mLogFile(file, wxFile::write) {
 
 }
 

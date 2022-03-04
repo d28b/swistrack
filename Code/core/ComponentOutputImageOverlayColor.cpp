@@ -1,13 +1,13 @@
 #include "ComponentOutputImageOverlayColor.h"
 #define THISCLASS ComponentOutputImageOverlayColor
 
-#include <highgui.h>
+#include <opencv2/highgui.hpp>
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentOutputImageOverlayColor(SwisTrackCore *stc):
-		Component(stc, wxT("OutputImageOverlayColor")),
-		mFinalImage(0), mMode(sMode_Addition),
-		mDisplayOutput(wxT("Output"), wxT("Image overlay")) {
+THISCLASS::ComponentOutputImageOverlayColor(SwisTrackCore * stc):
+	Component(stc, wxT("OutputImageOverlayColor")),
+	mFinalImage(), mMode(Addition), mFileName(""),
+	mDisplayOutput(wxT("Output"), wxT("Image overlay")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryOutput);
@@ -22,73 +22,55 @@ THISCLASS::~ComponentOutputImageOverlayColor() {
 }
 
 void THISCLASS::OnStart() {
+	mFinalImage.release();
 	OnReloadConfiguration();
-
-	// Make sure the final image is empty
-	if (mFinalImage != NULL) {
-		cvReleaseImage(&mFinalImage);
-	}
-	mFinalImage = NULL;
 }
 
 void THISCLASS::OnReloadConfiguration() {
 	// Filename
-	wxString filename_string = GetConfigurationString(wxT("Filename"), wxT(""));
-	mFileName = mCore->GetRunFileName(filename_string);
+	mFileName = mCore->GetRunFileName(GetConfigurationString(wxT("Filename"), wxT(""))).GetFullPath().ToStdString();
 
 	// Mode
-	wxString modestr = GetConfigurationString(wxT("Mode"), wxT("addition"));
-	if (modestr == wxT("subtraction")) {
-		mMode = sMode_Subtraction;
-	} else if (modestr == wxT("multiplication")) {
-		mMode = sMode_Multiplication;
-	} else {
-		mMode = sMode_Addition;
-	}
+	wxString modeString = GetConfigurationString(wxT("Mode"), wxT("addition"));
+	mMode =
+	    modeString == wxT("subtraction") ? Subtraction :
+	    modeString == wxT("multiplication") ? Multiplication :
+	    Addition;
 
 	// Whether to reset the image
-	if (GetConfigurationBool(wxT("ResetImage"), false)) {
-		cvReleaseImage(&mFinalImage);
-		mFinalImage = NULL;
-		mConfiguration[wxT("ResetImage")] = wxT("false");
-	}
+	if (GetConfigurationButton(wxT("ResetImage")))
+		mFinalImage.release();
 }
 
 void THISCLASS::OnStep() {
 	// Get and check input image
-	IplImage *inputimage = mCore->mDataStructureImageColor.mImage;
-	if (! inputimage) {
+	cv::Mat inputImage = mCore->mDataStructureImageColor.mImage;
+	if (inputImage.empty()) {
 		AddError(wxT("No input image."));
-		return;
-	}
-	if (inputimage->nChannels != 3) {
-		AddError(wxT("The input image is not a color image."));
 		return;
 	}
 
 	// Check and update the background
-	if (! mFinalImage) {
-		mFinalImage = cvCloneImage(inputimage);
-	} else if (mMode == sMode_Addition) {
-		cvAdd(mFinalImage, inputimage, mFinalImage);
-	} else if (mMode == sMode_Subtraction) {
-		cvSub(mFinalImage, inputimage, mFinalImage);
-	} else if (mMode == sMode_Multiplication) {
+	if (mFinalImage.empty()) {
+		mFinalImage = inputImage;
+	} else if (mMode == Addition) {
+		mFinalImage = mFinalImage + inputImage;
+	} else if (mMode == Subtraction) {
+		mFinalImage = mFinalImage - inputImage;
+	} else if (mMode == Multiplication) {
+		cv::multiply(mFinalImage, inputImage, mFinalImage);
 	}
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(mFinalImage);
-	}
+	if (de.IsActive()) de.SetMainImage(mFinalImage);
 }
 
 void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-	if (mFinalImage) {
-		cvSaveImage(mFileName.GetFullPath().mb_str(wxConvFile), mFinalImage);
-		cvReleaseImage(&mFinalImage);
-	}
+	if (mFinalImage.empty()) return;
+	cv::imwrite(mFileName, mFinalImage);
+	mFinalImage.release();
 }

@@ -15,9 +15,9 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterInteger(wxWindow* parent):
-		ConfigurationParameter(parent),
-		mSpinCtrl(0), mSlider(0),
-		mValueMin(0), mValueMax(255), mValueDefault(0) {
+	ConfigurationParameter(parent),
+	mSpinCtrl(0), mSlider(0),
+	mValueMin(0), mValueMax(255), mValueDefault(0) {
 
 }
 
@@ -50,20 +50,16 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 
 	wxBoxSizer *vs = new wxBoxSizer(wxVERTICAL);
 	vs->Add(hs, 0, 0, 0);
-	if (mSlider) {
-		vs->Add(mSlider, 0, 0, 0);
-	}
+	if (mSlider) vs->Add(mSlider, 0, 0, 0);
 	SetSizer(vs);
 }
 
 void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 	int value = mComponent->GetConfigurationInt(mName, mValueDefault);
-	if (updateprotection != mSpinCtrl) {
+	if (updateprotection != mSpinCtrl)
 		mSpinCtrl->SetValue(value);
-	}
-	if ((mSlider) && (updateprotection != mSlider)) {
+	if ((mSlider) && (updateprotection != mSlider))
 		mSlider->SetValue(value);
-	}
 }
 
 bool THISCLASS::ValidateNewValue() {
@@ -74,6 +70,7 @@ bool THISCLASS::ValidateNewValue() {
 		mNewValue = mValueMin;
 		valid = false;
 	}
+
 	if (mNewValue > mValueMax) {
 		mNewValue = mValueMax;
 		valid = false;
@@ -95,16 +92,10 @@ void THISCLASS::OnSetNewValue() {
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	mNewValue = mSpinCtrl->GetValue();
 
-	if (ValidateNewValue()) {
-		mSpinCtrl->SetOwnForegroundColour(*wxBLACK);
-	} else {
-		mSpinCtrl->SetOwnForegroundColour(*wxRED);
-	}
+	mSpinCtrl->SetOwnForegroundColour(ValidateNewValue() ? wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) : *wxRED);
 	mSpinCtrl->Refresh();
 
-	if (CompareNewValue()) {
-		return;
-	}
+	if (CompareNewValue()) return;
 	SetNewValue(mSpinCtrl);
 }
 
@@ -117,9 +108,7 @@ void THISCLASS::OnTextEnter(wxCommandEvent& event) {
 void THISCLASS::OnSpin(wxSpinEvent& event) {
 	mNewValue = mSpinCtrl->GetValue();
 	ValidateNewValue();
-	if (CompareNewValue()) {
-		return;
-	}
+	if (CompareNewValue()) return;
 	SetNewValue(mSpinCtrl);
 }
 
@@ -131,8 +120,6 @@ void THISCLASS::OnKillFocus(wxFocusEvent& event) {
 void THISCLASS::OnScrollChanged(wxScrollEvent& event) {
 	mNewValue = mSlider->GetValue();
 	ValidateNewValue();
-	if (CompareNewValue()) {
-		return;
-	}
+	if (CompareNewValue()) return;
 	SetNewValue(mSlider);
 }

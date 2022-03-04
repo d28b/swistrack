@@ -4,7 +4,7 @@
 #include <wx/xml/xml.h>
 #include "ComponentEditor.h"
 
-THISCLASS::SwisTrackCoreEditor(SwisTrackCore *stc): mSwisTrackCore(0) {
+THISCLASS::SwisTrackCoreEditor(SwisTrackCore * stc): mSwisTrackCore(0) {
 	// Try to enter edit mode
 	if (! stc->IncrementEditLocks()) {
 		return;
@@ -21,7 +21,7 @@ THISCLASS::~SwisTrackCoreEditor() {
 	mSwisTrackCore->DecrementEditLocks();
 }
 
-SwisTrackCore::tComponentList *THISCLASS::GetDeployedComponents() {
+SwisTrackCore::tComponentList * THISCLASS::GetDeployedComponents() {
 	if (! mSwisTrackCore) {
 		return 0;
 	}
@@ -70,7 +70,7 @@ void THISCLASS::ConfigurationReadXMLElement(wxXmlNode* node, ErrorList *xmlerr) 
 
 	// Get the type attribute
 	wxString type;
-	wxXmlProperty *prop = node->GetProperties();
+	wxXmlAttribute * prop = node->GetAttributes();
 	while (prop) {
 		if (prop->GetName() == wxT("type")) {
 			type = prop->GetValue();

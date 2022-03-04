@@ -19,7 +19,7 @@ class CanvasTitle: public wxControl {
 
 public:
 	//! The associated CanvasPanel.
-	CanvasPanel* mCanvasPanel;
+	CanvasPanel * mCanvasPanel;
 	//! The title text (displayed on the left).
 	wxString mTitle;
 	//! The text on the right.
@@ -27,10 +27,10 @@ public:
 	//! Whether the title is highlighted (during mouse over) or not.
 	bool mHighlight;
 	//! The popup menu.
-	wxMenu *mMenu;
+	wxMenu * mMenu;
 
 	// Constructor.
-	CanvasTitle(CanvasPanel *cp);
+	CanvasTitle(CanvasPanel * cp);
 	// Destructor.
 	~CanvasTitle();
 

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Correct Mean</friendlyname>
+	<description>Subtracts the mean and adds the colors specified below.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/CorrectMean</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+		<parameter type="color">
+			<name>Color</name>
+			<label>Target mean</label>
+		</parameter>
+	</configuration>
+</swistrackcomponent>
+

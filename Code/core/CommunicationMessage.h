@@ -3,6 +3,7 @@
 
 class CommunicationMessage;
 
+#include <cstdlib>
 #include <wx/string.h>
 #include <vector>
 

@@ -5,7 +5,7 @@
 
 #ifdef USE_XVID
 #include <wx/string.h>
-#include <cv.h>
+#include <opencv2/opencv.hpp>
 #include <xvid.h>
 #include <wx/file.h>
 
@@ -14,7 +14,7 @@ class ComponentOutputFileM4V: public Component {
 
 public:
 	//! Constructor.
-	ComponentOutputFileM4V(SwisTrackCore *stc);
+	ComponentOutputFileM4V(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentOutputFileM4V();
 
@@ -24,7 +24,8 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentOutputFileM4V(mCore);
 	}
 
@@ -63,9 +64,9 @@ private:
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 
 	//! Opens the video file.
-	void M4VOpen(IplImage* image);
+	void M4VOpen(cv::Mat* image);
 	//! Writes one frame.
-	void M4VWriteFrame(IplImage* image);
+	void M4VWriteFrame(cv::Mat* image);
 	//! Closes the video file.
 	void M4VClose();
 };
@@ -75,7 +76,7 @@ private:
 class ComponentOutputFileM4V: public Component {
 
 public:
-	ComponentOutputFileM4V(SwisTrackCore *stc): Component(stc, wxT("OutputFileM4V")) {
+	ComponentOutputFileM4V(SwisTrackCore * stc): Component(stc, wxT("OutputFileM4V")) {
 		Initialize();
 	}
 	~ComponentOutputFileM4V() {}
@@ -94,7 +95,8 @@ public:
 	void OnStop() {
 		AddError(wxT("XVID support was not compiled into this executable."));
 	}
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentOutputFileM4V(mCore);
 	}
 };

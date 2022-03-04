@@ -1,8 +1,8 @@
 #ifndef HEADER_ComponentInputCameraUSB
 #define HEADER_ComponentInputCameraUSB
 
-#include <cv.h>
-#include <highgui.h>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
 #include "Component.h"
 
 //! An input component that interfaces a USB camera using the CV library.
@@ -10,7 +10,7 @@ class ComponentInputCameraUSB: public Component {
 
 public:
 	//! Constructor.
-	ComponentInputCameraUSB(SwisTrackCore *stc);
+	ComponentInputCameraUSB(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentInputCameraUSB();
 
@@ -20,17 +20,18 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentInputCameraUSB(mCore);
 	}
 
 	double GetFPS();
 
 private:
-	bool mFlipVertically;				//!< (configuration) Flip the image vertically (on some computers, the image appears upside down)
+	bool mFlipHorizontally;				//!< (configuration) Flip the image horizontally.
+	bool mFlipVertically;				//!< (configuration) Flip the image vertically.
 
-	CvCapture* mCapture;				//!< Pointer to the capture object.
-	IplImage* mOutputImage;				//!< The last acquired image.
+	cv::VideoCapture mCapture;			//!< OpenCV capture object.
 	int mFrameNumber;					//!< The frame number since the component was started.
 
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.

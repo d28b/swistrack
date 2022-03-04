@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentAdaptiveBackgroundSubtractionGray
 #define HEADER_ComponentAdaptiveBackgroundSubtractionGray
 
-#include <cv.h>
+#include <opencv2/core.hpp>
 #include "Component.h"
 
 //! A component subtracting a fixed background from a color image.
@@ -9,7 +9,7 @@ class ComponentAdaptiveBackgroundSubtractionGray: public Component {
 
 public:
 	//! Constructor.
-	ComponentAdaptiveBackgroundSubtractionGray(SwisTrackCore *stc);
+	ComponentAdaptiveBackgroundSubtractionGray(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentAdaptiveBackgroundSubtractionGray();
 
@@ -19,7 +19,8 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentAdaptiveBackgroundSubtractionGray(mCore);
 	}
 
@@ -30,8 +31,8 @@ private:
 		sMode_SubBackgroundImage,
 	};
 
-	IplImage *mBackgroundImage;			//!< The background image.
-	CvScalar mBackgroundImageMean;		//!< The mean of the background image.
+	cv::Mat mBackgroundImage;			//!< The background image.
+	cv::Scalar mBackgroundImageMean;	//!< The mean of the background image.
 	bool mCorrectMean;					//!< (configuration) Whether to correct for the mean or not.
 	float mUpdateProportion;			//!< (configuration) Proportion of the input image added to the background
 	eMode mMode;						//!< (configuration) The subtraction mode.

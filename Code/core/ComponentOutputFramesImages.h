@@ -2,21 +2,22 @@
 #define HEADER_ComponentOutputFramesImages
 
 #include <vector>
-#include <cv.h>
-#include <highgui.h>
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
 #include "Component.h"
 
 //! An input component that reads an AVI file using the CV library.
 class ComponentOutputFramesImages: public Component {
 
 public:
-	enum eFileType { // see cvLoadImage for supported file types
+	enum eFileType {
 		FileTypePNG = 0,
 		FileTypeBMP = 1,
 		FileTypeJPEG = 2,
 	};
+
 	//! Constructor.
-	ComponentOutputFramesImages(SwisTrackCore *stc);
+	ComponentOutputFramesImages(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentOutputFramesImages();
 
@@ -26,22 +27,22 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentOutputFramesImages(mCore);
 	}
 
 private:
 	//! Input channel
 	enum eInputChannel {
-		cInputChannel_None,
-		cInputChannel_Color,
-		cInputChannel_Grayscale,
-		cInputChannel_Binary
+		COLOR,
+		GRAYSCALE,
+		BINARY
 	};
 
 	enum eInputChannel mInputChannel;	//!< (configuration) Selected input channel.
-	wxFileName mFileName;				//!< (configuration) directory and filename prefix
-	eFileType mFileType;				//!< (configuration) directory and filename prefix
+	std::string mFileBase;				//!< (configuration) Base file name.
+	std::string mFileExtension;			//!< (configuration) File extension.
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 };
 

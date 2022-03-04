@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Buffer and write AVI File</friendlyname>
+	<description>Buffer all images, and write an AVI file at the end. This is useful for high-speed acquisition of short sequences.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputBufferedFileAVI</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<title>Memory</title>
+		<parameter type="integer">
+			<name>BufferSize</name>
+			<label>Image memory</label>
+			<min>1</min>
+			<max>10000</max>
+			<default>200</default>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="dropdownlist">
+			<name>Keep</name>
+			<label>On overrun</label>
+			<items>
+				<item key="first">Keep the N first images.</item>
+				<item key="last">Keep the N last images.</item>
+			</items>
+			<default>last</default>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<title>Video file</title>
+		<label>The video file is written when the acquisision is stopped.</label>
+		<parameter type="outputfile">
+			<name>FileTitle</name>
+			<label>AVI File</label>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="string">
+			<name>Codec</name>
+			<label>Codec code</label>
+			<default>Def.</default>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="integer">
+			<name>FrameRate</name>
+			<label>Frame Rate</label>
+			<default>15</default>
+			<reloadable>false</reloadable>
+		</parameter>
+		<parameter type="dropdownlist">
+			<name>InputChannel</name>
+			<label>Input Image</label>
+			<items>
+				<item key="color">Color</item>
+				<item key="grayscale">Grayscale</item>
+				<item key="binary">Binary</item>
+			</items>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

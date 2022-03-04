@@ -12,7 +12,6 @@ class TimelinePanel;
 #include <wx/dcbuffer.h>
 #include "SwisTrack.h"
 #include "DisplayRenderer.h"
-#include <cv.h>
 
 /** \class TimelinePanel
 * \brief Shows a snapshot of the execution timeline.
@@ -32,7 +31,7 @@ public:
 
 private:
 	//! An overwritten wxTimer.
-class EventRecorderResetTimer: public wxTimer {
+	class EventRecorderResetTimer: public wxTimer {
 	public:
 		TimelinePanel *mTimelinePanel;		//!< The associated timeline panel.
 
@@ -49,7 +48,7 @@ class EventRecorderResetTimer: public wxTimer {
 
 	//! Component IDs.
 	enum eID {
-		cID_TriggerAuto10=1,
+		cID_TriggerAuto10 = 1,
 		cID_TriggerAuto1,
 		cID_TriggerManual,
 		cID_ViewReset,

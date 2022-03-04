@@ -9,8 +9,8 @@ BEGIN_EVENT_TABLE(TCPServer, wxEvtHandler)
 END_EVENT_TABLE()
 
 THISCLASS::TCPServer(SwisTrack* swistrack):
-		CommunicationInterface(), SwisTrackCoreInterface(),
-		mServer(0), mPort(0), mSwisTrack(swistrack), mConnections(), mNMEALogFile(0) {
+	CommunicationInterface(), SwisTrackCoreInterface(),
+	mServer(0), mPort(0), mSwisTrack(swistrack), mConnections(), mNMEALogFile(0) {
 
 	// Add SwisTrackCoreInterface
 	SwisTrackCore *stc = mSwisTrack->mSwisTrackCore;

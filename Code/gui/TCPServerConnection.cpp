@@ -6,7 +6,7 @@ BEGIN_EVENT_TABLE(TCPServerConnection, wxEvtHandler)
 END_EVENT_TABLE()
 
 THISCLASS::TCPServerConnection(TCPServer* ss, wxSocketBase *sb):
-		mSocket(sb), mTCPServer(ss), mCurrentRequest(0), mSubscriptions() {
+	mSocket(sb), mTCPServer(ss), mCurrentRequest(0), mSubscriptions() {
 
 	// Configure the socket to be non-blocking
 	mSocket->SetFlags(wxSOCKET_NOWAIT);
@@ -30,7 +30,7 @@ void THISCLASS::OnSocketEvent(wxSocketEvent& event) {
 	}
 	switch (event.GetSocketEvent()) {
 
-		// We've received something
+	// We've received something
 	case wxSOCKET_INPUT:
 		char buffer[128];
 		while (1) {
@@ -43,13 +43,13 @@ void THISCLASS::OnSocketEvent(wxSocketEvent& event) {
 		}
 		break;
 
-		// The connection was closed
+	// The connection was closed
 	case wxSOCKET_LOST:
 		mSocket->Destroy();
 		mSocket = 0;
 		break;
 
-		// Something else
+	// Something else
 	default:
 		break;
 	}
@@ -128,7 +128,7 @@ bool THISCLASS::SendMessage(CommunicationMessage *m) {
 	}
 
 	// If the sender didn't subscribe for any messages, send all
-	if (mSubscriptions.size()==0) {
+	if (mSubscriptions.size() == 0) {
 		NMEASendMessage(m);
 		return true;
 	}

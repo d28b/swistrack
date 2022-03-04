@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Binary blur</friendlyname>
+	<description>Blurs binary images.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BinaryBlur</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<line />
+		<title>Parameters</title>
+		<parameter type="integer">
+	    	<name>Size</name>
+	    	<label>Blur size</label>
+	    	<min>0</min>
+			<max>100</max>
+			<reloadable>true</reloadable>
+	  	</parameter>
+	</configuration>
+</swistrackcomponent>

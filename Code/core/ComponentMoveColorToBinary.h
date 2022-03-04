@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentMoveColorToBinary
 #define HEADER_ComponentMoveColorToBinary
 
-#include <cv.h>
+#include <opencv2/opencv.hpp>
 #include "Component.h"
 
 //! A component that converts the color input image binary.
@@ -9,7 +9,7 @@ class ComponentMoveColorToBinary: public Component {
 
 public:
 	//! Constructor.
-	ComponentMoveColorToBinary(SwisTrackCore *stc);
+	ComponentMoveColorToBinary(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentMoveColorToBinary();
 
@@ -19,12 +19,12 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentMoveColorToBinary(mCore);
 	}
 
 private:
-	IplImage *mOutputImage;				//!< The image created by this component.
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 
 };

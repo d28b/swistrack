@@ -10,7 +10,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxDialog)
 END_EVENT_TABLE()
 
 THISCLASS::ComponentsDialog(wxWindow* parent, SwisTrackCore *stc):
-		wxDialog(parent, -1, wxT("Add Component"), wxDefaultPosition, wxSize(400, 400), wxDEFAULT_DIALOG_STYLE), mSwisTrackCore(stc), mSelectedComponent(0) {
+	wxDialog(parent, -1, wxT("Add Component"), wxDefaultPosition, wxSize(400, 400), wxDEFAULT_DIALOG_STYLE), mSwisTrackCore(stc), mSelectedComponent(0) {
 
 
 	// Create tree control
@@ -19,30 +19,28 @@ THISCLASS::ComponentsDialog(wxWindow* parent, SwisTrackCore *stc):
 
 	// Add the root element
 	wxTreeItemId rootitem = mTree->AddRoot(wxT(""));
-	wxTreeItemId rootitem2 = mTree->GetRootItem();
+	//wxTreeItemId rootitem2 = mTree->GetRootItem();
 
 	// Add an item for each component
-	SwisTrackCore::tComponentList::iterator it = mSwisTrackCore->mAvailableComponents.begin();
 	wxTreeItemId curcategoryitem;
 	std::map<ComponentCategory *, wxTreeItemId> mCategoryMap;
-	ComponentCategory *curcategory = 0;
-	while (it != mSwisTrackCore->mAvailableComponents.end()) {
-		ComponentCategory *category = (*it)->mCategory;
+	ComponentCategory * curcategory = 0;
+	for (auto component : mSwisTrackCore->mAvailableComponents) {
+		ComponentCategory * category = component->mCategory;
 		if (category) {
 			if ((! curcategoryitem) || (category != curcategory)) {
-			  curcategory = category;
-			  if (mCategoryMap.find(curcategory) != mCategoryMap.end()) {
-			    curcategoryitem = mCategoryMap[curcategory];
-			  } else {
-				curcategoryitem = mTree->AppendItem(rootitem, category->mDisplayName);
-				mCategoryMap[category] = curcategoryitem;
-			  }
-			  mTree->Expand(curcategoryitem);
+				curcategory = category;
+				if (mCategoryMap.find(curcategory) != mCategoryMap.end()) {
+					curcategoryitem = mCategoryMap[curcategory];
+				} else {
+					curcategoryitem = mTree->AppendItem(rootitem, category->mDisplayName);
+					mCategoryMap[category] = curcategoryitem;
+				}
+				mTree->Expand(curcategoryitem);
 			}
 
-			wxTreeItemId item = mTree->AppendItem(curcategoryitem, (*it)->mDisplayName, -1, -1, new ComponentTreeItem(*it));
+			mTree->AppendItem(curcategoryitem, component->mDisplayName, -1, -1, new ComponentTreeItem(component));
 		}
-		it++;
 	}
 
 	// Create Buttons
@@ -69,14 +67,10 @@ void THISCLASS::OnButtonAdd(wxCommandEvent& event) {
 	wxTreeItemId sel = mTree->GetSelection();
 	if (sel.IsOk()) {
 		ComponentTreeItem *cti = static_cast<ComponentTreeItem*>(mTree->GetItemData(sel));
-		if (cti) {
-			mSelectedComponent = cti->mComponent;
-		}
+		if (cti) mSelectedComponent = cti->mComponent;
 	}
 
-	if (! mSelectedComponent) {
-		return;
-	}
+	if (! mSelectedComponent) return;
 	this->Hide();
 }
 

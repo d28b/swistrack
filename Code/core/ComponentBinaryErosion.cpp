@@ -3,10 +3,10 @@
 
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentBinaryErosion(SwisTrackCore *stc):
-		Component(stc, wxT("BinaryErosion")),
-		mIterations(1),
-		mDisplayOutput(wxT("Output"), wxT("After erosion")) {
+THISCLASS::ComponentBinaryErosion(SwisTrackCore * stc):
+	Component(stc, wxT("BinaryErosion")),
+	mIterations(1),
+	mDisplayOutput(wxT("Output"), wxT("After erosion")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryPreprocessingBinary);
@@ -23,7 +23,6 @@ THISCLASS::~ComponentBinaryErosion() {
 
 void THISCLASS::OnStart() {
 	OnReloadConfiguration();
-	return;
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -32,28 +31,28 @@ void THISCLASS::OnReloadConfiguration() {
 	// Check for stupid configurations
 	if (mIterations < 0) {
 		AddError(wxT("The number of erosions must be greater or equal to 0."));
+		mIterations = 1;
 	}
+
+	mKernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(mIterations * 2 + 1, mIterations * 2 + 1));
 }
 
 void THISCLASS::OnStep() {
-	if (! mCore->mDataStructureImageBinary.mImage) {
+	cv::Mat inputImage = mCore->mDataStructureImageBinary.mImage;
+	if (inputImage.empty()) {
 		AddError(wxT("No input image."));
 		return;
 	}
 
-	if (mIterations > 0) {
-		cvErode(mCore->mDataStructureImageBinary.mImage, mCore->mDataStructureImageBinary.mImage, NULL, mIterations);
-	}
+	cv::Mat outputImage(inputImage.size(), CV_8UC1);
+	cv::erode(inputImage, outputImage, mKernel);
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(mCore->mDataStructureImageBinary.mImage);
-	}
+	if (de.IsActive()) de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureParticles.mParticles = 0;
 }
 
 void THISCLASS::OnStop() {

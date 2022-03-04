@@ -1,0 +1,26 @@
+Porting to OpenCV4
+
+IplImage *							cv::Mat
+! image, image == NULL				image.empty()
+
+cvGetSize(image)->width				image.cols
+cvGetSize(image)->height			image.rows
+
+cvSub								imageA - imageB
+cvAdd								imageA + imageB
+cvAddS (add scalar)					image + value, or image + scalar
+cvAddWeighted						imageA * weightA + imageB * weightB
+cv
+cvResize							cv::resize(src, dst, dst.size(), 0, 0, INTER_LINEAR)
+cvCopy(src, dst, mask)				src.copyTo(dst, mask)
+cvCvtColor(src, dst, code)			cv::cvtColor(src, dst, code)
+cvLoadImage							imread
+cvSaveImage							imwrite
+str.mb_str()						str.ToStdString()
+cvCvtPixToPlane						perhaps cv::mixChannels
+
+cvCreateImage(..., IPL_DEPTH_8U, 3)	cv::Mat(width, height, CV_8UC3)
+									cv::Mat(other.size(), CV_8UC3)
+									image.create(width, height, CV_8UC3)
+
+cvReleaseImage()					image.release(), but this is not necessary, as memory is managed through reference counting inside cv::Mat instances.

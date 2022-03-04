@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentOutputImageOverlayColor
 #define HEADER_ComponentOutputImageOverlayColor
 
-#include <cv.h>
+#include <opencv2/opencv.hpp>
 #include "Component.h"
 
 //! A component subtracting a fixed background from a color image.
@@ -9,7 +9,7 @@ class ComponentOutputImageOverlayColor: public Component {
 
 public:
 	//! Constructor.
-	ComponentOutputImageOverlayColor(SwisTrackCore *stc);
+	ComponentOutputImageOverlayColor(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentOutputImageOverlayColor();
 
@@ -19,20 +19,21 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentOutputImageOverlayColor(mCore);
 	}
 
 private:
 	enum eMode {
-		sMode_Addition,
-		sMode_Subtraction,
-		sMode_Multiplication,
+		Addition,
+		Subtraction,
+		Multiplication,
 	};
 
-	IplImage *mFinalImage;			//!< The image being constructed.
-	wxFileName mFileName;			//!< (configuration) directory and filename prefix
+	cv::Mat mFinalImage;			//!< The image being constructed.
 	eMode mMode;					//!< (configuration) The combination mode.
+	std::string mFileName;			//!< (configuration) directory and filename prefix
 
 	Display mDisplayOutput;			//!< The DisplayImage showing the output of this component.
 };

@@ -1,8 +1,8 @@
 #include "ComponentOutputMarkFrameManual.h"
 #define THISCLASS ComponentOutputMarkFrameManual
 
-THISCLASS::ComponentOutputMarkFrameManual(SwisTrackCore *stc):
-		Component(stc, wxT("OutputMarkFrameManual")), mMarkerName(wxT("")) {
+THISCLASS::ComponentOutputMarkFrameManual(SwisTrackCore * stc):
+	Component(stc, wxT("OutputMarkFrameManual")), mMarkerName(wxT("")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryOutput);

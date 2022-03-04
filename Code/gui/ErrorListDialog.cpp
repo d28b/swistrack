@@ -9,7 +9,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxDialog)
 END_EVENT_TABLE()
 
 THISCLASS::ErrorListDialog(wxWindow *parent, ErrorList *el, const wxString &title, const wxString &text):
-		wxDialog(parent, -1, title, wxDefaultPosition, wxSize(500, 300), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER), mErrorList(el) {
+	wxDialog(parent, -1, title, wxDefaultPosition, wxSize(500, 300), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER), mErrorList(el) {
 
 	// Create list control
 	mList = new wxListCtrl(this, wxID_ANY);
@@ -42,28 +42,26 @@ void THISCLASS::OnUpdate() {
 	mList->DeleteAllItems();
 
 	int row = 0;
-	ErrorList::tList::iterator it = mErrorList->mList.begin();
-	while (it != mErrorList->mList.end()) {
+	for (auto error : mErrorList->mList) {
 		wxListItem li;
 
 		// Line number
 		li.SetId(row);
 		li.SetColumn(0);
-		if (it->mLineNumber > 0) {
-			li.SetText(wxString::Format(wxT("%d"), it->mLineNumber));
+		if (error.mLineNumber > 0) {
+			li.SetText(wxString::Format(wxT("%d"), error.mLineNumber));
 		} else {
 			li.SetText(wxT(""));
 		}
-		li.SetTextColour(*wxBLACK);
+
 		mList->InsertItem(li);
 
 		// Message
 		li.SetColumn(1);
-		li.SetText(it->mMessage);
+		li.SetText(error.mMessage);
 		mList->SetItem(li);
 
 		// Next item
-		it++;
 		row++;
 	}
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
 	<friendlyname>Blob Detection</friendlyname>
-	<description>Detects blobs on a binary image and stores them as particles.</description>
+	<description>Detects blobs on a binary image, and filter them by area, compactness, and orientation.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BlobDetectionMinMax</url>
 	<displayimage>Output</displayimage>
 
@@ -17,8 +17,8 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="checkbox">
-			<name>AreaBool</name>
-			<label>Area selection</label>
+			<name>SelectionByArea</name>
+			<label>Filter by area</label>
 			<default>0</default>
 			<reloadable>true</reloadable>
 		</parameter>
@@ -39,8 +39,8 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="checkbox">
-			<name>CompactnessBool</name>
-			<label>Compactness Selection</label>
+			<name>SelectionByCompactness</name>
+			<label>Filter by compactness</label>
 			<default>0</default>
 			<reloadable>true</reloadable>
 		</parameter>
@@ -65,8 +65,8 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="checkbox">
-			<name>OrientationBool</name>
-			<label>Orientation Selection</label>
+			<name>SelectionByOrientation</name>
+			<label>Filter by orientation</label>
 			<default>0</default>
 			<reloadable>true</reloadable>
 		</parameter>

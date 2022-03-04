@@ -8,7 +8,7 @@ class ComponentOutputMarkFrameManual: public Component {
 
 public:
 	//! Constructor.
-	ComponentOutputMarkFrameManual(SwisTrackCore *stc);
+	ComponentOutputMarkFrameManual(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentOutputMarkFrameManual();
 
@@ -18,7 +18,8 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentOutputMarkFrameManual(mCore);
 	}
 

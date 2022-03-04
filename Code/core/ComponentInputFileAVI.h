@@ -1,9 +1,8 @@
 #ifndef HEADER_ComponentInputFileAVI
 #define HEADER_ComponentInputFileAVI
 
-#include <vector>
-#include <cv.h>
-#include <highgui.h>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
 #include "Component.h"
 
 //! An input component that reads an AVI file using the CV library.
@@ -11,7 +10,7 @@ class ComponentInputFileAVI: public Component {
 
 public:
 	//! Constructor.
-	ComponentInputFileAVI(SwisTrackCore *stc);
+	ComponentInputFileAVI(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentInputFileAVI();
 
@@ -21,7 +20,8 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentInputFileAVI(mCore);
 	}
 
@@ -31,10 +31,10 @@ public:
 	double GetFPS();
 
 private:
-	bool mFlipVertically;				//!< (configuration) Flip the image vertically (on some computers, the image appears upside down)
+	bool mFlipHorizontally;				//!< (configuration) Flip the image horizontally.
+	bool mFlipVertically;				//!< (configuration) Flip the image vertically.
 
-	CvCapture* mCapture;				//!< Pointer to AVI sequence.
-	IplImage* mOutputImage;				//!< The last acquired image.
+	cv::VideoCapture mCapture;			//!< OpenCV capture object.
 
 	Display mDisplayOutput;				//!< The Display showing the output of this component.
 };

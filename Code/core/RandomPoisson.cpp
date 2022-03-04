@@ -139,9 +139,9 @@ long int THISCLASS::PoissonPatchwork(double L) {
 	static double        P_L_last = -1.;
 	static long int      P_k1, P_k2, P_k4, P_k5;
 	static double        P_dl, P_dr, P_r1, P_r2, P_r4, P_r5,
-	P_ll, P_lr, P_l_my, P_c_pm,
-	P_f1, P_f2, P_f4, P_f5,
-	P_p1, P_p2, P_p3, P_p4, P_p5, P_p6;
+	       P_ll, P_lr, P_l_my, P_c_pm,
+	       P_f1, P_f2, P_f4, P_f5,
+	       P_p1, P_p2, P_p3, P_p4, P_p5, P_p6;
 	long int             mode, Dk, X, Y;
 	double               Ds, U, V, W;
 
@@ -229,7 +229,7 @@ long int THISCLASS::PoissonPatchwork(double L) {
 			// computation of candidate X > k4, and its counterpart Y < k4
 			// either squeeze-acceptance of X or acceptance-rejection of Y
 			Dk = (long int)(P_dr * mRandomMersenneTwister->randExc()) + 1L;
-			if (W <= P_f4 - Dk * (P_f4 - P_f4*P_r4)) {          // quick accept of
+			if (W <= P_f4 - Dk * (P_f4 - P_f4 * P_r4)) {        // quick accept of
 				return(P_k4 + Dk);
 			}                         // X = k4 + Dk
 			if ((V = P_f4 + P_f4 - W) < 1.0) {              // quick reject of Y
@@ -253,7 +253,7 @@ long int THISCLASS::PoissonPatchwork(double L) {
 				Dk = (long int)(1.0 - log(W) / P_lr);
 				X  = P_k5 + Dk;                                // X >= k5 + 1
 				W *= (U - P_p5) * P_lr;                          // W -- U(0, h(x))
-				if (W <= P_f5 - Dk * (P_f5 - P_f5*P_r5)) return(X);
+				if (W <= P_f5 - Dk * (P_f5 - P_f5 * P_r5)) return(X);
 			}
 		} // quick accept of X
 
@@ -290,7 +290,7 @@ long int THISCLASS::PoissonLow(double L) {
 	if (mRandomMersenneTwister->randExc() >= d) return 0;
 	r = mRandomMersenneTwister->randExc() * d;
 	if (r > L * (1. - L)) return 0;
-	if (r > 0.5 * L*L * (1. - L)) return 1;
+	if (r > 0.5 * L * L * (1. - L)) return 1;
 	return 2;
 }
 
@@ -390,8 +390,8 @@ double THISCLASS::LnFac(long int n) {
 	// define constants
 	static const double        // coefficients in Stirling approximation
 	C0 =  0.918938533204672722,   // ln(sqrt(2*pi))
-	      C1 =  1. / 12.,
-	            C3 = -1. / 360.;
+	C1 =  1. / 12.,
+	C3 = -1. / 360.;
 	// C5 =  1./1260.,  // use r^5 term if FAK_LEN < 50
 	// C7 = -1./1680.;  // use r^7 term if FAK_LEN < 20
 	// static variables
@@ -419,5 +419,5 @@ double THISCLASS::LnFac(long int n) {
 	double  n1, r;
 	n1 = n;
 	r  = 1. / n1;
-	return (n1 + 0.5)*log(n1) - n1 + C0 + r*(C1 + r*r*C3);
+	return (n1 + 0.5) * log(n1) - n1 + C0 + r * (C1 + r * r * C3);
 }

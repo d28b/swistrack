@@ -49,7 +49,7 @@ public:
 	tDisplayList mDisplays;						//! The Display objects that this component provides.
 
 	//! Constructor.
-	Component(SwisTrackCore *stc, const wxString &name);
+	Component(SwisTrackCore * stc, const wxString &name);
 	//! Destructor.
 	virtual ~Component() {}
 
@@ -69,7 +69,7 @@ public:
 	//! This event is called to reset the component. This should reset all internal variables.
 	virtual void OnReloadConfiguration() = 0;
 	//! This function must return an new object of its own class.
-	virtual Component *Create() = 0;
+	virtual Component * Create() = 0;
 
 	//! Writes the configuration to an XML element.
 	void ConfigurationWriteXML(wxXmlNode *element, ErrorList *xmlerr);
@@ -77,18 +77,35 @@ public:
 	//! Returns the enabled interval.
 	int GetEnabledInterval();
 
+	//! Returns true if the button has been pressed.
+	bool GetConfigurationButton(const wxString &key);
 	//! Returns a boolean from the configuration.
-	bool GetConfigurationBool(const wxString &key, bool defvalue);
+	bool GetConfigurationBool(const wxString &key, bool defvalue) const;
 	//! Returns an integer value from the configuration.
-	int GetConfigurationInt(const wxString &key, int defvalue);
+	int GetConfigurationInt(const wxString &key, int defvalue) const;
 	//! Returns a double from the configuration.
-	double GetConfigurationDouble(const wxString &key, double defvalue);
+	double GetConfigurationDouble(const wxString &key, double defvalue) const;
 	//! Returns a string from the configuration.
-	wxString GetConfigurationString(const wxString &key, const wxString &defvalue);
+	wxString GetConfigurationString(const wxString &key, const wxString &defvalue) const;
 	//! Returns a timestamp from the configuration.
-	wxDateTime GetConfigurationDate(const wxString &key, const wxDateTime &defvalue);
+	wxDateTime GetConfigurationDate(const wxString &key, const wxDateTime &defvalue) const;
 	//! Returns a color from the configuration.
-	wxColour GetConfigurationColor(const wxString &key, const wxColour &defvalue);
+	wxColour GetConfigurationColor(const wxString &key, const wxColour defvalue) const;
+	//! Returns a color from the configuration.
+	cv::Scalar GetConfigurationColor(const wxString &key, const cv::Scalar defvalue) const;
+	//! Loads a color or grayscale image file pointed to by the configuration. Label is used in error messages.
+	cv::Mat LoadConfigurationImage(const wxString &key, const wxString &label);
+	//! Loads a grayscale image file pointed to by the configuration. Label is used in error messages.
+	cv::Mat LoadConfigurationGrayscaleImage(const wxString &key, const wxString &label);
+	//! Loads a color image file pointed to by the configuration. Label is used in error messages.
+	cv::Mat LoadConfigurationColorImage(const wxString &key, const wxString &label);
+
+	//! Adds an error message to the status list.
+	void AddError(const wxString &msg);
+	//! Adds a warning to the status list.
+	void AddWarning(const wxString &msg);
+	//! Adds an informational message to the status list.
+	void AddInfo(const wxString &msg);
 
 	//! Clears the status list
 	void ClearStatus();
@@ -99,26 +116,19 @@ public:
 	bool HasDataStructureWrite(DataStructure *ds);
 
 	//! Returns a component by name.
-	Display *GetDisplayByName(const wxString &name);
+	Display * GetDisplayByName(const wxString &name);
 
 	//! Returns the SwisTrackCore object.
-	SwisTrackCore *GetSwisTrackCore() {
+	SwisTrackCore * GetSwisTrackCore() {
 		return mCore;
 	}
 
 protected:
-	SwisTrackCore *mCore; 						//!< The associated SwisTrackCore object.
+	SwisTrackCore * mCore; 						//!< The associated SwisTrackCore object.
 	tConfigurationMap mConfiguration;			//!< The configuration values.
 	tConfigurationMap mConfigurationDefault;	//!< The default configuration values.
 	int mEnabledInterval;						//!< Allows only every Nth frame to be processed by this component. During all other steps, the component's OnStep function is not called. Defaults to 1 (process every frame). If set to 0, the OnStep function is never called (but OnStart and OnStop are).
 	int mEditLocks;								//!< The number of edit locks.
-
-	//! Adds an error message to the status list.
-	void AddError(const wxString &msg);
-	//! Adds a warning to the status list.
-	void AddWarning(const wxString &msg);
-	//! Adds an informational message to the status list.
-	void AddInfo(const wxString &msg);
 
 	//! Reads the XML file that belongs to the component.
 	void Initialize();

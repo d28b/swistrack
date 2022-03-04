@@ -3,13 +3,11 @@
 
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentCannyEdgeDetection(SwisTrackCore *stc):
-		Component(stc, wxT("CannyEdgeDetection")),
-		mOutputImage(0), 
-		mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
+THISCLASS::ComponentCannyEdgeDetection(SwisTrackCore * stc):
+	Component(stc, wxT("CannyEdgeDetection")),
+	mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
 
 	// Data structure relations
-
 	mCategory = &(mCore->mCategoryPreprocessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
@@ -22,49 +20,32 @@ THISCLASS::ComponentCannyEdgeDetection(SwisTrackCore *stc):
 THISCLASS::~ComponentCannyEdgeDetection() {
 }
 
-void THISCLASS::OnStart()
-{
+void THISCLASS::OnStart() {
 	OnReloadConfiguration();
 }
 
 void THISCLASS::OnReloadConfiguration() {
-
-  mThreshold1 = GetConfigurationDouble(wxT("Threshold1"), 50);
-  mThreshold2 = GetConfigurationDouble(wxT("Threshold2"), 200);
-  
+	mThreshold1 = GetConfigurationDouble(wxT("Threshold1"), 50);
+	mThreshold2 = GetConfigurationDouble(wxT("Threshold2"), 200);
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputimage = mCore->mDataStructureImageGray.mImage;
-	if (! inputimage)
-	{
-	  AddError(wxT("Cannot access input image."));
-	  return;
-	}
-	
-	if (inputimage->nChannels != 1)
-	{
-	  AddError(wxT("Input must be a greyscale (1 channel)."));
+	cv::Mat inputImage = mCore->mDataStructureImageGray.mImage;
+	if (inputImage.empty()) {
+		AddError(wxT("No input image."));
+		return;
 	}
 
-	if (mOutputImage == NULL) {
-	  mOutputImage = cvCreateImage(cvSize(inputimage->width, 
-					      inputimage->height), 8, 1);
-	}
-	
+	cv::Mat outputImage(inputImage.size(), CV_8UC3);
+	cv::Canny(inputImage, outputImage, mThreshold1, mThreshold2);
+	mCore->mDataStructureImageBinary.mImage = outputImage;
 
-	cvCanny(inputimage, mOutputImage, mThreshold1, mThreshold2);
-	mCore->mDataStructureImageBinary.mImage = mOutputImage;
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(mOutputImage);
-	}
+	if (de.IsActive()) de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-  cvReleaseImage(&mOutputImage);
-
 }

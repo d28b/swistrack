@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentSobelDifferentiation
 #define HEADER_ComponentSobelDifferentiation
 
-#include <cv.h>
+#include <opencv2/opencv.hpp>
 #include "Component.h"
 #include "DataStructureParticles.h"
 
@@ -10,7 +10,7 @@ class ComponentSobelDifferentiation: public Component {
 
 public:
 	//! Constructor.
-	ComponentSobelDifferentiation(SwisTrackCore *stc);
+	ComponentSobelDifferentiation(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentSobelDifferentiation();
 
@@ -26,10 +26,11 @@ public:
 	int mChannelMain;					//!< The channel to subtract from.
 	int mChannelSubtract;					//!< The channel to subtract.
 	Display mDisplayOutput;					//!< The Display showing the last acquired image and the particles.
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentSobelDifferentiation(mCore);
 	}
-	
+
 };
 
 #endif

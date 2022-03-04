@@ -75,7 +75,7 @@ public:
 	tTypeNameMap mTypeNames;					//!< String names of the event types.
 
 	//! Constructor.
-	SwisTrackCoreEventRecorder(SwisTrackCore *stc);
+	SwisTrackCoreEventRecorder(SwisTrackCore * stc);
 	//! Destructor.
 	~SwisTrackCoreEventRecorder();
 

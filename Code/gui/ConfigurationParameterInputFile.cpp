@@ -13,9 +13,9 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterInputFile(wxWindow* parent):
-		ConfigurationParameter(parent),
-		mTextCtrl(0), mButton(0),
-		mValueDefault(wxT("")) {
+	ConfigurationParameter(parent),
+	mTextCtrl(0), mButton(0),
+	mValueDefault(wxT("")) {
 
 }
 

@@ -2,7 +2,7 @@
 #define HEADER_DataStructureParticles
 
 #include <vector>
-#include <cv.h>
+#include <opencv2/core.hpp>
 #include "DataStructure.h"
 #include "Particle.h"
 
@@ -13,7 +13,7 @@ public:
 	//! Particle vector type.
 	typedef std::vector<Particle> tParticleVector;
 
-	tParticleVector *mParticles;	//!< Vector of particles.
+	tParticleVector * mParticles;	//!< The current particles.
 
 	//! Constructor.
 	DataStructureParticles(): DataStructure(wxT("Particles"), wxT("Particles")), mParticles(0) {}

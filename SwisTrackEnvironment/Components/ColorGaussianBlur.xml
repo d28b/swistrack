@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Gaussian Blur</friendlyname>
+	<description>Blurs a color image using a gaussian window. This an expensive operation, but will reduce the noise.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ColorGaussianBlur</url>
+	<displayimage>Output</displayimage>
+	<configuration>
+		<parameter type="double">
+			<name>SigmaX</name>
+			<label>Sigma X</label>
+			<default>2</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>SigmaY</name>
+			<label>Sigma Y</label>
+			<default>2</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="int">
+			<name>SizeX</name>
+			<label>Window size X</label>
+			<default>5</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="int">
+			<name>SizeY</name>
+			<label>Window size Y</label>
+			<default>5</default>
+			<reloadable>true</reloadable>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

@@ -4,7 +4,7 @@
 #include "Component.h"
 
 #include <wx/string.h>
-#include <cv.h>
+#include <opencv2/opencv.hpp>
 #include <wx/file.h>
 
 //! An output component that writes an M4V file using the Xvid library.
@@ -12,7 +12,7 @@ class ComponentOutputImageStatisticsGray: public Component {
 
 public:
 	//! Constructor.
-	ComponentOutputImageStatisticsGray(SwisTrackCore *stc);
+	ComponentOutputImageStatisticsGray(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentOutputImageStatisticsGray();
 
@@ -22,7 +22,8 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentOutputImageStatisticsGray(mCore);
 	}
 

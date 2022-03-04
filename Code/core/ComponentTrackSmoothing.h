@@ -1,16 +1,16 @@
 #ifndef HEADER_ComponentTrackSmoothing
 #define HEADER_ComponentTrackSmoothing
 
-#include <cv.h>
+#include <opencv2/opencv.hpp>
 #include "Component.h"
 #include "DataStructureParticles.h"
 
 //! A component that detects blobs that have a certain size and stores them as particles in DataStructureParticle.
 class ComponentTrackSmoothing: public Component {
 
- public:
+public:
 	//! Constructor.
-	ComponentTrackSmoothing(SwisTrackCore *stc);
+	ComponentTrackSmoothing(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentTrackSmoothing();
 
@@ -20,7 +20,8 @@ class ComponentTrackSmoothing: public Component {
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentTrackSmoothing(mCore);
 	}
 
@@ -33,7 +34,7 @@ private:
 	//	DataStructureTracks::tTrackVector mInputTracks;
 	DataStructureTracks::tTrackMap mOutputTracks;
 	DataStructureTracks::tTrackMap mWindows;
-	
+
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 };
 

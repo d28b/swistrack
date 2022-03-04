@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Weighted Sum</friendlyname>
+    <description>Calculates a weighted sum of the RGB channels.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/WeightedSum</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="double">
+			<name>R</name>
+			<label>Red</label>
+			<unit></unit>
+			<default>0.5</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>G</name>
+			<label>Green</label>
+			<unit></unit>
+			<default>0.5</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>B</name>
+			<label>Blue</label>
+			<unit></unit>
+			<default>0.5</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<parameter type="double">
+			<name>Base</name>
+			<label>Base</label>
+			<unit></unit>
+			<default>0</default>
+			<reloadable>true</reloadable>
+		</parameter>
+		<label>Calculates: Base + Red * r + Green * g + Blue * b.</label>
+		<label>The channel values r, g, and b are values in the range 0..255. The final value is truncated to 0..255.</label>
+	</configuration>
+</swistrackcomponent>

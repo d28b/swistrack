@@ -3,10 +3,9 @@
 
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentInvertBinary(SwisTrackCore *stc):
-		Component(stc, wxT("InvertBinary")),
-		mOutputImage(0),
-		mDisplayOutput(wxT("Output"), wxT("Invert binary image.")) {
+THISCLASS::ComponentInvertBinary(SwisTrackCore * stc):
+	Component(stc, wxT("InvertBinary")),
+	mDisplayOutput(wxT("Output"), wxT("Invert binary image.")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryPreprocessingBinary);
@@ -21,47 +20,30 @@ THISCLASS::ComponentInvertBinary(SwisTrackCore *stc):
 THISCLASS::~ComponentInvertBinary() {
 }
 
-void THISCLASS::OnStart()
-{
+void THISCLASS::OnStart() {
 	OnReloadConfiguration();
 }
 
-void THISCLASS::OnReloadConfiguration()
-{
-
+void THISCLASS::OnReloadConfiguration() {
 }
 
-void THISCLASS::OnStep()
-{
-	IplImage *inputimage = mCore->mDataStructureImageBinary.mImage;
-	if (! inputimage) {
+void THISCLASS::OnStep() {
+	cv::Mat inputImage = mCore->mDataStructureImageBinary.mImage;
+	if (inputImage.empty()) {
+		AddError(wxT("No input image."));
 		return;
 	}
-	if (!mOutputImage)
-		mOutputImage = cvCreateImage(cvSize(inputimage->width, inputimage->height), inputimage->depth, 1);
-	if (inputimage->nChannels != 1)
-	{
-		AddError(wxT("This function require a Binary input Image"));
-	}
 
-	cvXorS(inputimage, cvScalar(255), mOutputImage);
-
-
-	mCore->mDataStructureImageBinary.mImage = mOutputImage;
+	cv::Mat outputImage = inputImage ^ 255;
+	mCore->mDataStructureImageBinary.mImage = outputImage;
 
 	// Let the Display know about our image
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(mCore->mDataStructureImageBinary.mImage);
-	}
+	if (de.IsActive()) de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
-
 }
 
 void THISCLASS::OnStop() {
-	if (mOutputImage) {
-		cvReleaseImage(&mOutputImage);
-	}
 }

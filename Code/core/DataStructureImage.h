@@ -3,10 +3,6 @@
 
 #include "DataStructure.h"
 #include <wx/string.h>
-#include <cv.h>
-
-
-
 
 #include "opencv2/opencv.hpp"
 
@@ -18,17 +14,13 @@
 class DataStructureImage: public DataStructure {
 
 public:
-	IplImage* mImage;	  //! Image.
-	cv::Mat mMat;       // Added by Felix Schill, Jan. 2013. Required by ComponentFFT
-	
-	#ifdef GPU_ENABLED  // Added by Felix Schill, Jan. 2013. Required by ComponentFFT when using GPU
-	cv::gpu::GpuMat mMat_Gpu;
-	#endif
-	
+	cv::Mat mImage;	  //! Image.
+
 	//! Constructor.
-	DataStructureImage(const wxString &name, const wxString &displayname): DataStructure(name), mImage(0) {
+	DataStructureImage(const wxString &name, const wxString &displayname): DataStructure(name), mImage() {
 		mDisplayName = displayname;
 	}
+
 	//! Destructor.
 	~DataStructureImage() {}
 };

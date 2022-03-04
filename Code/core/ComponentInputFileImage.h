@@ -2,8 +2,8 @@
 #define HEADER_ComponentInputFileImage
 
 #include <vector>
-#include <cv.h>
-#include <highgui.h>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
 #include "Component.h"
 
 //! An input component that reads an AVI file using the CV library.
@@ -11,7 +11,7 @@ class ComponentInputFileImage: public Component {
 
 public:
 	//! Constructor.
-	ComponentInputFileImage(SwisTrackCore *stc);
+	ComponentInputFileImage(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentInputFileImage();
 
@@ -21,13 +21,13 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentInputFileImage(mCore);
 	}
 
 private:
-	IplImage* mOutputImage;				//!< The image.
-
+	cv::Mat mInputImage;				//!< (configuration) The input image.
 	Display mDisplayOutput;				//!< The Display showing the output of this component.
 };
 

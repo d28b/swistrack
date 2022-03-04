@@ -6,16 +6,6 @@
 	<displayimage>Output</displayimage>
 
 	<configuration>
-		<parameter type="integer">
-			<name>mMaxNumberOfParticles</name>
-			<label>Max. particles</label>
-			<min>1</min>
-			<max>50</max>
-			<default>10</default>
-			<unit>blobs</unit>
-			<slider>true</slider>
-			<reloadable>true</reloadable>
-		</parameter>
 		<parameter type="double">
 			<name>MaxDistance</name>
 			<label>Max. distance</label>
@@ -27,8 +17,30 @@
 			<sliderstep>1</sliderstep>
 			<reloadable>true</reloadable>
 		</parameter>
+		<parameter type="dropdownlist">
+			<name>Center</name>
+			<label>Center</label>
+			<items>
+				<item key="0.0">Red blob</item>
+				<item key="0.5">Middle</item>
+				<item key="1.0">Green blob</item>
+			</items>
+			<default>0.5</default>
+			<reloadable>true</reloadable>
+		</parameter>
+
 		<line />
 		<title>Red Blob</title>
+		<parameter type="integer">
+			<name>Color1_MaxNumber</name>
+			<label>Max. blobs</label>
+			<min>1</min>
+			<max>50</max>
+			<default>10</default>
+			<unit>blobs</unit>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
 		<parameter type="integer">
 			<name>Color1_Threshold</name>
 			<label>Threshold</label>
@@ -44,7 +56,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
-			<name>Color1_AreaMin</name>
+			<name>Color1_MinArea</name>
 			<label>Min. blob size</label>
 			<min>0</min>
 			<default>10</default>
@@ -52,7 +64,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
-			<name>Color1_AreaMax</name>
+			<name>Color1_MaxArea</name>
 			<label>Max. blob size</label>
 			<min>0</min>
 			<default>100</default>
@@ -66,7 +78,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
-			<name>Color1_CompactnessMin</name>
+			<name>Color1_MinCompactness</name>
 			<label>Min. compactness</label>
 			<min>0</min>
 			<default>0</default>
@@ -76,7 +88,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
-			<name>Color1_CompactnessMax</name>
+			<name>Color1_MaxCompactness</name>
 			<label>Max. compactness</label>
 			<min>0</min>
 			<default>1</default>
@@ -85,8 +97,19 @@
 			<sliderstep>0.01</sliderstep>
 			<reloadable>true</reloadable>
 		</parameter>
+
 		<line />
 		<title>Green Blob</title>
+		<parameter type="integer">
+			<name>Color2_MaxNumber</name>
+			<label>Max. blobs</label>
+			<min>1</min>
+			<max>50</max>
+			<default>10</default>
+			<unit>blobs</unit>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
 		<parameter type="integer">
 			<name>Color2_Threshold</name>
 			<label>Threshold</label>
@@ -102,7 +125,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
-			<name>Color2_AreaMin</name>
+			<name>Color2_MinArea</name>
 			<label>Min. blob size</label>
 			<min>0</min>
 			<default>10</default>
@@ -110,7 +133,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
-			<name>Color2_AreaMax</name>
+			<name>Color2_MaxArea</name>
 			<label>Max. blob size</label>
 			<min>0</min>
 			<default>100</default>
@@ -124,7 +147,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
-			<name>Color2_CompactnessMin</name>
+			<name>Color2_MinCompactness</name>
 			<label>Min. compactness</label>
 			<min>0</min>
 			<default>0</default>
@@ -134,7 +157,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
-			<name>Color2_CompactnessMax</name>
+			<name>Color2_MaxCompactness</name>
 			<label>Max. compactness</label>
 			<min>0</min>
 			<default>1</default>

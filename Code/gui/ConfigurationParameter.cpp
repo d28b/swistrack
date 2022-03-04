@@ -6,9 +6,9 @@
 #include "SwisTrackCoreEditor.h"
 
 THISCLASS::ConfigurationParameter(wxWindow* parent):
-		wxPanel(parent, -1), mSwisTrack(0), mComponent(0),
-		mLabel(wxT("")), mDisplay(wxT("")), mReloadable(true),
-		mUpdating(true), mUpdateProtection(0) {
+	wxPanel(parent, -1), mSwisTrack(0), mComponent(0),
+	mLabel(wxT("")), mDisplay(wxT("")), mReloadable(true),
+	mUpdating(true), mUpdateProtection(0) {
 
 }
 

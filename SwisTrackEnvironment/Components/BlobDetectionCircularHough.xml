@@ -7,7 +7,7 @@
 
 	<configuration>
 		<parameter type="integer">
-			<name>dp</name>
+			<name>AccumulatorResolution</name>
 			<label>Accumulator Resolution</label>
 			<min>1</min>
 			<max>2</max>
@@ -30,7 +30,7 @@
 		<line />
 		<title>Parameters</title>
 		<parameter type="integer">
-			<name>Param1</name>
+			<name>EdgeDetectionThreshold</name>
 			<label>Canny Edge Detection Threshold</label>
 			<min>0</min>
 			<default>200</default>
@@ -40,7 +40,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
-			<name>Param2</name>
+			<name>CenterDetectionThreshold</name>
 			<label>Center Detection Threshold</label>
 			<min>0</min>
 			<default>10</default>
@@ -78,13 +78,13 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="checkbox">
-			<name>LimitNumberofCircles</name>
+			<name>LimitNumberOfCircles</name>
 			<label>Limit number of circles</label>
 			<default>0</default>
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
-			<name>MaxNumberofCircles</name>
+			<name>MaxNumberOfCircles</name>
 			<label>Max. number of circles</label>
 			<default>20</default>
 			<max>100</max>

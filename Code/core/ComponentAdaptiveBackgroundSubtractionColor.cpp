@@ -1,14 +1,13 @@
 #include "ComponentAdaptiveBackgroundSubtractionColor.h"
 #define THISCLASS ComponentAdaptiveBackgroundSubtractionColor
 
-#include <highgui.h>
+#include <opencv2/highgui.hpp>
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentAdaptiveBackgroundSubtractionColor(SwisTrackCore *stc):
-		Component(stc, wxT("AdaptiveBackgroundSubtractionColor")),
-		mOutputImage(0),
-		mBackgroundImageMean(cvScalarAll(0)), mCorrectMean(true), mUpdateProportion(0), mMode(sMode_AbsDiff), 
-		mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
+THISCLASS::ComponentAdaptiveBackgroundSubtractionColor(SwisTrackCore * stc):
+	Component(stc, wxT("AdaptiveBackgroundSubtractionColor")),
+	mBackgroundImageMean(0, 0, 0, 0), mCorrectMean(true), mUpdateProportion(0), mMode(AbsDiff),
+	mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryPreprocessingColor);
@@ -26,12 +25,8 @@ THISCLASS::~ComponentAdaptiveBackgroundSubtractionColor() {
 void THISCLASS::OnStart() {
 	OnReloadConfiguration();
 
-	//Force the copy of the input in the background in the first step
-	mBackgroundImage = NULL;
-	if (mOutputImage != NULL) {
-	  cvReleaseImage(&mOutputImage);
-	}
-	mOutputImage = NULL;
+	// Force the copy of the input in the background in the first step
+	mBackgroundImage.release();
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -40,84 +35,69 @@ void THISCLASS::OnReloadConfiguration() {
 	mUpdateProportion = GetConfigurationDouble(wxT("UpdateProportion"), 0.1);
 
 	// Mode
-	wxString modestr = GetConfigurationString(wxT("Mode"), wxT("AbsDiff"));
-	if (modestr == wxT("SubImageBackground")) {
-		mMode = sMode_SubImageBackground;
-	} else if (modestr == wxT("SubBackgroundImage")) {
-		mMode = sMode_SubBackgroundImage;
-	} else {
-		mMode = sMode_AbsDiff;
-	}
+	wxString modeString = GetConfigurationString(wxT("Mode"), wxT("AbsDiff"));
+	mMode =
+	    modeString == wxT("ImageMinusBackground") ? ImageMinusBackground :
+	    modeString == wxT("BackgroundMinusImage") ? BackgroundMinusImage :
+	    AbsDiff;
 
 	// Whether to take the next image as background image
 	if (GetConfigurationBool(wxT("ResetBackgroundImage"), false)) {
-		cvReleaseImage(&mBackgroundImage);
-		mBackgroundImage = NULL;
+		mBackgroundImage.release();
 		mConfiguration[wxT("ResetBackgroundImage")] = wxT("false");
 	}
 }
 
 void THISCLASS::OnStep() {
 	// Get and check input image
-	IplImage *inputimage = mCore->mDataStructureImageColor.mImage;
-	if (! inputimage) {
+	cv::Mat inputImage = mCore->mDataStructureImageColor.mImage;
+	if (inputImage.empty()) {
 		AddError(wxT("No input image."));
-		return;
-	}
-	if (inputimage->nChannels != 3) {
-		AddError(wxT("The input image is not a color image."));
 		return;
 	}
 
 	// Check and update the background
-	if (! mOutputImage) {
-	  mOutputImage = cvCloneImage(inputimage);
-	} else {
-	  cvCopyImage(inputimage, mOutputImage);
-	}
-	if (! mBackgroundImage) {
-		mBackgroundImage = cvCloneImage(mOutputImage);
+	if (mBackgroundImage.empty()) {
+		mBackgroundImage = inputImage.clone();
 	} else if (mUpdateProportion > 0) {
-		if ((cvGetSize(mOutputImage).height != cvGetSize(mBackgroundImage).height) || (cvGetSize(mOutputImage).width != cvGetSize(mBackgroundImage).width)) {
+		if (inputImage.rows != mBackgroundImage.rows || inputImage.cols != mBackgroundImage.cols) {
 			AddError(wxT("Input and background images do not have the same size."));
 			return;
 		}
 
-		cvAddWeighted(mOutputImage, mUpdateProportion, mBackgroundImage, 1.0 - mUpdateProportion, 0, mBackgroundImage);
+		cv::addWeighted(inputImage, mUpdateProportion, mBackgroundImage, 1.0 - mUpdateProportion, 0, mBackgroundImage);
 	}
 
-	try {
-		// Correct the tmpImage with the difference in image mean
-		if (mCorrectMean) {
-			mBackgroundImageMean = cvAvg(mBackgroundImage);
-			CvScalar tmpScalar = cvAvg(mOutputImage);
-			cvAddS(mOutputImage, cvScalar(mBackgroundImageMean.val[0] - tmpScalar.val[0], mBackgroundImageMean.val[1] - tmpScalar.val[1], mBackgroundImageMean.val[2] - tmpScalar.val[2]), mOutputImage);
-		}
-
-		// Background subtraction
-		if (mMode == sMode_SubImageBackground) {
-			cvSub(mOutputImage, mBackgroundImage, mOutputImage);
-		} else if (mMode == sMode_SubBackgroundImage) {
-			cvSub(mBackgroundImage, mOutputImage, mOutputImage);
-		} else {
-			cvAbsDiff(mOutputImage, mBackgroundImage, mOutputImage);
-		}
-	} catch (...) {
-		AddError(wxT("Background subtraction failed."));
+	// Correct the tmpImage with the difference in image mean
+	cv::Mat intermediateImage;
+	if (mCorrectMean) {
+		mBackgroundImageMean = cv::mean(mBackgroundImage);
+		cv::Scalar tmpScalar = cv::mean(inputImage);
+		intermediateImage = inputImage + cv::Scalar(mBackgroundImageMean.val[0] - tmpScalar.val[0], mBackgroundImageMean.val[1] - tmpScalar.val[1], mBackgroundImageMean.val[2] - tmpScalar.val[2]);
+	} else {
+		intermediateImage = inputImage;
 	}
-	mCore->mDataStructureImageColor.mImage = mOutputImage;
+
+	// Background subtraction
+	cv::Mat outputImage;
+	if (mMode == ImageMinusBackground) {
+		outputImage = intermediateImage - mBackgroundImage;
+	} else if (mMode == BackgroundMinusImage) {
+		outputImage = mBackgroundImage - intermediateImage;
+	} else {
+		cv::absdiff(intermediateImage, mBackgroundImage, outputImage);
+	}
+
+	mCore->mDataStructureImageColor.mImage = outputImage;
+
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(mOutputImage);
-	}
+	if (de.IsActive()) de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-	if (mBackgroundImage) {
-		cvReleaseImage(&mBackgroundImage);
-	}
+	mBackgroundImage.release();
 }

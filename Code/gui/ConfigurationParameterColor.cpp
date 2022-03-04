@@ -14,9 +14,9 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterColor(wxWindow* parent):
-		ConfigurationParameter(parent),
-		mTextCtrl(0), mButton(0),
-		mValueDefault(*wxBLACK) {
+	ConfigurationParameter(parent),
+	mTextCtrl(0), mButton(0),
+	mValueDefault(*wxBLACK) {
 
 }
 

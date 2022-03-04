@@ -27,8 +27,8 @@
 			<label>Mode</label>
 			<items>
 				<item key="AbsDiff">Abs(I - B)</item>
-				<item key="SubImageBackground">Truncate(I - B, 0..255)</item>
-				<item key="SubBackgroundImage">Truncate(B - I, 0..255)</item>
+				<item key="ImageMinusBackground">Truncate(I - B, 0..255)</item>
+				<item key="BackgroundMinusImage">Truncate(B - I, 0..255)</item>
 			</items>
 			<default>AbsDiff</default>
 			<reloadable>true</reloadable>

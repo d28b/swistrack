@@ -13,10 +13,10 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterPointDouble(wxWindow* parent):
-		ConfigurationParameter(parent),
-		mValueMinX(0), mValueMinY(0),
-		mValueMaxX(1), mValueMaxY(1),
-		mValueDefaultX(0), mValueDefaultY(0) {
+	ConfigurationParameter(parent),
+	mValueMinX(0), mValueMinY(0),
+	mValueMaxX(1), mValueMaxY(1),
+	mValueDefaultX(0), mValueDefaultY(0) {
 
 }
 
@@ -76,12 +76,10 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 	double valuex = mComponent->GetConfigurationDouble(mName + wxT(".x"), mValueDefaultX);
 	double valuey = mComponent->GetConfigurationDouble(mName + wxT(".y"), mValueDefaultY);
-	if (updateprotection != mTextCtrlX) {
+	if (updateprotection != mTextCtrlX)
 		mTextCtrlX->SetValue(wxString::Format(wxT("%f"), valuex));
-	}
-	if (updateprotection != mTextCtrlY) {
+	if (updateprotection != mTextCtrlY)
 		mTextCtrlY->SetValue(wxString::Format(wxT("%f"), valuey));
-	}
 }
 
 bool THISCLASS::ValidateNewValueX() {
@@ -92,6 +90,7 @@ bool THISCLASS::ValidateNewValueX() {
 		mNewValueX = mValueMinX;
 		valid = false;
 	}
+
 	if (mNewValueX > mValueMaxX) {
 		mNewValueX = mValueMaxX;
 		valid = false;
@@ -108,6 +107,7 @@ bool THISCLASS::ValidateNewValueY() {
 		mNewValueY = mValueMinY;
 		valid = false;
 	}
+
 	if (mNewValueY > mValueMaxY) {
 		mNewValueY = mValueMaxY;
 		valid = false;
@@ -131,25 +131,15 @@ void THISCLASS::OnSetNewValue() {
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	mNewValueX = mValueDefaultX;
 	mTextCtrlX->GetValue().ToDouble(&mNewValueX);
-	if (ValidateNewValueX()) {
-		mTextCtrlX->SetOwnForegroundColour(*wxBLACK);
-	} else {
-		mTextCtrlX->SetOwnForegroundColour(*wxRED);
-	}
+	mTextCtrlX->SetOwnForegroundColour(ValidateNewValueX() ? wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) : *wxRED);
 	mTextCtrlX->Refresh();
 
 	mNewValueY = mValueDefaultY;
 	mTextCtrlY->GetValue().ToDouble(&mNewValueY);
-	if (ValidateNewValueY()) {
-		mTextCtrlY->SetOwnForegroundColour(*wxBLACK);
-	} else {
-		mTextCtrlY->SetOwnForegroundColour(*wxRED);
-	}
+	mTextCtrlY->SetOwnForegroundColour(ValidateNewValueY() ? wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) : *wxRED);
 	mTextCtrlY->Refresh();
 
-	if (CompareNewValue()) {
-		return;
-	}
+	if (CompareNewValue()) return;
 	if (event.GetId() == cID_X) {
 		SetNewValue(mTextCtrlX);
 	} else {

@@ -7,9 +7,9 @@
 #include <wx/log.h>
 #include <fstream>
 
-THISCLASS::ComponentCalibrationTSAI(SwisTrackCore *stc):
-		Component(stc, wxT("CalibrationTSAI")),
-		mDisplayOutput(wxT("Output"), wxT("TSAI Calibration: Output")) {
+THISCLASS::ComponentCalibrationTSAI(SwisTrackCore * stc):
+	Component(stc, wxT("CalibrationTSAI")),
+	mDisplayOutput(wxT("Output"), wxT("TSAI Calibration: Output")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryCalibration);
@@ -104,10 +104,9 @@ void THISCLASS::OnStart() {
 	maxErrorD = 0;
 	errorD = 0;
 
-	for (unsigned int i = 0; i < calibrationPointList.size(); i++)
-	{
+	for (unsigned int i = 0; i < calibrationPointList.size(); i++) {
 		double tmpErrorX, tmpErrorY, tmpErrorD;
-		CvPoint2D32f originalImage, originalWorld, finalWorld;
+		cv::Point2f originalImage, originalWorld, finalWorld;
 		originalImage.x = (float)(calibrationPointList.at(i)).xImage;
 		originalImage.y = (float)(calibrationPointList.at(i)).yImage;
 		originalWorld.x = (float)(calibrationPointList.at(i)).xWorld;
@@ -149,15 +148,12 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	// These are the particles to transform
-	DataStructureParticles::tParticleVector *particles = mCore->mDataStructureParticles.mParticles;
-	if (! particles) {
-		return;
-	}
+	DataStructureParticles::tParticleVector * particles = mCore->mDataStructureParticles.mParticles;
+	if (! particles) return;
 
 	// Transform all particle positions
 	DataStructureParticles::tParticleVector::iterator it = particles->begin();
-	while (it != particles->end())
-	{
+	while (it != particles->end()) {
 		it->mWorldCenter = Image2World(it->mCenter);
 		it++;
 	}
@@ -169,7 +165,7 @@ void THISCLASS::OnStepCleanup() {
 void THISCLASS::OnStop() {
 }
 
-void THISCLASS::ReadPoint(wxXmlNode *node) {
+void THISCLASS::ReadPoint(wxXmlNode * node) {
 	mSelectedNode = node;
 	CalibrationPoint calibrationPoint;
 	calibrationPoint.xImage = ConfigurationConversion::Double(ReadChildContent(wxT("ximage")), 0);
@@ -179,19 +175,17 @@ void THISCLASS::ReadPoint(wxXmlNode *node) {
 	calibrationPointList.push_back(calibrationPoint);
 }
 
-CvPoint2D32f THISCLASS::Image2World(CvPoint2D32f imageCoordinates) {
+cv::Point2f THISCLASS::Image2World(cv::Point2f imageCoordinates) {
 	double wx, wy;
-	CvPoint2D32f worldCoordinates;
 	image_coord_to_world_coord(calibrationConstants, cameraParameters, (double)imageCoordinates.x, (double)imageCoordinates.y, 0, &wx, &wy);
-	worldCoordinates = cvPoint2D32f(wx, wy);
+	cv::Point2f worldCoordinates(wx, wy);
 	return worldCoordinates;
 }
 
-CvPoint2D32f THISCLASS::World2Image(CvPoint2D32f worldCoordinates) {
+cv::Point2f THISCLASS::World2Image(cv::Point2f worldCoordinates) {
 	double ix, iy;
-	CvPoint2D32f imageCoordinates;
 	world_coord_to_image_coord(calibrationConstants, cameraParameters, (double)worldCoordinates.x, (double)worldCoordinates.y, 0, &ix, &iy);
-	imageCoordinates = cvPoint2D32f(ix, iy);
+	cv::Point2f imageCoordinates(ix, iy);
 	return imageCoordinates;
 }
 

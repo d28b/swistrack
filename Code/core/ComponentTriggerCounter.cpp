@@ -1,9 +1,9 @@
 #include "ComponentTriggerCounter.h"
 #define THISCLASS ComponentTriggerCounter
 
-THISCLASS::ComponentTriggerCounter(SwisTrackCore *stc):
-		Component(stc, wxT("TriggerCounter")),
-		mCount(1), mTodo(0) {
+THISCLASS::ComponentTriggerCounter(SwisTrackCore * stc):
+	Component(stc, wxT("TriggerCounter")),
+	mCount(1), mTodo(0) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryTrigger);
@@ -25,9 +25,7 @@ void THISCLASS::OnStart() {
 
 void THISCLASS::OnReloadConfiguration() {
 	mCount = GetConfigurationInt(wxT("Count"), 1);
-	if (mCount < 1) {
-		mCount = 1;
-	}
+	if (mCount < 1) mCount = 1;
 
 	bool start = GetConfigurationBool(wxT("Start"), false);
 	if (start) {
@@ -39,9 +37,7 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	mTodo--;
-	if (mTodo > 0) {
-		mTrigger->SetReady();
-	}
+	if (mTodo > 0) mTrigger->SetReady();
 }
 
 void THISCLASS::OnStepCleanup() {

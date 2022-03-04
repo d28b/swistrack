@@ -11,7 +11,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 END_EVENT_TABLE()
 
 THISCLASS::CanvasAnnotation(CanvasPanel *cp):
-		wxControl(cp, -1), mCanvasPanel(cp), mTextLeft(), mTextRight() {
+	wxControl(cp, -1), mCanvasPanel(cp), mTextLeft(), mTextRight() {
 
 	SetWindowStyle(wxNO_BORDER);
 	SetBackgroundColour(*wxBLACK);

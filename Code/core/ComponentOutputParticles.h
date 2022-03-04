@@ -8,7 +8,7 @@ class ComponentOutputParticles: public Component {
 
 public:
 	//! Constructor.
-	ComponentOutputParticles(SwisTrackCore *stc);
+	ComponentOutputParticles(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentOutputParticles();
 
@@ -18,7 +18,8 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentOutputParticles(mCore);
 	}
 

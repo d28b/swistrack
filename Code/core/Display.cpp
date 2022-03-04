@@ -4,11 +4,11 @@
 #include <algorithm>
 
 THISCLASS::Display(const wxString &name, const wxString &displayname):
-		mComponent(0), mName(name), mDisplayName(displayname), mSubscribers(), mStepCounter(-1),
-		mFrameNumber(-1), mFramesCount(-1), mTime(wxDateTime::UNow()), mAnnotation(), mErrors(),
-		mTopLeft(cvPoint(0, 0)), mSize(cvSize(0, 0)),
-		mMainImage(0), mMaskImage(0), mParticles(), mTrajectories(false),
-		mActive(false), mChanged(false) {
+	mComponent(0), mName(name), mDisplayName(displayname), mSubscribers(), mStepCounter(-1),
+	mFrameNumber(-1), mFramesCount(-1), mTime(wxDateTime::UNow()), mAnnotation(), mErrors(),
+	mTopLeft(0, 0), mSize(0, 0),
+	mMainImage(), mMaskImage(), mParticles(), mTrajectories(false),
+	mActive(false), mChanged(false) {
 
 }
 
@@ -22,9 +22,7 @@ THISCLASS::~Display() {
 void THISCLASS::Subscribe(DisplaySubscriberInterface *disi) {
 	// Return if this interface is in the subscriber list already
 	tSubscriberList::iterator it = find(mSubscribers.begin(), mSubscribers.end(), disi);
-	if (it != mSubscribers.end()) {
-		return;
-	}
+	if (it != mSubscribers.end()) return;
 
 	// Otherwise, add the interface
 	mSubscribers.push_back(disi);
@@ -34,9 +32,7 @@ void THISCLASS::Subscribe(DisplaySubscriberInterface *disi) {
 void THISCLASS::Unsubscribe(DisplaySubscriberInterface *disi) {
 	// Look up the interface and return if not found
 	tSubscriberList::iterator it = find(mSubscribers.begin(), mSubscribers.end(), disi);
-	if (it == mSubscribers.end()) {
-		return;
-	}
+	if (it == mSubscribers.end()) return;
 
 	// Remove the interface
 	disi->OnDisplayUnsubscribe(this);
@@ -57,9 +53,7 @@ void THISCLASS::OnBeforeStep() {
 
 void THISCLASS::OnAfterStep() {
 	// Proceed only if the display changed (this flag is set by the DisplayEditor)
-	if (! mChanged) {
-		return;
-	}
+	if (! mChanged) return;
 
 	// Otherwise, let the subscribers know that we have a new image
 	tSubscriberList::iterator it = mSubscribers.begin();

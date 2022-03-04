@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <map>
-#include <cv.h>
-#include <highgui.h>
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
 #include <fstream>
 #include "Component.h"
 
@@ -13,7 +13,7 @@ class ComponentOutputFile: public Component {
 
 public:
 	//! Constructor.
-	ComponentOutputFile(SwisTrackCore *stc);
+	ComponentOutputFile(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentOutputFile();
 
@@ -23,7 +23,8 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentOutputFile(mCore);
 	}
 

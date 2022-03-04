@@ -19,11 +19,11 @@ class ComponentListPanel;
 class ComponentListPanel: public wxPanel, public SwisTrackCoreInterface {
 
 public:
-	SwisTrack *mSwisTrack;				//!< The associated SwisTrack object.
-	Component *mSelectedComponent;		//!< The selected component.
+	SwisTrack * mSwisTrack;				//!< The associated SwisTrack object.
+	Component * mSelectedComponent;		//!< The selected component.
 
 	//! Constructor.
-	ComponentListPanel(wxWindow *parent, SwisTrack *st);
+	ComponentListPanel(wxWindow * parent, SwisTrack * st);
 	//! Destructor.
 	~ComponentListPanel();
 
@@ -58,7 +58,8 @@ private:
 	};
 
 	wxMenu mPopupMenu;					//!< The popup menu.
-	wxListCtrl *mList;					//!< The corresponding GUI widget.
+	wxListCtrl * mList;					//!< The corresponding GUI widget.
+	int mColumnStatus;					//!< The column number of the status flag.
 	int mColumnMessages;				//!< The column number of the messages.
 	int mColumnEnabledInterval;			//!< The column number of the enabled interval.
 	int mColumnStepDuration;			//!< The column number of the step duration.

@@ -5,8 +5,8 @@
 #include "SwisTrackCoreEditor.h"
 
 THISCLASS::ConfigurationReaderXML():
-		ConfigurationXML(0, true),
-		mErrorList(), mDocument(), mIsOpen(false) {
+	ConfigurationXML(0, true),
+	mErrorList(), mDocument(), mIsOpen(false) {
 
 }
 
@@ -33,7 +33,7 @@ bool THISCLASS::Open(const wxFileName &filename) {
 	return true;
 }
 
-bool THISCLASS::ReadComponents(SwisTrackCore *stc) {
+bool THISCLASS::ReadComponents(SwisTrackCore * stc) {
 	SwisTrackCoreEditor stce(stc);
 	if (! stce.IsEditable()) {
 		return false;

@@ -4,7 +4,7 @@
 #include <wx/event.h>
 
 THISCLASS::ComponentTrigger(Component *c):
-		mComponent(c), mIsReady(false) {
+	mComponent(c), mIsReady(false) {
 
 }
 

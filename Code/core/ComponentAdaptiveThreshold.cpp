@@ -5,10 +5,9 @@
 using namespace std;
 #include <iostream>
 
-THISCLASS::ComponentAdaptiveThreshold(SwisTrackCore *stc):
-		Component(stc, wxT("AdaptiveThreshold")),
-		mThisFrame(0), mOutputImage(0),
-		mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
+THISCLASS::ComponentAdaptiveThreshold(SwisTrackCore * stc):
+	Component(stc, wxT("AdaptiveThreshold")),
+	mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryThresholdingColor);
@@ -28,45 +27,31 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-  mThreshold = GetConfigurationInt(wxT("Threshold"), 255);
+	mThreshold = GetConfigurationInt(wxT("Threshold"), 255);
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputImage = mCore->mDataStructureImageColor.mImage;
-	if (! inputImage) {
-		AddError(wxT("Cannot access Input image."));
+	cv::Mat inputImage = mCore->mDataStructureImageColor.mImage;
+	if (inputImage.empty()) {
+		AddError(wxT("No input image."));
 		return;
 	}
-	if (mThisFrame == NULL) {
-	  mThisFrame = cvCreateImage(cvSize(inputImage->width,
-					    inputImage->height),
-				     inputImage->depth, 1);
-	}
-	cvCvtColor(inputImage, mThisFrame, CV_BGR2GRAY);
-	if (inputImage->nChannels != 3) {
-		AddError(wxT("Input must be a color image (3 channels)."));
-	}
 
-	//Do the thresholding
-	PrepareOutputImage(mThisFrame);
-	cvAdaptiveThreshold(mThisFrame, mOutputImage, mThreshold);
-	mCore->mDataStructureImageBinary.mImage = mOutputImage;
-
+	// Do the thresholding
+	cv::Mat grayImage;
+	cv::cvtColor(inputImage, grayImage, cv::COLOR_BGR2GRAY);
+	cv::Mat outputImage;
+	cv::adaptiveThreshold(grayImage, outputImage, mThreshold, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, 3, 5);
+	mCore->mDataStructureImageBinary.mImage = outputImage;
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(mOutputImage);
-	}
+	if (de.IsActive()) de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
 	mCore->mDataStructureImageBinary.mImage = 0;
 }
 
-void THISCLASS::OnStop()
-{
-	if (mOutputImage) {
-		cvReleaseImage(&mOutputImage);
-	}
+void THISCLASS::OnStop() {
 }

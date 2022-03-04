@@ -14,9 +14,9 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterDouble(wxWindow* parent):
-		ConfigurationParameter(parent),
-		mTextCtrl(0), mSlider(0),
-		mValueMin(0), mValueMax(1), mValueDefault(0), mSliderStep(1) {
+	ConfigurationParameter(parent),
+	mTextCtrl(0), mSlider(0),
+	mValueMin(0), mValueMax(1), mValueDefault(0), mSliderStep(1) {
 
 }
 
@@ -32,10 +32,10 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	mValueDefault = config->ReadDouble(wxT("default"), 0);
 
 	// Create the controls
-	wxStaticText *label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
 	mTextCtrl = new wxTextCtrl(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT | wxTE_PROCESS_ENTER);
 	mTextCtrl->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
-	wxStaticText *unitlabel = new wxStaticText(this, wxID_ANY, wxT(" ") + config->ReadString(wxT("unit"), wxT("")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * unitlabel = new wxStaticText(this, wxID_ANY, wxT(" ") + config->ReadString(wxT("unit"), wxT("")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
 
 	if (config->ReadBool(wxT("slider"), false)) {
 		mSliderStep = config->ReadDouble(wxT("sliderstep"), 1);
@@ -43,27 +43,23 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	}
 
 	// Layout the controls
-	wxBoxSizer *hs = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer * hs = new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(label, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mTextCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(unitlabel, 0, wxALIGN_CENTER_VERTICAL, 0);
 
-	wxBoxSizer *vs = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer * vs = new wxBoxSizer(wxVERTICAL);
 	vs->Add(hs, 0, 0, 0);
-	if (mSlider) {
-		vs->Add(mSlider, 0, 0, 0);
-	}
+	if (mSlider) vs->Add(mSlider, 0, 0, 0);
 	SetSizer(vs);
 }
 
 void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 	double value = mComponent->GetConfigurationDouble(mName, mValueDefault);
-	if (updateprotection != mTextCtrl) {
+	if (updateprotection != mTextCtrl)
 		mTextCtrl->SetValue(wxString::Format(wxT("%f"), value));
-	}
-	if ((mSlider) && (updateprotection != mSlider)) {
+	if (mSlider && updateprotection != mSlider)
 		mSlider->SetValue((int)floor((value - mValueMin) / mSliderStep + 0.5));
-	}
 }
 
 bool THISCLASS::ValidateNewValue() {
@@ -74,6 +70,7 @@ bool THISCLASS::ValidateNewValue() {
 		mNewValue = mValueMin;
 		valid = false;
 	}
+
 	if (mNewValue > mValueMax) {
 		mNewValue = mValueMax;
 		valid = false;
@@ -96,16 +93,10 @@ void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	mNewValue = mValueDefault;
 	mTextCtrl->GetValue().ToDouble(&mNewValue);
 
-	if (ValidateNewValue()) {
-		mTextCtrl->SetOwnForegroundColour(*wxBLACK);
-	} else {
-		mTextCtrl->SetOwnForegroundColour(*wxRED);
-	}
+	mTextCtrl->SetOwnForegroundColour(ValidateNewValue() ? wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) : *wxRED);
 	mTextCtrl->Refresh();
 
-	if (CompareNewValue()) {
-		return;
-	}
+	if (CompareNewValue()) return;
 	SetNewValue(mTextCtrl);
 }
 

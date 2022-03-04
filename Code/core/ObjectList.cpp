@@ -7,8 +7,8 @@
 #include "ConfigurationConversion.h"
 
 THISCLASS::ObjectList(const wxFileName &filename):
-		ConfigurationXML(0, true),
-		mObjects(), mError(), mFileName(filename) {
+	ConfigurationXML(0, true),
+	mObjects(), mError(), mFileName(filename) {
 
 	// Read the file
 	wxLogNull log;

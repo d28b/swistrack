@@ -2,7 +2,7 @@
 #define HEADER_DataStructureTracks
 
 #include <map>
-#include <cv.h>
+#include <opencv2/core.hpp>
 #include "DataStructure.h"
 #include "Track.h"
 
@@ -12,9 +12,9 @@ class DataStructureTracks: public DataStructure {
 
 public:
 	//! Track vector type.
-        typedef std::map<int, Track> tTrackMap;
+	typedef std::map<int, Track> tTrackMap;
 
-	tTrackMap *mTracks;	//!< Vector of tracks.
+	tTrackMap * mTracks;	//!< Vector of tracks.
 
 	//! Constructor.
 	DataStructureTracks(): DataStructure(wxT("Tracks"), wxT("Tracks")), mTracks(0) {}

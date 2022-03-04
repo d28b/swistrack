@@ -7,7 +7,7 @@
 
 
 THISCLASS::CommunicationMessage(const wxString &cmd, CommunicationMessage *inreplyto):
-		mPopIndex(0), mParameters(), mCommand(cmd), mInReplyTo(inreplyto){
+	mPopIndex(0), mParameters(), mCommand(cmd), mInReplyTo(inreplyto) {
 
 }
 

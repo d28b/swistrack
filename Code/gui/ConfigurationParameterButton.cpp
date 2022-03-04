@@ -12,7 +12,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterButton(wxWindow* parent):
-		ConfigurationParameter(parent) {
+	ConfigurationParameter(parent) {
 
 }
 

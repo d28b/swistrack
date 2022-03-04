@@ -3,10 +3,9 @@
 
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentConvertToGray(SwisTrackCore *stc):
-		Component(stc, wxT("ConvertToGray")),
-		mOutputImage(0),
-		mDisplayOutput(wxT("Output"), wxT("After conversion to grayscale")) {
+THISCLASS::ComponentConvertToGray(SwisTrackCore * stc):
+	Component(stc, wxT("ConvertToGray")),
+	mDisplayOutput(wxT("Output"), wxT("After conversion to grayscale")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryInputConversion);
@@ -27,82 +26,41 @@ void THISCLASS::OnStart() {
 
 void THISCLASS::OnReloadConfiguration() {
 	mChannel = GetConfigurationInt(wxT("Channel"), 0);
-	memcpy(mChannelColorSeq, wxT("BGR "), 4);
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputimage = mCore->mDataStructureInput.mImage;
-	if (! inputimage) {
+	cv::Mat inputImage = mCore->mDataStructureInput.mImage;
+	if (inputImage.empty()) {
+		AddError(wxT("No input Image"));
 		return;
 	}
 
-	try {
-		// We convert the input image to black and white
-		if (inputimage->nChannels == 3) {
-			// The input image is a color image
-			PrepareOutputImage(inputimage);
-
-			if ((mChannel > 0) && (mChannel <= 3)) {
-				// If the user selected one channel, copy that channel
-
-				// If the channel sequence in the image changed, follow the channel
-				if (memcmp(inputimage->channelSeq, mChannelColorSeq, 3)) {
-					for (int i = 0;i < 3;i++) {
-						if (inputimage->channelSeq[i] == mChannelColorSeq[mChannel]) {
-							mChannel = i;
-							break;
-						}
-					}
-					memcpy(mChannelColorSeq, inputimage->channelSeq, 3);
-				}
-
-				// Copy
-				switch(mChannel)
-				{				
-				case 1:
-					cvSplit(inputimage, mOutputImage, NULL, NULL, NULL);
-					break;
-				case 2:
-					cvSplit(inputimage, NULL, mOutputImage, NULL, NULL);
-					break;
-				case 3:
-					cvSplit(inputimage, NULL, NULL, mOutputImage, NULL);
-					break;
-				default:
-					AddError(wxT("Conversion to gray failed."));
-					break;
-				}
-			} else {
-				// Otherwise, convert to gray using the standard procedure
-				cvCvtColor(inputimage, mOutputImage, CV_BGR2GRAY);
-			}
-			mCore->mDataStructureImageGray.mImage = mOutputImage;
-		} else if (inputimage->nChannels == 1) {
-			// The input image is in gray already, so just take that very same image
-			mCore->mDataStructureImageGray.mImage = inputimage;
+	// Convert the input image to grayscale
+	cv::Mat outputImage;
+	if (inputImage.channels() == 1) {
+		outputImage = inputImage;
+	} else if (inputImage.channels() == 3) {
+		outputImage = cv::Mat(inputImage.size(), CV_8UC1);
+		if (mChannel >= 0 && mChannel <= 2) {
+			cv::Mat out[] = {outputImage};
+			int fromTo[] = {mChannel, 0};
+			cv::mixChannels(&inputImage, 1, out, 1, fromTo, 1);
 		} else {
-			// Other cases (should never happen), we take the first channel
-			PrepareOutputImage(inputimage);
-			cvSplit(inputimage, mOutputImage, NULL, NULL, NULL);
-			mCore->mDataStructureImageGray.mImage = mOutputImage;
+			cv::cvtColor(inputImage, outputImage, cv::COLOR_BGR2GRAY);
 		}
-	} catch (...) {
-		AddError(wxT("Conversion to gray failed."));
+	} else {
+		AddError(wxT("Invalid input image."));
 	}
+
+	mCore->mDataStructureImageGray.mImage = outputImage;
 
 	// Let the Display know about our image
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(mCore->mDataStructureImageGray.mImage);
-	}
+	if (de.IsActive()) de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureImageGray.mImage = 0;
 }
 
 void THISCLASS::OnStop() {
-	if (mOutputImage) {
-		cvReleaseImage(&mOutputImage);
-	}
 }

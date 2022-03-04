@@ -5,11 +5,7 @@
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputImageOverlayColor</url>
 	<displayimage>Output</displayimage>
 	<configuration>
-		<parameter type="outputfile">
-			<name>File</name>
-			<label>File name</label>
-			<reloadable>true</reloadable>
-		</parameter>
+		<label>Combine all images.</label>
 		<parameter type="dropdownlist">
 			<name>Mode</name>
 			<label>Combination</label>
@@ -21,11 +17,17 @@
 			<default>addition</default>
 			<reloadable>true</reloadable>
 		</parameter>
-		<line />
-		<label>The following button resets the image at the next step.</label>
 		<parameter type="button">
 			<name>ResetImage</name>
 			<label>Reset image</label>
+			<reloadable>true</reloadable>
+		</parameter>
+
+		<line />
+		<label>Write the final results to the following file.</label>
+		<parameter type="outputfile">
+			<name>File</name>
+			<label>File name</label>
 			<reloadable>true</reloadable>
 		</parameter>
 	</configuration>

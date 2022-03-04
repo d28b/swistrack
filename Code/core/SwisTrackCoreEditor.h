@@ -11,7 +11,7 @@ class SwisTrackCoreEditor {
 
 public:
 	//! Constructor.
-	SwisTrackCoreEditor(SwisTrackCore *stc);
+	SwisTrackCoreEditor(SwisTrackCore * stc);
 	//! Destructor.
 	~SwisTrackCoreEditor();
 
@@ -28,7 +28,7 @@ public:
 	void ConfigurationReadXML(wxXmlNode* configuration, ErrorList *xmlerr);
 
 private:
-	SwisTrackCore *mSwisTrackCore;		//!< The associated SwisTrackCore object.
+	SwisTrackCore * mSwisTrackCore;		//!< The associated SwisTrackCore object.
 
 	//! Reads one component from the XML file.
 	void ConfigurationReadXMLElement(wxXmlNode* element, ErrorList *xmlerr);

@@ -9,7 +9,7 @@ class ComponentTriggerCounter: public Component {
 public:
 
 	//! Constructor.
-	ComponentTriggerCounter(SwisTrackCore *stc);
+	ComponentTriggerCounter(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentTriggerCounter();
 
@@ -19,7 +19,8 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentTriggerCounter(mCore);
 	}
 

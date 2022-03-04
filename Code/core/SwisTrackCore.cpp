@@ -4,30 +4,20 @@
 #include <algorithm>
 #include "ComponentTriggerTimer.h"
 #include "ComponentTriggerCounter.h"
-#include "ComponentInputCamera1394.h"
 #include "ComponentInputCameraUSB.h"
-#include "ComponentInputCameraGigE.h"
-#include "ComponentInputCameraARVGigE.h"
-#include "ComponentInputCameraProselicaGigE.h"
 #include "ComponentInputFileAVI.h"
 #include "ComponentInputFileImage.h"
 #include "ComponentConvertToGray.h"
 #include "ComponentConvertToColor.h"
-#include "ComponentFFT.h"
-#include "ComponentResize.h"
-#include "ComponentInverseFFT.h"
-#include "ComponentFrequencyFilter.h"
+#include "ComponentCrop.h"
 #include "ComponentCannyEdgeDetection.h"
 #include "ComponentConvertBayerToColor.h"
 #include "ComponentChannelArithmetic.h"
 #include "ComponentBackgroundSubtractionGray.h"
 #include "ComponentBackgroundSubtractionColor.h"
-#include "ComponentHSVBackgroundSubtractionColor.h"
 #include "ComponentAdaptiveBackgroundSubtractionGray.h"
 #include "ComponentAdaptiveBackgroundSubtractionColor.h"
 #include "ComponentAdaptiveBackgroundSubtractionMedian.h"
-#include "ComponentAdaptiveBackgroundSubtractionMode.h"
-#include "ComponentBackgroundSubtractionCheungKamath.h"
 #include "ComponentGrayMask.h"
 #include "ComponentSpecificColorSubtraction.h"
 #include "ComponentColorMask.h"
@@ -38,7 +28,6 @@
 #include "ComponentMoveColorToBinary.h"
 #include "ComponentMoveColorToGray.h"
 #include "ComponentThresholdGray.h"
-#include "ComponentThresholdColorCommon.h"
 #include "ComponentThresholdColorIndependent.h"
 #include "ComponentAdaptiveThreshold.h"
 #include "ComponentBinaryDilation.h"
@@ -46,27 +35,16 @@
 #include "ComponentBinaryErosion.h"
 #include "ComponentBinaryMask.h"
 #include "ComponentInvertBinary.h"
-#include "ComponentBlobSelection.h"
 #include "ComponentBlobDetectionMinMax.h"
 #include "ComponentBlobDetectionTwoColors.h"
 #include "ComponentBlobDetectionRedGreen.h"
 #include "ComponentBlobDetectionCircularHough.h"
 #include "ComponentTracking.h"
-#include "ComponentNearestNeighborTracking.h"
-#include "ComponentDynamicNearestNeighborTracking.h"
-#include "ComponentCamShiftTracking.h"
-#include "ComponentMinCostFlowTracking.h"
-#include "ComponentMotionTemplateParticleDetector.h"
 #include "ComponentFilterParticles.h"
 #include "ComponentTrackSmoothing.h"
-#include "ComponentKalmanFilterTrack.h"
 #include "ComponentIDReaderRing.h"
 #include "ComponentSimulationParticles.h"
-#include "ComponentFourierCorrelation.h"
-#include "ComponentFourierPatternTracker.h"
-#include "ComponentColorHistogramParticles.h"
 #include "ComponentCalibrationLinear.h"
-#include "ComponentCalibrationOpenCV.h"
 #include "ComponentCalibrationTSAI.h"
 #include "ComponentCalibrationFileTSAI.h"
 #include "ComponentOutputFile.h"
@@ -80,131 +58,120 @@
 #include "ComponentOutputImageOverlayColor.h"
 #include "ComponentOutputMarkFrameManual.h"
 #include "ComponentOutputParticles.h"
-#include "ComponentOutputDataAssociationTraining.h"
-#include "ComponentClassifierTracker.h"
 #include "ComponentDoubleThresholdColorIndependent.h"
 #include "ComponentSobelDifferentiation.h"
-#include "ComponentBinarySmooth.h"
-
-#include "ComponentChamberControl.h"
-#include "ComponentPiezoControl.h"
-#include "ComponentGraphControl.h"
-
+#include "ComponentBinaryBlur.h"
+#include "ComponentWeightedSum.h"
+#include "ComponentOutputBufferedFileAVI.h"
+#include "ComponentColorGaussianBlur.h"
+#include "ComponentCorrectMean.h"
 
 #include "NMEALog.h"
 THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
-		mAvailableComponents(), mDataStructures(), mSwisTrackCoreInterfaces(), mComponentConfigurationFolder(componentconfigurationfolder),
-		mComponentCategories(), mCommunicationInterface(0), mTrigger(new SwisTrackCoreTrigger(this)), mEventRecorder(new SwisTrackCoreEventRecorder(this)),
-		mCategoryTrigger(wxT("Trigger"), wxT("Trigger"), 0),
-		mCategoryInput(wxT("Input"), wxT("Input"), 100, ComponentCategory::sTypeOne),
-		mCategoryInputConversion(wxT("InputConversion"), wxT("Input conversion"), 200, ComponentCategory::sTypeAuto),
-		mCategoryPreprocessingColor(wxT("PreprocessingColor"), wxT("Preprocessing (color)"), 300),
-		mCategoryPreprocessingGray(wxT("PreprocessingGray"), wxT("Preprocessing (grayscale)"), 350),
-		mCategoryThresholdingColor(wxT("ThresholdingColor"), wxT("Thresholding (color)"), 400),
-		mCategoryThresholdingGray(wxT("ThresholdingGray"), wxT("Thresholding (grayscale)"), 450),
-		mCategoryPreprocessingBinary(wxT("PreprocessingBinary"), wxT("Preprocessing (binary)"), 500),
-		mCategoryParticleDetection(wxT("ParticleDetection"), wxT("Particle detection"), 600),
-		mCategoryCalibration(wxT("Calibration"), wxT("Calibration"), 700),
-		mCategoryTracking(wxT("Tracking"), wxT("Tracking"), 800),
-		mCategoryOutput(wxT("Output"), wxT("Output"), 10000),
-		mDataStructureInput(),
-		mDataStructureImageColor(wxT("ImageColor"), wxT("Color image")),
-		mDataStructureImageGray(wxT("ImageGray"), wxT("Grayscale image")),
-		mDataStructureImageFFT(wxT("ImageFFT"), wxT("Fourier image")),
-		mDataStructureImageBinary(wxT("ImageBinary"), wxT("Binary image")),
-		mDataStructureParticles(),
-		mDataStructureTracks(),
-		mDataStructureCommands(),
-		mStarted(false), mProductionMode(false), mStepCounter(0), mEditLocks(0), mDeployedComponents() {
-
+	mAvailableComponents(), mDataStructures(), mSwisTrackCoreInterfaces(), mComponentConfigurationFolder(componentconfigurationfolder),
+	mComponentCategories(), mCommunicationInterface(0), mTrigger(new SwisTrackCoreTrigger(this)), mEventRecorder(new SwisTrackCoreEventRecorder(this)),
+	mCategoryTrigger(wxT("Trigger"), wxT("Trigger"), 0),
+	mCategoryInput(wxT("Input"), wxT("Input"), 100, ComponentCategory::sTypeOne),
+	mCategoryInputConversion(wxT("InputConversion"), wxT("Input conversion"), 200, ComponentCategory::sTypeAuto),
+	mCategoryPreprocessingColor(wxT("PreprocessingColor"), wxT("Preprocessing (color)"), 300),
+	mCategoryPreprocessingGray(wxT("PreprocessingGray"), wxT("Preprocessing (grayscale)"), 350),
+	mCategoryThresholdingColor(wxT("ThresholdingColor"), wxT("Thresholding (color)"), 400),
+	mCategoryThresholdingGray(wxT("ThresholdingGray"), wxT("Thresholding (grayscale)"), 450),
+	mCategoryPreprocessingBinary(wxT("PreprocessingBinary"), wxT("Preprocessing (binary)"), 500),
+	mCategoryParticleDetection(wxT("ParticleDetection"), wxT("Particle detection"), 600),
+	mCategoryCalibration(wxT("Calibration"), wxT("Calibration"), 700),
+	mCategoryTracking(wxT("Tracking"), wxT("Tracking"), 800),
+	mCategoryOutput(wxT("Output"), wxT("Output"), 10000),
+	mDataStructureInput(),
+	mDataStructureImageColor(wxT("ImageColor"), wxT("Color image")),
+	mDataStructureImageGray(wxT("ImageGray"), wxT("Grayscale image")),
+	//mDataStructureImageFFT(wxT("ImageFFT"), wxT("Fourier image")),
+	mDataStructureImageBinary(wxT("ImageBinary"), wxT("Binary image")),
+	mDataStructureParticles(),
+	mDataStructureTracks(),
+	mDataStructureCommands(),
+	mStarted(false), mProductionMode(false), mStepCounter(0), mEditLocks(0), mDeployedComponents() {
 
 	// Initialize the list of available components
-	//Trigger
+
+	// Trigger
 	mAvailableComponents.push_back(new ComponentTriggerTimer(this));
 	mAvailableComponents.push_back(new ComponentTriggerCounter(this));
-	//Input
-	mAvailableComponents.push_back(new ComponentInputCamera1394(this));
+
+	// Input
 	mAvailableComponents.push_back(new ComponentInputCameraUSB(this));
-	mAvailableComponents.push_back(new ComponentInputCameraGigE(this));
-	mAvailableComponents.push_back(new ComponentInputCameraARVGigE(this));
-	mAvailableComponents.push_back(new ComponentInputCameraProselicaGigE(this));
 	mAvailableComponents.push_back(new ComponentInputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentInputFileImage(this));
-	//Input conversion
+
+	// Input conversion
 	mAvailableComponents.push_back(new ComponentConvertToGray(this));
 	mAvailableComponents.push_back(new ComponentConvertToColor(this));
 	mAvailableComponents.push_back(new ComponentConvertBayerToColor(this));
-	mAvailableComponents.push_back(new ComponentFFT(this));
-	mAvailableComponents.push_back(new ComponentInverseFFT(this));
-	mAvailableComponents.push_back(new ComponentResize(this));
-	//Preprocessing Color
+	mAvailableComponents.push_back(new ComponentCrop(this));
+
+	// Preprocessing Color
 	mAvailableComponents.push_back(new ComponentChannelArithmetic(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionColor(this));
-	mAvailableComponents.push_back(new ComponentHSVBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionMedian(this));
-	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionMode(this));
-	mAvailableComponents.push_back(new ComponentBackgroundSubtractionCheungKamath(this));
 	mAvailableComponents.push_back(new ComponentSpecificColorSubtraction(this));
 	mAvailableComponents.push_back(new ComponentColorMask(this));
 	mAvailableComponents.push_back(new ComponentColorBlur(this));
+	mAvailableComponents.push_back(new ComponentColorGaussianBlur(this));
 	mAvailableComponents.push_back(new ComponentColorSwapper(this));
 	mAvailableComponents.push_back(new ComponentMoveColorToBinary(this));
 	mAvailableComponents.push_back(new ComponentMoveColorToGray(this));
 	mAvailableComponents.push_back(new ComponentMoveGrayToColor(this));
 	mAvailableComponents.push_back(new ComponentMoveBinaryToColor(this));
 	mAvailableComponents.push_back(new ComponentCannyEdgeDetection(this));
-	//Preprocessing Gray
+	mAvailableComponents.push_back(new ComponentWeightedSum(this));
+	mAvailableComponents.push_back(new ComponentCorrectMean(this));
+
+	// Preprocessing Gray
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionGray(this));
 	mAvailableComponents.push_back(new ComponentGrayMask(this));
-	mAvailableComponents.push_back(new ComponentFrequencyFilter(this));
-	mAvailableComponents.push_back(new ComponentFourierCorrelation(this));
-	//Thresholding Color
-	mAvailableComponents.push_back(new ComponentThresholdColorCommon(this));
+
+	// Thresholding Color
 	mAvailableComponents.push_back(new ComponentThresholdColorIndependent(this));
 	mAvailableComponents.push_back(new ComponentDoubleThresholdColorIndependent(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveThreshold(this));
-	//Thresholding Gray
+
+	// Thresholding Gray
 	mAvailableComponents.push_back(new ComponentThresholdGray(this));
-	//Preprocessing Binary
+
+	// Preprocessing Binary
 	mAvailableComponents.push_back(new ComponentBinaryDilation(this));
 	mAvailableComponents.push_back(new ComponentMorphology(this));
 	mAvailableComponents.push_back(new ComponentBinaryErosion(this));
 	mAvailableComponents.push_back(new ComponentBinaryMask(this));
-	mAvailableComponents.push_back(new ComponentBlobSelection(this));
 	mAvailableComponents.push_back(new ComponentInvertBinary(this));
-	mAvailableComponents.push_back(new ComponentBinarySmooth(this));
-	//Particle Detection
+	mAvailableComponents.push_back(new ComponentBinaryBlur(this));
+
+	// Particle Detection
 	mAvailableComponents.push_back(new ComponentBlobDetectionMinMax(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionTwoColors(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionRedGreen(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionCircularHough(this));
 	mAvailableComponents.push_back(new ComponentSobelDifferentiation(this));
-  	mAvailableComponents.push_back(new ComponentIDReaderRing(this));
+	mAvailableComponents.push_back(new ComponentIDReaderRing(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
-	mAvailableComponents.push_back(new ComponentFourierPatternTracker(this));
-	
-	//Calibration	
+
+	// Calibration
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
-	mAvailableComponents.push_back(new ComponentCalibrationOpenCV(this));
 	mAvailableComponents.push_back(new ComponentCalibrationTSAI(this));
 	mAvailableComponents.push_back(new ComponentCalibrationFileTSAI(this));
-	//Tracking
+
+	// Tracking
 	mAvailableComponents.push_back(new ComponentTracking(this));
-	mAvailableComponents.push_back(new ComponentNearestNeighborTracking(this));
-	mAvailableComponents.push_back(new ComponentDynamicNearestNeighborTracking(this));
-	mAvailableComponents.push_back(new ComponentCamShiftTracking(this));
-	mAvailableComponents.push_back(new ComponentMinCostFlowTracking(this));
-	mAvailableComponents.push_back(new ComponentMotionTemplateParticleDetector(this));
 	mAvailableComponents.push_back(new ComponentFilterParticles(this));
 	mAvailableComponents.push_back(new ComponentTrackSmoothing(this));
-	mAvailableComponents.push_back(new ComponentKalmanFilterTrack(this));
 
-	//Output
+	// Output
 	mAvailableComponents.push_back(new ComponentOutputFile(this));
-  	mAvailableComponents.push_back(new ComponentOutputSQLite(this));
+	mAvailableComponents.push_back(new ComponentOutputSQLite(this));
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
+	mAvailableComponents.push_back(new ComponentOutputBufferedFileAVI(this));
 	mAvailableComponents.push_back(new ComponentOutputFileM4V(this));
 	mAvailableComponents.push_back(new ComponentOutputFramesImages(this));
 	mAvailableComponents.push_back(new ComponentOutputImageStatisticsBinary(this));
@@ -213,13 +180,6 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentOutputImageOverlayColor(this));
 	mAvailableComponents.push_back(new ComponentOutputMarkFrameManual(this));
 	mAvailableComponents.push_back(new ComponentOutputParticles(this));
-	mAvailableComponents.push_back(new ComponentOutputDataAssociationTraining(this));
-	mAvailableComponents.push_back(new ComponentClassifierTracker(this));
- 
- 	mAvailableComponents.push_back(new ComponentGraphControl(this));
-	mAvailableComponents.push_back(new ComponentChamberControl(this));
- 	mAvailableComponents.push_back(new ComponentPiezoControl(this));
- 
 
 	// Initialize the available components
 	tComponentList::iterator ita = mAvailableComponents.begin();
@@ -232,7 +192,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mDataStructures.push_back(&mDataStructureInput);
 	mDataStructures.push_back(&mDataStructureImageColor);
 	mDataStructures.push_back(&mDataStructureImageGray);
-	mDataStructures.push_back(&mDataStructureImageFFT);
+	//mDataStructures.push_back(&mDataStructureImageFFT);
 	mDataStructures.push_back(&mDataStructureImageBinary);
 	mDataStructures.push_back(&mDataStructureParticles);
 	mDataStructures.push_back(&mDataStructureTracks);
@@ -274,18 +234,14 @@ void THISCLASS::SetFileName(const wxFileName &filename) {
 wxFileName THISCLASS::GetProjectFileName(const wxString &filename_str) {
 	// Check filename
 	wxFileName filename(filename_str);
-	if (! filename.IsOk()) {
-		return wxFileName();
-	}
+	if (! filename.IsOk()) return wxFileName();
 
 	// Normalize
 	if (filename.IsAbsolute()) {
 		filename.Normalize(wxPATH_NORM_ENV_VARS | wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE | wxPATH_NORM_TILDE);
 	} else {
 		// If there is no valid project folder (i.e. the project has not been saved yet), we give up
-		if (! mFileName.IsOk()) {
-			return wxFileName();
-		}
+		if (! mFileName.IsOk()) return wxFileName();
 
 		// Normalize with respect to project folder
 		filename.Normalize(wxPATH_NORM_ENV_VARS | wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE | wxPATH_NORM_TILDE, mFileName.GetPath());
@@ -297,18 +253,14 @@ wxFileName THISCLASS::GetProjectFileName(const wxString &filename_str) {
 wxFileName THISCLASS::GetRunFileName(const wxString &filename_str) {
 	// Check filename
 	wxFileName filename(filename_str);
-	if (! filename.IsOk()) {
-		return wxFileName();
-	}
+	if (! filename.IsOk()) return wxFileName();
 
 	// Normalize
 	if (filename.IsAbsolute()) {
 		filename.Normalize(wxPATH_NORM_ENV_VARS | wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE | wxPATH_NORM_TILDE);
 	} else {
 		// If there is no valid project folder (i.e. the project has not been saved yet), we give up
-		if (! mFileName.IsOk()) {
-			return wxFileName();
-		}
+		if (! mFileName.IsOk()) return wxFileName();
 
 		// Normalize with respect to run folder
 		wxFileName run_folder(mFileName);
@@ -320,12 +272,8 @@ wxFileName THISCLASS::GetRunFileName(const wxString &filename_str) {
 }
 
 bool THISCLASS::Start(bool productionmode) {
-	if (mStarted) {
-		return false;
-	}
-	if (mEditLocks > 0) {
-		return false;
-	}
+	if (mStarted) return false;
+	if (mEditLocks > 0) return false;
 
 	// Timestamp of start
 	wxDateTime now = wxDateTime::Now();
@@ -338,12 +286,8 @@ bool THISCLASS::Start(bool productionmode) {
 		mRunTitle = runtitlebase;
 		while (1) {
 			wxFileName filename_output = GetRunFileName(wxT("output"));
-			if (! filename_output.IsOk()) {
-				break;
-			}
-			if (! filename_output.DirExists()) {
-				break;
-			}
+			if (! filename_output.IsOk()) break;
+			if (! filename_output.DirExists()) break;
 			unique_id++;
 			mRunTitle = runtitlebase + wxString::Format(wxT("-%d"), unique_id);
 		}
@@ -385,9 +329,7 @@ bool THISCLASS::Start(bool productionmode) {
 	while (it != mDeployedComponents.end()) {
 		(*it)->ClearStatus();
 		(*it)->OnStart();
-		if ((*it)->mStatusHasError) {
-			break;
-		}
+		if ((*it)->mStatusHasError) break;
 		(*it)->mStarted = true;
 		it++;
 	}
@@ -413,9 +355,7 @@ bool THISCLASS::Start(bool productionmode) {
 }
 
 bool THISCLASS::Stop() {
-	if (! mStarted) {
-		return false;
-	}
+	if (! mStarted) return false;
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeStop);
@@ -467,9 +407,7 @@ bool THISCLASS::Stop() {
 }
 
 bool THISCLASS::Step() {
-	if (! mStarted) {
-		return false;
-	}
+	if (! mStarted) return false;
 
 	// Initialization
 	mTimeCritical = false;
@@ -582,9 +520,7 @@ bool THISCLASS::Step() {
 }
 
 bool THISCLASS::ReloadConfiguration() {
-	if (! mStarted) {
-		return false;
-	}
+	if (! mStarted) return false;
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeReloadConfiguration);
@@ -606,9 +542,7 @@ bool THISCLASS::ReloadConfiguration() {
 }
 
 void THISCLASS::TriggerStart() {
-	if (mTrigger->GetActive()) {
-		return;
-	}
+	if (mTrigger->GetActive()) return;
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeTriggerStart);
@@ -641,9 +575,7 @@ void THISCLASS::TriggerStart() {
 }
 
 void THISCLASS::TriggerStop() {
-	if (! mTrigger->GetActive()) {
-		return;
-	}
+	if (! mTrigger->GetActive()) return;
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeTriggerStop);
@@ -681,19 +613,17 @@ void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmler
 	while (it != mDeployedComponents.end()) {
 		wxXmlNode *node = new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("component"));
 		configuration->AddChild(node);
-		node->AddProperty(wxT("type"), (*it)->mName);
+		node->AddAttribute(wxT("type"), (*it)->mName);
 		(*it)->ConfigurationWriteXML(node, xmlerr);
 
 		it++;
 	}
 }
 
-Component *THISCLASS::GetComponentByName(const wxString &name) {
+Component * THISCLASS::GetComponentByName(const wxString &name) {
 	tComponentList::iterator it = mAvailableComponents.begin();
 	while (it != mAvailableComponents.end()) {
-		if ((*it)->mName == name) {
-			return (*it);
-		}
+		if ((*it)->mName == name) return *it;
 		it++;
 	}
 
@@ -706,9 +636,7 @@ void THISCLASS::AddInterface(SwisTrackCoreInterface *stc) {
 
 void THISCLASS::RemoveInterface(SwisTrackCoreInterface *stc) {
 	tSwisTrackCoreInterfaceList::iterator it = find(mSwisTrackCoreInterfaces.begin(), mSwisTrackCoreInterfaces.end(), stc);
-	if (it == mSwisTrackCoreInterfaces.end()) {
-		return;
-	}
+	if (it == mSwisTrackCoreInterfaces.end()) return;
 	mSwisTrackCoreInterfaces.erase(it);
 }
 
@@ -742,15 +670,11 @@ bool THISCLASS::IncrementEditLocks() {
 }
 
 void THISCLASS::DecrementEditLocks() {
-	if (mEditLocks < 1) {
-		return;
-	}
+	if (mEditLocks < 1) return;
 
 	// Decrement and return if there are still other locks
 	mEditLocks--;
-	if (mEditLocks > 0) {
-		return;
-	}
+	if (mEditLocks > 0) return;
 
 	// Notify the interfaces
 	tSwisTrackCoreInterfaceList::iterator it = mSwisTrackCoreInterfaces.begin();

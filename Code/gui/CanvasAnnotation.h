@@ -10,7 +10,6 @@
 class CanvasAnnotation;
 
 #include <wx/dcbuffer.h>
-#include <cv.h>
 #include "SwisTrack.h"
 #include "CanvasPanel.h"
 
@@ -19,14 +18,14 @@ class CanvasAnnotation: public wxControl {
 
 public:
 	//! The associated CanvasPanel.
-	CanvasPanel* mCanvasPanel;
+	CanvasPanel * mCanvasPanel;
 	//! The text shown on the left side.
 	wxString mTextLeft;
 	//! The text shown on the right side.
 	wxString mTextRight;
 
 	// Constructor.
-	CanvasAnnotation(CanvasPanel *cp);
+	CanvasAnnotation(CanvasPanel * cp);
 	// Destructor.
 	~CanvasAnnotation();
 

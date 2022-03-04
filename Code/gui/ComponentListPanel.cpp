@@ -31,9 +31,9 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
-		wxPanel(parent, -1), SwisTrackCoreInterface(),
-		mSwisTrack(st), mSelectedComponent(0),
-		mPopupMenu(), mList(0), mComponentsDialog(0) {
+	wxPanel(parent, -1), SwisTrackCoreInterface(),
+	mSwisTrack(st), mSelectedComponent(0),
+	mPopupMenu(), mList(0), mComponentsDialog(0) {
 
 	// Add SwisTrackCoreInterface
 	SwisTrackCore *stc = mSwisTrack->mSwisTrackCore;
@@ -56,8 +56,12 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 	mList->Connect(wxID_ANY, wxEVT_LEFT_DCLICK, wxMouseEventHandler(THISCLASS::OnListLeftDoubleClick), 0, this);
 	mList->Connect(wxID_ANY, wxEVT_RIGHT_DOWN, wxMouseEventHandler(THISCLASS::OnListMouseRightDown), 0, this);
 
-	// Add column for the component name
+	// Add column for the status
 	int col = 0;
+	mColumnStatus = col;
+	mList->InsertColumn(col++, wxT(""), wxLIST_FORMAT_CENTER, 40);
+
+	// Add column for the component name
 	mList->InsertColumn(col++, wxT("Component"), wxLIST_FORMAT_LEFT, 200);
 
 	// Add column for the trigger flag
@@ -120,9 +124,8 @@ THISCLASS::~ComponentListPanel() {
 	mSwisTrack->mSwisTrackCore->RemoveInterface(this);
 
 	// Delete the dialog
-	if (mComponentsDialog) {
+	if (mComponentsDialog)
 		mComponentsDialog->Destroy();
-	}
 }
 
 void THISCLASS::Update() {
@@ -134,40 +137,43 @@ void THISCLASS::Update() {
 
 	// Add all components
 	int row = 0;
-	SwisTrackCore *stc = mSwisTrack->mSwisTrackCore;
-	const SwisTrackCore::tComponentList *cl = stc->GetDeployedComponents();
-	SwisTrackCore::tComponentList::const_iterator it = cl->begin();
-	while (it != cl->end()) {
+	SwisTrackCore * stc = mSwisTrack->mSwisTrackCore;
+	const SwisTrackCore::tComponentList * cl = stc->GetDeployedComponents();
+	for (auto component : *cl) {
 		int col = 0;
 		wxListItem li;
 
-		// Name
+		// Status
 		li.SetId(row);
 		li.SetColumn(col++);
-		li.SetText((*it)->mDisplayName);
-		li.SetTextColour(*wxBLACK);
+		li.SetText(wxT(""));
+		li.SetData((void *) component);
+		mList->InsertItem(li);
+
+		// Name
+		li.SetColumn(col++);
+		li.SetText(component->mDisplayName);
+		//li.SetTextColour(*wxBLACK);
 		li.SetFont(*wxNORMAL_FONT);
-		li.SetData((void*)(*it));
-		if (mSelectedComponent == (*it)) {
+		if (mSelectedComponent == component) {
 			li.SetState(wxLIST_STATE_SELECTED);
 			selecteditemid = li.GetId();
 		}
-		mList->InsertItem(li);
+		mList->SetItem(li);
 
 		// Trigger flag
 		li.SetColumn(col++);
-		if ((*it)->mTrigger) {
+		if (component->mTrigger) {
 			li.SetText(wxT("T"));
 			mList->SetItem(li);
 		}
 
 		// Data structures
-		SwisTrackCore::tDataStructureList::iterator itds = stc->mDataStructures.begin();
-		while (itds != stc->mDataStructures.end()) {
+		for (auto dataStructure : stc->mDataStructures) {
 			li.SetColumn(col++);
 
-			bool read = (*it)->HasDataStructureRead(*itds);
-			bool write = (*it)->HasDataStructureWrite(*itds);
+			bool read = component->HasDataStructureRead(dataStructure);
+			bool write = component->HasDataStructureWrite(dataStructure);
 			if (read && write) {
 				li.SetText(wxT("E"));
 				mList->SetItem(li);
@@ -178,22 +184,15 @@ void THISCLASS::Update() {
 				li.SetText(wxT("W"));
 				mList->SetItem(li);
 			}
-
-			itds++;
 		}
 
 		// Next item
-		it++;
-		row++;
+		row += 1;
 	}
-
-
-
 
 	// Make the selection visible
-	if (selecteditemid > -1) {
+	if (selecteditemid > -1)
 		mList->EnsureVisible(selecteditemid);
-	}
 
 	// Update the status messages
 	UpdateStatus();
@@ -203,70 +202,69 @@ void THISCLASS::UpdateStatus() {
 	long item = -1;
 	while (1) {
 		item = mList->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_DONTCARE);
-		if (item == -1) {
-			break;
-		}
+		if (item == -1) break;
 
 		// Get the corresponding component
-		Component *c = (Component*)mList->GetItemData(item);
-
-		// Update the color
-		int enabledinterval = c->GetEnabledInterval();
-		if (c->mStatusHasError) {
-			mList->SetItemBackgroundColour(item, wxColour(255, 225, 225));
-		} else if (c->mStatusHasWarning) {
-			mList->SetItemBackgroundColour(item, wxColour(225, 225, 225));
-		} else if (enabledinterval == 0) {
-			mList->SetItemBackgroundColour(item, wxColour(192, 192, 192));
-		} else {
-			mList->SetItemBackgroundColour(item, *wxWHITE);
-		}
+		Component * c = (Component *) mList->GetItemData(item);
+		if (! c) continue;
 
 		// Status messages
-		if ((c->mStatusHasError) || (c->mStatusHasWarning)) {
+		if (c->mStatusHasError || c->mStatusHasWarning) {
+			wxListItem liStatus;
+			liStatus.SetId(item);
+			liStatus.SetColumn(mColumnStatus);
+			liStatus.SetText(wxT("●"));
+			liStatus.SetTextColour(c->mStatusHasError ? *wxRED : wxColour(128, 128, 0));
+			mList->SetItem(liStatus);
+
 			wxListItem li;
 			li.SetId(item);
 			li.SetColumn(mColumnMessages);
 
 			wxString str;
-			Component::tStatusItemList::iterator itsl = c->mStatus.begin();
-			while (itsl != c->mStatus.end()) {
-				if (itsl->mType == StatusItem::sTypeError) {
-					str += itsl->mMessage;
+			for (auto status : c->mStatus) {
+				if (status.mType == StatusItem::sTypeError) {
+					str += status.mMessage;
 					str += wxT(" ");
-				} else if (itsl->mType == StatusItem::sTypeWarning) {
-					str += itsl->mMessage;
+				} else if (status.mType == StatusItem::sTypeWarning) {
+					str += status.mMessage;
 					str += wxT(" ");
 				}
-
-				itsl++;
 			}
-			li.SetText(str);
 
+			li.SetText(str);
 			mList->SetItem(li);
 
 			// Set optimal column widths of all DataStructure columns
-			for (int i = 1; i < mColumnMessages - 1; i++) {
-			  mList->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
-			}
+			//for (int i = 1; i < mColumnMessages - 1; i++) {
+			//  mList->SetColumnWidth(i, wxLIST_AUTOSIZE_USEHEADER);
+			//}
 		} else {
+			wxListItem liStatus;
+			liStatus.SetId(item);
+			liStatus.SetColumn(mColumnStatus);
+			liStatus.SetText(wxT(""));
+			liStatus.SetTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+			mList->SetItem(liStatus);
+
 			wxListItem li;
 			li.SetId(item);
 			li.SetColumn(mColumnMessages);
 			li.SetText(wxT(""));
 			mList->SetItem(li);
 		}
-		
-		// EnabledInterval
+
+		// Enabled interval
+		int enabledInterval = c->GetEnabledInterval();
 		wxListItem li;
 		li.SetId(item);
 		li.SetColumn(mColumnEnabledInterval);
-		if (enabledinterval == 0) {
+		if (enabledInterval == 0) {
 			li.SetText(wxT("no"));
-		} else if (enabledinterval == 1) {
+		} else if (enabledInterval == 1) {
 			li.SetText(wxT("yes"));
 		} else {
-			li.SetText(wxString::Format(wxT("yes (%% %d)"), enabledinterval));
+			li.SetText(wxString::Format(wxT("yes (%% %d)"), enabledInterval));
 		}
 		mList->SetItem(li);
 
@@ -276,7 +274,7 @@ void THISCLASS::UpdateStatus() {
 		if (c->mStepDuration < 0) {
 			li.SetText(wxT(""));
 		} else {
-			li.SetText(wxString::Format(wxT("%0.3f ms"), c->mStepDuration*1000.));
+			li.SetText(wxString::Format(wxT("%0.3f ms"), c->mStepDuration * 1000.));
 		}
 		mList->SetItem(li);
 	}
@@ -312,21 +310,16 @@ void THISCLASS::OnAfterEdit() {
 
 void THISCLASS::OnButtonAddClick(wxCommandEvent& event) {
 	SwisTrackCoreEditor stce(mSwisTrack->mSwisTrackCore);
-	if (! stce.IsEditable()) {
-		return;
-	}
+	if (! stce.IsEditable()) return;
 
 	// Create the dialog if necessary
-	if (mComponentsDialog == 0) {
+	if (mComponentsDialog == 0)
 		mComponentsDialog = new ComponentsDialog(this->GetParent(), mSwisTrack->mSwisTrackCore);
-	}
 
 	// Show dialog, returning if the user selected "Cancel"
 	mComponentsDialog->mSelectedComponent = 0;
 	mComponentsDialog->ShowModal();
-	if (! mComponentsDialog->mSelectedComponent) {
-		return;
-	}
+	if (! mComponentsDialog->mSelectedComponent) return;
 
 	// Create the new component
 	Component *newcomponent = mComponentsDialog->mSelectedComponent->Create();
@@ -349,35 +342,27 @@ void THISCLASS::OnButtonAddClick(wxCommandEvent& event) {
 
 void THISCLASS::OnButtonRemoveClick(wxCommandEvent& event) {
 	SwisTrackCoreEditor stce(mSwisTrack->mSwisTrackCore);
-	if (! stce.IsEditable()) {
-		return;
-	}
+	if (! stce.IsEditable()) return;
 
 	// Find the corresponding component in the list and delete it
 	SwisTrackCore::tComponentList *cl = stce.GetDeployedComponents();
 	SwisTrackCore::tComponentList::iterator it = find(cl->begin(), cl->end(), mSelectedComponent);
-	if (it == cl->end()) {
-		return;
-	}
+	if (it == cl->end()) return;
+
 	cl->erase(it);
 	delete mSelectedComponent;
 }
 
 void THISCLASS::OnButtonUpClick(wxCommandEvent& event) {
 	SwisTrackCoreEditor stce(mSwisTrack->mSwisTrackCore);
-	if (! stce.IsEditable()) {
-		return;
-	}
+	if (! stce.IsEditable()) return;
 
 	// Find the corresponding component in the list and move it up
-	SwisTrackCore::tComponentList *cl = stce.GetDeployedComponents();
+	SwisTrackCore::tComponentList * cl = stce.GetDeployedComponents();
 	SwisTrackCore::tComponentList::iterator it = find(cl->begin(), cl->end(), mSelectedComponent);
-	if (it == cl->end()) {
-		return;
-	}
-	if (it == cl->begin()) {
-		return;
-	}
+	if (it == cl->end()) return;
+	if (it == cl->begin()) return;
+
 	SwisTrackCore::tComponentList::iterator it2 = it;
 	it2--;
 	cl->erase(it);
@@ -386,28 +371,23 @@ void THISCLASS::OnButtonUpClick(wxCommandEvent& event) {
 
 void THISCLASS::OnButtonDownClick(wxCommandEvent& event) {
 	SwisTrackCoreEditor stce(mSwisTrack->mSwisTrackCore);
-	if (! stce.IsEditable()) {
-		return;
-	}
+	if (! stce.IsEditable()) return;
 
 	// Find the corresponding component in the list and move it up
 	SwisTrackCore::tComponentList *cl = stce.GetDeployedComponents();
 	SwisTrackCore::tComponentList::iterator it = find(cl->begin(), cl->end(), mSelectedComponent);
-	if (it == cl->end()) {
-		return;
-	}
+	if (it == cl->end()) return;
+
 	SwisTrackCore::tComponentList::iterator it2 = it;
 	it2++;
-	if (it2 == cl->end()) {
-		return;
-	}
+	if (it2 == cl->end()) return;
 	it2++;
 	cl->erase(it);
 	cl->insert(it2, mSelectedComponent);
 }
 
 void THISCLASS::OnListItemSelected(wxListEvent& event) {
-	mSelectedComponent = (Component*)(event.GetData());
+	mSelectedComponent = (Component *) event.GetData();
 
 	mSwisTrack->SetConfigurationPanel(mSelectedComponent);
 	mSwisTrack->mTimelinePanel->SelectComponent(mSelectedComponent);
@@ -418,15 +398,13 @@ void THISCLASS::OnListItemDeselected(wxListEvent& event) {
 }
 
 void THISCLASS::OnListLeftDoubleClick(wxMouseEvent& event) {
-	wxMiniFrame *frame = new wxMiniFrame(this, -1, _("Configuration"), wxDefaultPosition, wxSize(230, 400), wxCAPTION | wxRESIZE_BORDER | wxCLOSE_BOX | wxSYSTEM_MENU);
+	wxMiniFrame * frame = new wxMiniFrame(this, -1, _("Configuration"), wxDefaultPosition, wxSize(230, 400), wxCAPTION | wxRESIZE_BORDER | wxCLOSE_BOX | wxSYSTEM_MENU);
 	new ConfigurationPanel(frame, mSwisTrack, mSelectedComponent);
 	frame->Show();
 }
 
 void THISCLASS::OnListMouseRightDown(wxMouseEvent& event) {
-	if (! mSelectedComponent) {
-		return;
-	}
+	if (! mSelectedComponent) return;
 
 	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval0, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
 	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval1, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
@@ -438,24 +416,22 @@ void THISCLASS::OnListMouseRightDown(wxMouseEvent& event) {
 	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval64, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
 	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval128, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
 
-	int enabledinterval = mSelectedComponent->GetEnabledInterval();
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval0, (enabledinterval == 0));
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval1, (enabledinterval == 1));
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval2, (enabledinterval == 2));
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval4, (enabledinterval == 4));
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval8, (enabledinterval == 8));
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval16, (enabledinterval == 16));
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval32, (enabledinterval == 32));
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval64, (enabledinterval == 64));
-	mPopupMenu.Check(cID_PopupMenu_EnabledInterval128, (enabledinterval == 128));
+	int enabledInterval = mSelectedComponent->GetEnabledInterval();
+	mPopupMenu.Check(cID_PopupMenu_EnabledInterval0, (enabledInterval == 0));
+	mPopupMenu.Check(cID_PopupMenu_EnabledInterval1, (enabledInterval == 1));
+	mPopupMenu.Check(cID_PopupMenu_EnabledInterval2, (enabledInterval == 2));
+	mPopupMenu.Check(cID_PopupMenu_EnabledInterval4, (enabledInterval == 4));
+	mPopupMenu.Check(cID_PopupMenu_EnabledInterval8, (enabledInterval == 8));
+	mPopupMenu.Check(cID_PopupMenu_EnabledInterval16, (enabledInterval == 16));
+	mPopupMenu.Check(cID_PopupMenu_EnabledInterval32, (enabledInterval == 32));
+	mPopupMenu.Check(cID_PopupMenu_EnabledInterval64, (enabledInterval == 64));
+	mPopupMenu.Check(cID_PopupMenu_EnabledInterval128, (enabledInterval == 128));
 
 	PopupMenu(&mPopupMenu);
 }
 
 void THISCLASS::OnPopupMenuEnabledInterval(wxCommandEvent& event) {
-	if (mSwisTrack->mSwisTrackCore->IsStartedInProductionMode()) {
-		return;
-	}
+	if (mSwisTrack->mSwisTrackCore->IsStartedInProductionMode()) return;
 
 	// Set the enabled flag
 	ComponentEditor ce(mSelectedComponent);

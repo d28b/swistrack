@@ -4,10 +4,10 @@
 #ifdef USE_XVID
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentOutputFileM4V(SwisTrackCore *stc):
-		Component(stc, wxT("OutputFileM4V")),
-		mM4VHandle(0), mM4VBuffer(0), mFrameRate(15), mInputChannel(cInputChannel_None),
-		mDisplayOutput(wxT("Output"), wxT("M4V File: Unprocessed Frame")) {
+THISCLASS::ComponentOutputFileM4V(SwisTrackCore * stc):
+	Component(stc, wxT("OutputFileM4V")),
+	mM4VHandle(0), mM4VBuffer(0), mFrameRate(15), mInputChannel(cInputChannel_None),
+	mDisplayOutput(wxT("Output"), wxT("M4V File: Unprocessed Frame")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryOutput);
@@ -55,20 +55,20 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	// Get the input image
-	IplImage* inputimage = 0;
+	cv::Mat* inputImage = 0;
 	if (mInputChannel == cInputChannel_Grayscale) {
-		inputimage = mCore->mDataStructureImageGray.mImage;
+		inputImage = mCore->mDataStructureImageGray.mImage;
 	} else if (mInputChannel == cInputChannel_Color) {
-		inputimage = mCore->mDataStructureImageColor.mImage;
+		inputImage = mCore->mDataStructureImageColor.mImage;
 	} else if (mInputChannel == cInputChannel_Binary) {
-		inputimage = mCore->mDataStructureImageBinary.mImage;
+		inputImage = mCore->mDataStructureImageBinary.mImage;
 	} else {
 		AddError(wxT("No input channel selected."));
 		return;
 	}
 
 	// Do nothing if no image is available
-	if (! inputimage) {
+	if (inputImage.empty()) {
 		AddError(wxT("No image on selected input."));
 		return;
 	}
@@ -76,20 +76,18 @@ void THISCLASS::OnStep() {
 	if (mKeepInMemory == cKeepInMemory_None) {
 		// Open the output file if necessary
 		if (! mM4VHandle) {
-			M4VOpen(inputimage);
+			M4VOpen(inputImage);
 		}
 
 		// Write the frame
-		M4VWriteFrame(inputimage);
+		M4VWriteFrame(inputImage);
 	} else if (mKeepInMemory == cKeepInMemory_Raw) {
 	} else if (mKeepInMemory == cKeepInMemory_Compressed) {
 	}
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(inputimage);
-	}
+	if (de.IsActive()) de.SetMainImage(inputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
@@ -100,7 +98,7 @@ void THISCLASS::OnStop() {
 }
 
 /* Initialize encoder for first use, pass all needed parameters to the codec */
-void THISCLASS::M4VOpen(IplImage* image) {
+void THISCLASS::M4VOpen(cv::Mat* image) {
 	xvid_enc_plugin_t plugins[7];
 	xvid_gbl_init_t xvid_gbl_init;
 	xvid_enc_create_t xvid_enc_create;
@@ -185,7 +183,7 @@ void THISCLASS::M4VOpen(IplImage* image) {
 	mM4VHandle = xvid_enc_create.handle;
 }
 
-void THISCLASS::M4VWriteFrame(IplImage* image) {
+void THISCLASS::M4VWriteFrame(cv::Mat* image) {
 	xvid_enc_frame_t xvid_enc_frame;
 	xvid_enc_stats_t xvid_enc_stats;
 
@@ -212,7 +210,7 @@ void THISCLASS::M4VWriteFrame(IplImage* image) {
 	xvid_enc_frame.input.stride[0] = image->widthStep;
 	xvid_enc_frame.input.csp = XVID_CSP_BGR;
 
-	if (image->nChannels == 1) {
+	if (image->channels() == 1) {
 		xvid_enc_frame.vop_flags |= XVID_VOP_GREYSCALE;
 	}
 

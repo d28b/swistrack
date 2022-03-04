@@ -12,8 +12,8 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterCheckBox(wxWindow* parent):
-		ConfigurationParameter(parent),
-		mValueDefault(wxT("")) {
+	ConfigurationParameter(parent),
+	mValueDefault(wxT("")) {
 
 }
 

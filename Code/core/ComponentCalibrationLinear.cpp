@@ -6,9 +6,9 @@
 #include <wx/log.h>
 #include <fstream>
 
-THISCLASS::ComponentCalibrationLinear(SwisTrackCore *stc):
-		Component(stc, wxT("CalibrationLinear")),
-		mDisplayOutput(wxT("Output"), wxT("Linear Calibration: Output")) {
+THISCLASS::ComponentCalibrationLinear(SwisTrackCore * stc):
+	Component(stc, wxT("CalibrationLinear")),
+	mDisplayOutput(wxT("Output"), wxT("Linear Calibration: Output")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryCalibration);
@@ -62,68 +62,55 @@ void THISCLASS::OnStart() {
 	}
 
 	// Create the matrices
-	CvMat* pseudoinverse32f   = cvCreateMat(12, calibrationPointList.size() * 2, CV_32F);	// matrix to hold the pseudoinverse
-	CvMat* imagematrix32f     = cvCreateMat(calibrationPointList.size() * 2, 12, CV_32F);	// matrix containing points in image space
-	CvMat* objectmatrix32f    = cvCreateMat(calibrationPointList.size() * 2, 1, CV_32F);	// matrix containing points in world space
-	CvMat* cameratransform32f = cvCreateMat(12, 1, CV_32F);								// matrix containing camera matrix (nonlinear model)
+	cv::Mat imageMatrix(calibrationPointList.size() * 2, 12, CV_32F);	// matrix containing points in image space
+	cv::Mat objectMatrix(calibrationPointList.size() * 2, 1, CV_32F);	// matrix containing points in world space
 
 	// Build up matrices
-	for (unsigned int i = 0; i < calibrationPointList.size(); i++) {
-		CvPoint2D32f p;
+	int count = calibrationPointList.size();
+	for (int i = 0; i < count; i++) {
+		cv::Point2f p;
 
-		p.x = (calibrationPointList.at(i)).xImage;
-		p.y = (calibrationPointList.at(i)).yImage;
+		p.x = calibrationPointList.at(i).xImage;
+		p.y = calibrationPointList.at(i).yImage;
 
-		imagematrix32f->data.fl[i*12] = p.x;
-		imagematrix32f->data.fl[i*12+1] = p.y;
-		imagematrix32f->data.fl[i*12+2] = 1;
-		imagematrix32f->data.fl[i*12+3] = p.x * p.x;
-		imagematrix32f->data.fl[i*12+4] = p.y * p.y;
-		imagematrix32f->data.fl[i*12+5] = p.x * p.y;
-		imagematrix32f->data.fl[i*12+6] = 0;
-		imagematrix32f->data.fl[i*12+7] = 0;
-		imagematrix32f->data.fl[i*12+8] = 0;
-		imagematrix32f->data.fl[i*12+9] = 0;
-		imagematrix32f->data.fl[i*12+10] = 0;
-		imagematrix32f->data.fl[i*12+11] = 0;
+		imageMatrix.at<float>(i, 0) = p.x;
+		imageMatrix.at<float>(i, 1) = p.y;
+		imageMatrix.at<float>(i, 2) = 1;
+		imageMatrix.at<float>(i, 3) = p.x * p.x;
+		imageMatrix.at<float>(i, 4) = p.y * p.y;
+		imageMatrix.at<float>(i, 5) = p.x * p.y;
+		imageMatrix.at<float>(i, 6) = 0;
+		imageMatrix.at<float>(i, 7) = 0;
+		imageMatrix.at<float>(i, 8) = 0;
+		imageMatrix.at<float>(i, 9) = 0;
+		imageMatrix.at<float>(i, 10) = 0;
+		imageMatrix.at<float>(i, 11) = 0;
 
-		imagematrix32f->data.fl[calibrationPointList.size()*12+i*12] = 0;
-		imagematrix32f->data.fl[calibrationPointList.size()*12+i*12+1] = 0;
-		imagematrix32f->data.fl[calibrationPointList.size()*12+i*12+2] = 0;
-		imagematrix32f->data.fl[calibrationPointList.size()*12+i*12+3] = 0;
-		imagematrix32f->data.fl[calibrationPointList.size()*12+i*12+4] = 0;
-		imagematrix32f->data.fl[calibrationPointList.size()*12+i*12+5] = 0;
-		imagematrix32f->data.fl[calibrationPointList.size()*12+i*12+6] = p.x;
-		imagematrix32f->data.fl[calibrationPointList.size()*12+i*12+7] = p.y;
-		imagematrix32f->data.fl[calibrationPointList.size()*12+i*12+8] = 1;
-		imagematrix32f->data.fl[calibrationPointList.size()*12+i*12+9] = p.x * p.x;
-		imagematrix32f->data.fl[calibrationPointList.size()*12+i*12+10] = p.y * p.y;
-		imagematrix32f->data.fl[calibrationPointList.size()*12+i*12+11] = p.x * p.y;
+		imageMatrix.at<float>(count + i, 0) = 0;
+		imageMatrix.at<float>(count + i, 1) = 0;
+		imageMatrix.at<float>(count + i, 2) = 0;
+		imageMatrix.at<float>(count + i, 3) = 0;
+		imageMatrix.at<float>(count + i, 4) = 0;
+		imageMatrix.at<float>(count + i, 5) = 0;
+		imageMatrix.at<float>(count + i, 6) = p.x;
+		imageMatrix.at<float>(count + i, 7) = p.y;
+		imageMatrix.at<float>(count + i, 8) = 1;
+		imageMatrix.at<float>(count + i, 9) = p.x * p.x;
+		imageMatrix.at<float>(count + i, 10) = p.y * p.y;
+		imageMatrix.at<float>(count + i, 11) = p.x * p.y;
 
-		objectmatrix32f->data.fl[i] = (calibrationPointList.at(i)).xWorld;
-		objectmatrix32f->data.fl[i+calibrationPointList.size()] = (calibrationPointList.at(i)).yWorld;
+		objectMatrix.at<float>(i, 0) = calibrationPointList.at(i).xWorld;
+		objectMatrix.at<float>(count + i, 0) = calibrationPointList.at(i).yWorld;
 	}
 
-	CvMat* multransposed    = cvCreateMat(12, 12, CV_32F);
-	CvMat* invmultransposed = cvCreateMat(12, 12, CV_32F);
-	CvMat* transposed       = cvCreateMat(12, calibrationPointList.size() * 2, CV_32F);
-
-	cvMulTransposed(imagematrix32f, multransposed, 1);
-	cvInv(multransposed, invmultransposed, CV_LU);
-	cvTranspose(imagematrix32f, transposed);
-	cvMatMul(invmultransposed, transposed, pseudoinverse32f);
-	cvMatMul(pseudoinverse32f, objectmatrix32f, cameratransform32f);
+	cv::Mat mulTransposed(12, 12, CV_32F);
+	cv::mulTransposed(imageMatrix, mulTransposed, true);
+	cv::Mat cameraTransform = mulTransposed.inv() * imageMatrix.t() * objectMatrix;
 
 	// Copy cameratransformation to appropriate format
 	for (int i = 0; i < 12; i++) {
-		cameraMatrix[i] = cameratransform32f->data.fl[i];
+		cameraMatrix[i] = cameraTransform.at<float>(i, 0);
 	}
-
-	// Release unused matrix
-	cvReleaseMat(&pseudoinverse32f);
-	cvReleaseMat(&imagematrix32f);
-	cvReleaseMat(&objectmatrix32f);
-	cvReleaseMat(&cameratransform32f);
 
 	//Compute error of calibration on calibration points
 	double errorX, errorY, maxErrorX, maxErrorY, maxErrorD, errorD;
@@ -135,29 +122,29 @@ void THISCLASS::OnStart() {
 	errorD = 0;
 
 	for (unsigned int i = 0; i < calibrationPointList.size(); i++) {
-		double tmpErrorX, tmpErrorY, tmpErrorD;
-		CvPoint2D32f originalImage, originalWorld, finalWorld;
-		originalImage.x = (float)(calibrationPointList.at(i)).xImage;
-		originalImage.y = (float)(calibrationPointList.at(i)).yImage;
-		originalWorld.x = (float)(calibrationPointList.at(i)).xWorld;
-		originalWorld.y = (float)(calibrationPointList.at(i)).yWorld;
-		finalWorld = THISCLASS::Image2World(originalImage);
-		tmpErrorX = (double)fabsf(originalWorld.x - finalWorld.x);
-		tmpErrorY = (double)fabsf(originalWorld.y - finalWorld.y);
-		tmpErrorD = sqrt(tmpErrorX * tmpErrorX + tmpErrorY * tmpErrorY);
+		cv::Point2f originalImage;
+		originalImage.x = (float) calibrationPointList.at(i).xImage;
+		originalImage.y = (float) calibrationPointList.at(i).yImage;
+
+		cv::Point2f originalWorld;
+		originalWorld.x = (float) calibrationPointList.at(i).xWorld;
+		originalWorld.y = (float) calibrationPointList.at(i).yWorld;
+
+		cv::Point2f finalWorld = THISCLASS::Image2World(originalImage);
+
+		double tmpErrorX = (double) fabsf(originalWorld.x - finalWorld.x);
+		double tmpErrorY = (double) fabsf(originalWorld.y - finalWorld.y);
+		double tmpErrorD = sqrt(tmpErrorX * tmpErrorX + tmpErrorY * tmpErrorY);
+
 		errorX += tmpErrorX;
 		errorY += tmpErrorY;
 		errorD += tmpErrorD;
-		if (tmpErrorX > maxErrorX) {
-			maxErrorX = tmpErrorX;
-		}
-		if (tmpErrorY > maxErrorY) {
-			maxErrorY = tmpErrorY;
-		}
-		if (tmpErrorD > maxErrorD) {
-			maxErrorD = tmpErrorD;
-		}
+
+		if (tmpErrorX > maxErrorX) maxErrorX = tmpErrorX;
+		if (tmpErrorY > maxErrorY) maxErrorY = tmpErrorY;
+		if (tmpErrorD > maxErrorD) maxErrorD = tmpErrorD;
 	}
+
 	errorX = errorX / calibrationPointList.size();
 	errorY = errorY / calibrationPointList.size();
 	errorD = errorD / calibrationPointList.size();
@@ -176,14 +163,15 @@ void THISCLASS::OnStart() {
 	logfile << "Camera matrix: " << std::endl;
 	logfile << "\t" << "x = a11 u + a12 v + a13 + a14 u^2 + a15 v^2 + a16 uv" << std::endl;
 	logfile << "\t" << "y = a21 u + a22 v + a23 + a24 u^2 + a25 v^2 + a26 uv" << std::endl;
-	for (int i = 0; i < 6; i++) {
+
+	for (int i = 0; i < 6; i++)
 		logfile << "\t" << cameraMatrix[i];
-	}
 	logfile << std::endl;
-	for (int i = 6; i < 12; i++) {
+
+	for (int i = 6; i < 12; i++)
 		logfile << "\t" << cameraMatrix[i];
-	}
 	logfile << std::endl;
+
 	logfile.close();
 }
 
@@ -192,16 +180,12 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	// These are the particles to transform
-	DataStructureParticles::tParticleVector *particles = mCore->mDataStructureParticles.mParticles;
-	if (! particles) {
-		return;
-	}
+	DataStructureParticles::tParticleVector * particles = mCore->mDataStructureParticles.mParticles;
+	if (! particles) return;
 
 	// Transform all particle positions
-	DataStructureParticles::tParticleVector::iterator it = particles->begin();
-	while (it != particles->end()) {
-		it->mWorldCenter = Image2World(it->mCenter);
-		it++;
+	for (auto particle : *particles) {
+		particle.mWorldCenter = Image2World(particle.mCenter);
 	}
 }
 
@@ -222,13 +206,13 @@ void THISCLASS::ReadPoint(wxXmlNode *node) {
 	calibrationPointList.push_back(calibrationPoint);
 }
 
-CvPoint2D32f THISCLASS::Image2World(CvPoint2D32f p) {
-	CvPoint2D32f w;
-	float pxx, pxy, pyy;
-	pxx = p.x * p.x;
-	pyy = p.y * p.y;
-	pxy = p.x * p.y;
+cv::Point2f THISCLASS::Image2World(cv::Point2f p) {
+	float pxx = p.x * p.x;
+	float pyy = p.y * p.y;
+	float pxy = p.x * p.y;
+
+	cv::Point2f w;
 	w.x = cameraMatrix[0] * p.x + cameraMatrix[1] * p.y + cameraMatrix[2] + cameraMatrix[3] * pxx + cameraMatrix[4] * pyy + cameraMatrix[5] * pxy;
 	w.y = cameraMatrix[6] * p.x + cameraMatrix[7] * p.y + cameraMatrix[8] + cameraMatrix[9] * pxx + cameraMatrix[10] * pyy + cameraMatrix[11] * pxy;
-	return(w);
+	return w;
 }

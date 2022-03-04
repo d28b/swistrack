@@ -10,7 +10,7 @@ class ComponentTriggerTimer: public Component {
 
 public:
 	//! Constructor.
-	ComponentTriggerTimer(SwisTrackCore *stc);
+	ComponentTriggerTimer(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentTriggerTimer();
 
@@ -20,13 +20,14 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentTriggerTimer(mCore);
 	}
 
 private:
 	//! An overwritten wxTimer.
-class Timer: public wxTimer {
+	class Timer: public wxTimer {
 	public:
 		ComponentTriggerTimer *mComponentTriggerTimer;		//!< The associated component.
 

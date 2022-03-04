@@ -29,7 +29,7 @@ public:
 	}
 
 	//! Writes the components.
-	void WriteComponents(SwisTrackCore *stc);
+	void WriteComponents(SwisTrackCore * stc);
 
 protected:
 	wxXmlDocument mDocument;		//!< The document.

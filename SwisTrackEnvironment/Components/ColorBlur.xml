@@ -9,16 +9,14 @@
 			<name>Mode</name>
 			<label>Mode</label>
 			<items>
-				<item key="gaussian">Gaussian</item>
-				<item key="median">Median</item>
 				<item key="mean">Mean</item>
-				<item key="sum">Sum</item>
+				<item key="median">Median</item>
 			</items>
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="dropdownlist">
-			<name>Radius</name>
-			<label>Radius</label>
+			<name>Size</name>
+			<label>Blur size</label>
 			<items>
 				<item key="1">1x1</item>
 				<item key="3">3x3</item>

@@ -13,7 +13,7 @@ public:
 	SwisTrackCore *mSwisTrackCore;		//!< The associated SwisTrackCore object.
 
 	//! Constructor.
-	SwisTrackCoreTrigger(SwisTrackCore *stc);
+	SwisTrackCoreTrigger(SwisTrackCore * stc);
 	//! Destructor.
 	~SwisTrackCoreTrigger();
 

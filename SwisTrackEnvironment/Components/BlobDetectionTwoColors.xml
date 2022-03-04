@@ -6,16 +6,6 @@
 	<displayimage>Output</displayimage>
 
 	<configuration>
-		<parameter type="integer">
-			<name>mMaxNumberOfParticles</name>
-			<label>Max. particles</label>
-			<min>1</min>
-			<max>50</max>
-			<default>10</default>
-			<unit>blobs</unit>
-			<slider>true</slider>
-			<reloadable>true</reloadable>
-		</parameter>
 		<parameter type="double">
 			<name>MaxDistance</name>
 			<label>Max. distance</label>
@@ -28,17 +18,19 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="dropdownlist">
-			<name>OutputParams</name>
-			<label>Output Parameters</label>
+			<name>Center</name>
+			<label>Center</label>
 			<items>
-				<item key="blob1">blob #1</item>
-				<item key="blob2">blob #2</item>
-				<item key="avg">combination</item>
+				<item key="0.0">Color 1 blob</item>
+				<item key="0.5">Middle</item>
+				<item key="1.0">Color 2 blob</item>
 			</items>
-			<default>avg</default>
+			<default>0.5</default>
 			<reloadable>true</reloadable>
 		</parameter>
+
 		<line />
+		<title>Color 1</title>
 		<parameter type="color">
 			<name>Color1_Color</name>
 			<label>Color 1</label>
@@ -69,6 +61,16 @@
 			<default>32</default>
 			<reloadable>true</reloadable>
 		</parameter>
+		<parameter type="integer">
+			<name>Color1_MaxNumber</name>
+			<label>Max. particles</label>
+			<min>1</min>
+			<max>50</max>
+			<default>10</default>
+			<unit>blobs</unit>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
 		<parameter type="checkbox">
 			<name>Color1_SelectionByArea</name>
 			<label>Selection by area</label>
@@ -76,7 +78,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
-			<name>Color1_AreaMin</name>
+			<name>Color1_MinArea</name>
 			<label>Min. blob size</label>
 			<min>0</min>
 			<default>10</default>
@@ -84,7 +86,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
-			<name>Color1_AreaMax</name>
+			<name>Color1_MaxArea</name>
 			<label>Max. blob size</label>
 			<min>0</min>
 			<default>100</default>
@@ -98,7 +100,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
-			<name>Color1_CompactnessMin</name>
+			<name>Color1_MinCompactness</name>
 			<label>Min. compactness</label>
 			<min>0</min>
 			<default>0</default>
@@ -108,7 +110,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
-			<name>Color1_CompactnessMax</name>
+			<name>Color1_MaxCompactness</name>
 			<label>Max. compactness</label>
 			<min>0</min>
 			<default>1</default>
@@ -117,7 +119,9 @@
 			<sliderstep>0.01</sliderstep>
 			<reloadable>true</reloadable>
 		</parameter>
+
 		<line />
+		<title>Color 2</title>
 		<parameter type="color">
 			<name>Color2_Color</name>
 			<label>Color 2</label>
@@ -148,6 +152,16 @@
 			<default>32</default>
 			<reloadable>true</reloadable>
 		</parameter>
+		<parameter type="integer">
+			<name>Color2_MaxNumber</name>
+			<label>Max. particles</label>
+			<min>1</min>
+			<max>50</max>
+			<default>10</default>
+			<unit>blobs</unit>
+			<slider>true</slider>
+			<reloadable>true</reloadable>
+		</parameter>
 		<parameter type="checkbox">
 			<name>Color2_SelectionByArea</name>
 			<label>Selection by area</label>
@@ -155,7 +169,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
-			<name>Color2_AreaMin</name>
+			<name>Color2_MinArea</name>
 			<label>Min. blob size</label>
 			<min>0</min>
 			<default>10</default>
@@ -163,7 +177,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="integer">
-			<name>Color2_AreaMax</name>
+			<name>Color2_MaxArea</name>
 			<label>Max. blob size</label>
 			<min>0</min>
 			<default>100</default>
@@ -177,7 +191,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
-			<name>Color2_CompactnessMin</name>
+			<name>Color2_MinCompactness</name>
 			<label>Min. compactness</label>
 			<min>0</min>
 			<default>0</default>
@@ -187,7 +201,7 @@
 			<reloadable>true</reloadable>
 		</parameter>
 		<parameter type="double">
-			<name>Color2_CompactnessMax</name>
+			<name>Color2_MaxCompactness</name>
 			<label>Max. compactness</label>
 			<min>0</min>
 			<default>1</default>

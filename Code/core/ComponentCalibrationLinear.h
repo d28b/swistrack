@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentCalibrationLinear
 #define HEADER_ComponentCalibrationLinear
 
-#include <cv.h>
+#include <opencv2/core.hpp>
 #include "Component.h"
 #include "DataStructureParticles.h"
 #include "ConfigurationXML.h"
@@ -14,7 +14,7 @@ class ComponentCalibrationLinear: public Component, public ConfigurationXML {
 
 public:
 	//! Constructor.
-	ComponentCalibrationLinear(SwisTrackCore *stc);
+	ComponentCalibrationLinear(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentCalibrationLinear();
 
@@ -24,7 +24,8 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentCalibrationLinear(mCore);
 	}
 
@@ -43,8 +44,8 @@ private:
 	float cameraMatrix[12];										//!< Matrix for the coordinate transformation.
 	Display mDisplayOutput;										//!< The Display showing the particles.
 
-	void ReadPoint(wxXmlNode *node);
-	CvPoint2D32f Image2World(CvPoint2D32f p);
+	void ReadPoint(wxXmlNode * node);
+	cv::Point2f Image2World(cv::Point2f p);
 };
 #endif
 

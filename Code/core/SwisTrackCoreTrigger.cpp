@@ -6,9 +6,9 @@
 DEFINE_EVENT_TYPE(wxEVT_SWISTRACKCORE_TRIGGER)
 DEFINE_EVENT_TYPE(wxEVT_SWISTRACKCORE_TRIGGER_CLEAR)
 
-THISCLASS::SwisTrackCoreTrigger(SwisTrackCore *stc):
-		wxEvtHandler(), SwisTrackCoreInterface(),
-		mSwisTrackCore(stc), mActive(false), mStepPerformed(false) {
+THISCLASS::SwisTrackCoreTrigger(SwisTrackCore * stc):
+	wxEvtHandler(), SwisTrackCoreInterface(),
+	mSwisTrackCore(stc), mActive(false), mStepPerformed(false) {
 
 	mSwisTrackCore->AddInterface(this);
 	Connect(wxID_ANY, wxEVT_SWISTRACKCORE_TRIGGER, wxEventHandler(THISCLASS::OnTrigger));

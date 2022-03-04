@@ -3,10 +3,10 @@
 
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentDoubleThresholdColorIndependent(SwisTrackCore *stc):
-		Component(stc, wxT("DoubleThresholdColorIndependent")),
-		mOutputImage(0), mLowThreshold(cvScalarAll(0)), mHighThreshold(cvScalarAll(0)),
-		mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
+THISCLASS::ComponentDoubleThresholdColorIndependent(SwisTrackCore * stc):
+	Component(stc, wxT("DoubleThresholdColorIndependent")),
+	mLowThreshold(0, 0, 0), mHighThreshold(0, 0, 0),
+	mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryThresholdingColor);
@@ -37,62 +37,24 @@ void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
-	IplImage *inputimage = mCore->mDataStructureImageColor.mImage;
-	if (! inputimage) {
+	cv::Mat inputImage = mCore->mDataStructureImageColor.mImage;
+	if (inputImage.empty()) {
 		AddError(wxT("Cannot access Input image."));
 		return;
 	}
-	if (inputimage->nChannels != 3) {
-		AddError(wxT("Input must be a color image (3 channels)."));
-	}
 
-	//Do the thresholding
-	//We compute the average value on the three channels
-	try {
-		PrepareOutputImage(inputimage);
-		// Correct the channel sequence
-		if (strncmp(inputimage->channelSeq, thresholdColorSeq, 3))
-		{
-			CvScalar tmpLowThreshold;
-			CvScalar tmpHighThreshold;
+	cv::Mat outputImage(inputImage.size(), CV_8UC1);
+	cv::inRange(inputImage, mLowThreshold, mHighThreshold, outputImage);
 
-			for (int i = 0;i < 3;i++)
-				for (int j = 0;j < 3;j++)
-					if (inputimage->channelSeq[i] == thresholdColorSeq[j])
-					{
-						tmpLowThreshold.val[i] = mLowThreshold.val[j];
-						tmpHighThreshold.val[i] = mLowThreshold.val[j];
-					}
-			strcpy(thresholdColorSeq, inputimage->channelSeq);
-			for (int i = 0;i < 3;i++)
-			{
-				mLowThreshold.val[i] = tmpLowThreshold.val[i];
-				mHighThreshold.val[i] = tmpHighThreshold.val[i];
-			}
-
-		}
-		cvInRangeS(inputimage, mLowThreshold, mHighThreshold, mOutputImage);
-		mCore->mDataStructureImageBinary.mImage = mOutputImage;
-	} catch (...)
-	{
-		AddError(wxT("Thresholding failed."));
-		return;
-	}
+	mCore->mDataStructureImageBinary.mImage = outputImage;
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(mOutputImage);
-	}
+	if (de.IsActive()) de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureImageBinary.mImage = 0;
 }
 
-void THISCLASS::OnStop()
-{
-	if (mOutputImage) {
-		cvReleaseImage(&mOutputImage);
-	}
+void THISCLASS::OnStop() {
 }

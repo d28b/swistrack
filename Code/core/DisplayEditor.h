@@ -24,23 +24,23 @@ public:
 	}
 
 	//! Sets the main image.
-	void SetMainImage(IplImage *img);
+	void SetMainImage(cv::Mat img);
 	//! Sets the mask.
-	void SetMaskImage(IplImage *img);
+	void SetMaskImage(cv::Mat img);
 
 	//! Sets the particles.
-	void SetParticles(DataStructureParticles::tParticleVector *pv);
+	void SetParticles(DataStructureParticles::tParticleVector * pv);
 	//! Sets whether to draw the trajectories.
 	void SetTrajectories(bool trajectories);
 
 	//! Sets the size of the display.
-	void SetSize(CvSize size);
+	void SetSize(cv::Size size);
 	//! Tries to determine the size automatically.
 	bool SetSizeAuto();
 	//! Adds an error message.
 	void AddError(const wxString &message);
 
-	void SetArea(CvPoint2D32f topleft, CvPoint2D32f bottomright) {}
+	void SetArea(cv::Point2f topleft, cv::Point2f bottomright) {}
 	void SetArea(double x1, double y1, double x2, double y2) {}
 
 };

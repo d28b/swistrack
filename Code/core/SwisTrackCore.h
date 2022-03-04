@@ -27,22 +27,22 @@ class SwisTrackCore {
 
 public:
 	//! A list of components type.
-	typedef std::list<Component*> tComponentList;
+	typedef std::list<Component *> tComponentList;
 	//! A list of data structures type.
-	typedef std::list<DataStructure*> tDataStructureList;
+	typedef std::list<DataStructure *> tDataStructureList;
 	//! A list of SwisTrackCoreInterface objects.
-	typedef std::list<SwisTrackCoreInterface*> tSwisTrackCoreInterfaceList;
+	typedef std::list<SwisTrackCoreInterface *> tSwisTrackCoreInterfaceList;
 	//! A map of ComponentCategory objects.
 	typedef std::map<wxString, ComponentCategory> tComponentCategoryMap;
 
 	tComponentList mAvailableComponents;					//!< The list of all available components.
 	tDataStructureList mDataStructures;						//!< The list of all available data structures.
 	tSwisTrackCoreInterfaceList mSwisTrackCoreInterfaces;	//!< The list of SwisTrackCoreInterface objects.
-	wxString mComponentConfigurationFolder;				//!< The path to the component configuration files, including the trailing slash.
+	wxString mComponentConfigurationFolder;					//!< The path to the component configuration files, including the trailing slash.
 	tComponentCategoryMap mComponentCategories;				//!< The component categories. (not used, TODO: read categories from XML file and put them here, then modify components to read categoryID from their XML file)
-	CommunicationInterface *mCommunicationInterface;		//!< The associated communication interface.
-	SwisTrackCoreTrigger *mTrigger;							//!< The associated trigger.
-	SwisTrackCoreEventRecorder *mEventRecorder;				//!< The associated event recorder.
+	CommunicationInterface * mCommunicationInterface;		//!< The associated communication interface.
+	SwisTrackCoreTrigger * mTrigger;						//!< The associated trigger.
+	SwisTrackCoreEventRecorder * mEventRecorder;			//!< The associated event recorder.
 	bool mTimeCritical;										//!< Whether one or more components would like more time. (writable by components, readable by the UI)
 
 	// Component categories
@@ -60,15 +60,13 @@ public:
 	ComponentCategory mCategoryOutput;
 
 	// Data structures
-	DataStructureInput mDataStructureInput;
-	DataStructureImage mDataStructureImageColor;
-	DataStructureImage mDataStructureImageGray;
-	DataStructureImage mDataStructureImageFFT;        // used by FFT modules (F. Schill 2014)
-	DataStructureImage mDataStructureImageBinary;
+	DataStructureInput mDataStructureInput;					//!< The channel with the input image.
+	DataStructureImage mDataStructureImageColor;			//!< A channel with a 3-channel BGR image.
+	DataStructureImage mDataStructureImageGray;				//!< A channel with a single-channel grayscale image.
+	DataStructureImage mDataStructureImageBinary;			//!< A channel with a single-channel black and white image.
 	DataStructureParticles mDataStructureParticles;
 	DataStructureTracks mDataStructureTracks;
 	DataStructureCommand mDataStructureCommands;
-
 
 	//! Constructor.
 	SwisTrackCore(wxString componentconfigurationfolder);
@@ -105,10 +103,10 @@ public:
 	void TriggerStop();
 
 	//! Writes the configuration to a XML document.
-	void ConfigurationWriteXML(wxXmlNode* configuration, ErrorList *xmlerr);
+	void ConfigurationWriteXML(wxXmlNode* configuration, ErrorList * xmlerr);
 
 	//! Returns the list of deployed components. Note that this list can only be read. To modify the list, you need to use a SwisTrackCoreEditor object.
-	const SwisTrackCore::tComponentList *GetDeployedComponents() {
+	const SwisTrackCore::tComponentList * GetDeployedComponents() {
 		return &mDeployedComponents;
 	}
 	//! Returns a component by name.

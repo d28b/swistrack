@@ -2,8 +2,7 @@
 #define THISCLASS Canvas
 
 #include <wx/image.h>
-#include <highgui.h>
-#include "ImageConversion.h"
+#include <opencv2/core.hpp>
 
 BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 	EVT_PAINT(THISCLASS::OnPaint)
@@ -33,8 +32,8 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 END_EVENT_TABLE()
 
 THISCLASS::Canvas(CanvasPanel *cp):
-		wxControl(cp, -1), mCanvasPanel(cp), mPopupMenu(), mDisplayRenderer(),
-		mMoveStarted(false), mMoveStartPoint() {
+	wxControl(cp, -1), mCanvasPanel(cp), mPopupMenu(), mDisplayRenderer(),
+	mMoveStarted(false), mMoveStartPoint() {
 
 	SetWindowStyle(wxNO_BORDER);
 
@@ -61,7 +60,7 @@ THISCLASS::Canvas(CanvasPanel *cp):
 	mPopupMenu.AppendSeparator();
 	mPopupMenu.Append(cID_SaveViewImageAs, wxT("Save displayed image as ..."));
 	mPopupMenu.Append(cID_SaveOriginalImageAs, wxT("Save original image as ..."));
-	mWriter.Open(wxT("displayOutput.avi"));
+	//mWriter.Open(wxT("displayOutput.avi"));
 
 	// Set non-bold font
 	wxFont f = GetFont();
@@ -69,7 +68,7 @@ THISCLASS::Canvas(CanvasPanel *cp):
 }
 
 THISCLASS::~Canvas() {
-	mWriter.Close();
+	//mWriter.Close();
 }
 
 void THISCLASS::SetDisplay(Display *display) {
@@ -88,7 +87,7 @@ void THISCLASS::UpdateView() {
 }
 
 wxSize THISCLASS::GetMaximumSize() {
-	CvSize size = mDisplayRenderer.GetSize();
+	cv::Size size = mDisplayRenderer.GetSize();
 	if (size.width < 32) {
 		size.width = 32;
 	}
@@ -118,10 +117,9 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 }
 
 bool THISCLASS::OnPaintImage(wxPaintDC &dc) {
-	IplImage *img = mDisplayRenderer.GetImage();
-	if (! img) {
-		return false;
-	}
+	cv::Mat img = mDisplayRenderer.GetImage();
+	if (img.empty()) return false;
+
 	// Uncomment to write to an AVI file.
 	// It would be nice if this was a gui, but it's not.
 	// It writes the contents of the display, so it includes all
@@ -129,103 +127,71 @@ bool THISCLASS::OnPaintImage(wxPaintDC &dc) {
 	// The filename is hardcoded and specified above.
 	//mWriter.WriteFrame(img);
 	// Create an image that has the size of the DC
-	wxSize dcsize = dc.GetSize();
-	int dw = dcsize.GetWidth();
-	int dh = dcsize.GetHeight();
+	wxSize dcSize = dc.GetSize();
+	int dw = dcSize.GetWidth();
+	int dh = dcSize.GetHeight();
 	wxImage wximg(dw, dh, false);
 
 	// Prepare the area of interest of the source image
 	int sx1 = -mViewOffset.x;
 	int sy1 = -mViewOffset.y;
-	if (sx1 < 0) {
-		sx1 = 0;
-	}
-	if (sy1 < 0) {
-		sy1 = 0;
-	}
-	if (sx1 > img->width) {
-		sx1 = img->width;
-	}
-	if (sy1 > img->height) {
-		sy1 = img->height;
-	}
+	if (sx1 < 0) sx1 = 0;
+	if (sy1 < 0) sy1 = 0;
+	if (sx1 > img.cols) sx1 = img.cols;
+	if (sy1 > img.rows) sy1 = img.rows;
+
 	int sx2 = -mViewOffset.x + dw;
 	int sy2 = -mViewOffset.y + dh;
-	if (sx2 < 0) {
-		sx2 = 0;
-	}
-	if (sy2 < 0) {
-		sy2 = 0;
-	}
-	if (sx2 > img->width) {
-		sx2 = img->width;
-	}
-	if (sy2 > img->height) {
-		sy2 = img->height;
-	}
+	if (sx2 < 0) sx2 = 0;
+	if (sy2 < 0) sy2 = 0;
+	if (sx2 > img.cols) sx2 = img.cols;
+	if (sy2 > img.rows) sy2 = img.rows;
 	int w = sx2 - sx1;
 	//int h=sy2-sy1;	// Not needed
 
 	// Prepare the area of interest of the destination image
 	int dx1 = mViewOffset.x;
 	int dy1 = mViewOffset.y;
-	if (dx1 < 0) {
-		dx1 = 0;
-	}
-	if (dy1 < 0) {
-		dy1 = 0;
-	}
-	if (dx1 > dw) {
-		dx1 = dw;
-	}
-	if (dy1 > dh) {
-		dy1 = dh;
-	}
-	int dx2 = mViewOffset.x + img->width;
-	int dy2 = mViewOffset.y + img->height;
-	if (dx2 < 0) {
-		dx2 = 0;
-	}
-	if (dy2 < 0) {
-		dy2 = 0;
-	}
-	if (dx2 > dw) {
-		dx2 = dw;
-	}
-	if (dy2 > dh) {
-		dy2 = dh;
-	}
+	if (dx1 < 0) dx1 = 0;
+	if (dy1 < 0) dy1 = 0;
+	if (dx1 > dw) dx1 = dw;
+	if (dy1 > dh) dy1 = dh;
+
+	int dx2 = mViewOffset.x + img.cols;
+	int dy2 = mViewOffset.y + img.rows;
+	if (dx2 < 0) dx2 = 0;
+	if (dy2 < 0) dy2 = 0;
+	if (dx2 > dw) dx2 = dw;
+	if (dy2 > dh) dy2 = dh;
 
 	// Convert the area of interest to a wximg
-	unsigned char *cw = wximg.GetData();
-	unsigned char *cr = (unsigned char *)img->imageData;
-	cr += sx1 * 3 + sy1 * img->widthStep;
+	unsigned char * cw = wximg.GetData();
 
 	// Top white area
 	for (int y = 0; y < dy1; y++) {
-		memset(cw, 255, dw*3);
+		memset(cw, 255, dw * 3);
 		cw += dw * 3;
 	}
 
 	// Image area
 	for (int y = dy1; y < dy2; y++) {
 		// White on the left
-		memset(cw, 255, dx1*3);
+		memset(cw, 255, dx1 * 3);
 		cw += dx1 * 3;
 
 		// Image
-		memcpy(cw, cr, w*3);
+		unsigned char * cr = img.ptr(sy1 - dy1 + y) + sx1 * 3;
+		memcpy(cw, cr, w * 3);
 		cw += w * 3;
-		cr += img->widthStep;
 
 		// White on the right
-		memset(cw, 255, (dw - dx2)*3);
+		memset(cw, 255, (dw - dx2) * 3);
 		cw += (dw - dx2) * 3;
 	}
 
 	// Bottom white area
 	for (int y = dy2; y < dh; y++) {
-		memset(cw, 255, dw*3);
+		memset(cw, 255, dw * 3);
 		cw += dw * 3;
 	}
 
@@ -245,39 +211,30 @@ void THISCLASS::OnMouseLeftUp(wxMouseEvent &event) {
 }
 
 void THISCLASS::OnMouseMove(wxMouseEvent &event) {
-	if (! mMoveStarted) {
-		return;
-	}
+	if (! mMoveStarted) return;
+
 	if (! event.LeftIsDown()) {
 		mMoveStarted = false;
 		return;
 	}
-	wxPoint nowpoint = event.GetPosition();
 
-	wxPoint oldviewoffset = mViewOffset;
-	mViewOffset.x += nowpoint.x - mMoveStartPoint.x;
-	mViewOffset.y += nowpoint.y - mMoveStartPoint.y;
-	mMoveStartPoint = nowpoint;
+	wxPoint nowPoint = event.GetPosition();
+	wxPoint oldViewOffset = mViewOffset;
+	mViewOffset.x += nowPoint.x - mMoveStartPoint.x;
+	mViewOffset.y += nowPoint.y - mMoveStartPoint.y;
+	mMoveStartPoint = nowPoint;
 
-	if (mViewOffset.x > 0) {
-		mViewOffset.x = 0;
-	}
-	if (mViewOffset.y > 0) {
-		mViewOffset.y = 0;
-	}
+	if (mViewOffset.x > 0) mViewOffset.x = 0;
+	if (mViewOffset.y > 0) mViewOffset.y = 0;
 
-	wxSize dcsize = this->GetSize();
-	CvSize imagesize = mDisplayRenderer.GetSize();
-	if (mViewOffset.x < dcsize.GetWidth() - imagesize.width) {
-		mViewOffset.x = dcsize.GetWidth() - imagesize.width;
-	}
-	if (mViewOffset.y < dcsize.GetHeight() - imagesize.height) {
-		mViewOffset.y = dcsize.GetHeight() - imagesize.height;
-	}
+	wxSize dcSize = this->GetSize();
+	cv::Size imageSize = mDisplayRenderer.GetSize();
+	if (mViewOffset.x < dcSize.GetWidth() - imageSize.width)
+		mViewOffset.x = dcSize.GetWidth() - imageSize.width;
+	if (mViewOffset.y < dcSize.GetHeight() - imageSize.height)
+		mViewOffset.y = dcSize.GetHeight() - imageSize.height;
 
-	if (mViewOffset == oldviewoffset) {
-		return;
-	}
+	if (mViewOffset == oldViewOffset) return;
 	Refresh(true);
 }
 
@@ -308,30 +265,21 @@ void THISCLASS::OnSize(wxSizeEvent &event) {
 
 void THISCLASS::OnMenuSaveOriginalImageAs(wxCommandEvent& event) {
 	// Get the current image
-	Display *display = mCanvasPanel->mCurrentDisplay;
-	if (display == 0) {
-		return;
-	}
-	IplImage *img = display->mMainImage;
-	if (img == 0) {
-		return;
-	}
+	Display * display = mCanvasPanel->mCurrentDisplay;
+	if (display == 0) return;
+	cv::Mat img = display->mMainImage;
+	if (img.empty()) return;
 
-	// Convert and make sure we have a *copy* the current image (since the file dialog will allow other threads to run, which may modify the image)
-	IplImage *imgcopy = ImageConversion::ToBGR(img);
-	if (imgcopy == img) {
-		imgcopy = cvCloneImage(img);
-	}
+	// Copy the current image (since the file dialog will allow other threads to run, which may modify the image)
+	cv::Mat imgCopy = CopyToBGR(img);
 
 	// Show the file save dialog
-	wxFileDialog *dlg = new wxFileDialog(this, wxT("Save original image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp|All files|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
-	if (dlg->ShowModal() != wxID_OK) {
-		return;
-	}
+	wxFileDialog * dlg = new wxFileDialog(this, wxT("Save original image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp|All files|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
+	if (dlg->ShowModal() != wxID_OK) return;
 
 	// Save the image
 	wxString filename = dlg->GetPath();
-	if (! cvSaveImage(filename.mb_str(wxConvFile), imgcopy)) {
+	if (! cv::imwrite(filename.ToStdString(), imgCopy)) {
 		wxMessageDialog dlg(this, wxT("The file could not be saved!"), wxT("Save original image"), wxOK);
 		dlg.ShowModal();
 		return;
@@ -340,31 +288,38 @@ void THISCLASS::OnMenuSaveOriginalImageAs(wxCommandEvent& event) {
 
 void THISCLASS::OnMenuSaveViewImageAs(wxCommandEvent& event) {
 	// Copy the current image (since the file dialog will allow other threads to run)
-	IplImage *img = mDisplayRenderer.GetImage();
+	cv::Mat img = mDisplayRenderer.GetImage();
+	if (img.empty()) return;
 
-	if (img == 0) {
-		return;
-	}
-
-	// Convert and make sure we have a *copy* the current image (since the file dialog will allow other threads to run, which may modify the image)
-	IplImage *imgcopy = ImageConversion::ToBGR(img);
-	if (imgcopy == img) {
-		imgcopy = cvCloneImage(img);
-	}
+	// Copy the current image (since the file dialog will allow other threads to run, which may modify the image)
+	cv::Mat imgCopy = CopyToBGR(img);
 
 	// Show the file save dialog
 	wxFileDialog *dlg = new wxFileDialog(this, wxT("Save displayed image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp|All files|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
-	if (dlg->ShowModal() != wxID_OK) {
-		return;
-	}
+	if (dlg->ShowModal() != wxID_OK) return;
 
 	// Save the image
 	wxString filename = dlg->GetPath();
-	if (! cvSaveImage(filename.mb_str(wxConvFile), imgcopy)) {
+	if (! cv::imwrite(filename.ToStdString(), imgCopy)) {
 		wxMessageDialog dlg(this, wxT("The file could not be saved!"), wxT("Save displayed image"), wxOK);
 		dlg.ShowModal();
 		return;
 	}
+}
+
+cv::Mat THISCLASS::CopyToBGR(cv::Mat src) {
+	if (src.channels() == 3) return src.clone();
+
+	if (src.channels() == 1) {
+		cv::Mat dest = cv::Mat(src.size(), CV_8UC3);
+		cv::cvtColor(src, dest, cv::COLOR_GRAY2BGR);
+		return dest;
+	}
+
+	cv::Mat dest = cv::Mat(src.size(), CV_8UC3);
+	int fromTo[] = {0, 0, 0, 1, 0, 2};
+	cv::mixChannels(&src, 1, &dest, 1, fromTo, 3);
+	return dest;
 }
 
 void THISCLASS::OnMenuFlipVertically(wxCommandEvent& event) {
@@ -387,7 +342,7 @@ void THISCLASS::OnMenuZoom(wxCommandEvent& event) {
 	} else if (event.GetId() == cID_Zoom10) {
 		mDisplayRenderer.SetScalingFactor(0.1);
 	} else {
-		mDisplayRenderer.SetScalingFactorMax(cvSize(mCanvasPanel->mAvailableSpace.GetWidth(), mCanvasPanel->mAvailableSpace.GetHeight()));
+		mDisplayRenderer.SetScalingFactorMax(cv::Size(mCanvasPanel->mAvailableSpace.GetWidth(), mCanvasPanel->mAvailableSpace.GetHeight()));
 	}
 	UpdateView();
 }

@@ -8,12 +8,12 @@
 	<configuration>
 		<parameter type="dropdownlist">
 			<name>Channel</name>
-			<label>Channel</label>
+			<label>Channel (if color image)</label>
 			<items>
-				<item key="0">All (convert to grayscale)</item>
-				<item key="3">Red</item>
-				<item key="2">Green</item>
-				<item key="1">Blue</item>
+				<item key="-1">Mean of all channels</item>
+				<item key="0">Red</item>
+				<item key="1">Green</item>
+				<item key="2">Blue</item>
 			</items>
 			<reloadable>true</reloadable>
 		</parameter>

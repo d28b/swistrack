@@ -10,11 +10,12 @@
 #include "ConfigurationParameterFactory.h"
 #include "ConfigurationXML.h"
 
-THISCLASS::ConfigurationPanel(wxWindow *parent, SwisTrack *st, Component *c):
-		wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize),
-		mSwisTrack(st), mComponent(c) {
+THISCLASS::ConfigurationPanel(wxWindow * parent, SwisTrack * st, Component * c):
+	wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize),
+	mSwisTrack(st), mComponent(c) {
 
 	// Prepare
+	SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_DESKTOP));
 	SetSizer(new wxBoxSizer(wxVERTICAL));
 	wxStaticLine *line = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(230, 2), wxLI_HORIZONTAL);
 	GetSizer()->Add(line, 0, wxEXPAND | wxALL, 0);
@@ -145,9 +146,7 @@ void THISCLASS::ReadConfigurationNode(wxXmlNode *node) {
 }
 
 void THISCLASS::ReadParameter(wxXmlNode *node) {
-	if (! node) {
-		return;
-	}
+	if (! node) return;
 
 	// Find out the type and create a new object
 	wxString type = GetPropertyString(node, wxT("type"), wxT(""));
@@ -167,16 +166,12 @@ void THISCLASS::ReadParameter(wxXmlNode *node) {
 }
 
 wxString THISCLASS::GetPropertyString(wxXmlNode *node, const wxString &name, const wxString &defvalue) {
-	if (! node) {
-		return defvalue;
-	}
+	if (! node) return defvalue;
 
 	// Find out the type
-	wxXmlProperty *prop = node->GetProperties();
+	wxXmlAttribute * prop = node->GetAttributes();
 	while (prop) {
-		if (prop->GetName() == name) {
-			return prop->GetValue();
-		}
+		if (prop->GetName() == name) return prop->GetValue();
 		prop = prop->GetNext();
 	}
 

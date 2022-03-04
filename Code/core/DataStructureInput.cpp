@@ -1,9 +1,7 @@
 #include "DataStructureInput.h"
 #define THISCLASS DataStructureInput
 
-void THISCLASS::SetFrameTimestamp(wxDateTime d) {
-	if (mFrameTimestamp.IsValid()) {
-		mTimeSinceLastFrame = d - mFrameTimestamp;
-	}
-	mFrameTimestamp = d;
+void THISCLASS::SetFrameTimestamp(wxDateTime timestamp) {
+	mTimeSinceLastFrame = mFrameTimestamp.IsValid() ? timestamp - mFrameTimestamp : wxTimeSpan(0);
+	mFrameTimestamp = timestamp;
 }

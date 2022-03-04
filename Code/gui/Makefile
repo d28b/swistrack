@@ -13,11 +13,11 @@ FILES_CPP := $(wildcard *.cpp)
 FILES_H   := $(wildcard *.h)
 FILES_O   := $(FILES_CPP:.cpp=.o)
 FILES_D   := $(FILES_CPP:.cpp=.d)
-FILES_A   := ../core/libSwisTrackCore.a ../../3rdParty/cvblobslib_v6p1/libCVBlobs.a ../../3rdParty/libtsai/libtsai.a ../../3rdParty/camshift_wrapper/libCamshiftWrapper.a 
+FILES_A   := ../core/libSwisTrackCore.a ../../3rdParty/libtsai/libtsai.a
 
 # Flags
 override CXXFLAGS  += -g -Wall $(CXXFLAGS_ADD)
-override CPPFLAGS  += $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -isystem/usr/include -I../core $(CPPFLAGS_ADD)
+override CPPFLAGS  += $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -I../core $(CPPFLAGS_ADD)
 override LDLIBS    += $(OPENCV_LDLIBS) $(WXWIDGETS_LDLIBS) -lm $(LDLIBS_ADD)
 override LDFLAGS   += $(LDFLAGS_ADD)
 

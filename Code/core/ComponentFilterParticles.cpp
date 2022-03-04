@@ -9,80 +9,59 @@
 
 using namespace std;
 
-THISCLASS::ComponentFilterParticles(SwisTrackCore *stc):
-		Component(stc, wxT("FilterParticles")),
-		mParticles(), mOutputImage(0),
-		mDisplayOutput(wxT("Output"), wxT("Particles"))
+THISCLASS::ComponentFilterParticles(SwisTrackCore * stc):
+	Component(stc, wxT("FilterParticles")),
+	mParticles(),
+	mDisplayOutput(wxT("Output"), wxT("Particles")) {
 
-{
 	// Data structure relations
 	mCategory = &(mCore->mCategoryParticleDetection);
 	AddDataStructureRead(&(mCore->mDataStructureParticles));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
-	
 	AddDisplay(&mDisplayOutput);
-	Initialize();						// Read the XML configuration file
+
+	Initialize();
 }
 
-THISCLASS::~ComponentFilterParticles()
-{
-
+THISCLASS::~ComponentFilterParticles() {
 }
 
-void THISCLASS::OnStart()
-{
-	THISCLASS::OnReloadConfiguration();
-
+void THISCLASS::OnStart() {
+	OnReloadConfiguration();
 }
 
-void THISCLASS::OnReloadConfiguration()
-{
-
-
-  mMaxParticleArea = GetConfigurationDouble(wxT("MaxParticleArea"), 100);
-  mMinParticleArea = GetConfigurationDouble(wxT("MinParticleArea"), 100);
-  cout << "Value: " << mMinParticleArea <<" " << mMaxParticleArea << endl;
-
+void THISCLASS::OnReloadConfiguration() {
+	mMaxParticleArea = GetConfigurationDouble(wxT("MaxParticleArea"), 100);
+	mMinParticleArea = GetConfigurationDouble(wxT("MinParticleArea"), 100);
 }
 
-void THISCLASS::OnStep()
-{
-  IplImage *inputImage = mCore->mDataStructureInput.mImage;
-  if (mOutputImage == NULL) {
-    mOutputImage = cvCloneImage(inputImage);
-  }
-  cvCopy(mCore->mDataStructureInput.mImage, mOutputImage);
-  mParticles.clear();
-  DataStructureParticles::tParticleVector * particles = mCore->mDataStructureParticles.mParticles;
-  for (DataStructureParticles::tParticleVector::iterator pIt = 
-	 particles->begin(); pIt != particles->end(); pIt++) {	
-    const Particle & p = *pIt;
-    cout << "Area: " << p.mArea << endl;
-    cout << "Min: " << mMinParticleArea << endl;
-    cout << "Max: " << mMaxParticleArea << endl;
-    if (p.mArea >= mMinParticleArea && p.mArea <= mMaxParticleArea) {
-      cout << "Adding particle " << endl;
-      mParticles.push_back(p);
-      cvCircle(mOutputImage, cvPointFrom32f(p.mCenter), 10, CV_RGB(0, 255, 0), 3, CV_AA, 0 );
-    }
-    cvCircle(mOutputImage, cvPointFrom32f(p.mCenter), 10, CV_RGB(255, 0, 0), 3, CV_AA, 0 );
-  }
+void THISCLASS::OnStep() {
+	mParticles.clear();
+	for (auto particle : *mCore->mDataStructureParticles.mParticles) {
+		if (particle.mArea < mMinParticleArea) continue;
+		if (particle.mArea > mMaxParticleArea) continue;
+		mParticles.push_back(particle);
+	}
 
-  mCore->mDataStructureParticles.mParticles = &mParticles;
-  DisplayEditor de(&mDisplayOutput);
-  if (de.IsActive()) {
-    //de.SetParticles(&mParticles);
-    de.SetMainImage(mOutputImage);
+	mCore->mDataStructureParticles.mParticles = &mParticles;
+	DisplayEditor de(&mDisplayOutput);
+	if (! de.IsActive()) return;
 
-  }
+	cv::Mat outputImage = mCore->mDataStructureInput.mImage.clone();
+	for (auto particle : *mCore->mDataStructureParticles.mParticles)
+		cv::circle(outputImage, cv::Point(particle.mCenter), 10, CV_RGB(255, 0, 0), 3, cv::LINE_AA, 0);
+
+	for (auto particle : mParticles)
+		cv::circle(outputImage, cv::Point(particle.mCenter), 10, CV_RGB(0, 255, 0), 3, cv::LINE_AA, 0);
+
+	//de.SetParticles(&mParticles);
+	de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
-
 }
 
 void THISCLASS::OnStop() {
-  cvReleaseImage(&mOutputImage);
 }
 
 

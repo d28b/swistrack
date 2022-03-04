@@ -3,11 +3,11 @@
 
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentSimulationParticles(SwisTrackCore *stc):
-		Component(stc, wxT("SimulationParticles")),
-		mCameraOrigin(cvPoint2D32f(0, 0)), mCameraRotation(0), mCameraPixelSize(1), mCameraSize(cvSize2D32f(640, 480)),
-		mSimulationParticles(0), mParticles(),
-		mDisplayOutput(wxT("Output"), wxT("Particle Simulation: Output")) {
+THISCLASS::ComponentSimulationParticles(SwisTrackCore * stc):
+	Component(stc, wxT("SimulationParticles")),
+	mCameraOrigin(0, 0), mCameraRotation(0), mCameraPixelSize(1), mCameraSize(640, 480),
+	mSimulationParticles(0), mParticles(),
+	mDisplayOutput(wxT("Output"), wxT("Particle Simulation: Output")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryParticleDetection);

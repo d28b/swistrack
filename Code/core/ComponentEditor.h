@@ -36,7 +36,7 @@ public:
 	bool SetConfigurationString(const wxString &key, const wxString &value);
 	//! Sets a date in the configuration.
 	bool SetConfigurationDate(const wxString &key, const wxDateTime &value);
-	
+
 	bool SetConfigurationColor(const wxString &key, const wxColor &value);
 
 private:

@@ -5,7 +5,7 @@ class Display;
 
 #include <wx/string.h>
 #include <list>
-#include <cv.h>
+#include <opencv2/core.hpp>
 #include <wx/datetime.h>
 #include "DisplaySubscriberInterface.h"
 #include "DataStructureParticles.h"
@@ -21,7 +21,7 @@ public:
 	typedef std::list<DisplaySubscriberInterface *> tSubscriberList;
 
 	// Internal display information
-	Component *mComponent;			//!< The associated component
+	Component * mComponent;			//!< The associated component
 	wxString mName;					//!< The internal name of this display.
 	wxString mDisplayName;			//!< The name displayed to the user.
 	tSubscriberList mSubscribers;	//!< The list of subscribers.
@@ -35,13 +35,13 @@ public:
 	ErrorList mErrors;				//!< This holds more information display errors (e.g. wrong image format, ...).
 
 	// Display window
-	CvPoint mTopLeft;				//!< The offset at which the display starts. (TODO: implement this in the renderer)
-	CvSize mSize;					//!< The size of the display.
+	cv::Point mTopLeft;				//!< The offset at which the display starts. (TODO: implement this in the renderer)
+	cv::Size mSize;					//!< The size of the display.
 
 	// Images
 	double mImagePixelSize;			//!< The size of a pixel in the image. (not implemented and probably not needed)
-	IplImage *mMainImage;			//!< The main image. This is always assumed to be at position (0, 0).
-	IplImage *mMaskImage;			//!< The mask image, if any.
+	cv::Mat mMainImage;				//!< The main image. This is always assumed to be at position (0, 0).
+	cv::Mat mMaskImage;				//!< The mask image, if any.
 
 	// Particles
 	DataStructureParticles::tParticleVector mParticles;			//!< The particles in pixel coordinates.
@@ -50,14 +50,14 @@ public:
 	bool mTrajectories;				//!< Whether to draw the trajectories in this image. The current trajectories will be drawn.
 
 	//! Constructor.
-	Display(const wxString &name, const wxString &displayname);
+	Display(const wxString & name, const wxString & displayname);
 	//! Destructor.
 	~Display();
 
 	//! Adds a subscriber.
-	void Subscribe(DisplaySubscriberInterface *disi);
+	void Subscribe(DisplaySubscriberInterface * disi);
 	//! Removes a subscriber.
-	void Unsubscribe(DisplaySubscriberInterface *disi);
+	void Unsubscribe(DisplaySubscriberInterface * disi);
 
 	//! Returns if the this display is active (i.e. someone wants its contents).
 	void SetActive() {

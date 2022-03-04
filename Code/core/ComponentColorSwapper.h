@@ -1,11 +1,7 @@
 #ifndef HEADER_ComponentColorSwapper
 #define HEADER_ComponentColorSwapper
 
-#include <cv.h>
-//#include <cvaux.hpp>
-extern "C" {
-#include "camshift_wrapper.h"
-}
+#include <opencv2/core.hpp>
 #include "Component.h"
 #include "DataStructureParticles.h"
 
@@ -15,7 +11,7 @@ class ComponentColorSwapper: public Component {
 
 public:
 	//! Constructor.
-	ComponentColorSwapper(SwisTrackCore *stc);
+	ComponentColorSwapper(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentColorSwapper();
 
@@ -25,17 +21,15 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentColorSwapper(mCore);
 	}
 
 private:
-	IplImage * mOutputImage;
-	wxColour mSourceColor;
-	wxColour mTargetColor;
+	cv::Scalar mSourceColor;
+	cv::Scalar mTargetColor;
 	Display mDisplayOutput;
-
-	
 };
 
 #endif

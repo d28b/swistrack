@@ -12,9 +12,9 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterOutputFile(wxWindow* parent):
-		ConfigurationParameter(parent),
-		mTextCtrl(0),
-		mValueDefault(wxT("")) {
+	ConfigurationParameter(parent),
+	mTextCtrl(0),
+	mValueDefault(wxT("")) {
 
 }
 

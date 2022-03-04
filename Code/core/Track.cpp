@@ -4,7 +4,7 @@ Track::Track() {
 }
 
 /** \brief Constructor - id number id*/
-Track::Track(int idnumber) :  mLastUpdateFrame(0), mColorModel(0), trajectory(0) {
+Track::Track(int idnumber) :  mLastUpdateFrame(0), mColorModel(), trajectory(0) {
 	maxlength = 50; // maximum length of trajectory to store
 	//printf("%f %f\n",trajectory.at(0).x,trajectory.at(0).y);
 	mID = idnumber;
@@ -17,7 +17,7 @@ Track::~Track() {
 }
 
 /** \brief Add a point to the current track (max track) */
-void Track::AddPoint(CvPoint2D32f p, int frameNumber) {
+void Track::AddPoint(cv::Point2f p, int frameNumber) {
 	trajectory.push_back(p);
 	if (maxlength != -1 && (int)(trajectory.size()) > maxlength)
 		trajectory.erase(trajectory.begin());
@@ -26,25 +26,19 @@ void Track::AddPoint(CvPoint2D32f p, int frameNumber) {
 }
 
 void Track::SetMaxLength(int length) {
-  maxlength = length;
+	maxlength = length;
 }
 
-void Track:: SetColorModel(CvHistogram * model) {
-  cvReleaseHist(&mColorModel);
-  mColorModel = model;
+void Track:: SetColorModel(cv::Mat colorModel) {
+	mColorModel = colorModel;
 }
 
-void Track::SetCritPoint(CvPoint2D32f *p) {
+void Track::SetCritPoint(cv::Point2f *p) {
 	critpoint.x = p->x;
 	critpoint.y = p->y;
 }
 
-double Track::GetDist(CvPoint2D32f *p1, CvPoint2D32f *p2) {
-	return (
-	           (p1->x - p2->x)*
-	           (p1->x - p2->x)
-	           +
-	           (p1->y - p2->y)*
-	           (p1->y - p2->y)
-	       );
+double Track::GetDist(cv::Point2f *p1, cv::Point2f *p2) {
+	return (p1->x - p2->x) * (p1->x - p2->x) +
+	       (p1->y - p2->y) * (p1->y - p2->y);
 }

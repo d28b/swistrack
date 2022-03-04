@@ -4,8 +4,7 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <algorithm>
-#include <cv.h>
-#include <highgui.h>
+#include <opencv2/core.hpp>
 #include "SwisTrackCoreEditor.h"
 #include "ComponentEditor.h"
 
@@ -15,9 +14,9 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterVideoFormat(wxWindow* parent):
-		ConfigurationParameter(parent),
-		mTextCtrl(0), mButton(0),
-		mValueDefault(wxT("")) {
+	ConfigurationParameter(parent),
+	mTextCtrl(0), mButton(0),
+	mValueDefault(wxT("")) {
 
 }
 
@@ -47,9 +46,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 }
 
 void THISCLASS::OnUpdate(wxWindow *updateprotection) {
-	if (updateprotection == mTextCtrl) {
-		return;
-	}
+	if (updateprotection == mTextCtrl) return;
 	wxString value = mComponent->GetConfigurationString(mName, mValueDefault);
 	mTextCtrl->SetValue(value);
 }
@@ -60,7 +57,7 @@ bool THISCLASS::ValidateNewValue() {
 
 bool THISCLASS::CompareNewValue() {
 	wxString value = mComponent->GetConfigurationString(mName, mValueDefault);
-	return (value == mNewValue);
+	return value == mNewValue;
 }
 
 void THISCLASS::OnSetNewValue() {
@@ -69,11 +66,12 @@ void THISCLASS::OnSetNewValue() {
 }
 
 void THISCLASS::OnButtonClicked(wxCommandEvent& event) {
-	CvVideoWriter *writer = cvCreateVideoWriter("temp.avi", -1, 15, cvSize(640, 480));
-	cvReleaseVideoWriter(&writer);
-	CvCapture *capture = cvCaptureFromFile("temp.avi");
-	double fourcc = cvGetCaptureProperty(capture, CV_CAP_PROP_FOURCC);
-	cvReleaseCapture(&capture);
+	cv::VideoWriter writer("temp.avi", -1, 15, cv::Size(640, 480));
+	writer.release();
+
+	cv::VideoCapture capture("temp.avi");
+	double fourcc = capture.get(cv::CAP_PROP_FOURCC);
+	capture.release();
 
 	mNewValue = wxString::Format(wxT("%f"), fourcc);
 	ValidateNewValue();

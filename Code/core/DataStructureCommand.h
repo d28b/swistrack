@@ -2,7 +2,7 @@
 #define HEADER_DataStructureCommand
 
 #include <vector>
-#include <cv.h>
+#include <opencv2/opencv.hpp>
 #include "DataStructure.h"
 #include "Command.h"
 
@@ -13,7 +13,7 @@ public:
 	//! Particle vector type.
 	typedef std::vector<Command> tCommandVector;
 
-	tCommandVector *mCommands;	//!< Vector of particles.
+	tCommandVector * mCommands;	//!< Vector of particles.
 
 	//! Constructor.
 	DataStructureCommand(): DataStructure(wxT("Commands"), wxT("Commands")), mCommands(0) {}

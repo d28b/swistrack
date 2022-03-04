@@ -1,13 +1,13 @@
 #include "ComponentAdaptiveBackgroundSubtractionGray.h"
 #define THISCLASS ComponentAdaptiveBackgroundSubtractionGray
 
-#include <highgui.h>
+#include <opencv2/highgui.hpp>
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentAdaptiveBackgroundSubtractionGray(SwisTrackCore *stc):
-		Component(stc, wxT("AdaptiveBackgroundSubtractionGray")),
-		mBackgroundImageMean(cvScalarAll(0)), mCorrectMean(true), mUpdateProportion(0), mMode(sMode_AbsDiff),
-		mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
+THISCLASS::ComponentAdaptiveBackgroundSubtractionGray(SwisTrackCore * stc):
+	Component(stc, wxT("AdaptiveBackgroundSubtractionGray")),
+	mBackgroundImageMean(0, 0, 0, 0), mCorrectMean(true), mUpdateProportion(0), mMode(sMode_AbsDiff),
+	mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryPreprocessingGray);
@@ -26,7 +26,7 @@ void THISCLASS::OnStart() {
 	OnReloadConfiguration();
 
 	// Force the copy of the input in the background in the first step
-	mBackgroundImage = NULL;
+	mBackgroundImage.release();
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -46,68 +46,66 @@ void THISCLASS::OnReloadConfiguration() {
 
 	// Whether to take the next image as background image
 	if (GetConfigurationBool(wxT("ResetBackgroundImage"), false)) {
-		cvReleaseImage(&mBackgroundImage);
-		mBackgroundImage = NULL;
+		mBackgroundImage.release();
 		mConfiguration[wxT("ResetBackgroundImage")] = wxT("false");
 	}
 }
 
 void THISCLASS::OnStep() {
 	// Get and check input image
-	IplImage *inputimage = mCore->mDataStructureImageGray.mImage;
-	if (! inputimage) {
+	cv::Mat inputImage = mCore->mDataStructureImageGray.mImage;
+	if (inputImage.empty()) {
 		AddError(wxT("No input image."));
 		return;
 	}
-	if (inputimage->nChannels != 1) {
+
+	if (inputImage.channels() != 1) {
 		AddError(wxT("The input image is not a grayscale image."));
 		return;
 	}
 
 	// Check and update the background
-	if (! mBackgroundImage) {
-		mBackgroundImage = cvCloneImage(inputimage);
+	if (mBackgroundImage.empty()) {
+		mBackgroundImage = inputImage.clone();
 	} else if (mUpdateProportion > 0) {
-		if ((cvGetSize(inputimage).height != cvGetSize(mBackgroundImage).height) || (cvGetSize(inputimage).width != cvGetSize(mBackgroundImage).width)) {
+		if (inputImage.rows != mBackgroundImage.rows || inputImage.cols != mBackgroundImage.cols) {
 			AddError(wxT("Input and background images do not have the same size."));
 			return;
 		}
 
-		cvAddWeighted(inputimage, mUpdateProportion, mBackgroundImage, 1.0 - mUpdateProportion, 0, mBackgroundImage);
+		cv::addWeighted(inputImage, mUpdateProportion, mBackgroundImage, 1.0 - mUpdateProportion, 0, mBackgroundImage);
 	}
 
-	try {
-		// Correct the tmpImage with the difference in image mean
-		if (mCorrectMean) {
-			mBackgroundImageMean = cvAvg(mBackgroundImage);
-			CvScalar tmpScalar = cvAvg(inputimage);
-			cvAddS(inputimage, cvScalar(mBackgroundImageMean.val[0] - tmpScalar.val[0]), inputimage);
-		}
-
-		// Background subtraction
-		if (mMode == sMode_SubImageBackground) {
-			cvSub(inputimage, mBackgroundImage, inputimage);
-		} else if (mMode == sMode_SubBackgroundImage) {
-			cvSub(mBackgroundImage, inputimage, inputimage);
-		} else {
-			cvAbsDiff(inputimage, mBackgroundImage, inputimage);
-		}
-	} catch (...) {
-		AddError(wxT("Background subtraction failed."));
+	// Correct the tmpImage with the difference in image mean
+	cv::Mat intermediateImage;
+	if (mCorrectMean) {
+		mBackgroundImageMean = cv::mean(mBackgroundImage);
+		cv::Scalar tmpScalar = cv::mean(inputImage);
+		intermediateImage = inputImage + cv::Scalar(mBackgroundImageMean.val[0] - tmpScalar.val[0]);
+	} else {
+		intermediateImage = inputImage;
 	}
+
+	// Background subtraction
+	cv::Mat outputImage;
+	if (mMode == sMode_SubImageBackground) {
+		outputImage = inputImage - mBackgroundImage;
+	} else if (mMode == sMode_SubBackgroundImage) {
+		outputImage = mBackgroundImage - inputImage;
+	} else {
+		cv::absdiff(intermediateImage, mBackgroundImage, outputImage);
+	}
+
+	mCore->mDataStructureImageGray.mImage = outputImage;
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(inputimage);
-	}
+	if (de.IsActive()) de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-	if (mBackgroundImage) {
-		cvReleaseImage(&mBackgroundImage);
-	}
+	mBackgroundImage.release();
 }

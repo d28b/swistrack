@@ -14,10 +14,10 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 END_EVENT_TABLE()
 
 THISCLASS::ConfigurationParameterPointInteger(wxWindow* parent):
-		ConfigurationParameter(parent),
-		mValueMinX(0), mValueMinY(0),
-		mValueMaxX(640), mValueMaxY(480),
-		mValueDefaultX(0), mValueDefaultY(0) {
+	ConfigurationParameter(parent),
+	mValueMinX(0), mValueMinY(0),
+	mValueMaxX(640), mValueMaxY(480),
+	mValueDefaultX(0), mValueDefaultY(0) {
 
 }
 
@@ -77,12 +77,10 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 	int valuex = mComponent->GetConfigurationInt(mName + wxT(".x"), mValueDefaultX);
 	int valuey = mComponent->GetConfigurationInt(mName + wxT(".y"), mValueDefaultY);
-	if (updateprotection != mSpinCtrlX) {
+	if (updateprotection != mSpinCtrlX)
 		mSpinCtrlX->SetValue(valuex);
-	}
-	if (updateprotection != mSpinCtrlY) {
+	if (updateprotection != mSpinCtrlY)
 		mSpinCtrlY->SetValue(valuey);
-	}
 }
 
 bool THISCLASS::ValidateNewValueX() {
@@ -93,6 +91,7 @@ bool THISCLASS::ValidateNewValueX() {
 		mNewValueX = mValueMinX;
 		valid = false;
 	}
+
 	if (mNewValueX > mValueMaxX) {
 		mNewValueX = mValueMaxX;
 		valid = false;
@@ -109,6 +108,7 @@ bool THISCLASS::ValidateNewValueY() {
 		mNewValueY = mValueMinY;
 		valid = false;
 	}
+
 	if (mNewValueY > mValueMaxY) {
 		mNewValueY = mValueMaxY;
 		valid = false;
@@ -131,28 +131,18 @@ void THISCLASS::OnSetNewValue() {
 
 void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	mNewValueX = mSpinCtrlX->GetValue();
-	if (ValidateNewValueX()) {
-		mSpinCtrlX->SetOwnForegroundColour(*wxBLACK);
-	} else {
-		mSpinCtrlX->SetOwnForegroundColour(*wxRED);
-	}
+	mSpinCtrlX->SetOwnForegroundColour(ValidateNewValueX() ? wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) : *wxRED);
 	mSpinCtrlX->Refresh();
 
 	mNewValueY = mSpinCtrlY->GetValue();
-	if (ValidateNewValueY()) {
-		mSpinCtrlX->SetOwnForegroundColour(*wxBLACK);
-	} else {
-		mSpinCtrlX->SetOwnForegroundColour(*wxRED);
-	}
+	mSpinCtrlY->SetOwnForegroundColour(ValidateNewValueY() ? wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) : *wxRED);
 	mSpinCtrlX->Refresh();
 
-	if (CompareNewValue()) {
-		return;
-	}
+	if (CompareNewValue()) return;
 	if (event.GetId() == cID_X) {
 		SetNewValue(mSpinCtrlX);
 	} else {
-		SetNewValue(mSpinCtrlX);
+		SetNewValue(mSpinCtrlY);
 	}
 }
 

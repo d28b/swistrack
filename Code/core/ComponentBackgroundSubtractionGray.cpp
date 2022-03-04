@@ -1,14 +1,15 @@
 #include "ComponentBackgroundSubtractionGray.h"
 #define THISCLASS ComponentBackgroundSubtractionGray
 
-#include <highgui.h>
+#include <opencv2/highgui.hpp>
 #include "DisplayEditor.h"
+#include "ImageTools.h"
 
-THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore *stc):
-		Component(stc, wxT("BackgroundSubtractionGray")),
-		mBackgroundImage(0), mBackgroundImageMean(cvScalarAll(0)),
-		mCorrectMean(true), mMode(sMode_AbsDiff),
-		mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
+THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore * stc):
+	Component(stc, wxT("BackgroundSubtractionGray")),
+	mBackgroundImage(), mBackgroundImageMean(cv::Scalar::all(0)),
+	mCorrectMean(true), mMode(sMode_AbsDiff),
+	mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryPreprocessingGray);
@@ -24,25 +25,7 @@ THISCLASS::~ComponentBackgroundSubtractionGray() {
 }
 
 void THISCLASS::OnStart() {
-	// Load the background image
-	wxString filename_string = GetConfigurationString(wxT("BackgroundImage"), wxT(""));
-	wxFileName filename = mCore->GetProjectFileName(filename_string);
-	if (filename.IsOk()) {
-		mBackgroundImage = cvLoadImage(filename.GetFullPath().mb_str(wxConvFile), CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
-	}
-	if (! mBackgroundImage) {
-		AddError(wxT("Cannot open background image."));
-		return;
-	}
-
-	// Check the background image
-	// We explicitely do not convert image to grayscale automatically, as this is likely to be a configuration error of the user (e.g. wrong background selected). In addition, the user can easily convert a file to grayscale.
-	if (mBackgroundImage->nChannels != 1) {
-		AddError(wxT("Background image is not grayscale."));
-		return;
-	}
-
-	// Read the reloadable parameters
+	mBackgroundImage = LoadConfigurationGrayscaleImage(wxT("BackgroundImage"), wxT("Background image"));
 	OnReloadConfiguration();
 }
 
@@ -62,64 +45,60 @@ void THISCLASS::OnReloadConfiguration() {
 
 	// We always calculate the background average, so we can select if we use the moving threshold during the segmentation
 	if (mCorrectMean) {
-		mBackgroundImageMean = cvAvg(mBackgroundImage);
+		mBackgroundImageMean = cv::mean(mBackgroundImage);
 	} else {
-		mBackgroundImageMean = cvScalar(0);
+		mBackgroundImageMean = cv::Scalar::all(0);
 	}
 }
 
 void THISCLASS::OnStep() {
 	// Get and check input image
-	IplImage *inputimage = mCore->mDataStructureImageGray.mImage;
-	if (! inputimage) {
+	cv::Mat inputImage = mCore->mDataStructureImageGray.mImage;
+	if (inputImage.empty()) {
 		AddError(wxT("No input image."));
-		return;
-	}
-	if (inputimage->nChannels != 1) {
-		AddError(wxT("The input image is not a grayscale image."));
 		return;
 	}
 
 	// Check the background image
-	if (! mBackgroundImage) {
+	if (mBackgroundImage.empty()) {
 		AddError(wxT("No background image loaded."));
 		return;
 	}
-	if ((cvGetSize(inputimage).height != cvGetSize(mBackgroundImage).height) || (cvGetSize(inputimage).width != cvGetSize(mBackgroundImage).width)) {
+
+	if (! ImageTools::EqualSize(inputImage, mBackgroundImage)) {
 		AddError(wxT("Input and background images don't have the same size."));
 		return;
 	}
 
-	try {
-		// Correct the inputimage with the difference in image mean
-		if (mCorrectMean) {
-			cvAddS(inputimage, cvScalar(mBackgroundImageMean.val[0] - cvAvg(inputimage).val[0]), inputimage);
-		}
-
-		// Background subtraction
-		if (mMode == sMode_SubImageBackground) {
-			cvSub(inputimage, mBackgroundImage, inputimage);
-		} else if (mMode == sMode_SubBackgroundImage) {
-			cvSub(mBackgroundImage, inputimage, inputimage);
-		} else {
-			cvAbsDiff(inputimage, mBackgroundImage, inputimage);
-		}
-	} catch (...) {
-		AddError(wxT("Background subtraction failed."));
+	// Correct the inputImage with the difference in image mean
+	cv::Mat intermediateImage;
+	if (mCorrectMean) {
+		cv::Scalar mean = cv::mean(inputImage);
+		intermediateImage = inputImage + (mBackgroundImageMean.val[0] - mean.val[0]);
+	} else {
+		intermediateImage = inputImage;
 	}
+
+	// Background subtraction
+	cv::Mat outputImage;
+	if (mMode == sMode_SubImageBackground) {
+		outputImage = inputImage - mBackgroundImage;
+	} else if (mMode == sMode_SubBackgroundImage) {
+		outputImage = mBackgroundImage - inputImage;
+	} else {
+		cv::absdiff(inputImage, mBackgroundImage, outputImage);
+	}
+
+	mCore->mDataStructureImageGray.mImage = outputImage;
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(inputimage);
-	}
+	if (de.IsActive()) de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {
-	if (mBackgroundImage) {
-		cvReleaseImage(&mBackgroundImage);
-	}
+	mBackgroundImage.release();
 }

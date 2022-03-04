@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentBackgroundSubtractionGray
 #define HEADER_ComponentBackgroundSubtractionGray
 
-#include <cv.h>
+#include <opencv2/core.hpp>
 #include "Component.h"
 
 //! A component subtracting a fixed background from a grayscale image.
@@ -9,7 +9,7 @@ class ComponentBackgroundSubtractionGray: public Component {
 
 public:
 	//! Constructor.
-	ComponentBackgroundSubtractionGray(SwisTrackCore *stc);
+	ComponentBackgroundSubtractionGray(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentBackgroundSubtractionGray();
 
@@ -19,7 +19,8 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentBackgroundSubtractionGray(mCore);
 	}
 
@@ -30,8 +31,8 @@ private:
 		sMode_SubBackgroundImage,
 	};
 
-	IplImage *mBackgroundImage;			//!< The background image.
-	CvScalar mBackgroundImageMean;		//!< The mean of the background image.
+	cv::Mat mBackgroundImage;			//!< The background image.
+	cv::Scalar mBackgroundImageMean;	//!< The mean of the background image.
 	bool mCorrectMean;					//!< (configuration) Whether to correct for the mean or not.
 	eMode mMode;						//!< (configuration) The subtraction mode.
 

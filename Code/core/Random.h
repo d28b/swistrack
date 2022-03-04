@@ -77,7 +77,7 @@ public:
 
 	//! Returns a double in the range [from, to) with uniform distribution.
 	double Uniform(double from, double to) {
-		return smRandomMersenneTwister->randExc()*(to - from) + from;
+		return smRandomMersenneTwister->randExc() * (to - from) + from;
 		//return ((double)random() / ((double)RAND_MAX+1) * (double)(to-from)) + from;
 	}
 
@@ -88,7 +88,7 @@ public:
 
 	//! Returns a float with a gaussian distribution with a given standard deviation and mean.
 	double Normal(float mean, float stddev) {
-		return smRandomNormal->Normal()*stddev + mean;
+		return smRandomNormal->Normal() * stddev + mean;
 	}
 
 	//! Returns a float with an exponential distribution.

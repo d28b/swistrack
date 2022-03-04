@@ -1,15 +1,15 @@
 #ifndef HEADER_ComponentMoveGrayToColor
 #define HEADER_ComponentMoveGrayToColor
 
-#include <cv.h>
+#include <opencv2/opencv.hpp>
 #include "Component.h"
 
-//! A component that converts the input gray image to RGB.
+//! A component that converts the input gray image to BGR.
 class ComponentMoveGrayToColor: public Component {
 
 public:
 	//! Constructor.
-	ComponentMoveGrayToColor(SwisTrackCore *stc);
+	ComponentMoveGrayToColor(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentMoveGrayToColor();
 
@@ -19,12 +19,13 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentMoveGrayToColor(mCore);
 	}
 
 private:
-	IplImage *mOutputImage;				//!< The image created by this component.
+	cv::Mat *mOutputImage;				//!< The image created by this component.
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 
 };

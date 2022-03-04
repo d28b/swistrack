@@ -1,16 +1,14 @@
 #include "CanvasPanel.h"
 #define THISCLASS CanvasPanel
 
-#include "cv.h"
-
 BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_SIZE(THISCLASS::OnSize)
 END_EVENT_TABLE()
 
 THISCLASS::CanvasPanel(wxWindow *parent, SwisTrack *st):
-		wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(100, 100)),
-		DisplaySubscriberInterface(), mSwisTrack(st),
-		mCurrentDisplay(0), mUpdateRate(1), mUpdateStepCounter(0) {
+	wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(100, 100)),
+	DisplaySubscriberInterface(), mSwisTrack(st),
+	mCurrentDisplay(0), mUpdateRate(1), mUpdateStepCounter(0) {
 
 	SetBackgroundColour(st->GetBackgroundColour());
 
@@ -33,10 +31,8 @@ THISCLASS::~CanvasPanel() {
 	SetDisplay(0);
 }
 
-void THISCLASS::SetDisplay(Display *display) {
-	if (mCurrentDisplay == display) {
-		return;
-	}
+void THISCLASS::SetDisplay(Display * display) {
+	if (mCurrentDisplay == display) return;
 
 	if (display) {
 		// Subscribe to the new display
@@ -47,8 +43,8 @@ void THISCLASS::SetDisplay(Display *display) {
 	}
 }
 
-void THISCLASS::OnDisplaySubscribe(Display *display) {
-	Display *olddisplay = mCurrentDisplay;
+void THISCLASS::OnDisplaySubscribe(Display * display) {
+	Display * olddisplay = mCurrentDisplay;
 	mCurrentDisplay = display;
 
 	// Unsubscribe from the current display
@@ -61,10 +57,8 @@ void THISCLASS::OnDisplaySubscribe(Display *display) {
 	OnDisplayChanged(display);
 }
 
-void THISCLASS::OnDisplayUnsubscribe(Display *display) {
-	if (mCurrentDisplay != display) {
-		return;
-	}
+void THISCLASS::OnDisplayUnsubscribe(Display * display) {
+	if (mCurrentDisplay != display) return;
 
 	// Set everything to empty
 	mCurrentDisplay = 0;
@@ -73,44 +67,32 @@ void THISCLASS::OnDisplayUnsubscribe(Display *display) {
 	mCanvasAnnotation->SetText(wxT(""), wxT(""));
 }
 
-void THISCLASS::OnDisplayBeforeStep(Display *display) {
-	if (mCurrentDisplay != display) {
-		return;
-	}
+void THISCLASS::OnDisplayBeforeStep(Display * display) {
+	if (mCurrentDisplay != display) return;
 
 	// If the display is disabled, return
-	if (mUpdateRate <= 0) {
-		return;
-	}
+	if (mUpdateRate <= 0) return;
 
 	// Count to mUpdateRate from the last displayed image (the counter is reset in OnDisplayChanged)
 	//mUpdateStepCounter++;
 	SwisTrackCore *stc = mSwisTrack->mSwisTrackCore;
-	if ((stc->GetStepCounter() % mUpdateRate) != 0) {
-		return;
-	}
+	if ((stc->GetStepCounter() % mUpdateRate) != 0) return;
 
 	// Do nothing if the canvas is invisible
-	if (! mCanvas->IsShown()) {
-		return;
-	}
+	if (! mCanvas->IsShown()) return;
 
 	// Activate the display (such that OnDisplayChanged is called)
 	display->SetActive();
 }
 
 void THISCLASS::OnDisplayChanged(Display *display) {
-	if (mCurrentDisplay != display) {
-		return;
-	}
+	if (mCurrentDisplay != display) return;
 
 	// Reset the counter
 	//mUpdateStepCounter = 0;
 
 	// Do nothing if the canvas is invisible
-	if (! mCanvas->IsShown()) {
-		return;
-	}
+	if (! mCanvas->IsShown()) return;
 
 	// Update the canvas
 	mCanvas->OnDisplayChanged();
@@ -135,14 +117,14 @@ void THISCLASS::OnSize(wxSizeEvent &event) {
 void THISCLASS::UpdateSize() {
 	// Get the sizes
 	wxSize size = GetClientSize();
-	wxSize titlesize = mCanvasTitle->GetClientSize();
-	titlesize.SetHeight(20);
-	wxSize annotationsize = mCanvasAnnotation->GetClientSize();
-	annotationsize.SetHeight(20);
+	wxSize titleSize = mCanvasTitle->GetClientSize();
+	titleSize.SetHeight(26);
+	wxSize annotationSize = mCanvasAnnotation->GetClientSize();
+	annotationSize.SetHeight(26);
 
 	// Set the available space (for future images)
 	mAvailableSpace.SetWidth(size.GetWidth());
-	mAvailableSpace.SetHeight(size.GetHeight() - titlesize.GetHeight() - annotationsize.GetHeight());
+	mAvailableSpace.SetHeight(size.GetHeight() - titleSize.GetHeight() - annotationSize.GetHeight());
 
 	if ((mAvailableSpace.GetWidth() < 30) || (mAvailableSpace.GetHeight() < 30)) {
 		mCanvasTitle->Hide();
@@ -157,15 +139,13 @@ void THISCLASS::UpdateSize() {
 
 	// Layout the children
 	int x = (size.GetWidth() - canvassize.GetWidth()) / 2;
-	int y = (size.GetHeight() - canvassize.GetHeight() - titlesize.GetHeight() - annotationsize.GetHeight()) / 2;
-	mCanvasTitle->SetSize(x, y, canvassize.GetWidth(), titlesize.GetHeight());
-	y += titlesize.GetHeight();
-	if (canvassize.GetWidth()*canvassize.GetHeight() == 0) {
-		wxTrap();
-	}
+	int y = (size.GetHeight() - canvassize.GetHeight() - titleSize.GetHeight() - annotationSize.GetHeight()) / 2;
+	mCanvasTitle->SetSize(x, y, canvassize.GetWidth(), titleSize.GetHeight());
+	y += titleSize.GetHeight();
+	if (canvassize.GetWidth() * canvassize.GetHeight() == 0) wxTrap();
 	mCanvas->SetSize(x, y, canvassize.GetWidth(), canvassize.GetHeight());
 	y += canvassize.GetHeight();
-	mCanvasAnnotation->SetSize(x, y, canvassize.GetWidth(), annotationsize.GetHeight());
+	mCanvasAnnotation->SetSize(x, y, canvassize.GetWidth(), annotationSize.GetHeight());
 
 	mCanvasTitle->Show();
 	mCanvas->Show();

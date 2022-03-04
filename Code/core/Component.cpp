@@ -3,17 +3,18 @@
 #include <cctype>
 #include <algorithm>
 #include <wx/log.h>
-#include "ConfigurationXML.h"
-#include "SwisTrackCoreInterface.h"
 #include "ConfigurationConversion.h"
+#include "ConfigurationXML.h"
+#include "ImageTools.h"
+#include "SwisTrackCoreInterface.h"
 #define THISCLASS Component
 
-THISCLASS::Component(SwisTrackCore *stc, const wxString &name):
-		mStatus(), mStatusHasError(false), mStatusHasWarning(false), mStarted(false),
-		mName(name), mDisplayName(name), mDescription(), mHelpURL(), mCategory(0), mDefaultDisplay(), mTrigger(0),
-		mInitializationErrors(), mStepDuration(-1),
-		mDataStructureRead(), mDataStructureWrite(), mDisplays(),
-		mCore(stc), mConfiguration(), mConfigurationDefault(), mEnabledInterval(1), mEditLocks(0) {
+THISCLASS::Component(SwisTrackCore * stc, const wxString &name):
+	mStatus(), mStatusHasError(false), mStatusHasWarning(false), mStarted(false),
+	mName(name), mDisplayName(name), mDescription(), mHelpURL(), mCategory(0), mDefaultDisplay(), mTrigger(0),
+	mInitializationErrors(), mStepDuration(-1),
+	mDataStructureRead(), mDataStructureWrite(), mDisplays(),
+	mCore(stc), mConfiguration(), mConfigurationDefault(), mEnabledInterval(1), mEditLocks(0) {
 
 }
 
@@ -60,7 +61,7 @@ bool THISCLASS::HasDataStructureWrite(DataStructure *ds) {
 	return (it != mDataStructureWrite.end());
 }
 
-Display *THISCLASS::GetDisplayByName(const wxString &name) {
+Display * THISCLASS::GetDisplayByName(const wxString &name) {
 	tDisplayList::iterator it = mDisplays.begin();
 	while (it != mDisplays.end()) {
 		if ((*it)->mName == name) {
@@ -74,17 +75,17 @@ Display *THISCLASS::GetDisplayByName(const wxString &name) {
 
 void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmlerr) {
 	// Write enabled flag
-	wxXmlNode *node = new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("enabledinterval"));
+	wxXmlNode * node = new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("enabledinterval"));
 	configuration->AddChild(node);
-	node->AddProperty(wxT("value"), ConfigurationConversion::Int(mEnabledInterval));
+	node->AddAttribute(wxT("value"), ConfigurationConversion::Int(mEnabledInterval));
 
 	// Write configuration
 	tConfigurationMap::iterator it = mConfiguration.begin();
 	while (it != mConfiguration.end()) {
-		wxXmlNode *node = new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("parameter"));
+		wxXmlNode * node = new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("parameter"));
 		configuration->AddChild(node);
-		node->AddProperty(wxT("name"), it->first);
-		node->AddProperty(wxT("value"), it->second);
+		node->AddAttribute(wxT("name"), it->first);
+		node->AddAttribute(wxT("value"), it->second);
 		it++;
 	}
 }
@@ -93,41 +94,84 @@ int THISCLASS::GetEnabledInterval() {
 	return mEnabledInterval;
 }
 
-bool THISCLASS::GetConfigurationBool(const wxString &key, bool defvalue) {
-	return ConfigurationConversion::Bool(GetConfigurationString(key, wxT("")), defvalue);
+bool THISCLASS::GetConfigurationButton(const wxString &key) {
+	tConfigurationMap::iterator it = mConfiguration.find(key);
+	if (it == mConfiguration.end()) return false;
+
+	if (! ConfigurationConversion::Bool(it->second, false)) return false;
+	it->second = wxT("");
+	return true;
 }
 
-int THISCLASS::GetConfigurationInt(const wxString &key, int defvalue) {
-	return ConfigurationConversion::Int(GetConfigurationString(key, wxT("")), defvalue);
+bool THISCLASS::GetConfigurationBool(const wxString &key, bool defaultValue) const {
+	return ConfigurationConversion::Bool(GetConfigurationString(key, wxT("")), defaultValue);
 }
 
-double THISCLASS::GetConfigurationDouble(const wxString &key, double defvalue) {
-	return ConfigurationConversion::Double(GetConfigurationString(key, wxT("")), defvalue);
+int THISCLASS::GetConfigurationInt(const wxString &key, int defaultValue) const {
+	return ConfigurationConversion::Int(GetConfigurationString(key, wxT("")), defaultValue);
 }
 
-wxDateTime THISCLASS::GetConfigurationDate(const wxString &key, const wxDateTime &defvalue) {
-	return ConfigurationConversion::Date(GetConfigurationString(key, wxT("")), defvalue);
+double THISCLASS::GetConfigurationDouble(const wxString &key, double defaultValue) const {
+	return ConfigurationConversion::Double(GetConfigurationString(key, wxT("")), defaultValue);
 }
 
-wxColor THISCLASS::GetConfigurationColor(const wxString &key, const wxColor &defvalue) {
-	return ConfigurationConversion::Color(GetConfigurationString(key, wxT("")), defvalue);
-}
-
-wxString THISCLASS::GetConfigurationString(const wxString &key, const wxString &defvalue) {
+wxString THISCLASS::GetConfigurationString(const wxString &key, const wxString &defaultValue) const {
 	// If the key is available in the configuration, return its value
 	tConfigurationMap::const_iterator it = mConfiguration.find(key);
-	if (it != mConfiguration.end()) {
-		return mConfiguration[key];
-	}
+	if (it != mConfiguration.end()) return it->second;
 
 	// If the key is available in the default configuration, return that value
 	it = mConfigurationDefault.find(key);
-	if (it != mConfigurationDefault.end()) {
-		return mConfigurationDefault[key];
-	}
+	if (it != mConfigurationDefault.end()) return it->second;
 
 	// Otherwise, return the default value provided to this function
-	return defvalue;
+	return defaultValue;
+}
+
+wxDateTime THISCLASS::GetConfigurationDate(const wxString &key, const wxDateTime &defaultValue) const {
+	return ConfigurationConversion::Date(GetConfigurationString(key, wxT("")), defaultValue);
+}
+
+wxColor THISCLASS::GetConfigurationColor(const wxString &key, const wxColor defaultValue) const {
+	return ConfigurationConversion::Color(GetConfigurationString(key, wxT("")), defaultValue);
+}
+
+cv::Scalar THISCLASS::GetConfigurationColor(const wxString &key, const cv::Scalar defaultValue) const {
+	return ConfigurationConversion::Color(GetConfigurationString(key, wxT("")), defaultValue);
+}
+
+cv::Mat THISCLASS::LoadConfigurationImage(const wxString &key, const wxString &label) {
+	wxFileName filename = mCore->GetProjectFileName(GetConfigurationString(key, wxT("")));
+	if (! filename.IsOk()) {
+		AddError(label + wxT(": Invalid image filename."));
+		return cv::Mat();
+	}
+
+	cv::Mat image = cv::imread(filename.GetFullPath().ToStdString(), cv::IMREAD_COLOR);
+	if (image.empty()) {
+		AddError(label + wxT(": Cannot load image from file '") + filename.GetFullPath() + wxT("'."));
+		return cv::Mat();
+	}
+
+	return image;
+}
+
+cv::Mat THISCLASS::LoadConfigurationGrayscaleImage(const wxString &key, const wxString &label) {
+	cv::Mat image = LoadConfigurationImage(key, label);
+	if (image.empty()) return image;
+	if (image.channels() == 1) return image;
+
+	AddError(label + wxT(": Image is not a grayscale image."));
+	return cv::Mat();
+}
+
+cv::Mat THISCLASS::LoadConfigurationColorImage(const wxString &key, const wxString &label) {
+	cv::Mat image = LoadConfigurationImage(key, label);
+	if (image.empty()) return image;
+	if (image.channels() == 3) return image;
+
+	AddError(label + wxT(": Image is not a color image."));
+	return cv::Mat();
 }
 
 bool THISCLASS::IncrementEditLocks() {

@@ -2,12 +2,12 @@
 #define THISCLASS NMEALog
 
 THISCLASS::NMEALog(const wxString &file):
-		mLogFile() {
+	mLogFile() {
 
 	if (file.length() == 0) {
-	  mLogFile.Attach(wxFile::fd_stdout);
+		mLogFile.Attach(wxFile::fd_stdout);
 	} else {
-	  mLogFile.Open(file, wxFile::write);
+		mLogFile.Open(file, wxFile::write);
 	}
 }
 
@@ -37,7 +37,7 @@ bool THISCLASS::Send(CommunicationMessage *m) {
 }
 
 void THISCLASS::NMEASendMessage(CommunicationMessage *m) {
-	char buffer[1024+5];
+	char buffer[1024 + 5];
 	int len;
 
 	// Start of message

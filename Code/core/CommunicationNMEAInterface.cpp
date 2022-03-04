@@ -74,7 +74,7 @@ void THISCLASS::NMEAProcessData(const char *data, int len) {
 }
 
 void THISCLASS::NMEASendMessage(CommunicationMessage *m) {
-	char buffer[1024+5];
+	char buffer[1024 + 5];
 	int len;
 
 	// Start of message

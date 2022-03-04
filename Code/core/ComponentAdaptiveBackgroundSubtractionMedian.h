@@ -1,7 +1,7 @@
 #ifndef HEADER_ComponentAdaptiveBackgroundSubtractionMedian
 #define HEADER_ComponentAdaptiveBackgroundSubtractionMedian
 
-#include <cv.h>
+#include <opencv2/core.hpp>
 #include "Component.h"
 
 #include <vector>
@@ -11,7 +11,7 @@ class ComponentAdaptiveBackgroundSubtractionMedian: public Component {
 
 public:
 	//! Constructor.
-	ComponentAdaptiveBackgroundSubtractionMedian(SwisTrackCore *stc);
+	ComponentAdaptiveBackgroundSubtractionMedian(SwisTrackCore * stc);
 	//! Destructor.
 	~ComponentAdaptiveBackgroundSubtractionMedian();
 
@@ -21,17 +21,16 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	Component *Create() {
+
+	Component * Create() {
 		return new ComponentAdaptiveBackgroundSubtractionMedian(mCore);
 	}
 
-	void UpdateBackgroundModel(IplImage * inputImage);
-
 private:
-	IplImage * mBackgroundModel;
-	IplImage *mOutputImage;
-	Display mDisplayOutput;	
+	cv::Mat mBackgroundModel;
+	Display mDisplayOutput;
+
+	cv::Mat UpdateBackgroundModel(cv::Mat inputImage);
 };
 
 #endif
-

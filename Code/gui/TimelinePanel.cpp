@@ -2,10 +2,8 @@
 #define THISCLASS TimelinePanel
 
 #include <wx/image.h>
-#include <highgui.h>
 #include <fstream>
 #include <math.h>
-#include "ImageConversion.h"
 
 BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 	EVT_PAINT(THISCLASS::OnPaint)
@@ -26,8 +24,8 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 END_EVENT_TABLE()
 
 THISCLASS::TimelinePanel(wxWindow *parent, SwisTrack *st):
-		wxControl(parent, -1), mSwisTrack(st), mSelectedComponent(0), mPopupMenu(), mTimer(this),
-		mViewOffset(0), mViewScale(1000), mMoveStarted(false), mMoveStartPoint(0) {
+	wxControl(parent, -1), mSwisTrack(st), mSelectedComponent(0), mPopupMenu(), mTimer(this),
+	mViewOffset(0), mViewScale(1000), mMoveStarted(false), mMoveStartPoint(0) {
 
 	SetWindowStyle(wxNO_BORDER);
 	SetSize(wxSize(20, 20));
@@ -69,7 +67,7 @@ void THISCLASS::StartRecording() {
 	if (stepdistance == 0) {
 		mSwisTrack->SetStatusText(wxT(""), SwisTrack::cStatusField_Timeline);
 	} else {
-		mSwisTrack->SetStatusText(wxString::Format(wxT("%0.2f fps (%0.0f ms)"), 1 / stepdistance, stepdistance*1000), SwisTrack::cStatusField_Timeline);
+		mSwisTrack->SetStatusText(wxString::Format(wxT("%0.2f fps (%0.0f ms)"), 1 / stepdistance, stepdistance * 1000), SwisTrack::cStatusField_Timeline);
 	}
 }
 
@@ -428,7 +426,7 @@ void THISCLASS::OnMouseWheel(wxMouseEvent &event) {
 	// For some reason (probably focus), this is never called.
 	int rotation = event.GetWheelRotation();
 	//SetViewScale(pow(1.01, rotation)*mViewScale, event.GetX());
-	SetViewScale((rotation > 0 ? mViewScale*2 : mViewScale / 2), event.GetX());
+	SetViewScale((rotation > 0 ? mViewScale * 2 : mViewScale / 2), event.GetX());
 }
 
 void THISCLASS::OnSize(wxSizeEvent &event) {
@@ -439,7 +437,7 @@ void THISCLASS::OnMenuView(wxCommandEvent& event) {
 	if (event.GetId() == cID_ViewZoomOut) {
 		SetViewScale(mViewScale / 2, mMoveStartPoint);
 	} else if (event.GetId() == cID_ViewZoomIn) {
-		SetViewScale(mViewScale*2, mMoveStartPoint);
+		SetViewScale(mViewScale * 2, mMoveStartPoint);
 	} else {
 		// Reset
 		mViewOffset = 0;
@@ -451,7 +449,7 @@ void THISCLASS::OnMenuView(wxCommandEvent& event) {
 void THISCLASS::SetViewScale(double newscale, int fixpoint) {
 	double xreal = ((double)fixpoint - mViewOffset) / mViewScale;
 	mViewScale = newscale;
-	SetViewOffset(fixpoint - (int)floor(xreal*mViewScale + 0.5));
+	SetViewOffset(fixpoint - (int)floor(xreal * mViewScale + 0.5));
 	Refresh(true);
 }
 

@@ -4,11 +4,11 @@
 #include <fstream>
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
-		Component(stc, wxT("InputFileAVI")),
-		mFlipVertically(false),
-		mCapture(0), mOutputImage(0),
-		mDisplayOutput(wxT("Output"), wxT("AVI File: Unprocessed Frame")) {
+THISCLASS::ComponentInputFileAVI(SwisTrackCore * stc):
+	Component(stc, wxT("InputFileAVI")),
+	mFlipHorizontally(false), mFlipVertically(false),
+	mCapture(),
+	mDisplayOutput(wxT("Output"), wxT("AVI File: Unprocessed Frame")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryInput);
@@ -20,71 +20,61 @@ THISCLASS::ComponentInputFileAVI(SwisTrackCore *stc):
 }
 
 THISCLASS::~ComponentInputFileAVI() {
-	if (mCapture) {
-		cvReleaseCapture(&mCapture);
-	}
 }
 
 void THISCLASS::OnStart() {
 	// Open file
-	wxString filename_string = GetConfigurationString(wxT("File"), wxT(""));
-	wxFileName filename = mCore->GetProjectFileName(filename_string);
-	if (! filename.FileExists()) {
-	  wxString msg = wxT("The avi file does not exist: ");
-	  msg << filename_string;
-	  AddError(msg);
-	  return;
-	}
-	if (filename.IsOk()) {
-	  mCapture = cvCreateFileCapture(filename.GetFullPath().mb_str(wxConvFile));
+	wxFileName filename = mCore->GetProjectFileName(GetConfigurationString(wxT("File"), wxT("")));
+	if (! filename.IsOk()) {
+		AddError(wxT("The video file name is invalid."));
+		return;
 	}
 
-	// Error? Check whether the file exists or not, to give an appropriate error message to the user
-	if (mCapture == NULL) {
-		std::fstream f;
-		f.open(filename.GetFullPath().mb_str(wxConvFile));
-		if (f.is_open()) {
-			f.close();
-			AddError(wxT("Can open the AVI file as a file, but not with OpenCV."));
-			return;
-		} else {
-			AddError(wxT("Cannot open AVI file: permissions problem or something?"));
-			return;
-		}
+	if (! mCapture.open(filename.GetFullPath().ToStdString())) {
+		AddError(wxT("The video file '") + filename.GetFullPath() + wxT("' could not be opened."));
+		return;
 	}
 
 	// Reset to first frame
-	cvSetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES, 0);
+	mCapture.set(cv::CAP_PROP_POS_FRAMES, 0);
 }
 
 void THISCLASS::OnReloadConfiguration() {
+	mFlipHorizontally = GetConfigurationBool(wxT("FlipHorizontally"), false);
 	mFlipVertically = GetConfigurationBool(wxT("FlipVertically"), false);
 }
 
 void THISCLASS::OnStep() {
-	if (! mCapture) {
-		return;
-	}
-
 	// Read the next frame
-	int framenumber = (int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES);
-	int framescount = (int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_FRAME_COUNT);
-	mOutputImage = cvQueryFrame(mCapture);
-	if (! mOutputImage) {
+	int frameNumber = (int) mCapture.get(cv::CAP_PROP_POS_FRAMES);
+	int framesCount = (int) mCapture.get(cv::CAP_PROP_FRAME_COUNT);
+
+	cv::Mat image;
+	if (! mCapture.read(image)) {
 		AddError(wxT("Finished reading AVI file."));
 		mCore->TriggerStop();
 		return;
 	}
 
 	// Flip the image if desired
-	if (mFlipVertically) {
-		cvFlip(mOutputImage, 0, 0);
+	if (mFlipHorizontally && mFlipVertically) {
+		cv::Mat flippedImage(image.size(), CV_8UC3);
+		cv::flip(image, flippedImage, -1);
+		image = flippedImage;
+	} else if (mFlipHorizontally) {
+		cv::Mat flippedImage(image.size(), CV_8UC3);
+		cv::flip(image, flippedImage, 0);
+		image = flippedImage;
+	} else if (mFlipVertically) {
+		cv::Mat flippedImage(image.size(), CV_8UC3);
+		cv::flip(image, flippedImage, 1);
+		image = flippedImage;
 	}
 
 	// Set DataStructureImage
-	mCore->mDataStructureInput.mImage = mOutputImage;
-	mCore->mDataStructureInput.mFrameNumber = framenumber;
-	mCore->mDataStructureInput.mFramesCount = framescount;
+	mCore->mDataStructureInput.mImage = image;
+	mCore->mDataStructureInput.mFrameNumber = frameNumber;
+	mCore->mDataStructureInput.mFramesCount = framesCount;
 
 	// On linux, directly readig the millisecond offset doesn't work.
 	//double progress = GetProgressMSec();
@@ -96,46 +86,30 @@ void THISCLASS::OnStep() {
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(mOutputImage);
-	}
+	if (de.IsActive()) de.SetMainImage(image);
 }
 
 void THISCLASS::OnStepCleanup() {
-  //	mCore->mDataStructureInput.mImage = 0;
+	//	mCore->mDataStructureInput.mImage = 0;
 	//mOutputImage should not be released here, as this is handled by the HighGUI library
 }
 
 void THISCLASS::OnStop() {
-	if (mCapture) {
-		cvReleaseCapture(&mCapture);
-	}
+	mCapture.release();
 }
 
 double THISCLASS::GetProgressPercent() {
-	if (! mCapture) {
-		return 0;
-	}
-	return cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_AVI_RATIO);
+	return mCapture.get(cv::CAP_PROP_POS_AVI_RATIO);
 }
 
 double THISCLASS::GetProgressMSec() {
-	if (! mCapture) {
-		return 0;
-	}
-	return cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_MSEC);
+	return mCapture.get(cv::CAP_PROP_POS_MSEC);
 }
 
 int THISCLASS::GetProgressFrameNumber() {
-	if (! mCapture) {
-		return 0;
-	}
-	return (int)cvGetCaptureProperty(mCapture, CV_CAP_PROP_POS_FRAMES);
+	return (int) mCapture.get(cv::CAP_PROP_POS_FRAMES);
 }
 
 double THISCLASS::GetFPS() {
-	if (! mCapture) {
-		return 0;
-	}
-	return cvGetCaptureProperty(mCapture, CV_CAP_PROP_FPS);
+	return mCapture.get(cv::CAP_PROP_FPS);
 }

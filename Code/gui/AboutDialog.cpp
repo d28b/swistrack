@@ -7,7 +7,7 @@
 #include "bitmaps/icon_gui.xpm"
 
 THISCLASS::AboutDialog(wxWindow *parent):
-		wxDialog(parent, -1, wxT("About SwisTrack"), wxDefaultPosition, wxSize(400, 250), wxDEFAULT_DIALOG_STYLE)	{
+	wxDialog(parent, -1, wxT("About SwisTrack"), wxDefaultPosition, wxSize(400, 250), wxDEFAULT_DIALOG_STYLE)	{
 
 	wxPanel *p = new wxPanel(this, wxID_ANY);
 

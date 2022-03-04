@@ -3,10 +3,10 @@
 
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentOutputImageStatisticsColor(SwisTrackCore *stc):
-		Component(stc, wxT("OutputImageStatisticsColor")),
-		mCalculateNonZero(true), mCalculateSum(true), mCalculateMeanStdDev(true), mCalculateMinMax(true),
-		mDisplayOutput(wxT("Output"), wxT("Image Statistics: Input Frame")) {
+THISCLASS::ComponentOutputImageStatisticsColor(SwisTrackCore * stc):
+	Component(stc, wxT("OutputImageStatisticsColor")),
+	mCalculateNonZero(true), mCalculateSum(true), mCalculateMeanStdDev(true), mCalculateMinMax(true),
+	mDisplayOutput(wxT("Output"), wxT("Image Statistics: Input Frame")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryOutput);
@@ -33,24 +33,29 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	// Get the input image
-	IplImage* inputimage = mCore->mDataStructureImageColor.mImage;
-	if (! inputimage) {
+	cv::Mat inputImage = mCore->mDataStructureImageColor.mImage;
+	if (inputImage.empty()) {
 		AddError(wxT("No image on selected input."));
 		return;
 	}
 
+	// Split into channels if necessary
+	cv::Mat channels[3];
+	if (mCalculateNonZero || mCalculateMinMax)
+		cv::split(inputImage, channels);
+
 	// Calculate non-zero elements
 	if (mCalculateNonZero) {
-		int non_zero= cvCountNonZero(inputimage);
-		CommunicationMessage m(wxT("STATS_NONZERO"));
-		m.AddInt(non_zero);
+		CommunicationMessage m(wxT("NONZERO"));
+		for (int i = 0; i < 3; i++)
+			m.AddInt(cv::countNonZero(channels[i]));
 		mCore->mCommunicationInterface->Send(&m);
 	}
 
 	// Calculate sum
 	if (mCalculateSum) {
-		CvScalar sum= cvSum(inputimage);
-		CommunicationMessage m(wxT("STATS_SUM"));
+		cv::Scalar sum = cv::sum(inputImage);
+		CommunicationMessage m(wxT("SUM"));
 		m.AddDouble(sum.val[0]);
 		m.AddDouble(sum.val[1]);
 		m.AddDouble(sum.val[2]);
@@ -59,38 +64,42 @@ void THISCLASS::OnStep() {
 
 	// Calculate mean and standard deviation
 	if (mCalculateMeanStdDev) {
-		CvScalar mean;
-		CvScalar std_dev;
-		cvAvgSdv(inputimage, &mean, &std_dev, NULL);
-		CommunicationMessage m(wxT("STATS_MEANSTDDEV"));
+		cv::Scalar mean;
+		cv::Scalar stdDev;
+		cv::meanStdDev(inputImage, mean, stdDev);
+		CommunicationMessage m(wxT("MEANSTDDEV"));
 		m.AddDouble(mean.val[0]);
-		m.AddDouble(std_dev.val[0]);
+		m.AddDouble(stdDev.val[0]);
 		m.AddDouble(mean.val[1]);
-		m.AddDouble(std_dev.val[1]);
+		m.AddDouble(stdDev.val[1]);
 		m.AddDouble(mean.val[2]);
-		m.AddDouble(std_dev.val[2]);
+		m.AddDouble(stdDev.val[2]);
 		mCore->mCommunicationInterface->Send(&m);
 	}
 
 	// Calculate min and max
 	if (mCalculateMinMax) {
-		double min_val;
-		double max_val;
-		CommunicationMessage m(wxT("STATS_MINMAX"));
-		for (int i=0; i<2; i++) {
-			cvSetImageCOI(inputimage, 0);
-			cvMinMaxLoc(inputimage, &min_val, &max_val, NULL, NULL, NULL);
-			m.AddDouble(min_val);
-			m.AddDouble(max_val);
+		double minValue;
+		double maxValue;
+		cv::Point minLocation;
+		cv::Point maxLocation;
+		CommunicationMessage m(wxT("MINMAX"));
+		for (int i = 0; i < 3; i++) {
+			cv::minMaxLoc(channels[i], &minValue, &maxValue, &minLocation, &maxLocation);
+			m.AddDouble(minValue);
+			m.AddInt(minLocation.x);
+			m.AddInt(minLocation.y);
+			m.AddDouble(maxValue);
+			m.AddInt(maxLocation.x);
+			m.AddInt(maxLocation.y);
 		}
+
 		mCore->mCommunicationInterface->Send(&m);
 	}
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(inputimage);
-	}
+	if (de.IsActive()) de.SetMainImage(inputImage);
 }
 
 void THISCLASS::OnStepCleanup() {

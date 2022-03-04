@@ -12,17 +12,15 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 	EVT_PAINT(THISCLASS::OnPaint)
 END_EVENT_TABLE()
 
-THISCLASS::CanvasTitle(CanvasPanel *cp):
-		wxControl(cp, -1), mCanvasPanel(cp), mTitle(wxT("")), mHighlight(false), mMenu(0) {
+THISCLASS::CanvasTitle(CanvasPanel * cp):
+	wxControl(cp, -1), mCanvasPanel(cp), mTitle(wxT("")), mHighlight(false), mMenu(0) {
 
 	SetWindowStyle(wxNO_BORDER);
 	SetBackgroundColour(*wxBLACK);
 }
 
 THISCLASS::~CanvasTitle() {
-	if (mMenu) {
-		delete mMenu;
-	}
+	if (mMenu) delete mMenu;
 }
 
 void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
@@ -36,11 +34,7 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	f.SetWeight(wxFONTWEIGHT_BOLD);
 	f.SetUnderlined(true);
 	dc.SetFont(f);
-	if (mHighlight) {
-		dc.SetTextForeground(*wxWHITE);
-	} else {
-		dc.SetTextForeground(wxColour(255, 255, 0));
-	}
+	dc.SetTextForeground(mHighlight ? *wxWHITE : wxColour(255, 255, 0));
 	dc.DrawText(mTitle, 4, 2);
 
 	// Right
@@ -59,9 +53,7 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 
 void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 	// Create a new menu
-	if (mMenu) {
-		delete mMenu;
-	}
+	if (mMenu) delete mMenu;
 	mMenu = new wxMenu;
 
 	// Add the no-display option
@@ -69,20 +61,13 @@ void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 
 	// Add all possible displays
 	int id = 1;
-	SwisTrackCore *stc = mCanvasPanel->mSwisTrack->mSwisTrackCore;
-	const SwisTrackCore::tComponentList *cl = stc->GetDeployedComponents();
-	SwisTrackCore::tComponentList::const_iterator it = cl->begin();
-	while (it != cl->end()) {
-		Component *c = (*it);
-
-		Component::tDisplayList::iterator itdi = c->mDisplays.begin();
-		while (itdi != c->mDisplays.end()) {
-			Display *display = (*itdi);
-			mMenu->Append(id++, display->mDisplayName);
-			itdi++;
+	SwisTrackCore * stc = mCanvasPanel->mSwisTrack->mSwisTrackCore;
+	const SwisTrackCore::tComponentList * cl = stc->GetDeployedComponents();
+	for (auto component : *cl) {
+		for (auto display : component->mDisplays) {
+			mMenu->Append(id, display->mDisplayName);
+			id++;
 		}
-
-		it++;
 	}
 
 	// Show the popup menu
@@ -104,7 +89,7 @@ void THISCLASS::OnMouseLeave(wxMouseEvent &event) {
 }
 
 void THISCLASS::OnMenu(wxCommandEvent& event) {
-	Display *display = GetDisplay(event.GetId());
+	Display * display = GetDisplay(event.GetId());
 	mCanvasPanel->SetDisplay(display);
 }
 
@@ -114,29 +99,17 @@ void THISCLASS::SetText(const wxString &title, const wxString &textright) {
 	Refresh(true);
 }
 
-Display *THISCLASS::GetDisplay(int selid) {
-	if (selid < 1) {
-		return 0;
-	}
+Display * THISCLASS::GetDisplay(int selid) {
+	if (selid < 1) return 0;
 
 	int id = 1;
-	SwisTrackCore *stc = mCanvasPanel->mSwisTrack->mSwisTrackCore;
-	const SwisTrackCore::tComponentList *cl = stc->GetDeployedComponents();
-	SwisTrackCore::tComponentList::const_iterator it = cl->begin();
-	while (it != cl->end()) {
-		Component *c = (*it);
-
-		Component::tDisplayList::iterator itdi = c->mDisplays.begin();
-		while (itdi != c->mDisplays.end()) {
-			if (id == selid) {
-				return (*itdi);
-			}
-
+	SwisTrackCore * stc = mCanvasPanel->mSwisTrack->mSwisTrackCore;
+	const SwisTrackCore::tComponentList * cl = stc->GetDeployedComponents();
+	for (auto component : *cl) {
+		for (auto display : component->mDisplays) {
+			if (id == selid) return display;
 			id++;
-			itdi++;
 		}
-
-		it++;
 	}
 
 	return 0;

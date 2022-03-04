@@ -3,10 +3,10 @@
 
 #include "DisplayEditor.h"
 
-THISCLASS::ComponentConvertBayerToColor(SwisTrackCore *stc):
-		Component(stc, wxT("ConvertBayerToColor")),
-		mBayerType(0), mOutputImage(0),
-		mDisplayOutput(wxT("Output"), wxT("After conversion from Bayer to BGR")) {
+THISCLASS::ComponentConvertBayerToColor(SwisTrackCore * stc):
+	Component(stc, wxT("ConvertBayerToColor")),
+	mBayerType(0),
+	mDisplayOutput(wxT("Output"), wxT("After conversion from Bayer to BGR")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryInputConversion);
@@ -31,56 +31,35 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	// Check input image
-	IplImage *inputimage = mCore->mDataStructureInput.mImage;
-	if (! inputimage) {
+	cv::Mat inputImage = mCore->mDataStructureInput.mImage;
+	if (inputImage.empty()) {
+		AddError(wxT("No input image."));
 		return;
 	}
-	if (inputimage->nChannels != 1) {
-		AddError(wxT("This component requires a grayscale input image."));
-	}
-
-	// Prepare the output image
-	PrepareOutputImage(inputimage);
 
 	// Convert
-	try {
-		switch (mBayerType) {
-		case 0 :
-			cvCvtColor(inputimage, mOutputImage, CV_BayerBG2BGR);
-			break;
-		case 1 :
-			cvCvtColor(inputimage, mOutputImage, CV_BayerGB2BGR);
-			break;
-		case 2 :
-			cvCvtColor(inputimage, mOutputImage, CV_BayerRG2BGR);
-			break;
-		case 3 :
-			cvCvtColor(inputimage, mOutputImage, CV_BayerGR2BGR);
-			break;
-		default :
-			AddError(wxT("Invalid Bayer Pattern Type"));
-			return;
-		}
-	} catch (...) {
-		AddError(wxT("Conversion from Bayer to BGR failed."));
-	}
+	cv::Mat outputImage(inputImage.size(), CV_8UC3);
+	if (mBayerType == 0)
+		cv::cvtColor(inputImage, outputImage, cv::COLOR_BayerBG2BGR);
+	else if (mBayerType == 1)
+		cv::cvtColor(inputImage, outputImage, cv::COLOR_BayerGB2BGR);
+	else if (mBayerType == 2)
+		cv::cvtColor(inputImage, outputImage, cv::COLOR_BayerRG2BGR);
+	else if (mBayerType == 3)
+		cv::cvtColor(inputImage, outputImage, cv::COLOR_BayerGR2BGR);
+	else
+		AddError(wxT("Invalid Bayer Pattern Type"));
 
 	// Set the output image on the color data structure
-	mCore->mDataStructureImageColor.mImage = mOutputImage;
+	mCore->mDataStructureImageColor.mImage = outputImage;
 
 	// Let the Display know about our image
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) {
-		de.SetMainImage(mCore->mDataStructureImageColor.mImage);
-	}
+	if (de.IsActive()) de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureImageColor.mImage = 0;
 }
 
 void THISCLASS::OnStop() {
-	if (mOutputImage) {
-		cvReleaseImage(&mOutputImage);
-	}
 }
