@@ -39,7 +39,7 @@ private:
 
 		Display mDisplayBinary;			//!< The Display showing the thresholded image.
 
-		Color(int color, const wxString &displayNameBinary, const wxString &displayTitleBinary):
+		Color(int color, const wxString & displayNameBinary, const wxString & displayTitleBinary):
 			mColor(color), mThresholdR(32), mThresholdG(32), mThresholdB(32), mBlobDetection(),
 			mDisplayBinary(displayNameBinary, displayTitleBinary) {};
 

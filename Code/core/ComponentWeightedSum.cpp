@@ -1,9 +1,8 @@
 #include "ComponentWeightedSum.h"
 #define THISCLASS ComponentWeightedSum
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
-
 
 THISCLASS::ComponentWeightedSum(SwisTrackCore * stc):
 	Component(stc, wxT("WeightedSum")),
@@ -11,7 +10,7 @@ THISCLASS::ComponentWeightedSum(SwisTrackCore * stc):
 	mDisplayOutput(wxT("Output"), wxT("After weighted sum")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingColor);
+	mCategory = &(mCore->mCategoryProcessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 	AddDisplay(&mDisplayOutput);
@@ -28,7 +27,7 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	base = GetConfigurationDouble(wxT("base"), 0.0);
+	base = GetConfigurationDouble(wxT("Base"), 0.0);
 	R = GetConfigurationDouble(wxT("R"), 0.5);
 	G = GetConfigurationDouble(wxT("G"), 0.5);
 	B = GetConfigurationDouble(wxT("B"), 0.5);
@@ -37,9 +36,11 @@ void THISCLASS::OnReloadConfiguration() {
 void THISCLASS::OnStep() {
 	cv::Mat inputImage = mCore->mDataStructureImageColor.mImage;
 	if (inputImage.empty()) {
-		AddError(wxT("No input Image"));
+		AddError(wxT("No input image."));
 		return;
 	}
+
+	printf("%f %f %f %f\n", R, G, B, base);
 
 	// Calculate weighted sum
 	cv::Mat outputImage(inputImage.rows, inputImage.cols, CV_8UC1);
@@ -47,9 +48,9 @@ void THISCLASS::OnStep() {
 		unsigned char * inputLine = inputImage.ptr(y);
 		unsigned char * outputLine = outputImage.ptr(y);
 		for (int x = 0; x < inputImage.cols; x++) {
-			int r = inputLine[x * 3 + 0];
+			int b = inputLine[x * 3 + 0];
 			int g = inputLine[x * 3 + 1];
-			int b = inputLine[x * 3 + 2];
+			int r = inputLine[x * 3 + 2];
 
 			int output = (int) (base + R * r + G * g + B * b + 0.5);
 			if (output < 0) output = 0;
@@ -66,7 +67,6 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureImageGray.mImage = 0;
 }
 
 void THISCLASS::OnStop() {

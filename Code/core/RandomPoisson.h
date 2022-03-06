@@ -12,11 +12,11 @@ class RandomPoisson;
 class RandomPoisson {
 
 protected:
-	RandomMersenneTwister *mRandomMersenneTwister;
+	RandomMersenneTwister * mRandomMersenneTwister;
 
 public:
 	//! Constructor.
-	RandomPoisson(RandomMersenneTwister *rmt): mRandomMersenneTwister(rmt) {}
+	RandomPoisson(RandomMersenneTwister * rmt): mRandomMersenneTwister(rmt) {}
 
 	//! Returns a integer with a poisson distribution of density L.
 	long int Poisson(double L);

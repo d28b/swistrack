@@ -4,10 +4,12 @@
 	<description>Subtracts a specific value of each pixel of the image.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/SpecificColorSubtraction</url>
 	<displayimage>Output</displayimage>
+
 	<configuration>
 		<parameter type="color">
 			<name>Color</name>
 			<label>Color</label>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>Mode</name>
@@ -18,7 +20,7 @@
 				<item key="ColorMinusImage">Truncate(C - I, 0..255)</item>
 			</items>
 			<default>AbsDiff</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

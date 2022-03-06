@@ -21,10 +21,10 @@ public:
 	~ConfigurationWriterXML();
 
 	//! Opens an XML document. If this function returns true, the document can be read.
-	bool Save(const wxFileName &filename);
+	bool Save(const wxFileName & filename);
 
 	//! Returns the XML document. (This function is not needed unless the application needs to access the XML document in a different way.)
-	wxXmlDocument *GetDocument() {
+	wxXmlDocument * GetDocument() {
 		return &mDocument;
 	}
 

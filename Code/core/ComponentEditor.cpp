@@ -4,7 +4,7 @@
 #include "ConfigurationConversion.h"
 #include <wx/xml/xml.h>
 
-THISCLASS::ComponentEditor(Component *c): mComponent(0) {
+THISCLASS::ComponentEditor(Component * c): mComponent(0) {
 	// Try to enter edit mode (this will always work for components)
 	if (! c->IncrementEditLocks()) return;
 
@@ -17,7 +17,7 @@ THISCLASS::~ComponentEditor() {
 	mComponent->DecrementEditLocks();
 }
 
-void THISCLASS::ConfigurationReadXML(wxXmlNode * configuration, ErrorList *xmlerr) {
+void THISCLASS::ConfigurationReadXML(wxXmlNode * configuration, ErrorList * xmlerr) {
 	if (! mComponent) return;
 
 	// Default settings
@@ -25,7 +25,7 @@ void THISCLASS::ConfigurationReadXML(wxXmlNode * configuration, ErrorList *xmler
 	mComponent->mEnabledInterval = 1;
 
 	// Read all nodes of the XML node belonging to the component
-	wxXmlNode *node = configuration->GetChildren();
+	wxXmlNode * node = configuration->GetChildren();
 	while (node) {
 		if (node->GetName() == wxT("enabledinterval")) {
 			wxXmlAttribute * prop = node->GetAttributes();
@@ -63,37 +63,37 @@ bool THISCLASS::SetEnabledInterval(int value) {
 	return true;
 }
 
-bool THISCLASS::SetConfigurationBool(const wxString &key, bool value) {
+bool THISCLASS::SetConfigurationBool(const wxString & key, bool value) {
 	if (! mComponent) return false;
 	mComponent->mConfiguration[key] = ConfigurationConversion::Bool(value);
 	return true;
 }
 
-bool THISCLASS::SetConfigurationInt(const wxString &key, int value) {
+bool THISCLASS::SetConfigurationInt(const wxString & key, int value) {
 	if (! mComponent) return false;
 	mComponent->mConfiguration[key] = ConfigurationConversion::Int(value);
 	return true;
 }
 
-bool THISCLASS::SetConfigurationDouble(const wxString &key, double value) {
+bool THISCLASS::SetConfigurationDouble(const wxString & key, double value) {
 	if (! mComponent) return false;
 	mComponent->mConfiguration[key] = ConfigurationConversion::Double(value);
 	return true;
 }
 
-bool THISCLASS::SetConfigurationString(const wxString &key, const wxString &value) {
+bool THISCLASS::SetConfigurationString(const wxString & key, const wxString & value) {
 	if (! mComponent) return false;
 	mComponent->mConfiguration[key] = value;
 	return true;
 }
 
-bool THISCLASS::SetConfigurationDate(const wxString &key, const wxDateTime &value) {
+bool THISCLASS::SetConfigurationDate(const wxString & key, const wxDateTime & value) {
 	if (! mComponent) return false;
 	mComponent->mConfiguration[key] = ConfigurationConversion::Date(value);
 	return true;
 }
 
-bool THISCLASS::SetConfigurationColor(const wxString &key, const wxColor &value) {
+bool THISCLASS::SetConfigurationColor(const wxString & key, const wxColor & value) {
 	if (! mComponent) return false;
 	mComponent->mConfiguration[key] = ConfigurationConversion::Color(value);
 	return true;

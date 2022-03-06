@@ -5,6 +5,7 @@
 	</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/MinFlowTracking</url>
 	<displayimage>Output</displayimage>
+
 	<configuration>
 	</configuration>
 </swistrackcomponent>

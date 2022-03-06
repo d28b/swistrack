@@ -5,7 +5,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_SIZE(THISCLASS::OnSize)
 END_EVENT_TABLE()
 
-THISCLASS::CanvasPanel(wxWindow *parent, SwisTrack *st):
+THISCLASS::CanvasPanel(wxWindow * parent, SwisTrack * st):
 	wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(100, 100)),
 	DisplaySubscriberInterface(), mSwisTrack(st),
 	mCurrentDisplay(0), mUpdateRate(1), mUpdateStepCounter(0) {
@@ -18,7 +18,7 @@ THISCLASS::CanvasPanel(wxWindow *parent, SwisTrack *st):
 	mCanvasAnnotation = new CanvasAnnotation(this);
 
 	// Layout the components in the panel
-	//wxBoxSizer *vs=new wxBoxSizer(wxVERTICAL);
+	//wxBoxSizer * vs=new wxBoxSizer(wxVERTICAL);
 	//vs->Add(mTitle, 0, wxALL|wxALIGN_CENTER_VERTICAL, 0);
 	//vs->Add(mCanvas, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 0);
 	//SetSizer(vs);
@@ -75,7 +75,7 @@ void THISCLASS::OnDisplayBeforeStep(Display * display) {
 
 	// Count to mUpdateRate from the last displayed image (the counter is reset in OnDisplayChanged)
 	//mUpdateStepCounter++;
-	SwisTrackCore *stc = mSwisTrack->mSwisTrackCore;
+	SwisTrackCore * stc = mSwisTrack->mSwisTrackCore;
 	if ((stc->GetStepCounter() % mUpdateRate) != 0) return;
 
 	// Do nothing if the canvas is invisible
@@ -85,7 +85,7 @@ void THISCLASS::OnDisplayBeforeStep(Display * display) {
 	display->SetActive();
 }
 
-void THISCLASS::OnDisplayChanged(Display *display) {
+void THISCLASS::OnDisplayChanged(Display * display) {
 	if (mCurrentDisplay != display) return;
 
 	// Reset the counter
@@ -110,7 +110,7 @@ void THISCLASS::OnDisplayChanged(Display *display) {
 	UpdateSize();
 }
 
-void THISCLASS::OnSize(wxSizeEvent &event) {
+void THISCLASS::OnSize(wxSizeEvent & event) {
 	UpdateSize();
 }
 

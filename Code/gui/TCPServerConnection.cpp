@@ -5,7 +5,7 @@ BEGIN_EVENT_TABLE(TCPServerConnection, wxEvtHandler)
 	EVT_SOCKET(SOCKET_ID, TCPServerConnection::OnSocketEvent)
 END_EVENT_TABLE()
 
-THISCLASS::TCPServerConnection(TCPServer* ss, wxSocketBase *sb):
+THISCLASS::TCPServerConnection(TCPServer * ss, wxSocketBase * sb):
 	mSocket(sb), mTCPServer(ss), mCurrentRequest(0), mSubscriptions() {
 
 	// Configure the socket to be non-blocking
@@ -24,7 +24,7 @@ THISCLASS::~TCPServerConnection() {
 	mSocket->Destroy();
 }
 
-void THISCLASS::OnSocketEvent(wxSocketEvent& event) {
+void THISCLASS::OnSocketEvent(wxSocketEvent & event) {
 	if (! mSocket) {
 		return;
 	}
@@ -55,7 +55,7 @@ void THISCLASS::OnSocketEvent(wxSocketEvent& event) {
 	}
 }
 
-void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum) {
+void THISCLASS::OnNMEAProcessMessage(CommunicationMessage * m, bool withchecksum) {
 	if (! mSocket) {
 		return;
 	}
@@ -96,7 +96,7 @@ void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum)
 	mCurrentRequest = 0;
 }
 
-void THISCLASS::OnNMEAProcessMessageChecksumError(CommunicationMessage *m) {
+void THISCLASS::OnNMEAProcessMessageChecksumError(CommunicationMessage * m) {
 	// Don't do anything for now
 	// TODO: such incidents should be logged or at least counted somewhere
 }
@@ -105,14 +105,14 @@ void THISCLASS::OnNMEAProcessUnrecognizedChar(unsigned char chr) {
 	// Don't do anything, just ignore such chars
 }
 
-void THISCLASS::OnNMEASend(const char *buffer, int len) {
+void THISCLASS::OnNMEASend(const char * buffer, int len) {
 	if (! mSocket) {
 		return;
 	}
 	mSocket->Write(buffer, len);
 }
 
-bool THISCLASS::SendMessage(CommunicationMessage *m) {
+bool THISCLASS::SendMessage(CommunicationMessage * m) {
 	if (! mSocket) {
 		return false;
 	}

@@ -14,7 +14,7 @@
 			<default>12</default>
 			<unit>pixels</unit>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>RingRadiusInner</name>
@@ -24,12 +24,12 @@
 			<default>8</default>
 			<unit>pixels</unit>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="inputfile">
 			<name>ObjectListFileName</name>
 			<label>Objects and codes</label>
-			<default></default>
+			<onchange>restart</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

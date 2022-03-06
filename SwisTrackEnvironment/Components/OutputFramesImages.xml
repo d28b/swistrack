@@ -14,12 +14,12 @@
 				<item key="binary">Binary</item>
 			</items>
 			<default>color</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="outputfile">
 			<name>FileBase</name>
 			<label>Base filename</label>
-			<reloadable>false</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>FileExtension</name>
@@ -30,7 +30,7 @@
 				<item key="jpeg">JPEG (lossy)</item>
 			</items>
 			<default>png</default>
-			<reloadable>false</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 		<label>Images are saved as BASE[FRAMECOUNTER].EXT.</label>
 	</configuration>

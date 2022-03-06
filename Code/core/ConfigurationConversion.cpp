@@ -2,7 +2,7 @@
 #define THISCLASS ConfigurationConversion
 #include <iostream>
 
-bool THISCLASS::Bool(const wxString &str, bool defaultValue) {
+bool THISCLASS::Bool(const wxString & str, bool defaultValue) {
 	if (str.Len() == 0) return defaultValue;
 
 	wxString strlc = str.Lower();
@@ -11,10 +11,10 @@ bool THISCLASS::Bool(const wxString &str, bool defaultValue) {
 
 	long value = (defaultValue ? 1 : 0);
 	str.ToLong(&value);
-	return (value != 0);
+	return value != 0;
 }
 
-int THISCLASS::Int(const wxString &str, int defaultValue) {
+int THISCLASS::Int(const wxString & str, int defaultValue) {
 	if (str.Len() == 0) return defaultValue;
 
 	long value = (long)defaultValue;
@@ -22,7 +22,7 @@ int THISCLASS::Int(const wxString &str, int defaultValue) {
 	return value;
 }
 
-double THISCLASS::Double(const wxString &str, double defaultValue) {
+double THISCLASS::Double(const wxString & str, double defaultValue) {
 	if (str.Len() == 0) return defaultValue;
 
 	str.ToDouble(&defaultValue);
@@ -45,7 +45,7 @@ wxString THISCLASS::Date(wxDateTime value) {
 	return value.Format();
 }
 
-wxDateTime THISCLASS::Date(const wxString &str, const wxDateTime &defaultValue) {
+wxDateTime THISCLASS::Date(const wxString & str, const wxDateTime & defaultValue) {
 	if (str.Len() == 0) return defaultValue;
 
 	wxDateTime retval = wxDateTime();
@@ -53,13 +53,13 @@ wxDateTime THISCLASS::Date(const wxString &str, const wxDateTime &defaultValue) 
 	return retval;
 }
 
-wxColor THISCLASS::Color(const wxString &str, const wxColor defValue) {
+wxColor THISCLASS::Color(const wxString & str, const wxColor defValue) {
 	if (str.Len() == 0) return defValue;
 
 	return wxColor(str);
 }
 
-cv::Scalar THISCLASS::Color(const wxString &str, const cv::Scalar defValue) {
+cv::Scalar THISCLASS::Color(const wxString & str, const cv::Scalar defValue) {
 	if (str.Len() == 0) return defValue;
 
 	wxColor color(str);

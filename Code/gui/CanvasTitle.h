@@ -35,24 +35,24 @@ public:
 	~CanvasTitle();
 
 	//! Sets the text.
-	void SetText(const wxString &title, const wxString &textright);
+	void SetText(const wxString & title, const wxString & textright);
 
 private:
 	//! The corresponding GUI event handler.
-	void OnMouseEnter(wxMouseEvent &event);
+	void OnMouseEnter(wxMouseEvent & event);
 	//! The corresponding GUI event handler.
-	void OnMouseLeave(wxMouseEvent &event);
+	void OnMouseLeave(wxMouseEvent & event);
 	//! The corresponding GUI event handler.
-	void OnMouseLeftDown(wxMouseEvent &event);
+	void OnMouseLeftDown(wxMouseEvent & event);
 	//! The corresponding GUI event handler.
-	void OnMouseRightDown(wxMouseEvent &event);
+	void OnMouseRightDown(wxMouseEvent & event);
 	//! The corresponding GUI event handler.
-	void OnPaint(wxPaintEvent& WXUNUSED(event));
+	void OnPaint(wxPaintEvent & WXUNUSED(event));
 	//! The corresponding GUI event handler.
-	void OnMenu(wxCommandEvent& event);
+	void OnMenu(wxCommandEvent & event);
 
 	//! Returns the Display associated with the index.
-	Display *GetDisplay(int selid);
+	Display * GetDisplay(int selid);
 
 	DECLARE_EVENT_TABLE()
 };

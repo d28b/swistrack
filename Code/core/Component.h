@@ -34,13 +34,14 @@ public:
 	bool mStatusHasError;				//!< Whether there is an error in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)
 	bool mStatusHasWarning;				//!< Whether there is a warning in the status item list. (This only exists for performance reasons. A program could also go through the status list and check if there is an error message.)
 	bool mStarted;						//!< Tells whether the component is started. This flag is set and reset by the SwisTrackCore class and should not be used by the components.
-	wxString mName;					//!< The internal name of the component (used to save configuration).
-	wxString mDisplayName;			//!< The name that is displayed to the user.
-	wxString mDescription;			//!< The description.
-	wxString mHelpURL;				//!< The url pointing to the website with more information about the component.
-	ComponentCategory *mCategory;		//!< The category which this component belongs to.
-	wxString mDefaultDisplay;		//!< The default view (not used).
-	ComponentTrigger *mTrigger;			//!< The trigger of this component (if any).
+	bool mHasReloadError;				//!< Tells whether the component encountered an error while reloading. This is reset when restarting or reloading.
+	wxString mName;						//!< The internal name of the component (used to save configuration).
+	wxString mDisplayName;				//!< The name that is displayed to the user.
+	wxString mDescription;				//!< The description.
+	wxString mHelpURL;					//!< The url pointing to the website with more information about the component.
+	ComponentCategory * mCategory;		//!< The category which this component belongs to.
+	wxString mDefaultDisplay;			//!< The default view (not used).
+	ComponentTrigger * mTrigger;		//!< The trigger of this component (if any).
 	ErrorList mInitializationErrors;	//!< Error messages (during component initialization) are added here.
 	double mStepDuration;				//!< The duration of the last step in milliseconds. This information is filled in by SwisTrackCore.
 
@@ -49,7 +50,7 @@ public:
 	tDisplayList mDisplays;						//! The Display objects that this component provides.
 
 	//! Constructor.
-	Component(SwisTrackCore * stc, const wxString &name);
+	Component(SwisTrackCore * stc, const wxString & name);
 	//! Destructor.
 	virtual ~Component() {}
 
@@ -72,51 +73,51 @@ public:
 	virtual Component * Create() = 0;
 
 	//! Writes the configuration to an XML element.
-	void ConfigurationWriteXML(wxXmlNode *element, ErrorList *xmlerr);
+	void ConfigurationWriteXML(wxXmlNode * element, ErrorList * xmlerr);
 
 	//! Returns the enabled interval.
 	int GetEnabledInterval();
 
 	//! Returns true if the button has been pressed.
-	bool GetConfigurationButton(const wxString &key);
+	bool GetConfigurationButton(const wxString & key);
 	//! Returns a boolean from the configuration.
-	bool GetConfigurationBool(const wxString &key, bool defvalue) const;
+	bool GetConfigurationBool(const wxString & key, bool defvalue) const;
 	//! Returns an integer value from the configuration.
-	int GetConfigurationInt(const wxString &key, int defvalue) const;
+	int GetConfigurationInt(const wxString & key, int defvalue) const;
 	//! Returns a double from the configuration.
-	double GetConfigurationDouble(const wxString &key, double defvalue) const;
+	double GetConfigurationDouble(const wxString & key, double defvalue) const;
 	//! Returns a string from the configuration.
-	wxString GetConfigurationString(const wxString &key, const wxString &defvalue) const;
+	wxString GetConfigurationString(const wxString & key, const wxString & defvalue) const;
 	//! Returns a timestamp from the configuration.
-	wxDateTime GetConfigurationDate(const wxString &key, const wxDateTime &defvalue) const;
+	wxDateTime GetConfigurationDate(const wxString & key, const wxDateTime & defvalue) const;
 	//! Returns a color from the configuration.
-	wxColour GetConfigurationColor(const wxString &key, const wxColour defvalue) const;
+	wxColour GetConfigurationColor(const wxString & key, const wxColour defvalue) const;
 	//! Returns a color from the configuration.
-	cv::Scalar GetConfigurationColor(const wxString &key, const cv::Scalar defvalue) const;
+	cv::Scalar GetConfigurationColor(const wxString & key, const cv::Scalar defvalue) const;
 	//! Loads a color or grayscale image file pointed to by the configuration. Label is used in error messages.
-	cv::Mat LoadConfigurationImage(const wxString &key, const wxString &label);
+	cv::Mat LoadConfigurationImage(const wxString & key, const wxString & label, int flags);
 	//! Loads a grayscale image file pointed to by the configuration. Label is used in error messages.
-	cv::Mat LoadConfigurationGrayscaleImage(const wxString &key, const wxString &label);
+	cv::Mat LoadConfigurationGrayscaleImage(const wxString & key, const wxString & label);
 	//! Loads a color image file pointed to by the configuration. Label is used in error messages.
-	cv::Mat LoadConfigurationColorImage(const wxString &key, const wxString &label);
+	cv::Mat LoadConfigurationColorImage(const wxString & key, const wxString & label);
 
 	//! Adds an error message to the status list.
-	void AddError(const wxString &msg);
+	void AddError(const wxString & msg);
 	//! Adds a warning to the status list.
-	void AddWarning(const wxString &msg);
+	void AddWarning(const wxString & msg);
 	//! Adds an informational message to the status list.
-	void AddInfo(const wxString &msg);
+	void AddInfo(const wxString & msg);
 
 	//! Clears the status list
 	void ClearStatus();
 
 	//! Returns true if the component reads that data structure.
-	bool HasDataStructureRead(DataStructure *ds);
+	bool HasDataStructureRead(DataStructure * ds);
 	//! Returns true if the component writes that data structure.
-	bool HasDataStructureWrite(DataStructure *ds);
+	bool HasDataStructureWrite(DataStructure * ds);
 
 	//! Returns a component by name.
-	Display * GetDisplayByName(const wxString &name);
+	Display * GetDisplayByName(const wxString & name);
 
 	//! Returns the SwisTrackCore object.
 	SwisTrackCore * GetSwisTrackCore() {
@@ -134,12 +135,12 @@ protected:
 	void Initialize();
 
 	//! Registers a data structure that the component uses.
-	void AddDataStructureRead(DataStructure *ds);
+	void AddDataStructureRead(DataStructure * ds);
 	//! Registers a data structure that the component modifies.
-	void AddDataStructureWrite(DataStructure *ds);
+	void AddDataStructureWrite(DataStructure * ds);
 
 	//! Registers a display image.
-	void AddDisplay(Display *di);
+	void AddDisplay(Display * di);
 
 	//! Increments the edit locks.
 	bool IncrementEditLocks();
@@ -148,11 +149,11 @@ protected:
 
 private:
 	//! Reads the configuration section of the XML file belonging to the component.
-	void InitializeReadConfiguration(wxXmlNode *configurationnode);
+	void InitializeReadConfiguration(wxXmlNode * configurationnode);
 	//! Reads a node within the configuration section of the XML file.
-	void InitializeReadConfigurationNode(wxXmlNode *node);
+	void InitializeReadConfigurationNode(wxXmlNode * node);
 	//! Reads a parameter node within the configuration section of the XML file.
-	void InitializeReadParameter(wxXmlNode *node);
+	void InitializeReadParameter(wxXmlNode * node);
 
 };
 

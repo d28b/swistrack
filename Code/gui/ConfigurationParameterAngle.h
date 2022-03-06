@@ -15,22 +15,22 @@ class ConfigurationParameterAngle: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterAngle(wxWindow* parent);
+	ConfigurationParameterAngle(wxWindow * parent);
 	//! Destructor.
 	~ConfigurationParameterAngle();
 
 	//! Handles the corresponding GUI event.
-	void OnTextUpdated(wxCommandEvent& event);
+	void OnTextUpdated(wxCommandEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnTextEnter(wxCommandEvent& event);
+	void OnTextEnter(wxCommandEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnKillFocus(wxFocusEvent& event);
+	void OnKillFocus(wxFocusEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnScrollChanged(wxScrollEvent& event);
+	void OnScrollChanged(wxScrollEvent & event);
 
 protected:
-	wxTextCtrl *mTextCtrl;		//!< The corresponding GUI widget.
-	wxSlider *mSlider;			//!< The corresponding GUI widget.
+	wxTextCtrl * mTextCtrl;		//!< The corresponding GUI widget.
+	wxSlider * mSlider;			//!< The corresponding GUI widget.
 	double mValueMin;			//!< The minimum value allowed.
 	double mValueMax;			//!< The maximum value allowed.
 	double mValueDefault;		//!< The default value.
@@ -38,8 +38,8 @@ protected:
 	double mNewValue;			//!< The new value.
 
 	// ConfigurationParameter methods
-	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
-	virtual void OnUpdate(wxWindow *updateprotection);
+	virtual void OnInitialize(ConfigurationXML * config, ErrorList * errorlist);
+	virtual void OnUpdate(wxWindow * updateprotection);
 	virtual void OnSetNewValue();
 
 	// Validates the new value.

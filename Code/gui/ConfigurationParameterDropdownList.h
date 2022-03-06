@@ -15,27 +15,27 @@ class ConfigurationParameterDropdownList: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterDropdownList(wxWindow* parent);
+	ConfigurationParameterDropdownList(wxWindow * parent);
 	//! Destructor.
 	~ConfigurationParameterDropdownList();
 
 	//! Handles the corresponding GUI event.
-	void OnItemSelected(wxCommandEvent& event);
+	void OnItemSelected(wxCommandEvent & event);
 
 protected:
-	wxComboBox *mComboBox;		//!< The corresponding GUI widget.
+	wxComboBox * mComboBox;		//!< The corresponding GUI widget.
 	wxString mValueDefault;		//!< The default value.
 	wxString mNewValue;			//!< The new value.
 
 	// ConfigurationParameter methods
-	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
-	virtual void OnUpdate(wxWindow *updateprotection);
+	virtual void OnInitialize(ConfigurationXML * config, ErrorList * errorlist);
+	virtual void OnUpdate(wxWindow * updateprotection);
 	virtual void OnSetNewValue();
 
 	// Fills in the list. This method can be overwritten to create list with specific entries. It should use the AddItem() method to add items to the list.
-	virtual void FillList(ConfigurationXML *config, ErrorList *errorlist);
+	virtual void FillList(ConfigurationXML * config, ErrorList * errorlist);
 	// Adds an item to the list.
-	void AddItem(const wxString &key, const wxString &label);
+	void AddItem(const wxString & key, const wxString & label);
 
 	// Validates the new value.
 	bool ValidateNewValue();

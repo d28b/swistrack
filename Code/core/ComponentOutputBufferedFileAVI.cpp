@@ -4,7 +4,7 @@
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentOutputBufferedFileAVI(SwisTrackCore * stc):
-	Component(stc, wxT("OutputFileAVI")),
+	Component(stc, wxT("OutputBufferedFileAVI")),
 	mInputChannel(COLOR),
 	mBuffer(), mBufferSize(0), mKeepLast(false),
 	mDisplayOutput(wxT("Output"), wxT("AVI File: Unprocessed Frame")) {

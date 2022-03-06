@@ -9,38 +9,38 @@
 		<line />
 		<title>Parameters</title>
 		<parameter type="integer">
-			<name>xorder</name>
-			<label>Differentiation Order for x</label>
+			<name>OrderX</name>
+			<label>Order X</label>
 			<min>0</min>
 			<max>3</max>
 			<default>1</default>
 			<unit>order</unit>
 			<slider>true</slider>
 			<sliderstep>1</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
-			<name>yorder</name>
-			<label>Differentiation Order for y</label>
+			<name>OrderY</name>
+			<label>Order Y</label>
 			<min>0</min>
 			<default>1</default>
 			<max>3</max>
 			<unit>order</unit>
 			<slider>true</slider>
 			<sliderstep>1</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="dropdownlist">
-	    		<name>apertureSize</name>
-	    		<label>Size of the extended Sobel kernel</label>
-	    		<items>
-	    		  <item key="1">1</item>
-	    		  <item key="3">3</item>
-	    		  <item key="5">5</item>
-			  <item key="7">7</item>	    	
+			<name>KernelSize</name>
+			<label>Kernel</label>
+			<items>
+				<item key="1">1x1</item>
+				<item key="3">3x3</item>
+				<item key="5">5x5</item>
+				<item key="7">7x7</item>
 			</items>
-	    		<default>3</default>
-	    		<reloadable>true</reloadable>
-	  	</parameter>
+			<default>3</default>
+			<onchange>reload</onchange>
+	  	</parameter>
 	</configuration>
 </swistrackcomponent>

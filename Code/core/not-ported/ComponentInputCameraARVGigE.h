@@ -44,7 +44,7 @@ public:
 		return new ComponentInputCameraARVGigE(mCore);
 	}
 
-	cv::Mat *mOutputImage;								//!< The current output image (only used for color acquisition, for mono acquision one of the mInputBufferImages is used).
+	cv::Mat mOutputImage;								//!< The current output image (only used for color acquisition, for mono acquision one of the mInputBufferImages is used).
 	unsigned int buffer_count;
 	bool imageProcessed, imageReady;
 private:
@@ -57,20 +57,20 @@ private:
 
 
 	static const int mInputBufferSizeMax = 32;							//!< The maximum number of input buffer images.
-	cv::Mat *mInputBufferImages[mInputBufferSizeMax];					//!< The input buffer images.
+	cv::Mat * mInputBufferImages[mInputBufferSizeMax];					//!< The input buffer images.
 
 	int mFrameNumberStart;								//!< The frame number of the first acquired frame, or -1 if no frame has been acquired yet.
 
 	Display mDisplayOutput;
-	ArvCamera *mCamera;
-	ArvStream *mStream;
-	ArvBuffer *mBuffer;
+	ArvCamera * mCamera;
+	ArvStream * mStream;
+	ArvBuffer * mBuffer;
 
 
-	char *arv_option_camera_name;
-	char *arv_option_debug_domains;
+	char * arv_option_camera_name;
+	char * arv_option_debug_domains;
 	gboolean arv_option_snaphot;
-	char *arv_option_trigger;
+	char * arv_option_trigger;
 	double arv_option_software_trigger;
 	double arv_option_frequency;
 	int arv_option_offset_x;
@@ -86,7 +86,7 @@ private:
 	unsigned int arv_option_packet_timeout;
 	unsigned int arv_option_frame_retention;
 
-	GMainLoop *main_loop;
+	GMainLoop * main_loop;
 };
 
 #else // USE_CAMERA_PYLON_GIGE

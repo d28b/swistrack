@@ -1,7 +1,7 @@
 #include "ComponentBinaryMask.h"
 #define THISCLASS ComponentBinaryMask
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 #include "ImageTools.h"
 
@@ -11,7 +11,7 @@ THISCLASS::ComponentBinaryMask(SwisTrackCore * stc):
 	mDisplayOutput(wxT("Output"), wxT("After applying mask")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingBinary);
+	mCategory = &(mCore->mCategoryProcessingBinary);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);

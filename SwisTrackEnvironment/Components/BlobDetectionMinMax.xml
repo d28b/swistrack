@@ -14,13 +14,13 @@
 			<default>10</default>
 			<unit>blobs</unit>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="checkbox">
 			<name>SelectionByArea</name>
 			<label>Filter by area</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>MinArea</name>
@@ -28,7 +28,7 @@
 			<min>0</min>
 			<default>10</default>
 			<unit>pixels</unit>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>MaxArea</name>
@@ -36,13 +36,13 @@
 			<min>0</min>
 			<default>100</default>
 			<unit>pixels</unit>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="checkbox">
 			<name>SelectionByCompactness</name>
 			<label>Filter by compactness</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>MinCompactness</name>
@@ -52,7 +52,7 @@
 			<max>1</max>
 			<slider>true</slider>
 			<sliderstep>0.01</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>MaxCompactness</name>
@@ -62,13 +62,13 @@
 			<max>1</max>
 			<slider>true</slider>
 			<sliderstep>0.01</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="checkbox">
 			<name>SelectionByOrientation</name>
 			<label>Filter by orientation</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>MinOrientation</name>
@@ -78,7 +78,7 @@
 			<max>180</max>
 			<slider>true</slider>
 			<sliderstep>0.1</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>MaxOrientation</name>
@@ -88,7 +88,7 @@
 			<max>180</max>
 			<slider>true</slider>
 			<sliderstep>0.1</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

@@ -27,8 +27,17 @@ public:
 	}
 
 private:
-	cv::Scalar mSourceColor;
-	cv::Scalar mTargetColor;
+	class BGR {
+	public:
+		unsigned char b;
+		unsigned char g;
+		unsigned char r;
+
+		BGR(wxColour color): b(color.Blue()), g(color.Green()), r(color.Red()) { }
+	};
+
+	BGR mSourceColor;
+	BGR mTargetColor;
 	Display mDisplayOutput;
 };
 

@@ -25,8 +25,6 @@ public:
 		return new ComponentInputCameraUSB(mCore);
 	}
 
-	double GetFPS();
-
 private:
 	bool mFlipHorizontally;				//!< (configuration) Flip the image horizontally.
 	bool mFlipVertically;				//!< (configuration) Flip the image vertically.

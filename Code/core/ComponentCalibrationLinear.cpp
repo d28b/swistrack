@@ -8,7 +8,7 @@
 
 THISCLASS::ComponentCalibrationLinear(SwisTrackCore * stc):
 	Component(stc, wxT("CalibrationLinear")),
-	mDisplayOutput(wxT("Output"), wxT("Linear Calibration: Output")) {
+	mDisplayOutput(wxT("Output"), wxT("After calibration")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryCalibration);
@@ -25,8 +25,8 @@ THISCLASS::~ComponentCalibrationLinear() {
 
 void THISCLASS::OnStart() {
 	// Read the file containing the calibration points
-	wxString filename_string = GetConfigurationString(wxT("CalibrationPoints"), wxT(""));
-	wxFileName filename = mCore->GetProjectFileName(filename_string);
+	wxString filenameString = GetConfigurationString(wxT("CalibrationPoints"), wxT(""));
+	wxFileName filename = mCore->GetProjectFileName(filenameString);
 	wxLogNull log;
 	wxXmlDocument document;
 	bool isopen = document.Load(filename.GetFullPath());
@@ -53,7 +53,7 @@ void THISCLASS::OnStart() {
 	calibrationPointList.clear();
 
 	// Fill the vector with the readen points
-	wxXmlNode *node = mSelectedNode->GetChildren();
+	wxXmlNode * node = mSelectedNode->GetChildren();
 	while (node) {
 		if (node->GetName() == wxT("point")) {
 			ReadPoint(node);
@@ -108,9 +108,8 @@ void THISCLASS::OnStart() {
 	cv::Mat cameraTransform = mulTransposed.inv() * imageMatrix.t() * objectMatrix;
 
 	// Copy cameratransformation to appropriate format
-	for (int i = 0; i < 12; i++) {
+	for (int i = 0; i < 12; i++)
 		cameraMatrix[i] = cameraTransform.at<float>(i, 0);
-	}
 
 	//Compute error of calibration on calibration points
 	double errorX, errorY, maxErrorX, maxErrorY, maxErrorD, errorD;
@@ -184,9 +183,8 @@ void THISCLASS::OnStep() {
 	if (! particles) return;
 
 	// Transform all particle positions
-	for (auto particle : *particles) {
+	for (auto & particle : *particles)
 		particle.mWorldCenter = Image2World(particle.mCenter);
-	}
 }
 
 void THISCLASS::OnStepCleanup() {
@@ -195,7 +193,7 @@ void THISCLASS::OnStepCleanup() {
 void THISCLASS::OnStop() {
 }
 
-void THISCLASS::ReadPoint(wxXmlNode *node) {
+void THISCLASS::ReadPoint(wxXmlNode * node) {
 	mSelectedNode = node;
 
 	CalibrationPoint calibrationPoint;

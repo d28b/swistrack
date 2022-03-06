@@ -143,7 +143,7 @@ void THISCLASS::DataAssociation() {
 	for (p = particles->begin(); p != particles->end(); p++) {
 		if (p->mID == -1) {
 			//			printf("Create new noise trajectory (%d)\n",id);
-			//Track* tmpTrack = new Track(id,trackingimg,mMaxNumber);
+			//Track * tmpTrack = new Track(id,trackingimg,mMaxNumber);
 			ptargets[id] = Track(id);
 			//delete tmpTrack;
 			ptargets[id].AddPoint(p->mCenter, mCore->mDataStructureInput.mFrameNumber);
@@ -213,7 +213,7 @@ void THISCLASS::DataAssociation() {
 */
 double THISCLASS::GetCost(int id, cv::Point2f p) {
 	return (mTracks[id].trajectory.back().x - p.x) * (mTracks[id].trajectory.back().x - p.x)
-	       + (mTracks[id].trajectory.back().y - p.y) * (mTracks[id].trajectory.back().y - p.y);
+	     + (mTracks[id].trajectory.back().y - p.y) * (mTracks[id].trajectory.back().y - p.y);
 }
 
 void THISCLASS::OnStep() {
@@ -255,7 +255,7 @@ void THISCLASS::AddCompetitor(int c) {
 * \param fp : number of free particles
 * \param ap : number of associated particles
 */
-void THISCLASS::FindFreeParticles(int* fp, int* ap) {
+void THISCLASS::FindFreeParticles(int * fp, int * ap) {
 	*fp = 0;
 	*ap = 0;
 	for (DataStructureParticles::tParticleVector::iterator p = particles->begin();

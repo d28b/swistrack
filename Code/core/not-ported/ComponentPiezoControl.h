@@ -29,8 +29,8 @@ private:
 	wxString device;
 	int serial_fd;
 	void write_serial(char output);
-	void write_serial_port(char *Buffer, int BytesToWrite);
-	void print_serial(const char* string);
+	void write_serial_port(char * Buffer, int BytesToWrite);
+	void print_serial(const char * string);
 	void setPiezo(int frequency, int amplitude);
 	int rfreq;
 	int frequency1;

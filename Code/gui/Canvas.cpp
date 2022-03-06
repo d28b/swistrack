@@ -27,11 +27,13 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 	EVT_MENU(cID_UpdateRate32, THISCLASS::OnMenuUpdateRate)
 	EVT_MENU(cID_UpdateRate64, THISCLASS::OnMenuUpdateRate)
 	EVT_MENU(cID_UpdateRate128, THISCLASS::OnMenuUpdateRate)
+	EVT_MENU(cID_FlipVertically, THISCLASS::OnMenuFlipVertically)
+	EVT_MENU(cID_FlipHorizontally, THISCLASS::OnMenuFlipHorizontally)
 	EVT_MENU(cID_SaveViewImageAs, THISCLASS::OnMenuSaveViewImageAs)
 	EVT_MENU(cID_SaveOriginalImageAs, THISCLASS::OnMenuSaveOriginalImageAs)
 END_EVENT_TABLE()
 
-THISCLASS::Canvas(CanvasPanel *cp):
+THISCLASS::Canvas(CanvasPanel * cp):
 	wxControl(cp, -1), mCanvasPanel(cp), mPopupMenu(), mDisplayRenderer(),
 	mMoveStarted(false), mMoveStartPoint() {
 
@@ -60,7 +62,6 @@ THISCLASS::Canvas(CanvasPanel *cp):
 	mPopupMenu.AppendSeparator();
 	mPopupMenu.Append(cID_SaveViewImageAs, wxT("Save displayed image as ..."));
 	mPopupMenu.Append(cID_SaveOriginalImageAs, wxT("Save original image as ..."));
-	//mWriter.Open(wxT("displayOutput.avi"));
 
 	// Set non-bold font
 	wxFont f = GetFont();
@@ -68,10 +69,9 @@ THISCLASS::Canvas(CanvasPanel *cp):
 }
 
 THISCLASS::~Canvas() {
-	//mWriter.Close();
 }
 
-void THISCLASS::SetDisplay(Display *display) {
+void THISCLASS::SetDisplay(Display * display) {
 	mDisplayRenderer.SetDisplay(display);
 	OnDisplayChanged();
 }
@@ -88,20 +88,16 @@ void THISCLASS::UpdateView() {
 
 wxSize THISCLASS::GetMaximumSize() {
 	cv::Size size = mDisplayRenderer.GetSize();
-	if (size.width < 32) {
-		size.width = 32;
-	}
-	if (size.height < 32) {
-		size.height = 32;
-	}
+	if (size.width < 32) size.width = 32;
+	if (size.height < 32) size.height = 32;
 	return wxSize(size.width, size.height);
 }
 
-void THISCLASS::OnEraseBackground(wxEraseEvent& event) {
+void THISCLASS::OnEraseBackground(wxEraseEvent & event) {
 	// Overwrite this method to avoid drawing the background
 }
 
-void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
+void THISCLASS::OnPaint(wxPaintEvent & WXUNUSED(event)) {
 	wxPaintDC dc(this);
 	bool ok = OnPaintImage(dc);
 
@@ -116,16 +112,10 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	}
 }
 
-bool THISCLASS::OnPaintImage(wxPaintDC &dc) {
+bool THISCLASS::OnPaintImage(wxPaintDC & dc) {
 	cv::Mat img = mDisplayRenderer.GetImage();
 	if (img.empty()) return false;
 
-	// Uncomment to write to an AVI file.
-	// It would be nice if this was a gui, but it's not.
-	// It writes the contents of the display, so it includes all
-	// tracks and everything.
-	// The filename is hardcoded and specified above.
-	//mWriter.WriteFrame(img);
 	// Create an image that has the size of the DC
 	wxSize dcSize = dc.GetSize();
 	int dw = dcSize.GetWidth();
@@ -201,16 +191,16 @@ bool THISCLASS::OnPaintImage(wxPaintDC &dc) {
 	return true;
 }
 
-void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
+void THISCLASS::OnMouseLeftDown(wxMouseEvent & event) {
 	mMoveStartPoint = event.GetPosition();
 	mMoveStarted = true;
 }
 
-void THISCLASS::OnMouseLeftUp(wxMouseEvent &event) {
+void THISCLASS::OnMouseLeftUp(wxMouseEvent & event) {
 	mMoveStarted = false;
 }
 
-void THISCLASS::OnMouseMove(wxMouseEvent &event) {
+void THISCLASS::OnMouseMove(wxMouseEvent & event) {
 	if (! mMoveStarted) return;
 
 	if (! event.LeftIsDown()) {
@@ -238,7 +228,7 @@ void THISCLASS::OnMouseMove(wxMouseEvent &event) {
 	Refresh(true);
 }
 
-void THISCLASS::OnMouseRightDown(wxMouseEvent &event) {
+void THISCLASS::OnMouseRightDown(wxMouseEvent & event) {
 	mPopupMenu.Check(cID_FlipVertically, mDisplayRenderer.GetFlipVertical());
 	mPopupMenu.Check(cID_FlipHorizontally, mDisplayRenderer.GetFlipHorizontal());
 
@@ -259,11 +249,11 @@ void THISCLASS::OnMouseRightDown(wxMouseEvent &event) {
 	PopupMenu(&mPopupMenu);
 }
 
-void THISCLASS::OnSize(wxSizeEvent &event) {
+void THISCLASS::OnSize(wxSizeEvent & event) {
 	Refresh(true);
 }
 
-void THISCLASS::OnMenuSaveOriginalImageAs(wxCommandEvent& event) {
+void THISCLASS::OnMenuSaveOriginalImageAs(wxCommandEvent & event) {
 	// Get the current image
 	Display * display = mCanvasPanel->mCurrentDisplay;
 	if (display == 0) return;
@@ -274,7 +264,7 @@ void THISCLASS::OnMenuSaveOriginalImageAs(wxCommandEvent& event) {
 	cv::Mat imgCopy = CopyToBGR(img);
 
 	// Show the file save dialog
-	wxFileDialog * dlg = new wxFileDialog(this, wxT("Save original image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp|All files|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
+	wxFileDialog * dlg = new wxFileDialog(this, wxT("Save original image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp|PNG images (*.png)|*.png|JPEG images (*.jpeg)|*.jpeg|All files|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
 	if (dlg->ShowModal() != wxID_OK) return;
 
 	// Save the image
@@ -286,16 +276,17 @@ void THISCLASS::OnMenuSaveOriginalImageAs(wxCommandEvent& event) {
 	}
 }
 
-void THISCLASS::OnMenuSaveViewImageAs(wxCommandEvent& event) {
+void THISCLASS::OnMenuSaveViewImageAs(wxCommandEvent & event) {
 	// Copy the current image (since the file dialog will allow other threads to run)
 	cv::Mat img = mDisplayRenderer.GetImage();
 	if (img.empty()) return;
 
-	// Copy the current image (since the file dialog will allow other threads to run, which may modify the image)
-	cv::Mat imgCopy = CopyToBGR(img);
+	// Copy the current image (since the file dialog will allow other threads to run, which may modify the image) and convert it from RGB to BGR
+	cv::Mat imgCopy = cv::Mat(img.size(), CV_8UC3);
+	cv::cvtColor(img, imgCopy, cv::COLOR_RGB2BGR);
 
 	// Show the file save dialog
-	wxFileDialog *dlg = new wxFileDialog(this, wxT("Save displayed image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp|All files|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
+	wxFileDialog * dlg = new wxFileDialog(this, wxT("Save displayed image"), wxT(""), wxT(""), wxT("Bitmap (*.bmp)|*.bmp|PNG images (*.png)|*.png|JPEG images (*.jpeg)|*.jpeg|All files|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
 	if (dlg->ShowModal() != wxID_OK) return;
 
 	// Save the image
@@ -322,15 +313,15 @@ cv::Mat THISCLASS::CopyToBGR(cv::Mat src) {
 	return dest;
 }
 
-void THISCLASS::OnMenuFlipVertically(wxCommandEvent& event) {
+void THISCLASS::OnMenuFlipVertically(wxCommandEvent & event) {
 	mDisplayRenderer.SetFlipVertical(event.IsChecked());
 }
 
-void THISCLASS::OnMenuFlipHorizontally(wxCommandEvent& event) {
+void THISCLASS::OnMenuFlipHorizontally(wxCommandEvent & event) {
 	mDisplayRenderer.SetFlipHorizontal(event.IsChecked());
 }
 
-void THISCLASS::OnMenuZoom(wxCommandEvent& event) {
+void THISCLASS::OnMenuZoom(wxCommandEvent & event) {
 	if (event.GetId() == cID_Zoom200) {
 		mDisplayRenderer.SetScalingFactor(2);
 	} else if (event.GetId() == cID_Zoom100) {
@@ -344,10 +335,11 @@ void THISCLASS::OnMenuZoom(wxCommandEvent& event) {
 	} else {
 		mDisplayRenderer.SetScalingFactorMax(cv::Size(mCanvasPanel->mAvailableSpace.GetWidth(), mCanvasPanel->mAvailableSpace.GetHeight()));
 	}
+
 	UpdateView();
 }
 
-void THISCLASS::OnMenuUpdateRate(wxCommandEvent& event) {
+void THISCLASS::OnMenuUpdateRate(wxCommandEvent & event) {
 	if (event.GetId() == cID_UpdateRate0) {
 		mCanvasPanel->mUpdateRate = 0;
 	} else if (event.GetId() == cID_UpdateRate2) {

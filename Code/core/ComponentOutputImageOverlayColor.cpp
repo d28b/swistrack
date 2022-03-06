@@ -1,7 +1,7 @@
 #include "ComponentOutputImageOverlayColor.h"
 #define THISCLASS ComponentOutputImageOverlayColor
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentOutputImageOverlayColor(SwisTrackCore * stc):

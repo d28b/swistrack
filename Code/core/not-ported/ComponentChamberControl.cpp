@@ -1,7 +1,7 @@
 #include "ComponentChamberControl.h"
 #define THISCLASS ComponentChamberControl
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 
 #include <sys/types.h>
@@ -10,11 +10,8 @@
 #include <termios.h>
 #include <stdio.h>
 
-
-
 using namespace cv;
 using namespace std;
-
 
 #define NUMBER_VALVES 4
 #define VALVEPORT "RD"
@@ -58,7 +55,7 @@ THISCLASS::~ComponentChamberControl() {
 
 
 
-void THISCLASS::write_serial_port (char *Buffer, int BytesToWrite) {
+void THISCLASS::write_serial_port (char * Buffer, int BytesToWrite) {
   int AmountWritten = 0;
   int StillToWrite;
   if (serial_fd<=0){
@@ -95,8 +92,8 @@ void THISCLASS::write_serial(char output) {
 
 }
 
-void THISCLASS::print_serial(const char* string) {
-	const char* s = string;
+void THISCLASS::print_serial(const char * string) {
+	const char * s = string;
 	while (*s != 0) {
 		write_serial(*s);
 		s++;

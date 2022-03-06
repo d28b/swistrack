@@ -30,13 +30,13 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_MENU(cID_PopupMenu_EnabledInterval128, THISCLASS::OnPopupMenuEnabledInterval)
 END_EVENT_TABLE()
 
-THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
+THISCLASS::ComponentListPanel(wxWindow * parent, SwisTrack * st):
 	wxPanel(parent, -1), SwisTrackCoreInterface(),
 	mSwisTrack(st), mSelectedComponent(0),
 	mPopupMenu(), mList(0), mComponentsDialog(0) {
 
 	// Add SwisTrackCoreInterface
-	SwisTrackCore *stc = mSwisTrack->mSwisTrackCore;
+	SwisTrackCore * stc = mSwisTrack->mSwisTrackCore;
 	stc->AddInterface(this);
 
 	// Create the popup menu
@@ -49,6 +49,9 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval64, wxT("Enabled for every 64th frame"));
 	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval128, wxT("Enabled for every 128th frame"));
 	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval0, wxT("Disabled"));
+
+	// Background
+	SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_DESKTOP));
 
 	// Create List
 	mList = new wxListCtrl(this, cID_List);
@@ -68,11 +71,8 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 	mList->InsertColumn(col++, wxT("Trigger"), wxLIST_FORMAT_CENTER, 50);
 
 	// Add columns for data structures
-	SwisTrackCore::tDataStructureList::iterator it = stc->mDataStructures.begin();
-	while (it != stc->mDataStructures.end()) {
-		mList->InsertColumn(col++, (*it)->mDisplayName, wxLIST_FORMAT_CENTER, 50);
-		it++;
-	}
+	for (auto dataStructure : stc->mDataStructures)
+		mList->InsertColumn(col++, dataStructure->mDisplayName, wxLIST_FORMAT_CENTER, 50);
 
 	// Add column for error messages, enabled interval and step duration
 	mColumnEnabledInterval = col;
@@ -83,19 +83,19 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 	mList->InsertColumn(col++, wxT("Messages"), wxLIST_FORMAT_LEFT, 800);
 
 	// Create Buttons
-	//wxStaticLine *line1=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 2), wxLI_HORIZONTAL);
-	//wxStaticLine *line2=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 2), wxLI_HORIZONTAL);
-	mButtonAdd = new wxBitmapButton(this, cID_ButtonAdd, wxBITMAP(bitmap_plus), wxDefaultPosition, wxSize(25, 25));
-	mButtonRemove = new wxBitmapButton(this, cID_ButtonRemove, wxBITMAP(bitmap_minus), wxDefaultPosition, wxSize(25, 25));
-	mButtonUp = new wxBitmapButton(this, cID_ButtonUp, wxBITMAP(bitmap_up), wxDefaultPosition, wxSize(25, 25));
-	mButtonDown = new wxBitmapButton(this, cID_ButtonDown, wxBITMAP(bitmap_down), wxDefaultPosition, wxSize(25, 25));
+	//wxStaticLine * line1=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 2), wxLI_HORIZONTAL);
+	//wxStaticLine * line2=new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 2), wxLI_HORIZONTAL);
+	mButtonAdd = new wxBitmapButton(this, cID_ButtonAdd, wxBITMAP(bitmap_plus), wxDefaultPosition, wxSize(35, 35));
+	mButtonRemove = new wxBitmapButton(this, cID_ButtonRemove, wxBITMAP(bitmap_minus), wxDefaultPosition, wxSize(35, 35));
+	mButtonUp = new wxBitmapButton(this, cID_ButtonUp, wxBITMAP(bitmap_up), wxDefaultPosition, wxSize(35, 35));
+	mButtonDown = new wxBitmapButton(this, cID_ButtonDown, wxBITMAP(bitmap_down), wxDefaultPosition, wxSize(35, 35));
 
 	// Create top and bottom lines
-	wxStaticLine *topline = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 1), wxLI_HORIZONTAL);
-	wxStaticLine *bottomline = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(25, 1), wxLI_HORIZONTAL);
+	wxStaticLine * topline = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(35, 1), wxLI_HORIZONTAL);
+	wxStaticLine * bottomline = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(35, 1), wxLI_HORIZONTAL);
 
 	// Layout the components in the panel
-	wxBoxSizer *vs = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer * vs = new wxBoxSizer(wxVERTICAL);
 	//vs->Add(line1, 0, 0, 0);
 	vs->Add(mButtonAdd, 0, 0, 0);
 	vs->Add(mButtonRemove, 0, 0, 0);
@@ -104,11 +104,11 @@ THISCLASS::ComponentListPanel(wxWindow* parent, SwisTrack *st):
 	vs->Add(mButtonDown, 0, 0, 0);
 	//vs->Add(line2, 0, 0, 0);
 
-	wxBoxSizer *hs = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer * hs = new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(mList, 1, wxEXPAND, 0);
 	hs->Add(vs, 0, wxEXPAND, 0);
 
-	wxBoxSizer *vstop = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer * vstop = new wxBoxSizer(wxVERTICAL);
 	vstop->Add(topline, 0, wxEXPAND, 0);
 	vstop->Add(hs, 1, wxEXPAND, 0);
 	vstop->Add(bottomline, 0, wxEXPAND, 0);
@@ -222,7 +222,7 @@ void THISCLASS::UpdateStatus() {
 			li.SetColumn(mColumnMessages);
 
 			wxString str;
-			for (auto status : c->mStatus) {
+			for (auto & status : c->mStatus) {
 				if (status.mType == StatusItem::sTypeError) {
 					str += status.mMessage;
 					str += wxT(" ");
@@ -308,7 +308,7 @@ void THISCLASS::OnAfterEdit() {
 	mSwisTrack->mSwisTrackCore->ReloadConfiguration();
 }
 
-void THISCLASS::OnButtonAddClick(wxCommandEvent& event) {
+void THISCLASS::OnButtonAddClick(wxCommandEvent & event) {
 	SwisTrackCoreEditor stce(mSwisTrack->mSwisTrackCore);
 	if (! stce.IsEditable()) return;
 
@@ -322,38 +322,41 @@ void THISCLASS::OnButtonAddClick(wxCommandEvent& event) {
 	if (! mComponentsDialog->mSelectedComponent) return;
 
 	// Create the new component
-	Component *newcomponent = mComponentsDialog->mSelectedComponent->Create();
+	Component * newComponent = mComponentsDialog->mSelectedComponent->Create();
 
 	// Try to insert the new component in a suitable spot in the list
-	SwisTrackCore::tComponentList *cl = stce.GetDeployedComponents();
-	if (newcomponent->mCategory && newcomponent->mCategory->mOrder) {
+	SwisTrackCore::tComponentList * cl = stce.GetDeployedComponents();
+	if (newComponent->mCategory && newComponent->mCategory->mOrder) {
 		SwisTrackCore::tComponentList::iterator it;
 		for (it = cl->begin(); it != cl->end(); it++) {
-			if ((*it)->mCategory && ((*it)->mCategory->mOrder > newcomponent->mCategory->mOrder)) {
-				cl->insert(it, newcomponent);
+			if ((*it)->mCategory && ((*it)->mCategory->mOrder > newComponent->mCategory->mOrder)) {
+				cl->insert(it, newComponent);
+				mSwisTrack->SetConfigurationPanel(newComponent);
 				return;
 			}
 		}
 	}
 
 	// If no optimal position could be determined, add the component to the end
-	cl->push_back(newcomponent);
+	cl->push_back(newComponent);
+	mSwisTrack->SetConfigurationPanel(newComponent);
 }
 
-void THISCLASS::OnButtonRemoveClick(wxCommandEvent& event) {
+void THISCLASS::OnButtonRemoveClick(wxCommandEvent & event) {
 	SwisTrackCoreEditor stce(mSwisTrack->mSwisTrackCore);
 	if (! stce.IsEditable()) return;
 
 	// Find the corresponding component in the list and delete it
-	SwisTrackCore::tComponentList *cl = stce.GetDeployedComponents();
+	SwisTrackCore::tComponentList * cl = stce.GetDeployedComponents();
 	SwisTrackCore::tComponentList::iterator it = find(cl->begin(), cl->end(), mSelectedComponent);
 	if (it == cl->end()) return;
 
+	mSwisTrack->SetConfigurationPanel(0);
 	cl->erase(it);
 	delete mSelectedComponent;
 }
 
-void THISCLASS::OnButtonUpClick(wxCommandEvent& event) {
+void THISCLASS::OnButtonUpClick(wxCommandEvent & event) {
 	SwisTrackCoreEditor stce(mSwisTrack->mSwisTrackCore);
 	if (! stce.IsEditable()) return;
 
@@ -369,12 +372,12 @@ void THISCLASS::OnButtonUpClick(wxCommandEvent& event) {
 	cl->insert(it2, mSelectedComponent);
 }
 
-void THISCLASS::OnButtonDownClick(wxCommandEvent& event) {
+void THISCLASS::OnButtonDownClick(wxCommandEvent & event) {
 	SwisTrackCoreEditor stce(mSwisTrack->mSwisTrackCore);
 	if (! stce.IsEditable()) return;
 
 	// Find the corresponding component in the list and move it up
-	SwisTrackCore::tComponentList *cl = stce.GetDeployedComponents();
+	SwisTrackCore::tComponentList * cl = stce.GetDeployedComponents();
 	SwisTrackCore::tComponentList::iterator it = find(cl->begin(), cl->end(), mSelectedComponent);
 	if (it == cl->end()) return;
 
@@ -386,24 +389,24 @@ void THISCLASS::OnButtonDownClick(wxCommandEvent& event) {
 	cl->insert(it2, mSelectedComponent);
 }
 
-void THISCLASS::OnListItemSelected(wxListEvent& event) {
+void THISCLASS::OnListItemSelected(wxListEvent & event) {
 	mSelectedComponent = (Component *) event.GetData();
 
 	mSwisTrack->SetConfigurationPanel(mSelectedComponent);
 	mSwisTrack->mTimelinePanel->SelectComponent(mSelectedComponent);
 }
 
-void THISCLASS::OnListItemDeselected(wxListEvent& event) {
+void THISCLASS::OnListItemDeselected(wxListEvent & event) {
 	mSwisTrack->SetConfigurationPanel(0);
 }
 
-void THISCLASS::OnListLeftDoubleClick(wxMouseEvent& event) {
+void THISCLASS::OnListLeftDoubleClick(wxMouseEvent & event) {
 	wxMiniFrame * frame = new wxMiniFrame(this, -1, _("Configuration"), wxDefaultPosition, wxSize(230, 400), wxCAPTION | wxRESIZE_BORDER | wxCLOSE_BOX | wxSYSTEM_MENU);
 	new ConfigurationPanel(frame, mSwisTrack, mSelectedComponent);
 	frame->Show();
 }
 
-void THISCLASS::OnListMouseRightDown(wxMouseEvent& event) {
+void THISCLASS::OnListMouseRightDown(wxMouseEvent & event) {
 	if (! mSelectedComponent) return;
 
 	mPopupMenu.Enable(cID_PopupMenu_EnabledInterval0, ! mSwisTrack->mSwisTrackCore->IsStartedInProductionMode());
@@ -430,7 +433,7 @@ void THISCLASS::OnListMouseRightDown(wxMouseEvent& event) {
 	PopupMenu(&mPopupMenu);
 }
 
-void THISCLASS::OnPopupMenuEnabledInterval(wxCommandEvent& event) {
+void THISCLASS::OnPopupMenuEnabledInterval(wxCommandEvent & event) {
 	if (mSwisTrack->mSwisTrackCore->IsStartedInProductionMode()) return;
 
 	// Set the enabled flag

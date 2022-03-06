@@ -7,6 +7,7 @@
 	</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/MinCostFlowTracking</url>
 	<displayimage>Output</displayimage>
+
 	<configuration>
 	  <parameter type="double">
 	    <name>MaxDistanceForTrack</name>
@@ -15,7 +16,7 @@
 	    <max>1000</max>
 	    <default>20</default>
 	    <slider>true</slider>
-	    <reloadable>false</reloadable>
+	    <onchange>restart</onchange>
 	  </parameter>
 
 	  <parameter type="double">
@@ -24,7 +25,7 @@
 	    <min>0</min>
 	    <max>1000</max>
 	    <slider>true</slider>
-	    <reloadable>false</reloadable>
+	    <onchange>restart</onchange>
 	  </parameter>
 
 	  <parameter type="double">
@@ -33,7 +34,7 @@
 	    <min>0</min>
 	    <max>1000</max>
 	    <slider>true</slider>
-	    <reloadable>false</reloadable>
+	    <onchange>restart</onchange>
 	  </parameter>
 
 
@@ -43,7 +44,7 @@
 	    <min>0</min>
 	    <max>1000</max>
 	    <slider>true</slider>
-	    <reloadable>false</reloadable>
+	    <onchange>restart</onchange>
 	  </parameter>
 
 
@@ -53,8 +54,7 @@
 	    <min>0</min>
 	    <max>1000</max>
 	    <slider>true</slider>
-	    <reloadable>false</reloadable>
+	    <onchange>restart</onchange>
 	  </parameter>
-
 	</configuration>
 </swistrackcomponent>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Conversion to Color</friendlyname>
+	<description>Converts a binary image to a color (BGR) image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ConvertBinaryToColor</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+	</configuration>
+</swistrackcomponent>

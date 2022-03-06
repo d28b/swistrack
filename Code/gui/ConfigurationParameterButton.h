@@ -16,20 +16,20 @@ class ConfigurationParameterButton: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterButton(wxWindow* parent);
+	ConfigurationParameterButton(wxWindow * parent);
 	//! Destructor.
 	~ConfigurationParameterButton();
 
 	//! Handles the corresponding GUI event.
-	void OnClick(wxCommandEvent& event);
+	void OnClick(wxCommandEvent & event);
 
 private:
-	wxButton *mButton;			//!< The corresponding GUI widget.
+	wxButton * mButton;			//!< The corresponding GUI widget.
 	wxString mValue;			//!< The value to set when the user clicks the button.
 
 	// ConfigurationParameter methods
-	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
-	virtual void OnUpdate(wxWindow *updateprotection);
+	virtual void OnInitialize(ConfigurationXML * config, ErrorList * errorlist);
+	virtual void OnUpdate(wxWindow * updateprotection);
 	virtual void OnSetNewValue();
 
 	DECLARE_EVENT_TABLE()

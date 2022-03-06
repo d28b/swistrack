@@ -22,6 +22,11 @@ private:
 	double mMinOrientation;			//!< (configuration) The minimum orientation of a blob.
 	double mMaxOrientation;			//!< (configuration) The maximum orientation of a blob.
 
+	static const int NEXT_SIBLING = 0;
+	static const int PREV_SIBLING = 1;
+	static const int FIRST_CHILD = 2;
+	static const int PARENT = 3;
+
 public:
 	std::vector<std::vector<cv::Point>> mSelectedContours;	//!< The contours that correspond to the criteria.
 	DataStructureParticles::tParticleVector mParticles;		//!< The detected particles.

@@ -16,9 +16,9 @@ public:
 	~DisplayRenderer();
 
 	//! Sets the display.
-	void SetDisplay(Display *display);
+	void SetDisplay(Display * display);
 	//! Sets a new scaling factor.
-	void SetScalingFactor(double scalingfactor);
+	void SetScalingFactor(double scalingFactor);
 	//! Sets the scaling factor to the maximal possible value to fit the image within maxwidth/maxheight.
 	void SetScalingFactorMax(cv::Size maxsize);
 	//! Sets the horizontal flip flag.
@@ -29,7 +29,7 @@ public:
 	void SetCropRectangle(cv::Rect rect);
 
 	//! Returns the display.
-	Display *GetDisplay() {
+	Display * GetDisplay() {
 		return mDisplay;
 	}
 	//! Returns the scaling factor.
@@ -38,11 +38,11 @@ public:
 	}
 	//! Returns the horizontal flip flag.
 	bool GetFlipHorizontal() {
-		return mFlipHorizontal;
+		return mFlipHorizontally;
 	}
 	//! Returns the vertical flip flag.
 	bool GetFlipVertical() {
-		return mFlipVertical;
+		return mFlipVertically;
 	}
 	//! Returns the crop rectangle.
 	cv::Rect GetCropRectangle() {
@@ -67,8 +67,8 @@ private:
 	// View properties
 	double mScalingFactor;		//!< The scaling factor.
 	cv::Rect mCropRectangle;	//!< The rectangle selecting the area to draw (TODO not implemented).
-	bool mFlipVertical;			//!< Whether the image should be flipped vertically.
-	bool mFlipHorizontal;		//!< Whether the image should be flipped horizontally.
+	bool mFlipVertically;		//!< Whether the image should be flipped vertically.
+	bool mFlipHorizontally;		//!< Whether the image should be flipped horizontally.
 
 	// Drawing layer properties
 	bool mDrawImage;			//!< Whether to draw the main image.
@@ -78,13 +78,13 @@ private:
 	bool mUseMask;				//!< Whether to use the mask.
 
 	//! Draws the main image layer.
-	bool DrawMainImage(ErrorList *errors);
+	bool DrawMainImage(ErrorList * errors);
 	//! Draws the particle layer.
-	bool DrawParticles(ErrorList *errors);
+	bool DrawParticles(ErrorList * errors);
 	//! Draws the trajectory layer.
-	bool DrawTrajectories(ErrorList *errors);
+	bool DrawTrajectories(ErrorList * errors);
 	//! Draws the errors.
-	bool DrawErrors(ErrorList *errors);
+	bool DrawErrors(ErrorList * errors);
 	//! Draws an image with a message in the center.
 	bool DrawMessagePanel(wxString errstr = wxT(""));
 

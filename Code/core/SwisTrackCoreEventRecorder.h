@@ -47,7 +47,7 @@ public:
 	public:
 		tTime mTime;				//!< The time of the event.
 		eType mType;				//!< The event type.
-		Component *mComponent;		//!< The associated component (if any).
+		Component * mComponent;		//!< The associated component (if any).
 	};
 
 	//! A class holding the state of SwisTrackCore at a specific time instance.
@@ -71,7 +71,7 @@ public:
 		tEventList mEvents;									//!< The recorded events. This vector is initialized to a certain size
 	};
 
-	SwisTrackCore *mSwisTrackCore;				//!< The associated SwisTrackCore object.
+	SwisTrackCore * mSwisTrackCore;				//!< The associated SwisTrackCore object.
 	tTypeNameMap mTypeNames;					//!< String names of the event types.
 
 	//! Constructor.
@@ -82,18 +82,18 @@ public:
 	//! Starts a new recording and makes the old recording available through GetLastTimeline().
 	void StartRecording();
 	//! Adds a new event to the current timeline.
-	void Add(const eType type, Component *component = 0);
+	void Add(const eType type, Component * component = 0);
 	//! Adds a new event to the current timeline.
-	void Add(const Event *it);
+	void Add(const Event * it);
 	//! Adds a sType_StepStart event and keeps track of the FPS.
 	void AddStepStart();
 	//! Stores an event in an Item object.
-	static void LapTime(Event *it, const eType type, Component *component = 0);
+	static void LapTime(Event * it, const eType type, Component * component = 0);
 	//! Returns the duration (in seconds) between two timeline items.
-	double CalculateDuration(const Event *it1, const Event *it2) const;
+	double CalculateDuration(const Event * it1, const Event * it2) const;
 
 	//! Returns the last timeline.
-	const Timeline *GetLastTimeline() const {
+	const Timeline * GetLastTimeline() const {
 		return mLastTimeline;
 	}
 	//! Returns the frames per seconds.
@@ -109,8 +109,8 @@ private:
 #ifdef __WXMSW__
 	double mFrequency;				//!< The frequency of the performance counter.
 #endif
-	Timeline *mCurrentTimeline;		//!< The timeline which currently records events.
-	Timeline *mLastTimeline;		//!< The previously recorded timeline.
+	Timeline * mCurrentTimeline;		//!< The timeline which currently records events.
+	Timeline * mLastTimeline;		//!< The previously recorded timeline.
 	Event mPreviousStep;			//!< Timestamp of the previous step.
 	double mStepDistance;			//!< The distance (time) between two steps.
 

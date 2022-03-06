@@ -8,14 +8,14 @@
 	<configuration>
 		<parameter type="double">
 			<name>MaxDistance</name>
-			<label>Max. distance</label>
+			<label>Distance</label>
 			<min>0</min>
-			<default>10</default>
-			<max>100</max>
+			<default>50</default>
+			<max>1000</max>
 			<unit>pixels</unit>
 			<slider>true</slider>
 			<sliderstep>1</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>Center</name>
@@ -26,7 +26,7 @@
 				<item key="1.0">Color 2 blob</item>
 			</items>
 			<default>0.5</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 
 		<line />
@@ -35,7 +35,7 @@
 			<name>Color1_Color</name>
 			<label>Color 1</label>
 			<default>#ff0000</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>Color1_ThresholdR</name>
@@ -43,7 +43,7 @@
 			<min>0</min>
 			<max>255</max>
 			<default>32</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>Color1_ThresholdG</name>
@@ -51,7 +51,7 @@
 			<min>0</min>
 			<max>255</max>
 			<default>32</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>Color1_ThresholdB</name>
@@ -59,7 +59,7 @@
 			<min>0</min>
 			<max>255</max>
 			<default>32</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>Color1_MaxNumber</name>
@@ -69,13 +69,13 @@
 			<default>10</default>
 			<unit>blobs</unit>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="checkbox">
 			<name>Color1_SelectionByArea</name>
 			<label>Selection by area</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>Color1_MinArea</name>
@@ -83,7 +83,7 @@
 			<min>0</min>
 			<default>10</default>
 			<unit>pixels</unit>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>Color1_MaxArea</name>
@@ -91,13 +91,13 @@
 			<min>0</min>
 			<default>100</default>
 			<unit>pixels</unit>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="checkbox">
 			<name>Color1_SelectionByCompactness</name>
 			<label>Selection by compactness</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>Color1_MinCompactness</name>
@@ -107,7 +107,7 @@
 			<max>1</max>
 			<slider>true</slider>
 			<sliderstep>0.01</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>Color1_MaxCompactness</name>
@@ -117,7 +117,7 @@
 			<max>1</max>
 			<slider>true</slider>
 			<sliderstep>0.01</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 
 		<line />
@@ -126,7 +126,7 @@
 			<name>Color2_Color</name>
 			<label>Color 2</label>
 			<default>#0000ff</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>Color2_ThresholdR</name>
@@ -134,7 +134,7 @@
 			<min>0</min>
 			<max>255</max>
 			<default>32</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>Color2_ThresholdG</name>
@@ -142,7 +142,7 @@
 			<min>0</min>
 			<max>255</max>
 			<default>32</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>Color2_ThresholdB</name>
@@ -150,7 +150,7 @@
 			<min>0</min>
 			<max>255</max>
 			<default>32</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>Color2_MaxNumber</name>
@@ -160,13 +160,13 @@
 			<default>10</default>
 			<unit>blobs</unit>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="checkbox">
 			<name>Color2_SelectionByArea</name>
 			<label>Selection by area</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>Color2_MinArea</name>
@@ -174,7 +174,7 @@
 			<min>0</min>
 			<default>10</default>
 			<unit>pixels</unit>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>Color2_MaxArea</name>
@@ -182,13 +182,13 @@
 			<min>0</min>
 			<default>100</default>
 			<unit>pixels</unit>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="checkbox">
 			<name>Color2_SelectionByCompactness</name>
 			<label>Selection by compactness</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>Color2_MinCompactness</name>
@@ -198,7 +198,7 @@
 			<max>1</max>
 			<slider>true</slider>
 			<sliderstep>0.01</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>Color2_MaxCompactness</name>
@@ -208,7 +208,7 @@
 			<max>1</max>
 			<slider>true</slider>
 			<sliderstep>0.01</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

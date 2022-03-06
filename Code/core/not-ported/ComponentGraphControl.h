@@ -34,7 +34,7 @@ private:        // this needs to be cleared of unused stuff
 
 	DataStructureParticles::tParticleVector * mParticles;
 	DataStructureCommand::tCommandVector mCommands;
-	double** distanceArray;
+	double ** distanceArray;
 	int maxParticles;
 	int ParticleSize;
 	// Parameters
@@ -44,7 +44,7 @@ private:        // this needs to be cleared of unused stuff
 	int imgCenterX, imgCenterY;
 
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
-	cv::Mat *mDisplayOutputImage;
+	cv::Mat mDisplayOutputImage;
 
 };
 

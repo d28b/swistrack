@@ -11,7 +11,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_BUTTON (wxID_ANY, THISCLASS::OnClick)
 END_EVENT_TABLE()
 
-THISCLASS::ConfigurationParameterButton(wxWindow* parent):
+THISCLASS::ConfigurationParameterButton(wxWindow * parent):
 	ConfigurationParameter(parent) {
 
 }
@@ -19,7 +19,7 @@ THISCLASS::ConfigurationParameterButton(wxWindow* parent):
 THISCLASS::~ConfigurationParameterButton() {
 }
 
-void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
+void THISCLASS::OnInitialize(ConfigurationXML * config, ErrorList * errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
 	mValue = config->ReadString(wxT("value"), wxT("true"));
@@ -28,12 +28,12 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	mButton = new wxButton(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scParameterWidth, -1));
 
 	// Layout the controls
-	wxBoxSizer *hs = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer * hs = new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(mButton, 0, wxALIGN_CENTER_VERTICAL, 0);
 	SetSizer(hs);
 }
 
-void THISCLASS::OnUpdate(wxWindow *updateprotection) {
+void THISCLASS::OnUpdate(wxWindow * updateprotection) {
 }
 
 void THISCLASS::OnSetNewValue() {
@@ -41,6 +41,6 @@ void THISCLASS::OnSetNewValue() {
 	ce.SetConfigurationString(mName, mValue);
 }
 
-void THISCLASS::OnClick(wxCommandEvent& event) {
+void THISCLASS::OnClick(wxCommandEvent & event) {
 	SetNewValue();
 }

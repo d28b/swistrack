@@ -13,7 +13,7 @@
 				<item key="true">Color </item>
 				<item key="false">Mono (8 bit)</item>
 			</items>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>ExposureMode</name>
@@ -25,7 +25,7 @@
 				<item key="3">External</item>
 			</items>
 			<default>1</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>ExposureValue</name>
@@ -35,7 +35,7 @@
 			<default>60000</default>
 			<sliderstep>1000</sliderstep>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>AnalogGain</name>
@@ -44,7 +44,7 @@
 			<max>21</max>
 			<default>0</default>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<title>Region of Interest (For stability, chage should be done from *.xml or *.swistrack file)</title>
 		<parameter type="pointInteger">
@@ -65,7 +65,7 @@
 				<x>0</x>
 				<y>0</y>
 			</default>
-			<reloadable>false</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="pointInteger">
 			<name>AOISize</name>
@@ -85,7 +85,7 @@
 				<x>4872</x>
 				<y>3248</y>
 			</default>
-			<reloadable>false</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

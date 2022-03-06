@@ -2,7 +2,6 @@
 #define HEADER_ComponentInputFileAVI
 
 #include <opencv2/core.hpp>
-#include <opencv2/highgui.hpp>
 #include "Component.h"
 
 //! An input component that reads an AVI file using the CV library.

@@ -12,7 +12,7 @@ class TCPServerDialog: public wxDialog {
 
 public:
 	//! Constructor.
-	TCPServerDialog(wxWindow *parent);
+	TCPServerDialog(wxWindow * parent);
 	//! Destructor.
 	~TCPServerDialog() {}
 };

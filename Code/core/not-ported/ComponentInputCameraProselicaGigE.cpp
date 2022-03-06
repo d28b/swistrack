@@ -179,7 +179,7 @@ void THISCLASS::OnStart() {
 
 
 	//Start a thread waiting for the next image
-	ComponentInputCameraProselicaGigE::Thread *ct = new ComponentInputCameraProselicaGigE::Thread(this);
+	ComponentInputCameraProselicaGigE::Thread * ct = new ComponentInputCameraProselicaGigE::Thread(this);
 	ct->Create();
 	ct->Run();
 }
@@ -220,7 +220,7 @@ void THISCLASS::OnStep() {
     cvCvtColor(mBayerImage, mColorImage,  CV_BayerGB2BGR);
 
 	//Restart a thread waiting for the next image
-	ComponentInputCameraProselicaGigE::Thread *ct = new ComponentInputCameraProselicaGigE::Thread(this);
+	ComponentInputCameraProselicaGigE::Thread * ct = new ComponentInputCameraProselicaGigE::Thread(this);
 	ct->Create();
 	ct->Run();
 

@@ -8,7 +8,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxDialog)
 	EVT_BUTTON  (eID_ButtonOK, THISCLASS::OnButtonOK)
 END_EVENT_TABLE()
 
-THISCLASS::ErrorListDialog(wxWindow *parent, ErrorList *el, const wxString &title, const wxString &text):
+THISCLASS::ErrorListDialog(wxWindow * parent, ErrorList * el, const wxString & title, const wxString & text):
 	wxDialog(parent, -1, title, wxDefaultPosition, wxSize(500, 300), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER), mErrorList(el) {
 
 	// Create list control
@@ -22,12 +22,12 @@ THISCLASS::ErrorListDialog(wxWindow *parent, ErrorList *el, const wxString &titl
 	mButtonOK = new wxButton(this, eID_ButtonOK, wxT("OK"));
 
 	// Layout the components in the panel
-	wxBoxSizer *hs = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer * hs = new wxBoxSizer(wxHORIZONTAL);
 	hs->AddStretchSpacer(1);
 	hs->Add(mButtonOK, 0, wxALL, 4);
 	hs->AddStretchSpacer(1);
 
-	wxBoxSizer *vs = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer * vs = new wxBoxSizer(wxVERTICAL);
 	vs->Add(mLabel, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 8);
 	vs->Add(mList, 1, wxEXPAND | wxALL, 8);
 	vs->Add(hs, 0, wxEXPAND | wxBOTTOM | wxLEFT | wxRIGHT, 8);
@@ -42,7 +42,7 @@ void THISCLASS::OnUpdate() {
 	mList->DeleteAllItems();
 
 	int row = 0;
-	for (auto error : mErrorList->mList) {
+	for (auto & error : mErrorList->mList) {
 		wxListItem li;
 
 		// Line number
@@ -66,6 +66,6 @@ void THISCLASS::OnUpdate() {
 	}
 }
 
-void THISCLASS::OnButtonOK(wxCommandEvent& event) {
+void THISCLASS::OnButtonOK(wxCommandEvent & event) {
 	this->Hide();
 }

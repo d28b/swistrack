@@ -6,7 +6,6 @@
 
 #ifdef USE_CAMERA_CMU_1394
 #include <opencv2/core.hpp>
-#include <opencv2/highgui.hpp>
 
 #ifdef __WXMSW__
 #include <1394camera.h>
@@ -42,9 +41,9 @@ private:
 #else // __WXMSW__
 	dc1394_camera_t mCamera;
 #endif // __WXMSW__
-	cv::Mat* mOutputImage;				//!< The last acquired image.
+	cv::Mat mOutputImage;				//!< The last acquired image.
 	int mFrameNumber;					//!< The frame number since the component was started.
-	unsigned char *grabbedImageBuffer;	//!< Memory buffer were the grabbed image is put
+	unsigned char * grabbedImageBuffer;	//!< Memory buffer were the grabbed image is put
 
 	Display mDisplayOutput;				//!< The DisplayImage showing the output of this component.
 };

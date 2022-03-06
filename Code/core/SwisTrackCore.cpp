@@ -2,82 +2,84 @@
 #define THISCLASS SwisTrackCore
 
 #include <algorithm>
-#include "ComponentTriggerTimer.h"
-#include "ComponentTriggerCounter.h"
+#include "ComponentAdaptiveBackgroundSubtractionColor.h"
+#include "ComponentAdaptiveBackgroundSubtractionGray.h"
+#include "ComponentAdaptiveBackgroundSubtractionMedian.h"
+#include "ComponentAdaptiveThreshold.h"
+#include "ComponentBackgroundSubtractionColor.h"
+#include "ComponentBackgroundSubtractionGray.h"
+#include "ComponentBinaryBlur.h"
+#include "ComponentBinaryDilation.h"
+#include "ComponentBinaryErosion.h"
+#include "ComponentBinaryMask.h"
+#include "ComponentBlobDetectionCircularHough.h"
+#include "ComponentBlobDetectionMinMax.h"
+#include "ComponentBlobDetectionRedGreen.h"
+#include "ComponentBlobDetectionTwoColors.h"
+#include "ComponentCalibrationFileTSAI.h"
+#include "ComponentCalibrationLinear.h"
+#include "ComponentCalibrationTSAI.h"
+#include "ComponentCannyEdgeDetection.h"
+#include "ComponentChannelCalculationColor.h"
+#include "ComponentChannelCalculationColorToGray.h"
+#include "ComponentChannelCalculationGray.h"
+#include "ComponentColorBlur.h"
+#include "ComponentColorGaussianBlur.h"
+#include "ComponentColorMask.h"
+#include "ComponentColorSwapper.h"
+#include "ComponentConvertBayerToColor.h"
+#include "ComponentConvertBinaryToColor.h"
+#include "ComponentConvertBinaryToGray.h"
+#include "ComponentConvertColorToGray.h"
+#include "ComponentConvertGrayToColor.h"
+#include "ComponentConvertInputToColor.h"
+#include "ComponentConvertInputToGray.h"
+#include "ComponentCorrectMean.h"
+#include "ComponentCropBinary.h"
+#include "ComponentCropColor.h"
+#include "ComponentCropGray.h"
+#include "ComponentCropInput.h"
+#include "ComponentDoubleThresholdColorIndependent.h"
+#include "ComponentFilterParticles.h"
+#include "ComponentGrayMask.h"
+#include "ComponentIDReaderRing.h"
 #include "ComponentInputCameraUSB.h"
 #include "ComponentInputFileAVI.h"
 #include "ComponentInputFileImage.h"
-#include "ComponentConvertToGray.h"
-#include "ComponentConvertToColor.h"
-#include "ComponentCrop.h"
-#include "ComponentCannyEdgeDetection.h"
-#include "ComponentConvertBayerToColor.h"
-#include "ComponentChannelArithmetic.h"
-#include "ComponentBackgroundSubtractionGray.h"
-#include "ComponentBackgroundSubtractionColor.h"
-#include "ComponentAdaptiveBackgroundSubtractionGray.h"
-#include "ComponentAdaptiveBackgroundSubtractionColor.h"
-#include "ComponentAdaptiveBackgroundSubtractionMedian.h"
-#include "ComponentGrayMask.h"
-#include "ComponentSpecificColorSubtraction.h"
-#include "ComponentColorMask.h"
-#include "ComponentColorBlur.h"
-#include "ComponentColorSwapper.h"
-#include "ComponentMoveGrayToColor.h"
-#include "ComponentMoveBinaryToColor.h"
-#include "ComponentMoveColorToBinary.h"
-#include "ComponentMoveColorToGray.h"
-#include "ComponentThresholdGray.h"
-#include "ComponentThresholdColorIndependent.h"
-#include "ComponentAdaptiveThreshold.h"
-#include "ComponentBinaryDilation.h"
-#include "ComponentMorphology.h"
-#include "ComponentBinaryErosion.h"
-#include "ComponentBinaryMask.h"
 #include "ComponentInvertBinary.h"
-#include "ComponentBlobDetectionMinMax.h"
-#include "ComponentBlobDetectionTwoColors.h"
-#include "ComponentBlobDetectionRedGreen.h"
-#include "ComponentBlobDetectionCircularHough.h"
-#include "ComponentTracking.h"
-#include "ComponentFilterParticles.h"
-#include "ComponentTrackSmoothing.h"
-#include "ComponentIDReaderRing.h"
-#include "ComponentSimulationParticles.h"
-#include "ComponentCalibrationLinear.h"
-#include "ComponentCalibrationTSAI.h"
-#include "ComponentCalibrationFileTSAI.h"
-#include "ComponentOutputFile.h"
-#include "ComponentOutputSQLite.h"
+#include "ComponentMorphology.h"
+#include "ComponentOutputBufferedFileAVI.h"
 #include "ComponentOutputFileAVI.h"
-#include "ComponentOutputFileM4V.h"
+#include "ComponentOutputFile.h"
 #include "ComponentOutputFramesImages.h"
+#include "ComponentOutputImageOverlayColor.h"
 #include "ComponentOutputImageStatisticsBinary.h"
 #include "ComponentOutputImageStatisticsColor.h"
 #include "ComponentOutputImageStatisticsGray.h"
-#include "ComponentOutputImageOverlayColor.h"
 #include "ComponentOutputMarkFrameManual.h"
 #include "ComponentOutputParticles.h"
-#include "ComponentDoubleThresholdColorIndependent.h"
+#include "ComponentOutputSQLite.h"
+#include "ComponentSimulationParticles.h"
 #include "ComponentSobelDifferentiation.h"
-#include "ComponentBinaryBlur.h"
+#include "ComponentSpecificColorSubtraction.h"
+#include "ComponentThresholdColorIndependent.h"
+#include "ComponentThresholdGray.h"
+#include "ComponentTracking.h"
+#include "ComponentTrackSmoothing.h"
+#include "ComponentTriggerCounter.h"
+#include "ComponentTriggerTimer.h"
 #include "ComponentWeightedSum.h"
-#include "ComponentOutputBufferedFileAVI.h"
-#include "ComponentColorGaussianBlur.h"
-#include "ComponentCorrectMean.h"
-
 #include "NMEALog.h"
+
 THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents(), mDataStructures(), mSwisTrackCoreInterfaces(), mComponentConfigurationFolder(componentconfigurationfolder),
 	mComponentCategories(), mCommunicationInterface(0), mTrigger(new SwisTrackCoreTrigger(this)), mEventRecorder(new SwisTrackCoreEventRecorder(this)),
 	mCategoryTrigger(wxT("Trigger"), wxT("Trigger"), 0),
 	mCategoryInput(wxT("Input"), wxT("Input"), 100, ComponentCategory::sTypeOne),
 	mCategoryInputConversion(wxT("InputConversion"), wxT("Input conversion"), 200, ComponentCategory::sTypeAuto),
-	mCategoryPreprocessingColor(wxT("PreprocessingColor"), wxT("Preprocessing (color)"), 300),
-	mCategoryPreprocessingGray(wxT("PreprocessingGray"), wxT("Preprocessing (grayscale)"), 350),
-	mCategoryThresholdingColor(wxT("ThresholdingColor"), wxT("Thresholding (color)"), 400),
-	mCategoryThresholdingGray(wxT("ThresholdingGray"), wxT("Thresholding (grayscale)"), 450),
-	mCategoryPreprocessingBinary(wxT("PreprocessingBinary"), wxT("Preprocessing (binary)"), 500),
+	mCategoryProcessingColor(wxT("PreprocessingColor"), wxT("Color processing"), 300),
+	mCategoryProcessingGray(wxT("PreprocessingGray"), wxT("Grayscale processing"), 350),
+	mCategoryProcessingBinary(wxT("PreprocessingBinary"), wxT("Binary image processing"), 500),
 	mCategoryParticleDetection(wxT("ParticleDetection"), wxT("Particle detection"), 600),
 	mCategoryCalibration(wxT("Calibration"), wxT("Calibration"), 700),
 	mCategoryTracking(wxT("Tracking"), wxT("Tracking"), 800),
@@ -104,13 +106,15 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentInputFileImage(this));
 
 	// Input conversion
-	mAvailableComponents.push_back(new ComponentConvertToGray(this));
-	mAvailableComponents.push_back(new ComponentConvertToColor(this));
+	mAvailableComponents.push_back(new ComponentCropInput(this));
+	mAvailableComponents.push_back(new ComponentConvertInputToGray(this));
+	mAvailableComponents.push_back(new ComponentConvertInputToColor(this));
 	mAvailableComponents.push_back(new ComponentConvertBayerToColor(this));
-	mAvailableComponents.push_back(new ComponentCrop(this));
 
-	// Preprocessing Color
-	mAvailableComponents.push_back(new ComponentChannelArithmetic(this));
+	// Color processing
+	mAvailableComponents.push_back(new ComponentCropColor(this));
+	mAvailableComponents.push_back(new ComponentChannelCalculationColor(this));
+	mAvailableComponents.push_back(new ComponentChannelCalculationColorToGray(this));
 	mAvailableComponents.push_back(new ComponentBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionColor(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionMedian(this));
@@ -118,44 +122,44 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentColorMask(this));
 	mAvailableComponents.push_back(new ComponentColorBlur(this));
 	mAvailableComponents.push_back(new ComponentColorGaussianBlur(this));
-	mAvailableComponents.push_back(new ComponentColorSwapper(this));
-	mAvailableComponents.push_back(new ComponentMoveColorToBinary(this));
-	mAvailableComponents.push_back(new ComponentMoveColorToGray(this));
-	mAvailableComponents.push_back(new ComponentMoveGrayToColor(this));
-	mAvailableComponents.push_back(new ComponentMoveBinaryToColor(this));
-	mAvailableComponents.push_back(new ComponentCannyEdgeDetection(this));
-	mAvailableComponents.push_back(new ComponentWeightedSum(this));
 	mAvailableComponents.push_back(new ComponentCorrectMean(this));
-
-	// Preprocessing Gray
-	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
-	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionGray(this));
-	mAvailableComponents.push_back(new ComponentGrayMask(this));
-
-	// Thresholding Color
+	mAvailableComponents.push_back(new ComponentConvertColorToGray(this));
+	mAvailableComponents.push_back(new ComponentWeightedSum(this));
 	mAvailableComponents.push_back(new ComponentThresholdColorIndependent(this));
 	mAvailableComponents.push_back(new ComponentDoubleThresholdColorIndependent(this));
 	mAvailableComponents.push_back(new ComponentAdaptiveThreshold(this));
+	mAvailableComponents.push_back(new ComponentColorSwapper(this));
 
-	// Thresholding Gray
+	// Grayscale processing
+	mAvailableComponents.push_back(new ComponentCropGray(this));
+	mAvailableComponents.push_back(new ComponentChannelCalculationGray(this));
+	mAvailableComponents.push_back(new ComponentBackgroundSubtractionGray(this));
+	mAvailableComponents.push_back(new ComponentAdaptiveBackgroundSubtractionGray(this));
+	mAvailableComponents.push_back(new ComponentGrayMask(this));
+	mAvailableComponents.push_back(new ComponentConvertGrayToColor(this));
 	mAvailableComponents.push_back(new ComponentThresholdGray(this));
+	mAvailableComponents.push_back(new ComponentCannyEdgeDetection(this));
+	mAvailableComponents.push_back(new ComponentSobelDifferentiation(this));
 
-	// Preprocessing Binary
-	mAvailableComponents.push_back(new ComponentBinaryDilation(this));
+	// Binary processing
+	mAvailableComponents.push_back(new ComponentCropBinary(this));
 	mAvailableComponents.push_back(new ComponentMorphology(this));
+	mAvailableComponents.push_back(new ComponentBinaryDilation(this));
 	mAvailableComponents.push_back(new ComponentBinaryErosion(this));
 	mAvailableComponents.push_back(new ComponentBinaryMask(this));
 	mAvailableComponents.push_back(new ComponentInvertBinary(this));
 	mAvailableComponents.push_back(new ComponentBinaryBlur(this));
+	mAvailableComponents.push_back(new ComponentConvertBinaryToColor(this));
+	mAvailableComponents.push_back(new ComponentConvertBinaryToGray(this));
 
 	// Particle Detection
 	mAvailableComponents.push_back(new ComponentBlobDetectionMinMax(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionTwoColors(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionRedGreen(this));
 	mAvailableComponents.push_back(new ComponentBlobDetectionCircularHough(this));
-	mAvailableComponents.push_back(new ComponentSobelDifferentiation(this));
 	mAvailableComponents.push_back(new ComponentIDReaderRing(this));
 	mAvailableComponents.push_back(new ComponentSimulationParticles(this));
+	mAvailableComponents.push_back(new ComponentFilterParticles(this));
 
 	// Calibration
 	mAvailableComponents.push_back(new ComponentCalibrationLinear(this));
@@ -164,7 +168,6 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 
 	// Tracking
 	mAvailableComponents.push_back(new ComponentTracking(this));
-	mAvailableComponents.push_back(new ComponentFilterParticles(this));
 	mAvailableComponents.push_back(new ComponentTrackSmoothing(this));
 
 	// Output
@@ -172,7 +175,6 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentOutputSQLite(this));
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentOutputBufferedFileAVI(this));
-	mAvailableComponents.push_back(new ComponentOutputFileM4V(this));
 	mAvailableComponents.push_back(new ComponentOutputFramesImages(this));
 	mAvailableComponents.push_back(new ComponentOutputImageStatisticsBinary(this));
 	mAvailableComponents.push_back(new ComponentOutputImageStatisticsColor(this));
@@ -227,13 +229,13 @@ THISCLASS::~SwisTrackCore() {
 	delete mEventRecorder;
 }
 
-void THISCLASS::SetFileName(const wxFileName &filename) {
+void THISCLASS::SetFileName(const wxFileName & filename) {
 	mFileName = filename;
 }
 
-wxFileName THISCLASS::GetProjectFileName(const wxString &filename_str) {
+wxFileName THISCLASS::GetProjectFileName(const wxString & filenameString) {
 	// Check filename
-	wxFileName filename(filename_str);
+	wxFileName filename(filenameString);
 	if (! filename.IsOk()) return wxFileName();
 
 	// Normalize
@@ -250,9 +252,9 @@ wxFileName THISCLASS::GetProjectFileName(const wxString &filename_str) {
 	return filename;
 }
 
-wxFileName THISCLASS::GetRunFileName(const wxString &filename_str) {
+wxFileName THISCLASS::GetRunFileName(const wxString & filenameString) {
 	// Check filename
-	wxFileName filename(filename_str);
+	wxFileName filename(filenameString);
 	if (! filename.IsOk()) return wxFileName();
 
 	// Normalize
@@ -271,7 +273,7 @@ wxFileName THISCLASS::GetRunFileName(const wxString &filename_str) {
 	return filename;
 }
 
-bool THISCLASS::Start(bool productionmode) {
+bool THISCLASS::Start(bool productionMode) {
 	if (mStarted) return false;
 	if (mEditLocks > 0) return false;
 
@@ -279,7 +281,7 @@ bool THISCLASS::Start(bool productionmode) {
 	wxDateTime now = wxDateTime::Now();
 
 	// Prepare the run folder
-	if (productionmode) {
+	if (productionMode) {
 		// Find a run folder which does not exist yet
 		int unique_id = 1;
 		wxString runtitlebase = now.Format(wxT("%Y-%m-%d-%H-%M-%S"));
@@ -305,33 +307,27 @@ bool THISCLASS::Start(bool productionmode) {
 	}
 
 	// Event recorder
-	if (productionmode) {
-		mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_SetModeProduction);
-	} else {
-		mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_SetModeNormal);
-	}
+	mEventRecorder->Add(productionMode ?
+		SwisTrackCoreEventRecorder::sType_SetModeProduction :
+		SwisTrackCoreEventRecorder::sType_SetModeNormal
+		);
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeStart);
 
 	// Notify the interfaces
-	tSwisTrackCoreInterfaceList::iterator iti = mSwisTrackCoreInterfaces.begin();
-	while (iti != mSwisTrackCoreInterfaces.end()) {
-		(*iti)->OnBeforeStart(productionmode);
-		iti++;
-	}
+	for (auto interface : mSwisTrackCoreInterfaces)
+		interface->OnBeforeStart(productionMode);
 
 	// Update the flags
 	mStarted = true;
-	mProductionMode = productionmode;
+	mProductionMode = productionMode;
 	mStepCounter = 0;
 
 	// Start all components (until first error)
-	tComponentList::iterator it = mDeployedComponents.begin();
-	while (it != mDeployedComponents.end()) {
-		(*it)->ClearStatus();
-		(*it)->OnStart();
-		if ((*it)->mStatusHasError) break;
-		(*it)->mStarted = true;
-		it++;
+	for (auto component : mDeployedComponents) {
+		component->ClearStatus();
+		component->OnStart();
+		if (component->mStatusHasError) break;
+		component->mStarted = true;
 	}
 
 	// Notify the clients
@@ -342,11 +338,8 @@ bool THISCLASS::Start(bool productionmode) {
 	}
 
 	// Notify the interfaces
-	iti = mSwisTrackCoreInterfaces.begin();
-	while (iti != mSwisTrackCoreInterfaces.end()) {
-		(*iti)->OnAfterStart(productionmode);
-		iti++;
-	}
+	for (auto interface : mSwisTrackCoreInterfaces)
+		interface->OnAfterStart(productionMode);
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterStart);
@@ -361,21 +354,17 @@ bool THISCLASS::Stop() {
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeStop);
 
 	// Notify the interfaces
-	tSwisTrackCoreInterfaceList::iterator iti = mSwisTrackCoreInterfaces.begin();
-	while (iti != mSwisTrackCoreInterfaces.end()) {
-		(*iti)->OnBeforeStop();
-		iti++;
-	}
+	for (auto interface : mSwisTrackCoreInterfaces)
+		interface->OnBeforeStop();
 
 	// Stop all components
 	tComponentList::iterator it = mDeployedComponents.end();
 	while (it != mDeployedComponents.begin()) {
 		it--;
-		if ((*it)->mStarted) {
-			(*it)->ClearStatus();
-			(*it)->OnStop();
-			(*it)->mStarted = false;
-		}
+		if (! (*it)->mStarted) continue;
+		(*it)->ClearStatus();
+		(*it)->OnStop();
+		(*it)->mStarted = false;
 	}
 
 	// Update flags
@@ -391,18 +380,14 @@ bool THISCLASS::Stop() {
 	}
 
 	// Notify the interfaces
-	iti = mSwisTrackCoreInterfaces.begin();
-	while (iti != mSwisTrackCoreInterfaces.end()) {
-		(*iti)->OnAfterStop();
-		iti++;
-	}
+	for (auto interface : mSwisTrackCoreInterfaces)
+		interface->OnAfterStop();
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterStop);
 
 	// Reset the run folder
 	mRunTitle = wxT("");
-
 	return true;
 }
 
@@ -416,22 +401,13 @@ bool THISCLASS::Step() {
 	mEventRecorder->AddStepStart();
 
 	// Notify the interfaces (OnBeforeStep)
-	tSwisTrackCoreInterfaceList::iterator iti = mSwisTrackCoreInterfaces.begin();
-	while (iti != mSwisTrackCoreInterfaces.end()) {
-		(*iti)->OnBeforeStep();
-		iti++;
-	}
+	for (auto interface : mSwisTrackCoreInterfaces)
+		interface->OnBeforeStep();
 
 	// Notify the displays (OnBeforeStep)
-	tComponentList::iterator it = mDeployedComponents.begin();
-	while (it != mDeployedComponents.end()) {
-		Component::tDisplayList::iterator itdi = (*it)->mDisplays.begin();
-		while (itdi != (*it)->mDisplays.end()) {
-			(*itdi)->OnBeforeStep();
-			itdi++;
-		}
-		it++;
-	}
+	for (auto component : mDeployedComponents)
+		for (auto display : component->mDisplays)
+			display->OnBeforeStep();
 
 	// Notify the clients
 	if (mCommunicationInterface) {
@@ -440,17 +416,14 @@ bool THISCLASS::Step() {
 	}
 
 	// Reset the step durations
-	it = mDeployedComponents.begin();
-	while (it != mDeployedComponents.end()) {
-		(*it)->mStepDuration = -1;
-		it++;
-	}
+	for (auto component : mDeployedComponents)
+		component->mStepDuration = -1;
 
 	// Run until first error, or until the end (all started components)
-	it = mDeployedComponents.begin();
+	auto it = mDeployedComponents.begin();
 	while (it != mDeployedComponents.end()) {
-		int enabledinterval = (*it)->GetEnabledInterval();
-		if (((*it)->mStarted) && (enabledinterval > 0) && (mStepCounter % enabledinterval == 0)) {
+		int enabledInterval = (*it)->GetEnabledInterval();
+		if ((*it)->mStarted && ! (*it)->mHasReloadError && enabledInterval > 0 && mStepCounter % enabledInterval == 0) {
 			// Event recorder
 			SwisTrackCoreEventRecorder::Event starttime;
 			mEventRecorder->LapTime(&starttime, SwisTrackCoreEventRecorder::sType_StepStart, (*it));
@@ -467,20 +440,15 @@ bool THISCLASS::Step() {
 			(*it)->mStepDuration = mEventRecorder->CalculateDuration(&starttime, &endtime);
 
 			// Error handling
-			if ((*it)->mStatusHasError) {
-				break;
-			}
+			if ((*it)->mStatusHasError) break;
 		}
 
 		it++;
 	}
 
 	// Notify the interfaces (OnStepReady)
-	iti = mSwisTrackCoreInterfaces.begin();
-	while (iti != mSwisTrackCoreInterfaces.end()) {
-		(*iti)->OnStepReady();
-		iti++;
-	}
+	for (auto interface : mSwisTrackCoreInterfaces)
+		interface->OnStepReady();
 
 	// and then cleanup what we run
 	while (it != mDeployedComponents.begin()) {
@@ -495,22 +463,13 @@ bool THISCLASS::Step() {
 	}
 
 	// Notify the displays (OnAfterStep)
-	it = mDeployedComponents.begin();
-	while (it != mDeployedComponents.end()) {
-		Component::tDisplayList::iterator itdi = (*it)->mDisplays.begin();
-		while (itdi != (*it)->mDisplays.end()) {
-			(*itdi)->OnAfterStep();
-			itdi++;
-		}
-		it++;
-	}
+	for (auto component : mDeployedComponents)
+		for (auto display : component->mDisplays)
+			display->OnAfterStep();
 
 	// Notify the interfaces (OnAfterStep)
-	iti = mSwisTrackCoreInterfaces.begin();
-	while (iti != mSwisTrackCoreInterfaces.end()) {
-		(*iti)->OnAfterStep();
-		iti++;
-	}
+	for (auto interface : mSwisTrackCoreInterfaces)
+		interface->OnAfterStep();
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepStop);
@@ -525,19 +484,33 @@ bool THISCLASS::ReloadConfiguration() {
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeReloadConfiguration);
 
-	// Start all components (until first error)
-	tComponentList::iterator it = mDeployedComponents.begin();
-	while (it != mDeployedComponents.end()) {
-		if ((*it)->mStarted) {
-			(*it)->ClearStatus();
-			(*it)->OnReloadConfiguration();
-		}
-		it++;
+	// Reload the configuration of all components
+	for (auto component : mDeployedComponents) {
+		if (! component->mStarted) continue;
+		component->ClearStatus();
+		component->OnReloadConfiguration();
+		component->mHasReloadError = component->mStatusHasError;
 	}
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterReloadConfiguration);
+	return true;
+}
 
+bool THISCLASS::ReloadConfigurationOfSingleComponent(Component * component) {
+	if (! mStarted) return false;
+	if (! component->mStarted) return false;
+
+	// Event recorder
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeReloadConfiguration);
+
+	// Reload the configuration of this component
+	component->ClearStatus();
+	component->OnReloadConfiguration();
+	component->mHasReloadError = component->mStatusHasError;
+
+	// Event recorder
+	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterReloadConfiguration);
 	return true;
 }
 
@@ -548,21 +521,15 @@ void THISCLASS::TriggerStart() {
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeTriggerStart);
 
 	// Notify the interfaces
-	tSwisTrackCoreInterfaceList::iterator it = mSwisTrackCoreInterfaces.begin();
-	while (it != mSwisTrackCoreInterfaces.end()) {
-		(*it)->OnBeforeTriggerStart();
-		it++;
-	}
+	for (auto interface : mSwisTrackCoreInterfaces)
+		interface->OnBeforeTriggerStart();
 
 	// Activate the trigger
 	mTrigger->SetActive(true);
 
 	// Notify the interfaces
-	it = mSwisTrackCoreInterfaces.begin();
-	while (it != mSwisTrackCoreInterfaces.end()) {
-		(*it)->OnAfterTriggerStart();
-		it++;
-	}
+	for (auto interface : mSwisTrackCoreInterfaces)
+		interface->OnAfterTriggerStart();
 
 	// Notify the clients
 	if (mCommunicationInterface) {
@@ -581,21 +548,15 @@ void THISCLASS::TriggerStop() {
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeTriggerStop);
 
 	// Notify the interfaces
-	tSwisTrackCoreInterfaceList::iterator it = mSwisTrackCoreInterfaces.begin();
-	while (it != mSwisTrackCoreInterfaces.end()) {
-		(*it)->OnBeforeTriggerStop();
-		it++;
-	}
+	for (auto interface : mSwisTrackCoreInterfaces)
+		interface->OnBeforeTriggerStop();
 
 	// Deactivate the trigger
 	mTrigger->SetActive(false);
 
 	// Notify the interfaces
-	it = mSwisTrackCoreInterfaces.begin();
-	while (it != mSwisTrackCoreInterfaces.end()) {
-		(*it)->OnAfterTriggerStop();
-		it++;
-	}
+	for (auto interface : mSwisTrackCoreInterfaces)
+		interface->OnAfterTriggerStop();
 
 	// Notify the clients
 	if (mCommunicationInterface) {
@@ -607,34 +568,28 @@ void THISCLASS::TriggerStop() {
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterTriggerStop);
 }
 
-void THISCLASS::ConfigurationWriteXML(wxXmlNode *configuration, ErrorList *xmlerr) {
+void THISCLASS::ConfigurationWriteXML(wxXmlNode * configuration, ErrorList * xmlerr) {
 	// Add an element for each component
-	tComponentList::iterator it = mDeployedComponents.begin();
-	while (it != mDeployedComponents.end()) {
-		wxXmlNode *node = new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("component"));
+	for (auto component : mDeployedComponents) {
+		wxXmlNode * node = new wxXmlNode(0, wxXML_ELEMENT_NODE, wxT("component"));
 		configuration->AddChild(node);
-		node->AddAttribute(wxT("type"), (*it)->mName);
-		(*it)->ConfigurationWriteXML(node, xmlerr);
-
-		it++;
+		node->AddAttribute(wxT("type"), component->mName);
+		component->ConfigurationWriteXML(node, xmlerr);
 	}
 }
 
-Component * THISCLASS::GetComponentByName(const wxString &name) {
-	tComponentList::iterator it = mAvailableComponents.begin();
-	while (it != mAvailableComponents.end()) {
-		if ((*it)->mName == name) return *it;
-		it++;
-	}
+Component * THISCLASS::GetComponentByName(const wxString & name) {
+	for (auto component : mAvailableComponents)
+		if (component->mName == name) return component;
 
-	return 0;
+	return NULL;
 }
 
-void THISCLASS::AddInterface(SwisTrackCoreInterface *stc) {
+void THISCLASS::AddInterface(SwisTrackCoreInterface * stc) {
 	mSwisTrackCoreInterfaces.push_back(stc);
 }
 
-void THISCLASS::RemoveInterface(SwisTrackCoreInterface *stc) {
+void THISCLASS::RemoveInterface(SwisTrackCoreInterface * stc) {
 	tSwisTrackCoreInterfaceList::iterator it = find(mSwisTrackCoreInterfaces.begin(), mSwisTrackCoreInterfaces.end(), stc);
 	if (it == mSwisTrackCoreInterfaces.end()) return;
 	mSwisTrackCoreInterfaces.erase(it);
@@ -651,19 +606,15 @@ bool THISCLASS::IncrementEditLocks() {
 	}
 
 	// If started in production mode, editing is not allowed
-	if (IsStartedInProductionMode()) {
+	if (IsStartedInProductionMode())
 		return false;
-	}
 
 	// If started in test mode, stop and allow editing
 	Stop();
 
 	// Notify the interfaces
-	tSwisTrackCoreInterfaceList::iterator it = mSwisTrackCoreInterfaces.begin();
-	while (it != mSwisTrackCoreInterfaces.end()) {
-		(*it)->OnBeforeEdit();
-		it++;
-	}
+	for (auto interface : mSwisTrackCoreInterfaces)
+		interface->OnBeforeEdit();
 
 	mEditLocks = 1;
 	return true;
@@ -677,9 +628,6 @@ void THISCLASS::DecrementEditLocks() {
 	if (mEditLocks > 0) return;
 
 	// Notify the interfaces
-	tSwisTrackCoreInterfaceList::iterator it = mSwisTrackCoreInterfaces.begin();
-	while (it != mSwisTrackCoreInterfaces.end()) {
-		(*it)->OnAfterEdit();
-		it++;
-	}
+	for (auto interface : mSwisTrackCoreInterfaces)
+		interface->OnAfterEdit();
 }

@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
 	<friendlyname>Cam Shift Tracking</friendlyname>
-	<description>Uses CvCamShiftTracker from cvaux
-	</description>
+	<description>Uses CvCamShiftTracker from cvaux</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/CamShiftTracking</url>
 	<displayimage>Output</displayimage>
+
 	<configuration>
 	  <parameter type="dropdownlist">
 	    <name>HistogramDimensions</name>
@@ -16,28 +16,28 @@
 	    </items>
 	    <unit></unit>
 	    <default>1</default>
-	    <reloadable>false</reloadable>
+	    <onchange>restart</onchange>
 	  </parameter>
 	  <parameter type="integer">
 	    <name>VMin</name>
 	    <label>VMin</label>
 	    <unit></unit>
 	    <default>60</default>
-	    <reloadable>false</reloadable>
+	    <onchange>restart</onchange>
 	  </parameter>
 	  <parameter type="integer">
 	    <name>SMin</name>
 	    <label>SMin</label>
 	    <unit></unit>
 	    <default>50</default>
-	    <reloadable>false</reloadable>
+	    <onchange>restart</onchange>
 	  </parameter>
 	  <parameter type="integer">
 	    <name>InitialWindowSize</name>
 	    <label>Initial Window Size when making new tracks</label>
 	    <unit></unit>
 	    <default>100</default>
-	    <reloadable>true</reloadable>
+	    <onchange>reload</onchange>
 	  </parameter>
 	  <parameter type="double">
 	    <name>MinNewTrackDistance</name>
@@ -46,7 +46,7 @@
 	    <max>1000</max>
 	    <default>100</default>
 	    <slider>true</slider>
-	    <reloadable>true</reloadable>
+	    <onchange>reload</onchange>
 	  </parameter>
 
 	  <parameter type="double">
@@ -56,7 +56,7 @@
 	    <max>1000</max>
 	    <default>100</default>
 	    <slider>true</slider>
-	    <reloadable>true</reloadable>
+	    <onchange>reload</onchange>
 	  </parameter>
 	  <parameter type="integer">
 	    <name>TrackDistanceKillThreshold</name>
@@ -65,7 +65,7 @@
 	    <max>1000</max>
 	    <default>100</default>
 	    <slider>true</slider>
-	    <reloadable>true</reloadable>
+	    <onchange>reload</onchange>
 	  </parameter>
 
 	  <parameter type="integer">
@@ -76,7 +76,7 @@
 	    <max>100</max>
 	    <default>4</default>
 	    <slider>true</slider>
-	    <reloadable>true</reloadable>
+	    <onchange>reload</onchange>
 	  </parameter>
 	</configuration>
 </swistrackcomponent>

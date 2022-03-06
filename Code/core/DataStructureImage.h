@@ -17,7 +17,7 @@ public:
 	cv::Mat mImage;	  //! Image.
 
 	//! Constructor.
-	DataStructureImage(const wxString &name, const wxString &displayname): DataStructure(name), mImage() {
+	DataStructureImage(const wxString & name, const wxString & displayname): DataStructure(name), mImage() {
 		mDisplayName = displayname;
 	}
 

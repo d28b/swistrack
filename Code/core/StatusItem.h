@@ -15,12 +15,12 @@ public:
 	};
 
 	eType mType;			//!< The status message type.
-	wxString mMessage;	//!< The message text.
+	wxString mMessage;		//!< The message text.
 
 	//! Constructor.
 	StatusItem(): mType(sTypeInfo), mMessage(wxT("")) {}
 	//! Constructor.
-	StatusItem(eType type, const wxString &msg): mType(type), mMessage(msg) {}
+	StatusItem(eType type, const wxString & msg): mType(type), mMessage(msg) {}
 	//! Destructor.
 	~StatusItem() {}
 

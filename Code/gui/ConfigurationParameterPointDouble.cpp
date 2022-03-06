@@ -12,7 +12,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_TEXT_ENTER (wxID_ANY, THISCLASS::OnTextEnter)
 END_EVENT_TABLE()
 
-THISCLASS::ConfigurationParameterPointDouble(wxWindow* parent):
+THISCLASS::ConfigurationParameterPointDouble(wxWindow * parent):
 	ConfigurationParameter(parent),
 	mValueMinX(0), mValueMinY(0),
 	mValueMaxX(1), mValueMaxY(1),
@@ -25,7 +25,7 @@ THISCLASS::~ConfigurationParameterPointDouble() {
 	mTextCtrlY->Disconnect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
 }
 
-void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
+void THISCLASS::OnInitialize(ConfigurationXML * config, ErrorList * errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
 	config->SelectChildNode(wxT("min"));
@@ -42,38 +42,38 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 
 	// Create the controls
 	config->SelectRootNode();
-	wxStaticText *label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scParameterWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *dummyx = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scIndentWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *dummyy = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scIndentWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *labelx = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("labelx"), wxT("X")), wxDefaultPosition, wxSize(scLabelWidth - scIndentWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *labely = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("labely"), wxT("Y")), wxDefaultPosition, wxSize(scLabelWidth - scIndentWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scParameterWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * dummyx = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scIndentWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * dummyy = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scIndentWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * labelx = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("labelx"), wxT("X")), wxDefaultPosition, wxSize(scLabelWidth - scIndentWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * labely = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("labely"), wxT("Y")), wxDefaultPosition, wxSize(scLabelWidth - scIndentWidth, -1), wxST_NO_AUTORESIZE);
 	mTextCtrlX = new wxTextCtrl(this, cID_X, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT | wxTE_PROCESS_ENTER);
 	mTextCtrlX->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
 	mTextCtrlY = new wxTextCtrl(this, cID_Y, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT | wxTE_PROCESS_ENTER);
 	mTextCtrlY->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
-	wxStaticText *unitx = new wxStaticText(this, wxID_ANY, wxT(" ") + config->ReadString(wxT("unitx"), wxT("")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *unity = new wxStaticText(this, wxID_ANY, wxT(" ") + config->ReadString(wxT("unity"), wxT("")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * unitx = new wxStaticText(this, wxID_ANY, wxT(" ") + config->ReadString(wxT("unitx"), wxT("")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * unity = new wxStaticText(this, wxID_ANY, wxT(" ") + config->ReadString(wxT("unity"), wxT("")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
 
 	// Layout the controls
-	wxBoxSizer *hsx = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer * hsx = new wxBoxSizer(wxHORIZONTAL);
 	hsx->Add(dummyx, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsx->Add(labelx, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsx->Add(mTextCtrlX, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsx->Add(unitx, 0, wxALIGN_CENTER_VERTICAL, 0);
-	wxBoxSizer *hsy = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer * hsy = new wxBoxSizer(wxHORIZONTAL);
 	hsy->Add(dummyy, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsy->Add(labely, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsy->Add(mTextCtrlY, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsy->Add(unity, 0, wxALIGN_CENTER_VERTICAL, 0);
 
-	wxBoxSizer *vs = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer * vs = new wxBoxSizer(wxVERTICAL);
 	vs->Add(label, 0, wxBOTTOM, 2);
 	vs->Add(hsx, 0, wxBOTTOM, 2);
 	vs->Add(hsy, 0, 0, 0);
 	SetSizer(vs);
 }
 
-void THISCLASS::OnUpdate(wxWindow *updateprotection) {
+void THISCLASS::OnUpdate(wxWindow * updateprotection) {
 	double valuex = mComponent->GetConfigurationDouble(mName + wxT(".x"), mValueDefaultX);
 	double valuey = mComponent->GetConfigurationDouble(mName + wxT(".y"), mValueDefaultY);
 	if (updateprotection != mTextCtrlX)
@@ -128,7 +128,7 @@ void THISCLASS::OnSetNewValue() {
 	ce.SetConfigurationDouble(mName + wxT(".y"), mNewValueY);
 }
 
-void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
+void THISCLASS::OnTextUpdated(wxCommandEvent & event) {
 	mNewValueX = mValueDefaultX;
 	mTextCtrlX->GetValue().ToDouble(&mNewValueX);
 	mTextCtrlX->SetOwnForegroundColour(ValidateNewValueX() ? wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) : *wxRED);
@@ -147,7 +147,7 @@ void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	}
 }
 
-void THISCLASS::OnTextEnter(wxCommandEvent& event) {
+void THISCLASS::OnTextEnter(wxCommandEvent & event) {
 	mNewValueX = mValueDefaultX;
 	mTextCtrlX->GetValue().ToDouble(&mNewValueX);
 	ValidateNewValueX();
@@ -159,7 +159,7 @@ void THISCLASS::OnTextEnter(wxCommandEvent& event) {
 	SetNewValue();
 }
 
-void THISCLASS::OnKillFocus(wxFocusEvent& event) {
+void THISCLASS::OnKillFocus(wxFocusEvent & event) {
 	wxCommandEvent ev;
 	OnTextEnter(ev);
 }

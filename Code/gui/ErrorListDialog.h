@@ -19,15 +19,15 @@ class ErrorListDialog: public wxDialog {
 
 public:
 	//! The associated ErrorList object.
-	ErrorList *mErrorList;
+	ErrorList * mErrorList;
 
 	//! Constructor.
-	ErrorListDialog(wxWindow *parent, ErrorList *el, const wxString &title, const wxString &text);
+	ErrorListDialog(wxWindow * parent, ErrorList * el, const wxString & title, const wxString & text);
 	//! Destructor.
 	~ErrorListDialog() {}
 
 	//! Closes the dialog when the user clicks the OK button.
-	void OnButtonOK(wxCommandEvent& event);
+	void OnButtonOK(wxCommandEvent & event);
 	//! Updates the list.
 	void OnUpdate();
 
@@ -37,9 +37,9 @@ protected:
 	};
 
 private:
-	wxListCtrl *mList;
-	wxStaticText *mLabel;
-	wxButton *mButtonOK;
+	wxListCtrl * mList;
+	wxStaticText * mLabel;
+	wxButton * mButtonOK;
 
 	DECLARE_EVENT_TABLE()
 };

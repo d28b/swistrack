@@ -1,7 +1,7 @@
 #include "ComponentBackgroundSubtractionColor.h"
 #define THISCLASS ComponentBackgroundSubtractionColor
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 #include "ImageTools.h"
 
@@ -12,7 +12,7 @@ THISCLASS::ComponentBackgroundSubtractionColor(SwisTrackCore * stc):
 	mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingColor);
+	mCategory = &(mCore->mCategoryProcessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);
@@ -44,7 +44,7 @@ void THISCLASS::OnReloadConfiguration() {
 void THISCLASS::OnStep() {
 	cv::Mat inputImage = mCore->mDataStructureImageColor.mImage;
 	if (inputImage.empty()) {
-		AddError(wxT("No input Image"));
+		AddError(wxT("No input image."));
 		return;
 	}
 
@@ -54,7 +54,7 @@ void THISCLASS::OnStep() {
 	}
 
 	if (! ImageTools::EqualSize(inputImage, mBackgroundImage)) {
-		AddError(wxT("Input and background images have not the same dimension"));
+		AddError(wxT("Input and background images do not have the same size."));
 		return;
 	}
 

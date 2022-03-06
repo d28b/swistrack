@@ -15,6 +15,7 @@ THISCLASS::DisplayEditor(Display * display): mDisplay(0) {
 	mDisplay->mSize = cv::Size(0, 0);
 	mDisplay->mMainImage = cv::Mat();
 	mDisplay->mMaskImage = cv::Mat();
+	mDisplay->mErrors.Clear();
 	SetParticles(0);
 	SetTrajectories(false);
 }
@@ -31,7 +32,7 @@ THISCLASS::~DisplayEditor() {
 	}
 
 	// Set frame number and time
-	SwisTrackCore *core = mDisplay->mComponent->GetSwisTrackCore();
+	SwisTrackCore * core = mDisplay->mComponent->GetSwisTrackCore();
 	mDisplay->mStepCounter = core->GetStepCounter();
 	mDisplay->mFrameNumber = core->mDataStructureInput.mFrameNumber;
 	mDisplay->mFramesCount = core->mDataStructureInput.mFramesCount;
@@ -65,7 +66,7 @@ void THISCLASS::SetParticles(DataStructureParticles::tParticleVector * pv) {
 	if (! pv) return;
 
 	// Add a copy of all particles
-	for (auto particle : *pv)
+	for (auto & particle : *pv)
 		mDisplay->mParticles.push_back(particle);
 }
 
@@ -106,7 +107,7 @@ bool THISCLASS::SetSizeAuto() {
 	return false;
 }
 
-void THISCLASS::AddError(const wxString &message) {
+void THISCLASS::AddError(const wxString & message) {
 	if (! mDisplay) return;
 	mDisplay->mErrors.Add(message);
 }

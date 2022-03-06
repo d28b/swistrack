@@ -23,15 +23,15 @@ public:
 	virtual ~CommunicationInterface() {}
 
 	//! This is called to send a message. The return value should indicate whether the message has really been sent to at least one client.
-	virtual bool Send(CommunicationMessage *m) = 0;
+	virtual bool Send(CommunicationMessage * m) = 0;
 
 	//! Registers a new command handler.
-	void AddCommandHandler(CommunicationCommandHandler *ch);
+	void AddCommandHandler(CommunicationCommandHandler * ch);
 	//! Removes a command handler.
-	void RemoveCommandHandler(CommunicationCommandHandler *ch);
+	void RemoveCommandHandler(CommunicationCommandHandler * ch);
 
 	//! Relays a message to all command handlers.
-	bool OnCommunicationCommand(CommunicationMessage *m);
+	bool OnCommunicationCommand(CommunicationMessage * m);
 };
 
 #endif

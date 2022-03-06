@@ -4,6 +4,7 @@
 	<description>Applies a morphological dilation (3x3 kernel) on the image.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BinaryDilation</url>
 	<displayimage>Output</displayimage>
+
 	<configuration>
 		<parameter type="integer">
 			<name>Iterations</name>
@@ -12,7 +13,7 @@
 			<max>10</max>
 			<default>1</default>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

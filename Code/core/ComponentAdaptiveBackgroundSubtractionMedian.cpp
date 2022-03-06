@@ -1,7 +1,7 @@
 #include "ComponentAdaptiveBackgroundSubtractionMedian.h"
 #define THISCLASS ComponentAdaptiveBackgroundSubtractionMedian
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 #include <cstdio>
 
@@ -23,7 +23,7 @@ THISCLASS::ComponentAdaptiveBackgroundSubtractionMedian(SwisTrackCore * stc):
 	mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingColor);
+	mCategory = &(mCore->mCategoryProcessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);

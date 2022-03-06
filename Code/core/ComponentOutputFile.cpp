@@ -32,7 +32,7 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	// If there is no track, stop
-	DataStructureTracks::tTrackMap *mTracks;
+	DataStructureTracks::tTrackMap * mTracks;
 	mTracks = mCore->mDataStructureTracks.mTracks;
 	if (! mTracks) {
 		AddError(wxT("No tracks."));
@@ -46,12 +46,12 @@ void THISCLASS::OnStep() {
 			// Write the data to the file
 			WriteData(mFiles[it->first]);
 		} else {
-			structOutputFile *newOutputFile = new structOutputFile;
+			structOutputFile * newOutputFile = new structOutputFile;
 			newOutputFile->trackID = it->first;
 
 			// Put file name together
-			wxString filename_str = mFileNamePrefix + wxString::Format(wxT("_%08d.txt"), it->first);
-			wxFileName filename = mCore->GetRunFileName(filename_str);
+			wxString filenameString = mFileNamePrefix + wxString::Format(wxT("_%08d.txt"), it->first);
+			wxFileName filename = mCore->GetRunFileName(filenameString);
 			if (! filename.IsOk()) {
 				AddError(wxT("Invalid output file prefix."));
 				return;
@@ -127,7 +127,7 @@ void THISCLASS::WriteParticle(std::fstream & fileStream, const Particle & p) {
 	fileStream << std::endl;
 }
 
-void THISCLASS::WriteData(structOutputFile *outputFile) {
+void THISCLASS::WriteData(structOutputFile * outputFile) {
 	// This was originally designed assuming each particles were for only one frame.
 	// ComponentMinCostFlow tracking sends particles for many frames at once.
 	// This loop still works if particles for each track are sorted in time.

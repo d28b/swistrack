@@ -1,0 +1,27 @@
+#! /usr/bin/perl
+use strict;
+
+my $file = shift || die 'Usage: ./svg-to-xpm SVGFILE';
+$file =~ /^(.*)\.svg$/ || die $file.' is not an SVG file.';
+my $title = $1;
+my $xpmFile = $title.'.xpm';
+
+system('rsvg-convert', '-f', 'png', '-o', 'tmp.png', $file);
+system('convert', 'tmp.png', $xpmFile);
+#unlink 'tmp.png';
+
+open(F, '<', $xpmFile);
+my @lines = <F>;
+close F;
+
+open(F, '>', $xpmFile);
+for my $line (@lines) {
+	while (chomp $line) { }
+
+	if ($line =~ /^static char \*(.*)\[\] = \{$/) {
+		$line = 'static const char *'.$1.'_xpm[] = {';
+	}
+
+	print F $line, "\n";
+}
+close F;

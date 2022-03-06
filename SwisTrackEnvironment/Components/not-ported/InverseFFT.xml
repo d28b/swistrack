@@ -16,16 +16,14 @@
 				<item key="3">Phase</item>
 				<item key="4">Sqare mag.</item>
 			</items>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 
 		<parameter type="checkbox">
 			<name>Normalize</name>
 			<label>Normalize output</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
-
 	</configuration>
-
 </swistrackcomponent>

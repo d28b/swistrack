@@ -6,7 +6,7 @@
 #include "ImageTools.h"
 #include <time.h>
 
-static void new_buffer_cb (ArvStream *stream, ComponentInputCameraARVGigE *data) {
+static void new_buffer_cb (ArvStream * stream, ComponentInputCameraARVGigE * data) {
 	ArvBuffer * buffer;
 	buffer = arv_stream_try_pop_buffer (stream);
 	if (buffer != NULL) {
@@ -25,13 +25,13 @@ static void new_buffer_cb (ArvStream *stream, ComponentInputCameraARVGigE *data)
 	}
 }
 
-static gboolean emit_software_trigger (void *abstract_data) {
+static gboolean emit_software_trigger (void * abstract_data) {
 	ArvCamera * camera = (ArvCamera*)abstract_data;
 	arv_camera_software_trigger (camera);
 	return TRUE;
 }
 
-static void control_lost_cb (ArvGvDevice *gv_device) {
+static void control_lost_cb (ArvGvDevice * gv_device) {
 	printf ("Control lost\n");
 }
 
@@ -204,7 +204,7 @@ void THISCLASS::OnStep() {
 	if (! mCamera) return;
 
 	// This is the acquired image
-	//cv::Mat *outputimage = (cv::Mat*)(mCurrentResult.Context());
+	//cv::Mat * outputimage = (cv::Mat*)(mCurrentResult.Context());
 
 	// dirty spinlock to wait for new camera image...
 	int loopcounter=0;

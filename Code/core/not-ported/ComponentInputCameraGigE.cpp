@@ -58,7 +58,7 @@ void THISCLASS::OnStart() {
 	}
 
 	// Get the transport layer
-	Pylon::CTlFactory& tlfactory = Pylon::CTlFactory::GetInstance();
+	Pylon::CTlFactory & tlfactory = Pylon::CTlFactory::GetInstance();
 	try {
 		if (mCameraFullName.Len() == 0) {
 			Pylon::DeviceInfoList_t devices;
@@ -81,7 +81,7 @@ void THISCLASS::OnStart() {
 
 		// Open the camera object
 		mCamera->Open();
-	} catch (GenICam::GenericException &e) {
+	} catch (GenICam::GenericException & e) {
 		printf("%s\n", e.GetDescription());
 		AddError(wxT("Error while opening the camera."));
 		mCamera = 0;
@@ -156,7 +156,7 @@ void THISCLASS::OnStart() {
 	// Set Ethernet Packet Size
 	try {
 		mCamera->GevSCPSPacketSize.SetValue(mEthernetPacketSize - mEthernetPacketSize%4); // only stepsize = 4 allowed
-	} catch (GenICam::GenericException &e) {
+	} catch (GenICam::GenericException & e) {
 		printf("%s\n", e.GetDescription());
 		AddError(wxT("Error while setting Ethernet Packet Size."));
 		return;
@@ -187,7 +187,7 @@ void THISCLASS::OnStart() {
 			mInputBufferHandles[i] = mStreamGrabber->RegisterBuffer(mInputBufferImages[i]->imageData, buffersize);
 			mStreamGrabber->QueueBuffer(mInputBufferHandles[i], mInputBufferImages[i]);
 		}
-	} catch (GenICam::GenericException &e) {
+	} catch (GenICam::GenericException & e) {
 		printf("%s\n", e.GetDescription());
 		AddError(wxT("Error while registering image buffers."));
 		mStreamGrabber->Close();
@@ -206,7 +206,7 @@ void THISCLASS::OnStart() {
 		mTrigger->SetReady();
 	} else {
 		// Otherwise, restart a thread waiting for the next image
-		ComponentInputCameraGigE::Thread *ct = new ComponentInputCameraGigE::Thread(this);
+		ComponentInputCameraGigE::Thread * ct = new ComponentInputCameraGigE::Thread(this);
 		ct->Create();
 		ct->Run();
 	}
@@ -226,7 +226,7 @@ void THISCLASS::OnReloadConfiguration() {
 		// Configure analog gain
 		int analoggain = GetConfigurationInt(wxT("AnalogGain"), 500);
 		mCamera->GainRaw.SetValue(analoggain);
-	} catch (GenICam::GenericException &e) {
+	} catch (GenICam::GenericException & e) {
 		printf("%s\n", e.GetDescription());
 		AddError(wxT("Error while setting camera parameters."));
 		return;
@@ -261,7 +261,7 @@ void THISCLASS::OnStep() {
 	}
 
 	// This is the acquired image
-	cv::Mat *outputimage = (cv::Mat*)(mCurrentResult.Context());
+	cv::Mat * outputimage = (cv::Mat*)(mCurrentResult.Context());
 
 	// If we are acquireing a color image, we need to transform it from BayerRG to BGR, otherwise we use the raw image
 	if (mColor) {
@@ -295,7 +295,7 @@ void THISCLASS::OnStepCleanup() {
 	// Requeue the used image
 	try {
 		mStreamGrabber->QueueBuffer(mCurrentResult.Handle(), mCurrentResult.Context());
-	} catch (GenICam::GenericException &e) {
+	} catch (GenICam::GenericException & e) {
 		AddError(wxString::Format(wxT("Failed to requeue buffer: %s"), e.GetDescription()));
 	}
 
@@ -305,7 +305,7 @@ void THISCLASS::OnStepCleanup() {
 		mTrigger->SetReady();
 	} else {
 		// Otherwise, restart a thread waiting for the next image
-		ComponentInputCameraGigE::Thread *ct = new ComponentInputCameraGigE::Thread(this);
+		ComponentInputCameraGigE::Thread * ct = new ComponentInputCameraGigE::Thread(this);
 		ct->Create();
 		ct->Run();
 	}
@@ -344,7 +344,7 @@ void THISCLASS::OnStop() {
 	mStreamGrabber->Close();
 	mStreamGrabber = 0;
 	mCamera->Close();
-	Pylon::CTlFactory& tlfactory = Pylon::CTlFactory::GetInstance();
+	Pylon::CTlFactory & tlfactory = Pylon::CTlFactory::GetInstance();
 	tlfactory.DestroyDevice(mCamera->GetDevice());
 	mCamera = 0;
 }

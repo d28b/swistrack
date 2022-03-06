@@ -31,7 +31,7 @@ private:
 	cv::gpu::GpuMat output_gpu;
 	#endif
 	Display mDisplayOutput;		//!< The DisplayImage showing the output of this component.
-	cv::Mat *mDisplayOutputImage;
+	cv::Mat mDisplayOutputImage;
     cv::Mat out;
 	cv::Mat planes[2];
 };

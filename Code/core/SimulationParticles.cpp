@@ -4,7 +4,7 @@
 #include <fstream>
 #include <algorithm>
 
-THISCLASS::SimulationParticles(const wxFileName &filename):
+THISCLASS::SimulationParticles(const wxFileName & filename):
 	mFrames(), mFrameRead(), mFileName(filename), mFile(0),
 	mCurrentFrame(mFrames.end()), mEmptyFrame() {
 
@@ -23,7 +23,7 @@ THISCLASS::~SimulationParticles() {
 	delete mFile;
 }
 
-void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum) {
+void THISCLASS::OnNMEAProcessMessage(CommunicationMessage * m, bool withchecksum) {
 	// We process known messages only (and discard other messages without warning)
 	if (m->mCommand == wxT("STEP_START")) {
 		mFrameRead.number = 0;
@@ -44,7 +44,7 @@ void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum)
 	}
 }
 
-void THISCLASS::OnNMEAProcessMessageChecksumError(CommunicationMessage *m) {
+void THISCLASS::OnNMEAProcessMessageChecksumError(CommunicationMessage * m) {
 	// Don't do anything for now
 	// TODO: such incidents should be logged or at least counted somewhere
 }
@@ -53,7 +53,7 @@ void THISCLASS::OnNMEAProcessUnrecognizedChar(unsigned char chr) {
 	// Don't do anything, just ignore such chars
 }
 
-void THISCLASS::OnNMEASend(const char *buffer, int len) {
+void THISCLASS::OnNMEASend(const char * buffer, int len) {
 	// We don't write
 }
 

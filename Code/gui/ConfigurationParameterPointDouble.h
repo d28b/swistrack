@@ -16,20 +16,20 @@ class ConfigurationParameterPointDouble: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterPointDouble(wxWindow* parent);
+	ConfigurationParameterPointDouble(wxWindow * parent);
 	//! Destructor.
 	~ConfigurationParameterPointDouble();
 
 	//! Handles the corresponding GUI event.
-	void OnTextUpdated(wxCommandEvent& event);
+	void OnTextUpdated(wxCommandEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnTextEnter(wxCommandEvent& event);
+	void OnTextEnter(wxCommandEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnKillFocus(wxFocusEvent& event);
+	void OnKillFocus(wxFocusEvent & event);
 
 private:
-	wxTextCtrl *mTextCtrlX;		//!< The corresponding GUI widget.
-	wxTextCtrl *mTextCtrlY;		//!< The corresponding GUI widget.
+	wxTextCtrl * mTextCtrlX;	//!< The corresponding GUI widget.
+	wxTextCtrl * mTextCtrlY;	//!< The corresponding GUI widget.
 	double mValueMinX;			//!< The minimum value allowed for X.
 	double mValueMinY;			//!< The minimum value allowed for Y.
 	double mValueMaxX;			//!< The maximum value allowed for X.
@@ -46,8 +46,8 @@ private:
 	};
 
 	// ConfigurationParameter methods
-	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
-	virtual void OnUpdate(wxWindow *updateprotection);
+	virtual void OnInitialize(ConfigurationXML * config, ErrorList * errorlist);
+	virtual void OnUpdate(wxWindow * updateprotection);
 	virtual void OnSetNewValue();
 
 	// Validates the new value for X.

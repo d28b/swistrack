@@ -54,7 +54,7 @@ void THISCLASS::StartRecording() {
 	}
 
 	// Swap current and old timeline
-	Timeline *temp = mLastTimeline;
+	Timeline * temp = mLastTimeline;
 	mLastTimeline = mCurrentTimeline;
 	mCurrentTimeline = temp;
 
@@ -74,7 +74,7 @@ void THISCLASS::StartRecording() {
 	LapTime(&(mCurrentTimeline->mBegin), sType_None, 0);
 }
 
-void THISCLASS::LapTime(Event *it, eType type, Component *c) {
+void THISCLASS::LapTime(Event * it, eType type, Component * c) {
 #ifdef __WXMSW__
 	QueryPerformanceCounter(&(it->mTime));
 #else
@@ -84,7 +84,7 @@ void THISCLASS::LapTime(Event *it, eType type, Component *c) {
 	it->mComponent = c;
 }
 
-void THISCLASS::Add(const Event *it) {
+void THISCLASS::Add(const Event * it) {
 	if (! mCurrentTimeline) {
 		return;
 	}
@@ -94,7 +94,7 @@ void THISCLASS::Add(const Event *it) {
 	mCurrentTimeline->mEvents.push_back(*it);
 }
 
-void THISCLASS::Add(eType type, Component *component) {
+void THISCLASS::Add(eType type, Component * component) {
 	if (! mCurrentTimeline) {
 		return;
 	}
@@ -124,7 +124,7 @@ void THISCLASS::AddStepStart() {
 	mPreviousStep = it;
 }
 
-double THISCLASS::CalculateDuration(const Event *it1, const Event *it2) const {
+double THISCLASS::CalculateDuration(const Event * it1, const Event * it2) const {
 #ifdef __WXMSW__
 	double diff = (double)(it2->mTime.QuadPart - it1->mTime.QuadPart);
 	return diff / mFrequency;

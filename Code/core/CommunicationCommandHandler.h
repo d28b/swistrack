@@ -15,7 +15,7 @@ public:
 	virtual ~CommunicationCommandHandler() {}
 
 	//! This event is called when a message arrives.
-	virtual bool OnCommunicationCommand(CommunicationMessage *m) = 0;
+	virtual bool OnCommunicationCommand(CommunicationMessage * m) = 0;
 };
 
 #endif

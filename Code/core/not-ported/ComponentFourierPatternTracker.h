@@ -33,16 +33,16 @@ public:
 	}
 
 	void prepareFilter(Mat input);
-	void generateFFTPreview(Mat complexI, Mat *output);
+	void generateFFTPreview(Mat complexI, Mat * output);
 
 private:
 	Display mDisplayOutput;		//!< The DisplayImage showing the output of this component.
 
 	Display mPatternPreview;		//!< The DisplayImage showing the output of this component.
 	Display mMatchPreview;
-	cv::Mat *mDisplayOutputImage;
-	cv::Mat *mPatternPreviewImage;
-	cv::Mat *mMatchPreviewImage;
+	cv::Mat mDisplayOutputImage;
+	cv::Mat mPatternPreviewImage;
+	cv::Mat mMatchPreviewImage;
 
 	DataStructureParticles::tParticleVector mParticles, mParticlesOutput;
 

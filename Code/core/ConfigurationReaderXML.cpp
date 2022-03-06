@@ -13,7 +13,7 @@ THISCLASS::ConfigurationReaderXML():
 THISCLASS::~ConfigurationReaderXML() {
 }
 
-bool THISCLASS::Open(const wxFileName &filename) {
+bool THISCLASS::Open(const wxFileName & filename) {
 	// Read the file
 	wxLogNull log;
 	mIsOpen = mDocument.Load(filename.GetFullPath());

@@ -3,7 +3,7 @@
 
 #include <wx/event.h>
 
-THISCLASS::ComponentTrigger(Component *c):
+THISCLASS::ComponentTrigger(Component * c):
 	mComponent(c), mIsReady(false) {
 
 }

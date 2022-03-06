@@ -1,7 +1,7 @@
 #include "ComponentHSVBackgroundSubtractionColor.h"
 #define THISCLASS ComponentHSVBackgroundSubtractionColor
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentHSVBackgroundSubtractionColor(SwisTrackCore * stc):
@@ -10,7 +10,7 @@ THISCLASS::ComponentHSVBackgroundSubtractionColor(SwisTrackCore * stc):
 		mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingColor);
+	mCategory = &(mCore->mCategoryProcessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 	AddDisplay(&mDisplayOutput);
@@ -38,7 +38,7 @@ void THISCLASS::OnReloadConfiguration() {
 void THISCLASS::OnStep() {
 	cv::Mat inputImage = mCore->mDataStructureImageColor.mImage;
 	if (inputImage.empty()) {
-		AddError(wxT("No input Image"));
+		AddError(wxT("No input image."));
 		return;
 	}
 

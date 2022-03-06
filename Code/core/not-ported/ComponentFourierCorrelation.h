@@ -29,8 +29,8 @@ private:
 	Display mDisplayOutput;		//!< The DisplayImage showing the output of this component.
 
 	Display mPatternPreview;		//!< The DisplayImage showing the output of this component.
-	cv::Mat *mDisplayOutputImage;
-	cv::Mat *mPatternPreviewImage;
+	cv::Mat mDisplayOutputImage;
+	cv::Mat mPatternPreviewImage;
 
 	cv::Mat mPattern1, mPatternFourierFiltered;
 

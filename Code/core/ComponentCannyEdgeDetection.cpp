@@ -5,10 +5,10 @@
 
 THISCLASS::ComponentCannyEdgeDetection(SwisTrackCore * stc):
 	Component(stc, wxT("CannyEdgeDetection")),
-	mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
+	mDisplayOutput(wxT("Output"), wxT("After edge detection")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingColor);
+	mCategory = &(mCore->mCategoryProcessingGray);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);

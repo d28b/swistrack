@@ -21,8 +21,10 @@ public:
 	//! Destructor.
 	~ErrorList() {}
 
+	//! Clears the list.
+	void Clear();
 	//! Adds an error message.
-	void Add(const wxString &msg, int linenumber = 0);
+	void Add(const wxString & msg, int linenumber = 0);
 };
 
 #endif

@@ -5,6 +5,7 @@
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BinaryErosion</url>
 	<displayimage>Output</displayimage>
 	<category>BinaryProcessing</category>
+
 	<configuration>
 		<parameter type="integer">
 			<name>Iterations</name>
@@ -13,7 +14,7 @@
 			<max>10</max>
 			<default>1</default>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

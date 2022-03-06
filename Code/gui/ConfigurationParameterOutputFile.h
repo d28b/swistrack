@@ -15,23 +15,23 @@ class ConfigurationParameterOutputFile: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterOutputFile(wxWindow* parent);
+	ConfigurationParameterOutputFile(wxWindow * parent);
 	//! Destructor.
 	~ConfigurationParameterOutputFile();
 
 	//! Handles the corresponding GUI event.
-	void OnTextEnter(wxCommandEvent& event);
+	void OnTextEnter(wxCommandEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnKillFocus(wxFocusEvent& event);
+	void OnKillFocus(wxFocusEvent & event);
 
 private:
-	wxTextCtrl *mTextCtrl;		//!< The corresponding GUI widget.
+	wxTextCtrl * mTextCtrl;		//!< The corresponding GUI widget.
 	wxString mValueDefault;		//!< The default value.
 	wxString mNewValue;			//!< The new value.
 
 	// ConfigurationParameter methods
-	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
-	virtual void OnUpdate(wxWindow *updateprotection);
+	virtual void OnInitialize(ConfigurationXML * config, ErrorList * errorlist);
+	virtual void OnUpdate(wxWindow * updateprotection);
 	virtual void OnSetNewValue();
 
 	// Validates the new value.

@@ -1,7 +1,7 @@
 #include "ComponentAdaptiveBackgroundSubtractionGray.h"
 #define THISCLASS ComponentAdaptiveBackgroundSubtractionGray
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentAdaptiveBackgroundSubtractionGray(SwisTrackCore * stc):
@@ -10,7 +10,7 @@ THISCLASS::ComponentAdaptiveBackgroundSubtractionGray(SwisTrackCore * stc):
 	mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingGray);
+	mCategory = &(mCore->mCategoryProcessingGray);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 	AddDisplay(&mDisplayOutput);

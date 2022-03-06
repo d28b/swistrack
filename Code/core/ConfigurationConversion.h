@@ -20,13 +20,13 @@ public:
 	~ConfigurationConversion() {}
 
 	//! Converts a configuration value into a boolean value.
-	static bool Bool(const wxString &str, bool defvalue);
+	static bool Bool(const wxString & str, bool defvalue);
 	//! Converts a configuration value into an int value.
-	static int Int(const wxString &str, int defvalue);
+	static int Int(const wxString & str, int defvalue);
 	//! Converts a configuration value into a double value.
-	static double Double(const wxString &str, double defvalue);
+	static double Double(const wxString & str, double defvalue);
 	//! Converts a configuration value into a date.
-	static wxDateTime Date(const wxString &str, const wxDateTime &defvalue);
+	static wxDateTime Date(const wxString & str, const wxDateTime & defvalue);
 	//! Converts a configuration value into a color.
 	static wxColor Color(const wxString & str, const wxColor defValue);
 	//! Converts a configuration value into a color.

@@ -15,13 +15,13 @@ class ConfigurationParameterGigECameraList: public ConfigurationParameterDropdow
 
 public:
 	//! Constructor.
-	ConfigurationParameterGigECameraList(wxWindow* parent): ConfigurationParameterDropdownList(parent) {}
+	ConfigurationParameterGigECameraList(wxWindow * parent): ConfigurationParameterDropdownList(parent) {}
 	//! Destructor.
 	~ConfigurationParameterGigECameraList() {}
 
 private:
 	// ConfigurationParameterDropdownList methods
-	virtual void FillList(ConfigurationXML *config, ErrorList *errorlist);
+	virtual void FillList(ConfigurationXML * config, ErrorList * errorlist);
 
 };
 

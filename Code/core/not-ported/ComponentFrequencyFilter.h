@@ -33,14 +33,14 @@ public:
 	}
 
 private:
-	void generateFFTPreview(Mat complexI, Mat *output);
+	void generateFFTPreview(Mat complexI, Mat * output);
 	cv::Mat mFilterMatrix;
 	#ifdef GPU_ENABLED
 		cv::gpu::GpuMat mFilterMatrixGPU;
 		cv::gpu::GpuMat output_gpu;
 	#endif
 	Display mDisplayOutput;		//!< The DisplayImage showing the output of this component.
-	cv::Mat *mDisplayOutputImage;
+	cv::Mat mDisplayOutputImage;
 	bool mGenerateOutput; 		// configuration parameter specifies if an magnitude image will be calculated for display (takes extra time)
 	bool mConfigChanged;
 };

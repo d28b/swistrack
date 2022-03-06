@@ -15,26 +15,26 @@ class ConfigurationParameterColor: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterColor(wxWindow* parent);
+	ConfigurationParameterColor(wxWindow * parent);
 	//! Destructor.
 	~ConfigurationParameterColor();
 
 	//! Handles the corresponding GUI event.
-	void OnTextEnter(wxCommandEvent& event);
+	void OnTextEnter(wxCommandEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnKillFocus(wxFocusEvent& event);
+	void OnKillFocus(wxFocusEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnButtonClicked(wxCommandEvent& event);
+	void OnButtonClicked(wxCommandEvent & event);
 
 private:
-	wxTextCtrl *mTextCtrl;		//!< The corresponding GUI widget.
-	wxButton *mButton;			//!< The corresponding GUI widget.
-	wxColor mValueDefault;			//!< The default value.
-	wxColor mNewValue;				//!< The new value.
+	wxTextCtrl * mTextCtrl;		//!< The corresponding GUI widget.
+	wxButton * mButton;			//!< The corresponding GUI widget.
+	wxColor mValueDefault;		//!< The default value.
+	wxColor mNewValue;			//!< The new value.
 
 	// ConfigurationParameter methods
-	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
-	virtual void OnUpdate(wxWindow *updateprotection);
+	virtual void OnInitialize(ConfigurationXML * config, ErrorList * errorlist);
+	virtual void OnUpdate(wxWindow * updateprotection);
 	virtual void OnSetNewValue();
 
 	// Validates the new value.

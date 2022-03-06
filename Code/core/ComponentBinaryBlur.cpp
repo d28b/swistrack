@@ -9,7 +9,7 @@ THISCLASS::ComponentBinaryBlur(SwisTrackCore * stc):
 	mDisplayOutput(wxT("Output"), wxT("After blurring the image")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingBinary);
+	mCategory = &(mCore->mCategoryProcessingBinary);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);

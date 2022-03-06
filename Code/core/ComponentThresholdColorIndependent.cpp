@@ -9,7 +9,7 @@ THISCLASS::ComponentThresholdColorIndependent(SwisTrackCore * stc):
 	mDisplayOutput(wxT("Output"), wxT("After thresholding")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryThresholdingColor);
+	mCategory = &(mCore->mCategoryProcessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);

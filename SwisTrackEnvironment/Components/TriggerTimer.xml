@@ -15,7 +15,7 @@
 			<max>1</max>
 			<slider>true</slider>
 			<sliderstep>0.01</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

@@ -12,7 +12,7 @@ THISCLASS::ComponentColorBlur(SwisTrackCore * stc):
 	mDisplayOutput(wxT("Output"), wxT("After blurring the image")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingColor);
+	mCategory = &(mCore->mCategoryProcessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);
@@ -26,7 +26,6 @@ THISCLASS::~ComponentColorBlur() {
 
 void THISCLASS::OnStart() {
 	OnReloadConfiguration();
-	return;
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -54,9 +53,11 @@ void THISCLASS::OnStep() {
 		cv::blur(inputImage, outputImage, cv::Size(mSize, mSize));
 	}
 
+	mCore->mDataStructureImageColor.mImage = outputImage;
+
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) de.SetMainImage(mCore->mDataStructureImageColor.mImage);
+	if (de.IsActive()) de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {

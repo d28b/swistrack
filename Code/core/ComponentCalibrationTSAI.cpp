@@ -9,7 +9,7 @@
 
 THISCLASS::ComponentCalibrationTSAI(SwisTrackCore * stc):
 	Component(stc, wxT("CalibrationTSAI")),
-	mDisplayOutput(wxT("Output"), wxT("TSAI Calibration: Output")) {
+	mDisplayOutput(wxT("Output"), wxT("After calibration")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryCalibration);
@@ -26,8 +26,8 @@ THISCLASS::~ComponentCalibrationTSAI() {
 
 void THISCLASS::OnStart() {
 	// Read the file containing the calibration points
-	wxString filename_string = GetConfigurationString(wxT("CalibrationPoints"), wxT(""));
-	wxFileName filename = mCore->GetProjectFileName(filename_string);
+	wxString filenameString = GetConfigurationString(wxT("CalibrationPoints"), wxT(""));
+	wxFileName filename = mCore->GetProjectFileName(filenameString);
 	wxLogNull log;
 	wxXmlDocument document;
 	bool isopen = document.Load(filename.GetFullPath());
@@ -54,11 +54,9 @@ void THISCLASS::OnStart() {
 	calibrationPointList.clear();
 
 	// Fill the vector with the readen points
-	wxXmlNode *node = mSelectedNode->GetChildren();
+	wxXmlNode * node = mSelectedNode->GetChildren();
 	while (node) {
-		if (node->GetName() == wxT("point")) {
-			ReadPoint(node);
-		}
+		if (node->GetName() == wxT("point")) ReadPoint(node);
 		node = node->GetNext();
 	}
 
@@ -76,8 +74,8 @@ void THISCLASS::OnStart() {
 	if (calibrationPointList.size() > TSAI_MAX_POINTS) {
 		AddError(wxT("There are more calibration points than accepted by the Tsai calibration library."));
 		return;
-		return;
 	}
+
 	calibrationData.point_count = calibrationPointList.size();
 	for (int i = 0; i < calibrationData.point_count; i++) {
 		calibrationData.zw[i] = 0;
@@ -86,11 +84,11 @@ void THISCLASS::OnStart() {
 		calibrationData.Xf[i] = (calibrationPointList.at(i)).xImage;
 		calibrationData.Yf[i] = (calibrationPointList.at(i)).yImage;
 	}
+
 	// Do the calibration
 	try {
 		coplanar_calibration_with_full_optimization(&calibrationData, &calibrationConstants, &cameraParameters);
-	}
-	catch (...) {
+	} catch (...) {
 		AddError(wxT("Calibration using libtsai failed."));
 		return;
 	}
@@ -118,13 +116,11 @@ void THISCLASS::OnStart() {
 		errorX += tmpErrorX;
 		errorY += tmpErrorY;
 		errorD += tmpErrorD;
-		if (tmpErrorX > maxErrorX)
-			maxErrorX = tmpErrorX;
-		if (tmpErrorY > maxErrorY)
-			maxErrorY = tmpErrorY;
-		if (tmpErrorD > maxErrorD)
-			maxErrorD = tmpErrorD;
+		if (tmpErrorX > maxErrorX) maxErrorX = tmpErrorX;
+		if (tmpErrorY > maxErrorY) maxErrorY = tmpErrorY;
+		if (tmpErrorD > maxErrorD) maxErrorD = tmpErrorD;
 	}
+
 	errorX = errorX / calibrationPointList.size();
 	errorY = errorY / calibrationPointList.size();
 	errorD = errorD / calibrationPointList.size();
@@ -152,11 +148,8 @@ void THISCLASS::OnStep() {
 	if (! particles) return;
 
 	// Transform all particle positions
-	DataStructureParticles::tParticleVector::iterator it = particles->begin();
-	while (it != particles->end()) {
-		it->mWorldCenter = Image2World(it->mCenter);
-		it++;
-	}
+	for (auto & particle : *particles)
+		particle.mWorldCenter = Image2World(particle.mCenter);
 }
 
 void THISCLASS::OnStepCleanup() {
@@ -188,4 +181,3 @@ cv::Point2f THISCLASS::World2Image(cv::Point2f worldCoordinates) {
 	cv::Point2f imageCoordinates(ix, iy);
 	return imageCoordinates;
 }
-

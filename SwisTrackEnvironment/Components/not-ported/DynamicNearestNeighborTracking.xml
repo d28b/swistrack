@@ -10,6 +10,7 @@
 			<label>Number of Tracks</label>
 			<unit>Individuals</unit>
 			<default>10</default>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>MaxDistance</name>
@@ -18,7 +19,7 @@
 			<max>1000</max>
 			<default>20</default>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>MinNewTrackDistance</name>
@@ -27,7 +28,7 @@
 			<max>1000</max>
 			<default>100</default>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 
 		<parameter type="double">
@@ -37,7 +38,7 @@
 			<max>1000</max>
 			<default>100</default>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 
 		<parameter type="double">
@@ -46,7 +47,7 @@
 			<min>0</min>
 			<max>1</max>
 			<default>1</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 
 		<parameter type="integer">
@@ -56,7 +57,7 @@
 			<max>1000</max>
 			<default>100</default>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

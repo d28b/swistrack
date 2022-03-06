@@ -1,7 +1,7 @@
 #include "ComponentFourierCorrelation.h"
 #define THISCLASS ComponentFourierCorrelation
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 
 using namespace cv;
@@ -13,7 +13,7 @@ THISCLASS::ComponentFourierCorrelation(SwisTrackCore * stc):
 		mPatternPreview(wxT("Output"), wxT("PatternPreview")){
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingGray);
+	mCategory = &(mCore->mCategoryProcessingGray);
 	AddDataStructureRead(&(mCore->mDataStructureImageFFT));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 	AddDisplay(&mDisplayOutput);

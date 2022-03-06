@@ -12,10 +12,10 @@ THISCLASS::~ConfigurationWriterXML() {
 
 void THISCLASS::WriteComponents(SwisTrackCore * stc) {
 	SelectRootNode();
-	wxXmlNode *node = GetChildNode(wxT("components"));
+	wxXmlNode * node = GetChildNode(wxT("components"));
 	stc->ConfigurationWriteXML(node, &mErrorList);
 }
 
-bool THISCLASS::Save(const wxFileName &filename) {
+bool THISCLASS::Save(const wxFileName & filename) {
 	return mDocument.Save(filename.GetFullPath());
 }

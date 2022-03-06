@@ -27,9 +27,9 @@ void THISCLASS::OnStart() {
 	bool production = mCore->IsStartedInProductionMode();
 
 	// Read the file (if the filename changed or if we are in production mode)
-	wxString filename_string = GetConfigurationString(wxT("File"), wxT(""));
-	wxFileName filename = mCore->GetProjectFileName(filename_string);
-	if (production || (mSimulationParticles == 0) || (mSimulationParticles->GetFileName() != filename)) {
+	wxString filenameString = GetConfigurationString(wxT("File"), wxT(""));
+	wxFileName filename = mCore->GetProjectFileName(filenameString);
+	if (production || mSimulationParticles == 0 || mSimulationParticles->GetFileName() != filename) {
 		delete mSimulationParticles;
 		mSimulationParticles = new SimulationParticles(filename);
 		if (! mSimulationParticles->IsOpen()) {
@@ -43,7 +43,7 @@ void THISCLASS::OnStart() {
 	OnReloadConfiguration();
 
 	// Start the simulation at the first frame that is available in the file
-	SimulationParticles::Frame *frame = mSimulationParticles->FirstFrame();
+	SimulationParticles::Frame * frame = mSimulationParticles->FirstFrame();
 	if (frame) {
 		mFrameNumber = frame->number - 1;
 	} else {
@@ -72,7 +72,7 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	mFrameNumber++;
-	SimulationParticles::Frame *frame = mSimulationParticles->GetFutureFrameByNumber(mFrameNumber);
+	SimulationParticles::Frame * frame = mSimulationParticles->GetFutureFrameByNumber(mFrameNumber);
 
 	// Clear the particles
 	mParticles.clear();

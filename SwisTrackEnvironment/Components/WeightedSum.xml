@@ -11,28 +11,28 @@
 			<label>Red</label>
 			<unit></unit>
 			<default>0.5</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>G</name>
 			<label>Green</label>
 			<unit></unit>
 			<default>0.5</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>B</name>
 			<label>Blue</label>
 			<unit></unit>
 			<default>0.5</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>Base</name>
 			<label>Base</label>
 			<unit></unit>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<label>Calculates: Base + Red * r + Green * g + Blue * b.</label>
 		<label>The channel values r, g, and b are values in the range 0..255. The final value is truncated to 0..255.</label>

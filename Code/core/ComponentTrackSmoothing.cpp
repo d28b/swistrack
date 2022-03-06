@@ -26,7 +26,7 @@ THISCLASS::~ComponentTrackSmoothing() {
 	}
 }
 
-Track& THISCLASS::WindowForTrack(int id)  {
+Track & THISCLASS::WindowForTrack(int id)  {
 	DataStructureTracks::tTrackMap::iterator it = mWindows.begin();
 	while (it != mWindows.end()) {
 		if (it->first == id) {

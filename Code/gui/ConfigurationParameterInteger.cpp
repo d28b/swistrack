@@ -14,7 +14,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_COMMAND_SCROLL_CHANGED (wxID_ANY, THISCLASS::OnScrollChanged)
 END_EVENT_TABLE()
 
-THISCLASS::ConfigurationParameterInteger(wxWindow* parent):
+THISCLASS::ConfigurationParameterInteger(wxWindow * parent):
 	ConfigurationParameter(parent),
 	mSpinCtrl(0), mSlider(0),
 	mValueMin(0), mValueMax(255), mValueDefault(0) {
@@ -25,7 +25,7 @@ THISCLASS::~ConfigurationParameterInteger() {
 	mSpinCtrl->Disconnect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
 }
 
-void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
+void THISCLASS::OnInitialize(ConfigurationXML * config, ErrorList * errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
 	mValueMin = config->ReadInt(wxT("min"), INT_MIN);
@@ -33,28 +33,28 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	mValueDefault = config->ReadInt(wxT("default"), 0);
 
 	// Create the controls
-	wxStaticText *label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
 	mSpinCtrl = new wxSpinCtrl(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT | wxTE_PROCESS_ENTER, mValueMin, mValueMax, mValueDefault);
 	mSpinCtrl->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
-	wxStaticText *unitlabel = new wxStaticText(this, wxID_ANY, wxT(" ") + config->ReadString(wxT("unit"), wxT("")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * unitlabel = new wxStaticText(this, wxID_ANY, wxT(" ") + config->ReadString(wxT("unit"), wxT("")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
 
 	if (config->ReadBool(wxT("slider"), false)) {
 		mSlider = new wxSlider(this, wxID_ANY, mValueDefault, mValueMin, mValueMax, wxDefaultPosition, wxSize(scParameterWidth, -1), wxSL_AUTOTICKS);
 	}
 
 	// Layout the controls
-	wxBoxSizer *hs = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer * hs = new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(label, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mSpinCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(unitlabel, 0, wxALIGN_CENTER_VERTICAL, 0);
 
-	wxBoxSizer *vs = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer * vs = new wxBoxSizer(wxVERTICAL);
 	vs->Add(hs, 0, 0, 0);
 	if (mSlider) vs->Add(mSlider, 0, 0, 0);
 	SetSizer(vs);
 }
 
-void THISCLASS::OnUpdate(wxWindow *updateprotection) {
+void THISCLASS::OnUpdate(wxWindow * updateprotection) {
 	int value = mComponent->GetConfigurationInt(mName, mValueDefault);
 	if (updateprotection != mSpinCtrl)
 		mSpinCtrl->SetValue(value);
@@ -81,7 +81,7 @@ bool THISCLASS::ValidateNewValue() {
 
 bool THISCLASS::CompareNewValue() {
 	int value = mComponent->GetConfigurationInt(mName, mValueDefault);
-	return (value == mNewValue);
+	return value == mNewValue;
 }
 
 void THISCLASS::OnSetNewValue() {
@@ -89,7 +89,7 @@ void THISCLASS::OnSetNewValue() {
 	ce.SetConfigurationInt(mName, mNewValue);
 }
 
-void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
+void THISCLASS::OnTextUpdated(wxCommandEvent & event) {
 	mNewValue = mSpinCtrl->GetValue();
 
 	mSpinCtrl->SetOwnForegroundColour(ValidateNewValue() ? wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) : *wxRED);
@@ -99,25 +99,25 @@ void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	SetNewValue(mSpinCtrl);
 }
 
-void THISCLASS::OnTextEnter(wxCommandEvent& event) {
+void THISCLASS::OnTextEnter(wxCommandEvent & event) {
 	mNewValue = mSpinCtrl->GetValue();
 	ValidateNewValue();
 	SetNewValue();
 }
 
-void THISCLASS::OnSpin(wxSpinEvent& event) {
+void THISCLASS::OnSpin(wxSpinEvent & event) {
 	mNewValue = mSpinCtrl->GetValue();
 	ValidateNewValue();
 	if (CompareNewValue()) return;
 	SetNewValue(mSpinCtrl);
 }
 
-void THISCLASS::OnKillFocus(wxFocusEvent& event) {
+void THISCLASS::OnKillFocus(wxFocusEvent & event) {
 	wxCommandEvent ev;
 	OnTextEnter(ev);
 }
 
-void THISCLASS::OnScrollChanged(wxScrollEvent& event) {
+void THISCLASS::OnScrollChanged(wxScrollEvent & event) {
 	mNewValue = mSlider->GetValue();
 	ValidateNewValue();
 	if (CompareNewValue()) return;

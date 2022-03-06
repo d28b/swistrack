@@ -1,7 +1,7 @@
 #include "ComponentCorrectMean.h"
 #define THISCLASS ComponentCorrectMean
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentCorrectMean(SwisTrackCore * stc):
@@ -10,7 +10,7 @@ THISCLASS::ComponentCorrectMean(SwisTrackCore * stc):
 	mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingColor);
+	mCategory = &(mCore->mCategoryProcessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);
@@ -33,7 +33,7 @@ void THISCLASS::OnReloadConfiguration() {
 void THISCLASS::OnStep() {
 	cv::Mat inputImage = mCore->mDataStructureImageColor.mImage;
 	if (inputImage.empty()) {
-		AddError(wxT("No input Image"));
+		AddError(wxT("No input image."));
 		return;
 	}
 

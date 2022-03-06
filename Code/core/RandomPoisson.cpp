@@ -377,7 +377,7 @@ long int THISCLASS::PoissonRatioUniforms(double L) {
 		if (u * (u - lf) > 1.0) continue;       // quick rejection
 		if (2.0 * log(u) <= lf) break;
 	}         // final acceptance
-	return(k);
+	return k;
 }
 
 

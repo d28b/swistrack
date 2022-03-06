@@ -89,14 +89,15 @@ void THISCLASS::Color::FindColorBlobs(cv::Mat channel, wxDateTime frameTimestamp
 	if (deColor.IsActive()) deColor.SetMainImage(channel);
 
 	// Threshold the main channel
-	cv::threshold(channel, channel, mThreshold, 255, cv::THRESH_BINARY_INV);
+	cv::Mat thresholded;
+	cv::threshold(channel, thresholded, mThreshold, 255, cv::THRESH_BINARY_INV);
 
 	// Set the binary DisplayImage
 	DisplayEditor deBinary(&mDisplayBinary);
-	if (deBinary.IsActive()) deBinary.SetMainImage(channel);
+	if (deBinary.IsActive()) deBinary.SetMainImage(thresholded);
 
 	// Do blob detection
-	mBlobDetection.FindBlobs(channel, frameTimestamp, frameNumber);
+	mBlobDetection.FindBlobs(thresholded, frameTimestamp, frameNumber);
 
 	// Fill the particles display images
 	if (deColor.IsActive()) deColor.SetParticles(&mBlobDetection.mParticles);

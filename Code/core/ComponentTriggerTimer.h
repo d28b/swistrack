@@ -29,10 +29,10 @@ private:
 	//! An overwritten wxTimer.
 	class Timer: public wxTimer {
 	public:
-		ComponentTriggerTimer *mComponentTriggerTimer;		//!< The associated component.
+		ComponentTriggerTimer * mComponentTriggerTimer;		//!< The associated component.
 
 		//! Constructor.
-		Timer(ComponentTriggerTimer *ctt): wxTimer(), mComponentTriggerTimer(ctt) {}
+		Timer(ComponentTriggerTimer * ctt): wxTimer(), mComponentTriggerTimer(ctt) {}
 		//! Destructor.
 		~Timer() {}
 
@@ -42,7 +42,7 @@ private:
 		}
 	};
 
-	Timer *mTimer;		//!< The associated timer.
+	Timer * mTimer;		//!< The associated timer.
 };
 
 #endif

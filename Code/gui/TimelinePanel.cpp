@@ -23,7 +23,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 	EVT_MENU(cID_SaveTimeline, THISCLASS::OnMenuSaveTimeline)
 END_EVENT_TABLE()
 
-THISCLASS::TimelinePanel(wxWindow *parent, SwisTrack *st):
+THISCLASS::TimelinePanel(wxWindow * parent, SwisTrack * st):
 	wxControl(parent, -1), mSwisTrack(st), mSelectedComponent(0), mPopupMenu(), mTimer(this),
 	mViewOffset(0), mViewScale(1000), mMoveStarted(false), mMoveStartPoint(0) {
 
@@ -54,7 +54,7 @@ THISCLASS::TimelinePanel(wxWindow *parent, SwisTrack *st):
 THISCLASS::~TimelinePanel() {
 }
 
-void THISCLASS::SelectComponent(Component *component) {
+void THISCLASS::SelectComponent(Component * component) {
 	mSelectedComponent = component;
 	Refresh(true);
 }
@@ -71,7 +71,7 @@ void THISCLASS::StartRecording() {
 	}
 }
 
-void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
+void THISCLASS::OnPaint(wxPaintEvent & WXUNUSED(event)) {
 	wxPaintDC dc(this);
 	bool ok = Paint(dc);
 
@@ -85,9 +85,9 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	}
 }
 
-bool THISCLASS::Paint(wxPaintDC &dc) {
+bool THISCLASS::Paint(wxPaintDC & dc) {
 	// Get timeline
-	const SwisTrackCoreEventRecorder::Timeline *timeline = mSwisTrack->mSwisTrackCore->mEventRecorder->GetLastTimeline();
+	const SwisTrackCoreEventRecorder::Timeline * timeline = mSwisTrack->mSwisTrackCore->mEventRecorder->GetLastTimeline();
 	if (timeline == 0) {
 		return false;
 	}
@@ -109,7 +109,7 @@ bool THISCLASS::Paint(wxPaintDC &dc) {
 	return true;
 }
 
-void THISCLASS::DrawTrigger(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
+void THISCLASS::DrawTrigger(wxPaintDC & dc, const SwisTrackCoreEventRecorder::Timeline * timeline) {
 	// Prepare
 	wxSize dcsize = dc.GetSize();
 	int dw = dcsize.GetWidth();
@@ -141,13 +141,13 @@ void THISCLASS::DrawTrigger(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Tim
 	}
 }
 
-void THISCLASS::DrawTrigger(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime) {
+void THISCLASS::DrawTrigger(wxPaintDC & dc, int dw, int dh, double starttime, double stoptime) {
 	int startx = ((starttime < 0) ? -5 : (int)floor(starttime * mViewScale + mViewOffset + 0.5));
 	int stopx = ((stoptime < 0) ? dw + 5 : (int)floor(stoptime * mViewScale + mViewOffset + 0.5));
 	dc.DrawRectangle(startx, 0, stopx - startx, dh);
 }
 
-void THISCLASS::DrawTicks(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
+void THISCLASS::DrawTicks(wxPaintDC & dc, const SwisTrackCoreEventRecorder::Timeline * timeline) {
 	wxSize dcsize = dc.GetSize();
 	int dw = dcsize.GetWidth();
 	//int dh=dcsize.GetHeight(); // Not needed
@@ -189,7 +189,7 @@ void THISCLASS::DrawTicks(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timel
 	}
 }
 
-void THISCLASS::DrawComponentSteps(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
+void THISCLASS::DrawComponentSteps(wxPaintDC & dc, const SwisTrackCoreEventRecorder::Timeline * timeline) {
 	// Prepare
 	wxSize dcsize = dc.GetSize();
 	int dw = dcsize.GetWidth();
@@ -211,7 +211,7 @@ void THISCLASS::DrawComponentSteps(wxPaintDC &dc, const SwisTrackCoreEventRecord
 	}
 }
 
-void THISCLASS::DrawComponentStep(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool selected) {
+void THISCLASS::DrawComponentStep(wxPaintDC & dc, int dw, int dh, double starttime, double stoptime, bool selected) {
 	if (selected) {
 		dc.SetBrush(wxBrush(wxColour(0xff, 0x66, 0x66)));
 		dc.SetPen(wxPen(wxColour(0xcc, 0x00, 0x00)));
@@ -224,7 +224,7 @@ void THISCLASS::DrawComponentStep(wxPaintDC &dc, int dw, int dh, double starttim
 	dc.DrawRectangle(startx, dh - 15, stopx - startx, 20);
 }
 
-void THISCLASS::DrawStepLapTimes(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
+void THISCLASS::DrawStepLapTimes(wxPaintDC & dc, const SwisTrackCoreEventRecorder::Timeline * timeline) {
 	// Prepare
 	wxSize dcsize = dc.GetSize();
 	int dw = dcsize.GetWidth();
@@ -244,12 +244,12 @@ void THISCLASS::DrawStepLapTimes(wxPaintDC &dc, const SwisTrackCoreEventRecorder
 	}
 }
 
-void THISCLASS::DrawStepLapTime(wxPaintDC &dc, int dw, int dh, double time) {
+void THISCLASS::DrawStepLapTime(wxPaintDC & dc, int dw, int dh, double time) {
 	int x = ((time < 0) ? -5 : (int)floor(time * mViewScale + mViewOffset + 0.5));
 	dc.DrawLine(x, dh - 13, x, dh);
 }
 
-void THISCLASS::DrawSteps(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
+void THISCLASS::DrawSteps(wxPaintDC & dc, const SwisTrackCoreEventRecorder::Timeline * timeline) {
 	// Prepare
 	wxSize dcsize = dc.GetSize();
 	int dw = dcsize.GetWidth();
@@ -273,13 +273,13 @@ void THISCLASS::DrawSteps(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timel
 	}
 }
 
-void THISCLASS::DrawStep(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime) {
+void THISCLASS::DrawStep(wxPaintDC & dc, int dw, int dh, double starttime, double stoptime) {
 	int startx = ((starttime < 0) ? -5 : (int)floor(starttime * mViewScale + mViewOffset + 0.5));
 	int stopx = ((stoptime < 0) ? dw + 5 : (int)floor(stoptime * mViewScale + mViewOffset + 0.5));
 	dc.DrawRectangle(startx, dh - 8, stopx - startx, 15);
 }
 
-void THISCLASS::DrawStartStop(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
+void THISCLASS::DrawStartStop(wxPaintDC & dc, const SwisTrackCoreEventRecorder::Timeline * timeline) {
 	// Prepare
 	wxSize dcsize = dc.GetSize();
 	int dw = dcsize.GetWidth();
@@ -315,7 +315,7 @@ void THISCLASS::DrawStartStop(wxPaintDC &dc, const SwisTrackCoreEventRecorder::T
 	}
 }
 
-void THISCLASS::DrawStartStop(wxPaintDC &dc, int dw, int dh, double starttime, double stoptime, bool production) {
+void THISCLASS::DrawStartStop(wxPaintDC & dc, int dw, int dh, double starttime, double stoptime, bool production) {
 	if (production) {
 		dc.SetBrush(wxBrush(wxColour(0x00, 0xcc, 0x00)));
 		dc.SetPen(wxPen(wxColour(0x00, 0x88, 0x00)));
@@ -328,7 +328,7 @@ void THISCLASS::DrawStartStop(wxPaintDC &dc, int dw, int dh, double starttime, d
 	dc.DrawRoundedRectangle(startx, dh - 6, stopx - startx, 15, 5);
 }
 
-void THISCLASS::DrawBeginEnd(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
+void THISCLASS::DrawBeginEnd(wxPaintDC & dc, const SwisTrackCoreEventRecorder::Timeline * timeline) {
 	// Prepare
 	wxSize dcsize = dc.GetSize();
 	int dw = dcsize.GetWidth();
@@ -350,7 +350,7 @@ void THISCLASS::DrawBeginEnd(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Ti
 	}
 }
 
-void THISCLASS::DrawTimelineOverflow(wxPaintDC &dc, const SwisTrackCoreEventRecorder::Timeline *timeline) {
+void THISCLASS::DrawTimelineOverflow(wxPaintDC & dc, const SwisTrackCoreEventRecorder::Timeline * timeline) {
 	// Get last event
 	if (timeline->mEvents.size() == 0) {
 		return;
@@ -378,23 +378,23 @@ void THISCLASS::DrawTimelineOverflow(wxPaintDC &dc, const SwisTrackCoreEventReco
 	dc.DrawText(wxT("Timeline memory exhausted."), x + 2, 2);
 }
 
-void THISCLASS::OnMouseLeftDoubleClick(wxMouseEvent &event) {
+void THISCLASS::OnMouseLeftDoubleClick(wxMouseEvent & event) {
 	if (mTimer.IsRunning()) {
 		return;
 	}
 	StartRecording();
 }
 
-void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
+void THISCLASS::OnMouseLeftDown(wxMouseEvent & event) {
 	mMoveStartPoint = event.GetX();
 	mMoveStarted = true;
 }
 
-void THISCLASS::OnMouseLeftUp(wxMouseEvent &event) {
+void THISCLASS::OnMouseLeftUp(wxMouseEvent & event) {
 	mMoveStarted = false;
 }
 
-void THISCLASS::OnMouseMove(wxMouseEvent &event) {
+void THISCLASS::OnMouseMove(wxMouseEvent & event) {
 	if (! mMoveStarted) {
 		return;
 	}
@@ -409,7 +409,7 @@ void THISCLASS::OnMouseMove(wxMouseEvent &event) {
 	mMoveStartPoint = nowpoint;
 }
 
-void THISCLASS::OnMouseRightDown(wxMouseEvent &event) {
+void THISCLASS::OnMouseRightDown(wxMouseEvent & event) {
 	// Set the checkmarks
 	mPopupMenu.Check(cID_TriggerAuto10, (mTimer.IsRunning() && (mTimer.GetInterval() == 10000)));
 	mPopupMenu.Check(cID_TriggerAuto1, (mTimer.IsRunning() && (mTimer.GetInterval() == 1000)));
@@ -422,18 +422,18 @@ void THISCLASS::OnMouseRightDown(wxMouseEvent &event) {
 	PopupMenu(&mPopupMenu);
 }
 
-void THISCLASS::OnMouseWheel(wxMouseEvent &event) {
+void THISCLASS::OnMouseWheel(wxMouseEvent & event) {
 	// For some reason (probably focus), this is never called.
 	int rotation = event.GetWheelRotation();
 	//SetViewScale(pow(1.01, rotation)*mViewScale, event.GetX());
 	SetViewScale((rotation > 0 ? mViewScale * 2 : mViewScale / 2), event.GetX());
 }
 
-void THISCLASS::OnSize(wxSizeEvent &event) {
+void THISCLASS::OnSize(wxSizeEvent & event) {
 	Refresh(true);
 }
 
-void THISCLASS::OnMenuView(wxCommandEvent& event) {
+void THISCLASS::OnMenuView(wxCommandEvent & event) {
 	if (event.GetId() == cID_ViewZoomOut) {
 		SetViewScale(mViewScale / 2, mMoveStartPoint);
 	} else if (event.GetId() == cID_ViewZoomIn) {
@@ -455,7 +455,7 @@ void THISCLASS::SetViewScale(double newscale, int fixpoint) {
 
 void THISCLASS::SetViewOffset(int newoffset) {
 	// Get timeline
-	const SwisTrackCoreEventRecorder::Timeline *timeline = mSwisTrack->mSwisTrackCore->mEventRecorder->GetLastTimeline();
+	const SwisTrackCoreEventRecorder::Timeline * timeline = mSwisTrack->mSwisTrackCore->mEventRecorder->GetLastTimeline();
 	if (timeline == 0) {
 		return;
 	}
@@ -479,7 +479,7 @@ void THISCLASS::SetViewOffset(int newoffset) {
 	Refresh(true);
 }
 
-void THISCLASS::OnMenuTrigger(wxCommandEvent& event) {
+void THISCLASS::OnMenuTrigger(wxCommandEvent & event) {
 	if (mTimer.IsRunning()) {
 		mTimer.Stop();
 	}
@@ -493,9 +493,9 @@ void THISCLASS::OnMenuTrigger(wxCommandEvent& event) {
 	Refresh();
 }
 
-void THISCLASS::OnMenuSaveTimeline(wxCommandEvent& event) {
+void THISCLASS::OnMenuSaveTimeline(wxCommandEvent & event) {
 	// Get the timeline
-	const SwisTrackCoreEventRecorder::Timeline *timeline = mSwisTrack->mSwisTrackCore->mEventRecorder->GetLastTimeline();
+	const SwisTrackCoreEventRecorder::Timeline * timeline = mSwisTrack->mSwisTrackCore->mEventRecorder->GetLastTimeline();
 	if (timeline == 0) {
 		return;
 	}

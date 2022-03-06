@@ -43,7 +43,7 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	wxTimeSpan timeSinceLastFrame = mCore->mDataStructureInput.TimeSinceLastFrame();
-	cv::Mat *foregroundMask = mCore->mDataStructureImageBinary.mImage;
+	cv::Mat * foregroundMask = mCore->mDataStructureImageBinary.mImage;
 	if (! foregroundMask) {
 		AddError(wxT("No foreground mask."));
 		return;

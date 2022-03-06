@@ -5,6 +5,7 @@
 	</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/FilterParticles</url>
 	<displayimage>Output</displayimage>
+
 	<configuration>
 		<parameter type="double">
 			<name>MinParticleArea</name>
@@ -12,7 +13,7 @@
 			<min>0</min>
 			<max>1000000</max>
 			<default>100</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>MaxParticleArea</name>
@@ -20,7 +21,7 @@
 			<min>0</min>
 			<max>1000000</max>
 			<default>100000</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

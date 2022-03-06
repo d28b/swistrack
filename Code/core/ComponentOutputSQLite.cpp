@@ -1,13 +1,14 @@
 /*
- *  ComponentOutputSQLite.cpp
+ * ComponentOutputSQLite.cpp
  *
  *
- *  Created by Rony Kubat on 6/6/09.
- *  Copyright 2009 MIT Media Lab - Cognitive Machines. All rights reserved.
+ * Created by Rony Kubat on 6/6/09.
+ * Copyright 2009 MIT Media Lab - Cognitive Machines. All rights reserved.
  *
  */
 
 #include "ComponentOutputSQLite.h"
+#define THISCLASS ComponentOutputSQLite
 
 #ifdef USE_SQLITE3
 #include "ConfigurationWriterXML.h"
@@ -20,16 +21,16 @@
 #include <wx/mstream.h>
 #include <wx/xml/xml.h>
 
-int ComponentOutputSQLite_beginTransaction(sqlite3* db)  {
+int ComponentOutputSQLite_beginTransaction(sqlite3 * db) {
 	return sqlite3_exec(db, "BEGIN EXCLUSIVE TRANSACTION;", NULL, NULL, NULL);
 }
-int ComponentOutputSQLite_commitTransaction(sqlite3* db) {
+int ComponentOutputSQLite_commitTransaction(sqlite3 * db) {
 	return sqlite3_exec(db, "COMMIT TRANSACTION;", NULL, NULL, NULL);
 }
 
 using namespace std;
 
-ComponentOutputSQLite::ComponentOutputSQLite(SwisTrackCore* stc):
+THISCLASS::ComponentOutputSQLite(SwisTrackCore * stc):
 	Component(stc, wxT("OutputSQLite")),
 	mDB(NULL),
 	mInsertStatement(NULL),
@@ -47,20 +48,20 @@ ComponentOutputSQLite::ComponentOutputSQLite(SwisTrackCore* stc):
 	Initialize();
 }
 
-ComponentOutputSQLite::~ComponentOutputSQLite() {
+THISCLASS::~ComponentOutputSQLite() {
 }
 
-void ComponentOutputSQLite::OnStart() {
+void THISCLASS::OnStart() {
 	mDirectoryName = GetConfigurationString(wxT("DirectoryName"), wxT("/tmp"));
-	mFileName      = GetConfigurationString(wxT("FileName"),      wxT("tracks.sqlite"));
-	mClearOnStart  = GetConfigurationBool  (wxT("ClearAtStart"),  true);
+	mFileName  = GetConfigurationString(wxT("FileName"),  wxT("tracks.sqlite"));
+	mClearOnStart = GetConfigurationBool (wxT("ClearAtStart"), true);
 
 	// setup db
 	wxString path;
 	path << mDirectoryName << wxT("/") << mFileName;
 
-	int   result   = 0;
-	char  dbPath[1024] = "";
+	int  result  = 0;
+	char dbPath[1024] = "";
 
 	strncpy(dbPath, path.ToAscii(), sizeof(dbPath));
 
@@ -71,10 +72,10 @@ void ComponentOutputSQLite::OnStart() {
 		return;
 	}
 
-	if (! CreateTables())       {
+	if (! CreateTables()) {
 		return;
 	}
-	if (! ClearIfNecessary())   {
+	if (! ClearIfNecessary())  {
 		return;
 	}
 	if (! WriteConfiguration()) {
@@ -83,10 +84,10 @@ void ComponentOutputSQLite::OnStart() {
 
 	/// Prepare the insert statement for points.
 	result = sqlite3_prepare_v2(mDB,
-	                            "INSERT INTO points (trackID, frameNumber, imageX, imageY, worldX, worldY, area, orientation, compactness, timestamp) VALUES (?,?,?,?,?,?,?,?,?,?);",
-	                            -1,
-	                            &mInsertStatement,
-	                            0);
+	  "INSERT INTO points (trackID, frameNumber, imageX, imageY, worldX, worldY, area, orientation, compactness, timestamp) VALUES (?,?,?,?,?,?,?,?,?,?);",
+	  -1,
+	  &mInsertStatement,
+	  0);
 	if (SQLITE_OK != result) {
 		AddError(wxString::FromAscii(sqlite3_errmsg(mDB)));
 		return;
@@ -95,21 +96,21 @@ void ComponentOutputSQLite::OnStart() {
 	mReady = true;
 }
 
-bool ComponentOutputSQLite::AttemptInsert(sqlite3_stmt* statement) {
+bool THISCLASS::AttemptInsert(sqlite3_stmt * statement) {
 	bool retry = false;
 	do {
 		retry = false;
 		int result = sqlite3_step(statement);
 
 		switch (result) {
-		case SQLITE_DONE:   // all is well..
+		case SQLITE_DONE:  // all is well..
 			break;
 		case SQLITE_BUSY:
 			printf("DB Busy, retrying...\n");
 			retry = true;
 			usleep(20);
 			break;
-		case SQLITE_ERROR:  // bad.
+		case SQLITE_ERROR: // bad.
 			AddError(wxT("SQLITE_ERROR on insert"));
 			printf(sqlite3_errmsg(mDB));
 			printf("\n");
@@ -119,7 +120,7 @@ bool ComponentOutputSQLite::AttemptInsert(sqlite3_stmt* statement) {
 			printf(sqlite3_errmsg(mDB));
 			printf("\n");
 			return false;
-		default:            // should never happen...
+		default:  // should never happen...
 			printf("Unknown sqlite error code received: %d\n", result);
 			return false;
 		}
@@ -127,15 +128,15 @@ bool ComponentOutputSQLite::AttemptInsert(sqlite3_stmt* statement) {
 	return true;
 }
 
-bool ComponentOutputSQLite::CreateTables() {
-	int   result   = SQLITE_OK;
-	char* errorMsg = NULL;
+bool THISCLASS::CreateTables() {
+	int  result  = SQLITE_OK;
+	char * errorMsg = NULL;
 
 	result = sqlite3_exec(mDB,
-	                      "CREATE TABLE IF NOT EXISTS points (trackID INTEGER, frameNumber INTEGER, imageX REAL, imageY REAL, worldX REAL, worldY REAL, area REAL, orientation REAL, compactness REAL, timestamp REAL);",
-	                      NULL, /* intentionally ommitted callback function */
-	                      NULL, /* intentionally ommitted 1st arg to callback function */
-	                      &errorMsg);
+	  "CREATE TABLE IF NOT EXISTS points (trackID INTEGER, frameNumber INTEGER, imageX REAL, imageY REAL, worldX REAL, worldY REAL, area REAL, orientation REAL, compactness REAL, timestamp REAL);",
+	  NULL, /* intentionally ommitted callback function */
+	  NULL, /* intentionally ommitted 1st arg to callback function */
+	  &errorMsg);
 	if (SQLITE_OK != result) {
 		if (errorMsg) {
 			AddError(wxString::FromAscii(errorMsg));
@@ -149,10 +150,10 @@ bool ComponentOutputSQLite::CreateTables() {
 
 
 	result = sqlite3_exec(mDB,
-	                      "CREATE INDEX trackIDindex on points(trackID asc);",
-	                      NULL, /* intentionally ommitted callback function */
-	                      NULL, /* intentionally ommitted 1st arg to callback function */
-	                      &errorMsg);
+	  "CREATE INDEX trackIDindex on points(trackID asc);",
+	  NULL, /* intentionally ommitted callback function */
+	  NULL, /* intentionally ommitted 1st arg to callback function */
+	  &errorMsg);
 	if (SQLITE_OK != result) {
 		if (errorMsg) {
 			AddError(wxString::FromAscii(errorMsg));
@@ -166,10 +167,10 @@ bool ComponentOutputSQLite::CreateTables() {
 
 
 	result = sqlite3_exec(mDB,
-	                      "CREATE TABLE IF NOT EXISTS configuration (key TEXT, value TEXT);",
-	                      NULL,
-	                      NULL,
-	                      &errorMsg);
+	  "CREATE TABLE IF NOT EXISTS configuration (key TEXT, value TEXT);",
+	  NULL,
+	  NULL,
+	  &errorMsg);
 	if (SQLITE_OK != result) {
 		if (errorMsg) {
 			AddError(wxString::FromAscii(errorMsg));
@@ -184,9 +185,9 @@ bool ComponentOutputSQLite::CreateTables() {
 	return true;
 }
 
-bool ComponentOutputSQLite::ClearIfNecessary() {
-	int   result   = SQLITE_OK;
-	char* errorMsg = NULL;
+bool THISCLASS::ClearIfNecessary() {
+	int  result  = SQLITE_OK;
+	char * errorMsg = NULL;
 
 	if (mClearOnStart) {
 		result = sqlite3_exec(mDB, "DELETE FROM points;", NULL, NULL, &errorMsg);
@@ -215,9 +216,9 @@ bool ComponentOutputSQLite::ClearIfNecessary() {
 	return true;
 }
 
-bool ComponentOutputSQLite::WriteConfiguration() {
+bool THISCLASS::WriteConfiguration() {
 	int result = SQLITE_OK;
-	sqlite3_stmt* configurationInsert = NULL;
+	sqlite3_stmt * configurationInsert = NULL;
 
 	result = sqlite3_prepare_v2(mDB, "INSERT INTO configuration (key, value) VALUES (?, ?);", -1, &configurationInsert, 0);
 	if (SQLITE_OK != result) {
@@ -227,7 +228,7 @@ bool ComponentOutputSQLite::WriteConfiguration() {
 
 	/// User name
 	{
-		sqlite3_bind_text(configurationInsert, 1, "USER",         -1, SQLITE_STATIC);
+		sqlite3_bind_text(configurationInsert, 1, "USER",  -1, SQLITE_STATIC);
 		sqlite3_bind_text(configurationInsert, 2, getenv("USER"), -1, SQLITE_TRANSIENT);
 		if (! AttemptInsert(configurationInsert)) {
 			sqlite3_finalize(configurationInsert);
@@ -253,7 +254,7 @@ bool ComponentOutputSQLite::WriteConfiguration() {
 		gethostname(hostname, 512);
 		hostname[511] = 0; // force null termination so sqlite doesn't balk.
 		sqlite3_bind_text(configurationInsert, 1, "HOSTNAME", -1, SQLITE_STATIC);
-		sqlite3_bind_text(configurationInsert, 2, hostname,   -1, SQLITE_TRANSIENT);
+		sqlite3_bind_text(configurationInsert, 2, hostname,  -1, SQLITE_TRANSIENT);
 		if (! AttemptInsert(configurationInsert)) {
 			sqlite3_finalize(configurationInsert);
 			return false;
@@ -264,7 +265,7 @@ bool ComponentOutputSQLite::WriteConfiguration() {
 	/// Start time
 	{
 		time_t rawtime;
-		struct tm* timeinfo;
+		struct tm * timeinfo;
 		char timeString[32] = "";
 
 		time (&rawtime);
@@ -273,7 +274,7 @@ bool ComponentOutputSQLite::WriteConfiguration() {
 		timeString[strlen(timeString) - 1] = 0; // get rid of training newline.
 
 		sqlite3_bind_text(configurationInsert, 1, "START_TIME", -1, SQLITE_STATIC);
-		sqlite3_bind_text(configurationInsert, 2, timeString,   -1, SQLITE_TRANSIENT);
+		sqlite3_bind_text(configurationInsert, 2, timeString,  -1, SQLITE_TRANSIENT);
 		if (! AttemptInsert(configurationInsert)) {
 			sqlite3_finalize(configurationInsert);
 			return false;
@@ -288,13 +289,13 @@ bool ComponentOutputSQLite::WriteConfiguration() {
 		writer.WriteComponents(mCore);
 
 		wxMemoryOutputStream outStream(NULL, 0);
-		wxXmlDocument* xmlDocument = writer.GetDocument();
+		wxXmlDocument * xmlDocument = writer.GetDocument();
 		if (! xmlDocument->Save(outStream)) {
 			sqlite3_finalize(configurationInsert);
 			return false;
 		}
 		size_t const length = outStream.GetLength();
-		char* configText = (char*) malloc(sizeof(*configText) * length);
+		char * configText = (char*) malloc(sizeof(*configText) * length);
 		outStream.CopyTo(configText, length);
 
 		sqlite3_bind_text(configurationInsert, 1, "CONFIG_XML", -1, SQLITE_STATIC);
@@ -314,12 +315,12 @@ bool ComponentOutputSQLite::WriteConfiguration() {
 	return true;
 }
 
-void ComponentOutputSQLite::OnReloadConfiguration() { }
+void THISCLASS::OnReloadConfiguration() { }
 
-void ComponentOutputSQLite::OnStep() {
+void THISCLASS::OnStep() {
 	if (! mReady) return;
 
-	DataStructureTracks::tTrackMap* const tracks = mCore->mDataStructureTracks.mTracks;
+	DataStructureTracks::tTrackMap * const tracks = mCore->mDataStructureTracks.mTracks;
 	if (! tracks) {
 		AddError(wxT("No Track"));
 		return;
@@ -332,7 +333,7 @@ void ComponentOutputSQLite::OnStep() {
 
 		int trackID = track->first;
 
-		DataStructureParticles::tParticleVector* particles = mCore->mDataStructureParticles.mParticles;
+		DataStructureParticles::tParticleVector * particles = mCore->mDataStructureParticles.mParticles;
 		if (! particles) {
 			AddError(wxT("There are no particles"));
 			continue;
@@ -369,9 +370,9 @@ void ComponentOutputSQLite::OnStep() {
 	ComponentOutputSQLite_commitTransaction(mDB);
 }
 
-void ComponentOutputSQLite::OnStepCleanup() { }
+void THISCLASS::OnStepCleanup() { }
 
-void ComponentOutputSQLite::OnStop() {
+void THISCLASS::OnStop() {
 	if (! mReady) return;
 
 	// close db
@@ -387,16 +388,16 @@ void ComponentOutputSQLite::OnStop() {
 }
 
 
-double ComponentOutputSQLite::GetProgressPercent()     {
-	return  0;
+double THISCLASS::GetProgressPercent() {
+	return 0;
 }
-double ComponentOutputSQLite::GetProgressMSec()        {
+double THISCLASS::GetProgressMSec() {
 	return -1;
 }
-int    ComponentOutputSQLite::GetProgressFrameNumber() {
-	return  0;
+int THISCLASS::GetProgressFrameNumber() {
+	return 0;
 }
-double ComponentOutputSQLite::GetFPS()                 {
+double THISCLASS::GetFPS() {
 	return -1;
 }
 

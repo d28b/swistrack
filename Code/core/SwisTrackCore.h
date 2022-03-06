@@ -49,11 +49,9 @@ public:
 	ComponentCategory mCategoryTrigger;
 	ComponentCategory mCategoryInput;
 	ComponentCategory mCategoryInputConversion;
-	ComponentCategory mCategoryPreprocessingColor;
-	ComponentCategory mCategoryPreprocessingGray;
-	ComponentCategory mCategoryThresholdingColor;
-	ComponentCategory mCategoryThresholdingGray;
-	ComponentCategory mCategoryPreprocessingBinary;
+	ComponentCategory mCategoryProcessingColor;
+	ComponentCategory mCategoryProcessingGray;
+	ComponentCategory mCategoryProcessingBinary;
 	ComponentCategory mCategoryParticleDetection;
 	ComponentCategory mCategoryCalibration;
 	ComponentCategory mCategoryTracking;
@@ -74,7 +72,7 @@ public:
 	~SwisTrackCore();
 
 	//! Sets the file. Note that this is used to determine the project and run folders only. The file itself is not opened or read (and does not even need to exist).
-	void SetFileName(const wxFileName &filename);
+	void SetFileName(const wxFileName & filename);
 	//! Sets the file. Note that this is used to determine the project and run folders only. The file itself is not opened or read (and does not even need to exist).
 	wxFileName GetFileName() {
 		return mFileName;
@@ -84,9 +82,9 @@ public:
 		return mRunTitle;
 	}
 	//! Returns a path to a file in the project folder.
-	wxFileName GetProjectFileName(const wxString &filename_str);
+	wxFileName GetProjectFileName(const wxString & filenameString);
 	//! Returns a path to a file in the run folder.
-	wxFileName GetRunFileName(const wxString &filename_str);
+	wxFileName GetRunFileName(const wxString & filenameString);
 
 	//! Starts all the components. This may only be called if IsStarted()==false.
 	bool Start(bool productionmode);
@@ -94,8 +92,10 @@ public:
 	bool Step();
 	//! Stops all started components. This may only be called if IsStarted()==true.
 	bool Stop();
-	//! Reloads the configuration while a session is runnning. This may only be called if IsStarted()==false. Note that not all configuration parameters may be reloaded. This function may also be called in production mode.
+	//! Reloads the configuration while a session is runnning. This may only be called if IsStarted() == false. Note that not all configuration parameters may be reloaded. This function may also be called in production mode.
 	bool ReloadConfiguration();
+	//! Reloads the configuration of a single component.
+	bool ReloadConfigurationOfSingleComponent(Component * component);
 
 	//! Starts the automatic trigger.
 	void TriggerStart();
@@ -103,14 +103,14 @@ public:
 	void TriggerStop();
 
 	//! Writes the configuration to a XML document.
-	void ConfigurationWriteXML(wxXmlNode* configuration, ErrorList * xmlerr);
+	void ConfigurationWriteXML(wxXmlNode * configuration, ErrorList * xmlerr);
 
 	//! Returns the list of deployed components. Note that this list can only be read. To modify the list, you need to use a SwisTrackCoreEditor object.
 	const SwisTrackCore::tComponentList * GetDeployedComponents() {
 		return &mDeployedComponents;
 	}
 	//! Returns a component by name.
-	Component *GetComponentByName(const wxString &name);
+	Component * GetComponentByName(const wxString &name);
 
 	//! Returns whether the components have been started.
 	bool IsStarted() {
@@ -118,7 +118,7 @@ public:
 	}
 	//! Returns whether the components have been started in production mode.
 	bool IsStartedInProductionMode() {
-		return (mStarted && mProductionMode);
+		return mStarted && mProductionMode;
 	}
 	//! Returns whether the automatic trigger is active.
 	bool IsTriggerActive() {
@@ -130,9 +130,9 @@ public:
 	}
 
 	//! Adds an object to the list of interfaces. Objects on this list will be informed upon changes.
-	void AddInterface(SwisTrackCoreInterface *stc);
+	void AddInterface(SwisTrackCoreInterface * stc);
 	//! Removes an object from the list of interfaces.
-	void RemoveInterface(SwisTrackCoreInterface *stc);
+	void RemoveInterface(SwisTrackCoreInterface * stc);
 
 	//! This method should be called whenever the system becomes idle. (Since wxWidgets 2.8 sends these events only to frames, we need to relay them from SwisTrack to SwisTrackCore.)
 	void OnIdle();

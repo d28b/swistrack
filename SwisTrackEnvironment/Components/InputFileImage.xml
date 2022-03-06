@@ -10,7 +10,7 @@
 			<name>File</name>
 			<label>Image file</label>
 			<filetype>image</filetype>
-			<reloadable>false</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

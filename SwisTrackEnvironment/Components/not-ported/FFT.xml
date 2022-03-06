@@ -12,13 +12,13 @@
 			<items>
 				<item key="0">Auto</item>
 			</items>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="checkbox">
 			<name>GenerateOutput</name>
 			<label>Generate Display Output (slower)</label>
 			<default>1</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

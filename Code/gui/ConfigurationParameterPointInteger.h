@@ -16,22 +16,22 @@ class ConfigurationParameterPointInteger: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterPointInteger(wxWindow* parent);
+	ConfigurationParameterPointInteger(wxWindow * parent);
 	//! Destructor.
 	~ConfigurationParameterPointInteger();
 
 	//! Handles the corresponding GUI event.
-	void OnTextUpdated(wxCommandEvent& event);
+	void OnTextUpdated(wxCommandEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnTextEnter(wxCommandEvent& event);
+	void OnTextEnter(wxCommandEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnSpin(wxSpinEvent& event);
+	void OnSpin(wxSpinEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnKillFocus(wxFocusEvent& event);
+	void OnKillFocus(wxFocusEvent & event);
 
 private:
-	wxSpinCtrl *mSpinCtrlX;		//!< The corresponding GUI widget.
-	wxSpinCtrl *mSpinCtrlY;		//!< The corresponding GUI widget.
+	wxSpinCtrl * mSpinCtrlX;	//!< The corresponding GUI widget.
+	wxSpinCtrl * mSpinCtrlY;	//!< The corresponding GUI widget.
 	int mValueMinX;				//!< The minimum value allowed.
 	int mValueMinY;				//!< The minimum value allowed.
 	int mValueMaxX;				//!< The maximum value allowed.
@@ -48,8 +48,8 @@ private:
 	};
 
 	// ConfigurationParameter methods
-	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
-	virtual void OnUpdate(wxWindow *updateprotection);
+	virtual void OnInitialize(ConfigurationXML * config, ErrorList * errorlist);
+	virtual void OnUpdate(wxWindow * updateprotection);
 	virtual void OnSetNewValue();
 
 	// Validates the new value.

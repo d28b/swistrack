@@ -1,11 +1,8 @@
 #include "ComponentFFT.h"
 #define THISCLASS ComponentFFT
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
-
-
-
 
 using namespace cv;
 using namespace std;
@@ -100,7 +97,7 @@ void THISCLASS::OnStop() {
 	//mDisplayOutputImage->release();
 }
 
-void THISCLASS::computeFFT(Mat Im, Mat *complexI) {
+void THISCLASS::computeFFT(Mat Im, Mat * complexI) {
 	Im.convertTo(I, CV_32F);
 	I=(I-128.0)/128.0;
 
@@ -123,7 +120,7 @@ void THISCLASS::computeFFT(Mat Im, Mat *complexI) {
 
 
 #ifdef GPU_ENABLED
-void THISCLASS::computeFFTGpu(Mat Im, cv::gpu::GpuMat *complexI) {
+void THISCLASS::computeFFTGpu(Mat Im, cv::gpu::GpuMat * complexI) {
 	Im.convertTo(I, CV_32F);
 	I=(I-128.0)/128.0;
 
@@ -152,7 +149,7 @@ void THISCLASS::computeFFTGpu(Mat Im, cv::gpu::GpuMat *complexI) {
 }
 #endif
 
-void THISCLASS::generateFFTPreview(Mat complexI, Mat *output) {
+void THISCLASS::generateFFTPreview(Mat complexI, Mat * output) {
 			// compute the magnitude and switch to logarithmic scale
 		// => log(1 + sqrt(Re(DFT(I))^2 + Im(DFT(I))^2))
 		cv::Mat planes[2];

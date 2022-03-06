@@ -13,7 +13,7 @@
 			<max>255</max>
 			<slider>true</slider>
 			<default>100</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

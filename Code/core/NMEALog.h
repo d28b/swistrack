@@ -20,18 +20,18 @@ class NMEALog;
 class NMEALog: public CommunicationInterface {
 
 public:
-	NMEALog(const wxString &file = wxT(""));
+	NMEALog(const wxString & file = wxT(""));
 	~NMEALog();
 
 	// CommuncationNMEAInterface methods.
-	void OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum);
-	void OnNMEAProcessMessageChecksumError(CommunicationMessage *m);
+	void OnNMEAProcessMessage(CommunicationMessage * m, bool withchecksum);
+	void OnNMEAProcessMessageChecksumError(CommunicationMessage * m);
 	void OnNMEAProcessUnrecognizedChar(unsigned char chr);
-	void OnNMEASend(const char *buffer, int len);
+	void OnNMEASend(const char * buffer, int len);
 
 	//! Sends a message.
-	bool Send(CommunicationMessage *m);
-	void NMEASendMessage(CommunicationMessage *m);
+	bool Send(CommunicationMessage * m);
+	void NMEASendMessage(CommunicationMessage * m);
 
 private:
 	wxFile mLogFile;	//!< The log file.

@@ -29,7 +29,7 @@ public:
 		return new ComponentCalibrationLinear(mCore);
 	}
 
-	void Transform(Particle *p);
+	void Transform(Particle * p);
 
 private:
 	//! A structure containing the position values of the calibration points

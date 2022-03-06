@@ -11,7 +11,7 @@ THISCLASS::ComponentColorMask(SwisTrackCore * stc):
 	mDisplayOutput(wxT("Output"), wxT("After applying mask")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingColor);
+	mCategory = &(mCore->mCategoryProcessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);

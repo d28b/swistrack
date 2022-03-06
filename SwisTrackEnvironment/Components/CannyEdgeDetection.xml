@@ -8,17 +8,17 @@
 	<configuration>
 	  <parameter type="double">
 	    <name>Threshold1</name>
-	    <label>Threshold1</label>
+	    <label>Threshold 1</label>
 	    <unit></unit>
 	    <default>50</default>
-	    <reloadable>true</reloadable>
+	    <onchange>reload</onchange>
 	  </parameter>
 	  <parameter type="double">
 	    <name>Threshold2</name>
-	    <label>Threshold2</label>
+	    <label>Threshold 2</label>
 	    <unit></unit>
 	    <default>200</default>
-	    <reloadable>true</reloadable>
+	    <onchange>reload</onchange>
 	  </parameter>
 	</configuration>
 </swistrackcomponent>

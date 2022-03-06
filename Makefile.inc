@@ -12,19 +12,15 @@ AR        := ar
 OPENCV_CPPFLAGS    := `pkg-config --cflags opencv4`
 OPENCV_LDLIBS      := `pkg-config --libs opencv4`
 
-#OPENCV_CPPFLAGS    := -I/usr/include/opencv4
-#OPENCV_LDLIBS      := -lcxcore -lcv -lhighgui -lcvaux -lml
-
 # wxWidgets
 WXWIDGETS_CPPFLAGS := `wx-config --cppflags`
 WXWIDGETS_LDLIBS   := `wx-config --libs`
 
-#glib
-GLIB_CPPFLAGS :=`pkg-config --cflags glib-2.0`
-GLIB_LDLIBS    :=`pkg-config --libs glib-2.0`
-
-CPPFLAGS_ADD += $(GLIB_CPPFLAGS)
-LDLIBS_ADD   += $(GLIB_LDLIBS)
+# glib
+GLIB_CPPFLAGS := `pkg-config --cflags glib-2.0`
+GLIB_LDLIBS   := `pkg-config --libs glib-2.0`
+CPPFLAGS_ADD  += $(GLIB_CPPFLAGS)
+LDLIBS_ADD    += $(GLIB_LDLIBS)
 
 #switch GPU/CUDA code on
 #CPPFLAGS_ADD += -DGPU_ENABLED

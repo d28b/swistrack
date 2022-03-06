@@ -7,12 +7,12 @@
 #include "DisplayEditor.h"
 
 THISCLASS::ComponentColorGaussianBlur(SwisTrackCore * stc):
-	Component(stc, wxT("ColorBlur")),
+	Component(stc, wxT("ColorGaussianBlur")),
 	mSigmaX(2.0), mSigmaY(2.0), mSizeX(5), mSizeY(5),
 	mDisplayOutput(wxT("Output"), wxT("After blurring the image")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingColor);
+	mCategory = &(mCore->mCategoryProcessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);
@@ -26,7 +26,6 @@ THISCLASS::~ComponentColorGaussianBlur() {
 
 void THISCLASS::OnStart() {
 	OnReloadConfiguration();
-	return;
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -53,10 +52,11 @@ void THISCLASS::OnStep() {
 
 	cv::Mat outputImage(inputImage.size(), CV_8UC3);
 	cv::GaussianBlur(inputImage, outputImage, cv::Size(mSizeX, mSizeY), mSigmaX, mSigmaY);
+	mCore->mDataStructureImageColor.mImage = outputImage;
 
 	// Set the display
 	DisplayEditor de(&mDisplayOutput);
-	if (de.IsActive()) de.SetMainImage(mCore->mDataStructureImageColor.mImage);
+	if (de.IsActive()) de.SetMainImage(outputImage);
 }
 
 void THISCLASS::OnStepCleanup() {

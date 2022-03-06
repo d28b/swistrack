@@ -3,7 +3,7 @@
 
 #include <algorithm>
 
-THISCLASS::Display(const wxString &name, const wxString &displayname):
+THISCLASS::Display(const wxString & name, const wxString & displayname):
 	mComponent(0), mName(name), mDisplayName(displayname), mSubscribers(), mStepCounter(-1),
 	mFrameNumber(-1), mFramesCount(-1), mTime(wxDateTime::UNow()), mAnnotation(), mErrors(),
 	mTopLeft(0, 0), mSize(0, 0),
@@ -14,12 +14,11 @@ THISCLASS::Display(const wxString &name, const wxString &displayname):
 
 THISCLASS::~Display() {
 	// Unsubscribe all interfaces
-	while (! mSubscribers.empty()) {
+	while (! mSubscribers.empty())
 		Unsubscribe(*(mSubscribers.begin()));
-	}
 }
 
-void THISCLASS::Subscribe(DisplaySubscriberInterface *disi) {
+void THISCLASS::Subscribe(DisplaySubscriberInterface * disi) {
 	// Return if this interface is in the subscriber list already
 	tSubscriberList::iterator it = find(mSubscribers.begin(), mSubscribers.end(), disi);
 	if (it != mSubscribers.end()) return;
@@ -29,7 +28,7 @@ void THISCLASS::Subscribe(DisplaySubscriberInterface *disi) {
 	disi->OnDisplaySubscribe(this);
 }
 
-void THISCLASS::Unsubscribe(DisplaySubscriberInterface *disi) {
+void THISCLASS::Unsubscribe(DisplaySubscriberInterface * disi) {
 	// Look up the interface and return if not found
 	tSubscriberList::iterator it = find(mSubscribers.begin(), mSubscribers.end(), disi);
 	if (it == mSubscribers.end()) return;
@@ -44,11 +43,8 @@ void THISCLASS::OnBeforeStep() {
 	mActive = false;
 
 	// Call the subscribers to check if the want an image
-	tSubscriberList::iterator it = mSubscribers.begin();
-	while (it != mSubscribers.end()) {
-		(*it)->OnDisplayBeforeStep(this);
-		it++;
-	}
+	for (auto subscriber : mSubscribers)
+		subscriber->OnDisplayBeforeStep(this);
 }
 
 void THISCLASS::OnAfterStep() {
@@ -56,11 +52,8 @@ void THISCLASS::OnAfterStep() {
 	if (! mChanged) return;
 
 	// Otherwise, let the subscribers know that we have a new image
-	tSubscriberList::iterator it = mSubscribers.begin();
-	while (it != mSubscribers.end()) {
-		(*it)->OnDisplayChanged(this);
-		it++;
-	}
+	for (auto subscriber : mSubscribers)
+		subscriber->OnDisplayChanged(this);
 
 	mChanged = false;
 }

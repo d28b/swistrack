@@ -1,7 +1,7 @@
 #include "ComponentAdaptiveBackgroundSubtractionMode.h"
 #define THISCLASS ComponentAdaptiveBackgroundSubtractionMode
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 
 const int EPSILON = 8;
@@ -11,7 +11,7 @@ THISCLASS::ComponentAdaptiveBackgroundSubtractionMode(SwisTrackCore * stc):
   mCounter(), mBackgroundModel(0), mOutputImage(0),
   mDisplayOutput(wxT("Output"), wxT("After background subtruction")) {
 
-     mCategory = &(mCore->mCategoryPreprocessingColor);
+     mCategory = &(mCore->mCategoryProcessingColor);
      AddDataStructureRead(&(mCore->mDataStructureImageColor));
      AddDataStructureWrite(&(mCore->mDataStructureImageColor));
      AddDisplay(&mDisplayOutput);

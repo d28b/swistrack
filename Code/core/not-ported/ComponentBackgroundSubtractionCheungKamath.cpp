@@ -1,12 +1,13 @@
 #include "ComponentBackgroundSubtractionCheungKamath.h"
 #define THISCLASS ComponentBackgroundSubtractionCheungKamath
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 #include <Blob.h>
 #include <BlobResult.h>
-using namespace std;
 #include <iostream>
+
+using namespace std;
 
 CvSeq * maskToSequence(cv::Mat * mask, CvMemStorage*storage) {
 
@@ -39,7 +40,7 @@ public:
     mMask = mask;
     mTmp = tmp;
   }
-  double operator()(const CBlob &blob) const {
+  double operator()(const CBlob & blob) const {
     cvZero(mTmp);
     blob.FillBlob(mTmp, cvRealScalar(255));
     cvAnd(mTmp, mMask, mTmp);
@@ -47,7 +48,7 @@ public:
     return numNonZero;
 
   }
-  const char *GetNom() const {
+  const char * GetNom() const {
     return "CBlobIntersectMask";
   }
 };
@@ -59,7 +60,7 @@ THISCLASS::ComponentBackgroundSubtractionCheungKamath(SwisTrackCore * stc):
 		mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingColor);
+	mCategory = &(mCore->mCategoryProcessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));

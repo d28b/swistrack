@@ -76,7 +76,7 @@ private:
 class ComponentMinCostFlowTracking: public Component {
 
 public:
-	ComponentMinCostFlowTracking(SwisTrackCore *stc): Component(stc, wxT("MinCostFlowTracking")) {
+	ComponentMinCostFlowTracking(SwisTrackCore * stc): Component(stc, wxT("MinCostFlowTracking")) {
 		Initialize();
 	}
 	~ComponentMinCostFlowTracking() {}

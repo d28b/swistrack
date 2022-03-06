@@ -6,7 +6,7 @@
 #include <wx/log.h>
 #include "ConfigurationConversion.h"
 
-THISCLASS::ObjectList(const wxFileName &filename):
+THISCLASS::ObjectList(const wxFileName & filename):
 	ConfigurationXML(0, true),
 	mObjects(), mError(), mFileName(filename) {
 
@@ -33,7 +33,7 @@ THISCLASS::ObjectList(const wxFileName &filename):
 		return;
 	}
 
-	wxXmlNode *node = mSelectedNode->GetChildren();
+	wxXmlNode * node = mSelectedNode->GetChildren();
 	while (node) {
 		if (node->GetName() == wxT("object")) {
 			ReadObject(node);
@@ -48,7 +48,7 @@ THISCLASS::ObjectList(const wxFileName &filename):
 THISCLASS::~ObjectList() {
 }
 
-void THISCLASS::ReadObject(wxXmlNode *node) {
+void THISCLASS::ReadObject(wxXmlNode * node) {
 	mSelectedNode = node;
 
 	// Create id

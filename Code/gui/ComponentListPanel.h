@@ -63,31 +63,31 @@ private:
 	int mColumnMessages;				//!< The column number of the messages.
 	int mColumnEnabledInterval;			//!< The column number of the enabled interval.
 	int mColumnStepDuration;			//!< The column number of the step duration.
-	wxBitmapButton *mButtonAdd;			//!< The corresponding GUI widget.
-	wxBitmapButton *mButtonRemove;		//!< The corresponding GUI widget.
-	wxBitmapButton *mButtonUp;			//!< The corresponding GUI widget.
-	wxBitmapButton *mButtonDown;		//!< The corresponding GUI widget.
+	wxBitmapButton * mButtonAdd;		//!< The corresponding GUI widget.
+	wxBitmapButton * mButtonRemove;		//!< The corresponding GUI widget.
+	wxBitmapButton * mButtonUp;			//!< The corresponding GUI widget.
+	wxBitmapButton * mButtonDown;		//!< The corresponding GUI widget.
 
-	ComponentsDialog *mComponentsDialog;	//!< The component selector dialog used when adding a new component.
+	ComponentsDialog * mComponentsDialog;	//!< The component selector dialog used when adding a new component.
 
 	//! Handles the corresponding GUI event.
-	void OnButtonAddClick(wxCommandEvent& event);
+	void OnButtonAddClick(wxCommandEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnButtonRemoveClick(wxCommandEvent& event);
+	void OnButtonRemoveClick(wxCommandEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnButtonUpClick(wxCommandEvent& event);
+	void OnButtonUpClick(wxCommandEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnButtonDownClick(wxCommandEvent& event);
+	void OnButtonDownClick(wxCommandEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnListItemSelected(wxListEvent& event);
+	void OnListItemSelected(wxListEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnListItemDeselected(wxListEvent& event);
+	void OnListItemDeselected(wxListEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnListLeftDoubleClick(wxMouseEvent& event);
+	void OnListLeftDoubleClick(wxMouseEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnListMouseRightDown(wxMouseEvent& event);
+	void OnListMouseRightDown(wxMouseEvent & event);
 	//! The corresponding GUI event handler.
-	void OnPopupMenuEnabledInterval(wxCommandEvent& event);
+	void OnPopupMenuEnabledInterval(wxCommandEvent & event);
 
 	DECLARE_EVENT_TABLE()
 };

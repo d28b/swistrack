@@ -11,11 +11,12 @@ void THISCLASS::ReadConfiguration(Component * component) {
 
 void THISCLASS::Match(DataStructureParticles::tParticleVector particleList1, DataStructureParticles::tParticleVector particleList2) {
 	mParticles.clear();
-	for (auto particle1 : particleList1) {
+
+	for (auto & particle1 : particleList1) {
 		// Select blob of color 2 which is closest
 		Particle * minParticle = NULL;
 		double minDistance2 = mMaxDistance * mMaxDistance;
-		for (auto particle2 : particleList2) {
+		for (auto & particle2 : particleList2) {
 			float dx = particle1.mCenter.x - particle2.mCenter.x;
 			float dy = particle1.mCenter.y - particle2.mCenter.y;
 			float distance2 = dx * dx + dy * dy;

@@ -19,29 +19,29 @@ class ConfigurationParameterDate: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterDate(wxWindow* parent);
+	ConfigurationParameterDate(wxWindow * parent);
 	//! Destructor.
 	~ConfigurationParameterDate();
 
 private:
 #ifdef wxUSE_DATEPICKCTRL
-	wxDatePickerCtrl *mDateCtrl;		//!< The corresponding GUI widget.
+	wxDatePickerCtrl * mDateCtrl;		//!< The corresponding GUI widget.
 #endif
-	wxSpinCtrl *mHourCtrl;
-	wxSpinCtrl *mMinuteCtrl;
-	wxComboBox *mAmPmCtrl;
+	wxSpinCtrl * mHourCtrl;
+	wxSpinCtrl * mMinuteCtrl;
+	wxComboBox * mAmPmCtrl;
 	wxDateTime mValueDefault;		//!< The default value.
 	wxDateTime mNewValue;		//!< The new value.
 
 	// ConfigurationParameter methods
-	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
-	virtual void OnUpdate(wxWindow *updateprotection);
+	virtual void OnInitialize(ConfigurationXML * config, ErrorList * errorlist);
+	virtual void OnUpdate(wxWindow * updateprotection);
 	virtual void OnSetNewValue();
 
 	//! Handles the corresponding GUI event.
-	void OnDateChanged(wxDateEvent& event);
-	void OnHourMinuteChanged(wxSpinEvent& event);
-	void OnAmPmChanged(wxCommandEvent& event);
+	void OnDateChanged(wxDateEvent & event);
+	void OnHourMinuteChanged(wxSpinEvent & event);
+	void OnAmPmChanged(wxCommandEvent & event);
 
 
 	// Validates the new value.

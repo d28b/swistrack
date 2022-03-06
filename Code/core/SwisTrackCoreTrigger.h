@@ -10,7 +10,7 @@ class SwisTrackCore;
 class SwisTrackCoreTrigger: public wxEvtHandler, public SwisTrackCoreInterface {
 
 public:
-	SwisTrackCore *mSwisTrackCore;		//!< The associated SwisTrackCore object.
+	SwisTrackCore * mSwisTrackCore;		//!< The associated SwisTrackCore object.
 
 	//! Constructor.
 	SwisTrackCoreTrigger(SwisTrackCore * stc);
@@ -18,9 +18,9 @@ public:
 	~SwisTrackCoreTrigger();
 
 	//! Executes a step if all trigger components are ready.
-	void OnTrigger(wxEvent &event);
+	void OnTrigger(wxEvent & event);
 	//! Clears the StepPerformed flag so that the a new step can be executed.
-	void OnTriggerClear(wxEvent &event);
+	void OnTriggerClear(wxEvent & event);
 	//! Idle event handler.
 	void OnIdle();
 

@@ -27,7 +27,7 @@ public:
 	wxString mError;			//!< The first error that occured.
 
 	//! Constructor.
-	ObjectList(const wxFileName &filename);
+	ObjectList(const wxFileName & filename);
 	//! Destructor.
 	~ObjectList();
 
@@ -40,7 +40,7 @@ private:
 	wxFileName mFileName;		//!< The name of the currently open file.
 
 	//! Reads one object from the file.
-	void ReadObject(wxXmlNode *node);
+	void ReadObject(wxXmlNode * node);
 };
 
 #endif

@@ -20,6 +20,9 @@ public:
 	//! Checks if two images have the same size.
 	static bool EqualSize(cv::Mat a, cv::Mat b);
 
+	//! Checks if two images have the same size.
+	static cv::Mat Flip(cv::Mat inputImage, bool flipHorizontally, bool flipVertically);
+
 	//! Converts from packed YUV422 to BGR. (inputImage and outputimage must not be the same.)
 	static void CvtYUV422ToBGR(cv::Mat inputImage, cv::Mat outputImage);
 	//! Converts from packed YUV422 to grayscale. (inputImage and outputimage must not be the same.)

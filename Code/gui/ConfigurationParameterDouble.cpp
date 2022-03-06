@@ -13,7 +13,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_COMMAND_SCROLL_CHANGED (wxID_ANY, THISCLASS::OnScrollChanged)
 END_EVENT_TABLE()
 
-THISCLASS::ConfigurationParameterDouble(wxWindow* parent):
+THISCLASS::ConfigurationParameterDouble(wxWindow * parent):
 	ConfigurationParameter(parent),
 	mTextCtrl(0), mSlider(0),
 	mValueMin(0), mValueMax(1), mValueDefault(0), mSliderStep(1) {
@@ -24,7 +24,7 @@ THISCLASS::~ConfigurationParameterDouble() {
 	mTextCtrl->Disconnect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
 }
 
-void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
+void THISCLASS::OnInitialize(ConfigurationXML * config, ErrorList * errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
 	mValueMin = config->ReadDouble(wxT("min"), -DBL_MAX);
@@ -54,7 +54,7 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	SetSizer(vs);
 }
 
-void THISCLASS::OnUpdate(wxWindow *updateprotection) {
+void THISCLASS::OnUpdate(wxWindow * updateprotection) {
 	double value = mComponent->GetConfigurationDouble(mName, mValueDefault);
 	if (updateprotection != mTextCtrl)
 		mTextCtrl->SetValue(wxString::Format(wxT("%f"), value));
@@ -89,7 +89,7 @@ void THISCLASS::OnSetNewValue() {
 	ce.SetConfigurationDouble(mName, mNewValue);
 }
 
-void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
+void THISCLASS::OnTextUpdated(wxCommandEvent & event) {
 	mNewValue = mValueDefault;
 	mTextCtrl->GetValue().ToDouble(&mNewValue);
 
@@ -100,23 +100,21 @@ void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	SetNewValue(mTextCtrl);
 }
 
-void THISCLASS::OnTextEnter(wxCommandEvent& event) {
+void THISCLASS::OnTextEnter(wxCommandEvent & event) {
 	mNewValue = mValueDefault;
 	mTextCtrl->GetValue().ToDouble(&mNewValue);
 	ValidateNewValue();
 	SetNewValue();
 }
 
-void THISCLASS::OnKillFocus(wxFocusEvent& event) {
+void THISCLASS::OnKillFocus(wxFocusEvent & event) {
 	wxCommandEvent ev;
 	OnTextEnter(ev);
 }
 
-void THISCLASS::OnScrollChanged(wxScrollEvent& event) {
+void THISCLASS::OnScrollChanged(wxScrollEvent & event) {
 	mNewValue = mSlider->GetValue() * mSliderStep + mValueMin;
 	ValidateNewValue();
-	if (CompareNewValue()) {
-		return;
-	}
+	if (CompareNewValue()) return;
 	SetNewValue(mSlider);
 }

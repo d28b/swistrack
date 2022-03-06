@@ -1,7 +1,7 @@
 #include "ComponentBackgroundSubtractionGray.h"
 #define THISCLASS ComponentBackgroundSubtractionGray
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 #include "ImageTools.h"
 
@@ -12,7 +12,7 @@ THISCLASS::ComponentBackgroundSubtractionGray(SwisTrackCore * stc):
 	mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingGray);
+	mCategory = &(mCore->mCategoryProcessingGray);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 	AddDisplay(&mDisplayOutput);

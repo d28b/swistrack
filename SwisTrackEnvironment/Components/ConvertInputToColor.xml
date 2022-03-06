@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Conversion to Color</friendlyname>
+	<description>Converts an input image to a color (BGR) image for further processing.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ConvertToColor</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<label>This component does not have any configuration values.</label>
+	</configuration>
+</swistrackcomponent>

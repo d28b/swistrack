@@ -3,7 +3,7 @@
 
 #include "DisplayEditor.h"
 #include "Utility.h"
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include <limits>
 #include <iostream>
 #include <set>
@@ -107,8 +107,7 @@ void THISCLASS::OnStop() {
 //  img - input video frame
 //  dst - resultant motion picture
 //  args - optional parameters
-void  THISCLASS::update_mhi( cv::Mat* inputImage, cv::Mat* dst, cv::Mat * foregroundMask, double timestampIn,
-                             int diff_threshold, wxDateTime frameTimestamp ) {
+void THISCLASS::update_mhi( cv::Mat inputImage, cv::Mat * dst, cv::Mat * foregroundMask, double timestampIn, int diff_threshold, wxDateTime frameTimestamp ) {
 	//double timestamp = (double)clock()/CLOCKS_PER_SEC; // get current time in seconds
 	if (firstTimestamp == -1) {
 		firstTimestamp = timestampIn - 0.01;
@@ -119,8 +118,8 @@ void  THISCLASS::update_mhi( cv::Mat* inputImage, cv::Mat* dst, cv::Mat * foregr
 
 	cv::Size size = cvSize(inputImage->width, inputImage->height); // get current frame size
 	int i, idx1 = last, idx2;
-	cv::Mat* silh;
-	CvSeq* seq;
+	cv::Mat silh;
+	CvSeq * seq;
 	cv::Rect comp_rect;
 	double count;
 	double angle;

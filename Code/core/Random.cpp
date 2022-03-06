@@ -3,10 +3,10 @@
 #include "Random.h"
 #define THISCLASS Random
 
-RandomMersenneTwister *Random::smRandomMersenneTwister = 0;
-RandomNormal *Random::smRandomNormal = 0;
-RandomExponential *Random::smRandomExponential = 0;
-RandomPoisson *Random::smRandomPoisson = 0;
+RandomMersenneTwister * Random::smRandomMersenneTwister = 0;
+RandomNormal * Random::smRandomNormal = 0;
+RandomExponential * Random::smRandomExponential = 0;
+RandomPoisson * Random::smRandomPoisson = 0;
 
 void THISCLASS::Initialize() {
 	if (smRandomMersenneTwister) {
@@ -36,13 +36,13 @@ void THISCLASS::Uninitialize() {
 	smRandomPoisson = 0;
 }
 
-void THISCLASS::SaveState(std::ofstream &out) {
+void THISCLASS::SaveState(std::ofstream & out) {
 	assert(smRandomMersenneTwister);
 	out << *smRandomMersenneTwister << std::endl;
 	ReinitializeDistributions(); // Note that we need to do this in order to be at the same state after LoadState. (Disadvantage: SaveState modifies the current state.)
 }
 
-void THISCLASS::LoadState(std::ifstream &in) {
+void THISCLASS::LoadState(std::ifstream & in) {
 	assert(smRandomMersenneTwister);
 	in >> *smRandomMersenneTwister;
 	ReinitializeDistributions();

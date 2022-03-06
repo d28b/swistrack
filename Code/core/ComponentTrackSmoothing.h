@@ -26,7 +26,7 @@ public:
 	}
 
 private:
-	Track& WindowForTrack(int id);
+	Track & WindowForTrack(int id);
 	DataStructureParticles::tParticleVector mParticles;
 
 	// Parameters

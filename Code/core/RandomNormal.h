@@ -13,7 +13,7 @@ class RandomNormal;
 class RandomNormal {
 
 protected:
-	RandomMersenneTwister *mRandomMersenneTwister;
+	RandomMersenneTwister * mRandomMersenneTwister;
 	unsigned long kn[128];
 	double wn[128], fn[128];
 
@@ -21,14 +21,14 @@ protected:
 
 public:
 	//! Constructor.
-	RandomNormal(RandomMersenneTwister *rmt);
+	RandomNormal(RandomMersenneTwister * rmt);
 
 	//! Returns a double with a gaussian distribution.
 	double Normal() {
 		long hz = mRandomMersenneTwister->randInt();
 		unsigned long iz = hz & 127;
 		unsigned long hz_ = labs(hz);
-		return (hz_ < kn[iz]) ? hz * wn[iz] : nfix(hz, iz);
+		return hz_ < kn[iz] ? hz * wn[iz] : nfix(hz, iz);
 	}
 };
 

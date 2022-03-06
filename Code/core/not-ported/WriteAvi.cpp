@@ -28,7 +28,7 @@ void THISCLASS::WriteFrame(cv::Mat * image) {
       //mWriter = cvCreateVideoWriter(mFilename.mb_str(wxConvFile), -1, 10, cvGetSize(image));
     }
 
-    cv::Mat *rgbImage = cvCreateImage(cvGetSize(image), 8, 3);
+    cv::Mat rgbImage = cvCreateImage(cvGetSize(image), 8, 3);
     cvCvtColor(image, rgbImage, CV_BGR2RGB);
     cvWriteFrame(mWriter, rgbImage);
     rgbImage->release();

@@ -24,7 +24,7 @@ extern "C"  {
 class ComponentOutputSQLite: public Component {
 
 public:
-	ComponentOutputSQLite(SwisTrackCore* stc);
+	ComponentOutputSQLite(SwisTrackCore * stc);
 	~ComponentOutputSQLite();
 
 	void OnStart();
@@ -33,7 +33,7 @@ public:
 	void OnStepCleanup();
 	void OnStop();
 
-	Component* Create() {
+	Component * Create() {
 		return new ComponentOutputSQLite(mCore);
 	}
 
@@ -46,7 +46,7 @@ private:
 	bool CreateTables();                         //!< returns true on success.
 	bool ClearIfNecessary();                     //!< returns true on success.
 	bool WriteConfiguration();                   //!< returns true on success.
-	bool AttemptInsert(sqlite3_stmt* statement); //!< returns true on success.
+	bool AttemptInsert(sqlite3_stmt * statement); //!< returns true on success.
 
 private:
 	sqlite3*        mDB;

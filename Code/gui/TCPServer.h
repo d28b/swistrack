@@ -21,7 +21,7 @@ class SwisTrack;
 class TCPServer: public wxEvtHandler, public CommunicationInterface, public SwisTrackCoreInterface {
 
 public:
-	TCPServer(SwisTrack* swistrack);
+	TCPServer(SwisTrack * swistrack);
 	~TCPServer();
 
 	//! Sets the desired port and tries to start listening.
@@ -36,10 +36,10 @@ public:
 	}
 
 	//! Handles server events.
-	void OnServerEvent(wxSocketEvent& event);
+	void OnServerEvent(wxSocketEvent & event);
 
 	// CommuncationInterface methods.
-	bool Send(CommunicationMessage *m);
+	bool Send(CommunicationMessage * m);
 
 	// SwisTrackCoreInterface methods
 	void OnBeforeStart(bool productionmode);
@@ -52,16 +52,16 @@ protected:
 
 private:
 	//! The socket server.
-	wxSocketServer *mServer;
+	wxSocketServer * mServer;
 	//! The desired port.
 	int mPort;
 	//! The SwisTrack object.
-	SwisTrack* mSwisTrack;
+	SwisTrack * mSwisTrack;
 	//! The list of all connected clients.
-	typedef std::list<TCPServerConnection*> tConnections;
+	typedef std::list<TCPServerConnection *> tConnections;
 	tConnections mConnections;
 	//! The log.
-	NMEALogFile *mNMEALogFile;
+	NMEALogFile * mNMEALogFile;
 
 	//! Starts listening.
 	void Open();

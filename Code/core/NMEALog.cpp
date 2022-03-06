@@ -1,7 +1,7 @@
 #include "NMEALog.h"
 #define THISCLASS NMEALog
 
-THISCLASS::NMEALog(const wxString &file):
+THISCLASS::NMEALog(const wxString & file):
 	mLogFile() {
 
 	if (file.length() == 0) {
@@ -14,11 +14,11 @@ THISCLASS::NMEALog(const wxString &file):
 THISCLASS::~NMEALog() {
 }
 
-void THISCLASS::OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum) {
+void THISCLASS::OnNMEAProcessMessage(CommunicationMessage * m, bool withchecksum) {
 	// We don't process any incoming messages.
 }
 
-void THISCLASS::OnNMEAProcessMessageChecksumError(CommunicationMessage *m) {
+void THISCLASS::OnNMEAProcessMessageChecksumError(CommunicationMessage * m) {
 	// We don't process any incoming messages.
 }
 
@@ -26,17 +26,17 @@ void THISCLASS::OnNMEAProcessUnrecognizedChar(unsigned char chr) {
 	// We don't process any incoming messages.
 }
 
-void THISCLASS::OnNMEASend(const char *buffer, int len) {
+void THISCLASS::OnNMEASend(const char * buffer, int len) {
 	mLogFile.Write(buffer, len);
 }
 
-bool THISCLASS::Send(CommunicationMessage *m) {
+bool THISCLASS::Send(CommunicationMessage * m) {
 	// Add the message to the log file (this will call OnNMEASend)
 	NMEASendMessage(m);
 	return true;
 }
 
-void THISCLASS::NMEASendMessage(CommunicationMessage *m) {
+void THISCLASS::NMEASendMessage(CommunicationMessage * m) {
 	char buffer[1024 + 5];
 	int len;
 

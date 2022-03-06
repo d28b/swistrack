@@ -30,17 +30,17 @@ public:
 	~CanvasAnnotation();
 
 	//! Sets the text.
-	void SetText(const wxString &textleft, const wxString &textright);
+	void SetText(const wxString & textleft, const wxString & textright);
 
 private:
 	//! The corresponding GUI event handler.
-	void OnMouseLeftClick(wxMouseEvent &event);
+	void OnMouseLeftClick(wxMouseEvent & event);
 	//! The corresponding GUI event handler.
-	void OnMouseRightClick(wxMouseEvent &event);
+	void OnMouseRightClick(wxMouseEvent & event);
 	//! The corresponding GUI event handler.
-	void OnMouseMove(wxMouseEvent &event);
+	void OnMouseMove(wxMouseEvent & event);
 	//! The corresponding GUI event handler.
-	void OnPaint(wxPaintEvent& WXUNUSED(event));
+	void OnPaint(wxPaintEvent & WXUNUSED(event));
 
 	DECLARE_EVENT_TABLE()
 };

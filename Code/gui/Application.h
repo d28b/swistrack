@@ -14,7 +14,7 @@ class Application;
 class Application: public wxApp {
 
 public:
-	SwisTrack *mSwisTrack;			//!< The main window.
+	SwisTrack * mSwisTrack;			//!< The main window.
 	wxString mApplicationFolder;	//!< The application folder. The default file as well as all *.swistrackconfiguration files are read from this folder.
 
 	//! Called upon program initialization.

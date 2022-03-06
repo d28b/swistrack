@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Conversion to Grayscale</friendlyname>
+	<description>Converts an input image to a grayscale image for further processing.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ConvertToGray</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="dropdownlist">
+			<name>Channel</name>
+			<label>Channel</label>
+			<items>
+				<item key="-1">Mean of all channels</item>
+				<item key="2">Red</item>
+				<item key="1">Green</item>
+				<item key="0">Blue</item>
+			</items>
+			<onchange>reload</onchange>
+		</parameter>
+		<label>The channel is used only if the input image is a color image. If the input image is a grayscale image, it is used as-is.</label>
+	</configuration>
+</swistrackcomponent>

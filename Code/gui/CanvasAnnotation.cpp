@@ -10,7 +10,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxControl)
 	EVT_MOTION(THISCLASS::OnMouseMove)
 END_EVENT_TABLE()
 
-THISCLASS::CanvasAnnotation(CanvasPanel *cp):
+THISCLASS::CanvasAnnotation(CanvasPanel * cp):
 	wxControl(cp, -1), mCanvasPanel(cp), mTextLeft(), mTextRight() {
 
 	SetWindowStyle(wxNO_BORDER);
@@ -20,7 +20,7 @@ THISCLASS::CanvasAnnotation(CanvasPanel *cp):
 THISCLASS::~CanvasAnnotation() {
 }
 
-void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
+void THISCLASS::OnPaint(wxPaintEvent & WXUNUSED(event)) {
 	wxPaintDC dc(this);
 
 	// Prepare
@@ -41,17 +41,17 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	//dc.DrawText(mTextRight, 2, size.GetWidth()-w-4);
 }
 
-void THISCLASS::OnMouseLeftClick(wxMouseEvent &event) {
+void THISCLASS::OnMouseLeftClick(wxMouseEvent & event) {
 }
 
-void THISCLASS::OnMouseRightClick(wxMouseEvent &event) {
+void THISCLASS::OnMouseRightClick(wxMouseEvent & event) {
 }
 
-void THISCLASS::OnMouseMove(wxMouseEvent &event) {
+void THISCLASS::OnMouseMove(wxMouseEvent & event) {
 }
 
-void THISCLASS::SetText(const wxString &textleft, const wxString &textright) {
-	mTextLeft = textleft;
-	mTextRight = textright;
+void THISCLASS::SetText(const wxString & textLeft, const wxString & textRight) {
+	mTextLeft = textLeft;
+	mTextRight = textRight;
 	Refresh(true);
 }

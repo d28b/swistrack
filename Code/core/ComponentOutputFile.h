@@ -3,8 +3,7 @@
 
 #include <vector>
 #include <map>
-#include <opencv2/opencv.hpp>
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include <fstream>
 #include "Component.h"
 
@@ -47,7 +46,7 @@ private:
 	//! Writes the file header.
 	static void WriteHeader(std::fstream & fileStream);
 	//! Writes one data record.
-	void WriteData(structOutputFile *outputFile);
+	void WriteData(structOutputFile * outputFile);
 };
 
 #endif

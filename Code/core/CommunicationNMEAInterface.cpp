@@ -8,7 +8,7 @@
 #define snprintf sprintf_s
 #endif
 
-void THISCLASS::NMEAProcessData(const char *data, int len) {
+void THISCLASS::NMEAProcessData(const char * data, int len) {
 	for (int i = 0; i < len; i++) {
 		char inchar = data[i];
 		if (mState == 0) {
@@ -73,7 +73,7 @@ void THISCLASS::NMEAProcessData(const char *data, int len) {
 	}
 }
 
-void THISCLASS::NMEASendMessage(CommunicationMessage *m) {
+void THISCLASS::NMEASendMessage(CommunicationMessage * m) {
 	char buffer[1024 + 5];
 	int len;
 

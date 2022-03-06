@@ -19,10 +19,10 @@ public:
 
 	tParameters mParameters;			//!< The list of message parameters.
 	wxString mCommand;				//!< The message type (command).
-	CommunicationMessage *mInReplyTo;	//!< The associated request (if any).
+	CommunicationMessage * mInReplyTo;	//!< The associated request (if any).
 
 	//! Constructor.
-	CommunicationMessage(const wxString &cmd = wxT(""), CommunicationMessage *inreplyto = 0);
+	CommunicationMessage(const wxString & cmd = wxT(""), CommunicationMessage * inreplyto = 0);
 	//! Destructor.
 	~CommunicationMessage() {}
 
@@ -33,7 +33,7 @@ public:
 	//! Returns a double from the parameter list.
 	double GetDouble(unsigned int i, double defvalue);
 	//! Returns a string from the parameter list.
-	wxString GetString(unsigned int i, const wxString &defvalue);
+	wxString GetString(unsigned int i, const wxString & defvalue);
 
 	//! Returns the next parameter as boolean value from the list.
 	bool PopBool(bool defvalue) {
@@ -48,7 +48,7 @@ public:
 		return GetDouble(mPopIndex++, defvalue);
 	}
 	//! Returns the next parameter as string from the list.
-	wxString PopString(const wxString &defvalue) {
+	wxString PopString(const wxString & defvalue) {
 		return GetString(mPopIndex++, defvalue);
 	}
 
@@ -59,9 +59,9 @@ public:
 	//! Adds a double to the parameter list.
 	bool AddDouble(double value);
 	//! Adds a string to the parameter list.
-	bool AddString(const wxString &value);
+	bool AddString(const wxString & value);
 	//! Sets the command or adds a string to the parameter list.
-	bool AddParsedArgument(const wxString &value);
+	bool AddParsedArgument(const wxString & value);
 };
 
 #endif

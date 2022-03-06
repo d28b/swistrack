@@ -6,7 +6,7 @@
 #define THISCLASS CommunicationMessage
 
 
-THISCLASS::CommunicationMessage(const wxString &cmd, CommunicationMessage *inreplyto):
+THISCLASS::CommunicationMessage(const wxString & cmd, CommunicationMessage * inreplyto):
 	mPopIndex(0), mParameters(), mCommand(cmd), mInReplyTo(inreplyto) {
 
 }
@@ -32,7 +32,7 @@ double THISCLASS::GetDouble(unsigned int i, double defvalue) {
 	return ConfigurationConversion::Double(mParameters[i], defvalue);
 }
 
-wxString THISCLASS::GetString(unsigned int i, const wxString &defvalue) {
+wxString THISCLASS::GetString(unsigned int i, const wxString & defvalue) {
 	if (mParameters.size() <= i) {
 		return defvalue;
 	}
@@ -54,12 +54,12 @@ bool THISCLASS::AddDouble(double value) {
 	return true;
 }
 
-bool THISCLASS::AddString(const wxString &value) {
+bool THISCLASS::AddString(const wxString & value) {
 	mParameters.push_back(value);
 	return true;
 }
 
-bool THISCLASS::AddParsedArgument(const wxString &value) {
+bool THISCLASS::AddParsedArgument(const wxString & value) {
 	if (mCommand.Len() == 0) {
 		mCommand = value;
 	} else {

@@ -5,10 +5,10 @@
 #include <pylon/TlFactory.h>
 #include <pylon/gige/BaslerGigECamera.h>
 
-void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
+void THISCLASS::FillList(ConfigurationXML * config, ErrorList * errorlist) {
 	try {
 		// Get the list of all cameras
-		Pylon::CTlFactory& tlfactory = Pylon::CTlFactory::GetInstance();
+		Pylon::CTlFactory & tlfactory = Pylon::CTlFactory::GetInstance();
 		Pylon::DeviceInfoList_t devices;
 		if (tlfactory.EnumerateDevices(devices) == 0) {
 			AddItem(wxT(""), wxT("No GigE cameras found!"));
@@ -23,7 +23,7 @@ void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
 			AddItem(name, value);
 			it++;
 		}
-	} catch (GenICam::GenericException &e) {
+	} catch (GenICam::GenericException & e) {
 		AddItem(wxT(""), wxString::Format(wxT("%s"), e.GetDescription()));
 		return;
 	}
@@ -34,7 +34,7 @@ void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
 
 #else
 
-void THISCLASS::FillList(ConfigurationXML *config, ErrorList *errorlist) {
+void THISCLASS::FillList(ConfigurationXML * config, ErrorList * errorlist) {
 	AddItem(wxT(""), wxT("No GigE support."));
 }
 

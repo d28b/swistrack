@@ -28,7 +28,7 @@ class ComponentKalmanFilterTrack: public Component {
 	}
 
 private:
-	Track& GetOrMakeTrack(int id, cv::Point2f p);
+	Track & GetOrMakeTrack(int id, cv::Point2f p);
 	void EraseTrack(int id);
 	cv::Point2f StepFilter(int trackID, cv::Point2f newMeasurement, cv::Point2f * lastMeasurement);
 	DataStructureParticles::tParticleVector mParticles;

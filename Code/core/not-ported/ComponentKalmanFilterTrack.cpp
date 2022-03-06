@@ -26,7 +26,7 @@ THISCLASS::~ComponentKalmanFilterTrack() {
   }
 }
 
-Track& THISCLASS::GetOrMakeTrack(int id, cv::Point2f p) {
+Track & THISCLASS::GetOrMakeTrack(int id, cv::Point2f p) {
   if (mOutputTracks.find(id) != mOutputTracks.end()) {
     return mOutputTracks[id];
   } else {
@@ -99,8 +99,7 @@ void THISCLASS::EraseTrack(int id) {
 }
 
 void THISCLASS::OnStep() {
-  DataStructureTracks::tTrackMap *tracks =
-    mCore->mDataStructureTracks.mTracks;
+  DataStructureTracks::tTrackMap * tracks = mCore->mDataStructureTracks.mTracks;
 	if (! tracks) {
 		AddError(wxT("No Track"));
 		return;

@@ -9,10 +9,12 @@
 		<parameter type="inputfile">
 			<name>CalibrationPoints</name>
 			<label>Calib. Points</label>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="inputfile">
 			<name>CalibrationParameters</name>
 			<label>Calib. Param.</label>
+			<onchange>restart</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

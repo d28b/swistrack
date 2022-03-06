@@ -10,6 +10,7 @@
 			<label>Window Size</label>
 			<unit>Individuals</unit>
 			<default>3</default>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

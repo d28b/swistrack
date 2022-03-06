@@ -10,47 +10,46 @@
 			<name>SerialDeviceValves</name>
 			<label>serial device for valve control</label>
 			<default>/dev/ttyACM0</default>
-
+			<onchange>restart</onchange>
 		</parameter>
 
 		<parameter type="checkbox">
 			<name>Compressor</name>
 			<label>Compressor</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 
 		<parameter type="checkbox">
 			<name>Valve1</name>
 			<label>Valve 1</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="checkbox">
 			<name>Valve2</name>
 			<label>Valve 2</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="checkbox">
 			<name>Valve3</name>
 			<label>Valve 3</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="checkbox">
 			<name>Valve4</name>
 			<label>Valve 4</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
-
 
 		<parameter type="checkbox">
 			<name>Pump</name>
 			<label>Pump</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 
 		<parameter type="double">
@@ -59,11 +58,9 @@
 			<min>-255</min>
 			<max>255</max>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
 			<default>0</default>
 			<sliderstep>1.0</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
-
 	</configuration>
 </swistrackcomponent>

@@ -4,12 +4,13 @@
 	<description>Adds a mask on the grayscale image. This can be useful to ignore areas which could otherwise be detected as particles (e.g. borders).</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/GrayMask</url>
 	<displayimage>Output</displayimage>
+
 	<configuration>
 		<parameter type="inputfile">
 			<name>MaskImage</name>
 			<label>Mask image</label>
 			<filetype>image</filetype>
-			<reloadable>false</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>Mode</name>
@@ -21,7 +22,7 @@
 				<item key="black-white">Black -> white (not M or I)</item>
 			</items>
 			<default>black-black</default>
-			<reloadable>true</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

@@ -20,16 +20,16 @@ public:
 	void OnStep();
 	void OnStepCleanup();
 	void OnStop();
-	int xorder;
-	int yorder;
-	int apertureSize;
-	int mChannelMain;					//!< The channel to subtract from.
-	int mChannelSubtract;					//!< The channel to subtract.
-	Display mDisplayOutput;					//!< The Display showing the last acquired image and the particles.
 
 	Component * Create() {
 		return new ComponentSobelDifferentiation(mCore);
 	}
+
+private:
+	int mOrderX;				//!< (configuration) Order X.
+	int mOrderY;				//!< (configuration) Order Y.
+	int mKernelSize;			//!< (configuration) Kernel size.
+	Display mDisplayOutput;		//!< The Display showing the last acquired image and the particles.
 
 };
 

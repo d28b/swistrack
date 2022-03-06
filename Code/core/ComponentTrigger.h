@@ -9,11 +9,11 @@ class ComponentTrigger;
 class ComponentTrigger {
 
 public:
-	Component *mComponent;
+	Component * mComponent;
 	bool mIsReady;		//!< Whether the this component is ready to perform the next step.
 
 	//! Constructor.
-	ComponentTrigger(Component *c);
+	ComponentTrigger(Component * c);
 	//! Destructor.
 	virtual ~ComponentTrigger() {}
 

@@ -172,8 +172,8 @@ int interpolate(cv::Mat mapx, cv::Mat mapy, cv::Size image_size) {
 void THISCLASS::OnStart() {
 	printf("on start, calibrate camera\n");
 	// Read the file containing the calibration points
-	wxString filename_string = GetConfigurationString(wxT("CalibrationPoints"), wxT(""));
-	wxFileName filename = mCore->GetProjectFileName(filename_string);
+	wxString filenameString = GetConfigurationString(wxT("CalibrationPoints"), wxT(""));
+	wxFileName filename = mCore->GetProjectFileName(filenameString);
 	wxLogNull log;
 	wxXmlDocument document;
 	bool isopen = document.Load(filename.GetFullPath());
@@ -203,7 +203,7 @@ void THISCLASS::OnStart() {
 	calibrationPointList.clear();
 
 	// Fill the vector with the readen points
-	wxXmlNode *node = mSelectedNode->GetChildren();
+	wxXmlNode * node = mSelectedNode->GetChildren();
 	while (node) {
 		if (node->GetName() == wxT("point"))
 			ReadPoint(node);
@@ -434,7 +434,7 @@ void THISCLASS::OnStepCleanup() {
 void THISCLASS::OnStop() {
 }
 
-void THISCLASS::ReadPoint(wxXmlNode *node) {
+void THISCLASS::ReadPoint(wxXmlNode * node) {
 	mSelectedNode = node;
 
 	CalibrationPoint calibrationPoint;

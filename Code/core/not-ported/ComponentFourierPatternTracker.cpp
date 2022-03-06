@@ -1,6 +1,7 @@
 #include "ComponentFourierPatternTracker.h"
 #define THISCLASS ComponentFourierPatternTracker
-#include <opencv2/highgui.hpp>
+
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 
 using namespace cv;
@@ -15,7 +16,7 @@ THISCLASS::ComponentFourierPatternTracker(SwisTrackCore * stc):
 		mParticles() {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingGray);
+	mCategory = &(mCore->mCategoryProcessingGray);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureParticles));
 	AddDisplay(&mDisplayOutput);
@@ -414,7 +415,7 @@ void THISCLASS::prepareFilter(Mat input) {
 }
 
 
-void THISCLASS::generateFFTPreview(Mat complexI, Mat *output) {
+void THISCLASS::generateFFTPreview(Mat complexI, Mat * output) {
 			// compute the magnitude and switch to logarithmic scale
 		// => log(1 + sqrt(Re(DFT(I))^2 + Im(DFT(I))^2))
 		cv::Mat planes[2];

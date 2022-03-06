@@ -37,7 +37,7 @@ void THISCLASS::OnReloadConfiguration() {
 
 void THISCLASS::OnStep() {
 	mParticles.clear();
-	for (auto particle : *mCore->mDataStructureParticles.mParticles) {
+	for (auto & particle : *mCore->mDataStructureParticles.mParticles) {
 		if (particle.mArea < mMinParticleArea) continue;
 		if (particle.mArea > mMaxParticleArea) continue;
 		mParticles.push_back(particle);
@@ -48,10 +48,10 @@ void THISCLASS::OnStep() {
 	if (! de.IsActive()) return;
 
 	cv::Mat outputImage = mCore->mDataStructureInput.mImage.clone();
-	for (auto particle : *mCore->mDataStructureParticles.mParticles)
+	for (auto & particle : *mCore->mDataStructureParticles.mParticles)
 		cv::circle(outputImage, cv::Point(particle.mCenter), 10, CV_RGB(255, 0, 0), 3, cv::LINE_AA, 0);
 
-	for (auto particle : mParticles)
+	for (auto & particle : mParticles)
 		cv::circle(outputImage, cv::Point(particle.mCenter), 10, CV_RGB(0, 255, 0), 3, cv::LINE_AA, 0);
 
 	//de.SetParticles(&mParticles);

@@ -135,7 +135,7 @@ void THISCLASS::OnStep() {
 	if (mOutputImage->channels() == 1) {
 		//Gray or Bayer color image !
 		unsigned long rawDataLength;
-		unsigned char *rawDataPtr;
+		unsigned char * rawDataPtr;
 
 		rawDataPtr = mCamera.GetRawData(&rawDataLength);
 		memcpy(mOutputImage->imageData, rawDataPtr, rawDataLength);

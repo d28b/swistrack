@@ -22,7 +22,7 @@ THISCLASS::~ComponentInputFileImage() {
 }
 
 void THISCLASS::OnStart() {
-	mInputImage = LoadConfigurationImage(wxT("File"), wxT("Input image"));
+	mInputImage = LoadConfigurationImage(wxT("File"), wxT("Input image"), cv::IMREAD_ANYCOLOR | cv::IMREAD_ANYDEPTH);
 }
 
 void THISCLASS::OnReloadConfiguration() {

@@ -12,9 +12,10 @@
 			<min>0</min>
 			<max>500</max>
 			<default>150</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 			<slider>true</slider>
 			<sliderstep>1</sliderstep>
+			<onchange>reload</onchange>
 		</parameter>
 
 		<parameter type="integer">
@@ -23,9 +24,10 @@
 			<min>0</min>
 			<max>20</max>
 			<default>4</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 			<slider>true</slider>
 			<sliderstep>1</sliderstep>
+			<onchange>reload</onchange>
 		</parameter>
 
 		<parameter type="integer">
@@ -34,10 +36,10 @@
 			<min>1</min>
 			<max>60</max>
 			<default>30</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 			<slider>true</slider>
 			<sliderstep>1</sliderstep>
+			<onchange>reload</onchange>
 		</parameter>
-
 	</configuration>
 </swistrackcomponent>

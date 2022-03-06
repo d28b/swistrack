@@ -1,7 +1,7 @@
 #include "ComponentInverseFFT.h"
 #define THISCLASS ComponentInverseFFT
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 
 using namespace cv;
@@ -40,10 +40,10 @@ void THISCLASS::OnStep() {
 	cv::gpu::GpuMat input=mCore->mDataStructureImageFFT.mMat_Gpu;
 //	Mat input(mCore->mDataStructureImageFFT.mMat_Gpu);
 #else
-	Mat input= mCore->mDataStructureImageFFT.mMat;
+	Mat input = mCore->mDataStructureImageFFT.mMat;
 #endif
 
-	cv::Mat *originalImage = mCore->mDataStructureImageGray.mImage;
+	cv::Mat originalImage = mCore->mDataStructureImageGray.mImage;
 
 	if (input.empty()) {
 	  AddError(wxT("Cannot access input image."));

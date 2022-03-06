@@ -14,7 +14,7 @@ public:
 	~ConfigurationParameterFactory() {}
 
 	//! Creates a new parameter.
-	ConfigurationParameter *Create(const wxString &type, wxWindow* parent);
+	ConfigurationParameter * Create(const wxString & type, wxWindow * parent);
 };
 
 #endif

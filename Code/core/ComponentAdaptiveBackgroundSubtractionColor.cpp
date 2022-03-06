@@ -1,8 +1,9 @@
 #include "ComponentAdaptiveBackgroundSubtractionColor.h"
 #define THISCLASS ComponentAdaptiveBackgroundSubtractionColor
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
+#include "ImageTools.h"
 
 THISCLASS::ComponentAdaptiveBackgroundSubtractionColor(SwisTrackCore * stc):
 	Component(stc, wxT("AdaptiveBackgroundSubtractionColor")),
@@ -10,7 +11,7 @@ THISCLASS::ComponentAdaptiveBackgroundSubtractionColor(SwisTrackCore * stc):
 	mDisplayOutput(wxT("Output"), wxT("After background subtraction")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingColor);
+	mCategory = &(mCore->mCategoryProcessingColor);
 	AddDataStructureRead(&(mCore->mDataStructureImageColor));
 	AddDataStructureWrite(&(mCore->mDataStructureImageColor));
 	AddDisplay(&mDisplayOutput);
@@ -60,7 +61,7 @@ void THISCLASS::OnStep() {
 	if (mBackgroundImage.empty()) {
 		mBackgroundImage = inputImage.clone();
 	} else if (mUpdateProportion > 0) {
-		if (inputImage.rows != mBackgroundImage.rows || inputImage.cols != mBackgroundImage.cols) {
+		if (! ImageTools::EqualSize(inputImage, mBackgroundImage)) {
 			AddError(wxT("Input and background images do not have the same size."));
 			return;
 		}

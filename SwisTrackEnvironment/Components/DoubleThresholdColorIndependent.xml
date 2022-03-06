@@ -14,7 +14,7 @@
 			<max>255</max>
 			<slider>true</slider>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>RedHighThreshold</name>
@@ -23,7 +23,7 @@
 			<max>255</max>
 			<slider>true</slider>
 			<default>255</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 
 		<title>Green</title>
@@ -34,7 +34,7 @@
 			<max>255</max>
 			<slider>true</slider>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>GreenHighThreshold</name>
@@ -43,7 +43,7 @@
 			<max>255</max>
 			<slider>true</slider>
 			<default>255</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 
 		<title>Blue</title>
@@ -54,7 +54,7 @@
 			<max>255</max>
 			<slider>true</slider>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>BlueHighThreshold</name>
@@ -63,7 +63,7 @@
 			<max>255</max>
 			<slider>true</slider>
 			<default>255</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

@@ -32,15 +32,15 @@ public:
 		return new ComponentFFT(mCore);
 	}
 
-	void computeFFT(Mat Im, Mat *complexI);
-	void generateFFTPreview(Mat complexI, Mat *output);
+	void computeFFT(Mat Im, Mat * complexI);
+	void generateFFTPreview(Mat complexI, Mat * output);
 	#ifdef GPU_ENABLED
-	void computeFFTGpu(Mat Im, cv::gpu::GpuMat *complexI);
+	void computeFFTGpu(Mat Im, cv::gpu::GpuMat * complexI);
 	#endif
 private:
 
 	Display mDisplayOutput;		//!< The DisplayImage showing the output of this component.
-	cv::Mat *mDisplayOutputImage;
+	cv::Mat mDisplayOutputImage;
 	bool mGenerateOutput; 		// configuration parameter specifies if an magnitude image will be calculated for display (takes extra time)
 
 	cv::Mat padded;

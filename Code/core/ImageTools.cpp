@@ -71,12 +71,12 @@ cv::Mat THISCLASS::AbsDiff3(cv::Mat image, cv::Scalar color) {
 		unsigned char * line = image.ptr(y);
 		unsigned char * absDiffLine = absDiffImage.ptr(y);
 		for (int x = 0; x < image.cols; x++) {
-			int r = line[x * 3 + 0];
+			int b = line[x * 3 + 0];
 			int g = line[x * 3 + 1];
-			int b = line[x * 3 + 2];
-			absDiffLine[x * 3 + 0] = abs(r - color.val[0]);
+			int r = line[x * 3 + 2];
+			absDiffLine[x * 3 + 0] = abs(b - color.val[0]);
 			absDiffLine[x * 3 + 1] = abs(g - color.val[1]);
-			absDiffLine[x * 3 + 2] = abs(b - color.val[2]);
+			absDiffLine[x * 3 + 2] = abs(r - color.val[2]);
 		}
 	}
 
@@ -89,6 +89,23 @@ bool THISCLASS::EqualSize(cv::Mat a, cv::Mat b) {
 	return true;
 }
 
+cv::Mat THISCLASS::Flip(cv::Mat image, bool flipHorizontally, bool flipVertically) {
+	if (flipHorizontally && flipVertically) {
+		cv::Mat flippedImage(image.size(), image.channels() == 1 ? CV_8UC1 : CV_8UC3);
+		cv::flip(image, flippedImage, -1);
+		return flippedImage;
+	} else if (flipHorizontally) {
+		cv::Mat flippedImage(image.size(), image.channels() == 1 ? CV_8UC1 : CV_8UC3);
+		cv::flip(image, flippedImage, 1);
+		return flippedImage;
+	} else if (flipVertically) {
+		cv::Mat flippedImage(image.size(), image.channels() == 1 ? CV_8UC1 : CV_8UC3);
+		cv::flip(image, flippedImage, 0);
+		return flippedImage;
+	} else {
+		return image;
+	}
+}
 /*
 void THISCLASS::CvtYUV422ToBGR(cv::Mat inputImage, cv::Mat outputImage) {
 	unsigned char * crl = (unsigned char *) inputImage->imageData;

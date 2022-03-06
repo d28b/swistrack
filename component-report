@@ -1,0 +1,95 @@
+#! /usr/bin/perl
+use strict;
+
+my $components = {};
+
+sub getOrCreate {
+	my $name = shift;
+	my $component = $components->{$name};
+	$component = $components->{$name} = {} if ! $component;
+	return $component;
+}
+
+# List the active components
+opendir(D, 'Code/core');
+my @files = readdir(D);
+closedir D;
+
+for my $file (@files) {
+	next if $file !~ /^Component(.*)\.(cpp|h)$/;
+	my $name = $1;
+	my $ext = $2;
+	next if $name eq '';
+	next if $name eq 'Category';
+	next if $name eq 'Editor';
+	next if $name eq 'Trigger';
+	my $component = &getOrCreate($name);
+	$component->{$ext} = 1;
+
+	open(F, '<', 'Code/core/'.$file);
+	my @lines = <F>;
+	close F;
+
+	for my $line (@lines) {
+		if ($line =~ /Component\(stc, wxT\("(.*?)"\)\)/) {
+			my $xmlName = $1;
+			$component->{xmlName} = $xmlName eq $name;
+		}
+
+		if ($line =~ /#define THISCLASS Component(.*)/) {
+			my $thisClass = $1;
+			$component->{thisClass} = $thisClass eq $name;
+		}
+
+		if ($line =~ /class Component(.*?): public Component/) {
+			my $classDefinition = $1;
+			$component->{classDefinition} = $classDefinition eq $name;
+		}
+	}
+}
+
+# Read the components registered in SwisTrackCode.cpp
+open(F, '<', 'Code/core/SwisTrackCore.cpp');
+my @lines = <F>;
+close F;
+
+for my $line (@lines) {
+	if ($line =~ /^#include "Component(.*)\.h"\s*$/) {
+		my $name = $1;
+		my $component = &getOrCreate($name);
+		$component->{include} = 1;
+	}
+
+	if ($line =~ /^\s*mAvailableComponents\.push_back\(new Component(.*)\(this\)\);\s*$/) {
+		my $name = $1;
+		my $component = &getOrCreate($name);
+		$component->{available} = 1;
+	}
+}
+
+# List the XML files components
+opendir(D, 'SwisTrackEnvironment/Components');
+my @files = readdir(D);
+closedir D;
+
+for my $file (@files) {
+	next if $file !~ /^(.*)\.xml$/;
+	my $name = $1;
+	my $component = &getOrCreate($name);
+	$component->{xml} = 1;
+}
+
+# Report
+for my $name (sort keys %$components) {
+	my $component = $components->{$name};
+
+	my @list;
+	push @list, $component->{cpp} ? 'CPP' : '';
+	push @list, ($component->{xmlName} ? 'X' : ' ').($component->{thisClass} ? 'T' : ' ').($component->{classDefinition} ? 'C' : ' ');
+	push @list, $component->{h} ? 'H' : '';
+	push @list, $component->{xml} ? 'XML' : '';
+	push @list, $component->{include} ? 'CORE' : '';
+	push @list, $component->{available} ? 'ENA' : '';
+	push @list, $name;
+	print join("\t", @list), "\n";
+}

@@ -33,12 +33,12 @@ void Track:: SetColorModel(cv::Mat colorModel) {
 	mColorModel = colorModel;
 }
 
-void Track::SetCritPoint(cv::Point2f *p) {
+void Track::SetCritPoint(cv::Point2f * p) {
 	critpoint.x = p->x;
 	critpoint.y = p->y;
 }
 
-double Track::GetDist(cv::Point2f *p1, cv::Point2f *p2) {
+double Track::GetDist(cv::Point2f * p1, cv::Point2f * p2) {
 	return (p1->x - p2->x) * (p1->x - p2->x) +
 	       (p1->y - p2->y) * (p1->y - p2->y);
 }

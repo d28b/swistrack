@@ -2,6 +2,7 @@
 #define THISCLASS ComponentInputCameraUSB
 
 #include "DisplayEditor.h"
+#include "ImageTools.h"
 
 THISCLASS::ComponentInputCameraUSB(SwisTrackCore * stc):
 	Component(stc, wxT("InputCameraUSB")),
@@ -33,7 +34,11 @@ void THISCLASS::OnStart() {
 		return;
 	}
 
+	int fps = GetConfigurationInt(wxT("FramesPerSecond"), 10);
+	mCapture.set(cv::CAP_PROP_FPS, fps);
+
 	mFrameNumber = 0;
+	OnReloadConfiguration();
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -50,23 +55,10 @@ void THISCLASS::OnStep() {
 	}
 
 	// Flip the image if desired
-	if (mFlipHorizontally && mFlipVertically) {
-		cv::Mat flippedImage(image.size(), CV_8UC3);
-		cv::flip(image, flippedImage, -1);
-		image = flippedImage;
-	} else if (mFlipHorizontally) {
-		cv::Mat flippedImage(image.size(), CV_8UC3);
-		cv::flip(image, flippedImage, 0);
-		image = flippedImage;
-	} else if (mFlipVertically) {
-		cv::Mat flippedImage(image.size(), CV_8UC3);
-		cv::flip(image, flippedImage, 1);
-		image = flippedImage;
-	}
+	image = ImageTools::Flip(image, mFlipHorizontally, mFlipVertically);
 
 	// Set Timestamp for the current frame
-	// this data is not read from the camera, so we will do the
-	// best we can: take a timestamp now.
+	// This data is not read from the camera, so we will do the best we can: take a timestamp now.
 	mCore->mDataStructureInput.SetFrameTimestamp(wxDateTime::UNow());
 
 	// Set DataStructureImage
@@ -84,8 +76,4 @@ void THISCLASS::OnStepCleanup() {
 
 void THISCLASS::OnStop() {
 	mCapture.release();
-}
-
-double THISCLASS::GetFPS() {
-	return mCapture.get(cv::CAP_PROP_FPS);
 }

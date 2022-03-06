@@ -31,18 +31,23 @@ void THISCLASS::FindBlobs(cv::Mat inputImage, wxDateTime frameTimestamp, int fra
 	// Blob extraction
 	cv::Point offset(0, 0);
 	std::vector<std::vector<cv::Point>> contours;
-	cv::findContours(inputImage, contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE, offset);
+	std::vector<cv::Vec4i> hierarchy;
+	cv::findContours(inputImage, contours, hierarchy, cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, offset);
 
 	// Select blobs
 	mParticles.clear();
 	mSelectedContours.clear();
-	for (auto contour : contours) {
+	if (hierarchy.size() < 1) return;
+
+	for (int child = hierarchy[0][FIRST_CHILD]; child >= 0; child = hierarchy[child][NEXT_SIBLING]) {
+		auto & contour = contours[child];
 		Particle particle;
 		particle.mID = -1;
 		particle.mIDCovariance = -1;
 
 		// Particle area
 		cv::Moments moments = cv::moments(contour);
+		//printf("contour %f\n", moments.m00);
 		particle.mArea = moments.m00;
 		particle.mCenter.x = (float)(offset.x + (moments.m10 / moments.m00 + 0.5));  // moments using Green theorem
 		particle.mCenter.y = (float)(offset.y + (moments.m01 / moments.m00 + 0.5));  // m10 = x direction, m01 = y direction, m00 = area as edicted in theorem

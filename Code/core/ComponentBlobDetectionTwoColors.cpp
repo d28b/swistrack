@@ -80,19 +80,24 @@ void THISCLASS::OnStop() {
 }
 
 void THISCLASS::Color::FindColorBlobs(cv::Mat inputImage, wxDateTime frameTimestamp, int frameNumber) {
+	int targetB = (int) mColor.val[0];
+	int targetG = (int) mColor.val[1];
+	int targetR = (int) mColor.val[2];
+	printf("%d %d\n", mThresholdB, targetB);
+
 	// Create a distance image
 	cv::Mat binaryImage(inputImage.rows, inputImage.cols, CV_8UC1);
 	for (int y = 0; y < inputImage.rows; y++) {
 		unsigned char * inputLine = inputImage.ptr(y);
 		unsigned char * binaryLine = binaryImage.ptr(y);
 		for (int x = 0; x < inputImage.cols; x++) {
-			int r = inputLine[x * 3 + 0];
+			int b = inputLine[x * 3 + 0];
 			int g = inputLine[x * 3 + 1];
-			int b = inputLine[x * 3 + 2];
-			int dr = abs(r - mColor.val[0]);
-			int dg = abs(g - mColor.val[1]);
-			int db = abs(b - mColor.val[2]);
-			binaryLine[x] = dr <= mThresholdR && dg <= mThresholdG && db <= mThresholdB ? 255 : 0;
+			int r = inputLine[x * 3 + 2];
+			int db = abs(b - targetB);
+			int dg = abs(g - targetG);
+			int dr = abs(r - targetR);
+			binaryLine[x] = dr <= mThresholdR && dg <= mThresholdG && db <= mThresholdB ? 0 : 255;
 		}
 	}
 

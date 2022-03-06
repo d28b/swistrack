@@ -9,7 +9,7 @@
 			<name>MaskImage</name>
 			<label>Mask image</label>
 			<filetype>image</filetype>
-			<reloadable>false</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>Mode</name>
@@ -21,7 +21,7 @@
 				<item key="black-white">Black -> white (not M or I)</item>
 			</items>
 			<default>black-black</default>
-			<reloadable>true</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

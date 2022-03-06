@@ -16,21 +16,21 @@ class ConfigurationParameterCheckBox: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterCheckBox(wxWindow* parent);
+	ConfigurationParameterCheckBox(wxWindow * parent);
 	//! Destructor.
 	~ConfigurationParameterCheckBox();
 
 	//! Handles the corresponding GUI event.
-	void OnChecked(wxCommandEvent& event);
+	void OnChecked(wxCommandEvent & event);
 
 private:
-	wxCheckBox *mCheckBox;		//!< The corresponding GUI widget.
+	wxCheckBox * mCheckBox;		//!< The corresponding GUI widget.
 	bool mValueDefault;			//!< The default value.
 	bool mNewValue;				//!< The new value.
 
 	// ConfigurationParameter methods
-	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
-	virtual void OnUpdate(wxWindow *updateprotection);
+	virtual void OnInitialize(ConfigurationXML * config, ErrorList * errorlist);
+	virtual void OnUpdate(wxWindow * updateprotection);
 	virtual void OnSetNewValue();
 
 	// Validates the new value.

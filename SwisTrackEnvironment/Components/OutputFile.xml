@@ -10,7 +10,7 @@
 			<name>FileNamePrefix</name>
 			<label>File prefix</label>
 			<default>track</default>
-			<reloadable>false</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

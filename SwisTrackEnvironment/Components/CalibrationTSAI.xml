@@ -9,42 +9,50 @@
 		<parameter type="inputfile">
 			<name>CalibrationPoints</name>
 			<label>Calib. Points</label>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>Ncx</name>
 			<label>Ncx</label>
 			<default>640</default>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>Nfx</name>
 			<label>Nfx</label>
 			<default>640</default>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>Ncy</name>
 			<label>Ncy</label>
 			<default>480</default>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>Nfy</name>
 			<label>Nfy</label>
 			<default>480</default>
+			<onchange>restart</onchange>
 		</parameter>
 
 		<parameter type="double">
 			<name>dx</name>
 			<label>dx</label>
 			<default>0.0065</default>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>dy</name>
 			<label>dy</label>
 			<default>0.0065</default>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="double">
 			<name>sx</name>
 			<label>sx</label>
 			<default>1.0</default>
+			<onchange>restart</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

@@ -8,6 +8,7 @@
 		<parameter type="color">
 			<name>Color</name>
 			<label>Target mean</label>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

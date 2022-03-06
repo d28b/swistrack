@@ -13,7 +13,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_SPINCTRL(wxID_ANY, THISCLASS::OnHourMinuteChanged)
 END_EVENT_TABLE()
 
-THISCLASS::ConfigurationParameterDate(wxWindow* parent):
+THISCLASS::ConfigurationParameterDate(wxWindow * parent):
 	ConfigurationParameter(parent),
 	mDateCtrl(0),
 	mValueDefault() {
@@ -23,13 +23,13 @@ THISCLASS::ConfigurationParameterDate(wxWindow* parent):
 THISCLASS::~ConfigurationParameterDate() {
 }
 
-void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
+void THISCLASS::OnInitialize(ConfigurationXML * config, ErrorList * errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
 
 
 	// Create the controls
-	wxStaticText *label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scLabelWidth, -1), wxST_NO_AUTORESIZE);
 	mDateCtrl = new wxDatePickerCtrl(this, wxID_ANY, mValueDefault, wxDefaultPosition, wxSize(scParameterWidth - 50, -1), wxTE_PROCESS_ENTER);
 	//	mDateCtrl->Connect(wxID_ANY, wxEVT_DATE_CHANGED, wxDateEventHandler(THISCLASS::OnDateChanged), 0, this);
 
@@ -44,22 +44,20 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 	mAmPmCtrl->Insert(wxT("PM"), 0);
 
 	// Layout the controls
-	wxBoxSizer *hs = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer * hs = new wxBoxSizer(wxHORIZONTAL);
 	hs->Add(mDateCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mHourCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mMinuteCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hs->Add(mAmPmCtrl, 0, wxALIGN_CENTER_VERTICAL, 0);
 
-	wxBoxSizer *vs = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer * vs = new wxBoxSizer(wxVERTICAL);
 	vs->Add(label, 0, wxBOTTOM, 2);
 	vs->Add(hs, 0, 0, 0);
 	SetSizer(vs);
 }
 
-void THISCLASS::OnUpdate(wxWindow *updateprotection) {
-	if (updateprotection == mDateCtrl) {
-		return;
-	}
+void THISCLASS::OnUpdate(wxWindow * updateprotection) {
+	if (updateprotection == mDateCtrl) return;
 	wxDateTime value = mComponent->GetConfigurationDate(mName, mValueDefault);
 	mDateCtrl->SetValue(value);
 
@@ -78,6 +76,7 @@ void THISCLASS::OnUpdate(wxWindow *updateprotection) {
 			mAmPmCtrl->SetValue(wxT("AM"));
 		}
 	}
+
 	mMinuteCtrl->SetValue(value.GetMinute());
 }
 
@@ -99,27 +98,24 @@ void THISCLASS::UpdateDate() {
 	mNewValue = mDateCtrl->GetValue();
 	int hour = mHourCtrl->GetValue();
 	if (mAmPmCtrl->GetValue() == wxT("PM")) {
-		if (hour != 12) {
-			hour += 12;
-		}
+		if (hour != 12) hour += 12;
 	} else {
-		if (hour == 12) {
-			hour = 0;
-		}
+		if (hour == 12) hour = 0;
 	}
+
 	mNewValue.SetHour(hour);
 	mNewValue.SetMinute(mMinuteCtrl->GetValue());
 	SetNewValue(mDateCtrl);
-
-
 }
-void THISCLASS::OnDateChanged(wxDateEvent& event) {
+
+void THISCLASS::OnDateChanged(wxDateEvent & event) {
 	UpdateDate();
 }
 
-void THISCLASS::OnHourMinuteChanged(wxSpinEvent& event) {
+void THISCLASS::OnHourMinuteChanged(wxSpinEvent & event) {
 	UpdateDate();
 }
-void THISCLASS::OnAmPmChanged(wxCommandEvent& event) {
+
+void THISCLASS::OnAmPmChanged(wxCommandEvent & event) {
 	UpdateDate();
 }

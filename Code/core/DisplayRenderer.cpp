@@ -7,7 +7,7 @@
 
 THISCLASS::DisplayRenderer(Display * display):
 	mDisplay(0), mImage(), mFontFace(cv::FONT_HERSHEY_SIMPLEX), mFontSize(0.4), mFontSizeBig(1.0),
-	mScalingFactor(1), mCropRectangle(0, 0, 0, 0), mFlipVertical(false), mFlipHorizontal(false),
+	mScalingFactor(1), mCropRectangle(0, 0, 0, 0), mFlipVertically(false), mFlipHorizontally(false),
 	mDrawImage(true), mDrawParticles(true), mDrawTrajectories(true), mDrawErrors(true), mUseMask(true) {
 
 	SetDisplay(display);
@@ -40,12 +40,12 @@ void THISCLASS::SetScalingFactorMax(cv::Size maxsize) {
 }
 
 void THISCLASS::SetFlipHorizontal(bool flip) {
-	mFlipHorizontal = flip;
+	mFlipHorizontally = flip;
 	DeleteCache();
 }
 
 void THISCLASS::SetFlipVertical(bool flip) {
-	mFlipVertical = flip;
+	mFlipVertically = flip;
 	DeleteCache();
 }
 
@@ -73,7 +73,7 @@ cv::Mat THISCLASS::GetImage() {
 
 	// Create an empty image
 	cv::Size size = GetSize();
-	mImage = cv::Mat(size, CV_8UC3);
+	mImage = cv::Mat::zeros(size, CV_8UC3);
 
 	// If the display is null, just display an error message
 	if (! mDisplay) {
@@ -85,8 +85,10 @@ cv::Mat THISCLASS::GetImage() {
 	ErrorList errors;
 
 	// If the display size is too small, show an error message
-	if ((mDisplay->mSize.width < 10) || (mDisplay->mSize.height < 10)) {
-		errors.Add(wxT("No image or too small image."));
+	if (mDisplay->mSize.width < 1 || mDisplay->mSize.height < 1) {
+		errors.Add(wxT("No image."));
+	} else if (mDisplay->mSize.width < 10 || mDisplay->mSize.height < 10) {
+		errors.Add(wxT("Image too small."));
 	}
 
 	// Draw the image
@@ -118,15 +120,17 @@ bool THISCLASS::DrawMainImage(ErrorList * errors) {
 		mImage = mainImage;
 	}
 
+	// Flip
+	mImage = ImageTools::Flip(mImage, mFlipHorizontally, mFlipVertically);
 	return true;
 }
 
-bool THISCLASS::DrawParticles(ErrorList *errors) {
+bool THISCLASS::DrawParticles(ErrorList * errors) {
 	if (! mDrawParticles) return false;
 	if (! mDisplay) return false;
 
 	// Draw particles
-	for (auto particle : mDisplay->mParticles) {
+	for (auto & particle : mDisplay->mParticles) {
 		int x = (int) floor(particle.mCenter.x * mScalingFactor + 0.5);
 		int y = (int) floor(particle.mCenter.y * mScalingFactor + 0.5);
 		cv::rectangle(mImage, cv::Point(x - 2, y - 2), cv::Point(x + 2, y + 2), cv::Scalar(192, 0, 0), 1);
@@ -142,14 +146,14 @@ bool THISCLASS::DrawParticles(ErrorList *errors) {
 	return true;
 }
 
-bool THISCLASS::DrawTrajectories(ErrorList *errors) {
+bool THISCLASS::DrawTrajectories(ErrorList * errors) {
 	if (! mDrawTrajectories) return false;
 	if (! mDisplay) return false;
 	if (! mDisplay->mTrajectories) return false;
 
 	// Draw trajectories
 	DataStructureTracks::tTrackMap * tracks = mDisplay->mComponent->GetSwisTrackCore()->mDataStructureTracks.mTracks;
-	for (auto tuple : *tracks) {
+	for (auto & tuple : *tracks) {
 		// Color for this track
 		cv::Scalar color = cv::Scalar((tuple.first * 50) % 255, (tuple.first * 50) % 255, 255);
 
@@ -175,27 +179,23 @@ bool THISCLASS::DrawTrajectories(ErrorList *errors) {
 	return true;
 }
 
-bool THISCLASS::DrawErrors(ErrorList *errors) {
+bool THISCLASS::DrawErrors(ErrorList * errors) {
 	if (! mDrawErrors) return false;
 	if (! mDisplay) return false;
 
 	// The first line starts at the bottom
-	int y = mImage.rows - 6;
+	int y = mImage.rows - 10;
 
 	// Draw all error messages
-	ErrorList::tList::iterator it = errors->mList.begin();
-	while (it != errors->mList.end()) {
-		cv::putText(mImage, (*it).mMessage.ToStdString(), cv::Point(4, y), mFontFace, mFontSize, cv::Scalar(0, 0, 255));
-		y += 20;
-		it++;
+	for (auto & error : errors->mList) {
+		cv::putText(mImage, error.mMessage.ToStdString(), cv::Point(4, y), mFontFace, mFontSize, cv::Scalar(255, 0, 0));
+		y -= 25;
 	}
 
 	// Draw all error messages
-	it = mDisplay->mErrors.mList.begin();
-	while (it != mDisplay->mErrors.mList.end()) {
-		cv::putText(mImage, (*it).mMessage.ToStdString(), cv::Point(4, y), mFontFace, mFontSize, cv::Scalar(0, 0, 255));
-		y += 20;
-		it++;
+	for (auto & error : mDisplay->mErrors.mList) {
+		cv::putText(mImage, error.mMessage.ToStdString(), cv::Point(4, y), mFontFace, mFontSize, cv::Scalar(255, 0, 0));
+		y -= 25;
 	}
 
 	return true;

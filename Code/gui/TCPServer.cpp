@@ -8,12 +8,12 @@ BEGIN_EVENT_TABLE(TCPServer, wxEvtHandler)
 	EVT_SOCKET(SERVER_ID, TCPServer::OnServerEvent)
 END_EVENT_TABLE()
 
-THISCLASS::TCPServer(SwisTrack* swistrack):
+THISCLASS::TCPServer(SwisTrack * swistrack):
 	CommunicationInterface(), SwisTrackCoreInterface(),
 	mServer(0), mPort(0), mSwisTrack(swistrack), mConnections(), mNMEALogFile(0) {
 
 	// Add SwisTrackCoreInterface
-	SwisTrackCore *stc = mSwisTrack->mSwisTrackCore;
+	SwisTrackCore * stc = mSwisTrack->mSwisTrackCore;
 	stc->AddInterface(this);
 }
 
@@ -74,14 +74,14 @@ void THISCLASS::Close() {
 	mSwisTrack->SetStatusText(wxT("Closed"), SwisTrack::cStatusField_ServerPort);
 }
 
-void THISCLASS::OnServerEvent(wxSocketEvent& event) {
+void THISCLASS::OnServerEvent(wxSocketEvent & event) {
 	// Only treat connection events
 	if (event.GetSocketEvent() != wxSOCKET_CONNECTION) {
 		return;
 	}
 
 	// Accept the connection
-	wxSocketBase *sock = mServer->Accept(false);
+	wxSocketBase * sock = mServer->Accept(false);
 	if (! sock) {
 		return;
 	}
@@ -90,7 +90,7 @@ void THISCLASS::OnServerEvent(wxSocketEvent& event) {
 	CleanupConnections();
 
 	// Create a new connection object
-	TCPServerConnection *ssc = new TCPServerConnection(this, sock);
+	TCPServerConnection * ssc = new TCPServerConnection(this, sock);
 
 	// Add this connection to the list of clients
 	mConnections.push_back(ssc);
@@ -116,7 +116,7 @@ void THISCLASS::CleanupConnections() {
 	}
 }
 
-bool THISCLASS::Send(CommunicationMessage *m) {
+bool THISCLASS::Send(CommunicationMessage * m) {
 	bool sent = false;
 
 	// Send to all connected TCP clients
@@ -144,7 +144,7 @@ void THISCLASS::OnBeforeStart(bool productionmode) {
 	}
 
 	// Start a new log file
-	SwisTrackCore *stc = mSwisTrack->mSwisTrackCore;
+	SwisTrackCore * stc = mSwisTrack->mSwisTrackCore;
 	wxFileName filename = stc->GetRunFileName(wxT("nmea"));
 	if (filename.IsOk()) {
 		mNMEALogFile = new NMEALogFile(filename.GetFullPath());

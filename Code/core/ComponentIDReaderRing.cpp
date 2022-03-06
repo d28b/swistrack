@@ -28,8 +28,8 @@ THISCLASS::~ComponentIDReaderRing() {
 
 void THISCLASS::OnStart() {
 	// Read the object list
-	wxString filename_string = GetConfigurationString(wxT("ObjectListFileName"), wxT(""));
-	wxFileName filename = mCore->GetProjectFileName(filename_string);
+	wxString filenameString = GetConfigurationString(wxT("ObjectListFileName"), wxT(""));
+	wxFileName filename = mCore->GetProjectFileName(filenameString);
 	mObjectList = new ObjectList(filename);
 	if (mObjectList->mError != wxT("")) {
 		AddError(mObjectList->mError);

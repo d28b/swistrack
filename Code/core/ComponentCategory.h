@@ -22,7 +22,7 @@ public:
 	eCategoryType mType;		//!< The type.
 
 	//! Constructor.
-	ComponentCategory(const wxString &name, const wxString &displayname, int order, eCategoryType type = sTypeAny): mName(name), mDisplayName(displayname), mOrder(order), mType(type) {}
+	ComponentCategory(const wxString & name, const wxString & displayname, int order, eCategoryType type = sTypeAny): mName(name), mDisplayName(displayname), mOrder(order), mType(type) {}
 	//! Destructor.
 	~ComponentCategory() {}
 };

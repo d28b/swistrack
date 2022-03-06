@@ -13,7 +13,7 @@ BEGIN_EVENT_TABLE(THISCLASS, wxPanel)
 	EVT_SPINCTRL (wxID_ANY, THISCLASS::OnSpin)
 END_EVENT_TABLE()
 
-THISCLASS::ConfigurationParameterPointInteger(wxWindow* parent):
+THISCLASS::ConfigurationParameterPointInteger(wxWindow * parent):
 	ConfigurationParameter(parent),
 	mValueMinX(0), mValueMinY(0),
 	mValueMaxX(640), mValueMaxY(480),
@@ -26,7 +26,7 @@ THISCLASS::~ConfigurationParameterPointInteger() {
 	mSpinCtrlY->Disconnect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
 }
 
-void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
+void THISCLASS::OnInitialize(ConfigurationXML * config, ErrorList * errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
 	config->SelectChildNode(wxT("min"));
@@ -43,38 +43,38 @@ void THISCLASS::OnInitialize(ConfigurationXML *config, ErrorList *errorlist) {
 
 	// Create the controls
 	config->SelectRootNode();
-	wxStaticText *label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scParameterWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *dummyx = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scIndentWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *dummyy = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scIndentWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *labelx = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("labelx"), wxT("X")), wxDefaultPosition, wxSize(scLabelWidth - scIndentWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *labely = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("labely"), wxT("Y")), wxDefaultPosition, wxSize(scLabelWidth - scIndentWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * label = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("label"), wxT("")), wxDefaultPosition, wxSize(scParameterWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * dummyx = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scIndentWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * dummyy = new wxStaticText(this, wxID_ANY, wxT(""), wxDefaultPosition, wxSize(scIndentWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * labelx = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("labelx"), wxT("X")), wxDefaultPosition, wxSize(scLabelWidth - scIndentWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * labely = new wxStaticText(this, wxID_ANY, config->ReadString(wxT("labely"), wxT("Y")), wxDefaultPosition, wxSize(scLabelWidth - scIndentWidth, -1), wxST_NO_AUTORESIZE);
 	mSpinCtrlX = new wxSpinCtrl(this, cID_X, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT | wxTE_PROCESS_ENTER, mValueMinX, mValueMaxX, mValueDefaultX);
 	mSpinCtrlX->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
 	mSpinCtrlY = new wxSpinCtrl(this, cID_Y, wxT(""), wxDefaultPosition, wxSize(scTextBoxWidth, -1), wxTE_RIGHT | wxTE_PROCESS_ENTER, mValueMinY, mValueMaxY, mValueDefaultY);
 	mSpinCtrlY->Connect(wxID_ANY, wxEVT_KILL_FOCUS, wxFocusEventHandler(THISCLASS::OnKillFocus), 0, this);
-	wxStaticText *unitx = new wxStaticText(this, wxID_ANY, wxT(" ") + config->ReadString(wxT("unitx"), wxT("X")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
-	wxStaticText *unity = new wxStaticText(this, wxID_ANY, wxT(" ") + config->ReadString(wxT("unity"), wxT("Y")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * unitx = new wxStaticText(this, wxID_ANY, wxT(" ") + config->ReadString(wxT("unitx"), wxT("X")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
+	wxStaticText * unity = new wxStaticText(this, wxID_ANY, wxT(" ") + config->ReadString(wxT("unity"), wxT("Y")), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
 
 	// Layout the controls
-	wxBoxSizer *hsx = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer * hsx = new wxBoxSizer(wxHORIZONTAL);
 	hsx->Add(dummyx, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsx->Add(labelx, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsx->Add(mSpinCtrlX, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsx->Add(unitx, 0, wxALIGN_CENTER_VERTICAL, 0);
-	wxBoxSizer *hsy = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer * hsy = new wxBoxSizer(wxHORIZONTAL);
 	hsy->Add(dummyy, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsy->Add(labely, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsy->Add(mSpinCtrlY, 0, wxALIGN_CENTER_VERTICAL, 0);
 	hsy->Add(unity, 0, wxALIGN_CENTER_VERTICAL, 0);
 
-	wxBoxSizer *vs = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer * vs = new wxBoxSizer(wxVERTICAL);
 	vs->Add(label, 0, wxBOTTOM, 2);
 	vs->Add(hsx, 0, 0, 0);
 	vs->Add(hsy, 0, 0, 0);
 	SetSizer(vs);
 }
 
-void THISCLASS::OnUpdate(wxWindow *updateprotection) {
+void THISCLASS::OnUpdate(wxWindow * updateprotection) {
 	int valuex = mComponent->GetConfigurationInt(mName + wxT(".x"), mValueDefaultX);
 	int valuey = mComponent->GetConfigurationInt(mName + wxT(".y"), mValueDefaultY);
 	if (updateprotection != mSpinCtrlX)
@@ -129,7 +129,7 @@ void THISCLASS::OnSetNewValue() {
 	ce.SetConfigurationInt(mName + wxT(".y"), mNewValueY);
 }
 
-void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
+void THISCLASS::OnTextUpdated(wxCommandEvent & event) {
 	mNewValueX = mSpinCtrlX->GetValue();
 	mSpinCtrlX->SetOwnForegroundColour(ValidateNewValueX() ? wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) : *wxRED);
 	mSpinCtrlX->Refresh();
@@ -146,7 +146,7 @@ void THISCLASS::OnTextUpdated(wxCommandEvent& event) {
 	}
 }
 
-void THISCLASS::OnTextEnter(wxCommandEvent& event) {
+void THISCLASS::OnTextEnter(wxCommandEvent & event) {
 	mNewValueX = mSpinCtrlX->GetValue();
 	ValidateNewValueX();
 
@@ -156,7 +156,7 @@ void THISCLASS::OnTextEnter(wxCommandEvent& event) {
 	SetNewValue();
 }
 
-void THISCLASS::OnSpin(wxSpinEvent& event) {
+void THISCLASS::OnSpin(wxSpinEvent & event) {
 	mNewValueX = mSpinCtrlX->GetValue();
 	ValidateNewValueX();
 
@@ -166,7 +166,7 @@ void THISCLASS::OnSpin(wxSpinEvent& event) {
 	SetNewValue();
 }
 
-void THISCLASS::OnKillFocus(wxFocusEvent& event) {
+void THISCLASS::OnKillFocus(wxFocusEvent & event) {
 	wxCommandEvent ev;
 	OnTextEnter(ev);
 }

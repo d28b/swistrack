@@ -9,7 +9,7 @@
 
 THISCLASS::ComponentCalibrationFileTSAI(SwisTrackCore * stc):
 	Component(stc, wxT("CalibrationFileTSAI")),
-	mDisplayOutput(wxT("Output"), wxT("TSAI Calibration: Output")) {
+	mDisplayOutput(wxT("Output"), wxT("After calibration")) {
 
 	// Data structure relations
 	mCategory = &(mCore->mCategoryCalibration);
@@ -26,8 +26,8 @@ THISCLASS::~ComponentCalibrationFileTSAI() {
 
 void THISCLASS::OnStart() {
 	//Getting camera parametrs from configuration file
-	wxString filename_string = GetConfigurationString(wxT("CalibrationParameters"), wxT(""));
-	wxFileName filename = mCore->GetProjectFileName(filename_string);
+	wxString filenameString = GetConfigurationString(wxT("CalibrationParameters"), wxT(""));
+	wxFileName filename = mCore->GetProjectFileName(filenameString);
 	wxLogNull log;
 	wxXmlDocument document;
 	bool isopen = document.Load(filename.GetFullPath());
@@ -99,8 +99,8 @@ void THISCLASS::OnStart() {
 	}
 
 	// Read the file containing the calibration points and compute calibration error if the file exist
-	filename_string = GetConfigurationString(wxT("CalibrationPoints"), wxT(""));
-	filename = mCore->GetProjectFileName(filename_string);
+	filenameString = GetConfigurationString(wxT("CalibrationPoints"), wxT(""));
+	filename = mCore->GetProjectFileName(filenameString);
 	isopen = document.Load(filename.GetFullPath());
 	if (! isopen) {
 		AddWarning(wxT("Calibration Points: could not open or parse the XML file!"));
@@ -123,7 +123,7 @@ void THISCLASS::OnStart() {
 		calibrationPointList.clear();
 
 		// Fill the vector with the readen points
-		wxXmlNode *node = mSelectedNode->GetChildren();
+		wxXmlNode * node = mSelectedNode->GetChildren();
 		while (node) {
 			if (node->GetName() == wxT("point")) {
 				ReadPoint(node);
@@ -190,9 +190,8 @@ void THISCLASS::OnStep() {
 	if (! particles) return;
 
 	// Transform all particle positions
-	for (auto particle : *particles) {
+	for (auto & particle : *particles)
 		particle.mWorldCenter = Image2World(particle.mCenter);
-	}
 }
 
 void THISCLASS::OnStepCleanup() {
@@ -214,7 +213,7 @@ void THISCLASS::Read3DMatrix(wxXmlNode * node) {
 	}
 }
 
-void THISCLASS::ReadPoint(wxXmlNode *node) {
+void THISCLASS::ReadPoint(wxXmlNode * node) {
 	mSelectedNode = node;
 	CalibrationPoint calibrationPoint;
 	calibrationPoint.xImage = ConfigurationConversion::Double(ReadChildContent(wxT("ximage")), 0);

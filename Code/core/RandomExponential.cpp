@@ -3,7 +3,7 @@
 #include "RandomExponential.h"
 #define THISCLASS RandomExponential
 
-THISCLASS::RandomExponential(RandomMersenneTwister *rmt): mRandomMersenneTwister(rmt) {
+THISCLASS::RandomExponential(RandomMersenneTwister * rmt): mRandomMersenneTwister(rmt) {
 	const double m2 = 4294967296.;
 	double de = 7.697117470131487, te = de, ve = 3.949659822581572e-3;
 	int i, jsr = 0;
@@ -34,19 +34,16 @@ double THISCLASS::efix(unsigned long jz, unsigned long iz) { /*provides REXP if 
 	double x;
 
 	for (;;) {
-		if (iz == 0) {
-			return (7.69711 - log(mRandomMersenneTwister->randExc()));
-		}
+		if (iz == 0)
+			return 7.69711 - log(mRandomMersenneTwister->randExc());
 
 		x = jz * we[iz];
-		if (fe[iz] + mRandomMersenneTwister->randExc() * (fe[iz - 1] - fe[iz]) < exp(-x)) {
-			return (x);
-		}
+		if (fe[iz] + mRandomMersenneTwister->randExc() * (fe[iz - 1] - fe[iz]) < exp(-x))
+			return x;
 
 		jz = mRandomMersenneTwister->randInt();
 		iz = (jz & 255);
-		if (jz < ke[iz]) {
-			return (jz * we[iz]);
-		}
+		if (jz < ke[iz])
+			return jz * we[iz];
 	}
 }

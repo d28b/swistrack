@@ -9,13 +9,13 @@
 		<parameter type="inputfile">
 			<name>File</name>
 			<label>AVI File</label>
-			<reloadable>false</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="checkbox">
 			<name>FlipVertically</name>
 			<label>Flip the image vertically</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

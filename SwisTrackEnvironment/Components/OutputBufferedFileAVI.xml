@@ -13,7 +13,7 @@
 			<min>1</min>
 			<max>10000</max>
 			<default>200</default>
-			<reloadable>false</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>Keep</name>
@@ -23,38 +23,39 @@
 				<item key="last">Keep the N last images.</item>
 			</items>
 			<default>last</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 
+		<line />
 		<title>Video file</title>
 		<label>The video file is written when the acquisision is stopped.</label>
 		<parameter type="outputfile">
 			<name>FileTitle</name>
-			<label>AVI File</label>
-			<reloadable>false</reloadable>
+			<label>AVI file</label>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="string">
 			<name>Codec</name>
 			<label>Codec code</label>
 			<default>Def.</default>
-			<reloadable>false</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>FrameRate</name>
-			<label>Frame Rate</label>
+			<label>Frame rate</label>
 			<default>15</default>
-			<reloadable>false</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="dropdownlist">
 			<name>InputChannel</name>
-			<label>Input Image</label>
+			<label>Input image</label>
 			<items>
 				<item key="color">Color</item>
 				<item key="grayscale">Grayscale</item>
 				<item key="binary">Binary</item>
 			</items>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

@@ -25,7 +25,7 @@ class UnitCounter {
       color[2] = s[2];
       count = c;
     }
-  bool operator<(const UnitCounter& b) const {
+  bool operator<(const UnitCounter & b) const {
     return count<b.count;
   }
 };

@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include "DisplayEditor.h"
+#include "ImageTools.h"
 
 THISCLASS::ComponentInputFileAVI(SwisTrackCore * stc):
 	Component(stc, wxT("InputFileAVI")),
@@ -57,19 +58,7 @@ void THISCLASS::OnStep() {
 	}
 
 	// Flip the image if desired
-	if (mFlipHorizontally && mFlipVertically) {
-		cv::Mat flippedImage(image.size(), CV_8UC3);
-		cv::flip(image, flippedImage, -1);
-		image = flippedImage;
-	} else if (mFlipHorizontally) {
-		cv::Mat flippedImage(image.size(), CV_8UC3);
-		cv::flip(image, flippedImage, 0);
-		image = flippedImage;
-	} else if (mFlipVertically) {
-		cv::Mat flippedImage(image.size(), CV_8UC3);
-		cv::flip(image, flippedImage, 1);
-		image = flippedImage;
-	}
+	image = ImageTools::Flip(image, mFlipHorizontally, mFlipVertically);
 
 	// Set DataStructureImage
 	mCore->mDataStructureInput.mImage = image;

@@ -14,7 +14,7 @@
 			<default>1</default>
 			<slider>true</slider>
 			<sliderstep>1</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>MinDist</name>
@@ -25,8 +25,9 @@
 			<unit>pixels</unit>
 			<slider>true</slider>
 			<sliderstep>1</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
+
 		<line />
 		<title>Parameters</title>
 		<parameter type="integer">
@@ -37,7 +38,7 @@
 			<max>500</max>
 			<slider>true</slider>
 			<sliderstep>1</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>CenterDetectionThreshold</name>
@@ -47,13 +48,13 @@
 			<max>500</max>
 			<slider>true</slider>
 			<sliderstep>1</sliderstep>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="checkbox">
 			<name>SelectionBySize</name>
 			<label>Selection by size</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>MinRadius</name>
@@ -64,7 +65,7 @@
 			<slider>true</slider>
 			<sliderstep>1</sliderstep>
 			<unit>pixels</unit>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>MaxRadius</name>
@@ -75,13 +76,13 @@
 			<slider>true</slider>
 			<sliderstep>1</sliderstep>
 			<unit>pixels</unit>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="checkbox">
 			<name>LimitNumberOfCircles</name>
 			<label>Limit number of circles</label>
 			<default>0</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>MaxNumberOfCircles</name>
@@ -91,7 +92,7 @@
 			<slider>true</slider>
 			<sliderstep>1</sliderstep>
 			<unit>circles</unit>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

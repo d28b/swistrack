@@ -15,10 +15,10 @@ class ComponentTreeItem;
 class ComponentTreeItem: public wxTreeItemData {
 
 public:
-	Component *mComponent;		//!< The associated Component object.
+	Component * mComponent;		//!< The associated Component object.
 
 	//! Constructor.
-	ComponentTreeItem(Component *c): mComponent(c) {}
+	ComponentTreeItem(Component * c): mComponent(c) {}
 	//! Destructor.
 	~ComponentTreeItem() {}
 

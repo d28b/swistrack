@@ -2,8 +2,7 @@
 #define HEADER_WriteAvi
 
 #include <wx/string.h>
-#include <opencv2/opencv.hpp>
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 
 class WriteAvi {
  public:
@@ -17,7 +16,7 @@ class WriteAvi {
  private:
 
   wxString mFilename;
-  CvVideoWriter* mWriter;  //!< Pointer to AVI sequence.
+  CvVideoWriter * mWriter;  //!< Pointer to AVI sequence.
   double mFrameRate;
 
 };

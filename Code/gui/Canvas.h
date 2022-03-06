@@ -28,12 +28,12 @@ public:
 	wxPoint mViewOffset;		//!< The current offset.
 
 	// Constructor.
-	Canvas(CanvasPanel *cp);
+	Canvas(CanvasPanel * cp);
 	// Destructor.
 	~Canvas();
 
 	//! Sets the display object.
-	void SetDisplay(Display *display);
+	void SetDisplay(Display * display);
 	//! Updates the display.
 	void OnDisplayChanged();
 	//! Returns the maximal size the image would take.
@@ -69,37 +69,37 @@ private:
 	wxPoint mMoveStartPoint;			//!< The starting point when moving the image.
 
 	//! Paints the image in the canvas.
-	bool OnPaintImage(wxPaintDC &dc);
+	bool OnPaintImage(wxPaintDC & dc);
 	//! Updates the view.
 	void UpdateView();
 
 	//! The corresponding GUI event handler.
-	void OnMenuSaveViewImageAs(wxCommandEvent& event);
+	void OnMenuSaveViewImageAs(wxCommandEvent & event);
 	//! The corresponding GUI event handler.
-	void OnMenuSaveOriginalImageAs(wxCommandEvent& event);
+	void OnMenuSaveOriginalImageAs(wxCommandEvent & event);
 	//! The corresponding GUI event handler.
-	void OnMenuFlipVertically(wxCommandEvent& event);
+	void OnMenuFlipVertically(wxCommandEvent & event);
 	//! The corresponding GUI event handler.
-	void OnMenuFlipHorizontally(wxCommandEvent& event);
+	void OnMenuFlipHorizontally(wxCommandEvent & event);
 	//! The corresponding GUI event handler.
-	void OnMenuZoom(wxCommandEvent& event);
+	void OnMenuZoom(wxCommandEvent & event);
 	//! The corresponding GUI event handler.
-	void OnMenuUpdateRate(wxCommandEvent& event);
+	void OnMenuUpdateRate(wxCommandEvent & event);
 
 	//! Overwritten to avoid painting the background.
-	void OnEraseBackground(wxEraseEvent& event);
+	void OnEraseBackground(wxEraseEvent & event);
 	//! The corresponding GUI event handler.
-	void OnMouseLeftDown(wxMouseEvent &event);
+	void OnMouseLeftDown(wxMouseEvent & event);
 	//! The corresponding GUI event handler.
-	void OnMouseLeftUp(wxMouseEvent &event);
+	void OnMouseLeftUp(wxMouseEvent & event);
 	//! The corresponding GUI event handler.
-	void OnMouseRightDown(wxMouseEvent &event);
+	void OnMouseRightDown(wxMouseEvent & event);
 	//! The corresponding GUI event handler.
-	void OnMouseMove(wxMouseEvent &event);
+	void OnMouseMove(wxMouseEvent & event);
 	//! The corresponding GUI event handler.
-	void OnPaint(wxPaintEvent& WXUNUSED(event));
+	void OnPaint(wxPaintEvent & WXUNUSED(event));
 	//! The corresponding GUI event handler.
-	void OnSize(wxSizeEvent &event);
+	void OnSize(wxSizeEvent & event);
 
 	//! Converts an image to BGR.
 	static cv::Mat CopyToBGR(cv::Mat src);

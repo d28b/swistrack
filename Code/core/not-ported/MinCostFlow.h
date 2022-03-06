@@ -309,7 +309,7 @@ class MinCostFlow {
     VertexLabeler(const Graph * g) {
       pGraph = g;
     }
-    void operator()(std::ostream& out, const Graph::vertex_descriptor v) {
+    void operator()(std::ostream & out, const Graph::vertex_descriptor v) {
       out << "[label=\"" << v << " " << (*pGraph)[v].name << "\"]";
 
     }
@@ -321,7 +321,7 @@ class MinCostFlow {
     EdgeLabeler(const Graph * g) {
       pGraph = g;
     }
-    void operator()(std::ostream& out, const Graph::edge_descriptor e) {
+    void operator()(std::ostream & out, const Graph::edge_descriptor e) {
       EdgeProps props = (*pGraph)[e];
       out << "[label=\"" << e << " " << props.flow << "/" << props.capacity << ", " << props.cost << "\"]";
 

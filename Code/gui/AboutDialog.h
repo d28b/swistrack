@@ -12,7 +12,7 @@ class AboutDialog: public wxDialog {
 
 public:
 	//! Constructor.
-	AboutDialog(wxWindow *parent);
+	AboutDialog(wxWindow * parent);
 	//! Destructor.
 	~AboutDialog() {}
 };

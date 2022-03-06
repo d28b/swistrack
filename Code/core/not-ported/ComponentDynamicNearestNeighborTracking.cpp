@@ -308,9 +308,10 @@ void THISCLASS::IntegrateHistogram(cv::Mat dest, cv::Mat newSample) {
     total *= size1[i];
   }
 
-  union { float* fl; uchar* ptr; } v;
+  union { float * fl; uchar * ptr; } v;
   v.fl = 0;
-  float *destBins, *newSampleBins;
+  float * destBins;
+  float * newSampleBins;
 
   cvGetRawData(dest->bins, &v.ptr);
   destBins = v.fl;

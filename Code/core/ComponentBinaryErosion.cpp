@@ -9,7 +9,7 @@ THISCLASS::ComponentBinaryErosion(SwisTrackCore * stc):
 	mDisplayOutput(wxT("Output"), wxT("After erosion")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingBinary);
+	mCategory = &(mCore->mCategoryProcessingBinary);
 	AddDataStructureRead(&(mCore->mDataStructureImageBinary));
 	AddDataStructureWrite(&(mCore->mDataStructureImageBinary));
 	AddDisplay(&mDisplayOutput);

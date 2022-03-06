@@ -15,27 +15,27 @@ class ConfigurationParameterInputFile: public ConfigurationParameter {
 
 public:
 	//! Constructor.
-	ConfigurationParameterInputFile(wxWindow* parent);
+	ConfigurationParameterInputFile(wxWindow * parent);
 	//! Destructor.
 	~ConfigurationParameterInputFile();
 
 	//! Handles the corresponding GUI event.
-	void OnTextEnter(wxCommandEvent& event);
+	void OnTextEnter(wxCommandEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnKillFocus(wxFocusEvent& event);
+	void OnKillFocus(wxFocusEvent & event);
 	//! Handles the corresponding GUI event.
-	void OnButtonClicked(wxCommandEvent& event);
+	void OnButtonClicked(wxCommandEvent & event);
 
 private:
-	wxTextCtrl *mTextCtrl;		//!< The corresponding GUI widget.
-	wxButton *mButton;			//!< The corresponding GUI widget.
+	wxTextCtrl * mTextCtrl;		//!< The corresponding GUI widget.
+	wxButton * mButton;			//!< The corresponding GUI widget.
 	wxString mValueDefault;		//!< The default value.
 	wxString mFileFilter;		//!< The file filter shown in the file selection dialog box.
 	wxString mNewValue;			//!< The new value.
 
 	// ConfigurationParameter methods
-	virtual void OnInitialize(ConfigurationXML *config, ErrorList *errorlist);
-	virtual void OnUpdate(wxWindow *updateprotection);
+	virtual void OnInitialize(ConfigurationXML * config, ErrorList * errorlist);
+	virtual void OnUpdate(wxWindow * updateprotection);
 	virtual void OnSetNewValue();
 
 	// Validates the new value.

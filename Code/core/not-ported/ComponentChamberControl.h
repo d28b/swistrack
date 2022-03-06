@@ -28,8 +28,8 @@ public:
 private:
 	int serial_fd;
 	void write_serial(char output);
-	void write_serial_port(char *Buffer, int BytesToWrite);
-	void print_serial(const char* string);
+	void write_serial_port(char * Buffer, int BytesToWrite);
+	void print_serial(const char * string);
 	void switch_compressor(bool on_off);
 	void switch_valve(int index, bool on_off);
 	void switch_pump(bool on_off, int speed);

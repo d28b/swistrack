@@ -1,7 +1,7 @@
 #include "ComponentFrequencyFilter.h"
 #define THISCLASS ComponentFrequencyFilter
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 
 using namespace cv;
@@ -12,7 +12,7 @@ THISCLASS::ComponentFrequencyFilter(SwisTrackCore * stc):
 		mDisplayOutput(wxT("Output"), wxT("Fourier amplitude")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingGray);
+	mCategory = &(mCore->mCategoryProcessingGray);
 	AddDataStructureRead(&(mCore->mDataStructureImageFFT));
 	AddDataStructureWrite(&(mCore->mDataStructureImageFFT));
 	AddDisplay(&mDisplayOutput);
@@ -157,7 +157,7 @@ void THISCLASS::OnStop() {
 	//mDisplayOutputImage->release();
 }
 
-void THISCLASS::generateFFTPreview(Mat complexI, Mat *output) {
+void THISCLASS::generateFFTPreview(Mat complexI, Mat * output) {
 			// compute the magnitude and switch to logarithmic scale
 		// => log(1 + sqrt(Re(DFT(I))^2 + Im(DFT(I))^2))
 		cv::Mat planes[2];

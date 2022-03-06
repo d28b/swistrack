@@ -23,7 +23,7 @@ THISCLASS::~CanvasTitle() {
 	if (mMenu) delete mMenu;
 }
 
-void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
+void THISCLASS::OnPaint(wxPaintEvent & WXUNUSED(event)) {
 	wxPaintDC dc(this);
 
 	// Prepare
@@ -51,7 +51,7 @@ void THISCLASS::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	//dc.DrawText(mTextRight, 2, size.GetWidth()-w-4);
 }
 
-void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
+void THISCLASS::OnMouseLeftDown(wxMouseEvent & event) {
 	// Create a new menu
 	if (mMenu) delete mMenu;
 	mMenu = new wxMenu;
@@ -75,25 +75,25 @@ void THISCLASS::OnMouseLeftDown(wxMouseEvent &event) {
 	PopupMenu(mMenu, 0, size.GetHeight());
 }
 
-void THISCLASS::OnMouseRightDown(wxMouseEvent &event) {
+void THISCLASS::OnMouseRightDown(wxMouseEvent & event) {
 }
 
-void THISCLASS::OnMouseEnter(wxMouseEvent &event) {
+void THISCLASS::OnMouseEnter(wxMouseEvent & event) {
 	mHighlight = true;
 	Refresh(true);
 }
 
-void THISCLASS::OnMouseLeave(wxMouseEvent &event) {
+void THISCLASS::OnMouseLeave(wxMouseEvent & event) {
 	mHighlight = false;
 	Refresh(true);
 }
 
-void THISCLASS::OnMenu(wxCommandEvent& event) {
+void THISCLASS::OnMenu(wxCommandEvent & event) {
 	Display * display = GetDisplay(event.GetId());
 	mCanvasPanel->SetDisplay(display);
 }
 
-void THISCLASS::SetText(const wxString &title, const wxString &textright) {
+void THISCLASS::SetText(const wxString & title, const wxString & textright) {
 	mTitle = title;
 	mTextRight = textright;
 	Refresh(true);

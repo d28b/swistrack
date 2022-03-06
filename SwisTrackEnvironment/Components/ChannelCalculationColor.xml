@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Channel Calculation (color)</friendlyname>
+    <description>Performs arithmetic channel operations.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/ChannelCalculationColor</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="text">
+			<name>Expression</name>
+			<label>Expression</label>
+			<unit></unit>
+			<default>Rout = R + 0.4 * B
+Gout = black
+Bout = 0.4 * R + B
+			</default>
+			<onchange>reload</onchange>
+		</parameter>
+
+		<line />
+		<title>Channels</title>
+		<label>Input: R, G, B</label>
+		<label>Output: Rout, Gout, Bout</label>
+
+		<title>Operators</title>
+		<label>Arithmetic: + - * /</label>
+		<label>Bitwise: &amp; | ^ ~</label>
+		<label>Comparison: &lt; &gt;</label>
+		<label>All arithmetic calculations are carried out using 32-bit float values. Bitwise operations are carried out on 8-bit integers. Channels are converted automatically.</label>
+
+		<title>Functions</title>
+		<label>mean(channel)</label>
+		<label>sum(channel)</label>
+		<label>sqrt(...)</label>
+		<label>pow(..., number)</label>
+		<label>log(...)</label>
+		<label>exp(...)</label>
+		<label>min(...)</label>
+		<label>max(...)</label>
+
+		<title>Special variables</title>
+		<label>PI: pi</label>
+		<label>E: e</label>
+		<label>Channel of 0: black, zeros</label>
+		<label>Channel of 1: ones</label>
+		<label>Channel of 255: white</label>
+	</configuration>
+</swistrackcomponent>

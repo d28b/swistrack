@@ -9,30 +9,30 @@
 		<parameter type="string">
 			<name>FileName</name>
 			<label>FileName</label>
-			<reloadable>false</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 		<parameter type="integer">
 			<name>BufferedFrameCount</name>
 			<label>BufferedFrameCount</label>
-			<reloadable>false</reloadable>
+			<onchange>restart</onchange>
 		</parameter>
 
-	  <parameter type="integer">
-	    <name>WindowSizeMilliseconds</name>
-	    <label>Window Size - how long to collect particles before associating them as tracks, in seconds.</label>
-	    <min>1</min>
-	    <max>1000</max>
-	    <slider>true</slider>
-	    <reloadable>false</reloadable>
-	  </parameter>
-	  <parameter type="double">
-	    <name>MaxDistance</name>
-	    <label>Maximum Distance</label>
-	    <min>0</min>
-	    <max>1000</max>
-	    <default>20</default>
-	    <slider>true</slider>
-	    <reloadable>true</reloadable>
-	  </parameter>
+		<parameter type="integer">
+			<name>WindowSizeMilliseconds</name>
+			<label>Window Size - how long to collect particles before associating them as tracks, in seconds.</label>
+			<min>1</min>
+			<max>1000</max>
+			<slider>true</slider>
+			<onchange>restart</onchange>
+		</parameter>
+		<parameter type="double">
+			<name>MaxDistance</name>
+			<label>Maximum Distance</label>
+			<min>0</min>
+			<max>1000</max>
+			<default>20</default>
+			<slider>true</slider>
+			<onchange>reload</onchange>
+		</parameter>
 	</configuration>
 </swistrackcomponent>

@@ -18,20 +18,20 @@ class TCPServerConnection;
 class TCPServerConnection: public wxEvtHandler, public CommunicationNMEAInterface {
 
 public:
-	TCPServerConnection(TCPServer* ss, wxSocketBase *sb);
+	TCPServerConnection(TCPServer * ss, wxSocketBase * sb);
 	~TCPServerConnection();
 
 	//! Handles socket events.
-	void OnSocketEvent(wxSocketEvent& event);
+	void OnSocketEvent(wxSocketEvent & event);
 
 	// CommuncationNMEAInterface methods.
-	void OnNMEAProcessMessage(CommunicationMessage *m, bool withchecksum);
-	void OnNMEAProcessMessageChecksumError(CommunicationMessage *m);
+	void OnNMEAProcessMessage(CommunicationMessage * m, bool withchecksum);
+	void OnNMEAProcessMessageChecksumError(CommunicationMessage * m);
 	void OnNMEAProcessUnrecognizedChar(unsigned char chr);
-	void OnNMEASend(const char *buffer, int len);
+	void OnNMEASend(const char * buffer, int len);
 
 	//! Sends a message.
-	bool SendMessage(CommunicationMessage *m);
+	bool SendMessage(CommunicationMessage * m);
 
 	//! Returns whether this object is still in use or not.
 	bool IsActive() {
@@ -45,12 +45,12 @@ protected:
 
 private:
 	//! The socket object.
-	wxSocketBase *mSocket;
+	wxSocketBase * mSocket;
 	//! The socket server object.
-	TCPServer* mTCPServer;
+	TCPServer * mTCPServer;
 
 	//! The current request. This is 0 unless a request is being processed.
-	CommunicationMessage* mCurrentRequest;
+	CommunicationMessage * mCurrentRequest;
 
 	//! The list of subscriptions type.
 	typedef std::list<wxString> tSubscriptions;

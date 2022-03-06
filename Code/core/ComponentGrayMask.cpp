@@ -1,7 +1,7 @@
 #include "ComponentGrayMask.h"
 #define THISCLASS ComponentGrayMask
 
-#include <opencv2/highgui.hpp>
+#include <opencv2/core.hpp>
 #include "DisplayEditor.h"
 #include "ImageTools.h"
 
@@ -11,7 +11,7 @@ THISCLASS::ComponentGrayMask(SwisTrackCore * stc):
 	mDisplayOutput(wxT("Output"), wxT("After applying mask")) {
 
 	// Data structure relations
-	mCategory = &(mCore->mCategoryPreprocessingGray);
+	mCategory = &(mCore->mCategoryProcessingGray);
 	AddDataStructureRead(&(mCore->mDataStructureImageGray));
 	AddDataStructureWrite(&(mCore->mDataStructureImageGray));
 	AddDisplay(&mDisplayOutput);

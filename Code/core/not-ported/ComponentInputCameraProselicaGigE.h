@@ -56,18 +56,18 @@ private:
 	tPvUint32   mHeight; 				//!< Image height
     int mFrameNumber;					//!< The frame number since the component was started.
     tPvErr		mErrcode; 				//!< Prosilica tPvErr type error code
-	cv::Mat   *mBayerImage; 			//!< captured raw (Bayer8) image
-	cv::Mat   *mColorImage; 			//!< converted image using CV_BayerGB2BGR
-	cv::Mat   *mGrayImage; 			//!< converted image using CV_BGRA2GRAY
+	cv::Mat   mBayerImage; 			//!< captured raw (Bayer8) image
+	cv::Mat   mColorImage; 			//!< converted image using CV_BayerGB2BGR
+	cv::Mat   mGrayImage; 			//!< converted image using CV_BGRA2GRAY
 
 
   	//! The thread waiting for new images (in case of external trigger).
   	class Thread: public wxThread {
 	  public:
-		ComponentInputCameraProselicaGigE *mComponent;	//!< The associated component.
+		ComponentInputCameraProselicaGigE * mComponent;	//!< The associated component.
 
 		//! Constructor.
-		Thread(ComponentInputCameraProselicaGigE *c): wxThread(), mComponent(c) {}
+		Thread(ComponentInputCameraProselicaGigE * c): wxThread(), mComponent(c) {}
 		//! Destructor.
 		~Thread() {}
 
@@ -102,7 +102,7 @@ public:
 	void OnStop() {
 		AddError(wxT("Proselica GigE support was not compiled into this executable."));
 	}
-	Component *Create() {
+	Component * Create() {
 		return new ComponentInputCameraProselicaGigE(mCore);
 	}
 };

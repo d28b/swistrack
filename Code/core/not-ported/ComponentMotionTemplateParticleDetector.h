@@ -35,7 +35,7 @@ private:
 
 
 
-	void update_mhi( cv::Mat* img, cv::Mat* dst, cv::Mat * foregroundMask, double timestampIn,
+	void update_mhi( cv::Mat img, cv::Mat dst, cv::Mat foregroundMask, double timestampIn,
 			 int diff_threshold, wxDateTime frameTimestamp );
 
 
@@ -55,20 +55,20 @@ private:
 	const int N;
 
 	// ring image buffer
-	cv::Mat **buf;
+	cv::Mat * buf;
 	int last;
-	cv::Mat *mhi; // MHI
-	cv::Mat *orient; // orientation
-	cv::Mat *mask; // valid orientation mask
-	cv::Mat *segmask; // motion segmentation map
+	cv::Mat mhi; // MHI
+	cv::Mat orient; // orientation
+	cv::Mat mask; // valid orientation mask
+	cv::Mat segmask; // motion segmentation map
 
-	cv::Mat *mHsv; // hsv image
-	CvMemStorage* storage; // temporary storage
+	cv::Mat mHsv; // hsv image
+	CvMemStorage * storage; // temporary storage
 	double firstTimestamp;
 
-	cv::Mat *mForegroundMask; // MHI
+	cv::Mat mForegroundMask; // MHI
 
-	cv::Mat * mInputChannels[3];
+	cv::Mat mInputChannels[3];
 
 	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
 
@@ -77,7 +77,7 @@ private:
 	 * If target is null, creates a new image, otherwise draws in target.
 	 * Returns the image that it created, or that was passed in.
 	 */
-	static cv::Mat * DrawHistogram1D(CvHistogram * histogram, cv::Mat * hist_image=NULL);
+	static cv::Mat DrawHistogram1D(CvHistogram * histogram, cv::Mat * hist_image=NULL);
 };
 
 #endif

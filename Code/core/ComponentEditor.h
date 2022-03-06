@@ -11,39 +11,39 @@ class ComponentEditor {
 
 public:
 	//! Constructor.
-	ComponentEditor(Component *stc);
+	ComponentEditor(Component * stc);
 	//! Destructor.
 	~ComponentEditor();
 
 	//! Returns whether the Component object is editable or not.
 	bool IsEditable() {
-		return (mComponent != 0);
+		return mComponent != 0;
 	}
 
 	//! Reads the configuration from an XML element.
-	void ConfigurationReadXML(wxXmlNode *element, ErrorList *xmlerr);
+	void ConfigurationReadXML(wxXmlNode * element, ErrorList * xmlerr);
 
 	//! Sets the enabled interval of the component.
 	bool SetEnabledInterval(int value);
 
 	//! Sets a boolean value in the configuration.
-	bool SetConfigurationBool(const wxString &key, bool value);
+	bool SetConfigurationBool(const wxString & key, bool value);
 	//! Sets an integer value in the configuration.
-	bool SetConfigurationInt(const wxString &key, int value);
+	bool SetConfigurationInt(const wxString & key, int value);
 	//! Sets a double in the configuration.
-	bool SetConfigurationDouble(const wxString &key, double value);
+	bool SetConfigurationDouble(const wxString & key, double value);
 	//! Sets a string in the configuration.
-	bool SetConfigurationString(const wxString &key, const wxString &value);
+	bool SetConfigurationString(const wxString & key, const wxString & value);
 	//! Sets a date in the configuration.
-	bool SetConfigurationDate(const wxString &key, const wxDateTime &value);
+	bool SetConfigurationDate(const wxString & key, const wxDateTime & value);
 
-	bool SetConfigurationColor(const wxString &key, const wxColor &value);
+	bool SetConfigurationColor(const wxString & key, const wxColor & value);
 
 private:
-	Component *mComponent;		//!< The associated Component object.
+	Component * mComponent;		//!< The associated Component object.
 
 	//! Reads one component from the XML file.
-	void ConfigurationReadXMLElement(wxXmlNode* element, ErrorList *xmlerr);
+	void ConfigurationReadXMLElement(wxXmlNode * element, ErrorList * xmlerr);
 
 };
 

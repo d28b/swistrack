@@ -56,29 +56,29 @@ private:
 	int mInputBufferSize;								//!< (configuration) The number of input buffer images.
   int mEthernetPacketSize;							//!< (configuration) The ethernet packet size.
 
-	Pylon::CBaslerGigECamera *mCamera;					//!< Camera object.
+	Pylon::CBaslerGigECamera * mCamera;					//!< Camera object.
 #ifdef USE_PYLON3
-	Pylon::CPylonGigEStreamGrabber *mStreamGrabber;		//!< Stream grabber object.
+	Pylon::CPylonGigEStreamGrabber * mStreamGrabber;		//!< Stream grabber object.
 #else
-	Pylon::CBaslerGigEStreamGrabber *mStreamGrabber;	//!< Stream grabber object.
+	Pylon::CBaslerGigEStreamGrabber * mStreamGrabber;	//!< Stream grabber object.
 #endif
-	Pylon::IChunkParser *mChunkParser;					//!< Chunk parser object.
+	Pylon::IChunkParser * mChunkParser;					//!< Chunk parser object.
 
 	static const int mInputBufferSizeMax = 32;							//!< The maximum number of input buffer images.
-	cv::Mat *mInputBufferImages[mInputBufferSizeMax];					//!< The input buffer images.
+	cv::Mat * mInputBufferImages[mInputBufferSizeMax];					//!< The input buffer images.
 	Pylon::StreamBufferHandle mInputBufferHandles[mInputBufferSizeMax];	//!< The corresponding buffer handles.
 	Pylon::GrabResult mCurrentResult;									//!< The current result.
 
 	int mFrameNumberStart;								//!< The frame number of the first acquired frame, or -1 if no frame has been acquired yet.
-	cv::Mat *mOutputImage;								//!< The current output image (only used for color acquisition, for mono acquision one of the mInputBufferImages is used).
+	cv::Mat * mOutputImage;								//!< The current output image (only used for color acquisition, for mono acquision one of the mInputBufferImages is used).
 
 	//! The thread waiting for new images (in case of external trigger).
 	class Thread: public wxThread {
 	public:
-		ComponentInputCameraGigE *mComponent;		//!< The associated component.
+		ComponentInputCameraGigE * mComponent;		//!< The associated component.
 
 		//! Constructor.
-		Thread(ComponentInputCameraGigE *c): wxThread(), mComponent(c) {}
+		Thread(ComponentInputCameraGigE * c): wxThread(), mComponent(c) {}
 		//! Destructor.
 		~Thread() {}
 

@@ -11,16 +11,16 @@ class DisplayEditor {
 
 public:
 	//! The attached Display. If this is 0, the construction is invalid (or not necessary) and all setter methods will just return without doing anything.
-	Display *mDisplay;
+	Display * mDisplay;
 
 	//! Constructor.
-	DisplayEditor(Display *display = 0);
+	DisplayEditor(Display * display = 0);
 	//! Destructor.
 	~DisplayEditor();
 
 	//! Returns if the display is active.
 	bool IsActive() {
-		return (mDisplay != 0);
+		return mDisplay != 0;
 	}
 
 	//! Sets the main image.
@@ -38,7 +38,7 @@ public:
 	//! Tries to determine the size automatically.
 	bool SetSizeAuto();
 	//! Adds an error message.
-	void AddError(const wxString &message);
+	void AddError(const wxString & message);
 
 	void SetArea(cv::Point2f topleft, cv::Point2f bottomright) {}
 	void SetArea(double x1, double y1, double x2, double y2) {}

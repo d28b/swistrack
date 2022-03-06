@@ -13,14 +13,14 @@
 			<min>1</min>
 			<max>100</max>
 			<slider>true</slider>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 		<label>Click the "Start" button to execute the above number of steps. Note that you must be in "Run" mode.</label>
 		<parameter type="button">
 			<name>Start</name>
 			<label>Start</label>
 			<default>false</default>
-			<reloadable>true</reloadable>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>
