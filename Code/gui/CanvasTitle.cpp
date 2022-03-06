@@ -42,13 +42,8 @@ void THISCLASS::OnPaint(wxPaintEvent & WXUNUSED(event)) {
 	f.SetUnderlined(false);
 	dc.SetFont(f);
 	dc.SetTextForeground(*wxWHITE);
-	wxSize textsize = dc.GetTextExtent(mTextRight);
-	dc.DrawText(mTextRight, 0, size.GetWidth() - textsize.GetWidth());
-
-	//wxCoord w;
-	//wxCoord h;
-	//dc.GetTextExtent(mTextRight, &w, &h);
-	//dc.DrawText(mTextRight, 2, size.GetWidth()-w-4);
+	wxSize textExtent = dc.GetTextExtent(mTextRight);
+	dc.DrawText(mTextRight, size.GetWidth() - textExtent.GetWidth() - 4, 2);
 }
 
 void THISCLASS::OnMouseLeftDown(wxMouseEvent & event) {

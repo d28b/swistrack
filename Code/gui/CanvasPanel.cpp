@@ -64,7 +64,7 @@ void THISCLASS::OnDisplayUnsubscribe(Display * display) {
 	mCurrentDisplay = 0;
 	mCanvas->SetDisplay(0);
 	mCanvasTitle->SetText(wxT("No display (maximum speed)"), wxT(""));
-	mCanvasAnnotation->SetText(wxT(""), wxT(""));
+	mCanvasAnnotation->SetTextLeft(wxT(""));
 }
 
 void THISCLASS::OnDisplayBeforeStep(Display * display) {
@@ -100,11 +100,11 @@ void THISCLASS::OnDisplayChanged(Display * display) {
 	// Update title and annotation
 	mCanvasTitle->SetText(display->mDisplayName, wxT(""));
 	wxString str = wxString::Format(wxT("Step %d"), display->mStepCounter);
-	if (display->mFramesCount >= 0) {
+	if (display->mFramesCount >= 0)
 		str += wxString::Format(wxT(" (Frame %d / %d)"), display->mFrameNumber, display->mFramesCount);
-	}
+
 	str += wxString::Format(wxT(", %dx%d, %s"), display->mSize.width, display->mSize.height, display->mTime.FormatTime().c_str());
-	mCanvasAnnotation->SetText(str, display->mAnnotation);
+	mCanvasAnnotation->SetTextLeft(str);
 
 	// Move the children
 	UpdateSize();

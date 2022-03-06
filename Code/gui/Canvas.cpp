@@ -201,7 +201,33 @@ void THISCLASS::OnMouseLeftUp(wxMouseEvent & event) {
 }
 
 void THISCLASS::OnMouseMove(wxMouseEvent & event) {
-	if (! mMoveStarted) return;
+	if (! mMoveStarted) {
+		wxPoint nowPoint = event.GetPosition();
+		int x = (int) ((nowPoint.x - mViewOffset.x) / mDisplayRenderer.GetScalingFactor() + 0.5);
+		int y = (int) ((nowPoint.y - mViewOffset.y) / mDisplayRenderer.GetScalingFactor() + 0.5);
+		wxString position = wxString::Format(wxT("%d x %d"), x, y);
+
+		Display * display = mCanvasPanel->mCurrentDisplay;
+		if (! display) {
+			mCanvasPanel->mCanvasAnnotation->SetTextRight(wxT(""));
+			return;
+		}
+
+		cv::Mat img = display->mMainImage;
+		if (x < 0 || x >= img.cols || y < 0 || y >= img.rows) {
+			mCanvasPanel->mCanvasAnnotation->SetTextRight(position);
+			return;
+		}
+
+		unsigned char * pixel = img.ptr<unsigned char>(y, x);
+		if (img.channels() == 3) {
+			wxColour color(pixel[2], pixel[1], pixel[0]);
+			mCanvasPanel->mCanvasAnnotation->SetTextRight(color.GetAsString(wxC2S_HTML_SYNTAX) + wxString::Format(wxT(" RGB %d %d %d @ "), pixel[2], pixel[1], pixel[0]) + position);
+		} else {
+			mCanvasPanel->mCanvasAnnotation->SetTextRight(wxString::Format(wxT("%d"), pixel[0]) + wxT(" @ ") + position);
+		}
+		return;
+	}
 
 	if (! event.LeftIsDown()) {
 		mMoveStarted = false;
@@ -256,7 +282,7 @@ void THISCLASS::OnSize(wxSizeEvent & event) {
 void THISCLASS::OnMenuSaveOriginalImageAs(wxCommandEvent & event) {
 	// Get the current image
 	Display * display = mCanvasPanel->mCurrentDisplay;
-	if (display == 0) return;
+	if (! display) return;
 	cv::Mat img = display->mMainImage;
 	if (img.empty()) return;
 

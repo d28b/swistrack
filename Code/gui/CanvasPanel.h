@@ -46,6 +46,8 @@ public:
 	void UpdateSize();
 
 private:
+	friend class Canvas;
+
 	Canvas * mCanvas;						//!< The canvas.
 	CanvasTitle * mCanvasTitle;				//!< The title box.
 	CanvasAnnotation * mCanvasAnnotation;	//!< The annotation box.

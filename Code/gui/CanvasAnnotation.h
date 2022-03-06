@@ -29,8 +29,10 @@ public:
 	// Destructor.
 	~CanvasAnnotation();
 
-	//! Sets the text.
-	void SetText(const wxString & textleft, const wxString & textright);
+	//! Sets the left text.
+	void SetTextLeft(const wxString & textleft);
+	//! Sets the right text.
+	void SetTextRight(const wxString & textright);
 
 private:
 	//! The corresponding GUI event handler.

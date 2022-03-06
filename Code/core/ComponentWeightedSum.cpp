@@ -40,8 +40,6 @@ void THISCLASS::OnStep() {
 		return;
 	}
 
-	printf("%f %f %f %f\n", R, G, B, base);
-
 	// Calculate weighted sum
 	cv::Mat outputImage(inputImage.rows, inputImage.cols, CV_8UC1);
 	for (int y = 0; y < inputImage.rows; y++) {

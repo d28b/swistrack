@@ -83,7 +83,6 @@ void THISCLASS::Color::FindColorBlobs(cv::Mat inputImage, wxDateTime frameTimest
 	int targetB = (int) mColor.val[0];
 	int targetG = (int) mColor.val[1];
 	int targetR = (int) mColor.val[2];
-	printf("%d %d\n", mThresholdB, targetB);
 
 	// Create a distance image
 	cv::Mat binaryImage(inputImage.rows, inputImage.cols, CV_8UC1);
