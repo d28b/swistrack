@@ -1,4 +1,5 @@
 *.orig
 *.d
 *.o
-test/opencv-test
+tests/expression/main
+core/libSwisTrackCore.a

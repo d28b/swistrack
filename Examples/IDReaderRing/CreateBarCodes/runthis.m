@@ -7,12 +7,12 @@
 % a fairly high resolution (and a well-focussed lens) is required to read such codes.
 % E.g., 14-chip codes should appear as 20-by-20 pixels at least on the image.
 
-% The number of chips as well as the Hamming distance will greatly influence the number of available codes. 
+% The number of chips as well as the Hamming distance will greatly influence the number of available codes.
 % There are a number of trade-offs involved, however:
 %
 %   * The more chips you use, the more codes you'll get.
 %   * The bigger the Hamming distance, the fewer codes you'll get.
-%   * The more chips you use, the more resolution you need 
+%   * The more chips you use, the more resolution you need
 %     (i.e. better camera resolution or bigger blobs on the camera image).
 %     This is a constraint imposed by the Nyquist criterion.
 %     As a rule of thumb, the image should be at least N by N pixels for a code with 0.7N chips.
@@ -20,13 +20,13 @@
 %
 % Hence, you should find a configuration that provides about the number of blobs that you really need.
 % One or two times more codes than you need is OK and may serve you as spare codes
-% in case you'll need more at some later time, but if your configuration yields 10 or 100 times more codes, 
+% in case you'll need more at some later time, but if your configuration yields 10 or 100 times more codes,
 % you unnecessarily trading off detection quality with number of codes.
 
 %%%%%%%%%%%%%%%%%%%% set these parameters %%%%%%%%%%%%%%%%%%
-chips = 13; % number of chips (8-15)
+chips = 15; % number of chips (8-15)
 hdist = 4; % minimum (Hamming) distance between two symbols (1-4)
-name = 'Test'; % name of the ID set
+name = 'Set15'; % name of the ID set
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 symbollist=symbols(chips, hdist) % (chips, hamming distance)
@@ -52,4 +52,4 @@ if s == 'y'
 else
     close all %figures
 end
-    
+
