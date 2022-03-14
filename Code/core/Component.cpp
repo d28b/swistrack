@@ -108,6 +108,10 @@ double THISCLASS::GetConfigurationDouble(const wxString & key, double defaultVal
 	return ConfigurationConversion::Double(GetConfigurationString(key, wxT("")), defaultValue);
 }
 
+double THISCLASS::GetConfigurationAngle(const wxString & key, double defaultValue) const {
+	return ConfigurationConversion::Double(GetConfigurationString(key, wxT("")), defaultValue * 180 / M_PI) / 180 * M_PI;
+}
+
 wxString THISCLASS::GetConfigurationString(const wxString & key, const wxString & defaultValue) const {
 	// If the key is available in the configuration, return its value
 	tConfigurationMap::const_iterator it = mConfiguration.find(key);

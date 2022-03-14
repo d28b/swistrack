@@ -98,7 +98,7 @@ THISCLASS::SwisTrack(const wxString & title, const wxPoint & pos, const wxSize &
 	panel_top->SetSizer(mHorizontalSizer);
 
 	// Canvas (main display)
-	mHorizontalSizer->Add(mCanvasPanel, 1, wxALL | wxEXPAND | wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL, 0);
+	mHorizontalSizer->Add(mCanvasPanel, 1, wxALL | wxEXPAND | wxALIGN_CENTER_HORIZONTAL, 0);
 
 	// Configuration panel
 	mConfigurationPanel = new ConfigurationPanel(panel_top, this, 0);

@@ -19,7 +19,7 @@ END_EVENT_TABLE()
 THISCLASS::ConfigurationParameterAngle(wxWindow * parent):
 	ConfigurationParameter(parent),
 	mTextCtrl(0), mSlider(0),
-	mValueMin(0), mValueMax(1), mValueDefault(0), mSliderStep(1) {
+	mValueMin(0), mValueMax(360), mValueDefault(0), mSliderStep(1) {
 
 }
 
@@ -30,7 +30,7 @@ void THISCLASS::OnInitialize(ConfigurationXML * config, ErrorList * errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
 	mValueMin = config->ReadDouble(wxT("min"), 0);
-	mValueMax = config->ReadDouble(wxT("max"), 2 * PI);
+	mValueMax = config->ReadDouble(wxT("max"), 360);
 	mValueDefault = config->ReadDouble(wxT("default"), 0);
 
 	// Create the controls
@@ -40,7 +40,7 @@ void THISCLASS::OnInitialize(ConfigurationXML * config, ErrorList * errorlist) {
 	wxStaticText * unitlabel = new wxStaticText(this, wxID_ANY, wxT(" deg"), wxDefaultPosition, wxSize(scUnitWidth, -1), wxST_NO_AUTORESIZE);
 
 	if (config->ReadBool(wxT("slider"), false)) {
-		mSliderStep = config->ReadDouble(wxT("sliderstep"), PI / 180);
+		mSliderStep = config->ReadDouble(wxT("sliderstep"), 1);
 		mSlider = new wxSlider(this, wxID_ANY, (int)floor((mValueDefault - mValueMin) / mSliderStep + 0.5), 0, (int)floor((mValueMax - mValueMin) / mSliderStep + 0.5), wxDefaultPosition, wxSize(scParameterWidth, -1), wxSL_AUTOTICKS);
 	}
 
@@ -59,7 +59,7 @@ void THISCLASS::OnInitialize(ConfigurationXML * config, ErrorList * errorlist) {
 void THISCLASS::OnUpdate(wxWindow * updateprotection) {
 	double value = mComponent->GetConfigurationDouble(mName, mValueDefault);
 	if (updateprotection != mTextCtrl)
-		mTextCtrl->SetValue(wxString::Format(wxT("%f"), value * 180 / PI));
+		mTextCtrl->SetValue(wxString::Format(wxT("%f"), value));
 	if (mSlider && updateprotection != mSlider)
 		mSlider->SetValue((int)floor((value - mValueMin) / mSliderStep + 0.5));
 }
@@ -94,7 +94,7 @@ void THISCLASS::OnSetNewValue() {
 void THISCLASS::OnTextUpdated(wxCommandEvent & event) {
 	mNewValue = mValueDefault;
 	mTextCtrl->GetValue().ToDouble(&mNewValue);
-	mNewValue = mNewValue * PI / 180;
+	mNewValue = mNewValue;
 
 	mTextCtrl->SetOwnForegroundColour(ValidateNewValue() ? wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) : *wxRED);
 	mTextCtrl->Refresh();
@@ -106,7 +106,7 @@ void THISCLASS::OnTextUpdated(wxCommandEvent & event) {
 void THISCLASS::OnTextEnter(wxCommandEvent & event) {
 	mNewValue = mValueDefault;
 	mTextCtrl->GetValue().ToDouble(&mNewValue);
-	mNewValue = mNewValue * PI / 180;
+	mNewValue = mNewValue;
 	ValidateNewValue();
 	SetNewValue();
 }

@@ -19,8 +19,8 @@ void THISCLASS::ReadConfiguration(Component * component, const wxString prefix) 
 	mMinCompactness = component->GetConfigurationDouble(prefix + wxT("MinCompactness"), 1);
 	mMaxCompactness = component->GetConfigurationDouble(prefix + wxT("MaxCompactness"), 1000);
 	mSelectionByOrientation = component->GetConfigurationBool(prefix + wxT("SelectionByOrientation"), false);
-	mMinOrientation = component->GetConfigurationDouble(prefix + wxT("MinOrientation"), -90);
-	mMaxOrientation = component->GetConfigurationDouble(prefix + wxT("MaxOrientation"), 90);
+	mMinOrientation = component->GetConfigurationAngle(prefix + wxT("MinOrientation"), 0);
+	mMaxOrientation = component->GetConfigurationAngle(prefix + wxT("MaxOrientation"), 360);
 
 	if (mMaxNumber < 0) mMaxNumber = 0;
 	if (mMinArea > mMaxArea) component->AddError(wxT("The area selection is empty."));
@@ -39,8 +39,10 @@ void THISCLASS::FindBlobs(cv::Mat inputImage, wxDateTime frameTimestamp, int fra
 	mSelectedContours.clear();
 	if (hierarchy.size() < 1) return;
 
-	for (int child = hierarchy[0][FIRST_CHILD]; child >= 0; child = hierarchy[child][NEXT_SIBLING]) {
-		auto & contour = contours[child];
+	//for (int child = 0; child >= 0; child = hierarchy[child][NEXT_SIBLING]) {
+	int count = hierarchy.size();
+	for (int i = 0; i < count; i++) {
+		auto & contour = contours[i];
 		Particle particle;
 		particle.mID = -1;
 		particle.mIDCovariance = -1;

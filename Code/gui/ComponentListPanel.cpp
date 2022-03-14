@@ -401,7 +401,7 @@ void THISCLASS::OnListItemDeselected(wxListEvent & event) {
 }
 
 void THISCLASS::OnListLeftDoubleClick(wxMouseEvent & event) {
-	wxMiniFrame * frame = new wxMiniFrame(this, -1, _("Configuration"), wxDefaultPosition, wxSize(230, 400), wxCAPTION | wxRESIZE_BORDER | wxCLOSE_BOX | wxSYSTEM_MENU);
+	wxMiniFrame * frame = new wxMiniFrame(this, -1, _("Configuration"), wxDefaultPosition, wxSize(330, 400), wxCAPTION | wxRESIZE_BORDER | wxCLOSE_BOX | wxSYSTEM_MENU);
 	new ConfigurationPanel(frame, mSwisTrack, mSelectedComponent);
 	frame->Show();
 }

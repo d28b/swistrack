@@ -28,8 +28,8 @@ THISCLASS::~ConfigurationParameterInteger() {
 void THISCLASS::OnInitialize(ConfigurationXML * config, ErrorList * errorlist) {
 	// Read specific configuration
 	config->SelectRootNode();
-	mValueMin = config->ReadInt(wxT("min"), INT_MIN);
-	mValueMax = config->ReadInt(wxT("max"), INT_MAX);
+	mValueMin = config->ReadInt(wxT("min"), -999999);
+	mValueMax = config->ReadInt(wxT("max"), 999999);
 	mValueDefault = config->ReadInt(wxT("default"), 0);
 
 	// Create the controls

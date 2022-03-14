@@ -86,6 +86,8 @@ public:
 	int GetConfigurationInt(const wxString & key, int defvalue) const;
 	//! Returns a double from the configuration.
 	double GetConfigurationDouble(const wxString & key, double defvalue) const;
+	//! Returns an angle (in rad) from the configuration, where angles are written in degrees.
+	double GetConfigurationAngle(const wxString & key, double defvalue) const;
 	//! Returns a string from the configuration.
 	wxString GetConfigurationString(const wxString & key, const wxString & defvalue) const;
 	//! Returns a timestamp from the configuration.

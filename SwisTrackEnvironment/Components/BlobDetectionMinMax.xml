@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <swistrackcomponent>
 	<friendlyname>Blob Detection</friendlyname>
-	<description>Detects blobs on a binary image, and filter them by area, compactness, and orientation.</description>
+	<description>Detects white blobs on a binary image, and filter them by area, compactness, and orientation.</description>
 	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/BlobDetectionMinMax</url>
 	<displayimage>Output</displayimage>
 
@@ -26,6 +26,7 @@
 			<name>MinArea</name>
 			<label>Min. blob size</label>
 			<min>0</min>
+			<max>999999</max>
 			<default>10</default>
 			<unit>pixels</unit>
 			<onchange>reload</onchange>
@@ -34,6 +35,7 @@
 			<name>MaxArea</name>
 			<label>Max. blob size</label>
 			<min>0</min>
+			<max>999999</max>
 			<default>100</default>
 			<unit>pixels</unit>
 			<onchange>reload</onchange>
@@ -70,22 +72,22 @@
 			<default>0</default>
 			<onchange>reload</onchange>
 		</parameter>
-		<parameter type="double">
+		<parameter type="angle">
 			<name>MinOrientation</name>
 			<label>Min. orientation</label>
-			<min>-90</min>
-			<default>-90</default>
-			<max>180</max>
+			<min>-360</min>
+			<default>0</default>
+			<max>360</max>
 			<slider>true</slider>
 			<sliderstep>0.1</sliderstep>
 			<onchange>reload</onchange>
 		</parameter>
-		<parameter type="double">
+		<parameter type="angle">
 			<name>MaxOrientation</name>
 			<label>Max. orientation</label>
-			<min>-90</min>
+			<min>-360</min>
 			<default>90</default>
-			<max>180</max>
+			<max>360</max>
 			<slider>true</slider>
 			<sliderstep>0.1</sliderstep>
 			<onchange>reload</onchange>
