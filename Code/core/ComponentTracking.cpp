@@ -377,7 +377,7 @@ cv::Point2f THISCLASS::GetPos(int id) {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureParticles.mParticles = 0;
+	mCore->mDataStructureParticles.mParticles = NULL;
 }
 
 void THISCLASS::OnStop() {

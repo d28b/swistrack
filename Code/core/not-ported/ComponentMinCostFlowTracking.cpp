@@ -305,8 +305,8 @@ void THISCLASS::AddTransitionEdges() {
     }
   }
 }
-  void THISCLASS::OnStepCleanup() {
 
+void THISCLASS::OnStepCleanup() {
 }
 
 void THISCLASS::OnStop() {

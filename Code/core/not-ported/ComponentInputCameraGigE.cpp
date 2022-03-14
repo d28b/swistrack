@@ -288,9 +288,7 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	if (! mCamera) {
-		return;
-	}
+	if (! mCamera) return;
 
 	// Requeue the used image
 	try {

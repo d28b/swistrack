@@ -57,11 +57,11 @@ protected:
 	wxString mLabel;			//!< The main label of the parameter.
 	wxString mDisplay;			//!< The display to be selected when the parameter is changed.
 	enum eOnChange mOnChange;	//!< Action to do on change.
-	static const int scParameterWidth = 200;	//!< The width of a parameter.
-	static const int scLabelWidth = 75;			//!< The width of a label.
+	static const int scParameterWidth = 300;	//!< The width of a parameter.
+	static const int scLabelWidth = 100;		//!< The width of a label.
 	static const int scIndentWidth = 25;		//!< The indent width.
-	static const int scTextBoxWidth = 100;		//!< The width of a text box.
-	static const int scUnitWidth = 50;			//!< The width of a unit label.
+	static const int scTextBoxWidth = 150;		//!< The width of a text box.
+	static const int scUnitWidth = 75;			//!< The width of a unit label.
 
 private:
 	// Update control variables

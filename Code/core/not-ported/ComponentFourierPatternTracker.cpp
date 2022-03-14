@@ -314,7 +314,6 @@ void THISCLASS::OnStop() {
 	//mDisplayOutputImage->release();
 }
 
-
 void THISCLASS::prepareFilter(Mat input) {
 			// prepare bandpass filter
 		cv::Mat planes[] = {cv::Mat::ones(input.size(),CV_32F), cv::Mat::ones(input.size(), CV_32F)};

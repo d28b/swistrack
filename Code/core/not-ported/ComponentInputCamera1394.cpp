@@ -159,7 +159,6 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureInput.mImage = 0;
 }
 
 void THISCLASS::OnStop() {

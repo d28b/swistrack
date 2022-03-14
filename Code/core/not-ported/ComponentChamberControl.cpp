@@ -199,8 +199,6 @@ void THISCLASS::switch_pump(bool on_off, int speed) {
 }
 
 void THISCLASS::OnStart() {
-
-	return;
 }
 
 void THISCLASS::OnReloadConfiguration() {
@@ -243,7 +241,6 @@ void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
-
 }
 
 void THISCLASS::OnStepCleanup() {
@@ -251,4 +248,3 @@ void THISCLASS::OnStepCleanup() {
 
 void THISCLASS::OnStop() {
 }
-

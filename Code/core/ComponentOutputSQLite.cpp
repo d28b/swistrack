@@ -315,7 +315,8 @@ bool THISCLASS::WriteConfiguration() {
 	return true;
 }
 
-void THISCLASS::OnReloadConfiguration() { }
+void THISCLASS::OnReloadConfiguration() {
+}
 
 void THISCLASS::OnStep() {
 	if (! mReady) return;
@@ -370,7 +371,8 @@ void THISCLASS::OnStep() {
 	ComponentOutputSQLite_commitTransaction(mDB);
 }
 
-void THISCLASS::OnStepCleanup() { }
+void THISCLASS::OnStepCleanup() {
+}
 
 void THISCLASS::OnStop() {
 	if (! mReady) return;
@@ -387,16 +389,18 @@ void THISCLASS::OnStop() {
 	}
 }
 
-
 double THISCLASS::GetProgressPercent() {
 	return 0;
 }
+
 double THISCLASS::GetProgressMSec() {
 	return -1;
 }
+
 int THISCLASS::GetProgressFrameNumber() {
 	return 0;
 }
+
 double THISCLASS::GetFPS() {
 	return -1;
 }

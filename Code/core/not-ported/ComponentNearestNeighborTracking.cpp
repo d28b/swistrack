@@ -78,7 +78,7 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureParticles.mParticles = 0;
+	mCore->mDataStructureParticles.mParticles = NULL;
 }
 
 void THISCLASS::OnStop() {

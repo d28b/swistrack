@@ -11,6 +11,7 @@
 			<label>Threshold</label>
 			<min>0</min>
 			<max>255</max>
+			<default>128</default>
 			<slider>true</slider>
 			<onchange>reload</onchange>
 		</parameter>

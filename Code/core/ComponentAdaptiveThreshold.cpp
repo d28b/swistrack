@@ -50,7 +50,6 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureImageBinary.mImage = 0;
 }
 
 void THISCLASS::OnStop() {

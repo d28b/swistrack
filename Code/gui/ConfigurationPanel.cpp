@@ -17,7 +17,7 @@ THISCLASS::ConfigurationPanel(wxWindow * parent, SwisTrack * st, Component * c):
 	// Prepare
 	SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_DESKTOP));
 	SetSizer(new wxBoxSizer(wxVERTICAL));
-	wxStaticLine * line = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(230, 2), wxLI_HORIZONTAL);
+	wxStaticLine * line = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(330, 2), wxLI_HORIZONTAL);
 	GetSizer()->Add(line, 0, wxEXPAND | wxALL, 0);
 
 	// Create a scrollable subpanel
@@ -99,7 +99,7 @@ void THISCLASS::Read(const wxFileName & filename) {
 		mPanelSizer->Add(label, 0, wxEXPAND | wxBOTTOM | wxRIGHT | wxLEFT, 4);
 	}
 
-	wxStaticLine * line = new wxStaticLine(mPanel, wxID_ANY, wxDefaultPosition, wxSize(230, 2), wxLI_HORIZONTAL);
+	wxStaticLine * line = new wxStaticLine(mPanel, wxID_ANY, wxDefaultPosition, wxSize(330, 2), wxLI_HORIZONTAL);
 	mPanelSizer->Add(line, 0, wxEXPAND | wxALL, 4);
 
 	// Read the list of settings
@@ -138,7 +138,7 @@ void THISCLASS::ReadConfigurationNode(wxXmlNode * node) {
 		label->Wrap(scParameterWidth);
 		mPanelSizer->Add(label, 0, wxEXPAND | wxALL, 4);
 	} else if (nodename == wxT("line")) {
-		wxStaticLine * line = new wxStaticLine(mPanel, wxID_ANY, wxDefaultPosition, wxSize(230, 2), wxLI_HORIZONTAL);
+		wxStaticLine * line = new wxStaticLine(mPanel, wxID_ANY, wxDefaultPosition, wxSize(330, 2), wxLI_HORIZONTAL);
 		mPanelSizer->Add(line, 0, wxEXPAND | wxALL, 4);
 	} else {
 		mErrorList.Add(wxT("Invalid node '") + nodename + wxT("' in 'configuration'. Allowed types are 'line', 'label', 'title' and 'parameter'."));
