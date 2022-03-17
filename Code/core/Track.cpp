@@ -1,44 +1,17 @@
 #include "Track.h"
+#define THISCLASS Track
 
-Track::Track() {
+THISCLASS::Track(): mID(-1), mTrajectory() {
 }
 
-/** \brief Constructor - id number id*/
-Track::Track(int idnumber) :  mLastUpdateFrame(0), mColorModel(), trajectory(0) {
-	maxlength = 50; // maximum length of trajectory to store
-	//printf("%f %f\n",trajectory.at(0).x,trajectory.at(0).y);
-	mID = idnumber;
-	critpoint.x = -1;
-	critpoint.y = -1;
-};
-
-Track::~Track() {
-
+THISCLASS::~Track() {
 }
 
-/** \brief Add a point to the current track (max track) */
-void Track::AddPoint(cv::Point2f p, int frameNumber) {
-	trajectory.push_back(p);
-	if (maxlength != -1 && (int)(trajectory.size()) > maxlength)
-		trajectory.erase(trajectory.begin());
-	mLastUpdateFrame = frameNumber;
-
+void THISCLASS::AddPoint(float x, float y, int frameNumber) {
+	mTrajectory.push_back(TrackPoint(x, y, frameNumber));
 }
 
-void Track::SetMaxLength(int length) {
-	maxlength = length;
-}
-
-void Track:: SetColorModel(cv::Mat colorModel) {
-	mColorModel = colorModel;
-}
-
-void Track::SetCritPoint(cv::Point2f * p) {
-	critpoint.x = p->x;
-	critpoint.y = p->y;
-}
-
-double Track::GetDist(cv::Point2f * p1, cv::Point2f * p2) {
-	return (p1->x - p2->x) * (p1->x - p2->x) +
-	       (p1->y - p2->y) * (p1->y - p2->y);
+void THISCLASS::Shorten(unsigned int maxNumberOfPoints) {
+	while (mTrajectory.size() > maxNumberOfPoints)
+		mTrajectory.pop_front();
 }

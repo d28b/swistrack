@@ -9,7 +9,7 @@
 	    <parameter type="integer">
 		    <name>MaxNumber</name>
 			<label>Max. Number</label>
-			<unit>Individuals</unit>
+			<unit>tracks</unit>
 			<default>10</default>
 			<onchange>restart</onchange>
 		</parameter>

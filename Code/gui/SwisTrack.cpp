@@ -409,7 +409,9 @@ void THISCLASS::OnFileSaveAs(wxCommandEvent & WXUNUSED(event)) {
 	wxFileDialog dlg(this, wxT("Save a configuration"), wxT(""), wxT(""), wxT("Configurations (*.swistrack)|*.swistrack|All files|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, wxDefaultPosition);
 	if (dlg.ShowModal() != wxID_OK) return;
 
-	SaveFile(dlg.GetPath(), true, false);
+	wxFileName filename = dlg.GetPath();
+	if (filename.GetExt() != "swistrack") filename.SetExt("swistrack");
+	SaveFile(filename, true, false);
 }
 
 void THISCLASS::OnFileSave(wxCommandEvent & event) {
@@ -422,14 +424,6 @@ void THISCLASS::OnFileSave(wxCommandEvent & event) {
 }
 
 void THISCLASS::SaveFile(const wxFileName & filename, bool breakOnError, bool asCopy) {
-	// Check if can write to that file
-	/*wxFileName fn(filename);
-	if (! fn.IsFileWritable()) {
-		wxMessageDialog dlg(this, wxT("Unable to write \n\n")+filename, wxT("Save File"), wxOK);
-		dlg.ShowModal();
-		return;
-	}*/
-
 	// Save the file
 	ConfigurationWriterXML cw;
 	cw.WriteComponents(mSwisTrackCore);

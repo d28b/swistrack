@@ -33,10 +33,10 @@ void THISCLASS::OnStart() {
 		mMode = cMode_WhiteWhite;
 	} else if (mode == wxT("white-black")) {
 		mMode = cMode_WhiteBlack;
-		mMaskImage = ~mMaskImage;
+		if (! mMaskImage.empty()) mMaskImage = ~mMaskImage;
 	} else if (mode == wxT("black-white")) {
 		mMode = cMode_BlackWhite;
-		mMaskImage = ~mMaskImage;
+		if (! mMaskImage.empty()) mMaskImage = ~mMaskImage;
 	} else {
 		mMode = cMode_BlackBlack;
 	}

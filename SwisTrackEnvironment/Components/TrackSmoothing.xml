@@ -8,10 +8,10 @@
 	<configuration>
 		<parameter type="integer">
 		    <name>WindowSize</name>
-			<label>Window Size</label>
-			<unit>Individuals</unit>
+			<label>Smooth over</label>
+			<unit>points</unit>
 			<default>3</default>
-			<onchange>restart</onchange>
+			<onchange>reload</onchange>
 		</parameter>
 	</configuration>
 </swistrackcomponent>

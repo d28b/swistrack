@@ -29,6 +29,7 @@ void THISCLASS::OnReloadConfiguration() {
 }
 
 void THISCLASS::OnStep() {
+	mCore->mDataStructureInput.mFrameNumber += 1;
 	mCore->mDataStructureInput.mImage = mInputImage;
 
 	// Set the display

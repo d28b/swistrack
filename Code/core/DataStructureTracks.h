@@ -8,8 +8,6 @@
 
 // A DataStructure holding a list of tracks.
 class DataStructureTracks: public DataStructure {
-
-
 public:
 	//! Track vector type.
 	typedef std::map<int, Track> tTrackMap;

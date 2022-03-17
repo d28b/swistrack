@@ -7,7 +7,7 @@
 class DataStructureInput: public DataStructureImage {
 
 public:
-	int mFrameNumber;				//!< Frame number as provided by the input source (if available). For a reliable
+	int mFrameNumber;				//!< Frame number as provided by the input source (if available), or a consecutive frame counter.
 	int mFramesCount;				//!< The total number of frames available (if available).
 	wxDateTime mFrameTimestamp;		//!< The time the frame was recorded (wxInvalidDateTime if not availabe).
 	wxTimeSpan mTimeSinceLastFrame;	//!< The time difference from the last frame to the current frame.

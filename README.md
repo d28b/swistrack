@@ -10,6 +10,7 @@ To compile and run SwisTrack, open a terminal, and type the following
 
 ```sh
 git clone https://github.com/d28b/swistrack.git
+sudo apt install build-essential
 sudo apt install libglib2.0-dev libwxgtk3.0-gtk3-dev libopencv-dev
 cd swistrack
 make
@@ -17,7 +18,7 @@ cd SwisTrackEnvironment
 ./SwisTrack
 ```
 
-This downloads the latest version of SwisTrack (`git clone ...`), installs the dependencies (`apt install ...`), compiles (`make`) and runs SwisTrack. Note that compilation may take a few minutes.
+This downloads the latest version of SwisTrack (`git clone ...`), installs the compiler and the dependencies (`apt install ...`), compiles (`make`) and runs SwisTrack. Note that compiling may take a few minutes.
 
 ## Running SwisTrack on other Linux systems
 

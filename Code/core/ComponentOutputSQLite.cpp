@@ -84,10 +84,10 @@ void THISCLASS::OnStart() {
 
 	/// Prepare the insert statement for points.
 	result = sqlite3_prepare_v2(mDB,
-	  "INSERT INTO points (trackID, frameNumber, imageX, imageY, worldX, worldY, area, orientation, compactness, timestamp) VALUES (?,?,?,?,?,?,?,?,?,?);",
-	  -1,
-	  &mInsertStatement,
-	  0);
+	                            "INSERT INTO points (trackID, frameNumber, imageX, imageY, worldX, worldY, area, orientation, compactness, timestamp) VALUES (?,?,?,?,?,?,?,?,?,?);",
+	                            -1,
+	                            &mInsertStatement,
+	                            0);
 	if (SQLITE_OK != result) {
 		AddError(wxString::FromAscii(sqlite3_errmsg(mDB)));
 		return;
@@ -133,10 +133,10 @@ bool THISCLASS::CreateTables() {
 	char * errorMsg = NULL;
 
 	result = sqlite3_exec(mDB,
-	  "CREATE TABLE IF NOT EXISTS points (trackID INTEGER, frameNumber INTEGER, imageX REAL, imageY REAL, worldX REAL, worldY REAL, area REAL, orientation REAL, compactness REAL, timestamp REAL);",
-	  NULL, /* intentionally ommitted callback function */
-	  NULL, /* intentionally ommitted 1st arg to callback function */
-	  &errorMsg);
+	                      "CREATE TABLE IF NOT EXISTS points (trackID INTEGER, frameNumber INTEGER, imageX REAL, imageY REAL, worldX REAL, worldY REAL, area REAL, orientation REAL, compactness REAL, timestamp REAL);",
+	                      NULL, /* intentionally ommitted callback function */
+	                      NULL, /* intentionally ommitted 1st arg to callback function */
+	                      &errorMsg);
 	if (SQLITE_OK != result) {
 		if (errorMsg) {
 			AddError(wxString::FromAscii(errorMsg));
@@ -150,10 +150,10 @@ bool THISCLASS::CreateTables() {
 
 
 	result = sqlite3_exec(mDB,
-	  "CREATE INDEX trackIDindex on points(trackID asc);",
-	  NULL, /* intentionally ommitted callback function */
-	  NULL, /* intentionally ommitted 1st arg to callback function */
-	  &errorMsg);
+	                      "CREATE INDEX trackIDindex on points(trackID asc);",
+	                      NULL, /* intentionally ommitted callback function */
+	                      NULL, /* intentionally ommitted 1st arg to callback function */
+	                      &errorMsg);
 	if (SQLITE_OK != result) {
 		if (errorMsg) {
 			AddError(wxString::FromAscii(errorMsg));
@@ -167,10 +167,10 @@ bool THISCLASS::CreateTables() {
 
 
 	result = sqlite3_exec(mDB,
-	  "CREATE TABLE IF NOT EXISTS configuration (key TEXT, value TEXT);",
-	  NULL,
-	  NULL,
-	  &errorMsg);
+	                      "CREATE TABLE IF NOT EXISTS configuration (key TEXT, value TEXT);",
+	                      NULL,
+	                      NULL,
+	                      &errorMsg);
 	if (SQLITE_OK != result) {
 		if (errorMsg) {
 			AddError(wxString::FromAscii(errorMsg));

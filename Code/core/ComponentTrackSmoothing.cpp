@@ -21,105 +21,71 @@ THISCLASS::ComponentTrackSmoothing(SwisTrackCore * stc):
 }
 
 THISCLASS::~ComponentTrackSmoothing() {
-	if (mOutputTracks.size()) {
-		mOutputTracks.clear();
-	}
-}
-
-Track & THISCLASS::WindowForTrack(int id)  {
-	DataStructureTracks::tTrackMap::iterator it = mWindows.begin();
-	while (it != mWindows.end()) {
-		if (it->first == id) {
-			return it->second;
-		}
-		it++;
-	}
-
-	mWindows[id] = Track(id);
-	mWindows[id].SetMaxLength(mWindowSize);
-	mOutputTracks[id] = Track(id);
-	return mWindows[id];
 }
 
 void THISCLASS::OnStart() {
+	OnReloadConfiguration();
+}
+
+void THISCLASS::OnReloadConfiguration() {
 	mWindowSize = GetConfigurationInt(wxT("WindowSize"), 3);
-	mWindows.clear();
-	if (mOutputTracks.size()) mOutputTracks.clear();
 }
 
 void THISCLASS::OnStep() {
-	DataStructureTracks::tTrackMap * tracks =
-	    mCore->mDataStructureTracks.mTracks;
-	if (! tracks) {
-		AddError(wxT("No Track"));
+	DataStructureTracks::tTrackMap * trackMap = mCore->mDataStructureTracks.mTracks;
+	if (! trackMap) {
+		AddError(wxT("No input tracks."));
 		return;
 	}
-	DataStructureParticles::tParticleVector * particles = mCore->mDataStructureParticles.mParticles;
-	if (! particles) {
-		AddError(wxT("There are no particles"));
-		return;
+
+	// Process new points
+	int frameNumber = mCore->mDataStructureInput.mFrameNumber;
+	for (auto & entry : *trackMap) {
+		auto & track = entry.second;
+
+		// Get or create the state
+		auto & state = mState[track.mID];
+		if (! state.track) state.track = &mTracks[track.mID];
+		state.seen = true;
+
+		auto & newPoint = track.mTrajectory.back();
+		if (newPoint.frameNumber != frameNumber) {
+			// Add a gap
+			state.gaps += 1;
+			continue;
+		}
+
+		// Fill the gaps
+		auto & previousPoint = state.points.back();
+		for (int i = 0; i < state.gaps; i++) {
+			float x = previousPoint.x + (newPoint.x - previousPoint.x) / (state.gaps + 1) * i;
+			float y = previousPoint.y + (newPoint.y - previousPoint.y) / (state.gaps + 1) * i;
+			state.AddPoint(x, y, previousPoint.frameNumber + i, mWindowSize);
+		}
+
+		state.gaps = 0;
+
+		// Add the new point
+		state.AddPoint(newPoint.x, newPoint.y, newPoint.frameNumber, mWindowSize);
+
+		// Shorten to the length of the original track
+		state.track->Shorten(track.mTrajectory.size());
 	}
-	for (DataStructureTracks::tTrackMap::iterator i = mWindows.begin(); i != mWindows.end(); i++) {
-		if (tracks->find(i->first) == tracks->end()) {
-			mOutputTracks.erase(i->first);
-			mWindows.erase(i);
+
+	// Remove states of tracks not seen any more
+	for (auto it = mState.begin(); it != mState.end(); ) {
+		if (! it->second.seen) {
+			mTracks.erase(it->first);
+			it = mState.erase(it);
+		} else {
+			it->second.seen = false;
+			it++;
 		}
 	}
 
-	//For each track, write data in the corresponding output file
-	DataStructureTracks::tTrackMap::iterator it = tracks->begin();
-	while (it != tracks->end())	{
-		Track & window = WindowForTrack(it->first);
-		//Search for the corresponding particle
+	// Set the new tracks
+	mCore->mDataStructureTracks.mTracks = &mTracks;
 
-
-		DataStructureParticles::tParticleVector::iterator it2 = particles->begin();
-		while (it2 != particles->end()) {
-			//Correct ID is found
-			if (window.mID == it2->mID) {
-				window.AddPoint(it2->mCenter,
-				                mCore->mDataStructureInput.mFrameNumber);
-
-			}
-			it2++;
-		}
-		it++;
-	}
-	mParticles.clear();
-	DataStructureTracks::tTrackMap::iterator outputIterator = mOutputTracks.begin();
-	while (outputIterator != mOutputTracks.end()) {
-		Track & window = WindowForTrack(outputIterator->first);
-		if (window.trajectory.size() == mWindowSize && window.LastUpdateFrame() == mCore->mDataStructureInput.mFrameNumber) {
-			cv::Point2f point(0, 0);
-			std::vector<cv::Point2f>::iterator it3 = window.trajectory.begin();
-
-			while (it3 != window.trajectory.end()) {
-				point.x += it3->x;
-				point.y += it3->y;
-				it3++;
-			}
-			point.x = point.x / mWindowSize;
-			point.y = point.y / mWindowSize;
-			if (window.trajectory.size() != 0) {
-				outputIterator->second.AddPoint(point,
-				                                mCore->mDataStructureInput.mFrameNumber);
-				Particle p;
-				p.mCenter.x = point.x;
-				p.mCenter.y = point.y;
-				p.mID = outputIterator->first;
-				p.mArea = -1;
-				p.mCompactness = -1;
-				p.mOrientation = -1;
-				p.mIDCovariance = -1;
-				mParticles.push_back(p);
-			}
-		} else if (window.trajectory.size() > mWindowSize) {
-			AddError(wxT("Too many points in the window."));
-		}
-		outputIterator++;
-	}
-	mCore->mDataStructureTracks.mTracks = &mOutputTracks;
-	mCore->mDataStructureParticles.mParticles = &mParticles;
 	// Let the DisplayImage know about our image
 	DisplayEditor de(&mDisplayOutput);
 	if (de.IsActive()) {
@@ -129,11 +95,31 @@ void THISCLASS::OnStep() {
 }
 
 void THISCLASS::OnStepCleanup() {
-	mCore->mDataStructureParticles.mParticles = NULL;
 }
 
 void THISCLASS::OnStop() {
 }
 
-void THISCLASS::OnReloadConfiguration() {
+THISCLASS::State::State(): gaps(0), points(), track(NULL) {
+}
+
+void THISCLASS::State::AddPoint(float x, float y, int frameNumber, unsigned int windowSize) {
+	// Remove points larger than the window size
+	while (points.size() >= windowSize)
+		points.pop_front();
+
+	// Add the new point to the window
+	points.push_back(TrackPoint(x, y, frameNumber));
+
+	// Add a new point to the track
+	double xSum = 0;
+	double ySum = 0;
+	for (auto & point : points) {
+		xSum += point.x;
+		ySum += point.y;
+	}
+
+	float xAverage = xSum / points.size();
+	float yAverage = ySum / points.size();
+	track->AddPoint(xAverage, yAverage, frameNumber);
 }

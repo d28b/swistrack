@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Nearest Neighbor Tracking</friendlyname>
+	<description>Matches each detected blob (point) to its nearest track.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/NearestNeighborTracking</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="integer">
+		    <name>MaxNumberOfTracks</name>
+			<label>Max. tracks</label>
+			<unit>tracks</unit>
+			<default>10</default>
+			<onchange>reload</onchange>
+		</parameter>
+		<parameter type="integer">
+			<name>MaxNumberOfPoints</name>
+			<label>Max. points</label>
+			<min>0</min>
+			<max>1000</max>
+			<default>50</default>
+			<slider>true</slider>
+			<onchange>reload</onchange>
+		</parameter>
+		<parameter type="double">
+			<name>MaxDistance</name>
+			<label>Max. distance</label>
+			<min>0</min>
+			<max>1000</max>
+			<unit>pixels</unit>
+			<default>25</default>
+			<slider>true</slider>
+			<onchange>reload</onchange>
+		</parameter>
+
+		<label>If a track has not seen any new point for several frames (gaps), it is given up.</label>
+		<parameter type="integer">
+			<name>MaxLostTrackFrames</name>
+			<label>Max. gaps</label>
+			<min>0</min>
+			<max>1000</max>
+			<unit>points</unit>
+			<default>10</default>
+			<slider>true</slider>
+			<onchange>reload</onchange>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

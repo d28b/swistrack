@@ -64,7 +64,7 @@
 #include "ComponentSpecificColorSubtraction.h"
 #include "ComponentThresholdColorIndependent.h"
 #include "ComponentThresholdGray.h"
-#include "ComponentTracking.h"
+#include "ComponentNearestNeighborTracking.h"
 #include "ComponentTrackSmoothing.h"
 #include "ComponentTriggerCounter.h"
 #include "ComponentTriggerTimer.h"
@@ -167,7 +167,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentCalibrationFileTSAI(this));
 
 	// Tracking
-	mAvailableComponents.push_back(new ComponentTracking(this));
+	mAvailableComponents.push_back(new ComponentNearestNeighborTracking(this));
 	mAvailableComponents.push_back(new ComponentTrackSmoothing(this));
 
 	// Output
@@ -308,9 +308,9 @@ bool THISCLASS::Start(bool productionMode) {
 
 	// Event recorder
 	mEventRecorder->Add(productionMode ?
-		SwisTrackCoreEventRecorder::sType_SetModeProduction :
-		SwisTrackCoreEventRecorder::sType_SetModeNormal
-		);
+	                    SwisTrackCoreEventRecorder::sType_SetModeProduction :
+	                    SwisTrackCoreEventRecorder::sType_SetModeNormal
+	                   );
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeStart);
 
 	// Notify the interfaces

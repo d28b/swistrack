@@ -110,9 +110,9 @@ void THISCLASS::OnStep() {
 		mOutputRed->GetMatrix(),
 		mOutputGreen->GetMatrix(),
 		mOutputBlue->GetMatrix()
-		};
+	};
 	cv::Mat outputImage;
-    cv::merge(outputChannels, 3, outputImage);
+	cv::merge(outputChannels, 3, outputImage);
 	mCore->mDataStructureImageColor.mImage = outputImage;
 
 	// Set the display

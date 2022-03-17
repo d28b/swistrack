@@ -26,16 +26,21 @@ public:
 	}
 
 private:
-	Track & WindowForTrack(int id);
-	DataStructureParticles::tParticleVector mParticles;
+	class State {
+	public:
+		bool seen;
+		int gaps;
+		std::deque<TrackPoint> points;
+		Track * track;
 
-	// Parameters
-	unsigned int mWindowSize;		//!< (configuration) The maximum number of objects that are to track.
-	//	DataStructureTracks::tTrackVector mInputTracks;
-	DataStructureTracks::tTrackMap mOutputTracks;
-	DataStructureTracks::tTrackMap mWindows;
+		State();
+		void AddPoint(float x, float y, int frameNumber, unsigned int windowSize);
+	};
 
-	Display mDisplayOutput;									//!< The Display showing the last acquired image and the particles.
+	unsigned int mWindowSize;					//!< (configuration) The window size.
+	std::map<int, State> mState;				//!< The state of each track.
+	DataStructureTracks::tTrackMap mTracks;		//!< The smoothed tracks.
+	Display mDisplayOutput;						//!< The Display showing the last acquired image and the particles.
 };
 
 #endif

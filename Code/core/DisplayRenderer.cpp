@@ -139,7 +139,7 @@ bool THISCLASS::DrawParticles(ErrorList * errors) {
 		float s = sinf(particle.mOrientation) * 8; //sinf(particle.mOrientation/57.29577951)*20;
 		cv::line(mImage, cv::Point(x, y), cv::Point(x + (int)floorf(c + 0.5), y + (int)floorf(s + 0.5)), cv::Scalar(192, 0, 0), 1);
 
-		wxString label = wxString::Format(wxT("%d [%f]"), particle.mID, particle.mIDCovariance);
+		wxString label = wxString::Format(wxT("%d [%0.0f, %0.3f]"), particle.mID, particle.mArea, particle.mCompactness);
 		cv::putText(mImage, label.ToStdString(), cv::Point(x + 12, y + 10), mFontFace, mFontSize, cv::Scalar(255, 0, 0));
 	}
 
@@ -153,17 +153,18 @@ bool THISCLASS::DrawTrajectories(ErrorList * errors) {
 
 	// Draw trajectories
 	DataStructureTracks::tTrackMap * tracks = mDisplay->mComponent->GetSwisTrackCore()->mDataStructureTracks.mTracks;
+	if (! tracks) return true;
 	for (auto & tuple : *tracks) {
 		// Color for this track
 		cv::Scalar color = cv::Scalar((tuple.first * 50) % 255, (tuple.first * 50) % 255, 255);
 
 		// Draw trajectory polyline
-		std::vector<cv::Point2f>::iterator p = tuple.second.trajectory.begin();
-		int xprev = (int)floor((*p).x * mScalingFactor + 0.5);
-		int yprev = (int)floor((*p).y * mScalingFactor + 0.5);
-		while (p != tuple.second.trajectory.end()) {
-			int x = (int)floor((*p).x * mScalingFactor + 0.5);
-			int y = (int)floor((*p).y * mScalingFactor + 0.5);
+		auto p = tuple.second.mTrajectory.begin();
+		int xprev = (int) floor(p->x * mScalingFactor + 0.5);
+		int yprev = (int) floor(p->y * mScalingFactor + 0.5);
+		while (p != tuple.second.mTrajectory.end()) {
+			int x = (int) floor(p->x * mScalingFactor + 0.5);
+			int y = (int) floor(p->y * mScalingFactor + 0.5);
 			cv::line(mImage, cv::Point(xprev, yprev), cv::Point(x, y), color, 3);
 			xprev = x;
 			yprev = y;
