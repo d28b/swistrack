@@ -65,7 +65,7 @@ THISCLASS::Canvas(CanvasPanel * cp):
 
 	// Set non-bold font
 	wxFont f = GetFont();
-	f.SetWeight(wxNORMAL);
+	f.SetWeight(wxFONTWEIGHT_NORMAL);
 }
 
 THISCLASS::~Canvas() {

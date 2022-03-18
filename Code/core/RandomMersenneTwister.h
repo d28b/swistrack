@@ -284,7 +284,7 @@ inline void RandomMersenneTwister::seed() {
 		uint32 bigSeed[N];
 		register uint32 * s = bigSeed;
 		register int i = N;
-		register int success = 1;
+		register size_t success = 1;
 		while ( success && i-- )
 			success = fread( s++, sizeof(uint32), 1, urandom );
 		fclose(urandom);

@@ -317,8 +317,8 @@ bool THISCLASS::Start(bool productionMode) {
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeStart);
 
 	// Notify the interfaces
-	for (auto interface : mSwisTrackCoreInterfaces)
-		interface->OnBeforeStart(productionMode);
+	for (auto iface : mSwisTrackCoreInterfaces)
+		iface->OnBeforeStart(productionMode);
 
 	// Update the flags
 	mStarted = true;
@@ -341,8 +341,8 @@ bool THISCLASS::Start(bool productionMode) {
 	}
 
 	// Notify the interfaces
-	for (auto interface : mSwisTrackCoreInterfaces)
-		interface->OnAfterStart(productionMode);
+	for (auto iface : mSwisTrackCoreInterfaces)
+		iface->OnAfterStart(productionMode);
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterStart);
@@ -357,8 +357,8 @@ bool THISCLASS::Stop() {
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeStop);
 
 	// Notify the interfaces
-	for (auto interface : mSwisTrackCoreInterfaces)
-		interface->OnBeforeStop();
+	for (auto iface : mSwisTrackCoreInterfaces)
+		iface->OnBeforeStop();
 
 	// Stop all components
 	tComponentList::iterator it = mDeployedComponents.end();
@@ -383,8 +383,8 @@ bool THISCLASS::Stop() {
 	}
 
 	// Notify the interfaces
-	for (auto interface : mSwisTrackCoreInterfaces)
-		interface->OnAfterStop();
+	for (auto iface : mSwisTrackCoreInterfaces)
+		iface->OnAfterStop();
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_AfterStop);
@@ -404,8 +404,8 @@ bool THISCLASS::Step() {
 	mEventRecorder->AddStepStart();
 
 	// Notify the interfaces (OnBeforeStep)
-	for (auto interface : mSwisTrackCoreInterfaces)
-		interface->OnBeforeStep();
+	for (auto iface : mSwisTrackCoreInterfaces)
+		iface->OnBeforeStep();
 
 	// Notify the displays (OnBeforeStep)
 	for (auto component : mDeployedComponents)
@@ -450,8 +450,8 @@ bool THISCLASS::Step() {
 	}
 
 	// Notify the interfaces (OnStepReady)
-	for (auto interface : mSwisTrackCoreInterfaces)
-		interface->OnStepReady();
+	for (auto iface : mSwisTrackCoreInterfaces)
+		iface->OnStepReady();
 
 	// and then cleanup what we run
 	while (it != mDeployedComponents.begin()) {
@@ -471,8 +471,8 @@ bool THISCLASS::Step() {
 			display->OnAfterStep();
 
 	// Notify the interfaces (OnAfterStep)
-	for (auto interface : mSwisTrackCoreInterfaces)
-		interface->OnAfterStep();
+	for (auto iface : mSwisTrackCoreInterfaces)
+		iface->OnAfterStep();
 
 	// Event recorder
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_StepStop);
@@ -524,15 +524,15 @@ void THISCLASS::TriggerStart() {
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeTriggerStart);
 
 	// Notify the interfaces
-	for (auto interface : mSwisTrackCoreInterfaces)
-		interface->OnBeforeTriggerStart();
+	for (auto iface : mSwisTrackCoreInterfaces)
+		iface->OnBeforeTriggerStart();
 
 	// Activate the trigger
 	mTrigger->SetActive(true);
 
 	// Notify the interfaces
-	for (auto interface : mSwisTrackCoreInterfaces)
-		interface->OnAfterTriggerStart();
+	for (auto iface : mSwisTrackCoreInterfaces)
+		iface->OnAfterTriggerStart();
 
 	// Notify the clients
 	if (mCommunicationInterface) {
@@ -551,15 +551,15 @@ void THISCLASS::TriggerStop() {
 	mEventRecorder->Add(SwisTrackCoreEventRecorder::sType_BeforeTriggerStop);
 
 	// Notify the interfaces
-	for (auto interface : mSwisTrackCoreInterfaces)
-		interface->OnBeforeTriggerStop();
+	for (auto iface : mSwisTrackCoreInterfaces)
+		iface->OnBeforeTriggerStop();
 
 	// Deactivate the trigger
 	mTrigger->SetActive(false);
 
 	// Notify the interfaces
-	for (auto interface : mSwisTrackCoreInterfaces)
-		interface->OnAfterTriggerStop();
+	for (auto iface : mSwisTrackCoreInterfaces)
+		iface->OnAfterTriggerStop();
 
 	// Notify the clients
 	if (mCommunicationInterface) {
@@ -616,8 +616,8 @@ bool THISCLASS::IncrementEditLocks() {
 	Stop();
 
 	// Notify the interfaces
-	for (auto interface : mSwisTrackCoreInterfaces)
-		interface->OnBeforeEdit();
+	for (auto iface : mSwisTrackCoreInterfaces)
+		iface->OnBeforeEdit();
 
 	mEditLocks = 1;
 	return true;
@@ -631,6 +631,6 @@ void THISCLASS::DecrementEditLocks() {
 	if (mEditLocks > 0) return;
 
 	// Notify the interfaces
-	for (auto interface : mSwisTrackCoreInterfaces)
-		interface->OnAfterEdit();
+	for (auto iface : mSwisTrackCoreInterfaces)
+		iface->OnAfterEdit();
 }

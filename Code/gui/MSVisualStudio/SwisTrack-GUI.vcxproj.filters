@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{90c013a6-fab4-4e31-acc2-3f18ae087669}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{7f828ab3-eebe-4a03-911b-f99b9dcccf70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Canvas">
+      <UniqueIdentifier>{5a58b519-5392-451c-9725-578fae6189d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ComponentList">
+      <UniqueIdentifier>{247bc6f4-8dc9-451b-ba12-2ccd576ad950}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialogs">
+      <UniqueIdentifier>{37466f44-3795-4e0f-ad17-832087181c7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Configuration">
+      <UniqueIdentifier>{2017c86c-9551-408d-8d02-a46cab61a995}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timeline">
+      <UniqueIdentifier>{a51a33d9-0c22-435d-9c73-dbe9f335bdc5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\bitmaps\down.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\bitmaps\finger.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\bitmaps\gui.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\bitmaps\minus.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\bitmaps\new.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\bitmaps\open.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\bitmaps\play.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\bitmaps\plus.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\bitmaps\productive.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\bitmaps\save.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\bitmaps\singlestep.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\bitmaps\up.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SwisTrack-GUI.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Application.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\NMEALogFile.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SwisTrack.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TCPServer.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TCPServerConnection.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Canvas.cpp">
+      <Filter>Canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CanvasAnnotation.cpp">
+      <Filter>Canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CanvasPanel.cpp">
+      <Filter>Canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CanvasTitle.cpp">
+      <Filter>Canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ComponentListPanel.cpp">
+      <Filter>ComponentList</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AboutDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ComponentsDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ComponentTreeItem.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ErrorListDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationPanel.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameter.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterAngle.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterButton.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterCheckBox.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterColor.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterDate.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterDouble.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterDropdownList.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterFactory.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterGigECameraList.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterInputFile.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterInteger.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterOutputFile.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterPointDouble.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterPointInteger.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterString.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TimelinePanel.cpp">
+      <Filter>Timeline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterText.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConfigurationParameterVideoFormat.cpp">
+      <Filter>Configuration</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Application.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ErrorListDialog.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\NMEALogFile.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SwisTrack.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TCPServer.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TCPServerConnection.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Canvas.h">
+      <Filter>Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CanvasAnnotation.h">
+      <Filter>Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CanvasPanel.h">
+      <Filter>Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CanvasTitle.h">
+      <Filter>Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ComponentListPanel.h">
+      <Filter>ComponentList</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AboutDialog.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ComponentsDialog.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ComponentTreeItem.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationPanel.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameter.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterAngle.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterButton.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterCheckBox.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterColor.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterDate.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterDouble.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterDropdownList.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterFactory.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterGigECameraList.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterInputFile.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterInteger.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterOutputFile.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterPointDouble.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterPointInteger.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterString.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TimelinePanel.h">
+      <Filter>Timeline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterText.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConfigurationParameterVideoFormat.h">
+      <Filter>Configuration</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

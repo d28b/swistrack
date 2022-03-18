@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0fcfe8c8-8014-4983-9df9-6829bd555657}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{b48b64c3-daf2-4679-ad9a-0d040054f4ff}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TSAISRC\CAL_EVAL.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TSAISRC\CAL_MAIN.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TSAISRC\CAL_TRAN.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TSAISRC\CAL_UTIL.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MATHSRC\MINPACK\DPMPAR.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TSAISRC\ECALMAIN.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MATHSRC\MINPACK\ENORM.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MATHSRC\MINPACK\FDJAC2.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MATHSRC\MINPACK\LMDIF.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MATHSRC\MINPACK\LMPAR.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MATHSRC\MATRIX.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MATHSRC\MINPACK\QRFAC.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MATHSRC\MINPACK\QRSOLV.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="INCLUDE\CAL_DEFS.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INCLUDE\F2C.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INCLUDE\GASDEV.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INCLUDE\libtsai.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INCLUDE\LMDIF.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INCLUDE\MATRIX.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

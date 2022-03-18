@@ -178,8 +178,8 @@ bool THISCLASS::IncrementEditLocks() {
 	}
 
 	// Notify the interfaces
-	for (auto interface : mCore->mSwisTrackCoreInterfaces)
-		interface->OnBeforeEditComponent(this);
+	for (auto iface : mCore->mSwisTrackCoreInterfaces)
+		iface->OnBeforeEditComponent(this);
 
 	mEditLocks = 1;
 	return true;
@@ -193,8 +193,8 @@ void THISCLASS::DecrementEditLocks() {
 	if (mEditLocks > 0) return;
 
 	// Notify the interfaces
-	for (auto interface : mCore->mSwisTrackCoreInterfaces)
-		interface->OnAfterEditComponent(this);
+	for (auto iface : mCore->mSwisTrackCoreInterfaces)
+		iface->OnAfterEditComponent(this);
 }
 
 void THISCLASS::Initialize() {

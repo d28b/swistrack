@@ -45,7 +45,7 @@ THISCLASS::TimelinePanel(wxWindow * parent, SwisTrack * st):
 	// Set non-bold font
 	wxFont f = GetFont();
 	f.SetPointSize(8);
-	f.SetWeight(wxNORMAL);
+	f.SetWeight(wxFONTWEIGHT_NORMAL);
 
 	// Start the timer
 	mTimer.Start(1000, false);

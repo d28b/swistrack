@@ -52,9 +52,9 @@ cv::Mat THISCLASS::DistanceToColor(cv::Mat image, cv::Scalar color, double scali
 			int r = line[x * 3 + 0];
 			int g = line[x * 3 + 1];
 			int b = line[x * 3 + 2];
-			int dr = abs(r - color.val[0]);
-			int dg = abs(g - color.val[1]);
-			int db = abs(b - color.val[2]);
+			double dr = fabs(r - color.val[0]);
+			double dg = fabs(g - color.val[1]);
+			double db = fabs(b - color.val[2]);
 			double distance = sqrt(dr * dr + dg * dg + db * db) * scaling;
 			int distanceInt = (int) (distance + 0.5);
 			if (distanceInt > 255) distanceInt = 255;
@@ -66,6 +66,9 @@ cv::Mat THISCLASS::DistanceToColor(cv::Mat image, cv::Scalar color, double scali
 }
 
 cv::Mat THISCLASS::AbsDiff3(cv::Mat image, cv::Scalar color) {
+	int colorB = (int) color.val[0];
+	int colorG = (int) color.val[1];
+	int colorR = (int) color.val[2];
 	cv::Mat absDiffImage(image.rows, image.cols, CV_8UC3);
 	for (int y = 0; y < image.rows; y++) {
 		unsigned char * line = image.ptr(y);
@@ -74,9 +77,9 @@ cv::Mat THISCLASS::AbsDiff3(cv::Mat image, cv::Scalar color) {
 			int b = line[x * 3 + 0];
 			int g = line[x * 3 + 1];
 			int r = line[x * 3 + 2];
-			absDiffLine[x * 3 + 0] = abs(b - color.val[0]);
-			absDiffLine[x * 3 + 1] = abs(g - color.val[1]);
-			absDiffLine[x * 3 + 2] = abs(r - color.val[2]);
+			absDiffLine[x * 3 + 0] = abs(b - colorB);
+			absDiffLine[x * 3 + 1] = abs(g - colorG);
+			absDiffLine[x * 3 + 2] = abs(r - colorR);
 		}
 	}
 

@@ -46,4 +46,10 @@ make osxbundle
 
 ## Running SwisTrack on Windows
 
-Compile the Visual Studio project.
+On a fresh computer, proceed as follows:
+
+- Install Visual Studio 2022. The free version is enough.
+- Download and install OpenCV to C:\OpenCV (or any other folder).
+- Download and install wxWidgets to C:\wxWidgets-3.1.5 (or any other folder).
+- Open the wxWidgets Visual Studio project (C:\wxWidgets-3.1.5\build\msw\wx_vc16.sln) and compile the debug and release versions for x86 (and Win32 if desired).
+- Open the SwisTrack Visual Studio project (swistrack\Code\MSVisualStudio\SwisTrack.sln) and compile the x86 debug or release version.

@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug - FireWire Camera|Win32">
+      <Configuration>Debug - FireWire Camera</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug - FireWire Camera|x64">
+      <Configuration>Debug - FireWire Camera</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug - GigaBit Camera|Win32">
+      <Configuration>Debug - GigaBit Camera</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug - GigaBit Camera|x64">
+      <Configuration>Debug - GigaBit Camera</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release - FireWire Camera|Win32">
+      <Configuration>Release - FireWire Camera</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release - FireWire Camera|x64">
+      <Configuration>Release - FireWire Camera</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release - GigaBit Camera|Win32">
+      <Configuration>Release - GigaBit Camera</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release - GigaBit Camera|x64">
+      <Configuration>Release - GigaBit Camera</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{D010B136-96BD-4D44-B4F0-30388FB460B7}</ProjectGuid>
+    <RootNamespace>objecttrackerlib</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - FireWire Camera|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - FireWire Camera|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - GigaBit Camera|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - GigaBit Camera|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - FireWire Camera|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - FireWire Camera|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - GigaBit Camera|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - GigaBit Camera|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release - FireWire Camera|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release - FireWire Camera|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release - GigaBit Camera|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release - GigaBit Camera|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug - FireWire Camera|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug - FireWire Camera|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug - GigaBit Camera|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug - GigaBit Camera|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>17.0.32203.90</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - GigaBit Camera|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - FireWire Camera|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - GigaBit Camera|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - FireWire Camera|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_DEPRECATE" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc;$(OPENCV_DIR)\..\..\include;..\..\..\3rdParty\libtsai\INCLUDE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;WINVER=0x0500;__WXMSW__;wxUSE_GUI=1;_UNICODE;_DEBUG;__WXDEBUG__;_USE_MATH_DEFINES;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>$(IntDir)$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)objecttrackerlib.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_DEPRECATE" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc;$(OPENCV_DIR)\..\..\include;..\..\..\3rdParty\libtsai\INCLUDE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;WINVER=0x0500;__WXMSW__;wxUSE_GUI=1;_UNICODE;_DEBUG;__WXDEBUG__;_USE_MATH_DEFINES;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>$(IntDir)$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)objecttrackerlib.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_DEPRECATE" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc;$(OPENCV_DIR)\..\..\include;..\..\..\3rdParty\libtsai\INCLUDE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;WINVER=0x0500;__WXMSW__;wxUSE_GUI=1;_UNICODE;NDEBUG;_USE_MATH_DEFINES;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <OutputFile>$(IntDir)$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)objecttrackerlib.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_DEPRECATE" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>$(WXWIN)\include;$(WXWIN)\include\msvc;$(OPENCV_DIR)\..\..\include;..\..\..\3rdParty\libtsai\INCLUDE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;WINVER=0x0500;__WXMSW__;wxUSE_GUI=1;_UNICODE;NDEBUG;_USE_MATH_DEFINES;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <OutputFile>$(IntDir)$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)objecttrackerlib.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug - GigaBit Camera|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_DEPRECATE" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;L:\Basler\Pylon 2.0\pylon\include;L:\Basler\Pylon 2.0\genicam\library\cpp\include;L:\OpenCV\ml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;USE_CAMERA_PYLON_GIGE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>$(IntDir)$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)objecttrackerlib.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug - GigaBit Camera|x64'">
+    <ClCompile>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_DEPRECATE" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;L:\Basler\Pylon 2.0\pylon\include;L:\Basler\Pylon 2.0\genicam\library\cpp\include;L:\OpenCV\ml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;USE_CAMERA_PYLON_GIGE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>$(IntDir)$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)objecttrackerlib.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug - FireWire Camera|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_DEPRECATE" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;L:\OpenCV\ml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;USE_CAMERA_CMU_1394;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>$(IntDir)$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)objecttrackerlib.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug - FireWire Camera|x64'">
+    <ClCompile>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_DEPRECATE" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;L:\OpenCV\ml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;USE_CAMERA_CMU_1394;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>$(IntDir)$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)objecttrackerlib.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - GigaBit Camera|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_DEPRECATE" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;L:\Basler\Pylon 2.0\pylon\include;L:\Basler\Pylon 2.0\genicam\library\cpp\include;L:\OpenCV\ml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;USE_CAMERA_PYLON_GIGE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <OutputFile>$(IntDir)$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)objecttrackerlib.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - GigaBit Camera|x64'">
+    <ClCompile>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_DEPRECATE" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;L:\Basler\Pylon 2.0\pylon\include;L:\Basler\Pylon 2.0\genicam\library\cpp\include;L:\OpenCV\ml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;USE_CAMERA_PYLON_GIGE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <OutputFile>$(IntDir)$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)objecttrackerlib.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - FireWire Camera|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_DEPRECATE" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;L:\OpenCV\ml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;USE_CAMERA_CMU_1394;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <OutputFile>$(IntDir)$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)objecttrackerlib.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - FireWire Camera|x64'">
+    <ClCompile>
+      <AdditionalOptions>/D "_CRT_SECURE_NO_DEPRECATE" %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>L:\wxWidgets\include;L:\wxWidgets\lib\vc_lib\mswd;L:\1394camera\include;L:\OpenCV\otherlibs\highgui;L:\OpenCV\cxcore\include;L:\OpenCV\cv\include;L:\opencv\otherlibs\cvcam\include;L:\boost_1_38_0;..\..\..\3rdParty\libtsai\INCLUDE;..\..\..\3rdParty\camshift_wrapper;..\..\..\3rdParty\cvblobslib_v6p1;L:\OpenCV\ml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;USE_CAMERA_CMU_1394;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <OutputFile>$(IntDir)$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)objecttrackerlib.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\BlobDetection.cpp" />
+    <ClCompile Include="..\BlobMatching.cpp" />
+    <ClCompile Include="..\CommunicationCommandHandler.cpp" />
+    <ClCompile Include="..\CommunicationInterface.cpp" />
+    <ClCompile Include="..\CommunicationMessage.cpp" />
+    <ClCompile Include="..\CommunicationNMEAInterface.cpp" />
+    <ClCompile Include="..\CompareWorkaround.cpp" />
+    <ClCompile Include="..\Component.cpp" />
+    <ClCompile Include="..\ComponentAdaptiveBackgroundSubtractionColor.cpp" />
+    <ClCompile Include="..\ComponentAdaptiveBackgroundSubtractionGray.cpp" />
+    <ClCompile Include="..\ComponentAdaptiveBackgroundSubtractionMedian.cpp" />
+    <ClCompile Include="..\ComponentAdaptiveThreshold.cpp" />
+    <ClCompile Include="..\ComponentBackgroundSubtractionColor.cpp" />
+    <ClCompile Include="..\ComponentBackgroundSubtractionGray.cpp" />
+    <ClCompile Include="..\ComponentBinaryBlur.cpp" />
+    <ClCompile Include="..\ComponentBinaryDilation.cpp" />
+    <ClCompile Include="..\ComponentBinaryErosion.cpp" />
+    <ClCompile Include="..\ComponentBinaryMask.cpp" />
+    <ClCompile Include="..\ComponentBlobDetectionCircularHough.cpp" />
+    <ClCompile Include="..\ComponentBlobDetectionMinMax.cpp" />
+    <ClCompile Include="..\ComponentBlobDetectionRedGreen.cpp" />
+    <ClCompile Include="..\ComponentBlobDetectionTwoColors.cpp" />
+    <ClCompile Include="..\ComponentCalibrationFileTSAI.cpp" />
+    <ClCompile Include="..\ComponentCalibrationLinear.cpp" />
+    <ClCompile Include="..\ComponentCalibrationTSAI.cpp" />
+    <ClCompile Include="..\ComponentCannyEdgeDetection.cpp" />
+    <ClCompile Include="..\ComponentCategory.cpp" />
+    <ClCompile Include="..\ComponentChannelCalculationColor.cpp" />
+    <ClCompile Include="..\ComponentChannelCalculationColorToGray.cpp" />
+    <ClCompile Include="..\ComponentChannelCalculationGray.cpp" />
+    <ClCompile Include="..\ComponentColorBlur.cpp" />
+    <ClCompile Include="..\ComponentColorGaussianBlur.cpp" />
+    <ClCompile Include="..\ComponentColorMask.cpp" />
+    <ClCompile Include="..\ComponentColorSwapper.cpp" />
+    <ClCompile Include="..\ComponentConvertBayerToColor.cpp" />
+    <ClCompile Include="..\ComponentConvertBinaryToColor.cpp" />
+    <ClCompile Include="..\ComponentConvertBinaryToGray.cpp" />
+    <ClCompile Include="..\ComponentConvertColorToGray.cpp" />
+    <ClCompile Include="..\ComponentConvertGrayToColor.cpp" />
+    <ClCompile Include="..\ComponentConvertInputToColor.cpp" />
+    <ClCompile Include="..\ComponentConvertInputToGray.cpp" />
+    <ClCompile Include="..\ComponentCorrectMean.cpp" />
+    <ClCompile Include="..\ComponentCropBinary.cpp" />
+    <ClCompile Include="..\ComponentCropColor.cpp" />
+    <ClCompile Include="..\ComponentCropGray.cpp" />
+    <ClCompile Include="..\ComponentCropInput.cpp" />
+    <ClCompile Include="..\ComponentDoubleThresholdColorIndependent.cpp" />
+    <ClCompile Include="..\ComponentEditor.cpp" />
+    <ClCompile Include="..\ComponentFilterParticles.cpp" />
+    <ClCompile Include="..\ComponentGrayMask.cpp" />
+    <ClCompile Include="..\ComponentIDReaderRing.cpp" />
+    <ClCompile Include="..\ComponentInputCameraUSB.cpp" />
+    <ClCompile Include="..\ComponentInputFileAVI.cpp" />
+    <ClCompile Include="..\ComponentInputFileImage.cpp" />
+    <ClCompile Include="..\ComponentInvertBinary.cpp" />
+    <ClCompile Include="..\ComponentMorphology.cpp" />
+    <ClCompile Include="..\ComponentNearestNeighborTracking.cpp" />
+    <ClCompile Include="..\ComponentOutputBufferedFileAVI.cpp" />
+    <ClCompile Include="..\ComponentOutputFile.cpp" />
+    <ClCompile Include="..\ComponentOutputFileAVI.cpp" />
+    <ClCompile Include="..\ComponentOutputFramesImages.cpp" />
+    <ClCompile Include="..\ComponentOutputImageOverlayColor.cpp" />
+    <ClCompile Include="..\ComponentOutputImageStatisticsBinary.cpp" />
+    <ClCompile Include="..\ComponentOutputImageStatisticsColor.cpp" />
+    <ClCompile Include="..\ComponentOutputImageStatisticsGray.cpp" />
+    <ClCompile Include="..\ComponentOutputMarkFrameManual.cpp" />
+    <ClCompile Include="..\ComponentOutputParticles.cpp">
+      <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
+      <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</PreprocessToFile>
+      <PreprocessSuppressLineNumbers Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessSuppressLineNumbers>
+      <PreprocessSuppressLineNumbers Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</PreprocessSuppressLineNumbers>
+    </ClCompile>
+    <ClCompile Include="..\ComponentOutputSQLite.cpp" />
+    <ClCompile Include="..\ComponentSimulationParticles.cpp" />
+    <ClCompile Include="..\ComponentSobelDifferentiation.cpp" />
+    <ClCompile Include="..\ComponentSpecificColorSubtraction.cpp" />
+    <ClCompile Include="..\ComponentThresholdColorIndependent.cpp" />
+    <ClCompile Include="..\ComponentThresholdGray.cpp" />
+    <ClCompile Include="..\ComponentTrackSmoothing.cpp" />
+    <ClCompile Include="..\ComponentTrigger.cpp" />
+    <ClCompile Include="..\ComponentTriggerCounter.cpp" />
+    <ClCompile Include="..\ComponentTriggerTimer.cpp">
+      <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
+      <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</PreprocessToFile>
+      <PreprocessSuppressLineNumbers Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessSuppressLineNumbers>
+      <PreprocessSuppressLineNumbers Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</PreprocessSuppressLineNumbers>
+    </ClCompile>
+    <ClCompile Include="..\ComponentWeightedSum.cpp" />
+    <ClCompile Include="..\ConfigurationConversion.cpp" />
+    <ClCompile Include="..\ConfigurationReaderXML.cpp" />
+    <ClCompile Include="..\ConfigurationWriterXML.cpp" />
+    <ClCompile Include="..\ConfigurationXML.cpp" />
+    <ClCompile Include="..\DataStructure.cpp" />
+    <ClCompile Include="..\DataStructureImage.cpp" />
+    <ClCompile Include="..\DataStructureInput.cpp" />
+    <ClCompile Include="..\DataStructureParticles.cpp" />
+    <ClCompile Include="..\DataStructureTracks.cpp" />
+    <ClCompile Include="..\Display.cpp" />
+    <ClCompile Include="..\DisplayEditor.cpp" />
+    <ClCompile Include="..\DisplayRenderer.cpp" />
+    <ClCompile Include="..\DisplaySubscriberInterface.cpp" />
+    <ClCompile Include="..\ErrorList.cpp" />
+    <ClCompile Include="..\ErrorListItem.cpp" />
+    <ClCompile Include="..\Expression.cpp" />
+    <ClCompile Include="..\ExpressionNode.cpp" />
+    <ClCompile Include="..\ExpressionParser.cpp" />
+    <ClCompile Include="..\ImageTools.cpp" />
+    <ClCompile Include="..\NMEALog.cpp" />
+    <ClCompile Include="..\ObjectList.cpp" />
+    <ClCompile Include="..\Particle.cpp" />
+    <ClCompile Include="..\Random.cpp" />
+    <ClCompile Include="..\RandomExponential.cpp" />
+    <ClCompile Include="..\RandomNormal.cpp" />
+    <ClCompile Include="..\RandomPoisson.cpp" />
+    <ClCompile Include="..\SimulationParticles.cpp" />
+    <ClCompile Include="..\StatusItem.cpp" />
+    <ClCompile Include="..\SwisTrackCore.cpp" />
+    <ClCompile Include="..\SwisTrackCoreEditor.cpp" />
+    <ClCompile Include="..\SwisTrackCoreEventRecorder.cpp" />
+    <ClCompile Include="..\SwisTrackCoreInterface.cpp" />
+    <ClCompile Include="..\SwisTrackCoreTrigger.cpp" />
+    <ClCompile Include="..\Track.cpp" />
+    <ClCompile Include="..\Utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\BlobDetection.h" />
+    <ClInclude Include="..\BlobMatching.h" />
+    <ClInclude Include="..\CommunicationCommandHandler.h" />
+    <ClInclude Include="..\CommunicationInterface.h" />
+    <ClInclude Include="..\CommunicationMessage.h" />
+    <ClInclude Include="..\CommunicationNMEAInterface.h" />
+    <ClInclude Include="..\CompareWorkaround.h" />
+    <ClInclude Include="..\Component.h" />
+    <ClInclude Include="..\ComponentAdaptiveBackgroundSubtractionColor.h" />
+    <ClInclude Include="..\ComponentAdaptiveBackgroundSubtractionGray.h" />
+    <ClInclude Include="..\ComponentAdaptiveBackgroundSubtractionMedian.h" />
+    <ClInclude Include="..\ComponentAdaptiveThreshold.h" />
+    <ClInclude Include="..\ComponentBackgroundSubtractionColor.h" />
+    <ClInclude Include="..\ComponentBackgroundSubtractionGray.h" />
+    <ClInclude Include="..\ComponentBinaryBlur.h" />
+    <ClInclude Include="..\ComponentBinaryDilation.h" />
+    <ClInclude Include="..\ComponentBinaryErosion.h" />
+    <ClInclude Include="..\ComponentBinaryMask.h" />
+    <ClInclude Include="..\ComponentBlobDetectionCircularHough.h" />
+    <ClInclude Include="..\ComponentBlobDetectionMinMax.h" />
+    <ClInclude Include="..\ComponentBlobDetectionRedGreen.h" />
+    <ClInclude Include="..\ComponentBlobDetectionTwoColors.h" />
+    <ClInclude Include="..\ComponentCalibrationFileTSAI.h" />
+    <ClInclude Include="..\ComponentCalibrationLinear.h" />
+    <ClInclude Include="..\ComponentCalibrationTSAI.h" />
+    <ClInclude Include="..\ComponentCannyEdgeDetection.h" />
+    <ClInclude Include="..\ComponentCategory.h" />
+    <ClInclude Include="..\ComponentChannelCalculationColor.h" />
+    <ClInclude Include="..\ComponentChannelCalculationColorToGray.h" />
+    <ClInclude Include="..\ComponentChannelCalculationGray.h" />
+    <ClInclude Include="..\ComponentColorBlur.h" />
+    <ClInclude Include="..\ComponentColorGaussianBlur.h" />
+    <ClInclude Include="..\ComponentColorMask.h" />
+    <ClInclude Include="..\ComponentColorSwapper.h" />
+    <ClInclude Include="..\ComponentConvertBayerToColor.h" />
+    <ClInclude Include="..\ComponentConvertBinaryToColor.h" />
+    <ClInclude Include="..\ComponentConvertBinaryToGray.h" />
+    <ClInclude Include="..\ComponentConvertColorToGray.h" />
+    <ClInclude Include="..\ComponentConvertGrayToColor.h" />
+    <ClInclude Include="..\ComponentConvertInputToColor.h" />
+    <ClInclude Include="..\ComponentConvertInputToGray.h" />
+    <ClInclude Include="..\ComponentCorrectMean.h" />
+    <ClInclude Include="..\ComponentCropBinary.h" />
+    <ClInclude Include="..\ComponentCropColor.h" />
+    <ClInclude Include="..\ComponentCropGray.h" />
+    <ClInclude Include="..\ComponentCropInput.h" />
+    <ClInclude Include="..\ComponentDoubleThresholdColorIndependent.h" />
+    <ClInclude Include="..\ComponentEditor.h" />
+    <ClInclude Include="..\ComponentFilterParticles.h" />
+    <ClInclude Include="..\ComponentGrayMask.h" />
+    <ClInclude Include="..\ComponentIDReaderRing.h" />
+    <ClInclude Include="..\ComponentInputCameraUSB.h" />
+    <ClInclude Include="..\ComponentInputFileAVI.h" />
+    <ClInclude Include="..\ComponentInputFileImage.h" />
+    <ClInclude Include="..\ComponentInvertBinary.h" />
+    <ClInclude Include="..\ComponentMorphology.h" />
+    <ClInclude Include="..\ComponentNearestNeighborTracking.h" />
+    <ClInclude Include="..\ComponentOutputBufferedFileAVI.h" />
+    <ClInclude Include="..\ComponentOutputFile.h" />
+    <ClInclude Include="..\ComponentOutputFileAVI.h" />
+    <ClInclude Include="..\ComponentOutputFramesImages.h" />
+    <ClInclude Include="..\ComponentOutputImageOverlayColor.h" />
+    <ClInclude Include="..\ComponentOutputImageStatisticsBinary.h" />
+    <ClInclude Include="..\ComponentOutputImageStatisticsColor.h" />
+    <ClInclude Include="..\ComponentOutputImageStatisticsGray.h" />
+    <ClInclude Include="..\ComponentOutputMarkFrameManual.h" />
+    <ClInclude Include="..\ComponentOutputParticles.h" />
+    <ClInclude Include="..\ComponentOutputSQLite.h" />
+    <ClInclude Include="..\ComponentSimulationParticles.h" />
+    <ClInclude Include="..\ComponentSobelDifferentiation.h" />
+    <ClInclude Include="..\ComponentSpecificColorSubtraction.h" />
+    <ClInclude Include="..\ComponentThresholdColorIndependent.h" />
+    <ClInclude Include="..\ComponentThresholdGray.h" />
+    <ClInclude Include="..\ComponentTrackSmoothing.h" />
+    <ClInclude Include="..\ComponentTrigger.h" />
+    <ClInclude Include="..\ComponentTriggerCounter.h" />
+    <ClInclude Include="..\ComponentTriggerTimer.h" />
+    <ClInclude Include="..\ComponentWeightedSum.h" />
+    <ClInclude Include="..\ConfigurationConversion.h" />
+    <ClInclude Include="..\ConfigurationReaderXML.h" />
+    <ClInclude Include="..\ConfigurationWriterXML.h" />
+    <ClInclude Include="..\ConfigurationXML.h" />
+    <ClInclude Include="..\DataStructure.h" />
+    <ClInclude Include="..\DataStructureImage.h" />
+    <ClInclude Include="..\DataStructureInput.h" />
+    <ClInclude Include="..\DataStructureParticles.h" />
+    <ClInclude Include="..\DataStructureTracks.h" />
+    <ClInclude Include="..\Display.h" />
+    <ClInclude Include="..\DisplayEditor.h" />
+    <ClInclude Include="..\DisplayRenderer.h" />
+    <ClInclude Include="..\DisplaySubscriberInterface.h" />
+    <ClInclude Include="..\ErrorList.h" />
+    <ClInclude Include="..\ErrorListItem.h" />
+    <ClInclude Include="..\Expression.h" />
+    <ClInclude Include="..\ExpressionNode.h" />
+    <ClInclude Include="..\ExpressionParser.h" />
+    <ClInclude Include="..\ImageTools.h" />
+    <ClInclude Include="..\NMEALog.h" />
+    <ClInclude Include="..\ObjectList.h" />
+    <ClInclude Include="..\Particle.h" />
+    <ClInclude Include="..\Random.h" />
+    <ClInclude Include="..\RandomExponential.h" />
+    <ClInclude Include="..\RandomMersenneTwister.h" />
+    <ClInclude Include="..\RandomNormal.h" />
+    <ClInclude Include="..\RandomPoisson.h" />
+    <ClInclude Include="..\SimulationParticles.h" />
+    <ClInclude Include="..\StatusItem.h" />
+    <ClInclude Include="..\SwisTrackCore.h" />
+    <ClInclude Include="..\SwisTrackCoreEditor.h" />
+    <ClInclude Include="..\SwisTrackCoreEventRecorder.h" />
+    <ClInclude Include="..\SwisTrackCoreInterface.h" />
+    <ClInclude Include="..\SwisTrackCoreTrigger.h" />
+    <ClInclude Include="..\Track.h" />
+    <ClInclude Include="..\Utility.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\3rdParty\libtsai\libtsai.vcxproj">
+      <Project>{a10316db-e1c4-4338-9777-4c2eb07179a6}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
