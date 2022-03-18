@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Output Particles to a file</friendlyname>
+	<description>Writes the particles to a file.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputParticlesToFile</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<label>This component has no configuration.</label>
+		<label>The particles are written to "particles.csv".</label>
+	</configuration>
+</swistrackcomponent>

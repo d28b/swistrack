@@ -6,7 +6,6 @@
 
 THISCLASS::ComponentInputCameraUSB(SwisTrackCore * stc):
 	Component(stc, wxT("InputCameraUSB")),
-	mFlipHorizontally(false), mFlipVertically(false),
 	mCapture(), mFrameNumber(0),
 	mDisplayOutput(wxT("Output"), wxT("USB Camera: Input Frame")) {
 
@@ -34,7 +33,11 @@ void THISCLASS::OnStart() {
 		return;
 	}
 
+	int width = GetConfigurationInt(wxT("FrameWidth"), 1920);
+	int height = GetConfigurationInt(wxT("FrameHeight"), 1080);
 	int fps = GetConfigurationInt(wxT("FramesPerSecond"), 10);
+	mCapture.set(cv::CAP_PROP_FRAME_WIDTH, width);
+	mCapture.set(cv::CAP_PROP_FRAME_HEIGHT, height);
 	mCapture.set(cv::CAP_PROP_FPS, fps);
 
 	/*
@@ -67,8 +70,6 @@ void THISCLASS::OnStart() {
 }
 
 void THISCLASS::OnReloadConfiguration() {
-	mFlipHorizontally = GetConfigurationBool(wxT("FlipHorizontally"), false);
-	mFlipVertically = GetConfigurationBool(wxT("FlipVertically"), false);
 }
 
 void THISCLASS::OnStep() {
@@ -78,9 +79,6 @@ void THISCLASS::OnStep() {
 		AddError(wxT("Could not retrieve image from USB camera."));
 		return;
 	}
-
-	// Flip the image if desired
-	image = ImageTools::Flip(image, mFlipHorizontally, mFlipVertically);
 
 	// Set Timestamp for the current frame
 	// This data is not read from the camera, so we will do the best we can: take a timestamp now.

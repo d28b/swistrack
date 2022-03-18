@@ -5,7 +5,6 @@
 #include <opencv2/highgui.hpp>
 #include "Component.h"
 
-//! An input component that interfaces a USB camera using the CV library.
 class ComponentInputCameraUSB: public Component {
 
 public:
@@ -26,9 +25,6 @@ public:
 	}
 
 private:
-	bool mFlipHorizontally;				//!< (configuration) Flip the image horizontally.
-	bool mFlipVertically;				//!< (configuration) Flip the image vertically.
-
 	cv::VideoCapture mCapture;			//!< OpenCV capture object.
 	int mFrameNumber;					//!< The frame number since the component was started.
 

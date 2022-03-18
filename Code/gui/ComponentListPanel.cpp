@@ -51,7 +51,7 @@ THISCLASS::ComponentListPanel(wxWindow * parent, SwisTrack * st):
 	mPopupMenu.AppendCheckItem(cID_PopupMenu_EnabledInterval0, wxT("Disabled"));
 
 	// Background
-	SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_DESKTOP));
+	SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
 	// Create List
 	mList = new wxListCtrl(this, cID_List);

@@ -4,7 +4,6 @@
 #include <opencv2/core.hpp>
 #include "Component.h"
 
-//! An input component that reads an AVI file using the CV library.
 class ComponentInputFileAVI: public Component {
 
 public:
@@ -24,18 +23,15 @@ public:
 		return new ComponentInputFileAVI(mCore);
 	}
 
+private:
+	cv::VideoCapture mCapture;			//!< OpenCV capture object.
+	Display mDisplayOutput;				//!< The Display showing the output of this component.
+
 	double GetProgressPercent();
 	double GetProgressMSec();
 	int GetProgressFrameNumber();
 	double GetFPS();
 
-private:
-	bool mFlipHorizontally;				//!< (configuration) Flip the image horizontally.
-	bool mFlipVertically;				//!< (configuration) Flip the image vertically.
-
-	cv::VideoCapture mCapture;			//!< OpenCV capture object.
-
-	Display mDisplayOutput;				//!< The Display showing the output of this component.
 };
 
 #endif

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Flip Image</friendlyname>
+	<description>Flips the input image.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/FlipImage</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<parameter type="checkbox">
+			<name>FlipHorizontally</name>
+			<label>Flip the image horizontally</label>
+			<default>false</default>
+			<onchange>reload</onchange>
+		</parameter>
+		<parameter type="checkbox">
+			<name>FlipVertically</name>
+			<label>Flip the image vertically</label>
+			<default>false</default>
+			<onchange>reload</onchange>
+		</parameter>
+	</configuration>
+</swistrackcomponent>

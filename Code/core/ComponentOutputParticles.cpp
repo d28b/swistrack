@@ -39,9 +39,11 @@ void THISCLASS::OnStep() {
 		m.AddInt(it->mID);
 		m.AddDouble(it->mCenter.x);
 		m.AddDouble(it->mCenter.y);
-		m.AddDouble(it->mOrientation);
 		m.AddDouble(it->mWorldCenter.x);
 		m.AddDouble(it->mWorldCenter.y);
+		m.AddDouble(it->mArea);
+		m.AddDouble(it->mOrientation);
+		m.AddDouble(it->mCompactness);
 		mCore->mCommunicationInterface->Send(&m);
 		it++;
 	}

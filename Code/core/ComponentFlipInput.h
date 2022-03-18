@@ -1,16 +1,16 @@
-#ifndef HEADER_ComponentCropInput
-#define HEADER_ComponentCropInput
+#ifndef HEADER_ComponentFlipInput
+#define HEADER_ComponentFlipInput
 
 #include <opencv2/opencv.hpp>
 #include "Component.h"
 
-class ComponentCropInput: public Component {
+class ComponentFlipInput: public Component {
 
 public:
 	//! Constructor.
-	ComponentCropInput(SwisTrackCore * stc);
+	ComponentFlipInput(SwisTrackCore * stc);
 	//! Destructor.
-	~ComponentCropInput();
+	~ComponentFlipInput();
 
 	// Overwritten Component methods
 	void OnStart();
@@ -20,11 +20,12 @@ public:
 	void OnStop();
 
 	Component * Create() {
-		return new ComponentCropInput(mCore);
+		return new ComponentFlipInput(mCore);
 	}
 
 private:
-	cv::Rect mCropRect;			//!< (configuration) Crop rectangle.
+	bool mFlipHorizontally;		//!< (configuration) Flip the image horizontally.
+	bool mFlipVertically;		//!< (configuration) Flip the image vertically.
 	Display mDisplayOutput;		//!< The DisplayImage showing the output of this component.
 
 };

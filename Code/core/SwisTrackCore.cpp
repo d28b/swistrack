@@ -41,6 +41,7 @@
 #include "ComponentCropInput.h"
 #include "ComponentDoubleThresholdColorIndependent.h"
 #include "ComponentFilterParticles.h"
+#include "ComponentFlipInput.h"
 #include "ComponentGrayMask.h"
 #include "ComponentIDReaderRing.h"
 #include "ComponentInputCameraUSB.h"
@@ -50,7 +51,7 @@
 #include "ComponentMorphology.h"
 #include "ComponentOutputBufferedFileAVI.h"
 #include "ComponentOutputFileAVI.h"
-#include "ComponentOutputFile.h"
+#include "ComponentOutputTracksToFiles.h"
 #include "ComponentOutputFramesImages.h"
 #include "ComponentOutputImageOverlayColor.h"
 #include "ComponentOutputImageStatisticsBinary.h"
@@ -58,6 +59,7 @@
 #include "ComponentOutputImageStatisticsGray.h"
 #include "ComponentOutputMarkFrameManual.h"
 #include "ComponentOutputParticles.h"
+#include "ComponentOutputParticlesToFile.h"
 #include "ComponentOutputSQLite.h"
 #include "ComponentSimulationParticles.h"
 #include "ComponentSobelDifferentiation.h"
@@ -106,6 +108,7 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentInputFileImage(this));
 
 	// Input conversion
+	mAvailableComponents.push_back(new ComponentFlipInput(this));
 	mAvailableComponents.push_back(new ComponentCropInput(this));
 	mAvailableComponents.push_back(new ComponentConvertInputToGray(this));
 	mAvailableComponents.push_back(new ComponentConvertInputToColor(this));
@@ -171,7 +174,9 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentTrackSmoothing(this));
 
 	// Output
-	mAvailableComponents.push_back(new ComponentOutputFile(this));
+	mAvailableComponents.push_back(new ComponentOutputParticles(this));
+	mAvailableComponents.push_back(new ComponentOutputParticlesToFile(this));
+	mAvailableComponents.push_back(new ComponentOutputTracksToFiles(this));
 	mAvailableComponents.push_back(new ComponentOutputSQLite(this));
 	mAvailableComponents.push_back(new ComponentOutputFileAVI(this));
 	mAvailableComponents.push_back(new ComponentOutputBufferedFileAVI(this));
@@ -181,7 +186,6 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mAvailableComponents.push_back(new ComponentOutputImageStatisticsGray(this));
 	mAvailableComponents.push_back(new ComponentOutputImageOverlayColor(this));
 	mAvailableComponents.push_back(new ComponentOutputMarkFrameManual(this));
-	mAvailableComponents.push_back(new ComponentOutputParticles(this));
 
 	// Initialize the available components
 	tComponentList::iterator ita = mAvailableComponents.begin();
@@ -199,7 +203,6 @@ THISCLASS::SwisTrackCore(wxString componentconfigurationfolder):
 	mDataStructures.push_back(&mDataStructureParticles);
 	mDataStructures.push_back(&mDataStructureTracks);
 	mDataStructures.push_back(&mDataStructureCommands);
-
 }
 
 THISCLASS::~SwisTrackCore() {
@@ -284,14 +287,14 @@ bool THISCLASS::Start(bool productionMode) {
 	if (productionMode) {
 		// Find a run folder which does not exist yet
 		int unique_id = 1;
-		wxString runtitlebase = now.Format(wxT("%Y-%m-%d-%H-%M-%S"));
-		mRunTitle = runtitlebase;
+		wxString runTitleBase = now.FormatISOCombined();
+		mRunTitle = runTitleBase;
 		while (1) {
-			wxFileName filename_output = GetRunFileName(wxT("output"));
-			if (! filename_output.IsOk()) break;
-			if (! filename_output.DirExists()) break;
+			wxFileName filenameOutput = GetRunFileName(wxT("output"));
+			if (! filenameOutput.IsOk()) break;
+			if (! filenameOutput.DirExists()) break;
 			unique_id++;
-			mRunTitle = runtitlebase + wxString::Format(wxT("-%d"), unique_id);
+			mRunTitle = runTitleBase + wxString::Format(wxT("-%d"), unique_id);
 		}
 	} else {
 		// Always use the folder "testing"
@@ -299,10 +302,10 @@ bool THISCLASS::Start(bool productionMode) {
 	}
 
 	// Create the run folder and open the main output file
-	wxFileName filename_output = GetRunFileName(wxT("output"));
-	if (filename_output.IsOk()) {
-		filename_output.Mkdir(0777, wxPATH_MKDIR_FULL);
-		//wxFFile file_output(filename_output.GetFullPath(), wxT("w"));
+	wxFileName filenameOutput = GetRunFileName(wxT("output"));
+	if (filenameOutput.IsOk()) {
+		filenameOutput.Mkdir(0777, wxPATH_MKDIR_FULL);
+		//wxFFile file_output(filenameOutput.GetFullPath(), wxT("w"));
 		//file_output.Write(wxT("$TIMESTAMP,") + now.Format() + wxT("\n"));
 	}
 

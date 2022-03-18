@@ -15,7 +15,7 @@ THISCLASS::ConfigurationPanel(wxWindow * parent, SwisTrack * st, Component * c):
 	mSwisTrack(st), mComponent(c) {
 
 	// Prepare
-	SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_DESKTOP));
+	SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 	SetSizer(new wxBoxSizer(wxVERTICAL));
 	wxStaticLine * line = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxSize(330, 2), wxLI_HORIZONTAL);
 	GetSizer()->Add(line, 0, wxEXPAND | wxALL, 0);

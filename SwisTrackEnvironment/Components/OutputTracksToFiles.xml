@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<swistrackcomponent>
+	<friendlyname>Output Tracks to Files</friendlyname>
+	<description>Writes a text file for every track.</description>
+	<url>http://en.wikibooks.org/wiki/SwisTrack/Components/OutputTracksToFiles</url>
+	<displayimage>Output</displayimage>
+
+	<configuration>
+		<label>This component has no configuration.</label>
+		<label>The tracks are written to track00000000.csv, track00000001.csv, ...</label>
+	</configuration>
+</swistrackcomponent>
