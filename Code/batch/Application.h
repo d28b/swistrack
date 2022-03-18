@@ -1,6 +1,5 @@
 #ifndef HEADER_Application
 #define HEADER_Application
-#define wxUSE_GUI 0
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
@@ -10,7 +9,7 @@
 class Application;
 
 //! Application
-class Application: public wxApp {
+class Application: public wxAppConsole {
 
 public:
 	//! Called upon program initialization.
@@ -24,8 +23,6 @@ public:
 	int RunBatch(const wxString filename_str);
 	//! Displays help.
 	void Help();
-
-	int OnRun();
 };
 
 DECLARE_APP(Application)
