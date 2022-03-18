@@ -657,7 +657,7 @@ Node * THISCLASS::Pow() {
 }
 
 int64_t THISCLASS::ReadInteger() {
-	int64_t value = 0.0;
+	int64_t value = 0;
 	while (IsDigit(c)) {
 		value *= 10;
 		value += c - 48;
@@ -672,7 +672,7 @@ double THISCLASS::ReadNumber() {
 	if (c != '.') return (double) value;
 	Next();
 
-	int64_t divisor = 1.0;
+	int64_t divisor = 1;
 	while (IsDigit(c)) {
 		value *= 10;
 		value += c - 48;

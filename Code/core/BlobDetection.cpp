@@ -67,8 +67,8 @@ void THISCLASS::FindBlobs(cv::Mat inputImage, wxDateTime frameTimestamp, int fra
 		// Orientation
 		if (moments.mu20 == moments.mu02) {
 			if (moments.mu11 == 0) particle.mOrientation = 0;
-			else if (moments.mu11 > 0) particle.mOrientation = M_PI / 4;
-			else particle.mOrientation = -M_PI / 4;
+			else if (moments.mu11 > 0) particle.mOrientation = (float) (M_PI / 4);
+			else particle.mOrientation = (float) (-M_PI / 4);
 		} else if (moments.mu20 > moments.mu02) {
 			particle.mOrientation = atan(2 * moments.mu11 / (moments.mu20 - moments.mu02)) / 2;
 		} else {

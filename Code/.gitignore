@@ -3,3 +3,7 @@
 *.o
 tests/expression/main
 core/libSwisTrackCore.a
+*.vcxproj.user
+**/MSVisualStudio/Debug
+**/MSVisualStudio/x64
+**/MSVisualStudio/.vs
