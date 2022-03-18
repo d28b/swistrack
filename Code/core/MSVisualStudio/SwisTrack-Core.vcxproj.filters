@@ -318,9 +318,6 @@
     <ClCompile Include="..\ComponentTrackSmoothing.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\ComponentOutputFile.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="..\ComponentOutputFileAVI.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -365,6 +362,15 @@
     </ClCompile>
     <ClCompile Include="..\CompareWorkaround.cpp">
       <Filter>Utility Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ComponentFlipInput.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ComponentOutputParticlesToFile.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ComponentOutputTracksToFiles.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -662,9 +668,6 @@
     <ClInclude Include="..\ComponentTrackSmoothing.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\ComponentOutputFile.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\ComponentOutputFileAVI.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -709,6 +712,15 @@
     </ClInclude>
     <ClInclude Include="..\CompareWorkaround.h">
       <Filter>Utility Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ComponentFlipInput.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ComponentOutputParticlesToFile.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ComponentOutputTracksToFiles.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

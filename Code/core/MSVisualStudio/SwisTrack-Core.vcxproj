@@ -576,6 +576,7 @@
     <ClCompile Include="..\ComponentDoubleThresholdColorIndependent.cpp" />
     <ClCompile Include="..\ComponentEditor.cpp" />
     <ClCompile Include="..\ComponentFilterParticles.cpp" />
+    <ClCompile Include="..\ComponentFlipInput.cpp" />
     <ClCompile Include="..\ComponentGrayMask.cpp" />
     <ClCompile Include="..\ComponentIDReaderRing.cpp" />
     <ClCompile Include="..\ComponentInputCameraUSB.cpp" />
@@ -585,7 +586,6 @@
     <ClCompile Include="..\ComponentMorphology.cpp" />
     <ClCompile Include="..\ComponentNearestNeighborTracking.cpp" />
     <ClCompile Include="..\ComponentOutputBufferedFileAVI.cpp" />
-    <ClCompile Include="..\ComponentOutputFile.cpp" />
     <ClCompile Include="..\ComponentOutputFileAVI.cpp" />
     <ClCompile Include="..\ComponentOutputFramesImages.cpp" />
     <ClCompile Include="..\ComponentOutputImageOverlayColor.cpp" />
@@ -599,7 +599,9 @@
       <PreprocessSuppressLineNumbers Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessSuppressLineNumbers>
       <PreprocessSuppressLineNumbers Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</PreprocessSuppressLineNumbers>
     </ClCompile>
+    <ClCompile Include="..\ComponentOutputParticlesToFile.cpp" />
     <ClCompile Include="..\ComponentOutputSQLite.cpp" />
+    <ClCompile Include="..\ComponentOutputTracksToFiles.cpp" />
     <ClCompile Include="..\ComponentSimulationParticles.cpp" />
     <ClCompile Include="..\ComponentSobelDifferentiation.cpp" />
     <ClCompile Include="..\ComponentSpecificColorSubtraction.cpp" />
@@ -701,6 +703,7 @@
     <ClInclude Include="..\ComponentDoubleThresholdColorIndependent.h" />
     <ClInclude Include="..\ComponentEditor.h" />
     <ClInclude Include="..\ComponentFilterParticles.h" />
+    <ClInclude Include="..\ComponentFlipInput.h" />
     <ClInclude Include="..\ComponentGrayMask.h" />
     <ClInclude Include="..\ComponentIDReaderRing.h" />
     <ClInclude Include="..\ComponentInputCameraUSB.h" />
@@ -710,7 +713,6 @@
     <ClInclude Include="..\ComponentMorphology.h" />
     <ClInclude Include="..\ComponentNearestNeighborTracking.h" />
     <ClInclude Include="..\ComponentOutputBufferedFileAVI.h" />
-    <ClInclude Include="..\ComponentOutputFile.h" />
     <ClInclude Include="..\ComponentOutputFileAVI.h" />
     <ClInclude Include="..\ComponentOutputFramesImages.h" />
     <ClInclude Include="..\ComponentOutputImageOverlayColor.h" />
@@ -719,7 +721,9 @@
     <ClInclude Include="..\ComponentOutputImageStatisticsGray.h" />
     <ClInclude Include="..\ComponentOutputMarkFrameManual.h" />
     <ClInclude Include="..\ComponentOutputParticles.h" />
+    <ClInclude Include="..\ComponentOutputParticlesToFile.h" />
     <ClInclude Include="..\ComponentOutputSQLite.h" />
+    <ClInclude Include="..\ComponentOutputTracksToFiles.h" />
     <ClInclude Include="..\ComponentSimulationParticles.h" />
     <ClInclude Include="..\ComponentSobelDifferentiation.h" />
     <ClInclude Include="..\ComponentSpecificColorSubtraction.h" />

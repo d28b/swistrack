@@ -12,7 +12,7 @@ THISCLASS::AboutDialog(wxWindow * parent):
 	wxPanel * p = new wxPanel(this, wxID_ANY);
 
 	wxBoxSizer * pvs = new wxBoxSizer(wxVERTICAL);
-	wxStaticText * title = new wxStaticText(p, -1, wxT("SwisTrack 4.1"));
+	wxStaticText * title = new wxStaticText(p, -1, wxT("SwisTrack 4.2"));
 	wxFont f = title->GetFont();
 	f.SetWeight(wxFONTWEIGHT_BOLD);
 	title->SetFont(f);
@@ -20,9 +20,9 @@ THISCLASS::AboutDialog(wxWindow * parent):
 	pvs->Add(new wxStaticText(p, -1, wxT("An open source, general-purpose multi-agent tracking software.")));
 	pvs->Add(new wxStaticText(p, -1, wxT("")));
 	pvs->Add(new wxStaticText(p, -1, wxT("Maintained by:")));
-	pvs->Add(new wxStaticText(p, -1, wxT("Distributed Intelligent Systems and Algorithms Laboratory (DISAL)")));
-	pvs->Add(new wxStaticText(p, -1, wxT("École Polytechnique Fédérale de Lausanne (EPFL)")));
-	pvs->Add(new wxStaticText(p, -1, wxT("Lausanne, Switzerland")));
+	pvs->Add(new wxStaticText(p, -1, wxT("Thomas Lochmatter")));
+	pvs->Add(new wxStaticText(p, -1, wxT("thomas.lochmatter@viereck.ch")));
+	pvs->Add(new wxStaticText(p, -1, wxT("")));
 	pvs->Add(new wxStaticText(p, -1, wxT("http://en.wikibooks.org/wiki/Swistrack")));
 
 	wxBoxSizer * phs = new wxBoxSizer(wxHORIZONTAL);
