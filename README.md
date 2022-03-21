@@ -2,9 +2,9 @@
 
 ## Documentation
 
-The documentation of SwisTrack (for both SwisTrack users and developers) can be found in the [SwisTrack wikibook](http://en.wikibooks.org/wiki/Swistrack).
+A brief documentation of SwisTrack is available on the [wiki page](https://github.com/d28b/swistrack/wiki).
 
-## Running SwisTrack on Ubuntu/Debian/Raspian
+## Compiling SwisTrack on Ubuntu/Debian/Raspian
 
 To compile and run SwisTrack, open a terminal, and type the following
 
@@ -20,7 +20,7 @@ cd SwisTrackEnvironment
 
 This downloads the latest version of SwisTrack (`git clone ...`), installs the compiler and the dependencies (`apt install ...`), compiles (`make`) and runs SwisTrack. Note that compiling may take a few minutes.
 
-## Running SwisTrack on other Linux systems
+## Compiling SwisTrack on other Linux systems
 
 Install the following dependencies using your package manager:
 
@@ -30,7 +30,7 @@ Install the following dependencies using your package manager:
 
 Then proceed using `make`.
 
-## Running SwisTrack on Mac
+## Compiling SwisTrack on Mac
 
 Install the following dependencies, e.g. using [brew](https://brew.sh):
 
@@ -44,7 +44,7 @@ Then proceed using:
 make osxbundle
 ```
 
-## Running SwisTrack on Windows
+## Compiling SwisTrack on Windows
 
 On a fresh computer, you can build SwisTrack as follows:
 
