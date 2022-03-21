@@ -167,9 +167,6 @@
     <ClCompile Include="..\ConfigurationParameterText.cpp">
       <Filter>Configuration</Filter>
     </ClCompile>
-    <ClCompile Include="..\ConfigurationParameterVideoFormat.cpp">
-      <Filter>Configuration</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Application.h">
@@ -272,9 +269,6 @@
       <Filter>Timeline</Filter>
     </ClInclude>
     <ClInclude Include="..\ConfigurationParameterText.h">
-      <Filter>Configuration</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ConfigurationParameterVideoFormat.h">
       <Filter>Configuration</Filter>
     </ClInclude>
   </ItemGroup>
