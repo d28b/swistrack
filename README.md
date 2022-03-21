@@ -1,4 +1,4 @@
-# SwisTrack 4
+# SwisTrack 4.2
 
 ## Documentation
 
@@ -6,19 +6,26 @@ A brief documentation of SwisTrack is available on the [wiki page](https://githu
 
 ## Compiling SwisTrack on Ubuntu/Debian/Raspian
 
-To compile and run SwisTrack, open a terminal, and type the following
+To compile and run SwisTrack, open a terminal, and type the following commands:
 
 ```sh
+# Download the SwisTrack source code
 git clone https://github.com/d28b/swistrack.git
+
+# Install the compiler and libraries
 sudo apt install build-essential
 sudo apt install libglib2.0-dev libwxgtk3.0-gtk3-dev libopencv-dev
+
+# Compile SwisTrack
 cd swistrack
 make
+
+# Run SwisTrack
 cd SwisTrackEnvironment
 ./SwisTrack
 ```
 
-This downloads the latest version of SwisTrack (`git clone ...`), installs the compiler and the dependencies (`apt install ...`), compiles (`make`) and runs SwisTrack. Note that compiling may take a few minutes.
+Note that compiling may take a few minutes.
 
 ## Compiling SwisTrack on other Linux systems
 
@@ -30,7 +37,7 @@ Install the following dependencies using your package manager:
 
 Then proceed using `make`.
 
-## Compiling SwisTrack on Mac
+## Compiling SwisTrack on Mac OS
 
 Install the following dependencies, e.g. using [brew](https://brew.sh):
 
@@ -46,7 +53,7 @@ make osxbundle
 
 ## Compiling SwisTrack on Windows
 
-On a fresh computer, you can build SwisTrack as follows:
+To build SwisTrack for Windows, proceed as follows:
 
 - Install Visual Studio 2022. The free version is enough.
 - Download and install OpenCV to C:\OpenCV (or any other folder).
