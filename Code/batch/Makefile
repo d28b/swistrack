@@ -16,8 +16,7 @@ FILES_D   := $(FILES_CPP:.cpp=.d)
 FILES_A   := ../core/libSwisTrackCore.a ../../3rdParty/libtsai/libtsai.a
 
 # Flags
-CXXFLAGS  := -g -Wall $(CXXFLAGS_ADD)
-CPPFLAGS  := $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -I../core $(CPPFLAGS_ADD)
+CPPFLAGS  := -Wall $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -I../core $(CPPFLAGS_ADD)
 LDLIBS    := $(OPENCV_LDLIBS) $(WXWIDGETS_LDLIBS) -lm $(LDLIBS_ADD)
 LDFLAGS   := $(LDFLAGS_ADD)
 
@@ -30,7 +29,7 @@ $(TARGET): $(FILES_O) $(FILES_A)
 	$(CXX) $(LDFLAGS) $(FILES_O) $(FILES_A) $(LDLIBS) -o $@
 
 $(FILES_O): %.o: %.cpp
-	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
+	$(CXX) -c $(CPPFLAGS) $< -o $@
 
 # Cleanup
 .PHONY: clean

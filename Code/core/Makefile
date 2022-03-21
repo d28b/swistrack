@@ -15,8 +15,7 @@ FILES_O   := $(FILES_CPP:.cpp=.o)
 FILES_D   := $(FILES_CPP:.cpp=.d)
 
 # Flags
-override CXXFLAGS  += -g -Wall $(CXXFLAGS_ADD)
-override CPPFLAGS  += $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -isystem../../3rdParty/libtsai/include $(CPPFLAGS_ADD) -g
+override CPPFLAGS  += -Wall $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -isystem../../3rdParty/libtsai/include $(CPPFLAGS_ADD)
 
 # Build
 .PHONY: all
@@ -27,7 +26,7 @@ $(TARGET): $(FILES_O)
 	$(AR) -r $@ $(FILES_O)
 
 $(FILES_O): %.o: %.cpp
-	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
+	$(CXX) -c $(CPPFLAGS) $< -o $@
 
 # Cleanup
 .PHONY: clean

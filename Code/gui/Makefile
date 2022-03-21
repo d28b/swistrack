@@ -16,8 +16,7 @@ FILES_D   := $(FILES_CPP:.cpp=.d)
 FILES_A   := ../core/libSwisTrackCore.a ../../3rdParty/libtsai/libtsai.a
 
 # Flags
-override CXXFLAGS  += -g -Wall $(CXXFLAGS_ADD)
-override CPPFLAGS  += $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -I../core $(CPPFLAGS_ADD)
+override CPPFLAGS  += -Wall $(OPENCV_CPPFLAGS) $(WXWIDGETS_CPPFLAGS) -I../core $(CPPFLAGS_ADD)
 override LDLIBS    += $(OPENCV_LDLIBS) $(WXWIDGETS_LDLIBS) -lm $(LDLIBS_ADD)
 override LDFLAGS   += $(LDFLAGS_ADD)
 
@@ -31,7 +30,7 @@ $(TARGET): $(FILES_O) $(FILES_A)
 #	$(CXX) $(LDFLAGS) $(FILES_O) $(FILES_A)/usr/lib/libefence.a  $(LDLIBS) -o $@
 
 $(FILES_O): %.o: %.cpp
-	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
+	$(CXX) -c $(CPPFLAGS) $< -o $@
 
 # Build with cygwin
 .PHONY: cygwin

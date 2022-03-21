@@ -14,8 +14,7 @@ FILES_H   := $(wildcard tsaisrc/*.h) $(wildcard mathsrc/*.h) $(wildcard mathsrc/
 FILES_O   := $(FILES_C:.c=.o)
 
 # Flags
-override CFLAGS    += -g -Wall
-override CPPFLAGS  += -I/usr/include -Itsaisrc -Imathsrc -Imathsrc/minpack -Iinclude
+override CPPFLAGS  += -Wall -I/usr/include -Itsaisrc -Imathsrc -Imathsrc/minpack -Iinclude $(CPPFLAGS_ADD)
 
 # Build
 .PHONY: all
@@ -26,7 +25,7 @@ $(TARGET): $(FILES_O)
 	$(AR) -r $@ $(FILES_O)
 
 $(FILES_O): %.o: %.c $(FILES_H)
-	$(CC) -c $(CPPFLAGS) $(CFLAGS) $< -o $@
+	$(CC) -c $(CPPFLAGS) $< -o $@
 
 # Cleanup
 .PHONY: clean

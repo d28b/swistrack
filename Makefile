@@ -1,3 +1,6 @@
+# Enable the following line to compile with debug information
+#CPPFLAGS_ADD := -g
+
 .PHONY: all
 all:
 	$(MAKE) -C 3rdParty/libtsai
