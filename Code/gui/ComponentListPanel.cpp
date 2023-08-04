@@ -200,7 +200,7 @@ void THISCLASS::Update() {
 
 void THISCLASS::UpdateStatus() {
 	long item = -1;
-	while (1) {
+	while (true) {
 		item = mList->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_DONTCARE);
 		if (item == -1) break;
 

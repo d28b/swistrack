@@ -33,7 +33,7 @@ void THISCLASS::OnSocketEvent(wxSocketEvent & event) {
 	// We've received something
 	case wxSOCKET_INPUT:
 		char buffer[128];
-		while (1) {
+		while (true) {
 			mSocket->Read(buffer, 128);
 			int read = mSocket->LastCount();
 			if (read == 0) {

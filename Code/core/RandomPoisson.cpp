@@ -82,7 +82,7 @@ long int THISCLASS::PoissonModeSearch(double L) {
 		P_f0 = exp(mode * log(L) - L - LnFac(mode));
 	}        // probability of x=mode
 
-	while (1) {
+	while (true) {
 		r = mRandomMersenneTwister->randExc();
 		if ((r -= P_f0) <= 0) return mode;
 		c = d = P_f0;
@@ -316,7 +316,7 @@ long int THISCLASS::PoissonInver(double L) {
 		p_f0 = exp(-L);
 	}                 // f(0) = probability of x=0
 
-	while (1) {
+	while (true) {
 		r = mRandomMersenneTwister->randExc();
 		x = 0;
 		f = p_f0;
@@ -326,8 +326,7 @@ long int THISCLASS::PoissonInver(double L) {
 			x++;
 			f *= L;
 			r *= x;
-		}                       // instead of f /= x
-		while (x <= bound);
+		} while (x <= bound);       // instead of f /= x
 	}
 }
 
@@ -366,7 +365,7 @@ long int THISCLASS::PoissonRatioUniforms(double L) {
 		p_bound = (long int)(p_a + 6.0 * p_h);
 	} // safety-bound
 
-	while (1) {
+	while (true) {
 		u = mRandomMersenneTwister->randExc();
 		if (u == 0) continue;                   // avoid division by 0
 		x = p_a + p_h * (mRandomMersenneTwister->randExc() - 0.5) / u;

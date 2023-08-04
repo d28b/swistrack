@@ -285,17 +285,8 @@ bool THISCLASS::Start(bool productionMode) {
 
 	// Prepare the run folder
 	if (productionMode) {
-		// Find a run folder which does not exist yet
-		int unique_id = 1;
-		wxString runTitleBase = now.FormatISOCombined();
-		mRunTitle = runTitleBase;
-		while (1) {
-			wxFileName filenameOutput = GetRunFileName(wxT("output"));
-			if (! filenameOutput.IsOk()) break;
-			if (! filenameOutput.DirExists()) break;
-			unique_id++;
-			mRunTitle = runTitleBase + wxString::Format(wxT("-%d"), unique_id);
-		}
+		// Use the current timestamp
+		mRunTitle = now.FormatISOCombined();
 	} else {
 		// Always use the folder "testing"
 		mRunTitle = wxT("testing");

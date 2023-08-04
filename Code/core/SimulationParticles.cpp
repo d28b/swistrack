@@ -70,7 +70,7 @@ bool THISCLASS::ReadBlock() {
 }
 
 THISCLASS::Frame * THISCLASS::FirstFrame() {
-	while (1) {
+	while (true) {
 		// Move to the first frame
 		mCurrentFrame = mFrames.begin();
 
@@ -83,7 +83,7 @@ THISCLASS::Frame * THISCLASS::FirstFrame() {
 }
 
 THISCLASS::Frame * THISCLASS::NextFrame() {
-	while (1) {
+	while (true) {
 		// Try incrementing
 		tFrameList::iterator nextframe = mCurrentFrame;
 		nextframe++;

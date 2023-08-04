@@ -85,22 +85,14 @@ void THISCLASS::LapTime(Event * it, eType type, Component * c) {
 }
 
 void THISCLASS::Add(const Event * it) {
-	if (! mCurrentTimeline) {
-		return;
-	}
-	if (mCurrentTimeline->mEvents.size() >= Timeline::mNumberOfEvents) {
-		return;
-	}
+	if (! mCurrentTimeline) return;
+	if (mCurrentTimeline->mEvents.size() >= Timeline::mNumberOfEvents) return;
 	mCurrentTimeline->mEvents.push_back(*it);
 }
 
 void THISCLASS::Add(eType type, Component * component) {
-	if (! mCurrentTimeline) {
-		return;
-	}
-	if (mCurrentTimeline->mEvents.size() >= Timeline::mNumberOfEvents) {
-		return;
-	}
+	if (! mCurrentTimeline) return;
+	if (mCurrentTimeline->mEvents.size() >= Timeline::mNumberOfEvents) return;
 
 	Event it;
 	LapTime(&it, type, component);

@@ -65,6 +65,6 @@ setx -m OPENCV_DIR C:\OpenCV\Build\x64\vc15
 setx -m WXWIN C:\wxWidgets-3.1.5
 ```
 
-- Open the wxWidgets Visual Studio project (C:\wxWidgets-3.1.5\build\msw\wx_vc16.sln) and compile the debug and release versions for x86 (and Win32 if desired). This takes several minutes.
-- Open the SwisTrack Visual Studio project (swistrack\Code\MSVisualStudio\SwisTrack.sln) and compile the x86 debug or release version. This takes several minutes.
+- Open the wxWidgets Visual Studio project (C:\wxWidgets-3.1.5\build\msw\wx_vc16.sln) and build the debug and release versions for x64 (and Win32 if desired). This takes several minutes.
+- Open the SwisTrack Visual Studio project (swistrack\Code\MSVisualStudio\SwisTrack.sln) and compile the x64 debug or release version. This takes several minutes.
 - Copy the OpenCV DLLs opencv_world455.dll (release) or opencv_world455d.dll (debug) into the SwisTrackEnvironment folder.
